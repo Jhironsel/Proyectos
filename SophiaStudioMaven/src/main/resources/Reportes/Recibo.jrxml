@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6440251b-80f5-459b-8089-1082bc506c88">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="87"/>
+	<parameter name="matricula" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pago" class="java.lang.Double"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[select m.id_mensualidad, m.consecutivo, m.documento,
+       (select e.nombres||' '||e.apellidos
+        from estudiantes e
+        where e.matricula = m.matricula) as NombreAlumno,
+       (select p.nombres||' '||p.apellidos
+        from padremadres p
+        where p.documento like m.documento) as NombrePadre, m.fecha_pago, m.estado,
+       (select u.nombres||' '||u.apellidos
+        from usuarios u
+        where u.idusuario like m.idusuario) as NombreUsuario , m.monto, m.pagado, m.total, m.fecha_pagado, m.fecha_abono, m.periodo
+from mensualidad m
+where m.matricula = $P{matricula} and m.fecha_pago = $P{fecha} and m.periodo like $P{periodo}]]>
+	</queryString>
+	<field name="ID_MENSUALIDAD" class="java.lang.Integer"/>
+	<field name="CONSECUTIVO" class="java.lang.Integer"/>
+	<field name="DOCUMENTO" class="java.lang.String">
+		<fieldDescription><![CDATA[Este Campo esta ligado con la cedula de los padres...]]></fieldDescription>
+	</field>
+	<field name="NOMBREALUMNO" class="java.lang.String"/>
+	<field name="NOMBREPADRE" class="java.lang.String"/>
+	<field name="FECHA_PAGO" class="java.sql.Date"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="NOMBREUSUARIO" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="PAGADO" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<field name="FECHA_PAGADO" class="java.sql.Date"/>
+	<field name="FECHA_ABONO" class="java.sql.Date"/>
+	<field name="PERIODO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="127" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="116" height="127" uuid="0906eecd-4576-4715-989f-7a890a4dcf05"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="116" y="0" width="439" height="37" uuid="8ee25ded-685f-4944-b47d-7a7b97b3efe2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="28" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sophia Studio]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="330" y="42" width="225" height="30" uuid="e28b16b1-a069-4067-a645-3d275bfe9180"/>
+				<textElement>
+					<font size="20" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="116" y="72" width="214" height="37" uuid="ad1a3e70-e57e-45de-a162-7405a0475428"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="28" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recibo]]></text>
+			</staticText>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="330" y="72" width="222" height="37" uuid="d95e8dc6-bc49-47fa-92c5-a504b58bb50a"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="434" splitType="Stretch">
+			<textField>
+				<reportElement x="106" y="0" width="200" height="26" uuid="9d6748a4-e39a-4f9d-a2c3-53727a0f7400"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ID_MENSUALIDAD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="106" height="26" uuid="5766c603-3c69-46d3-ac91-519dc35fe4fe"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Recibo No.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="233" width="101" height="26" uuid="63ef0dd2-b617-4c16-bdff-960d23e267b6"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="277" y="234" width="175" height="25" uuid="e3703d6e-4dfb-40da-9e4e-f3d4e768324c">
+					<printWhenExpression><![CDATA[$F{ESTADO}.equals( "ABONO" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Abono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="234" width="175" height="25" uuid="8f07d6fd-bc05-4a80-bb25-1034ddff1ce9">
+					<printWhenExpression><![CDATA[$F{ESTADO}.equals("PAGADO")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Pagado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="67" y="51" width="116" height="31" uuid="84d0f25d-3ec7-48c4-8588-cecf5449ca32"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}+',']]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="51" width="67" height="31" uuid="29f9201d-dbff-4347-91fa-22382ecd25f3"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Usted a ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="51" width="250" height="31" uuid="09593b53-2c44-4470-9f84-2d685206721f"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[a la fecha Correspondiente de]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="51" width="119" height="31" uuid="c3090705-90f3-4f1d-b3a3-45d6cb0784f3"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_PAGO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="82" width="36" height="31" uuid="0df6e5eb-b15f-400f-96c8-d6c3f1f66eab"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[del Alumno]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="36" y="82" width="219" height="31" uuid="b0008a99-d03d-4e2f-8b48-c3ea354e41e7"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBREALUMNO}+'.']]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="258" y="82" width="121" height="31" uuid="bc5261de-3b71-4fa2-b7e5-1b3cea8e264a"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[inscrito en el periodo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="379" y="82" width="183" height="28" uuid="961aa5fc-611b-4207-a651-fd637bb04c85"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PERIODO}+'.']]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="0" width="112" height="26" uuid="3d6d6728-95c9-4615-aa0e-138e1f987312"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Cuota No.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="452" y="0" width="100" height="26" uuid="fcc3fc99-f573-4e93-beaa-c4c23ead8ee4"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONSECUTIVO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="306" y="168" width="246" height="26" uuid="3f6904c4-7346-49e1-8866-d54262137bd4"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBREPADRE}+'.']]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="168" width="306" height="26" uuid="97b16fc7-437f-470e-8ce1-aa4123588ab4"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Este recibo se le dirige al Señor o Señora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="347" width="295" height="26" uuid="fb1f96e1-20e4-4b15-a3ef-45cc6ab63ba0">
+					<printWhenExpression><![CDATA[$F{ESTADO}.equals( "ABONO" )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Recuerde pagar lo antes posible...!!!]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="219" width="142" height="29" uuid="d34d1866-8345-4bbb-9fcb-89e3133f6725"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBREUSUARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="219" width="116" height="26" uuid="7ea53d02-df48-4a35-8941-c8ab518da5c8"/>
+				<textElement textAlignment="Right">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Recibido Por:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="289" width="101" height="25" uuid="8e2691b0-c004-4d79-99bc-febe915adfbf"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PAGADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="259" width="100" height="30" uuid="fe81bfd8-d5cb-49a4-b049-0bf1b33ea5c8"/>
+				<textElement>
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="277" y="289" width="175" height="26" uuid="80b574f6-ad3d-416c-beca-19efeef87063"/>
+				<textElement textAlignment="Right">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Monto Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="260" width="175" height="26" uuid="cc71c5a5-f293-453f-ac0e-34a2b8258a97"/>
+				<textElement textAlignment="Right">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Monto Adeudado:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Deudas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82a738fe-56fb-4b1f-a4a8-22f06ae637f2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[select m.consecutivo, m.matricula, (Select e.nombres||' '||e.apellidos
+                                    from estudiantes e
+                                    where e.matricula = m.matricula) as NombreAlumno,
+       m.documento,(select p.nombres||' '||p.apellidos
+                    from padremadres p
+                    where p.documento like m.documento) as NombrePadre,
+       m.fecha_pago, m.estado, m.monto,m.pagado, m.total, m.periodo
+from mensualidad m
+where m.fecha_pago <= current_date and m.estado in('ABONO', 'NOPAGA')]]>
+	</queryString>
+	<field name="CONSECUTIVO" class="java.lang.Integer"/>
+	<field name="MATRICULA" class="java.lang.Integer"/>
+	<field name="NOMBREALUMNO" class="java.lang.String"/>
+	<field name="DOCUMENTO" class="java.lang.String">
+		<fieldDescription><![CDATA[Este Campo esta ligado con la cedula de los padres...]]></fieldDescription>
+	</field>
+	<field name="NOMBREPADRE" class="java.lang.String"/>
+	<field name="FECHA_PAGO" class="java.sql.Date"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="PAGADO" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<field name="PERIODO" class="java.lang.String"/>
+	<title>
+		<band height="139" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="141" height="139" uuid="0681e7a8-f6fd-4d58-a05b-ab0f0a6b0d1d"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="141" y="0" width="414" height="32" uuid="6fae51ea-7728-4694-8534-cd34ccf30b04"/>
+				<textElement textAlignment="Center">
+					<font fontName="Comic Sans MS" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sophia Studio]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="410" y="93" width="145" height="26" uuid="2a68177c-1763-48d5-8c13-0e62e3460adc"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="410" y="119" width="145" height="20" uuid="cbb5c35c-07b0-4b05-93a9-ac71aa4a8740"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="141" y="99" width="269" height="32" uuid="d19dcd3e-e52e-4765-9f0b-013163dd70c0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Comic Sans MS" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deudas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="29" height="20" uuid="da3c487b-472a-418d-8c00-404ca4c838a3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="41" height="20" uuid="de18ac8c-940b-4f27-b0c2-50ec02672b55"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Matricula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="20" width="48" height="20" uuid="72bb1b11-1271-428c-9f0a-dc598f659353"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="20" width="62" height="20" uuid="182a102a-0a7e-4e3b-b321-d88b3ed9c462"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="44" width="555" height="1" uuid="b309ae3e-d001-435b-8120-08092fea0bb6"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="41" y="20" width="100" height="20" uuid="5ee9f08f-94c6-484c-8064-7fe107448af6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre alumno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="20" width="100" height="20" uuid="bf7d863c-da45-4060-90e7-937c7c8a6a22"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre Padre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="20" width="46" height="20" uuid="9bc8914e-3c9c-459e-a779-7d1196142623"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="20" width="48" height="20" uuid="15f27dd6-e8c0-49cb-a961-ef457668487a"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pagado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="20" width="36" height="20" uuid="ad03d813-af06-4d32-af9f-bd3a9daedafd"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deuda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="20" width="56" height="20" uuid="225be6ed-2330-4819-b14c-58c0210fa95c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Periodo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="29" height="20" uuid="44b8c8c8-d92b-4707-9186-cc85852cc32a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CONSECUTIVO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="20" width="48" height="20" uuid="68e670dd-b57d-44a6-be05-ac4901312faf"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{FECHA_PAGO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="20" width="62" height="20" uuid="251f1956-0260-4177-91cc-5d3611ca42df"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="45" width="555" height="1" uuid="fd3385a6-acc3-4dc2-a782-b37ce3f39713"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="20" width="41" height="20" uuid="3c255c01-477c-4678-afb7-f2251bf97bd7"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{MATRICULA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="20" width="100" height="20" uuid="21f639ac-3a72-4e08-b088-9c75a90ebfd8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBREALUMNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="20" width="100" height="20" uuid="7eaa4842-b95b-484d-bd94-332223b0cbc3"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NOMBREPADRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="351" y="20" width="46" height="20" uuid="b3ca46f6-ff05-4d80-9702-c4e710a16319"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="397" y="20" width="48" height="20" uuid="a5cf76b0-cada-4e09-863d-5c1d805a455b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{PAGADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="445" y="20" width="36" height="20" uuid="33fdeede-0199-4067-80d1-96746678e880"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="481" y="20" width="56" height="20" uuid="d1209650-c8e4-4f25-92ab-04a5ba80d44c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{PERIODO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

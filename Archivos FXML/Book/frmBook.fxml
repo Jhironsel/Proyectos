@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="84.0" layoutY="128.0" prefHeight="314.0" prefWidth="467.0" AnchorPane.bottomAnchor="92.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXTextField labelFloat="true" prefHeight="42.0" prefWidth="516.0" promptText="Book Title">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField labelFloat="true" prefHeight="42.0" prefWidth="516.0" promptText="Book ID">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField labelFloat="true" prefHeight="42.0" prefWidth="516.0" promptText="Book Author">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXTextField labelFloat="true" prefHeight="42.0" prefWidth="516.0" promptText="Publisher">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+            </JFXTextField>
+            <JFXDatePicker defaultColor="#060ada" nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0" prefWidth="437.0" promptText="Publisher Date">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </JFXDatePicker>
+         </children>
+      </VBox>
+      <HBox layoutX="15.0" layoutY="320.0" prefHeight="72.0" prefWidth="437.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="320.0">
+         <children>
+            <JFXButton fx:id="btnCancel" buttonType="RAISED" cancelButton="true" onAction="#btnCancelOnAction" prefHeight="58.0" prefWidth="264.0" stylesheets="@frmBook.css" text="Cancel">
+               <HBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@cancel_white_36x36.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="btnAcept" defaultButton="true" onAction="#btnAceptOnAction" prefHeight="58.0" prefWidth="269.0" stylesheets="@frmBook.css" text="Acept">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@done_white_36x36.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </children>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
+</AnchorPane>

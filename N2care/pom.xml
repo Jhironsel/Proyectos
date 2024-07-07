@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>sur.softsurena</groupId>
+    <artifactId>n2care</artifactId>
+    <version>1</version>
+    <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>sur.softsurena</groupId>
+        <artifactId>sistemasPom</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>                    
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>/archivos/frmLogin.java</mainClass>
+                        </manifest>
+                    </archive>                    
+                    <outputDirectory>
+                        /home/jhironsel/Proyectos/NetBeansProjects/sistemasPom/n2care/programa/
+                    </outputDirectory>
+                    <finalName>sistemaMedico</finalName>
+                    <attach>false</attach>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            
+        </plugins>
+    </build>    
+    
+    <dependencies>
+        <dependency>
+            <groupId>sur.softsurena</groupId>
+            <artifactId>entidades</artifactId>
+            <version>2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>sur.softsurena</groupId>
+            <artifactId>imagenes</artifactId>
+            <version>2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>

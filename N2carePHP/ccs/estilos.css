@@ -1,0 +1,43 @@
+body,h1,h2,h3,h4,h5 {
+    font-family: "Poppins", sans-serif
+}
+body {
+    font-size:16px;
+}
+.w3-half img{
+    margin-bottom:-6px;
+    margin-top:16px;
+    opacity:0.8;
+    cursor:pointer
+}
+.w3-half img:hover{
+    opacity:1
+}
+
+#cuerpo{
+    background-image: url("../imagenes/Principal800x600.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+textarea{
+    max-width: 500px;
+    max-height: 250px;
+    min-width: 480px;
+    min-height: 230px;
+}
+
+#gwd-reCAPTCHA_2, #rc-imageselect   {
+    -webkit-transform: scale(0.84);
+    -moz-transform:    scale(0.84);
+    -ms-transform:     scale(0.84);
+    -o-transform:      scale(0.84);
+    transform:         scale(0.84);
+
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    transform-origin: 0 0;
+}

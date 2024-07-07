@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteEstudiantesPorGrupo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9ccd9ca6-ceab-4234-8737-8c93c20756d0">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<subDataset name="ConteoPorGrupoEstudiante" uuid="a01b3c4f-1311-458b-b6df-07bfd837d35e">
+		<queryString>
+			<![CDATA[SELECT
+     (select trim(
+    case lunes
+                when 1 then 'Lunes '
+        else trim('')
+    end||
+    case martes
+        when 1 then 'Martes '
+        else trim('')
+    end||
+           case miercoles
+                when 1 then 'Miercoles '
+        else trim('')
+          end||
+           case jueves
+                when 1 then 'Jueves '
+        else trim('')
+           end||
+           case viernes
+                when 1 then 'Viernes '
+        else trim('')
+           end||
+           case sabados
+               when 1 then 'Sabados '
+        else trim('')
+           end||
+          case domingos
+                when 1 then 'Domingos '
+        else trim('')
+    end)||' De: ' ||subString(hora_inicio from 1 for 8)||' Hasta: '|| subString(Hora_Final from 1 for 8)
+       from Tandas t
+       where t.ID_Tanda = c.id_tanda), count(c.id_tanda)
+FROM
+     Inscripcion c
+where c.fecha_inscripcion <= current_date and current_date <= dateadd(1 year to c.fecha_inscripcion)
+GROUP BY
+     c.id_tanda]]>
+		</queryString>
+		<field name="CONCATENATION" class="java.lang.String"/>
+		<field name="COUNT" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[select MATRICULA, NOMBRES, APELLIDOS,
+       (select trim(
+               case LUNES
+                 when 1 then 'Lunes '
+                 else trim('')
+               end ||
+               case MARTES
+                 when 1 then 'Martes '
+                 else trim('')
+               end ||
+               case MIERCOLES
+                 when 1 then 'Miercoles '
+                 else trim('')
+               end ||
+               case JUEVES
+                 when 1 then 'Jueves '
+                 else trim('')
+               end ||
+               case VIERNES
+                 when 1 then 'Viernes '
+                 else trim('')
+               end ||
+               case SABADOS
+                 when 1 then 'Sabados '
+                 else trim('')
+               end ||
+               case DOMINGOS
+                 when 1 then 'Domingos '
+                 else trim('')
+               end) || ' De: ' || substring(HORA_INICIO from 1 for 8) || ' Hasta: ' || substring(HORA_FINAL from 1 for 8)
+        from TANDAS T
+        where T.ID_TANDA = (select I.ID_TANDA
+                            from INSCRIPCION I
+                            where I.MATRICULA = E.MATRICULA and
+                            extract(year from I.fecha_inscripcion) = extract(year from current_date))) as DIAS, INSCRIPTO, ESTADO
+from ESTUDIANTES E
+where E.INSCRIPTO = 1 and E.ESTADO = 1
+group by MATRICULA, NOMBRES, APELLIDOS, ID_TANDA, INSCRIPTO, ESTADO]]>
+	</queryString>
+	<field name="MATRICULA" class="java.lang.Integer"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="APELLIDOS" class="java.lang.String"/>
+	<field name="DIAS" class="java.lang.String"/>
+	<field name="INSCRIPTO" class="java.lang.Integer"/>
+	<field name="ESTADO" class="java.lang.Integer"/>
+	<group name="DiasAgrupado">
+		<groupExpression><![CDATA[$F{DIAS}]]></groupExpression>
+		<groupHeader>
+			<band height="39">
+				<textField>
+					<reportElement x="3" y="0" width="552" height="20" forecolor="#3300FF" uuid="b92c5f9b-f0fd-4bfc-983c-bb7ae51609da"/>
+					<textElement>
+						<font fontName="Serif" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DIAS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="219" y="20" width="92" height="18" forecolor="#000000" uuid="b144a466-f607-4760-85ac-46549338b34d"/>
+					<textElement>
+						<font fontName="Serif" size="12" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Apellidos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="392" y="20" width="49" height="18" forecolor="#000000" uuid="d95cd3f0-afe9-44a9-9218-7cea959bc069"/>
+					<textElement>
+						<font fontName="Serif" size="12" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Estado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="74" y="20" width="47" height="18" forecolor="#000000" uuid="ef335688-3598-450e-8231-dd01c5409c77"/>
+					<textElement>
+						<font fontName="Serif" size="12" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Nombre]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="467" y="20" width="86" height="18" forecolor="#000000" uuid="5c68aeca-b603-4a1d-851f-af3d299c9881"/>
+					<textElement>
+						<font fontName="Serif" size="12" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Inscripto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="3" y="20" width="57" height="18" uuid="d04e98a3-ca55-4a78-8bf9-6fb6de930ac9"/>
+					<textElement>
+						<font fontName="Serif" size="12" isUnderline="true"/>
+					</textElement>
+					<text><![CDATA[Matricula]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="19" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="129" splitType="Stretch">
+			<staticText>
+				<reportElement x="132" y="5" width="421" height="34" forecolor="#FF0000" uuid="50751f06-ada1-4fdb-94d6-125c63e2badf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sophia Studio]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="371" y="91" width="182" height="33" forecolor="#0000FF" uuid="fd27680b-0567-4923-8e7e-899ae345daa4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="1" y="5" width="129" height="120" uuid="3820c030-f4b5-47d1-9233-703b171a1a5f"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="132" y="90" width="231" height="34" forecolor="#003333" uuid="38d5305c-6d46-4881-8c23-90595ea74c30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Estudiantes]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="74" y="1" width="145" height="18" forecolor="#000000" uuid="c484a95c-242d-4a42-bafb-f089bbd0ed20"/>
+				<textElement>
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="374" y="1" width="80" height="18" forecolor="#000000" uuid="d350905b-ccdd-4a2a-9032-6dfcfb4fb871">
+					<printWhenExpression><![CDATA[$F{ESTADO}.equals(1)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}.equals(1) ? "Activo" : "Inactivo"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="219" y="1" width="155" height="18" forecolor="#000000" uuid="ba042a6f-39c0-4d32-b003-b03da2fabab9"/>
+				<textElement>
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="467" y="1" width="54" height="18" forecolor="#000000" uuid="6b146d1d-172e-48f1-9d92-e26720e3add5">
+					<printWhenExpression><![CDATA[$F{INSCRIPTO}.equals(1)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{INSCRIPTO}.equals(0) ? "No" : "Si" )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="467" y="1" width="54" height="18" forecolor="#FF0000" uuid="e8f4f7c7-179c-4c10-bd25-37678aed19ea">
+					<printWhenExpression><![CDATA[$F{INSCRIPTO}.equals( 0 )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{INSCRIPTO}.equals(0) ? "No" : "Si" )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3" y="1" width="57" height="18" uuid="31dc3629-a46b-4c2f-bc18-fc8f7f174667"/>
+				<textElement>
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MATRICULA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="374" y="1" width="80" height="18" forecolor="#FF0000" uuid="546ccfa8-6a42-4616-9a06-784fde453489">
+					<printWhenExpression><![CDATA[$F{ESTADO}.equals(0)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ESTADO}.equals(1) ? "Activo" : "Inactivo"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="262" splitType="Stretch">
+			<pie3DChart>
+				<chart>
+					<reportElement x="13" y="12" width="527" height="237" uuid="0fe0946a-3f9e-4618-8ce7-93e106a53237"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="ConteoPorGrupoEstudiante" uuid="c08136d8-6ded-438c-9a98-ff6e71d41311"/>
+					</dataset>
+					<keyExpression><![CDATA[$F{CONCATENATION}.trim()]]></keyExpression>
+					<valueExpression><![CDATA[$F{COUNT}]]></valueExpression>
+					<labelExpression><![CDATA[$F{COUNT}.toString()]]></labelExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>
