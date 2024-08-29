@@ -61,12 +61,10 @@
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>jaybird</artifactId>
-            <version>5.0.5.java11</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
-            <version>6.5.2.Final</version>
         </dependency>
         <!-- ////////////////////////////////////////// -->
     </dependencies>
