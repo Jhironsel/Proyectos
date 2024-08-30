@@ -4213,6 +4213,7 @@ AS
      DECLARE VARIABLE c_Fchi D_FECHA;
      DECLARE VARIABLE c_Fcha D_FECHA;
      DECLARE VARIABLE c_Fchv D_FECHA;
+     DECLARE VARIABLE v_valor TYPE OF COLUMN VS_USUARIOS_TAGS.VALOR;
 BEGIN
      IF(CURRENT_ROLE <> 'RRR_SOFTSURENA')THEN
      BEGIN
@@ -4248,6 +4249,20 @@ BEGIN
           END
           IF(entrada) THEN
                EXCEPTION E_EQUIPO_NO_REGISTRADO;
+            
+            --Consultar si el usuario contiene el atributo de auto_role en el sistema.
+            FOR SELECT u.VALOR
+            FROM VS_USUARIOS_TAGS u 
+            WHERE TRIM(u.USUARIO) STARTING WITH TRIM(CURRENT_USER) AND
+                  TRIM(u.LLAVE) STARTING WITH TRIM('AUTO_ROLE') AND
+                  TRIM(u.VALOR) != '' AND
+                  TRIM(u.VALOR) IS NOT NULL
+            INTO v_valor DO BEGIN
+                --si lo tiene este decir cual es su auto role, para ponerlo set role nombreRole.
+                EXECUTE STATEMENT 'SET ROLE '||v_valor;
+            END
+                
+            
      END
 END
 ^
@@ -4260,7 +4275,7 @@ COMMENT ON ROLE CAJERO IS '<!DOCTYPE html>
 <head>
 <style>
 body {
-  background-image: url("https://scontent.fhex5-2.fna.fbcdn.net/v/t1.18169-9/12009790_1068370356506549_8599854094894222264_n.png?stp=c17.0.766.400a_dst-jpg_s526x296&_nc_cat=110&ccb=1-7&_nc_sid=300f58&_nc_ohc=nXq2jETM2u4AX_9v_Am&_nc_ht=scontent.fhex5-2.fna&oh=00_AfB4thmtk4ucoGYERiXlNDQyQTDO77TNolzoi3uQdqjZqA&oe=655A79DC");
+  background-image: url("Una imagen.");
   background-repeat: no-repeat;
   background-position: right top;
   margin-right: 200px;
@@ -6947,26 +6962,35 @@ ALTER PROCEDURE SP_I_USUARIO (
 SQL SECURITY DEFINER
 
 AS
-DECLARE VARIABLE V_SQL D_VARCHAR_1024;
+DECLARE VARIABLE V_SQL D_VARCHAR_MAX;
+DECLARE VARIABLE V_FIRTNAME D_VARCHAR_MAX;
+DECLARE VARIABLE V_MIDDLENAME D_VARCHAR_MAX;
+DECLARE VARIABLE V_LASTNAME D_VARCHAR_MAX;
 BEGIN
+        V_SQL='';
      IF((SELECT DISTINCT (1) 
           FROM VS_USUARIOS 
           WHERE TRIM(USERNAME) STARTING WITH TRIM(:I_USER_NAME)) = 1)THEN
                EXCEPTION E_USUARIO_REGISTRADO;
+               
+    V_FIRTNAME = IIF(I_PNOMBRE IS NULL OR I_PNOMBRE = '', '', ' FIRSTNAME '''||TRIM(I_PNOMBRE)||'''');
+    
+    V_MIDDLENAME = IIF(I_SNOMBRE IS NULL OR I_SNOMBRE = '', '', ' MIDDLENAME '''||TRIM(I_SNOMBRE)||''''); 
+    
+    V_LASTNAME = IIF(I_APELLIDOS IS NULL OR I_APELLIDOS = '', '', ' LASTNAME '''||TRIM(I_APELLIDOS)||'''');
           
-     V_SQL = 'CREATE USER '||I_USER_NAME 
-          ||' PASSWORD '''||I_CLAVE
-          ||''' FIRSTNAME '''||I_PNOMBRE
-          ||''' MIDDLENAME '''||I_SNOMBRE
-          ||''' LASTNAME '''||I_APELLIDOS
-          ||''''|| iif(I_ESTADO, ' ACTIVE ',' INACTIVE ') 
-          ||I_TAGS||' '
-          || iif(I_ADMINISTRADOR, ' GRANT ',' REVOKE ') 
-          || 'ADMIN ROLE USING PLUGIN Srp;';
-          
+     V_SQL = 'CREATE USER '||TRIM(I_USER_NAME)||
+             ' PASSWORD '''||TRIM(I_CLAVE)||''' '||
+             V_FIRTNAME||
+             V_MIDDLENAME||
+             V_LASTNAME||
+             IIF(I_ESTADO, ' ACTIVE ',' INACTIVE ')||
+             'TAGS('||I_TAGS||')'||
+             ' '|| IIF(I_ADMINISTRADOR, ' GRANT ',' REVOKE ')|| 'ADMIN ROLE USING PLUGIN Srp;';
+     
      EXECUTE STATEMENT V_SQL;
      
-     V_SQL = 'COMMENT ON USER '||I_USER_NAME||' is '''||I_DESCRIPCION||'''';
+     V_SQL = 'COMMENT ON USER '||TRIM(I_USER_NAME)||' is '''||I_DESCRIPCION||'''';
      
      EXECUTE STATEMENT V_SQL;
      
@@ -7045,7 +7069,8 @@ BEGIN
 
 	V_ESTADO = (SELECT ESTADO FROM V_ARS WHERE ID = :ID);
      
-     UPDATE V_ARS      SET 
+     UPDATE V_ARS 
+     SET 
           DESCRIPCION                   = :Descripcion, 
           COVERTURA_CONSULTA_PORCIENTO  = :Covertura, 
           ESTADO                        = :ESTADO
@@ -7940,7 +7965,7 @@ BEGIN
      /*Validando que el usuario este registrado en la app*/
      IF((SELECT DISTINCT (1) 
           FROM VS_USUARIOS  
-          WHERE TRIM(USERNAME) STARTING WITH (TRIM(:I_USER_NAME))) IS NULL)THEN
+          WHERE TRIM(USERNAME) STARTING WITH UPPER(TRIM(:I_USER_NAME))) IS NULL)THEN
                EXCEPTION E_USUARIO_NO_ENCONTRADO;
      
           
@@ -8601,6 +8626,7 @@ GRANT CAJERO TO JHIRONSEL WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT CAJERO TO RDB$ADMIN WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT CAJERO TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT DOCTOR TO JHASLYN WITH ADMIN OPTION GRANTED BY SYSDBA;
+GRANT DOCTOR TO JHIRONSEL GRANTED BY SYSDBA;
 GRANT DOCTOR TO RDB$ADMIN WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT DOCTOR TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT GERENTE TO JHASLYN GRANTED BY SYSDBA;
@@ -8613,6 +8639,8 @@ GRANT RRHH TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT RRR_SOFTSURENA TO RDB$ADMIN WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT RRR_SOFTSURENA TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT SECRETARIA TO JHADIEL WITH ADMIN OPTION GRANTED BY SYSDBA;
+GRANT SECRETARIA TO JHIRONSEL GRANTED BY SYSDBA;
+GRANT SECRETARIA TO PRUEBA GRANTED BY SYSDBA;
 GRANT SECRETARIA TO RDB$ADMIN WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT SECRETARIA TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT VENDEDOR TO JHADIEL GRANTED BY SYSDBA;
@@ -8784,7 +8812,7 @@ GRANT EXECUTE
  ON PROCEDURE PERM_CREAR_FACTURAS TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
- ON PROCEDURE PERM_PANEL_USUARIO TO ROLE CAJERO GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+ ON PROCEDURE PERM_PANEL_USUARIO TO ROLE CAJERO WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
  ON PROCEDURE PERM_PANEL_USUARIO TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
@@ -9688,6 +9716,9 @@ GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
 
 GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
  ON GET_ROL TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;
+
+GRANT SELECT
+ ON GET_ROLES TO  "PUBLIC" GRANTED BY SYSDBA;
 
 GRANT DELETE, INSERT, REFERENCES, SELECT, UPDATE
  ON GET_ROLES TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA;
