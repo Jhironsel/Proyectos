@@ -641,9 +641,11 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         List<Role> rolesList = new ArrayList<>();
 
         for (int i = 0; i < tblRoles.getRowCount(); i++) {
-            rolesList.add(Role.builder().
-                    roleName(tblRoles.getValueAt(i, 0).toString()).
-                    build());
+            rolesList.add(
+                    Role.
+                            builder().
+                            roleName(tblRoles.getValueAt(i, 0).toString()).build()
+            );
         }
 
         String etiquetas = "";
@@ -653,14 +655,12 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                     + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
         }
 
-        etiquetas = "TAGS(" + etiquetas + ")";
-
         String mensaje = "<html>"
-                + "<h1>Se va a agregar el Usuario: </h1><h2>" + txtUserName.getText() + "</h2></br>"
-                + "<h1>Con Nombre y Apellido: </h1><h2>" + txtPNombre.getText() + " " + txtApellidos.getText() + "</h2></br>"
-                + "<h1>Delegar: </h1><h2>" + (cbAdministrador.isSelected() ? "Activado" : "NO Activado") + "</h2></br>"
-                + "<h1>Estado del Usuario: </h1><h2>" + (cbEstado.isSelected() ? "Activo" : "No Activo") + "</h2></br>"
-                + "<h2>Desea continuar? </h2>"
+                + "<h1>Se va a agregar el Usuario: " + txtUserName.getText() + "</h1></br>"
+                + "<h1>Con Nombre y Apellido: " + txtPNombre.getText() + " " + txtApellidos.getText() + "</h1></br>"
+                + "<h1>Delegar: " + (cbAdministrador.isSelected() ? "Activado" : "NO Activado") + "</h1></br>"
+                + "<h1>Estado del Usuario: " + (cbEstado.isSelected() ? "Activo" : "No Activo") + "</h1></br>"
+                + "<h1>Desea continuar? </h1>"
                 + "</html>";
 
         int resp = JOptionPane.showConfirmDialog(
@@ -674,7 +674,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             return;
         }
 
-        if (existeUsuarioByUserName(txtUserName.getText()) & nuevo) {
+        if (existeUsuarioByUserName(txtUserName.getText()) && nuevo) {
             int r = JOptionPane.showConfirmDialog(
                     this,
                     "Usuario ya existe. \n\nDesea recuperar el usuario?",
@@ -739,17 +739,17 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     }//GEN-LAST:event_cbEstadoActionPerformed
 
     private void btnAgregarTagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTagActionPerformed
-        frmEtiquetas e = new frmEtiquetas(null, true);
-        e.setLocationRelativeTo(e);
-        e.setVisible(true);
+        frmEtiquetas etiqueta = new frmEtiquetas(null, true);
+        etiqueta.setLocationRelativeTo(etiqueta);
+        etiqueta.setVisible(true);
 
-        if (!e.aceptar) {
+        if (!etiqueta.aceptar) {
             return;
         }
 
-        boolean palabra = PalabrasReservadasFirebird.
-                palabrasReservadasFirebird().
-                contains(e.txtPropiedad.getText());
+        boolean palabra = PalabrasReservadasFirebird
+                .palabrasReservadasFirebird()
+                .contains(etiqueta.txtPropiedad.getText());
 
         if (palabra) {
             JOptionPane.showMessageDialog(
@@ -761,8 +761,9 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             return;
         }
 
+        //Evitar que se duplique las etiquetas.
         for (int i = 0; i < tblEtiquetas.getRowCount(); i++) {
-            if (e.txtPropiedad.getText().equalsIgnoreCase(
+            if (etiqueta.txtPropiedad.getText().equalsIgnoreCase(
                     tblEtiquetas.getValueAt(i, 0).toString())) {
                 JOptionPane.showMessageDialog(
                         this,
@@ -777,8 +778,8 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         Object registro[] = new Object[2];
         DefaultTableModel miTabla = (DefaultTableModel) tblEtiquetas.getModel();
 
-        registro[0] = e.txtPropiedad.getText();
-        registro[1] = e.txtValor.getText();
+        registro[0] = etiqueta.txtPropiedad.getText();
+        registro[1] = etiqueta.txtValor.getText();
 
         miTabla.addRow(registro);
 

@@ -2,6 +2,7 @@ package sur.softsurena.metodos;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -12,6 +13,12 @@ import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
+import static sur.softsurena.metodos.M_Usuario.ERROR_AL_AGREGAR__USUARIO;
+import static sur.softsurena.metodos.M_Usuario.ERROR_AL_BORRAR_USUARIO;
+import static sur.softsurena.metodos.M_Usuario.ERROR_AL_MODIFICAR_USUARIO;
+import static sur.softsurena.metodos.M_Usuario.USUARIO_AGREGADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Usuario.USUARIO_BORRADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Usuario.USUARIO_MODIFICADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -64,14 +71,14 @@ public class M_UsuarioNGTest {
     }
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 0
+            enabled = true,
+            description = """
+                          Metodo encargado de registrar a un usuario al sistema.
+                          """,
+            priority = 1
     )
     public void testAgregarUsuario() {
-        Resultado expResult = null;
         List<Role> roles = new ArrayList();
-        
         roles.add(
                 Role
                         .builder()
@@ -79,7 +86,85 @@ public class M_UsuarioNGTest {
                         .conAdmin(false)
                         .build()
         );
+        roles.add(
+                Role
+                        .builder()
+                        .roleName("SECRETARIA")
+                        .conAdmin(false)
+                        .build()
+        );
+
+        Resultado result = M_Usuario.agregarUsuario(
+                Usuario
+                        .builder()
+                        .user_name("Prueba")
+                        .clave("1")
+                        .pnombre("PNombre")
+                        //.snombre("")
+                        .apellidos("Apellidos")
+                        .administrador(Boolean.FALSE)
+                        .estado(Boolean.TRUE)
+                        .descripcion("Es un usuario de prueba.")
+                        .tags("PRUEBA='Una prueba del sistema', Otra='4352.4', ultima='234'")
+                        .roles(roles)
+                        .build()
+        );
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(USUARIO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_AGREGAR__USUARIO
+        );
         
+        result = M_Usuario.agregarUsuario(
+                Usuario
+                        .builder()
+                        .user_name("Jhironsel")
+                        .clave("1")
+                        .pnombre("Jhironsel")
+                        .snombre(null)
+                        .apellidos("Diaz Almonte")
+                        .administrador(Boolean.FALSE)
+                        .estado(Boolean.TRUE)
+                        .descripcion("Es un usuario de prueba para el sistema.")
+                        .tags("PRUEBA='Una prueba del sistema', Otra='4352.4', ultima='234'")
+                        .roles(roles)
+                        .build()
+        );
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(USUARIO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_AGREGAR__USUARIO
+        );
+    }
+    
+    
+    @Test(
+            enabled = true,
+            description = """
+                          Prueba que se encarga de modificar los usuarios del 
+                          sistema.
+                          """,
+            priority = 2
+    )
+    public void testModificarUsuario() {
+        List<Role> roles = new ArrayList();
+        roles.add(
+                Role
+                        .builder()
+                        .roleName("CAJERO")
+                        .conAdmin(false)
+                        .build()
+        );
         roles.add(
                 Role
                         .builder()
@@ -88,52 +173,57 @@ public class M_UsuarioNGTest {
                         .build()
         );
         
-        roles.add(
-                Role
-                        .builder()
-                        .roleName("RRHH")
-                        .conAdmin(false)
-                        .build()
-        );
-        
-        Resultado result = M_Usuario.agregarUsuario(
+        Resultado result = M_Usuario.modificarUsuario(
                 Usuario
                         .builder()
-                        .user_name("Prueba")
+                        .user_name("JHIRONSEL")
                         .clave("1")
-                        .pnombre("PNombre")
-                        .snombre("SNombre")
-                        .apellidos("Apellidos")
-                        .administrador(Boolean.FALSE)
-                        .descripcion("Es un usuario de prueba.")
-                        .tags("(PRUEBA='Una prueba del sistema', Otra='4352.4', ultima='234')")
+                        .pnombre("Jhironsel")
+                        .snombre("Jhadiel")
+                        .apellidos("Diaz Almonte")
+                        .administrador(Boolean.TRUE)
+                        .estado(Boolean.TRUE)
+                        .descripcion("Es un usuario de prueba para el sistema.")
+                        .tags("DROP PRUEBA, Otra='432.4', ultima='100'")
                         .roles(roles)
                         .build()
         );
-        assertEquals(result, expResult);
+        
+        assertEquals(
+                result, 
+                Resultado
+                .builder()
+                .mensaje(USUARIO_MODIFICADO_CORRECTAMENTE)
+                .estado(Boolean.TRUE)
+                .icono(JOptionPane.INFORMATION_MESSAGE)
+                .build(),
+                ERROR_AL_MODIFICAR_USUARIO
+        );
     }
 
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 0
-    )
-    public void testBorrarUsuario() {
-        String loginName = "";
-        Resultado expResult = null;
-        Resultado result = M_Usuario.borrarUsuario(loginName);
-        assertEquals(result, expResult);
-    }
+    
+    
+    
 
     @Test(
-            enabled = false,
-            description = "",
+            enabled = true,
+            description = """
+                          Metodo que verifica que las propiedades de nombres y 
+                          rol de usuario que hace el test.
+                          """,
             priority = 0
     )
     public void testGetUsuarioActual() {
-        Usuario expResult = null;
+        Usuario expResult = Usuario
+                .builder()
+                .user_name("SYSDBA")
+                .rol("NONE")
+                .build();
         Usuario result = M_Usuario.getUsuarioActual();
-        assertEquals(result, expResult);
+        
+        assertEquals(result.getUser_name(), expResult.getUser_name());
+        
+        assertEquals(result.getRol(), expResult.getRol());
     }
 
     @Test(
@@ -175,22 +265,44 @@ public class M_UsuarioNGTest {
             description = "",
             priority = 0
     )
-    public void testModificarUsuario() {
-        Usuario u = null;
-        Resultado expResult = null;
-        Resultado result = M_Usuario.modificarUsuario(u);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 0
-    )
     public void testExisteUsuarioByUserName() {
         String userName = "";
         boolean expResult = false;
         boolean result = M_Usuario.existeUsuarioByUserName(userName);
         assertEquals(result, expResult);
+    }
+    
+    
+    
+    @Test(
+            enabled = true,
+            description = """
+                          Metodo que permite eliminar un usuario del sistema.
+                          """,
+            priority = 3
+    )
+    public void testBorrarUsuario() {
+        Resultado result = M_Usuario.borrarUsuario("Prueba");
+        assertEquals(
+                result, 
+                Resultado
+                    .builder()
+                    .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(), 
+                ERROR_AL_BORRAR_USUARIO+" Prueba."
+        );
+        result = M_Usuario.borrarUsuario("Jhironsel");
+        assertEquals(
+                result, 
+                Resultado
+                    .builder()
+                    .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(), 
+                ERROR_AL_BORRAR_USUARIO+" Jhironsel."
+        );
     }
 }

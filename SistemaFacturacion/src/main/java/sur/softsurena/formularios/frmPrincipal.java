@@ -234,7 +234,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         //Se carga los roles del usuario en el comboBox.
         comprobandoRolesDisponibles(
                 usuario.getUser_name().strip(),
-                false
+                true
         ).stream().forEach(
                 rolItem -> {
                     cbRoles.addItem(rolItem);

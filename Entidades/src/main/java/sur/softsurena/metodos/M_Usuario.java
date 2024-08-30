@@ -52,6 +52,127 @@ public class M_Usuario {
     }
 
     /**
+     * Metodo utilizado para modificar los usuarios del sistema con el rol
+     * doctor, el cual permite agregar al registro su Exequatur y
+     * Especialidad.Metodo actualizado el 19 05 2022.
+     *
+     *
+     * @param usuario Un objeto de la clase Usuario.
+     * @return Devuelve un mensaje que indica si la actualizacion fue exitosa.
+     */
+    public static synchronized Resultado agregarUsuario(Usuario usuario) {
+        final String sql
+                = "EXECUTE PROCEDURE SP_I_USUARIO(?,?,?,?,?,?,?,?,?)";
+
+        try (CallableStatement cs = getCnn().prepareCall(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
+        )) {
+            cs.setString(1, usuario.getUser_name());
+            cs.setString(2, usuario.getClave());
+            cs.setString(3, usuario.getPnombre());
+            cs.setString(4, usuario.getSnombre());
+            cs.setString(5, usuario.getApellidos());
+            cs.setBoolean(6, usuario.getEstado());
+            cs.setBoolean(7, usuario.getAdministrador());
+            cs.setString(8, usuario.getDescripcion());
+            cs.setString(9, usuario.getTags());
+
+            cs.executeUpdate();
+
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_AGREGAR__USUARIO,
+                    ex
+            );
+
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_AGREGAR__USUARIO)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+        usuario.getRoles().stream().forEach(
+                role -> {
+                    asignarRolUsuario(
+                            role.getRoleName(),
+                            usuario.getUser_name(),
+                            role.isConAdmin()
+                    );
+                }
+        );
+
+        return Resultado
+                .builder()
+                .mensaje(USUARIO_AGREGADO_CORRECTAMENTE)
+                .icono(JOptionPane.INFORMATION_MESSAGE)
+                .estado(Boolean.TRUE)
+                .build();
+    }
+    public static final String USUARIO_AGREGADO_CORRECTAMENTE
+            = "Usuario agregado correctamente.";
+    public static final String ERROR_AL_AGREGAR__USUARIO
+            = "Error al agregar Usuario...";
+    
+    
+        /**
+     * Metodo para modificar a los usuarios en el sistema.
+     *
+     * @param usuario
+     * @return
+     */
+    public static synchronized Resultado modificarUsuario(Usuario usuario) {
+        final String sql
+                = "EXECUTE PROCEDURE SP_U_USUARIO (?,?,?,?,?,?,?,?)";
+        try (CallableStatement cs = getCnn().prepareCall(sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+            cs.setString(1, usuario.getUser_name());
+            cs.setString(2, usuario.getClave());
+            cs.setString(3, usuario.getPnombre());
+            cs.setString(4, usuario.getSnombre());
+            cs.setString(5, usuario.getApellidos());
+            cs.setBoolean(6, usuario.getEstado());
+            cs.setBoolean(7, usuario.getAdministrador());
+            cs.setString(8, usuario.getDescripcion());
+            cs.executeUpdate();
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_MODIFICAR_USUARIO)
+                    .estado(Boolean.FALSE)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .build();
+        }
+        usuario.getRoles().forEach(
+                role -> {
+                    asignarRolUsuario(
+                            role.getRoleName(),
+                            usuario.getUser_name(),
+                            role.isConAdmin()
+                    );
+                }
+        );
+
+        return Resultado
+                .builder()
+                .mensaje(USUARIO_MODIFICADO_CORRECTAMENTE)
+                .estado(Boolean.TRUE)
+                .icono(JOptionPane.INFORMATION_MESSAGE)
+                .build();
+    }
+    public static final String ERROR_AL_MODIFICAR_USUARIO
+            = "Error al modificar usuario...";
+    public static final String USUARIO_MODIFICADO_CORRECTAMENTE
+            = "Usuario modificado correctamente.";
+
+    /**
      * Para matener la mejor integridad de los datos los usuario se desactivan
      * del sistema.
      *
@@ -82,16 +203,16 @@ public class M_Usuario {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ERROR_AL_BORRAR_USUARIO, 
+                    ERROR_AL_BORRAR_USUARIO,
                     ex
             );
             if (ex.getMessage().contains("E_CAJERO_TURNO_ACTIVO")) {
                 return Resultado
-                    .builder()
-                    .mensaje(CAJERO_CUENTA_CON_UN_TURNO_ACTIVO)
-                    .icono(JOptionPane.WARNING_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
+                        .builder()
+                        .mensaje(CAJERO_CUENTA_CON_UN_TURNO_ACTIVO)
+                        .icono(JOptionPane.WARNING_MESSAGE)
+                        .estado(Boolean.FALSE)
+                        .build();
             }
 
             return Resultado
@@ -102,11 +223,11 @@ public class M_Usuario {
                     .build();
         }
     }
-    public static final String CAJERO_CUENTA_CON_UN_TURNO_ACTIVO 
+    public static final String CAJERO_CUENTA_CON_UN_TURNO_ACTIVO
             = "Cajero cuenta con un turno activo.";
-    private static final String USUARIO_BORRADO_CORRECTAMENTE 
+    public static final String USUARIO_BORRADO_CORRECTAMENTE
             = "Usuario borrado correctamente.";
-    private static final String ERROR_AL_BORRAR_USUARIO 
+    public static final String ERROR_AL_BORRAR_USUARIO
             = "Error al borrar usuario.";
 
     /**
@@ -140,10 +261,11 @@ public class M_Usuario {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             try (ResultSet rs = ps.executeQuery();) {
                 rs.next();
-                return Usuario.builder().
-                        user_name(rs.getString("USUARIO")).
-                        rol(rs.getString("ROLE")).
-                        build();
+                return Usuario
+                        .builder()
+                        .user_name(rs.getString("USUARIO"))
+                        .rol(rs.getString("ROLE"))
+                        .build();
             }
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -279,117 +401,6 @@ public class M_Usuario {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
         }
-    }
-
-    /**
-     * Metodo utilizado para modificar los usuarios del sistema con el rol
-     * doctor, el cual permite agregar al registro su Exequatur y
-     * Especialidad.Metodo actualizado el 19 05 2022.
-     *
-     *
-     * @param usuario Un objeto de la clase Usuario.
-     * @return Devuelve un mensaje que indica si la actualizacion fue exitosa.
-     */
-    public static synchronized Resultado agregarUsuario(Usuario usuario) {
-        final String sql
-                = "EXECUTE PROCEDURE SP_I_USUARIO(?,?,?,?,?,?,?,?,?)";
-
-        try (CallableStatement cs = getCnn().prepareCall(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
-        )) {
-            cs.setString(1, usuario.getUser_name());
-            cs.setString(2, usuario.getClave());
-            cs.setString(3, usuario.getPnombre());
-            cs.setString(4, usuario.getSnombre());
-            cs.setString(5, usuario.getApellidos());
-            cs.setBoolean(6, usuario.getEstado());
-            cs.setBoolean(7, usuario.getAdministrador());
-            cs.setString(8, usuario.getDescripcion());
-            cs.setString(9, usuario.getTags());
-
-            cs.executeUpdate();
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_AGREGAR__USUARIO, 
-                    ex
-            );
-
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_AGREGAR__USUARIO)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
-        }
-        usuario.getRoles().stream().forEach( role -> {
-                    asignarRolUsuario(
-                            role.getRoleName(),
-                            usuario.getUser_name(),
-                            role.isConAdmin()
-                    );
-                }
-        );
-
-        return Resultado
-                .builder()
-                .mensaje(USUARIO_AGREGADO_CORRECTAMENTE)
-                .icono(JOptionPane.INFORMATION_MESSAGE)
-                .estado(Boolean.TRUE)
-                .build();
-    }
-    public static final String USUARIO_AGREGADO_CORRECTAMENTE 
-            = "Usuario agregado correctamente.";
-    public static final String ERROR_AL_AGREGAR__USUARIO 
-            = "Error al agregar Usuario...";
-
-    /**
-     *
-     * @param u
-     * @return
-     */
-    public static synchronized Resultado modificarUsuario(Usuario u) {
-        final String sql
-                = "EXECUTE PROCEDURE SP_U_USUARIO (?,?,?,?,?,?,?,?)";
-        try (CallableStatement cs = getCnn().prepareCall(sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-            cs.setString(1, u.getUser_name());
-            cs.setString(2, u.getClave());
-            cs.setString(3, u.getPnombre());
-            cs.setString(4, u.getSnombre());
-            cs.setString(5, u.getApellidos());
-            cs.setBoolean(6, u.getEstado());
-            cs.setBoolean(7, u.getAdministrador());
-            cs.setString(8, u.getDescripcion());
-            cs.executeUpdate();
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return Resultado
-                    .builder()
-                    .mensaje("Error al modificar usuario...")
-                    .estado(Boolean.FALSE)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .build();
-        }
-        u.getRoles().forEach(role -> {
-            asignarRolUsuario(
-                    role.getRoleName(),
-                    u.getUser_name(),
-                    role.isConAdmin());
-        });
-
-        return Resultado
-                .builder()
-                .mensaje("Usuario modificado correctamente.")
-                .estado(Boolean.TRUE)
-                .icono(JOptionPane.INFORMATION_MESSAGE)
-                .build();
     }
 
     /**

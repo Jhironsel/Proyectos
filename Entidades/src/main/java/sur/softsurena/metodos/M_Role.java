@@ -86,7 +86,7 @@ public class M_Role {
         final String sql = """
             SELECT r.ROL, r.DESCRIPCION, a.ADMINISTRACION
             FROM GET_ROLES r
-            LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND a.USER_NAME STARTING WITH ?
+            LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND TRIM(a.USER_NAME) STARTING WITH TRIM(UPPER(?))
             WHERE a.USER_NAME IS %s NULL;
                            """.formatted((disponible ? "NOT" : ""));
 
@@ -347,14 +347,16 @@ public class M_Role {
             = "Procedimiento incorrecto a la base de datos.";
 
     /**
-     *
+     * Metodo encargado de dar los coles a los usuarios.
      * @param usuario
      * @param rol
      * @param admin
      * @return
      */
     public synchronized static Resultado asignarRolUsuario(
-            String rol, String usuario, boolean admin
+            String rol, 
+            String usuario, 
+            boolean admin
     ) {
         String sql = "EXECUTE PROCEDURE ADMIN_DAR_ROL_USUARIO(?,?,?)";
 
@@ -391,8 +393,10 @@ public class M_Role {
                     .build();
         }
     }
-    public static final String ERROR_AL_ASIGNAR_ROL = "Error al asignar rol";
-    public static final String ROL_ASIGNADO_A_USUARIO = "Rol asignado a usuario";
+    public static final String ERROR_AL_ASIGNAR_ROL 
+            = "Error al asignar rol";
+    public static final String ROL_ASIGNADO_A_USUARIO
+            = "Rol asignado a usuario";
 
     /**
      *
