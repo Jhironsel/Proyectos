@@ -146,12 +146,17 @@ public class M_PacienteNGTest {
 
     @Test(
             enabled = true,
-            description = "",
+            description = """
+                          Metodo encargado de consultar los sexo de los 
+                          pacientes.
+                          """,
             priority = 2
     )
     public void testGetSexoPaciente() {
         assertTrue(
-                M_Paciente.getSexoPaciente(persona.getIdPersona()).equals("M"),
+                M_Paciente.getSexoPaciente(
+                        persona.getIdPersona()
+                ).equals("M"),
                 ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
         );
     }

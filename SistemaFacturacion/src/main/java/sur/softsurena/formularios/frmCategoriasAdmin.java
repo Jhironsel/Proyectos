@@ -2,6 +2,7 @@ package sur.softsurena.formularios;
 
 public class frmCategoriasAdmin extends javax.swing.JFrame {
     private static Boolean aceptar;
+    private static final long serialVersionUID = 1L;
 
     public Boolean getAceptar() {
         return aceptar;
@@ -12,24 +13,18 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
     }
     
     public frmCategoriasAdmin(String categoria, Boolean estado, boolean nuevo) {
+        super((nuevo ? "Agregando categoria" : "Modificando categoria"), null);
         initComponents();
         txtCategoria.setText(categoria);
         jcbEstado.setSelected(estado);
         jcbEstadoActionPerformed(null);
-        if(nuevo){
-            jlTitulo.setText("Agregar categoria");
-            setTitle("Agregando categoria");
-        }else{
-            jlTitulo.setText("Modificar categoria");
-            setTitle("Modificando categoria");
-        }
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jlTitulo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jcbEstado = new javax.swing.JCheckBox();
         txtCategoria = new javax.swing.JTextField();
@@ -42,10 +37,6 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
                 formWindowClosed(evt);
             }
         });
-
-        jlTitulo.setFont(new java.awt.Font("FreeMono", 1, 24)); // NOI18N
-        jlTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlTitulo.setText("Modificar Categoria");
 
         jLabel2.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         jLabel2.setText("Nombre Categoria: ");
@@ -95,13 +86,12 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCategoria)
-                    .addComponent(jlTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(btnGrabar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcbEstado)))
                 .addContainerGap())
@@ -110,8 +100,6 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jlTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jcbEstado))
@@ -159,7 +147,6 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
     private newscomponents.RSButtonGradientIcon_new btnGrabar;
     private javax.swing.JLabel jLabel2;
     public javax.swing.JCheckBox jcbEstado;
-    private javax.swing.JLabel jlTitulo;
     public javax.swing.JTextField txtCategoria;
     // End of variables declaration//GEN-END:variables
 }

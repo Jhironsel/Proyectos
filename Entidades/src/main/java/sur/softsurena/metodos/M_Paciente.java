@@ -18,8 +18,6 @@ public class M_Paciente {
      * Metodo utilizado para consultar el sexo de los pacientes en la Base de
      * Datos.
      *
-     * TODO Analizar si este metodo es necesario.
-     *
      * @param idPaciente Identificador que se encuentra registrado en la tabla
      * de V_PERSONAS_PACIENTES.
      *
@@ -27,9 +25,11 @@ public class M_Paciente {
      */
     public static String getSexoPaciente(int idPaciente) {
         final String sql
-                = "SELECT SEXO "
-                + "FROM GET_PACIENTES "
-                + "WHERE ID = ?";
+                = """
+                  SELECT SEXO 
+                  FROM GET_PACIENTES 
+                  WHERE ID = ?
+                  """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -45,19 +45,14 @@ public class M_Paciente {
 
             return rs.getString(1);
         } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE,
+            LOG.log(Level.SEVERE, ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE,
                     ex
             );
             return "X";
         }
     }
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
-    public static final String ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE 
-            = "Error al consultar el sexo de un paciente en el sistema. ";
+    public static final String ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
+            = "Error al consultar el sexo de un paciente en el sistema.";
 
     //--------------------------------------------------------------------------
     /**
@@ -178,8 +173,8 @@ public class M_Paciente {
             return ps.executeQuery();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return null;
@@ -206,9 +201,9 @@ public class M_Paciente {
                   RIGHT JOIN V_CONSULTAS c ON c.IDPACIENTE = p.IDPACIENTE 
                   LEFT JOIN V_CONSULTAS_APROVADAS A on A.IDCONSULTA = C.IDCONSULTA 
                   WHERE A.IDCONSULTA is null and c.FECHA = ? and  c.IDCONTROLCONSULTA = ? 
-                  filtro 
+                  %s
                   ORDER BY c.TURNO
-                  """;
+                  """.formatted(filtro);
 
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -440,7 +435,7 @@ public class M_Paciente {
                     .build();
         }
     }
-    
+
     /**
      * Variable utilizada para mostrar mensaje.
      */
@@ -476,7 +471,6 @@ public class M_Paciente {
             ps.setBigDecimal(4, paciente.getPerimetroCefalico());
             ps.setBoolean(5, paciente.getCesarea());
             ps.setInt(6, paciente.getTiempoGestacion());
-            
 
             ps.execute();
 
@@ -519,7 +513,9 @@ public class M_Paciente {
      * @return
      */
     public static Resultado eliminarEntidad(Integer idPaciente) {
-        final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_PACIENTE(?)";
+        final String sql = """
+                           EXECUTE PROCEDURE SP_D_PERSONA_PACIENTE(?)
+                           """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,

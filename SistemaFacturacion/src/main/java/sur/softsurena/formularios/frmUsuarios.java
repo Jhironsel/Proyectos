@@ -68,11 +68,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         tblPermisosDisponibles = new RSMaterialComponent.RSTableMetro();
         jScrollPane8 = new javax.swing.JScrollPane();
         tblPermisosAsignados = new RSMaterialComponent.RSTableMetro();
-        btnBorrarPermiso = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnAsignarPermiso = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnQuitarAgregarPermisoAdmin = new RSMaterialComponent.RSButtonMaterialIconOne();
         jScrollPane11 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextPane();
+        jPanel1 = new javax.swing.JPanel();
+        btnQuitarAgregarPermisoAdmin = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnBorrarPermiso = new RSMaterialComponent.RSButtonMaterialIconOne();
+        jPanel3 = new javax.swing.JPanel();
+        btnAsignarPermiso = new RSMaterialComponent.RSButtonMaterialIconOne();
         jpDefRoles = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblListadoUsuarios = new RSMaterialComponent.RSTableMetro();
@@ -112,7 +114,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Botones de acción"));
 
-        jPanel4.setLayout(new java.awt.GridLayout(1, 0, 4, 0));
+        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btnNuevo.setText("Nuevo");
         btnNuevo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
@@ -216,7 +218,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             jpMantUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantUsuariosLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
         );
 
@@ -303,28 +305,18 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         });
         jScrollPane8.setViewportView(tblPermisosAsignados);
 
-        btnBorrarPermiso.setText("Borrar Permiso");
-        btnBorrarPermiso.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DELETE);
-        btnBorrarPermiso.setName("btnBorrarPermiso"); // NOI18N
-        btnBorrarPermiso.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnBorrarPermiso.setRound(40);
-        btnBorrarPermiso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarPermisoActionPerformed(evt);
-            }
-        });
+        txtDescripcion.setEditable(false);
+        txtDescripcion.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Descripcion del permiso "));
+        txtDescripcion.setContentType("text/html"); // NOI18N
+        txtDescripcion.setToolTipText("Aqui se muestran las descripcion del rol seleccionado.");
+        txtDescripcion.setName("txtDescripcion"); // NOI18N
+        jScrollPane11.setViewportView(txtDescripcion);
 
-        btnAsignarPermiso.setText("Asignar permiso");
-        btnAsignarPermiso.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
-        btnAsignarPermiso.setName("btnAsignarPermiso"); // NOI18N
-        btnAsignarPermiso.setPreferredSize(new java.awt.Dimension(100, 40));
-        btnAsignarPermiso.setRound(40);
-        btnAsignarPermiso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAsignarPermisoActionPerformed(evt);
-            }
-        });
+        jPanel1.setAutoscrolls(true);
+        jPanel1.setLayout(new java.awt.GridLayout(1, 2, 10, 3));
 
+        btnQuitarAgregarPermisoAdmin.setToolTipText(btnQuitarAgregarPermisoAdmin.getText());
+        btnQuitarAgregarPermisoAdmin.setAutoscrolls(true);
         btnQuitarAgregarPermisoAdmin.setIcons(null);
         btnQuitarAgregarPermisoAdmin.setMaximumSize(new java.awt.Dimension(100, 0));
         btnQuitarAgregarPermisoAdmin.setMinimumSize(new java.awt.Dimension(80, 0));
@@ -336,13 +328,38 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 btnQuitarAgregarPermisoAdminActionPerformed(evt);
             }
         });
+        jPanel1.add(btnQuitarAgregarPermisoAdmin);
 
-        txtDescripcion.setEditable(false);
-        txtDescripcion.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Descripcion del permiso "));
-        txtDescripcion.setContentType("text/html"); // NOI18N
-        txtDescripcion.setToolTipText("Aqui se muestran las descripcion del rol seleccionado.");
-        txtDescripcion.setName("txtDescripcion"); // NOI18N
-        jScrollPane11.setViewportView(txtDescripcion);
+        btnBorrarPermiso.setText("Borrar Permiso");
+        btnBorrarPermiso.setToolTipText(btnBorrarPermiso.getText());
+        btnBorrarPermiso.setAutoscrolls(true);
+        btnBorrarPermiso.setDoubleBuffered(true);
+        btnBorrarPermiso.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DELETE);
+        btnBorrarPermiso.setName("btnBorrarPermiso"); // NOI18N
+        btnBorrarPermiso.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnBorrarPermiso.setRound(40);
+        btnBorrarPermiso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarPermisoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBorrarPermiso);
+
+        jPanel3.setLayout(new java.awt.GridLayout(1, 4, 10, 3));
+
+        btnAsignarPermiso.setText("Asignar permiso");
+        btnAsignarPermiso.setToolTipText(btnAsignarPermiso.getText());
+        btnAsignarPermiso.setAutoscrolls(true);
+        btnAsignarPermiso.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
+        btnAsignarPermiso.setName("btnAsignarPermiso"); // NOI18N
+        btnAsignarPermiso.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnAsignarPermiso.setRound(40);
+        btnAsignarPermiso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarPermisoActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnAsignarPermiso);
 
         javax.swing.GroupLayout jpMantRolesLayout = new javax.swing.GroupLayout(jpMantRoles);
         jpMantRoles.setLayout(jpMantRolesLayout);
@@ -355,19 +372,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane11)
                     .addGroup(jpMantRolesLayout.createSequentialGroup()
-                        .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-                            .addComponent(btnBorrarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpMantRolesLayout.createSequentialGroup()
-                                .addComponent(btnQuitarAgregarPermisoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(158, 158, 158)))
                         .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMantRolesLayout.createSequentialGroup()
-                                .addGap(137, 137, 137)
-                                .addComponent(btnAsignarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jpMantRolesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)))))
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(6, 6, 6))
         );
         jpMantRolesLayout.setVerticalGroup(
@@ -375,21 +386,21 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jpMantRolesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
                     .addGroup(jpMantRolesLayout.createSequentialGroup()
                         .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnAsignarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnBorrarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnQuitarAgregarPermisoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane11)))
                 .addGap(6, 6, 6))
         );
+
+        jpMantRolesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPanel1, jPanel3});
 
         jtpPrivilegios.addTab("<html><center><b>Mantenimiento<br>Roles</b><center></html>", null, jpMantRoles, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
 
@@ -475,6 +486,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jScrollPane6.setViewportView(tblRolesDisponibles);
 
         btnAsignarRol.setText("Asignar rol");
+        btnAsignarRol.setAutoscrolls(true);
         btnAsignarRol.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
         btnAsignarRol.setName("btnAsignarRol"); // NOI18N
         btnAsignarRol.setPreferredSize(new java.awt.Dimension(100, 40));
@@ -486,6 +498,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         });
 
         btnQuitarRolUsuario.setText("Quitar rol");
+        btnQuitarRolUsuario.setAutoscrolls(true);
         btnQuitarRolUsuario.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
         btnQuitarRolUsuario.setName("btnQuitarRolUsuario"); // NOI18N
         btnQuitarRolUsuario.setPreferredSize(new java.awt.Dimension(100, 40));
@@ -496,6 +509,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
+        btnQuitarPermisoAdministrativoUsuario.setAutoscrolls(true);
         btnQuitarPermisoAdministrativoUsuario.setContentAreaFilled(true);
         btnQuitarPermisoAdministrativoUsuario.setDoubleBuffered(true);
         btnQuitarPermisoAdministrativoUsuario.setEffectButton(RSMaterialComponent.RSButtonMaterialIconOne.EFFECTBUTTON.RAISED);
@@ -528,12 +542,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpDefRolesLayout.createSequentialGroup()
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(jpDefRolesLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnQuitarPermisoAdministrativoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(96, 96, 96)
+                                .addComponent(btnQuitarPermisoAdministrativoUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnQuitarRolUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnQuitarRolUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
@@ -548,7 +562,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jpDefRolesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                     .addGroup(jpDefRolesLayout.createSequentialGroup()
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1409,7 +1423,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarAgregarPermisoAdmin;
     private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarPermisoAdministrativoUsuario;
     private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarRolUsuario;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane11;

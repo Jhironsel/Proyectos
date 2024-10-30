@@ -853,7 +853,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         if (!tblPacientes.isEnabled()) {
             return;
         }
-        
+
         mostrarRegistro();
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -861,7 +861,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         if (!tblPacientes.isEnabled()) {
             return;
         }
-        
+
         mostrarRegistro();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -951,7 +951,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         // si es nuevo validamos que el Cliente no exista
         if (nuevo) {//Me parece que este caja de texto tendria problema cuando es un usuario nuevo
-            if (existePaciente((String) txtCedula.getValue())) {
+            if (existePaciente(
+                    ((Persona) txtCedula.getValue()).getGenerales().getCedula()
+            ).getEstado()) {
                 JOptionPane.showInternalConfirmDialog(this,
                         "Cedula registrada en el sistema",
                         "Proceso de validacion",
@@ -960,8 +962,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 txtCedula.requestFocusInWindow();
                 return;
             }
-        } else if (!existePaciente(((Categoria) txtCedula.getValue()).
-                        getDescripcion())) {
+        } else if (!existePaciente(
+                ((Persona) txtCedula.getValue()).getGenerales().getCedula()
+        ).getEstado()) {
             JOptionPane.showInternalConfirmDialog(this,
                     "No puede modificar ese paciente con esa cedula",
                     "Proceso de validacion",
@@ -977,40 +980,44 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         int cedulaMadre, cedulaPadre;
 
         try {
-            cedulaMadre = ((Categoria) txtCedulaMadre.getValue()).getId();
+            cedulaMadre = ((Persona) txtCedulaMadre.getValue()).getId_persona();
 
         } catch (Exception e) {
             cedulaMadre = 0;
         }
 
         try {
-            cedulaPadre = ((Categoria) txtCedulaPadre.getValue()).getId();
+            cedulaPadre = ((Persona) txtCedulaPadre.getValue()).getId_persona();
 
         } catch (Exception e) {
             cedulaPadre = 0;
-        }        
+        }
 
         String msg;
         Generales g = Generales.builder().
                 cedula(txtCedula.getValue().toString()).
                 id_tipo_sangre(cbSangre.getSelectedIndex()).build();
-        
-        Asegurados a = Asegurados.builder().
-                id_ars(((ARS) cbSeguro.getSelectedItem()).getId()).
-                no_nss(txtNoSeguro.getValue().toString()).build();
-        
-        Paciente p = Paciente.builder().
-                id_persona(nuevo ? -1 : ((Persona) txtCedula.getValue()).getId_persona()).
-                idMadre(cedulaMadre).
-                idPadre(cedulaPadre).
-                generales(g).
-                pNombre(txtPNombre.getText()).
-                sNombre(txtSNombre.getText()).
-                apellidos(txtApellidos.getText()).
-                sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f').
-                asegurado(a).
-                estado(cbEstado.isSelected()).build();
-        
+
+        Asegurados a = Asegurados
+                .builder()
+                .id_ars(((ARS) cbSeguro.getSelectedItem()).getId())
+                .no_nss(txtNoSeguro.getValue().toString())
+                .build();
+
+        Paciente p = Paciente
+                .builder()
+                .id_persona(nuevo ? -1 : ((Persona) txtCedula.getValue()).getId_persona())
+                .idMadre(cedulaMadre)
+                .idPadre(cedulaPadre)
+                .generales(g)
+                .pNombre(txtPNombre.getText())
+                .sNombre(txtSNombre.getText())
+                .apellidos(txtApellidos.getText())
+                .sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f')
+                .asegurado(a)
+                .estado(cbEstado.isSelected())
+                .build();
+
         if (nuevo) {
             msg = agregarPaciente(p);
         } else {
@@ -1056,7 +1063,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        JOptionPane.showInternalMessageDialog(this, 
+        JOptionPane.showInternalMessageDialog(this,
                 borrarPaciente(((Categorias) txtCedula.getValue()).getDescripcion().trim()));
         //Actualizamos los cambios en la Tabla
         llenarTabla();
@@ -1127,7 +1134,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         frmDatosNacimiento n = new frmDatosNacimiento(null, true);
 
         n.txtCedula.setValue(new Categorias(((Categorias) txtCedula.getValue()).getId(),
-                        ((Categorias) txtCedula.getValue()).getDescripcion()));
+                ((Categorias) txtCedula.getValue()).getDescripcion()));
         n.setLocationRelativeTo(null);
         n.setVisible(true);
     }//GEN-LAST:event_btnDatosNacimientoActionPerformed
@@ -1155,18 +1162,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbEstadoActionPerformed
 
     private void cbEstadoTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoTablaActionPerformed
-        
+
         if (cbEstadoTabla.isSelected()) {
             cbEstadoTabla.setText("Padres Activos");
         } else {
             cbEstadoTabla.setText("Padres Inactivos");
         }
-        
+
         llenarTabla();
     }//GEN-LAST:event_cbEstadoTablaActionPerformed
 
     private void btnBuscarMadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarMadreActionPerformed
-        
+
         frmBuscarCedula b = new frmBuscarCedula(null, true, "f");
         b.setLocationRelativeTo(null);
         b.setVisible(true);
@@ -1174,7 +1181,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarMadreActionPerformed
 
     private void btnBuscarPadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPadreActionPerformed
-        
+
         frmBuscarCedula b = new frmBuscarCedula(null, true, "m");
         b.setLocationRelativeTo(null);
         b.setVisible(true);
@@ -1182,19 +1189,19 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarPadreActionPerformed
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        
+
         txtPNombre.requestFocusInWindow();
         Utilidades.showTooltip(txtPNombre);
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
-        
+
         txtApellidos.requestFocusInWindow();
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
         if (cbSeguro.isShowing() && btnGuardar.isEnabled()) {
-            
+
             cbSeguro.requestFocusInWindow();
             cbSeguro.showPopup();
         }
@@ -1203,19 +1210,19 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     private void cbSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSeguroActionPerformed
         if (btnGuardar.isEnabled()) {
-            
+
             txtNoSeguro.setValue(null);
             txtNoSeguro.requestFocusInWindow();
         }
     }//GEN-LAST:event_cbSeguroActionPerformed
 
     private void txtCedulaPadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaPadreActionPerformed
-        
+
         btnGuardar.requestFocusInWindow();
     }//GEN-LAST:event_txtCedulaPadreActionPerformed
 
     private void txtCedulaMadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMadreActionPerformed
-        
+
         txtCedulaPadre.requestFocusInWindow();
     }//GEN-LAST:event_txtCedulaMadreActionPerformed
 
@@ -1227,7 +1234,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "No se permite insertar foto al paciente generico");
             return;
         }
-        
+
         JFileChooser fc = new JFileChooser();
         fc.setFileFilter(new FileNameExtensionFilter("*.PNG, *.JPEG, *.JPG", "png",
                 "jpeg", "jpg"));
@@ -1249,7 +1256,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     private void jlFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlFotoMouseClicked
         if (evt.getClickCount() == 2) {
-            
+
             int id = ((Categorias) txtCedula.getValue()).getId();
             if (id <= 0) {
                 JOptionPane.showInternalMessageDialog(this,
@@ -1265,20 +1272,20 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jlFotoMouseClicked
 
     private void txtNoSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoSeguroActionPerformed
-        
+
         cbSexo.requestFocusInWindow();
     }//GEN-LAST:event_txtNoSeguroActionPerformed
 
     private void cbSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSexoActionPerformed
         if (btnGuardar.isEnabled()) {
-            
+
             cbSangre.requestFocusInWindow();
         }
     }//GEN-LAST:event_cbSexoActionPerformed
 
     private void cbSangreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSangreActionPerformed
         if (btnGuardar.isEnabled()) {
-            
+
             txtCedulaMadre.requestFocusInWindow();
         }
     }//GEN-LAST:event_cbSangreActionPerformed
@@ -1362,7 +1369,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             "<html><b>Seguro</b></html>",
             "<html><b>Numero</b></html>",
             "<html><b>Estado</b></html>"};
-        
+
         Object registro[] = new Object[10];
         tblPacientes.removeAll();
 
@@ -1379,9 +1386,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                         id(rs.getInt("IDPADRE")).
                         nombres(rs.getString("nombrePadre")).
                         cedula(rs.getString("CEDULAPADRE")).build();
-                
+
                 registro[1] = padre;
-                        
+
                 registro[2] = new Categoria(rs.getInt("IDPACIENTE"),
                         rs.getString("CEDULAPACIENTE").trim());
                 registro[3] = rs.getString("NOMBRES").trim();
@@ -1404,7 +1411,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             @Override
             public void tableChanged(TableModelEvent e) {
                 if (e.getType() == TableModelEvent.UPDATE) {
-                    
+
                 }
             }
         });
@@ -1423,18 +1430,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     cedula(((Personas) tblPacientes.getValueAt(
                             tblPacientes.getSelectedRow(), 0)).getCedula()).
                     build();
-            
+
             txtCedulaMadre.setValue(madre);
-            
+
             Personas padre = Personas.builder().
                     id(((Personas) tblPacientes.getValueAt(
                             tblPacientes.getSelectedRow(), 1)).getId()).
                     cedula(((Personas) tblPacientes.getValueAt(
                             tblPacientes.getSelectedRow(), 1)).getCedula()).
                     build();
-            
+
             txtCedulaPadre.setValue(padre);
-            
+
             txtCedula.setValue(new Categorias(
                     ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId(),
                     ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getDescripcion()));
@@ -1530,7 +1537,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         }
 
-        tblPacientes.setRowSelectionInterval(tblPacientes.getSelectedRow(), 
+        tblPacientes.setRowSelectionInterval(tblPacientes.getSelectedRow(),
                 tblPacientes.getSelectedRow());
     }
 
