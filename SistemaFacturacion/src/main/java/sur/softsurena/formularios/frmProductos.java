@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -118,7 +119,12 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         jLabel2 = new javax.swing.JLabel();
         jsPaginaNro = new javax.swing.JSpinner();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tblProducto = new RSMaterialComponent.RSTableMetro();
+        tblProducto = new RSMaterialComponent.RSTableMetro(){
+            @Override
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Las celdas no son editables.
+            }
+        };
         btnActualizarLista = new newscomponents.RSButtonGradientIcon_new();
         jpMantenimiento = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -707,7 +713,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
+                    .addComponent(jtpPrincipal)
                     .addComponent(jScrollPane3))
                 .addGap(0, 0, 0)
                 .addComponent(jlOpcionesMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -934,8 +940,21 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
     }//GEN-LAST:event_btnBorrarActionPerformed
 
+    /**
+     * Este metodo se encarga de buscar un registro en la tabla de producto.
+     * 
+     * Si nos encontramos en la session de productos, mostrando el panel de 
+     * jpProductos, realizamos lo siguiente. 
+     * 
+     * 1) Mandamos a actualizar la tabla.
+     * 2) 
+     * 
+     * @param evt No utilizado por el momento.
+     */
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (jtpPrincipal.getSelectedComponent() == jpProductos) {
+            btnActualizarListaActionPerformed(null);
+            
             if (tblProducto.getRowCount() == 0) {
                 JOptionPane.showInternalMessageDialog(
                         this,
@@ -1571,7 +1590,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             }
         }
 
-        tblProducto.setRowSelectionInterval(v_fila, v_fila);
+        tblProducto.setRowSelectionInterval(0, 0);
     }
 
     /**
