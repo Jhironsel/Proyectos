@@ -2,6 +2,8 @@ package sur.softsurena.metodos;
 
 import java.io.File;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.GregorianCalendar;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -69,12 +71,12 @@ public class M_BaseDeDatosNGTest {
         
         File file = new File(result);
         
-        assertFalse(
+        assertTrue(
                 file.canRead(), 
                 "No puede leerse la base de datos."
         );
         
-        assertFalse(
+        assertTrue(
                 file.canWrite(), 
                 "No puede Escribirse en la base de datos."
         );
@@ -97,18 +99,29 @@ public class M_BaseDeDatosNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = ""
     )
-    public void testSetLicencia() {
-        Date fecha = null;
-        String idMaquina = "";
-        String clave1 = "";
-        String clave2 = "";
-        boolean expResult = false;
-        boolean result = M_BaseDeDatos.setLicencia(fecha, idMaquina, clave1, clave2);
-        assertEquals(result, expResult);
+    public void testSetLicencia() throws SQLException {
+        Conexion.getInstance(
+                "Registrador",
+                "123uasd",
+                "registros.db",
+                "localhost",
+                "3050"
+        );
+        assertTrue(
+                Conexion.verificar().getEstado(),
+                "Error al conectarse..."
+        );
+        Date fecha = new Date(new GregorianCalendar().getTimeInMillis());
+        String idMaquina = "Registro de prueba";
+        assertTrue(
+                M_BaseDeDatos.setLicencia(fecha, idMaquina), 
+                "El registro de la licencia no fue insertado."
+        );
+        Conexion.getCnn().close();
     }
 
     @Test(

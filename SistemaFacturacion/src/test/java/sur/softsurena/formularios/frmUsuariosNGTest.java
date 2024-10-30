@@ -15,7 +15,6 @@ import xy.ui.testing.util.TestingUtils;
  *
  * @author jhironsel
  */
-@Test(priority = 1000, enabled = false)
 public class frmUsuariosNGTest {
 
     public frmUsuariosNGTest() {
@@ -49,21 +48,26 @@ public class frmUsuariosNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
+    
+    //--------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
+                          Test que se encarga de hacer la instalacia del 
+                          formulario.
                           """
     )
     public void testGetInstance() {
         assertNotNull(
                 frmUsuarios.getInstance(),
-                "Error al instanciar el frmUsuarios en el sistema.");
+                "Error al instanciar el frmUsuarios en el sistema."
+        );
     }
-
+    
+    //--------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 1,
             description = """
                           """
@@ -77,11 +81,13 @@ public class frmUsuariosNGTest {
         );
 
     }
-
+    
+    //--------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 2,
             description = """
+                          Prueba grafica del formulario de Usuario.
                           """
     )
     public void testInsertUsuario() throws Exception {

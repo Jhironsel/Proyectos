@@ -194,7 +194,7 @@
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
-      <newPropertyValue>07 abr. 1984</newPropertyValue>
+      <newPropertyValue>07.04.1984</newPropertyValue>
       <propertyName>Text</propertyName>
     </xy.ui.testing.action.component.property.ChangeComponentPropertyAction>
     <xy.ui.testing.action.component.specific.SelectComboBoxItemAction>

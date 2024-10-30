@@ -21,6 +21,8 @@ import sur.softsurena.utilidades.Utilidades;
  */
 public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+
     public static frmAdministradorTurnos getInstance() {
         return NewSingletonHolder.INSTANCE;
     }
@@ -215,8 +217,8 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
             .addGroup(rSPanelGradiente2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(rSPanelGradiente2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(rSLabelTextIcon1, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
+                    .addComponent(rSLabelTextIcon1, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rSPanelGradiente2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnImprimirReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -321,7 +323,6 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         }
 
         RSComboBox comboAlmacenes = new RSComboBox();
-
         comboAlmacenes.removeAllItems();
 
         comboAlmacenes.addItem(
@@ -467,7 +468,8 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         int cajeroSelectRow = tblCajerosDisponible.getSelectedRow();
 
         String userName = ((Usuario) tblCajerosDisponible.getValueAt(cajeroSelectRow, 0)).getUser_name();
-
+        
+        System.out.println("userName = " + userName);
         crearReporte(userName);
     }//GEN-LAST:event_tblCajerosDisponibleMouseClicked
 

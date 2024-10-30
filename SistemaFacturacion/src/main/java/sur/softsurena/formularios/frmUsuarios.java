@@ -19,6 +19,7 @@ import static sur.softsurena.metodos.M_Role.dropRole;
 import static sur.softsurena.metodos.M_Role.getRoles;
 import static sur.softsurena.metodos.M_Role.modificarRol;
 import static sur.softsurena.metodos.M_Role.quitarRolUsuario;
+import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import static sur.softsurena.metodos.M_Usuario.borrarUsuario;
 import static sur.softsurena.metodos.M_Usuario.getNombresUsuarios;
 import static sur.softsurena.metodos.M_Usuario.getUsuario;
@@ -29,6 +30,8 @@ import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
 import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 
 public class frmUsuarios extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     public static frmUsuarios getInstance() {
         return NewSingletonHolder.INSTANCE;
@@ -83,7 +86,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jScrollPane12 = new javax.swing.JScrollPane();
         txtDescripcion1 = new javax.swing.JTextPane();
 
-        setBorder(javax.swing.BorderFactory.createMatteBorder(25, 10, 10, 10, new java.awt.Color(37, 45, 223)));
+        setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(37, 45, 223)));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -206,14 +209,14 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             jpMantUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantUsuariosLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 954, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
         );
         jpMantUsuariosLayout.setVerticalGroup(
             jpMantUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantUsuariosLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
         );
 
@@ -353,7 +356,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane11)
                     .addGroup(jpMantRolesLayout.createSequentialGroup()
                         .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                             .addComponent(btnBorrarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpMantRolesLayout.createSequentialGroup()
                                 .addComponent(btnQuitarAgregarPermisoAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -364,7 +367,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                                 .addComponent(btnAsignarPermiso, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jpMantRolesLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)))))
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)))))
                 .addGap(6, 6, 6))
         );
         jpMantRolesLayout.setVerticalGroup(
@@ -372,7 +375,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jpMantRolesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
                     .addGroup(jpMantRolesLayout.createSequentialGroup()
                         .addGroup(jpMantRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
@@ -525,7 +528,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpDefRolesLayout.createSequentialGroup()
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                             .addGroup(jpDefRolesLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnQuitarPermisoAdministrativoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -533,7 +536,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                                 .addComponent(btnQuitarRolUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                             .addGroup(jpDefRolesLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnAsignarRol, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -545,7 +548,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jpDefRolesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
                     .addGroup(jpDefRolesLayout.createSequentialGroup()
                         .addGroup(jpDefRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -666,9 +669,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
-            //TODO Trabajo
+            //TODO TRABAJAR EN LA OPERACIONES DE PRIVILEGIOS.
         } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
             //Validar que exista un rol seleccionado
             if (tblRoles.getSelectedRow() == -1) {
@@ -717,7 +724,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
             int rta = JOptionPane.showInternalConfirmDialog(
                     this,
-                    "Esta seguro de eliminar Usuario?",
+                    "Esta seguro de eliminar el usuario %s ?".formatted(usuario).toUpperCase(),
                     "",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
@@ -741,7 +748,16 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 return;
             }
 
-            Resultado resultado = borrarUsuario(usuario.strip());
+            Resultado resultado;
+            
+            resultado = quitarRolesUsuario(usuario);
+            
+            
+            if(resultado.getEstado()){
+                resultado = borrarUsuario(usuario.strip());
+            }
+            
+            
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -751,7 +767,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             );
 
         } else {
-            //TODO Trabajo
+            JOptionPane.showInternalMessageDialog(
+                    this, 
+                    "¿Es un formulario nuevo?", 
+                    "",
+                    JOptionPane.QUESTION_MESSAGE
+            );
 
         }
 
@@ -1130,6 +1151,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     /**
      * Metodo que entraga el listado de los usuarios del sistema.
      *
+     * @return 
      */
     public static JTable llenarTablaUsuarios() {
         tblUsuarios.removeAll();
@@ -1291,11 +1313,11 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         repararColumnaTable(tblListadoUsuarios);
     }
 
-    /**
-     * Metodo descontinuado, en su lugar llenarTblRolesDisponibles.
-     *
-     * @param userName
-     */
+//    /**
+//     * Metodo descontinuado, en su lugar llenarTblRolesDisponibles.
+//     *
+//     * @param userName
+//     */
 //    private void llenarTblRolesUsuarios(String userName) {
 //        tblRolesUsuario.removeAll();
 //        String[] titulos = {"Roles del usuarios", "Con administración"};

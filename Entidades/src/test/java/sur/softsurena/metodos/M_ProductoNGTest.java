@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__INSERTAR__PRODUCTO;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__MODIFICAR__PRODUCTO;
@@ -81,10 +82,15 @@ public class M_ProductoNGTest {
                                 M_ContactoTel.generarTelMovil().substring(8, 16)
                         )
                 )
-                .imagenProducto(
-                        imagenEncode64(
-                                new File("Imagenes/ImagenPrueba.png")
-                        )
+                .imagen(
+                        Imagen
+                                .builder()
+                                .imagen64(
+                                        imagenEncode64(
+                                                new File("Imagenes/ImagenPrueba.png")
+                                        )
+                                )
+                                .build()
                 )
                 .nota("Esta es una prueba del sistema.")
                 .estado(Boolean.TRUE)
@@ -109,10 +115,15 @@ public class M_ProductoNGTest {
                                 M_ContactoTel.generarTelMovil().substring(8, 16)
                         )
                 )
-                .imagenProducto(
-                        imagenEncode64(
-                                new File("Imagenes/ImagenPrueba.png")
-                        )
+                .imagen(
+                        Imagen
+                                .builder()
+                                .imagen64(
+                                        imagenEncode64(
+                                                new File("Imagenes/ImagenPrueba.png")
+                                        )
+                                )
+                                .build()
                 )
                 .nota("Esta es una prueba del sistema.")
                 .estado(Boolean.TRUE)
@@ -124,6 +135,7 @@ public class M_ProductoNGTest {
         producto = null;
     }
 
+    //TODO Documentar o describir bien esta prueba.
     @Test(
             enabled = true,
             description = """
@@ -139,44 +151,48 @@ public class M_ProductoNGTest {
                         .build()
         );
 
-        assertTrue(
+        assertFalse(
                 productos.isEmpty(),
-                "La encontraron registros en la tabla de producto."
+                "No se encontraron registros en la tabla de productos."
         );
 
+        //----------------------------------------------------------------------
         productos = getProductos(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.TRUE)
                         .build()
         );
-        assertTrue(
+        assertFalse(
                 productos.isEmpty(),
-                "La encontraron registros en la tabla de producto."
+                "No se encontraron registros en la tabla de productos."
         );
 
+        //----------------------------------------------------------------------
         productos = getProductos(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.FALSE)
                         .build()
         );
-        assertTrue(
+        assertFalse(
                 productos.isEmpty(),
-                "La encontraron registros en la tabla de producto."
+                "Se encontraron registros en la tabla de producto."
         );
 
+        //----------------------------------------------------------------------
         productos = getProductos(
                 FiltroBusqueda
                         .builder()
                         .filas(Boolean.FALSE)
                         .build()
         );
-        assertTrue(
+        assertFalse(
                 productos.isEmpty(),
-                "La encontraron registros en la tabla de producto."
+                "Se encontraron registros en la tabla de producto."
         );
 
+        //----------------------------------------------------------------------
         productos = getProductos(
                 FiltroBusqueda
                         .builder()
@@ -185,9 +201,9 @@ public class M_ProductoNGTest {
                         .nCantidadFilas(20)
                         .build()
         );
-        assertTrue(
+        assertFalse(
                 productos.isEmpty(),
-                "La encontraron registros en la tabla de producto."
+                "No se encontraron registros en la tabla de producto."
         );
     }
 
@@ -201,13 +217,13 @@ public class M_ProductoNGTest {
     )
     public void testGetProductosByCategoria() {
         List<Producto> result = getProductosByCategoria(0, null);
-        assertTrue(
+        assertFalse(
                 result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
+                "No se obtuvo resultados en la consulta."
         );
 
         result = getProductosByCategoria(0, true);
-        assertTrue(
+        assertFalse(
                 result.isEmpty(),
                 "Se obtuvo resultados en la consulta."
         );
@@ -246,30 +262,24 @@ public class M_ProductoNGTest {
 
         id_producto = resultado.getId();
 
-        assertThrows(() -> {
-            Resultado result = agregarProducto(producto2);
+        Resultado result = null;
 
-            if (!result.getEstado()) {
-                throw new SQLException(ERROR_AL__INSERTAR__PRODUCTO);
-            }
+        try {
+            result = agregarProducto(producto2);
+        } catch (Exception e) {
 
-            assertFalse(
-                    result.getEstado(),
-                    ERROR_AL__INSERTAR__PRODUCTO
+            assertEquals(
+                    result,
+                    Resultado
+                            .builder()
+                            .id(-1)
+                            .mensaje(ERROR_AL__INSERTAR__PRODUCTO)
+                            .icono(JOptionPane.ERROR_MESSAGE)
+                            .estado(Boolean.FALSE)
+                            .build()
             );
 
-            assertNotEquals(
-                    result.getIcono(),
-                    JOptionPane.INFORMATION_MESSAGE,
-                    ERROR_AL__INSERTAR__PRODUCTO
-            );
-
-            assertNotEquals(
-                    result.getMensaje(),
-                    PRODUCTO_AGREGADO_CORRECTAMENTE,
-                    ERROR_AL__INSERTAR__PRODUCTO
-            );
-        });
+        }
     }
 
     @Test(

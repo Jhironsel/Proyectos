@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,8 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.Medicamento;
+import sur.softsurena.entidades.Usuario;
 import sur.softsurena.formularios.frmPrincipal;
 import sur.softsurena.graficas.LongitudAlturaParaEdadNino0a5anno;
 import sur.softsurena.graficas.PCefalicoChicoChica;
@@ -30,7 +33,9 @@ import sur.softsurena.graficas.PesoParaEdadChicoChica;
 import sur.softsurena.graficas.PesoParaEstatura;
 import sur.softsurena.graficas.PesoParaLongitud;
 import sur.softsurena.hilos.hiloImpresionFactura;
+import static sur.softsurena.metodos.M_Medicamento.getMedicamentoActivo;
 import static sur.softsurena.metodos.M_Motivo_Consulta.agregarMotivo;
+import static sur.softsurena.metodos.M_Motivo_Consulta.getMotivo;
 import sur.softsurena.utilidades.Utilidades;
 import utilidades.frmEliminarMotivo;
 import utilidades.frmFondo;
@@ -52,7 +57,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         "<html><b>Descripción</b></html>",
         "<html><b>Uso o Docis</b></html>",
         "<html><b>Cantidad</b></html>"};
-    
+
     public frmConsultas2() {
 
         initComponents();
@@ -1162,7 +1167,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     private void jlAgregarMotivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAgregarMotivoMouseClicked
         String motivo = JOptionPane.showInternalInputDialog(
                 this,
-                "Agregue nuevo motivo de consultas", 
+                "Agregue nuevo motivo de consultas",
                 "Nuevo motivo",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -1192,15 +1197,15 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jlAgregarMotivoMouseClicked
 
     private void jtpVisorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtpVisorMouseClicked
-        
+
         if (jtpVisor.getSelectedIndex() == 6) {
-            
+
             cbOpcionGrafica.setSelectedIndex(0);
             nuevaGrafica();
             updateGrafica();
         }
         if (jtpVisor.getSelectedIndex() == 5) {
-            
+
             llenarComboxMedicamentos();
             ordenarTablaReceta();
         }
@@ -1219,7 +1224,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtEnfermedadesKeyReleased
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        rs = getMotivo();
+        ResultSet rs = getMotivo();
         jpMotivos.removeAll();
         JCheckBox b;
         try {
@@ -1289,7 +1294,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
             idPaciente = ((Categorias) jtPacientes.getValueAt(registro, 1)).getId();
 
-            rs = getDetalleMotivo(((Categorias) jtPacientes.getValueAt(registro, 2)).getId(),
+            getDetalleMotivo(((Categorias) jtPacientes.getValueAt(registro, 2)).getId(),
                     (Integer) jtPacientes.getValueAt(registro, 0));
 
             try {
@@ -1418,16 +1423,20 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         for (Component component : jpMotivos.getComponents()) {
             try {
                 if (((JCheckBox) component).isSelected()) {
-                    agregarDetallleConsulta(new DetalleMotivoConsulta(
-                            idConsulta,
-                            turno,
-                            Integer.parseUnsignedInt(((JCheckBox) component).getName()))
+                    agregarDetallleConsulta(
+                            new DetalleMotivoConsulta(
+                                    idConsulta,
+                                    turno,
+                                    Integer.parseUnsignedInt(((JCheckBox) component).getName())
+                            )
                     );
                 } else {
-                    borrarMotivoConsulta(new DetalleMotivoConsulta(
-                            idConsulta,
-                            turno,
-                            Integer.parseUnsignedInt(((JCheckBox) component).getName()))
+                    borrarMotivoConsulta(
+                            new DetalleMotivoConsulta(
+                                    idConsulta,
+                                    turno,
+                                    Integer.parseUnsignedInt(((JCheckBox) component).getName())
+                            )
                     );
                 }
             } catch (ClassCastException e) {
@@ -1439,8 +1448,8 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             int idReceta = agregarReceta(idPaciente, idConsulta);
             for (int i = 0; i < tblReceta.getRowCount(); i++) {
                 agregarRecetaDetalle(new D_Recetas(
-                        idReceta, 
-                        i + 1, 
+                        idReceta,
+                        i + 1,
                         ((Categorias) tblReceta.getValueAt(i, 1)).getId(),
                         new BigDecimal(tblReceta.getValueAt(i, 3).toString()),
                         tblReceta.getValueAt(i, 2).toString()
@@ -1452,15 +1461,15 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             Map parametros = new HashMap();
             parametros.clear();
             parametros.put("idReceta", idReceta);
-            
+
             File i = new File("n2careReceta.jasper");
-            
+
             new hiloImpresionFactura(
-                    true, 
-                    false, 
-                    i.getAbsolutePath(), 
-                    parametros, 
-                    frmPrincipal.jpEstado, 
+                    true,
+                    false,
+                    i.getAbsolutePath(),
+                    parametros,
+                    frmPrincipal.jpEstado,
                     frmPrincipal.jpbEstado).start();
 
         }
@@ -1492,7 +1501,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             return;
         }
         if (evt.getStateChange() == 1) {
-            
+
             nuevaGrafica();
             switch (cbOpcionGrafica.getSelectedIndex()) {
                 case 1:
@@ -1524,7 +1533,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbOpcionGraficaItemStateChanged
 
     private void jcbOpcionesVigilanciaDesarrolloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbOpcionesVigilanciaDesarrolloActionPerformed
-        
+
         switch (jcbOpcionesVigilanciaDesarrollo.getSelectedIndex()) {
             case 1:
                 dcVigilanciaDesarrollo.setVisible(false);
@@ -1566,7 +1575,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         }
 
         JOptionPane.showInternalMessageDialog(this,
-                agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(), 
+                agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
                         idPaciente));
         jcbOpcionesVigilanciaDesarrolloActionPerformed(null);
     }//GEN-LAST:event_btnAplicarFechaActionPerformed
@@ -1616,7 +1625,6 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtFiltroMedicamentosKeyReleased
 
     private void txtFiltroMedicamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltroMedicamentosActionPerformed
-        
 
         if (jcbMedicamentos.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un Medicamento");
@@ -1626,11 +1634,11 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         Float cantidad = null;
         String usoDosis = null;
         int linea = tblReceta.getRowCount() + 1;
-        
+
         String producto = ((Categorias) jcbMedicamentos.getSelectedItem()).getDescripcion();
-        
+
         int idProducto = ((Categorias) jcbMedicamentos.getSelectedItem()).getId();
-        
+
         reg = new Object[4];
 
         do {
@@ -1643,11 +1651,11 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 }
                 break;
             } catch (Exception e) {
-                
+
                 if (e.getMessage() == null) {
                     jcbMedicamentos.setSelectedIndex(0);
                     txtFiltroMedicamentos.requestFocus();
-                    
+
                     return;
                 }
             }
@@ -1669,7 +1677,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 }
                 break;
             } catch (Exception e) {
-                
+
                 if (e.getMessage() == null) {
                     jcbMedicamentos.setSelectedIndex(0);
                     txtFiltroMedicamentos.requestFocus();
@@ -1711,7 +1719,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jcbMedicamentosActionPerformed
     private void updateGrafica() {
-        
+
         jpGrafica.validate();
         jpGrafica.revalidate();
         jpGrafica.updateUI();
@@ -1726,7 +1734,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }
 
     private void nuevaGrafica() {
-        
+
         jpGrafica.removeAll();
         jpGrafica.setLayout(new java.awt.BorderLayout());
     }
@@ -1848,7 +1856,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }
 
     public synchronized void llenarTabla(String fecha, String d) {
-        
+
         jtPacientes.removeAll();
 
         String titulos[] = {
@@ -1908,7 +1916,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 if (e.getType() == TableModelEvent.UPDATE) {
                     if (e.getColumn() == 2) {
                         agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(
-                                        jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
+                                jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
                                 idPaciente);
 //                        , (Boolean) jtGuiaVigilanciaDesarrollo.getValueAt(
 //                                        jtGuiaVigilanciaDesarrollo.getSelectedRow(), 2)
@@ -2074,18 +2082,28 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
     private synchronized void llenarComboxDoctores(boolean actual) {
 
-        rs = getFechaDoctores(Utilidades.formatDate(dcReferimiento.getDate(), ""), actual);
+        getFechaDoctores(
+                Utilidades.formatDate(
+                        dcReferimiento.getDate(), 
+                        ""
+                ), 
+                actual
+        );
 
         cbDoctores.removeAllItems();
 
-        cbDoctores.addItem(new Usuario.Builder().id(0).pNombre("N/A").
-                apellidos("Seleccione un doctor").direccion("N/A").
-                id_Ars(0).build());
-        
+        cbDoctores.addItem(
+                Usuario
+                        .builder()
+                        .id_persona(0)
+                        .pnombre("N/A")
+                        .apellidos("Seleccione un doctor")
+                        .build()
+        );
+
         try {
             while (rs.next()) {
-                
-                
+
 //                
 //                        
 //                "<html><b>" + rs.getString("nombreCompleto").trim() + "</b> <br> "
@@ -2118,25 +2136,35 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
     /**
      * Metodo para rellenar la lista de productos de medicamentos del sistema.
-     * 
+     *
      * Actualizado el Lunes 30 de enero 2023.
      */
     private synchronized void llenarComboxMedicamentos() {
-        List<Medicamentos> medicamentosList = getMedicamentoActivo();
-        
+        List<Medicamento> medicamentosList = getMedicamentoActivo();
+
         jcbMedicamentos.removeAllItems();
-        
-        jcbMedicamentos.addItem(Medicamentos.builder().
-                id(-1).
-                descripcion("Seleccione un medicamento.").build());
-        
-        medicamentosList.stream().forEach((m) -> {
-            jcbMedicamentos.addItem(
-                    Medicamentos.builder().
-                            id(m.getId()).
-                            descripcion(m.getDescripcion()).build());
-            
-        });
+
+        jcbMedicamentos.addItem(
+                Medicamento
+                        .builder()
+                        .id(-1)
+                        .descripcion("Seleccione un medicamento.")
+                        .build()
+        );
+
+        medicamentosList.stream().forEach(
+                (medicamento) -> {
+                    jcbMedicamentos.addItem(
+                            Medicamento
+                                    .builder()
+                                    .id(medicamento.getId())
+                                    .descripcion(
+                                            medicamento.getDescripcion()
+                                    )
+                                    .build()
+                    );
+                }
+        );
     }
 
     private void nuevaTabla() {

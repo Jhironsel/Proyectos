@@ -2,12 +2,10 @@ package sur.softsurena.formularios;
 
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
@@ -54,8 +52,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     //Formularios Modales
     private static frmFechaReporte fechaReporte;
     private static Usuario usuario;
-    
-    
+    private static final long serialVersionUID = 1L;
 
     public JMenuItem getMnuMantenimientoClientes() {
         return mnuMantenimientoClientes;
@@ -63,209 +60,19 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     public frmPrincipal() {
 
-        //Obteniendo el usuario actual.
         usuario = getUsuarioActual();
 
         initComponents();
         ((DesktopConFondo) dpnEscritorio).setImagen("/sur/softsurena/imagenes/Fondo 1024 x 723.jpg");
 
-        mnuMantenimientoClientes.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PERSONA_CLIENTES")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMantenimientoProductos.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PRODUCTOS")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMantenimientoProveedores.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PROVEEDORES")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMantenimientoAlmacenes.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("V_ALMACENES")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMantenimientoUsuarios.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("VS_USUARIOS")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMantenimiento.setVisible(
-                mnuMantenimientoClientes.isVisible()
-                || mnuMantenimientoProductos.isVisible()
-                || mnuMantenimientoProveedores.isVisible()
-                || mnuMantenimientoAlmacenes.isVisible()
-                || mnuMantenimientoUsuarios.isVisible()
-        );
-        ///////////////////////////////////////////////////////////////////////
+        barraMenu();
 
-        mnuSistemaNomina.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("^")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuSistemaGestorGastos.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("^")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuSistemas.setVisible(
-                mnuSistemaNomina.isVisible()
-                || mnuSistemaGestorGastos.isVisible()
-        );
+        usuarioRoles();
 
-        ////////////////////////////////////////////////////////////////////////////////////
-        mnuMovimientosNuevaFactura.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("PERM_CREAR_FACTURAS")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMovimientosReporteFactura.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("^")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMovimientosInventario.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("^")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMovimientosDeudas.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("^")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMovimientosAbrirTurno.setVisible(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("GET_CAJEROS")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-        mnuMovimientos.setVisible(
-                mnuMovimientosNuevaFactura.isVisible()
-                || mnuMovimientosReporteFactura.isVisible()
-                || mnuMovimientosInventario.isVisible()
-                || mnuMovimientosDeudas.isVisible()
-                || mnuMovimientosAbrirTurno.isVisible()
-        );
-
-        ///////////////////////////////////////////////////////////////////////////
-        //Hacemos la consulta a la base de datos, para saber cual es el usuario
-        //y el rol del usuario conectado a la base de datos.
-        jlUser.setText(usuario.getUser_name());
-
-        //Proceso para cargar los roles del usuario al sistema.
-        cbRoles.removeAllItems();
-        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
-
-        cbRoles.addItem(
-                Role
-                        .builder()
-                        .propietario("SYSDBA")
-                        .roleName("None")
-                        .descripcion("Rol que indica que no ha sido establecido")
-                        .opcionPermiso(-1)
-                        .build()
-        );
-
-        //Se carga los roles del usuario en el comboBox.
-        comprobandoRolesDisponibles(
-                usuario.getUser_name().strip(),
-                true
-        ).stream().forEach(
-                rolItem -> {
-                    cbRoles.addItem(rolItem);
-                }
-        );
-
-        //Se busca cual es el rol actual del usuario y se selecciona.
-        for (int i = 0; i < cbRoles.getItemCount(); i++) {
-            if (cbRoles.getItemAt(i).toString().strip().
-                    equalsIgnoreCase(usuario.getRol())) {
-
-                cbRoles.setSelectedIndex(i);
-                break;
-            }
-        }
-
-        jMenuBar.add(btnOcultarPanel, 0);//Es el primer boton que se encuentra en la barra de menu.
-        jMenuBar.add(filler3, 6);//Expande los componente entre si.
-        jMenuBar.add(jlUser, 7);// jlUser es el icono de usuario con su nombre.
-        jMenuBar.add(liWork, 8);//liwork es el LabelIcon del Maletin Ventana principal.
-        jMenuBar.add(cbRoles, 9);//ComboBox que contienen los roles asignado al usuario.
-
-        jPanelImpresion.setVisible(false);//Una barra de progreso que se muestra cuando hay impresion.
-
-        //Se cargan los iconos de los menuIten de la barra de menu. 
         cargarIconos();
 
-        //Metodo que carga el logo de la empresa.
         cargarLogo();
 
-        //Poner Paner usuario.
         panelUsuario();
     }
 
@@ -525,7 +332,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         liWork.setOpaque(true);
         liWork.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbRoles.setForeground(new java.awt.Color(37, 45, 223));
         cbRoles.setColorSeleccionTXT(new java.awt.Color(37, 45, 223));
         cbRoles.setItemHeight(20);
         cbRoles.setMaximumSize(new java.awt.Dimension(200, 40));
@@ -979,6 +785,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuSistemas.setMnemonic('S');
         mnuSistemas.setText("Sistemas");
         mnuSistemas.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
+        mnuSistemas.setName("mnuSistemas"); // NOI18N
 
         mnuSistemaNomina.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuSistemaNomina.setMnemonic('P');
@@ -1115,9 +922,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        
+
         Utilidades.limpiarDiretorio("Logs/");
-        
+
         if (mnuOpcionesSalir.isEnabled()) {
             mnuOpcionesCambioUsuarioActionPerformed(null);
         } else {
@@ -1161,7 +968,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         if (resp == JFileChooser.APPROVE_OPTION) {
 
-            insertLogo(file.getSelectedFile());
+            insertLogo(1, file.getSelectedFile());
 
             cargarLogo();
             jlLogoEmpresa.validate();
@@ -1260,8 +1067,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jlRestaurarMouseExited
 
     private void jlRestauracionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRestauracionMouseClicked
-        frmRestaurarDatos restaurar = new frmRestaurarDatos();
-        abrirFormulario(restaurar);
+        abrirFormulario(new frmRestaurarDatos());
     }//GEN-LAST:event_jlRestauracionMouseClicked
 
     private void jlRestauracionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRestauracionMouseExited
@@ -1348,8 +1154,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         } else {
             btnOcultarPanel.setIcon(new Imagenes("Flecha Derecha 32 x 32.png").getIcono());
         }
-
-        pack();
     }//GEN-LAST:event_btnOcultarPanelActionPerformed
 
     private void mnuMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoClientesActionPerformed
@@ -1494,6 +1298,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     //TODO analizar este lineas comentadas. 
     //Funciones que estan en el panel de la Ventana Principal
+    /**
+     *
+     */
     private void panelUsuario() {
         jsEstatus.setVisible(false);
         btnOcultarPanel.setVisible(false);
@@ -1530,6 +1337,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         }
 
     }
+
 //    private void panorama() {
 //        ResultSet rs = getConsulta(
 //                "SELECT cast(r.VENTA as numeric(15,2)) as VENTA, "
@@ -1543,7 +1351,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 //            LOG.log(Level.SEVERE, "Error al crear ventana de cliente.", ex);
 //        }
 //    }
-
     protected void cerrarTodos() {
         for (JInternalFrame allFrame : dpnEscritorio.getAllFrames()) {
             if (allFrame != null) {
@@ -1564,7 +1371,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             formulario.setMaximum(true);
         } catch (PropertyVetoException ex) {
             LOG.log(
-                    Level.SEVERE, 
+                    Level.SEVERE,
                     "Error al crear ventana de cliente.",
                     ex
             );
@@ -1579,8 +1386,11 @@ public final class frmPrincipal extends javax.swing.JFrame {
         return fechaReporte;
     }
 
-    
-
+    /**
+     * Metodo que permite centralizar las ventanas que son internas.
+     *
+     * @param formulario
+     */
     protected static void abrirFormularioCentralizado(@NonNull JInternalFrame formulario) {
         if (!dpnEscritorio.isAncestorOf(formulario)) {
             dpnEscritorio.add(formulario);
@@ -1594,6 +1404,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
         System.gc();
     }
 
+    /**
+     * Se cargan los iconos de los menuIten de la barra de menu.
+     */
     private void cargarIconos() {
         //Iconos de menus de opciones.
         mnuAyuda.setIcon(new Imagenes("Ayuda 32 x 32.png").getIcono());
@@ -1651,8 +1464,216 @@ public final class frmPrincipal extends javax.swing.JFrame {
         btnOcultarPanel.setIcon(new Imagenes("Flecha Izquierda 32 x 32.png").getIcono());
     }
 
+    /**
+     * Metodo que carga el logo de la empresa.
+     */
     private void cargarLogo() {
         jlLogoEmpresa.setIcon(imagenDecode64(getLogo(), 320, 145));
+    }
+
+    /**
+     * Metodo que se encarga de mostrar las opciones al usuario que tiene
+     * acceso.
+     */
+    public void barraMenu() {
+        mnuMantenimientoClientes.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("GET_PERSONA_CLIENTES")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMantenimientoProductos.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("GET_PRODUCTOS")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMantenimientoProveedores.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("GET_PROVEEDORES")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMantenimientoAlmacenes.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("V_ALMACENES")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMantenimientoUsuarios.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("VS_USUARIOS")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        mnuMantenimiento.setVisible(
+                mnuMantenimientoClientes.isVisible()
+                || mnuMantenimientoProductos.isVisible()
+                || mnuMantenimientoProveedores.isVisible()
+                || mnuMantenimientoAlmacenes.isVisible()
+                || mnuMantenimientoUsuarios.isVisible()
+        );
+
+        /*
+        Menu de sistema de nomina, proceso de validación.
+         */
+        mnuSistemaNomina.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("^")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuSistemaGestorGastos.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("^")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        mnuSistemas.setVisible(
+                mnuSistemaNomina.isVisible()
+                || mnuSistemaGestorGastos.isVisible()
+        );
+
+        /*
+        Menu de sistema de movientos de facturas, proceso de validación. 
+         */
+        mnuMovimientosNuevaFactura.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("PERM_CREAR_FACTURAS")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMovimientosReporteFactura.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("^")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMovimientosInventario.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("^")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMovimientosDeudas.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("^")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMovimientosAbrirTurno.setVisible(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("GET_CAJEROS")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+        mnuMovimientos.setVisible(
+                mnuMovimientosNuevaFactura.isVisible()
+                || mnuMovimientosReporteFactura.isVisible()
+                || mnuMovimientosInventario.isVisible()
+                || mnuMovimientosDeudas.isVisible()
+                || mnuMovimientosAbrirTurno.isVisible()
+        );
+
+        jMenuBar.add(btnOcultarPanel, 0);//Es el primer boton que se encuentra en la barra de menu.
+        jMenuBar.add(filler3, 6);//Expande los componente entre si.
+        jMenuBar.add(jlUser, 7);// jlUser es el icono de usuario con su nombre.
+        jMenuBar.add(liWork, 8);//liwork es el LabelIcon del Maletin Ventana principal.
+        jMenuBar.add(cbRoles, 9);//ComboBox que contienen los roles asignado al usuario.
+
+        jPanelImpresion.setVisible(false);//Una barra de progreso que se muestra cuando hay impresion.
+    }
+
+    /**
+     * Se encarga de iniciar el nombre de usuario y rol del sistema.
+     */
+    private void usuarioRoles() {
+        //Hacemos la consulta a la base de datos, para saber cual es el usuario
+        //y el rol del usuario conectado a la base de datos.
+
+        jlUser.setText(usuario.getUser_name());
+
+        //Proceso para cargar los roles del usuario al sistema.
+        cbRoles.removeAllItems();
+        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
+
+        cbRoles.addItem(
+                Role
+                        .builder()
+                        .propietario("SYSDBA")
+                        .roleName("None")
+                        .descripcion("Rol que indica que no ha sido establecido")
+                        .opcionPermiso(-1)
+                        .build()
+        );
+
+        //Se carga los roles del usuario en el comboBox.
+        comprobandoRolesDisponibles(
+                usuario.getUser_name().strip(),
+                true
+        ).stream().forEach(
+                rolItem -> {
+                    cbRoles.addItem(rolItem);
+                }
+        );
+
+        //Se busca cual es el rol actual del usuario y se selecciona.
+        for (int i = 0; i < cbRoles.getItemCount(); i++) {
+            if (cbRoles.getItemAt(i).toString().strip().equalsIgnoreCase(usuario.getRol())) {
+                cbRoles.setSelectedIndex(i);
+                break;
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1740,4 +1761,5 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField txtGanancia;
     private javax.swing.JFormattedTextField txtVenta;
     // End of variables declaration//GEN-END:variables
+
 }

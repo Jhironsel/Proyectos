@@ -23,7 +23,7 @@ public class M_PrivilegioNGTest {
     @BeforeClass
     public void setUpClass() throws Exception {
         Conexion.getInstance(
-                "sysdba",
+                "jhironsel",
                 "1",
                 "SoftSurena.db",
                 "localhost",
@@ -49,17 +49,38 @@ public class M_PrivilegioNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
-            description = ""
+            description = """
+                          Metodo que realiza las pruebas de los privilegios del
+                          sistema, este consulta todos los permisos que estan
+                          siendo usado en el sistema.
+                          """
     )
     public void testPrivilegio() {
         boolean result = M_Privilegio.privilegio(
                 Privilegio
+                                .builder()
+                                .privilegio(
+                                        Privilegio.PRIVILEGIO_SELECT
+                                )
+                                .nombre_relacion("GET_CAJEROS")
+                                .build()
+        );
+        assertTrue(result, "No se tiene acceso a GET_CAJEROS");
+        
+        result = M_Privilegio.privilegio(
+                Privilegio
                         .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("V_ALMACENES")
                         .build()
         );
-        assertTrue(result, "Error al consultar permiso.");
+        assertTrue(result, "No se tiene acceso a V_ALMACENES");
+        
+        
     }
 
 }

@@ -16,59 +16,6 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Role {
 
-//    /**
-//     * Metodo utilizado para consultar a la base de datos, los roles creado y
-//     * aquienes fueron asignados esos roles.
-//     *
-//     * Metodo Actualizado el 18/05/2022.
-//     *
-//     * @param userName Identificador del usuario en el sistema.
-//     *
-//     * @return Devuelve una lista array de los roles por usuario del sistema.
-//     */
-//    public synchronized static List<Role> comprobandoRol(
-//            String userName
-//    ) {
-//        final String sql = """
-//                           SELECT ROL, DESCRIPCION, ADMINISTRACION 
-//                           FROM GET_ROL 
-//                           WHERE TRIM(USER_NAME) STARTING WITH TRIM(?);
-//                           """;
-//
-//        List<Role> roles = new ArrayList<>();
-//
-//        try (PreparedStatement ps = getCnn().prepareStatement(
-//                sql,
-//                ResultSet.TYPE_FORWARD_ONLY,
-//                ResultSet.CONCUR_READ_ONLY,
-//                ResultSet.HOLD_CURSORS_OVER_COMMIT
-//        )) {
-//            ps.setString(1, userName.strip().toUpperCase());
-//
-//            try (ResultSet rs = ps.executeQuery()) {
-//                while (rs.next()) {
-//                    roles.add(
-//                            Role
-//                                    .builder()
-//                                    .roleName(rs.getString("ROL"))
-//                                    .descripcion(rs.getString("DESCRIPCION"))
-//                                    .opcionPermiso(rs.getInt("ADMINISTRACION"))
-//                                    .build()
-//                    );
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            LOG.log(
-//                    Level.SEVERE,
-//                    ERROR_AL_CONSULTAR_LA_VISTA_GET_ROL_DEL_S,
-//                    ex
-//            );
-//        }
-//        return roles;
-//    }
-//    public static final String ERROR_AL_CONSULTAR_LA_VISTA_GET_ROL_DEL_S
-//            = "Error al consultar la vista GET_ROL del sistema.";
-
     /**
      * Metodo que devuelve los roles que tiene los usuarios en el sistema
      * asignados.
@@ -82,13 +29,14 @@ public class M_Role {
     public synchronized static List<Role> comprobandoRolesDisponibles(
             String userName, boolean disponible
     ) {
-
-        final String sql = """
-            SELECT r.ROL, r.DESCRIPCION, a.ADMINISTRACION
-            FROM GET_ROLES r
-            LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND TRIM(a.USER_NAME) STARTING WITH TRIM(UPPER(?))
-            WHERE a.USER_NAME IS %s NULL;
-                           """.formatted((disponible ? "NOT" : ""));
+        final String sql
+                = """
+                    SELECT r.ROL, r.DESCRIPCION, a.ADMINISTRACION
+                    FROM GET_ROLES r
+                    LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND 
+                                           TRIM(a.USER_NAME) STARTING WITH TRIM(UPPER(?))
+                    WHERE a.USER_NAME IS %s NULL;
+                """.formatted((disponible ? "NOT" : ""));
 
         List<Role> roles = new ArrayList<>();
 
@@ -102,16 +50,13 @@ public class M_Role {
             ps.setString(1, userName.strip().toUpperCase());
 
             try (ResultSet rs = ps.executeQuery()) {
-                
-                String aux, descripcion;
-                
-                while (rs.next()) {
-                    aux = rs.getString("ROL");
-                    descripcion = rs.getString("DESCRIPCION");
 
-                    if (aux.equalsIgnoreCase("RDB$ADMIN")) {
-                        aux = "ADMINISTRADOR";
-                    }
+                String aux, descripcion;
+
+                while (rs.next()) {
+                    aux = rs.getString("ROL").strip();
+
+                    descripcion = rs.getString("DESCRIPCION");
 
                     roles.add(
                             Role
@@ -165,12 +110,12 @@ public class M_Role {
                     propietario = rs.getString("PROPIETARIO");
 
                     rolesList.add(
-                        Role
-                            .builder()
-                            .roleName(Objects.isNull(rol) ? "" : rol.strip())
-                            .descripcion(Objects.isNull(descripcion) ? "" : descripcion.strip())
-                            .propietario(Objects.isNull(propietario) ? "" : propietario.strip())
-                            .build()
+                            Role
+                                    .builder()
+                                    .roleName(Objects.isNull(rol) ? "" : rol.strip())
+                                    .descripcion(Objects.isNull(descripcion) ? "" : descripcion.strip())
+                                    .propietario(Objects.isNull(propietario) ? "" : propietario.strip())
+                                    .build()
                     );
                 }
             }
@@ -197,7 +142,7 @@ public class M_Role {
      * el metodo.
      * @return
      */
-    public synchronized static Resultado<Object> setRole(
+    public synchronized static Resultado setRole(
             String i_role
     ) {
         String sql = "EXECUTE PROCEDURE ADMIN_SET_ROLE(?)";
@@ -231,7 +176,8 @@ public class M_Role {
                     .build();
         }
     }
-    public static final String ROL_ESTABLECIDO = "Rol establecido.";
+    public static final String ROL_ESTABLECIDO
+            = "Rol establecido.";
     public static final String ERROR_AL_ESTABLECER_ROL
             = "Error al establecer rol.";
 
@@ -247,7 +193,7 @@ public class M_Role {
      * el metodo.
      * @return
      */
-    public synchronized static Resultado<Object> dropRole(
+    public synchronized static Resultado dropRole(
             String i_role
     ) {
         String sql = "EXECUTE PROCEDURE ADMIN_BORRAR_ROLE(?)";
@@ -256,23 +202,27 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-            cs.setString(1, i_role);
-            boolean execute = cs.execute();
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
+        )) {
 
-            return Resultado.builder().
-                    id(-1).
-                    mensaje(ROLE_ELIMINADO).
-                    cantidad(-1).
-                    estado(execute).
-                    build();
+            cs.setString(1, i_role);
+
+            cs.executeUpdate();
+
+            return Resultado
+                    .builder()
+                    .mensaje(ROLE_ELIMINADO)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(true)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return Resultado.builder().
-                    id(-1).
-                    mensaje(ERROR_AL_BORRAR_ROL).
-                    cantidad(-1).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_BORRAR_ROL)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
     }
     public static final String ERROR_AL_BORRAR_ROL = "Error al borrar rol";
@@ -299,43 +249,50 @@ public class M_Role {
      * operacion fue un exito si o no.
      */
     public synchronized static Resultado asignarRol(
-            String procedimiento, String rol, boolean admin, boolean otorgar
+            String procedimiento,
+            String rol,
+            boolean admin,
+            boolean otorgar
     ) {
         if (!procedimiento.startsWith("PERM_")) {
-            return Resultado.builder().
-                    id(-1).
-                    mensaje(PROCEDIMIENTO_INCORRECTO_A_LA_BASE_DE_DAT).
-                    cantidad(-1).
-                    estado(Boolean.FALSE).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(PROCEDIMIENTO_INCORRECTO_A_LA_BASE_DE_DAT)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
-        
+
         String sql = "EXECUTE PROCEDURE " + procedimiento + " (?,?,?)";
-        
+
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
+            //Parametros
             cs.setString(1, rol);
             cs.setBoolean(2, admin);
             cs.setBoolean(3, otorgar);
-            boolean execute = cs.execute();
+
+            //Ejecucion del procedimiento.
+            cs.executeUpdate();
+
+            //Devolucion de los resultados.
             return Resultado
                     .builder()
-                    .id(-1)
                     .mensaje(PERMISO__ACTUALIZADO)
-                    .cantidad(-1)
-                    .estado(execute)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(true)
                     .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return Resultado
                     .builder()
-                    .id(-1)
                     .mensaje(ERROR_AL_ESTABLECER_ROL1)
-                    .cantidad(-1)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(false)
                     .build();
         }
     }
@@ -348,14 +305,15 @@ public class M_Role {
 
     /**
      * Metodo encargado de dar los coles a los usuarios.
+     *
      * @param usuario
      * @param rol
      * @param admin
      * @return
      */
     public synchronized static Resultado asignarRolUsuario(
-            String rol, 
-            String usuario, 
+            String rol,
+            String usuario,
             boolean admin
     ) {
         String sql = "EXECUTE PROCEDURE ADMIN_DAR_ROL_USUARIO(?,?,?)";
@@ -393,18 +351,20 @@ public class M_Role {
                     .build();
         }
     }
-    public static final String ERROR_AL_ASIGNAR_ROL 
+    public static final String ERROR_AL_ASIGNAR_ROL
             = "Error al asignar rol";
     public static final String ROL_ASIGNADO_A_USUARIO
             = "Rol asignado a usuario";
 
     /**
-     *
-     * @param usuario
-     * @param rol
-     * @return
+     * Este metodo quita un rol en especifico a un usuario. 
+     * 
+     * @param usuario Nombre ddel usuario.
+     * @param rol nombre del rol a quitar.
+     * 
+     * @return Devuelve un resultado de la operacion. 
      */
-    public synchronized static Resultado<Object> quitarRolUsuario(
+    public synchronized static Resultado quitarRolUsuario(
             String rol, String usuario
     ) {
         String sql = "EXECUTE PROCEDURE ADMIN_QUITAR_ROL_USUARIO(?,?)";
@@ -417,14 +377,13 @@ public class M_Role {
             cs.setString(1, rol);
             cs.setString(2, usuario);
 
-            boolean execute = cs.execute();
+            cs.executeUpdate();
 
             return Resultado
                     .builder()
-                    .id(-1)
                     .mensaje(ROL_BORRADO_CORRECTAMENTE)
-                    .cantidad(-1)
-                    .estado(execute)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
                     .build();
 
         } catch (SQLException ex) {
@@ -432,14 +391,60 @@ public class M_Role {
 
             return Resultado
                     .builder()
-                    .id(-1)
                     .mensaje(ERROR_AL_BORRAR__ROL)
-                    .cantidad(-1)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
                     .build();
         }
     }
-    public static final String ERROR_AL_BORRAR__ROL = "Error al borrar Rol";
-    public static final String ROL_BORRADO_CORRECTAMENTE = "Rol borrado correctamente.";
+    public static final String ERROR_AL_BORRAR__ROL
+            = "Error al borrar Rol";
+    public static final String ROL_BORRADO_CORRECTAMENTE
+            = "Rol borrado correctamente.";
+    
+    /**
+     * Este metodo quita un rol en especifico a un usuario. 
+     * 
+     * @param usuario Nombre ddel usuario.
+     * 
+     * @return Devuelve un resultado de la operacion. 
+     */
+    public synchronized static Resultado quitarRolesUsuario(
+            String usuario
+    ) {
+        String sql = "EXECUTE PROCEDURE ADMIN_QUITAR_ROLES_USUARIO(?)";
+        try (CallableStatement cs = getCnn().prepareCall(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+
+            cs.setString(1, usuario);
+
+            cs.executeUpdate();
+
+            return Resultado
+                    .builder()
+                    .mensaje(ROL_BORRADO_CORRECTAMENTE2)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_BORRAR__ROL2)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+    }
+    public static final String ERROR_AL_BORRAR__ROL2
+            = "Error al borrar los roles del usuario.";
+    public static final String ROL_BORRADO_CORRECTAMENTE2
+            = "Roles borrado correctamente.";
 
     /**
      * Metodo utilizado para crear los roles de los usuarios del sistema.
@@ -447,7 +452,7 @@ public class M_Role {
      * @param rolee Es el role a crear por el usuario.
      * @return
      */
-    public synchronized static Resultado<Object> createRole(
+    public synchronized static Resultado createRole(
             String rolee
     ) {
         final String sql = "EXECUTE PROCEDURE ADMIN_CREATE_ROLE(?);";
@@ -455,26 +460,26 @@ public class M_Role {
         try (PreparedStatement cs = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
+        )) {
             cs.setString(1, rolee);
 
-            int cantindad = cs.executeUpdate();
+            cs.executeUpdate();
 
-            return Resultado.builder().
-                    id(-1).
-                    mensaje(ROL_CREADO_EXITOSAMENTE).
-                    cantidad(cantindad).
-                    estado(false).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(ROL_CREADO_EXITOSAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(true)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return Resultado.builder().
-                    id(-1).
-                    mensaje(ERROR_AL_CREAR_ROLE).
-                    cantidad(-1).
-                    estado(false).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_CREAR_ROLE)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(false)
+                    .build();
         }
     }
     public static final String ERROR_AL_CREAR_ROLE = "Error al crear role.";
@@ -489,7 +494,7 @@ public class M_Role {
      *
      * @return devuelve un objecto Resultados para obtener informacion de la op.
      */
-    public synchronized static Resultado<Object> modificarRol(
+    public synchronized static Resultado modificarRol(
             String actual, String nuevo
     ) {
         final String sql = "EXECUTE PROCEDURE ADMIN_ALTER_ROLE(?, ?);";
@@ -502,22 +507,26 @@ public class M_Role {
             cs.setString(1, actual);
             cs.setString(2, nuevo);
 
-            int cantindad = cs.executeUpdate();
+            cs.executeUpdate();
 
-            return Resultado.builder().
-                    id(-1).
-                    mensaje("Rol modificado exitosamente.").
-                    cantidad(cantindad).
-                    estado(false).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(ROL_MODIFICADO_EXITOSAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(true)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return Resultado.builder().
-                    id(-1).
-                    mensaje("Error al modificar role.").
-                    cantidad(-1).
-                    estado(false).
-                    build();
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_MODIFICAR_ROLE)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(false)
+                    .build();
         }
     }
+    public static final String ERROR_AL_MODIFICAR_ROLE
+            = "Error al modificar role.";
+    public static final String ROL_MODIFICADO_EXITOSAMENTE
+            = "Rol modificado exitosamente.";
 }

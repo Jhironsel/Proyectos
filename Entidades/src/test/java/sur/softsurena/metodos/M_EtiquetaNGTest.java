@@ -48,7 +48,7 @@ public class M_EtiquetaNGTest {
 
     @Test
     public void testGetEtiquetasUsuario() {
-        assertTrue(
+        assertFalse(
                 M_Etiqueta.getEtiquetasUsuario("SYSDBA").isEmpty(), 
                 "La lista de etiquetas no esta vacia."
         );

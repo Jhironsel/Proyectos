@@ -28,7 +28,7 @@ import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PesoParaLongitud {
-    
+
     private final String sexo;
     private Float SD3Neg;
     private Float SD2Neg;
@@ -39,7 +39,6 @@ public class PesoParaLongitud {
     private Float SD3;
     private final int tamanoFigura;
     private final int idPaciente;
-
 
     public PesoParaLongitud(int idPaciente, int tamanoFigura) {
         sexo = getSexoPaciente(idPaciente);
@@ -65,25 +64,26 @@ public class PesoParaLongitud {
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
 
             for (str = localBufferedReader.readLine();
-                    str != null; str = localBufferedReader.readLine()) {
+                    str != null;
+                    str = localBufferedReader.readLine()) {
                 float f1 = Float.parseFloat(str.substring(0, 7).trim());//Para el Mes
-                
-                if (str.substring(8, 12).trim().equals("m") ) {//Determina Sexo
-                    localXYSeries1.add(f1, Float.parseFloat(str.substring(53, 59).trim())  );//SD3Neg
-                    localXYSeries2.add(f1, Float.parseFloat(str.substring(64, 70).trim())  );//SD2Neg
-                    localXYSeries3.add(f1, Float.parseFloat(str.substring(75, 81).trim())  );//SD1Neg
-                    localXYSeries4.add(f1, Float.parseFloat(str.substring(86, 92).trim())  );//SD0
-                    localXYSeries5.add(f1, Float.parseFloat(str.substring(95, 101).trim()) );//SD1
+
+                if (str.substring(8, 12).trim().equals("m")) {//Determina Sexo
+                    localXYSeries1.add(f1, Float.parseFloat(str.substring(53, 59).trim()));//SD3Neg
+                    localXYSeries2.add(f1, Float.parseFloat(str.substring(64, 70).trim()));//SD2Neg
+                    localXYSeries3.add(f1, Float.parseFloat(str.substring(75, 81).trim()));//SD1Neg
+                    localXYSeries4.add(f1, Float.parseFloat(str.substring(86, 92).trim()));//SD0
+                    localXYSeries5.add(f1, Float.parseFloat(str.substring(95, 101).trim()));//SD1
                     localXYSeries6.add(f1, Float.parseFloat(str.substring(104, 110).trim()));//SD2
                     localXYSeries7.add(f1, Float.parseFloat(str.substring(112, 117).trim()));//SD3
                     if (f1 == 110.0) {
-                        SD3Neg = Float.valueOf(str.substring(53, 59).trim())  ;
-                        SD2Neg = Float.valueOf(str.substring(64, 70).trim())  ;
-                        SD1Neg = Float.valueOf(str.substring(75, 81).trim())  ;
-                        SD0 =    Float.valueOf(str.substring(86, 92).trim())  ;
-                        SD1 =    Float.valueOf(str.substring(95, 101).trim()) ;
-                        SD2 =    Float.valueOf(str.substring(104, 110).trim());
-                        SD3 =    Float.valueOf(str.substring(112, 117).trim());
+                        SD3Neg = Float.valueOf(str.substring(53, 59).trim());
+                        SD2Neg = Float.valueOf(str.substring(64, 70).trim());
+                        SD1Neg = Float.valueOf(str.substring(75, 81).trim());
+                        SD0 = Float.valueOf(str.substring(86, 92).trim());
+                        SD1 = Float.valueOf(str.substring(95, 101).trim());
+                        SD2 = Float.valueOf(str.substring(104, 110).trim());
+                        SD3 = Float.valueOf(str.substring(112, 117).trim());
                     }
                 }
 
@@ -135,10 +135,10 @@ public class PesoParaLongitud {
 
         localXYPlot.setDomainCrosshairVisible(true);
         localXYPlot.setDomainCrosshairLockedOnData(true);
-        
+
         localXYPlot.setRangeCrosshairVisible(true);
         localXYPlot.setRangeCrosshairLockedOnData(true);
-        
+
         localXYPlot.setDomainZeroBaselineVisible(true);
         localXYPlot.setRangeZeroBaselineVisible(true);
 
@@ -191,28 +191,28 @@ public class PesoParaLongitud {
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesPaint(0, Color.RED);
         renderer.setSeriesShapesVisible(0, false);
-        
+
         renderer.setSeriesPaint(1, Color.ORANGE);
         renderer.setSeriesShapesVisible(1, false);
-        
+
         renderer.setSeriesPaint(2, Color.YELLOW);
         renderer.setSeriesShapesVisible(2, false);
-        
+
         renderer.setSeriesPaint(3, Color.GREEN);
         renderer.setSeriesShapesVisible(3, false);
-        
+
         renderer.setSeriesPaint(4, Color.YELLOW);
         renderer.setSeriesShapesVisible(4, false);
-        
+
         renderer.setSeriesPaint(5, Color.ORANGE);
         renderer.setSeriesShapesVisible(5, false);
-        
+
         renderer.setSeriesPaint(6, Color.RED);
         renderer.setSeriesShapesVisible(6, false);
-        
+
         renderer.setSeriesLinesVisible(7, false);
         renderer.setSeriesVisibleInLegend(7, false);
-       
+
         localXYPlot.setRenderer(renderer);
 
         if (sexo.equals("m")) {

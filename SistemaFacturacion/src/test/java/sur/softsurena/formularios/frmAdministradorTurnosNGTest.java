@@ -13,14 +13,9 @@ import sur.softsurena.conexion.Conexion;
  *
  * @author jhironsel
  */
-@Test(enabled = false)
 public class frmAdministradorTurnosNGTest {
-
+    
     public frmAdministradorTurnosNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -32,6 +27,10 @@ public class frmAdministradorTurnosNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
     }
 
     @AfterClass
@@ -48,9 +47,10 @@ public class frmAdministradorTurnosNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
+                          Prueba de la instacia de administracion de turnos.
                           """
     )
     public void testGetInstance() {
@@ -61,9 +61,10 @@ public class frmAdministradorTurnosNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 1,
             description = """
+                          Prueba o consulta que verifica la tabla de reporte.
                           """
     )
     public void testCrearReporte() {

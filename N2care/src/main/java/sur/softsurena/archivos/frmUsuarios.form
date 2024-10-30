@@ -513,9 +513,6 @@
                                         <Property name="text" type="java.lang.String" value="Delegar Rol"/>
                                         <Property name="enabled" type="boolean" value="false"/>
                                       </Properties>
-                                      <Events>
-                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbDelegarRolActionPerformed"/>
-                                      </Events>
                                     </Component>
                                   </SubComponents>
                                 </Container>
@@ -698,7 +695,7 @@
                                               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jPanel9" min="-2" pref="262" max="-2" attributes="0"/>
                                                       <EmptySpace pref="12" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="0" attributes="0">
@@ -793,8 +790,9 @@
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                                   <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                                  <Component id="jlAgregarFoto1" min="-2" pref="37" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jlAgregarFoto1" min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                         </DimensionLayout>
@@ -834,9 +832,6 @@
                                                   <Image iconType="3" name="/imagenes/user180x180.png"/>
                                                 </Property>
                                               </Properties>
-                                              <Events>
-                                                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jlFotoMouseClicked"/>
-                                              </Events>
                                             </Component>
                                             <Component class="javax.swing.JProgressBar" name="jpbFoto">
                                               <Properties>
@@ -858,12 +853,8 @@
                                             </Property>
                                             <Property name="horizontalAlignment" type="int" value="0"/>
                                             <Property name="text" type="java.lang.String" value="+"/>
-                                            <Property name="verticalAlignment" type="int" value="3"/>
                                             <Property name="opaque" type="boolean" value="true"/>
                                           </Properties>
-                                          <Events>
-                                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jlAgregarFoto1MouseClicked"/>
-                                          </Events>
                                         </Component>
                                       </SubComponents>
                                     </Container>
@@ -1051,7 +1042,7 @@
                                           <Component id="jrbMasculino" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jrbFemenino" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="14" max="32767" attributes="0"/>
+                                          <EmptySpace pref="19" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>

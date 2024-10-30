@@ -93,7 +93,6 @@ public class M_Direccion {
      * @return Retorna un conjunto de datos del tipo resultSet.
      */
     public synchronized static List<Direccion> getDireccionByID(Integer id_persona) {
-        List<Direccion> direcciones = new ArrayList<>();
         final String sql
                 = "SELECT ID, ID_PROVINCIA, PROVINCIA, ID_MUNICIPIO, "
                 + "     MUNICIPIO, ID_DISTRITO_MUNICIPAL, DISTRITO_MUNICIPAL, "
@@ -101,6 +100,9 @@ public class M_Direccion {
                 + "     ESTADO, POR_DEFECTO "
                 + "FROM GET_DIRECCION_BY_ID  "
                 + (Objects.isNull(id_persona) ? "ROWS (10);" : "WHERE ID_PERSONA = ?;");
+        
+        List<Direccion> direcciones = new ArrayList<>();
+        
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,

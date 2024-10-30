@@ -28,10 +28,10 @@ public class M_Privilegio {
     public synchronized static boolean privilegio(Privilegio privilegio) {
         final String sql
                 = "SELECT (1) "
-                + "FROM GET_PRIVILEGIOS "
-                + "WHERE (TRIM(USER_NAME) STARTING WITH TRIM(CURRENT_USER) OR "
-                + "      TRIM(USER_NAME) STARTING WITH TRIM(CURRENT_ROLE)) AND "
-                + "      TRIM(PRIVILEGIO) STARTING WITH TRIM(?) AND "
+                + "FROM VS_PRIVILEGIO "
+                + "WHERE (TRIM(USUARIO) STARTING WITH TRIM(CURRENT_USER) OR "
+                + "      TRIM(USUARIO) STARTING WITH TRIM(CURRENT_ROLE)) AND "
+                + "      TRIM(ABRV_PRIVILEGIO) STARTING WITH TRIM(?) AND "
                 + "      TRIM(NOMBRE_RELACION) STARTING WITH TRIM(?) OR "
                 + "      TRIM(NOMBRE_CAMPO) STARTING WITH TRIM(?); ";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -50,7 +50,7 @@ public class M_Privilegio {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE, 
-                    "Error al consultar la vista GET_PRIVILEGIOS del sistema.", 
+                    "Error al consultar la vista VS_PRIVILEGIO del sistema.", 
                     ex
             );
             return false;

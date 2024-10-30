@@ -13,14 +13,9 @@ import sur.softsurena.conexion.Conexion;
  *
  * @author jhironsel
  */
-@Test(enabled = false)
 public class frmAlmacenesNGTest {
 
     public frmAlmacenesNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -32,6 +27,10 @@ public class frmAlmacenesNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
     }
 
     @AfterClass

@@ -30,9 +30,11 @@ public class M_Turno {
      */
     public synchronized static Turno turnosActivoByUsuario(String userName) {
         final String sql
-                = "SELECT ID, ID_ALMACEN, NOMBRE_ALMACEN, ID_FACTURA "
-                + "FROM GET_TURNOS "
-                + "WHERE ESTADO AND TRIM(TURNO_USUARIO) STARTING WITH ?;";
+                = """
+                  SELECT ID, ID_ALMACEN, NOMBRE_ALMACEN, ID_FACTURA
+                  FROM GET_TURNOS 
+                  WHERE ESTADO AND UPPER(TRIM(TURNO_USUARIO)) STARTING WITH UPPER(TRIM(?));
+                  """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -43,18 +45,23 @@ public class M_Turno {
             ps.setString(1, userName.toUpperCase().strip());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return Turno.
-                            builder().
-                            id(rs.getInt("ID")).
-                            almacen(
-                                    Almacen.
-                                            builder().
-                                            id(rs.getInt("ID_ALMACEN")).
-                                            nombre(rs.getString("NOMBRE_ALMACEN")).
-                                            build()
-                            ).
-                            factura(Factura.builder().id(rs.getInt("ID_FACTURA")).build()).
-                            build();
+                    return Turno
+                            .builder()
+                            .id(rs.getInt("ID"))
+                            .almacen(
+                                    Almacen
+                                            .builder()
+                                            .id(rs.getInt("ID_ALMACEN"))
+                                            .nombre(rs.getString("NOMBRE_ALMACEN"))
+                                            .build()
+                            )
+                            .factura(
+                                    Factura
+                                            .builder()
+                                            .id(rs.getInt("ID_FACTURA"))
+                                            .build()
+                            )
+                            .build();
                 }
             }
         } catch (SQLException ex) {
@@ -86,7 +93,7 @@ public class M_Turno {
      * si no cuenta con un turno abierto.
      */
     public synchronized static boolean usuarioTurnoActivo(String userName) {
-        return (turnosActivoByUsuario(userName).getId() > 0);
+        return (turnosActivoByUsuario(userName).getId() >= 0);
     }
 
     /**
@@ -168,6 +175,9 @@ public class M_Turno {
     /**
      * Metodo que nos permite habilitar a los cajeros al modulo de facturacion.
      *
+     * 
+     * TODO evitar modificar la tabla de producto en mantedimiento de productos.
+     * 
      * @param id_almacen
      * @param idUsuario
      * @return
@@ -182,24 +192,29 @@ public class M_Turno {
         )) {
             cs.setInt(1, id_almacen);
             cs.setString(2, idUsuario);
-            return Resultado.
-                    builder().
-                    estado(cs.execute()).
-                    mensaje(TURNO_HABILITADO_CORRECTAMENTE).
-                    icono(JOptionPane.INFORMATION_MESSAGE).
-                    build();
+
+            cs.execute();
+
+            return Resultado
+                    .builder()
+                    .estado(Boolean.TRUE)
+                    .mensaje(TURNO_HABILITADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return Resultado.
-                    builder().
-                    estado(Boolean.FALSE).
-                    mensaje(ERROR_AL_HABILITAR_EL_TURNO).
-                    icono(JOptionPane.ERROR_MESSAGE).
-                    build();
+            return Resultado
+                    .builder()
+                    .estado(Boolean.FALSE)
+                    .mensaje(ERROR_AL_HABILITAR_EL_TURNO)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .build();
         }
     }
-    public static final String ERROR_AL_HABILITAR_EL_TURNO = "Error al habilitar el turno";
-    public static final String TURNO_HABILITADO_CORRECTAMENTE = "Turno habilitado correctamente.";
+    public static final String ERROR_AL_HABILITAR_EL_TURNO 
+            = "Error al habilitar el turno";
+    public static final String TURNO_HABILITADO_CORRECTAMENTE 
+            = "Turno habilitado correctamente.";
 
     /**
      * Metodo que nos permite cerrar los turno de los cajeros habiertos en el

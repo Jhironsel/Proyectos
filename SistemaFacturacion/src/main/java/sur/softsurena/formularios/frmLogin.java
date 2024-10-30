@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import sur.softsurena.FirebirdEventos.FirebirdEventos;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.metodos.Imagenes;
+import static sur.softsurena.metodos.M_BaseDeDatos.GET_GUID;
 import static sur.softsurena.metodos.M_BaseDeDatos.periodoMaquina;
 import static sur.softsurena.metodos.M_BaseDeDatos.setLicencia;
 import sur.softsurena.utilidades.Resultado;
@@ -27,8 +28,7 @@ public final class frmLogin extends javax.swing.JFrame {
     private final ResourceBundle bundle;
 
     private static String sistema;
-    private static String idMaquina;
-
+    
     public RSButtonMaterialIconOne getBtnAceptar() {
         return btnAceptar;
     }
@@ -315,6 +315,7 @@ public final class frmLogin extends javax.swing.JFrame {
                 dominio,
                 puerto);
 
+        
         Resultado resultado = Conexion.verificar();
 
         if (!resultado.getEstado()) {
@@ -442,30 +443,14 @@ public final class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void registro() {
-        //Implementar logistica para registrar producto en linea
-        //TODO Pasar idMaquina a este metodo.
-        frmRegistros miRegistros = new frmRegistros(this, true, idMaquina);
+        frmRegistros miRegistros = new frmRegistros(this, true);
         miRegistros.setVisible(true);
 
         if (miRegistros.txtIdMaquina.getText().equalsIgnoreCase("cancelado")) {
             return;
         }
-
-//        String claveServidor = new String(miRegistros.txtClaveServidor.getPassword());
-        //Conexion.getInstance("None", "SYSDBA", claveServidor, "", "", "");
-        if (setLicencia(
-                new Date(miRegistros.dchFecha.getDate().getTime()),
-                miRegistros.txtIdMaquina.getText().trim(),
-                new String(miRegistros.txtClave1.getPassword()).trim(),
-                new String(miRegistros.txtClave2.getPassword()).trim()
-        )) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Maquina Registradas",
-                    "",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        }
+        
+        //TODO Que hacer aqui cuando se termina de registrar.
 
         miRegistros.dispose();
 

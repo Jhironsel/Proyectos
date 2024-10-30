@@ -3,6 +3,8 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
@@ -73,7 +75,7 @@ public class M_Control_Consulta {
             = "Control consulta agregado correctamente.";
 
     /**
-     * TODO Crear SP.
+     * Metodo que modificas los controles de consultas en el sistema.
      *
      * @param controlConsulta
      * @return
@@ -124,52 +126,66 @@ public class M_Control_Consulta {
             = "Error al modificar control consulta del sistema.";
 
     /**
-     * TODO Devulver una lista.
-     * @param fecha
-     * @param actual
-     * @return
+     * Metodos que consultas las fechas y horas de los doctores en el sistema.
+     * 
+     * @param dia es el dia que el doctor realiza consultas medicas.
+     * 
+     * @return returna una lista de consultas disponibles en el sistema.
      */
-    public synchronized static ResultSet getFechaDoctores(String fecha, boolean actual) {
+    public synchronized static List<Control_Consulta> getFechaDoctores(String dia) {
         final String sql
-                = "SELECT IDCONTROLCONSULTA, loginName, dia, "
-                + "INICIAL, FINAL, nombreCompleto, CANTIDAD_PACIENTE "
-                + "FROM GET_controlConsulta "
-                + "WHERE dia like (SELECT TCNOMBREDIA "
-                + "                FROM NOMBRE_DIA_CORTO (?)) " + (actual ? " and CURRENT_DATE <= ? ;" : "");
-
+                = """
+                  SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL, ESTADO
+                  FROM V_CONTROL_CONSULTA
+                  WHERE DIA STARTING WITH ?;
+                  """;
+        
+        List<Control_Consulta> lista = new ArrayList<>();
+        
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setString(1, fecha);
-
-            if (actual) {
-                ps.setString(2, fecha);
+            ps.setString(1, dia);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                lista.add(
+                        Control_Consulta
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .user_name(rs.getString("USER_NAME"))
+                                .cantidad(rs.getInt("CANTIDAD_PACIENTE"))
+                                .dia(rs.getString("DIA"))
+                                .inicial(rs.getTime("INICIAL"))
+                                .finall(rs.getTime("FINAL"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .build()
+                );
             }
-
-            return ps.executeQuery();
-
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
         }
+        
+        return lista;
     }
 
     /**
-     * TODO Devolver una lista.
+     * Lista de controles de las consultas del sistema.
      * @param idUsuario
      * @return
      */
-    public synchronized static ResultSet getHorario(String idUsuario) {
-        final String sql
-                = "SELECT IDCONTROLCONSULTA, CANTIDADPACIENTE,"
-                + "          DIA, INICIAL, FINAL "
-                + "FROM t_controlconsulta "
-                + "WHERE IDUSUARIO = ? "
-                + "order by DIA, INICIAL, FINAL";
-
+    public synchronized static List<Control_Consulta> getHorario(String idUsuario) {
+        final String sql = """
+                           SELECT ID, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL 
+                           FROM V_CONTROL_CONSULTA 
+                           WHERE USER_NAME = ? ;
+                           """;
+        
+        List<Control_Consulta> lista = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -177,18 +193,31 @@ public class M_Control_Consulta {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setString(1, idUsuario);
-            return ps.executeQuery();
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                lista.add(
+                    Control_Consulta
+                            .builder()
+                            .id(rs.getInt("ID"))
+                            .cantidad(rs.getInt("CANTIDAD_PACIENTE"))
+                            .dia(rs.getString("DIA"))
+                            .inicial(rs.getTime("INICIAL"))
+                            .finall(rs.getTime("FINAL"))
+                            .estado(rs.getBoolean("ESTADO"))
+                            .build()
+                );
+            }
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
         }
+        return lista;
     }
     
     /**
      * Metodo utilizado para eliminar los controles de consultas programadas
      * previamente.
-     *
-     * TODO CREAR SP.
      *
      * @param idControlConsulta
      *

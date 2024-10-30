@@ -313,11 +313,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jcbDelegarRol.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         jcbDelegarRol.setText("Delegar Rol");
         jcbDelegarRol.setEnabled(false);
-        jcbDelegarRol.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbDelegarRolActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -528,11 +523,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jlFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user180x180.png"))); // NOI18N
-        jlFoto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jlFotoMouseClicked(evt);
-            }
-        });
 
         jpbFoto.setStringPainted(true);
 
@@ -557,13 +547,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jlAgregarFoto1.setForeground(new java.awt.Color(1, 1, 1));
         jlAgregarFoto1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlAgregarFoto1.setText("+");
-        jlAgregarFoto1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jlAgregarFoto1.setOpaque(true);
-        jlAgregarFoto1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jlAgregarFoto1MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -579,8 +563,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jlAgregarFoto1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlAgregarFoto1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jlCreador3.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -612,7 +597,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addGap(11, 11, 11)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -773,7 +758,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addComponent(jrbMasculino)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jrbFemenino)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -1529,21 +1514,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtClaveRepetirFocusGained
 
-    private void jlFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlFotoMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jlFotoMouseClicked
-
-    private void jlAgregarFoto1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAgregarFoto1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jlAgregarFoto1MouseClicked
-
     private void jcbPrimerNombreStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbPrimerNombreStateChanged
 
     }//GEN-LAST:event_jcbPrimerNombreStateChanged
-
-    private void jcbDelegarRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbDelegarRolActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcbDelegarRolActionPerformed
 
     private void jcbAdministradorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jcbAdministradorStateChanged
         jcbDelegarRol.setEnabled(jcbAdministrador.isSelected());

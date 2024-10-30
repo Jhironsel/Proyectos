@@ -127,7 +127,7 @@ public class M_Usuario {
      */
     public static synchronized Resultado modificarUsuario(Usuario usuario) {
         final String sql
-                = "EXECUTE PROCEDURE SP_U_USUARIO (?,?,?,?,?,?,?,?)";
+                = "EXECUTE PROCEDURE SP_U_USUARIO (?,?,?,?,?,?,?,?,?";
         try (CallableStatement cs = getCnn().prepareCall(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
@@ -140,6 +140,7 @@ public class M_Usuario {
             cs.setBoolean(6, usuario.getEstado());
             cs.setBoolean(7, usuario.getAdministrador());
             cs.setString(8, usuario.getDescripcion());
+            cs.setString(9, usuario.getTags());
             cs.executeUpdate();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -231,21 +232,14 @@ public class M_Usuario {
             = "Error al borrar usuario.";
 
     /**
-     * Nitido. Metodo para consultar cual es el usuario actual del sistema.
+     * Metodo para consultar cual es el usuario actual del sistema.<br/>
      *
      * Una vez iniciada la session del usuario en el sistema, hacemos una
      * consulta a la base de datos, que nos devuelve el usuario y el rol de
-     * este.
+     * este.<br/>
      *
-     * Metodo actualizado el 17/05/2022.
-     *
-     * Metodo actualizado el 24 oct 2022:
-     *
-     * Nota:Se cambió el tipo de resultado que devuelve de un ResultSet a una
-     * clase Usuarios.
-     *
-     * @return Retorna un String con el dato de cual es usuario del sistema que
-     * ha iniciado sessión actualmente.
+     * @return Un objecto de la clase usuario con los datos del usuario del 
+     * sistema que ha iniciado sessión actualmente.<br/>
      */
     public synchronized static Usuario getUsuarioActual() {
         final String sql
@@ -297,18 +291,20 @@ public class M_Usuario {
                 = "SELECT PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, ADMINISTRADOR, "
                 + "         DESCRIPCION "
                 + "FROM VS_USUARIOS "
-                + "WHERE TRIM(USERNAME) STARTING WITH ?;";
+                + "WHERE TRIM(UPPER(USERNAME)) STARTING WITH UPPER(TRIM(?));";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
-                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
+                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
 
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery();) {
-                rs.next();
+                
+                rs.absolute(1);
+                
                 return Usuario
                         .builder()
                         .pnombre(rs.getString("PNOMBRE"))

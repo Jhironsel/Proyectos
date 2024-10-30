@@ -49,14 +49,14 @@ public class M_E_S_SYSNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = ""
     )
     public void testInsertLogo() {
-        File file = null;
-        boolean expResult = false;
-        boolean result = M_E_S_SYS.insertLogo(file);
+        File file = new File("Imagenes/ImagenPrueba.png");
+        boolean expResult = true;
+        boolean result = M_E_S_SYS.insertLogo(1, file);
         assertEquals(result, expResult);
     }
 

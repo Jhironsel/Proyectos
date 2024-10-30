@@ -930,12 +930,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jpEnfermedades1" pref="197" max="32767" attributes="0"/>
-                              <Component id="jpEnfermedades2" pref="197" max="32767" attributes="0"/>
+                              <Component id="jpEnfermedades1" pref="198" max="32767" attributes="0"/>
+                              <Component id="jpEnfermedades2" pref="198" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jpEnfermedades3" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                          <Component id="jpEnfermedades4" pref="222" max="32767" attributes="0"/>
+                          <Component id="jpEnfermedades4" pref="223" max="32767" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1419,7 +1419,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jpTipoGrafica" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jpGrafica" pref="547" max="32767" attributes="0"/>
+                          <Component id="jpGrafica" pref="558" max="32767" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>

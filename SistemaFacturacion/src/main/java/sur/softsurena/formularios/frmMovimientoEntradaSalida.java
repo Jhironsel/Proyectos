@@ -17,11 +17,12 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
+public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
+        implements Runnable {
 
     private Object registro[] = new Object[3];
     private DefaultTableModel miTabla;
-    
+
     public frmMovimientoEntradaSalida() {
         initComponents();
         agregarOyente();
@@ -115,18 +116,18 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
 
     private void jtFechasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtFechasMouseClicked
         String fecha = jtFechas.getValueAt(jtFechas.getSelectedRow(), 0).toString().replace("/", ".");
-        
+
         if (fecha.isEmpty()) {
             return;
         }
         reporte(fecha);
     }//GEN-LAST:event_jtFechasMouseClicked
-    
+
     private void agregarOyente() {
         jCalendar1.getDayChooser().addPropertyChangeListener(
                 (java.beans.PropertyChangeEvent evt) -> {
                     SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
-                    
+
                     jFecha.setText("Fecha Selecionada: "
                             + formatoDeFecha.format(jCalendar1.getDate()));
 
@@ -139,17 +140,18 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
     //TODO Metodo de JasperReport
     private void reporte(String fecha) {
         try {
-            JasperReport masterReporte = 
-                    (JasperReport) JRLoader.loadObjectFromFile(
-                                    "/Reportes/MovimientoES.jasper");
-            
+            JasperReport masterReporte
+                    = (JasperReport) JRLoader.loadObjectFromFile(
+                            "Reportes/MovimientoES.jasper"
+                    );
+
             Map parametros = new HashMap();
             parametros.put("fecha", fecha);
-            
+
             JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros);
-            
+
             JRViewer jviewer = new JRViewer(jp);
-            
+
             jpReporte.removeAll();
             jpReporte.setLayout(new BorderLayout());
             jpReporte.add(jviewer, BorderLayout.CENTER);
@@ -158,8 +160,8 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
             jpReporte.revalidate();
         } catch (JRException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    "Error al crear reporte de moviemientos de entrada y salida.", 
+                    Level.SEVERE,
+                    "Error al crear reporte de moviemientos de entrada y salida.",
                     ex
             );
         }
@@ -167,7 +169,7 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
 
     private void llenarTabla() {
         try {
-            String titulos[] = {"Fecha",  "Operacion", "Usuario"};
+            String titulos[] = {"Fecha", "Operacion", "Usuario"};
             jtFechas.removeAll();
             miTabla = new DefaultTableModel(null, titulos);
 
@@ -176,9 +178,8 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
 //                  + "WHERE EXTRACT(MONTH FROM r.FECHAENTRADA) = " + mes + " "
 //                  + "and EXTRACT(YEAR FROM r.FECHAENTRADA) = " + year + " "
 //                  + "GROUP BY r.FECHAENTRADA,  r.OP, r.IDUSUARIO"
-            
             ResultSet rs = null;
-                        
+
             SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
             while (rs.next()) {
                 registro[0] = formatoDeFecha.format(rs.getDate("FECHAENTRADA"));
@@ -189,8 +190,8 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
             jtFechas.setModel(miTabla);
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    "Error al consultar la tabla Entradas_Productos.", 
+                    Level.SEVERE,
+                    "Error al consultar la tabla Entradas_Productos.",
                     ex
             );
         }
@@ -204,4 +205,9 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jpReporte;
     private javax.swing.JTable jtFechas;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+
+    }
 }

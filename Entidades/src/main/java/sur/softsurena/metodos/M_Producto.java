@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.interfaces.IProducto;
 import sur.softsurena.utilidades.FiltroBusqueda;
@@ -50,7 +51,7 @@ public class M_Producto implements IProducto {
                 + "          TRIM(DESCRIPCION) STARTING WITH TRIM(?) OR "
                 + "          TRIM(DESCRIPCION) CONTAINING TRIM(?) OR "
                 + "          ID_CATEGORIA IN( SELECT c.ID "
-                + "                             FROM V_CATEGORIAS c "
+                + "                             FROM VS_CATEGORIAS c "
                 + "                             WHERE UPPER(TRIM(c.DESCRIPCION)) STARTING WITH UPPER(TRIM(?))) "
                 + (Objects.isNull(filtro.getEstado()) ? "" : (filtro.getEstado() ? " AND ESTADO " : " AND ESTADO IS FALSE "))
                 + " ORDER BY ID "
@@ -96,7 +97,12 @@ public class M_Producto implements IProducto {
                                     .codigo(rs.getString("CODIGO"))
                                     .nota(rs.getString("NOTA"))
                                     .fechaCreacion(rs.getDate("FECHA_CREACION"))
-                                    .imagenProducto(rs.getString("IMAGEN_PRODUCTO"))
+                                    .imagen(
+                                            Imagen
+                                                    .builder()
+                                                    .imagen64(rs.getString("IMAGEN_PRODUCTO"))
+                                                    .build()
+                                    )
                                     .estado(rs.getBoolean("ESTADO"))
                                     .existencia(rs.getBigDecimal("EXISTENCIA"))
                                     .build()
@@ -150,7 +156,12 @@ public class M_Producto implements IProducto {
                                 .builder()
                                 .id(rs.getInt("ID"))
                                 .descripcion(rs.getString("DESCRIPCION"))
-                                .imagenProducto(rs.getString("IMAGEN_PRODUCTO"))
+                                .imagen(
+                                        Imagen
+                                                .builder()
+                                                .imagen64(rs.getString("IMAGEN_PRODUCTO"))
+                                                .build()
+                                )
                                 .build()
                 );
             }
@@ -237,7 +248,7 @@ public class M_Producto implements IProducto {
             ps.setInt(1, producto.getCategoria().getId_categoria());
             ps.setString(2, producto.getCodigo());
             ps.setString(3, producto.getDescripcion());
-            ps.setString(4, producto.getImagenProducto());
+            ps.setString(4, producto.getImagen().getImagen64());
             ps.setString(5, producto.getNota());
             ps.setBoolean(6, producto.getEstado());
 
@@ -259,7 +270,7 @@ public class M_Producto implements IProducto {
                     ERROR_AL__INSERTAR__PRODUCTO,
                     ex
             );
-
+            
             return Resultado
                     .builder()
                     .id(-1)
@@ -299,7 +310,7 @@ public class M_Producto implements IProducto {
             ps.setInt(2, p.getCategoria().getId_categoria());
             ps.setString(3, p.getCodigo());
             ps.setString(4, p.getDescripcion());
-            ps.setString(5, p.getImagenProducto());
+            ps.setString(5, p.getImagen().getImagen64());
             ps.setString(6, p.getNota());
             ps.setBoolean(7, p.getEstado());
 

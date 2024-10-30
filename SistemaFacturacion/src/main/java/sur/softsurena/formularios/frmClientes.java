@@ -544,6 +544,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             }
         });
 
+        dchFechaNacimiento.setDateFormatString("dd.MM.yyyy");
         dchFechaNacimiento.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         dchFechaNacimiento.setName("jdcFechaNacimiento"); // NOI18N
 
@@ -1255,7 +1256,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jpBotones2, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(jpBotones2, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 

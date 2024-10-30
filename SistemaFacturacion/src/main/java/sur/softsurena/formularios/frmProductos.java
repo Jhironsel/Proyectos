@@ -17,6 +17,7 @@ import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Producto;
+import sur.softsurena.entidades.Imagen;
 import sur.softsurena.interfaces.IProducto;
 import static sur.softsurena.metodos.M_Categoria.getCategorias;
 import static sur.softsurena.metodos.M_Privilegio.privilegio;
@@ -36,10 +37,12 @@ import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 
 public class frmProductos extends javax.swing.JInternalFrame implements IProducto {
 
+    private static final long serialVersionUID = 1L;
+
     private Boolean v_nuevo = null;
-    private final JFileChooser file;
-    private final FileNameExtensionFilter filter;
-    private int v_fila = 0;
+    private static JFileChooser file = null;
+    private static FileNameExtensionFilter filter = null;
+    private static int v_fila = 0;
     private static String criterioBusqueda = "";
 
     public static frmProductos getInstance() {
@@ -47,12 +50,13 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             Si un permiso a las vistas consultada anteriormente es negado, se 
         lanza una excepcion y la venta no se iniciará.
          */
-        if (!privilegio(Privilegio
-                .builder()
-                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                .nombre_relacion("GET_PRODUCTOS")
-                .nombre_campo("^")
-                .build()
+        if (!privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                        .nombre_relacion("GET_PRODUCTOS")
+                        .nombre_campo("^")
+                        .build()
         )) {
             final String mensaje = "No cuenta con permisos para ver la información de este módulo.";
             JOptionPane.showInternalMessageDialog(
@@ -64,6 +68,8 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             LOG.log(Level.SEVERE, mensaje);
             throw new ExceptionInInitializerError(mensaje);
         }
+        
+
         return NewSingletonHolder.INSTANCE;
     }
 
@@ -75,6 +81,14 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private frmProductos() {
 
         initComponents();
+        
+        
+        //Se llena la tabla de producto por primera vez. 
+        //TODO Revisar los permisos de este formlario.
+        llenarTablaProductos(criterioBusqueda);
+        reOrdenar();
+        updateCategoria();
+        
         jpOpciones.setVisible(false);
         file = new JFileChooser();
 
@@ -129,7 +143,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         btnEntradaSalidaProducto = new RSMaterialComponent.RSButtonMaterialIconOne();
         jlOpcionesMostrar = new RSMaterialComponent.RSLabelIcon();
 
-        setBorder(javax.swing.BorderFactory.createMatteBorder(25, 10, 10, 10, new java.awt.Color(37, 45, 223)));
+        setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(37, 45, 223)));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -137,6 +151,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         setTitle("Productos");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -149,7 +164,6 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameOpened(evt);
             }
         });
 
@@ -174,7 +188,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         });
         jPanel2.add(btnNuevo);
 
-        btnModificar.setText("Editar");
+        btnModificar.setText("Modificar");
         btnModificar.setIconTextGap(0);
         btnModificar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.EDIT);
         btnModificar.setName("btnModificar"); // NOI18N
@@ -296,7 +310,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                        .addGap(0, 301, Short.MAX_VALUE)
+                        .addGap(0, 512, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addGap(5, 5, 5)
                         .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -320,7 +334,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                     .addComponent(jLabel2)
                     .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -546,11 +560,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         jpESProductos.setLayout(jpESProductosLayout);
         jpESProductosLayout.setHorizontalGroup(
             jpESProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 694, Short.MAX_VALUE)
+            .addGap(0, 817, Short.MAX_VALUE)
         );
         jpESProductosLayout.setVerticalGroup(
             jpESProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 644, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jtpPrincipal.addTab("E/S Productos", jpESProductos);
@@ -559,11 +573,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         jpESHistorial.setLayout(jpESHistorialLayout);
         jpESHistorialLayout.setHorizontalGroup(
             jpESHistorialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 694, Short.MAX_VALUE)
+            .addGap(0, 817, Short.MAX_VALUE)
         );
         jpESHistorialLayout.setVerticalGroup(
             jpESHistorialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 644, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
 
         jtpPrincipal.addTab("E/S Historial", jpESHistorial);
@@ -693,7 +707,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtpPrincipal)
+                    .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE)
                     .addComponent(jScrollPane3))
                 .addGap(0, 0, 0)
                 .addComponent(jlOpcionesMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1025,7 +1039,17 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                     )
                     .codigo(txtCodigoBarra.getText().strip())
                     .descripcion(txtDescripcion.getText().strip())
-                    .imagenProducto(Utilidades.imagenEncode64(file.getSelectedFile()))
+                    .imagen(
+                            Imagen
+                                    .builder()
+                                    .imagen64(
+                                            Utilidades
+                                                    .imagenEncode64(
+                                                            file.getSelectedFile()
+                                                    )
+                                    )
+                                    .build()
+                    )
                     .estado(cbActivo.isSelected())
                     .nota(txtNotas.getText().strip())
                     .build();
@@ -1182,53 +1206,6 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         //TODO realizar proceso de entrada y salida de producto.
     }//GEN-LAST:event_btnEntradaSalidaProductoActionPerformed
 
-    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        //Se llena la tabla de producto por primera vez. 
-        llenarTablaProductos(criterioBusqueda);
-        reOrdenar();
-        updateCategoria();
-
-        btnNuevo.setEnabled(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(
-                                        Privilegio.PRIVILEGIO_EXECUTE
-                                )
-                                .nombre_relacion("SP_I_PRODUCTO")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-
-        btnModificar.setEnabled(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(
-                                        Privilegio.PRIVILEGIO_EXECUTE
-                                )
-                                .nombre_relacion("SP_U_PRODUCTO")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-
-        btnBorrar.setEnabled(
-                privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(
-                                        Privilegio.PRIVILEGIO_EXECUTE
-                                )
-                                .nombre_relacion("SP_D_PRODUCTO")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-
-    }//GEN-LAST:event_formInternalFrameOpened
-
     private void jlOpcionesMostrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlOpcionesMostrarMouseClicked
         if (jpOpciones.isVisible()) {
             jpOpciones.setVisible(false);
@@ -1339,6 +1316,47 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         }
     }//GEN-LAST:event_cbActivoActionPerformed
 
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        btnNuevo.setEnabled(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(
+                                        Privilegio.PRIVILEGIO_EXECUTE
+                                )
+                                .nombre_relacion("SP_I_PRODUCTO")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        btnModificar.setEnabled(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(
+                                        Privilegio.PRIVILEGIO_EXECUTE
+                                )
+                                .nombre_relacion("SP_U_PRODUCTO")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        btnBorrar.setEnabled(
+                privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(
+                                        Privilegio.PRIVILEGIO_EXECUTE
+                                )
+                                .nombre_relacion("SP_D_PRODUCTO")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+    }//GEN-LAST:event_formInternalFrameActivated
+
     /**
      * Metodo utilizado para controla el comportamiento de los botones del
      * formulario.
@@ -1354,7 +1372,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      *
      * @param botones
      */
-    private void cancelar(boolean botones, boolean cerrar) {
+    private static void cancelar(boolean botones, boolean cerrar) {
         //Botones Para habilitar:
         btnNuevo.setEnabled(botones);
         btnModificar.setEnabled(botones);
@@ -1385,6 +1403,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * Es llamado tambien cuando el modulo de producto se abre por primera vez.
      *
      * @param criterioBusqueda
+     * @return
      */
     public static JTable llenarTablaProductos(String criterioBusqueda) {
 
@@ -1415,8 +1434,16 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         .builder()
                         .criterioBusqueda(criterioBusqueda)
                         .filas(Boolean.TRUE)
-                        .nCantidadFilas(Integer.valueOf(jsCantidadFilas.getValue().toString()))
-                        .nPaginaNro(Integer.valueOf(jsPaginaNro.getValue().toString()))
+                        .nCantidadFilas(
+                                Integer.valueOf(
+                                        jsCantidadFilas.getValue().toString()
+                                )
+                        )
+                        .nPaginaNro(
+                                Integer.valueOf(
+                                        jsPaginaNro.getValue().toString()
+                                )
+                        )
                         .build()
         ).stream().forEach(producto -> {
             registro[0] = producto.getCodigo();
@@ -1439,7 +1466,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         int[] indices = {4};
 
         columnasCheckBox(tblProducto, indices);
-        
+
         return tblProducto;
     }
 
@@ -1473,7 +1500,13 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         cbActivo.setSelected(producto.getEstado());
 
-        jlImagenProducto.setIcon(Utilidades.imagenDecode64(producto.getImagenProducto(), 155, 155));
+        jlImagenProducto.setIcon(
+                Utilidades.imagenDecode64(
+                        producto.getImagen().getImagen64(),
+                        155,
+                        155
+                )
+        );
 
         for (int i = 0; i < cbCategoria.getItemCount(); i++) {
             int idCategoria = ((Categoria) cbCategoria.getItemAt(i)).getId_categoria();
@@ -1491,7 +1524,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * Este metodo es llamado desde: 1) btnBorrarActionPerformed 2)
      * btnBuscarProductoActionPerformed 3) formInternalFrameOpened
      */
-    private void reOrdenar() {
+    private static void reOrdenar() {
         if (tblProducto.getRowCount() <= 0) {
             return;
         }
@@ -1548,7 +1581,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * btnModificarActionPerformed 3) btnAdmCategoriasActionPerformed 4)
      * formInternalFrameOpened
      */
-    private void updateCategoria() {
+    private static void updateCategoria() {
         //Elimina registros previos.
         cbCategoria.removeAllItems();
 
@@ -1606,19 +1639,19 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private newscomponents.RSButtonGradientIcon_new btnActualizarLista;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAdmCategorias;
     private newscomponents.RSButtonGradientIcon_new btnAgregarFoto;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBuscarProducto;
-    public RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBuscarProducto;
+    public static RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
     private newscomponents.RSButtonGradientIcon_new btnEliminarFoto;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEntradaProducto;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEntradaSalidaProducto;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnImprimirLista;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalidaProducto;
     private RSMaterialComponent.RSCheckBoxMaterial cbActivo;
-    private javax.swing.JComboBox cbCategoria;
+    private static javax.swing.JComboBox cbCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
@@ -1634,11 +1667,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private javax.swing.JPanel jpESHistorial;
     private javax.swing.JPanel jpESProductos;
     private javax.swing.JPanel jpMantenimiento;
-    private javax.swing.JPanel jpOpciones;
-    private javax.swing.JPanel jpProductos;
+    private static javax.swing.JPanel jpOpciones;
+    private static javax.swing.JPanel jpProductos;
     private static javax.swing.JSpinner jsCantidadFilas;
     private static javax.swing.JSpinner jsPaginaNro;
-    private javax.swing.JTabbedPane jtpPrincipal;
+    private static javax.swing.JTabbedPane jtpPrincipal;
     public static RSMaterialComponent.RSTableMetro tblProducto;
     private javax.swing.JTextField txtCodigoBarra;
     private javax.swing.JTextField txtDescripcion;

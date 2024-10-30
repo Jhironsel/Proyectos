@@ -16,7 +16,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
 
     private frmBusquedaProducto miBusqueda;
     private Boolean impuesto = false;
-    private DefaultTableModel miTabla;
+    private final DefaultTableModel miTabla;
     private Object registro[];
 
     public frmEntradaProducto(java.awt.Frame parent, boolean modal) {
@@ -395,7 +395,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
 
         productos.stream().forEach(producto -> {
             
-            jlImagen.setIcon(imagenDecode64(producto.getImagenProducto(), 72, 72));
+            jlImagen.setIcon(imagenDecode64(producto.getImagen().getImagen64(), 72, 72));
             //imagen.getImage().flush();
             
             txtDescripcionProducto.setText(producto.getDescripcion());

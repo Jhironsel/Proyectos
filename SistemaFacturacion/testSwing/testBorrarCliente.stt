@@ -108,7 +108,7 @@
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
-        <occurrencesToSkip>1</occurrencesToSkip>
+        <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>

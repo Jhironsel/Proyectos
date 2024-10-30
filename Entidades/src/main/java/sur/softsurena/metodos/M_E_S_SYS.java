@@ -1,10 +1,12 @@
 package sur.softsurena.metodos;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -14,11 +16,11 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_E_S_SYS {
-    
+
     /**
      * Metodo que permite agregar una imagen en la pantalla principal del
      * sistema, es llamado logo de la aplicacion.
-     * 
+     *
      * TODO CREAR SP.
      *
      * @param file recibe una ruta de la imagen selecciona la cual es convertida
@@ -27,22 +29,27 @@ public class M_E_S_SYS {
      * @return Devuelve un valor booleano que indica si la operacion tuvo exito
      * o no.
      */
-    public synchronized static boolean insertLogo(File file) {
+    public synchronized static boolean insertLogo(Integer id, File file) {
         final String sql
-                = "UPDATE OR INSERT INTO V_T_E_S_SYS(ID, LOGO) "
-                + "VALUES(1,?) MATCHING(ID);";
+                = "UPDATE OR INSERT INTO V_T_E_S_SYS(ID, LOGO, PATH_LOGO) "
+                + "VALUES(?, ?, ?) MATCHING(ID);";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setString(1, Utilidades.imagenEncode64(file));
-            return ps.execute();
+            ps.setInt(1, id);
+            ps.setString(2, Utilidades.imagenEncode64(file));
+            ps.setString(3, file.toString());
+            
+            ps.execute();
+            
+            return true;
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
@@ -68,7 +75,7 @@ public class M_E_S_SYS {
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return rs.getString(1);
-            } 
+            }
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }

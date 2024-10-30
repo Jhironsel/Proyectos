@@ -68,14 +68,20 @@ public class M_Motivo_Consulta {
     }
 
     /**
-     *
-     * @return
+     * Metodo que devuelve los motivo por la cual una consulta se ha generado.
+     * 
+     * TODO Trabajando en este metodo. 
+     * 
+     * @return Que devuelva una lista.
      */
     public synchronized static ResultSet getMotivo() {
-        final String sql = "SELECT IDMCONSULTA, DESCRIPCION, DEFENICION "
-                + "FROM V_MOTIVOS_CONSULTA "
-                + "WHERE ESTADO "
-                + "ORDER BY 1";
+        final String sql = 
+                """
+                SELECT IDMCONSULTA, DESCRIPCION, DEFENICION 
+                FROM V_MOTIVOS_CONSULTA 
+                WHERE ESTADO 
+                ORDER BY 1
+                """;
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,

@@ -18,6 +18,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private static boolean v_nuevo;
     private static String criterioBusqueda;
+    private static final long serialVersionUID = 1L;
 
     public static frmAlmacenes getInstance() {
         if (!privilegio(
@@ -27,7 +28,6 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                                 Privilegio.PRIVILEGIO_SELECT
                         )
                         .nombre_relacion("V_ALMACENES")
-                        .nombre_campo("^")
                         .build()
         )) {
 
@@ -536,12 +536,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         }
 
         Resultado resultado = Resultado
-                    .builder()
-                    .id(-1)
-                    .mensaje("Este proceso esta en desarrollo. ")
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
+                .builder()
+                .id(-1)
+                .mensaje("Este proceso esta en desarrollo. ")
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
 
         if (v_nuevo) {
             resultado = agregarAlmacen(Almacen.
@@ -554,8 +554,8 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         } else {
             //TODO Crear proceso para modificar almacen.
         }
-        
-        if(!resultado.getEstado()){
+
+        if (!resultado.getEstado()) {
             LOG.severe("Este PROCESO no esta terminado.");
         }
 
@@ -718,9 +718,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     }
 
     /**
+     * Metodo encargado de llenar el sistema de los almacenes registrados.
      *
      * @param id
+     *
      * @param criterioBusqueda
+     *
      * @return
      */
     public synchronized static JTable llenarTabla(int id, String criterioBusqueda) {

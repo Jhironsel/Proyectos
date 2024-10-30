@@ -67,13 +67,14 @@ public class frmLoginNGTest {
 
         login.getTxtUsuario().setText("sysdba");
         login.getTxtClave().setText("1");
-
-        login.getBtnAceptar().doClick();
-
+        
         assertTrue(
                 login.isActive(),
                 "Login no responde."
         );
+
+        login.getBtnAceptar().doClick();
+
 
         login.dispose();
     }

@@ -8,14 +8,13 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Resultado <T>{
+public class Resultado{
     private final Integer id;
     private final String mensaje;
     private final Integer cantidad;
     private final Float cantidadDecimal;
     private final Object objecto;
     private final Object[] objectos;
-    private final List<T> lista;
     private final Boolean estado;
     private final String excepcion;
     private final Integer icono;
@@ -29,7 +28,6 @@ public class Resultado <T>{
         hash = 97 * hash + Objects.hashCode(this.cantidadDecimal);
         hash = 97 * hash + Objects.hashCode(this.objecto);
         hash = 97 * hash + Arrays.deepHashCode(this.objectos);
-        hash = 97 * hash + Objects.hashCode(this.lista);
         hash = 97 * hash + Objects.hashCode(this.estado);
         hash = 97 * hash + Objects.hashCode(this.excepcion);
         hash = 97 * hash + Objects.hashCode(this.icono);
@@ -47,7 +45,7 @@ public class Resultado <T>{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Resultado<?> other = (Resultado<?>) obj;
+        final Resultado other = (Resultado) obj;
         
         if (!Objects.equals(this.mensaje, other.mensaje)) {
             return false;

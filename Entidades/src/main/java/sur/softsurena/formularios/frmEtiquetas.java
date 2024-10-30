@@ -10,6 +10,17 @@ public class frmEtiquetas extends javax.swing.JDialog {
         initComponents();
     }
 
+    
+    public frmEtiquetas(java.awt.Frame parent, boolean modal, String propiedad, 
+            String valor
+    ) {
+        super(parent, modal);
+        initComponents();
+        txtPropiedad.setText(propiedad);
+        txtPropiedad.setEnabled(false);
+        txtValor.setText(valor);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

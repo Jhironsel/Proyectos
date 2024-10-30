@@ -82,17 +82,16 @@ public class M_BaseDeDatos {
      *
      * @param idMaquina Identificador del equipo unico, UUID.
      *
-     * @param clave1 Secreto.
-     *
-     * @param clave2 Secreto.
-     *
      * @return Devuelve un valor booleano que indica si tuvo exito el proceso de
      * registro.
      */
-    public synchronized static boolean setLicencia(Date fecha, String idMaquina,
-            String clave1, String clave2) {
-
-        final String sql = "EXECUTE PROCEDURE SYSTEM_SET_LICENCIA (?, ?, ?, ?)";
+    public synchronized static boolean setLicencia(
+            Date fecha, 
+            String idMaquina
+    ) {
+        final String sql = """
+                           EXECUTE PROCEDURE SYSTEM_SET_LICENCIA(?,?)
+                           """;
 
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
@@ -102,8 +101,6 @@ public class M_BaseDeDatos {
         )) {
             cs.setDate(1, fecha);
             cs.setString(2, idMaquina);
-            cs.setString(3, clave1);
-            cs.setString(4, clave2);
 
             cs.execute();
             
@@ -160,5 +157,42 @@ public class M_BaseDeDatos {
         }
         
         return 0;
+    }
+    
+    /**
+     * Metodo utilizado para obtener el identificador unico de la base de datos.
+     * 
+     * @return Devuelve un String con el identificador de la base de datos.
+     */
+    public synchronized static String GET_GUID() {
+        final String sql = 
+                """
+                    SELECT DB_GUID FROM GET_GUID
+                """;
+
+        String id = "";
+        
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                id = rs.getString("DB_GUID");
+            }
+
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        
+        return id;
     }
 }

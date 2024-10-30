@@ -3,9 +3,6 @@ package Formularios;
 import com.mxrck.autocompleter.AutoCompleterCallback;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,8 +15,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Categoria;
-import sur.softsurena.entidades.Factura;
-import sur.softsurena.entidades.Producto;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -755,6 +750,9 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
 //        }
     }
 
+    /**
+     * TODO Trabajando en este metodo.
+     */
     private void estadoCliente() {
         if (cmbCliente.getSelectedIndex() == -1) {
             return;

@@ -2,15 +2,17 @@ package sur.softsurena.formularios;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
 import static sur.softsurena.metodos.M_Role.comprobandoRolesDisponibles;
-import static sur.softsurena.metodos.M_Role.getRoles;
+import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import static sur.softsurena.metodos.M_Usuario.agregarUsuario;
 import static sur.softsurena.metodos.M_Usuario.existeUsuarioByUserName;
+import static sur.softsurena.metodos.M_Usuario.getUsuario;
 import static sur.softsurena.metodos.M_Usuario.modificarUsuario;
 import sur.softsurena.utilidades.PalabrasReservadasFirebird;
 import sur.softsurena.utilidades.Resultado;
@@ -21,86 +23,25 @@ import static sur.softsurena.utilidades.Utilidades.showTooltip;
 
 public class frmUsuariosAgregar extends javax.swing.JDialog {
 
-    private boolean nuevo;//Si el suario es nuevo o no
+    private static final long serialVersionUID = 1L;
+
+    private static boolean nuevo;//Si el suario es nuevo o no
 
     /*Este constructor es utilizado para agregar nuevos usuarios*/
     public frmUsuariosAgregar(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
         nuevo = true;
+        initComponents();
     }
 
     /*Este constructor es utilizado para cuando se vá a modificar un usuario,
     en el se inicianlizan todos los campos de formulario*/
     public frmUsuariosAgregar(java.awt.Frame parent, boolean modal, Usuario usuario) {
         super(parent, modal);
+        nuevo = false;
         initComponents();
 
-        //Cargar los atributos basico
-        txtUserName.setText(usuario.getUser_name());
-        txtUserName.setEditable(false);
-
-        txtPNombre.setText(usuario.getPnombre());
-        txtSNombre.setText(usuario.getSnombre());
-        txtApellidos.setText(usuario.getApellidos());
-
-        cbEstado.setSelected(usuario.getEstado());
-        cbEstadoActionPerformed(null);
-
-        cbAdministrador.setSelected(usuario.getAdministrador());
-        cbAdministradorActionPerformed(null);
-
-        txtDescripcion.setText(usuario.getDescripcion());
-
-        nuevo = false;
-
-        String titulos[] = {"Propiedad", "Valor"};
-
-        Object registro[] = new Object[titulos.length];
-
-        DefaultTableModel dtmEtiquetas = new DefaultTableModel(null, titulos);
-
-        tblEtiquetas.removeAll();
-
-        getEtiquetasUsuario(usuario.getUser_name()).stream().forEach(
-                etiqueta -> {
-                    registro[0] = etiqueta.getPropiedad();
-                    registro[1] = etiqueta.getValor();
-
-                    dtmEtiquetas.addRow(registro);
-                }
-        );
-
-        tblEtiquetas.setModel(dtmEtiquetas);
-
-        repararColumnaTable(tblEtiquetas);
-
-        tblEtiquetas.setBackgoundHover(new java.awt.Color(102, 102, 255));
-
-        String titulos2[] = {"Roles", "Descripción"};
-
-        Object registro2[] = new Object[titulos2.length];
-
-        DefaultTableModel dtmRoles = new DefaultTableModel(null, titulos2);
-
-        tblRoles.removeAll();
-
-        //TODO Analizar si este flat booleana es correcta.
-        comprobandoRolesDisponibles(usuario.getUser_name(), true).stream()
-                .forEach(
-                        rol -> {
-                            registro2[0] = rol.getRoleName();
-                            registro2[1] = rol.getDescripcion();
-
-                            dtmRoles.addRow(registro2);
-                        }
-                );
-
-        tblRoles.setModel(dtmRoles);
-
-        repararColumnaTable(tblRoles);
-
-        tblRoles.setBackgoundHover(new java.awt.Color(102, 102, 255));
+        cargarUsuario(usuario);
 
     }
 
@@ -133,6 +74,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         btnBorrarTag = new RSMaterialComponent.RSButtonMaterialIconOne();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblEtiquetas = new rojerusan.RSTableMetro();
+        btnEditarTag = new RSMaterialComponent.RSButtonMaterialIconOne();
         jPanel6 = new javax.swing.JPanel();
         btnAceptar = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -150,7 +92,11 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         txtUserName.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         txtUserName.setName("txtUserName"); // NOI18N
         txtUserName.setPlaceholder("ID Usuario");
-        txtUserName.setSoloLetras(true);
+        txtUserName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtUserNameFocusLost(evt);
+            }
+        });
         txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUserNameActionPerformed(evt);
@@ -275,7 +221,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -334,14 +280,14 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(btnAgregarRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBorrarRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addContainerGap(80, Short.MAX_VALUE)
+                        .addComponent(btnAgregarRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBorrarRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
 
@@ -387,16 +333,26 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         tblEtiquetas.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblEtiquetas);
 
+        btnEditarTag.setText("Editar");
+        btnEditarTag.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.EDIT);
+        btnEditarTag.setName("btnAgregarTag"); // NOI18N
+        btnEditarTag.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarTagActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAgregarTag, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEditarTag, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(btnAgregarTag, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnBorrarTag, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -405,8 +361,10 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(43, 77, Short.MAX_VALUE)
+                        .addContainerGap(34, Short.MAX_VALUE)
                         .addComponent(btnAgregarTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditarTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBorrarTag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -419,9 +377,9 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 478, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -540,33 +498,78 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         txtApellidos.requestFocusInWindow();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
+    /**
+     * Se realizan las siguientes validaciones. 
+     * 
+     * 1) Se valida que el userName no este en blanco. 
+     * 
+     * 2) Se valida que el primer nombre no este en blanco. 
+     * 
+     * 3) Se valida que el apellido no este en blanco. 
+     * 
+     * 4) Se pregunta si desea dejar el usuario inactivo. Si el usuario responde 
+     * que no el usuario pasa a estar activo automaticamente, en caso contrario 
+     * prosigue con el registro. 
+     * 
+     * 5) Se valida que las clave y la confirmacion no esten en blanco cuando se
+     * procede a registrar un nuevo registro. 
+     * 
+     * 6) Se procede a comprar la clave y la confirmacion de la clave. 
+     * 
+     * 7) Se valida los registros de roles cuando se esta modificando un 
+     * registro, si el usuario no agrego roles al registro de usuario cuando se 
+     * modifica un registro en el sistema, se le pregunta si desea continuar 
+     * con el registros de nuevo usuario sin registro.
+     *
+     * 8) Si el  usuario no tiene registros de en la tabla de roles se le 
+     * pregunta si desea continuar sin roles del usuario.
+     * 
+     * 9) Se verifica que no exista un usuario con el mismo nombre de usuario 
+     * en el sistema. En caso de que se encuentre el usuario tendrá la opcion de 
+     * cargar el usuario nueve.
+     * 
+     * 10) Se muestra el mensaje con la informacion del usuario.
+     * 
+     * 11) Se procesa la tags del usuario.
+     * 
+     * 12) Se procesa las etiquetas del usuario.
+     *
+     * 13) Se procede crear el objeto usuario tomando el userName, PNombre, 
+     * SNombre, Apellidos, la descripcion, la clave, se lista la tags del 
+     * usuario, el estado del registro, si es Administrador, la lista de roles.
+     *
+     * 14) Se envia el registro a la base de datos dependiendo del tipo, si es nuevo
+     * registro o modificando un registro a la base de datos.
+     *
+     * 15) Se muestra un mensaje con los resultado de la operacion.
+     * 
+     * 16) Se cierra el formulario en el sistema. 
+     *
+     * @param evt No utilizado por el momento.
+     */
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        /*
-            Validando la informacion que el usuario trata de ingresar o 
-        actualizar a la base de datos.
-         */
         if (txtUserName.getText().isBlank()) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Debe Digitar un ID.",
+                    "Debe Digitar un ID o nombre de usuario.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             txtUserName.requestFocusInWindow();
             return;
         }
-
+//-----------------------------------------------------------------------------1
         if (txtPNombre.getText().isBlank()) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Debe Digitar nombres.",
+                    "Debe Digitar un nombre.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             txtPNombre.requestFocusInWindow();
             return;
         }
-
+//-----------------------------------------------------------------------------2
         if (txtApellidos.getText().isBlank()) {
             JOptionPane.showMessageDialog(
                     this,
@@ -577,11 +580,22 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             txtApellidos.requestFocusInWindow();
             return;
         }
+//-----------------------------------------------------------------------------3        
+        if (!cbEstado.isSelected()) {
+            int resp = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Desea dejar el usuario inactivo?",
+                    "",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
 
-        /*
-            Se extraen las contraseñas de los campos para verificar sean iguales y 
-        sean segura tambien.
-         */
+            if (resp == JOptionPane.NO_OPTION) {
+                cbEstado.setSelected(true);
+                cbEstadoActionPerformed(null);
+            }
+        }
+//-----------------------------------------------------------------------------4
         String clave1 = new String(txtClave1.getPassword()),
                 clave2 = new String(txtClave2.getPassword());
 
@@ -608,7 +622,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 return;
             }
         }
-
+//-----------------------------------------------------------------------------5
         if (!clave1.equals(clave2)) {
             JOptionPane.showMessageDialog(
                     this,
@@ -621,45 +635,83 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             txtClave1.requestFocusInWindow();
             return;
         }
+//-----------------------------------------------------------------------------6
+        if (!nuevo) {
+            if (tblRoles.getRowCount() <= 0) {
+                int resp = JOptionPane.showConfirmDialog(
+                        this,
+                        "Desea eliminar todos los roles a este usuario?",
+                        "",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
 
+                if (resp == JOptionPane.CANCEL_OPTION) {
+                    return;
+                }
+
+                if (resp == JOptionPane.YES_OPTION) {
+                    quitarRolesUsuario(txtUserName.getText().strip());
+                }
+
+            }
+        }
+//-----------------------------------------------------------------------------7
         if (tblRoles.getRowCount() <= 0) {
-            JOptionPane.showMessageDialog(
+            int resp = JOptionPane.showConfirmDialog(
                     this,
-                    "Debe agregar un rol para el usuario",
+                    "Desea registrar usuario sin rol?",
                     "",
-                    JOptionPane.WARNING_MESSAGE
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
             );
-            btnAgregarRol.requestFocusInWindow();
-            showTooltip(btnAgregarRol);
-            return;
+
+            if (resp == JOptionPane.NO_OPTION) {
+                btnAgregarRol.doClick();
+
+                showTooltip(btnAgregarRol);
+
+                return;
+            }
         }
-
-        /*
-            Preparando el mensaje que verá el usuario para aceptar la información 
-        que se ingresará a la base de datos.
-         */
-        List<Role> rolesList = new ArrayList<>();
-
-        for (int i = 0; i < tblRoles.getRowCount(); i++) {
-            rolesList.add(
-                    Role.
-                            builder().
-                            roleName(tblRoles.getValueAt(i, 0).toString()).build()
+        
+//-----------------------------------------------------------------------------8
+        if (existeUsuarioByUserName(txtUserName.getText().strip()) && nuevo) {
+            int respuesta = JOptionPane.showConfirmDialog(
+                    this,
+                    "Usuario ya existe. \n\nDesea recuperar el usuario?",
+                    "",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
             );
-        }
 
-        String etiquetas = "";
-        for (int i = 0; i < tblEtiquetas.getRowCount(); i++) {
-            etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + " = "
-                    + "'" + tblEtiquetas.getValueAt(i, 1).toString() + "'"
-                    + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
-        }
+            if (respuesta == JOptionPane.YES_OPTION) {
+                cargarUsuario(getUsuario(txtUserName.getText().strip()));
+                nuevo = false;
+                txtClave1.setText("");
+                txtClave2.setText("");
+                txtClave1.requestFocusInWindow();
+                return;
+            }
 
-        String mensaje = "<html>"
+        }
+        
+//-----------------------------------------------------------------------------9
+        String mensaje
+                = "<html>"
                 + "<h1>Se va a agregar el Usuario: " + txtUserName.getText() + "</h1></br>"
-                + "<h1>Con Nombre y Apellido: " + txtPNombre.getText() + " " + txtApellidos.getText() + "</h1></br>"
-                + "<h1>Delegar: " + (cbAdministrador.isSelected() ? "Activado" : "NO Activado") + "</h1></br>"
-                + "<h1>Estado del Usuario: " + (cbEstado.isSelected() ? "Activo" : "No Activo") + "</h1></br>"
+                + "<h1>Con Nombre y Apellido: "
+                + txtPNombre.getText()
+                + " "
+                + (txtSNombre.getText().isBlank() ? "" : txtSNombre.getText().concat(" "))
+                + txtApellidos.getText()
+                + "</h1></br>"
+                + "<h1>Delegar: "
+                + (cbAdministrador.isSelected() ? "Activado" : "NO Activado")
+                + "</h1></br>"
+                + "<h1>Estado del Usuario: "
+                + (cbEstado.isSelected() ? "Activo" : "No Activo")
+                + "</h1></br>"
                 + "<h1>Desea continuar? </h1>"
                 + "</html>";
 
@@ -673,49 +725,62 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         if (resp == JOptionPane.NO_OPTION) {
             return;
         }
+//----------------------------------------------------------------------------10
 
-        if (existeUsuarioByUserName(txtUserName.getText()) && nuevo) {
-            int r = JOptionPane.showConfirmDialog(
-                    this,
-                    "Usuario ya existe. \n\nDesea recuperar el usuario?",
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
+
+        List<Role> rolesList = new ArrayList<>();
+
+        for (int i = 0; i < tblRoles.getRowCount(); i++) {
+            rolesList.add(
+                    Role
+                            .builder()
+                            .roleName(
+                                    tblRoles.getValueAt(i, 0).toString()
+                            )
+                            .conAdmin(
+                                    Boolean.parseBoolean(tblRoles.getValueAt(i, 1).toString())
+                            )
+                            .build()
             );
-
-            if (r == JOptionPane.YES_OPTION) {
-                //TODO Crear el proceso de recuperacion del usuario en esta parte.
+        }
+//----------------------------------------------------------------------------11
+        String etiquetas = "";
+        for (int i = 0; i < tblEtiquetas.getRowCount(); i++) {
+            if (tblEtiquetas.getValueAt(i, 0).toString().contains("DROP")) {
+                etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
+            } else {
+                etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + " = " + "'" + tblEtiquetas.getValueAt(i, 1).toString() + "'" + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
             }
-
-            txtClave1.setText("");
-            txtClave2.setText("");
-            txtClave1.requestFocusInWindow();
-            return;
         }
 
-        Usuario usuario = Usuario.builder().
-                user_name(txtUserName.getText()).
-                pnombre(txtPNombre.getText()).
-                snombre(txtSNombre.getText()).
-                apellidos(txtApellidos.getText()).
-                descripcion(txtDescripcion.getText()).
-                clave(clave1).
-                tags(etiquetas).
-                estado(cbEstado.isSelected()).
-                administrador(cbAdministrador.isSelected()).
-                roles(rolesList).
-                build();
+//----------------------------------------------------------------------------12
+        Usuario usuario = Usuario
+                .builder()
+                .user_name(txtUserName.getText())
+                .pnombre(txtPNombre.getText())
+                .snombre(txtSNombre.getText())
+                .apellidos(txtApellidos.getText())
+                .descripcion(txtDescripcion.getText())
+                .clave(clave1)
+                .tags(etiquetas)
+                .estado(cbEstado.isSelected())
+                .administrador(cbAdministrador.isSelected())
+                .roles(rolesList)
+                .build();
+
+//----------------------------------------------------------------------------13
 
         Resultado resultado = (nuevo ? agregarUsuario(usuario) : modificarUsuario(usuario));
 
+//----------------------------------------------------------------------------14
         JOptionPane.showMessageDialog(
                 this,
                 resultado,
                 "",
                 resultado.getIcono()
         );
-
-        dispose();
+//----------------------------------------------------------------------------15
+        dispose();//----16
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -776,10 +841,10 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
         Object registro[] = new Object[2];
-        DefaultTableModel miTabla = (DefaultTableModel) tblEtiquetas.getModel();
-
         registro[0] = etiqueta.txtPropiedad.getText();
         registro[1] = etiqueta.txtValor.getText();
+
+        DefaultTableModel miTabla = (DefaultTableModel) tblEtiquetas.getModel();
 
         miTabla.addRow(registro);
 
@@ -791,20 +856,48 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private void btnBorrarTagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarTagActionPerformed
         DefaultTableModel miTabla = (DefaultTableModel) tblEtiquetas.getModel();
 
-        miTabla.removeRow(tblEtiquetas.getSelectedRow());
+        if (nuevo) {
+            miTabla.removeRow(tblEtiquetas.getSelectedRow());
+        } else {
+            miTabla.setValueAt(
+                    "DROP ".concat(
+                            miTabla.getValueAt(
+                                    tblEtiquetas.getSelectedRow(),
+                                    0
+                            ).toString()
+                    ),
+                    tblEtiquetas.getSelectedRow(),
+                    0
+            );
+
+            miTabla.setValueAt(
+                    "",
+                    tblEtiquetas.getSelectedRow(),
+                    1
+            );
+        }
 
         tblEtiquetas.setModel(miTabla);
     }//GEN-LAST:event_btnBorrarTagActionPerformed
 
     private void btnAgregarRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarRolActionPerformed
-        Role rol = (Role) JOptionPane.showInputDialog(this,
+        Role rol = (Role) JOptionPane.showInputDialog(
+                this,
                 "Seleccione un rol para el usuario",
                 "",
                 JOptionPane.PLAIN_MESSAGE,
                 null,
-                getRoles().stream().toArray(Role[]::new),
+                //getRoles().stream().toArray(Role[]::new)
+                comprobandoRolesDisponibles(
+                        nuevo ? "SYSDBA" : txtUserName.getText().strip(),
+                        nuevo
+                ).toArray(),
                 null
         );
+
+        if (Objects.isNull(rol)) {
+            return;
+        }
 
         for (int i = 0; i < tblRoles.getRowCount(); i++) {
             if (rol.toString().equalsIgnoreCase(
@@ -848,12 +941,51 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private void btnBorrarRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarRolActionPerformed
         DefaultTableModel miTabla = (DefaultTableModel) tblRoles.getModel();
 
+        if (tblRoles.getSelectedRow() == -1) {
+            return;
+        }
+
+        int resp = JOptionPane.showInternalConfirmDialog(
+                this,
+                "¿Desea borrar el rol al usuario?",
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (resp == JOptionPane.NO_OPTION) {
+            return;
+        }
+
         miTabla.removeRow(tblRoles.getSelectedRow());
 
         tblRoles.setModel(miTabla);
     }//GEN-LAST:event_btnBorrarRolActionPerformed
 
+    private void btnEditarTagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarTagActionPerformed
+        if (tblEtiquetas.getSelectedRow() == -1) {
+            return;
+        }
 
+        var propiedad = tblEtiquetas.getValueAt(
+                tblEtiquetas.getSelectedRow(), 0
+        ).toString();
+
+        var valor = tblEtiquetas.getValueAt(
+                tblEtiquetas.getSelectedRow(), 1
+        ).toString();
+
+        frmEtiquetas etiqueta = new frmEtiquetas(null, true, propiedad, valor);
+        etiqueta.setLocationRelativeTo(etiqueta);
+        etiqueta.setVisible(true);
+
+    }//GEN-LAST:event_btnEditarTagActionPerformed
+
+    private void txtUserNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUserNameFocusLost
+        // TODO Seria bueno cargar los roles que tiene el supuesto usuario a 
+        // registrar, como medida de seguridad, puede ser que algun rol se quede
+        // registrado en el sistema.
+    }//GEN-LAST:event_txtUserNameFocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarRol;
@@ -861,6 +993,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarRol;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarTag;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarTag;
     private RSMaterialComponent.RSCheckBoxMaterial cbAdministrador;
     private RSMaterialComponent.RSCheckBoxMaterial cbEstado;
     private javax.swing.JPanel jPanel1;
@@ -884,4 +1017,71 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private rojeru_san.rsfield.RSTextFullRound txtSNombre;
     private rojeru_san.rsfield.RSTextFullRound txtUserName;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarUsuario(Usuario usuario) {
+        txtUserName.setText(usuario.getUser_name());
+        txtUserName.setEditable(false);
+
+        txtPNombre.setText(usuario.getPnombre());
+        txtSNombre.setText(usuario.getSnombre());
+        txtApellidos.setText(usuario.getApellidos());
+
+        cbEstado.setSelected(usuario.getEstado());
+        cbEstadoActionPerformed(null);
+
+        cbAdministrador.setSelected(usuario.getAdministrador());
+        cbAdministradorActionPerformed(null);
+
+        txtDescripcion.setText(usuario.getDescripcion());
+
+        String titulos[] = {"Propiedad", "Valor"};
+
+        Object registro[] = new Object[titulos.length];
+
+        DefaultTableModel dtmEtiquetas = new DefaultTableModel(null, titulos);
+
+        tblEtiquetas.removeAll();
+
+        getEtiquetasUsuario(usuario.getUser_name()).stream().forEach(
+                etiqueta -> {
+                    registro[0] = etiqueta.getPropiedad();
+                    registro[1] = etiqueta.getValor();
+
+                    dtmEtiquetas.addRow(registro);
+                }
+        );
+
+        tblEtiquetas.setModel(dtmEtiquetas);
+
+        repararColumnaTable(tblEtiquetas);
+
+        tblEtiquetas.setBackgoundHover(new java.awt.Color(102, 102, 255));
+
+        String titulos2[] = {"Roles", "Con Admin", "Descripción"};
+
+        Object registro2[] = new Object[titulos2.length];
+
+        DefaultTableModel dtmRoles = new DefaultTableModel(null, titulos2);
+
+        tblRoles.removeAll();
+
+        comprobandoRolesDisponibles(usuario.getUser_name(), true).stream()
+                .forEach(
+                        rol -> {
+                            registro2[0] = rol;
+                            registro2[1] = rol.getOpcionPermiso() == 2;
+                            //El 2 indica que si administra el role.
+                            registro2[2] = rol.getDescripcion();
+
+                            dtmRoles.addRow(registro2);
+                        }
+                );
+
+        tblRoles.setModel(dtmRoles);
+
+        repararColumnaTable(tblRoles);
+        columnasCheckBox(tblRoles, new int[]{1});
+
+        tblRoles.setBackgoundHover(new java.awt.Color(102, 102, 255));
+    }
 }

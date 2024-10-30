@@ -64,7 +64,7 @@ public class Utilidades {
     public static final Logger LOG = Logger.getLogger(Utilidades.class.getName());
     
     static {
-        final File file = new File("Logs/Log " + new Date().toString() + ".log");;
+        final File file = new File("Logs/Log " + new Date().toString().replace(":", ".") + ".log");
         try {     
 
             FileHandler fh = new FileHandler(

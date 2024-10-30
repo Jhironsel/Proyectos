@@ -122,13 +122,16 @@ public class M_DireccionNGTest {
 
     @Test(
             enabled = true,
-            description = "",
-            priority = 1
+            priority = 1,
+            description = """
+                          Permite consulta las direcciones de una personas del 
+                          sistema.
+                          """
     )
     public void testGetDireccionByID() {
         int id_persona = 0;
         List result = getDireccionByID(id_persona);
-        assertTrue(
+        assertFalse(
                 result.isEmpty(),
                 "La lista contiene datos"
         );

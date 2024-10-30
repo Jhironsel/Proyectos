@@ -91,7 +91,7 @@ public class M_Permiso {
             FROM VS_PROCEDIMIENTOS p 
             LEFT JOIN VS_PRIVILEGIO r ON 
                     TRIM(r.NOMBRE_RELACION) LIKE TRIM(p.PROCEDIMIENTO) AND
-            TRIM(r.USUARIO)  LIKE ? 
+                    TRIM(r.USUARIO)  LIKE ? 
             WHERE p.PROCEDIMIENTO STARTING WITH 'PERM_' AND 
                     TRIM(r.USUARIO) IS NULL AND 
                     p.PROCEDIMIENTO NOT STARTING WITH 'TRANSITIONS'

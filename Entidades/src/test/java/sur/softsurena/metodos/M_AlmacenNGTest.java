@@ -23,10 +23,6 @@ public class M_AlmacenNGTest {
     private int idAlmacen, idAlmacen2;
 
     public M_AlmacenNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -38,6 +34,10 @@ public class M_AlmacenNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
     }
 
     @AfterClass
@@ -60,7 +60,7 @@ public class M_AlmacenNGTest {
     )
     public void testGetAlmacenesList() {
         List result = M_Almacen.getAlmacenesList(0, "^+-*/");
-        assertTrue(
+        assertFalse(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
@@ -88,7 +88,7 @@ public class M_AlmacenNGTest {
         );
 
         assertEquals(
-                result, 
+                result,
                 Resultado
                         .builder()
                         .mensaje(ALMACEN_AGREGADO_CORRECTAMENTE)
@@ -96,7 +96,7 @@ public class M_AlmacenNGTest {
                         .estado(Boolean.TRUE)
                         .build(),
                 M_Almacen.ERROR_AL_INSERTAR__ALMACEN
-                );
+        );
 
         idAlmacen = result.getId();
 
@@ -120,28 +120,27 @@ public class M_AlmacenNGTest {
             priority = 2
     )
     public void testGetAlmacenes2List() {
-        List result = M_Almacen.getAlmacenesList(idAlmacen, "^+-*/");        
+        List result = M_Almacen.getAlmacenesList(idAlmacen, "^+-*/");
         assertFalse(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
-        
         result = M_Almacen.getAlmacenesList(idAlmacen2, "Seleccione");
         assertFalse(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
         result = M_Almacen.getAlmacenesList(-1, "Registro");
         assertFalse(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
         result = M_Almacen.getAlmacenesList(-1, "Texto");
         assertFalse(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
     }
@@ -161,15 +160,15 @@ public class M_AlmacenNGTest {
                         .estado(Boolean.FALSE)
                         .build()
         );
-        
+
         assertEquals(
                 result,
                 Resultado
-                    .builder()
-                    .mensaje(ALMACEN_ACTUALIZADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(), 
+                        .builder()
+                        .mensaje(ALMACEN_ACTUALIZADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_ELIMINAR_ALMACEN
         );
     }
@@ -182,25 +181,25 @@ public class M_AlmacenNGTest {
     public void testEliminarAlmacen() {
         Resultado result = M_Almacen.eliminarAlmacen(idAlmacen);
         assertEquals(
-                result, 
+                result,
                 Resultado
-                    .builder()
-                    .mensaje(ALMACEN_ELIMINADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
+                        .builder()
+                        .mensaje(ALMACEN_ELIMINADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_ELIMINAR_ALMACEN
         );
 
         result = M_Almacen.eliminarAlmacen(idAlmacen2);
         assertEquals(
-                result, 
+                result,
                 Resultado
-                    .builder()
-                    .mensaje(ALMACEN_ELIMINADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
+                        .builder()
+                        .mensaje(ALMACEN_ELIMINADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_ELIMINAR_ALMACEN
         );
     }

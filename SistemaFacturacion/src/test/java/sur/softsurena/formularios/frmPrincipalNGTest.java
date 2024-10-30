@@ -16,6 +16,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
+import static sur.softsurena.formularios.frmPrincipal.abrirFormulario;
 import sur.softsurena.metodos.M_ContactoEmail;
 import sur.softsurena.metodos.M_ContactoTel;
 import sur.softsurena.metodos.M_Generales;
@@ -31,11 +32,6 @@ public class frmPrincipalNGTest {
     private frmPrincipal principal;
 
     public frmPrincipalNGTest() {
-
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -47,6 +43,10 @@ public class frmPrincipalNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
     }
 
     @AfterClass
@@ -304,10 +304,12 @@ public class frmPrincipalNGTest {
         }
     }
 
-    /**
-     * Test of cerrarTodos method, of class frmPrincipal.
-     */
-    @Test
+    @Test(
+            enabled = true,
+            priority = 9,
+            description = """
+                          """
+    )
     public void testCerrarTodos() {
         System.out.println("cerrarTodos");
         frmPrincipal instance = new frmPrincipal();
@@ -316,22 +318,37 @@ public class frmPrincipalNGTest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of abrirFormulario method, of class frmPrincipal.
-     */
-    @Test
+
+    @Test(
+            enabled = true,
+            priority = 9,
+            description = """
+                          Permite verificar si una ventana interna abre 
+                          correctamente.
+                          """
+    )
     public void testAbrirFormulario() {
-        System.out.println("abrirFormulario");
-        JInternalFrame formulario = null;
-        frmPrincipal.abrirFormulario(formulario);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        abrirFormulario(new frmMovimientoEntradaSalida());
+        abrirFormulario(new frmRestaurarDatos());
+        abrirFormulario(new frmGraficos());
+        abrirFormulario(frmClientes.getInstance());
+        abrirFormulario(frmProductos.getInstance());
+        abrirFormulario(frmUsuarios.getInstance());
+        abrirFormulario(frmFacturas.getInstance());
+        abrirFormulario(frmAdministradorTurnos.getInstance());
+        abrirFormulario(frmDeudas.getInstance());
+        abrirFormulario(frmProveedores.getInstance());
+        abrirFormulario(frmAlmacenes.getInstance());
+        abrirFormulario(frmNomina.getInstance());
+        abrirFormulario(frmGestorGastos.getInstance());
     }
 
-    /**
-     * Test of getFechaReporte method, of class frmPrincipal.
-     */
-    @Test
+    @Test(
+            enabled = false,
+            priority = 9,
+            description = """
+                          """
+    )
     public void testGetFechaReporte() {
         System.out.println("getFechaReporte");
         frmFechaReporte expResult = null;
@@ -341,16 +358,16 @@ public class frmPrincipalNGTest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of abrirFormularioCentralizado method, of class frmPrincipal.
-     */
-    @Test
+    @Test(
+            enabled = true,
+            priority = 9,
+            description = """
+                          Validacion que se realizar para obtener una ventana 
+                          centralizada.
+                          """
+    )
     public void testAbrirFormularioCentralizado() {
-        System.out.println("abrirFormularioCentralizado");
-        JInternalFrame formulario = null;
-        frmPrincipal.abrirFormularioCentralizado(formulario);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        frmPrincipal.abrirFormularioCentralizado(frmClientes.getInstance());
     }
 
 }

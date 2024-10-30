@@ -1629,7 +1629,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbSexoItemStateChanged
 
     private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
-        // TODO add your handling code here:
+        txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     private synchronized void mostrarRegistro() {

@@ -122,9 +122,11 @@ public class M_D_MotivoConsulta {
             int idConsulta, int turno
     ) {
         final String sql
-                = "SELECT IDMCONSULTA "
-                + "FROM V_DETALLEMOTIVOCONSULTA d "
-                + "WHERE d.IDCONSULTA = ? and d.TURNO = ?";
+                = """
+                  SELECT IDMCONSULTA 
+                  FROM V_DETALLEMOTIVOCONSULTA d 
+                  WHERE d.IDCONSULTA = ? and d.TURNO = ?
+                  """;
         
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -137,12 +139,12 @@ public class M_D_MotivoConsulta {
             
             return ps.executeQuery();
         } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al consultar la vista V_DETALLEMOTIVOCONSULTA del sistema.",
+            LOG.log(Level.SEVERE, ERROR_AL_CONSULTAR_LA_VISTA_V_DETALLEMOTI,
                     ex
             );
             return null;
         }
     }
+    public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_DETALLEMOTI 
+            = "Error al consultar la vista V_DETALLEMOTIVOCONSULTA del sistema.";
 }

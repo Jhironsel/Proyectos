@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class Categoria implements Comparable {
+    
     private final Integer id_categoria;
     private final String descripcion;
     private final File pathImage;

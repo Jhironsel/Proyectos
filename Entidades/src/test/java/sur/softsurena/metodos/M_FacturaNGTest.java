@@ -75,9 +75,9 @@ public class M_FacturaNGTest {
                           """
     )
     public void testGetFacturas() {
-        assertTrue(
+        assertFalse(
                 M_Factura.getFacturas().isEmpty(),
-                "Existe registros de facturas en el sistema."
+                "No Existe registros de facturas en el sistema."
         );
     }
     

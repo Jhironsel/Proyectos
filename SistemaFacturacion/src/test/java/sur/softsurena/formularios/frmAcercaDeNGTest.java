@@ -18,11 +18,12 @@ public class frmAcercaDeNGTest {
     private frmAcercaDe acercaDe;
 
     public frmAcercaDeNGTest() {
+        acercaDe = new frmAcercaDe(null, false);
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        acercaDe = new frmAcercaDe(null, false);
+        
     }
 
     @AfterClass
@@ -31,6 +32,7 @@ public class frmAcercaDeNGTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        
     }
 
     @AfterMethod
@@ -38,13 +40,13 @@ public class frmAcercaDeNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
+                          Metodo encargado de testear el formulario de acercaDe.
                           """
     )
     public void testSomeMethod() {
-
         assertNotNull(
                 acercaDe,
                 "El formulario de acercaDe no inicia o instancia."
@@ -64,13 +66,13 @@ public class frmAcercaDeNGTest {
                 acercaDe.isVisible(),
                 "No puede cerrarse el formulario frmAcercaDe."
         );
-
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 1,
             description = """
+                          Prueba que se encarga de testear la foto mia.
                           """
     )
     public void testGetJlDesarrollador() {
@@ -82,8 +84,8 @@ public class frmAcercaDeNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 2,
             description = """
                           """
     )

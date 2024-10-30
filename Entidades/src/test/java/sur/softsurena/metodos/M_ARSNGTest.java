@@ -229,7 +229,7 @@ public class M_ARSNGTest {
                         .build()
         );
 
-        assertTrue(
+        assertFalse(
                 result.isEmpty(),
                 ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
         );

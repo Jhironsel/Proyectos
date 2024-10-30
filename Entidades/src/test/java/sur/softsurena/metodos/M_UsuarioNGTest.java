@@ -217,7 +217,7 @@ public class M_UsuarioNGTest {
         Usuario expResult = Usuario
                 .builder()
                 .user_name("SYSDBA")
-                .rol("NONE")
+                .rol("ADMINISTRADOR")
                 .build();
         Usuario result = M_Usuario.getUsuarioActual();
         

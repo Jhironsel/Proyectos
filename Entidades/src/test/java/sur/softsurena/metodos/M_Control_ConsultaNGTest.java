@@ -1,7 +1,7 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
 import java.util.Calendar;
+import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -63,7 +63,10 @@ public class M_Control_ConsultaNGTest {
     @Test(
             enabled = true,
             priority = 0,
-            description = "Te que permite registrar un control de una consulta."
+            description = """
+                          Te permite registrar un control de consulta en el 
+                          sistema.
+                          """
     )
     public void testAgregarControlConsulta() {
 
@@ -92,7 +95,11 @@ public class M_Control_ConsultaNGTest {
             description = ""
     )
     public void testModificarControlConsulta() {
-        Resultado result = M_Control_Consulta.modificarControlConsulta(controlConsulta());
+        
+        Resultado result = M_Control_Consulta.modificarControlConsulta(
+                controlConsulta()
+        );
+        
         assertEquals(
                 result,
                 Resultado
@@ -106,28 +113,40 @@ public class M_Control_ConsultaNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 2,
-            description = ""
+            description = """
+                          Metodo que permite obtener el listado de todas las
+                          consultas registradas en el sistema. 
+                          """
     )
     public void testGetFechaDoctores() {
-        String fecha = "";
-        boolean actual = false;
-        ResultSet expResult = null;
-        ResultSet result = M_Control_Consulta.getFechaDoctores(fecha, actual);
-        assertEquals(result, expResult);
+        String dia = "";
+        
+        
+        List<Control_Consulta> listaControlConsulta = M_Control_Consulta.getFechaDoctores(dia);
+        
+        assertFalse(
+                listaControlConsulta.isEmpty(), 
+                "La lista de control de consulta esta vacia."
+        );
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 2,
-            description = ""
+            description = """
+                          Consulta la base de datos por los horarios de un 
+                          usuario en especifico. 
+                          """
     )
     public void testGetHorario() {
         String idUsuario = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Control_Consulta.getHorario(idUsuario);
-        assertEquals(result, expResult);
+        List<Control_Consulta> lista = M_Control_Consulta.getHorario(idUsuario);
+        assertTrue(
+                lista.isEmpty(), 
+                "Listado de doctores con consulta lleno. "
+        );
     }
 
     @Test(
@@ -136,7 +155,9 @@ public class M_Control_ConsultaNGTest {
             description = "Prueba que elimina una consulta del sistema."
     )
     public void testBorrarControlConsulta() {
-        Resultado result = M_Control_Consulta.borrarControlConsulta(idControlConsulta);
+        Resultado result = M_Control_Consulta.borrarControlConsulta(
+                idControlConsulta
+        );
 
         assertEquals(
                 result,

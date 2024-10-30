@@ -43,17 +43,21 @@ import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.metodos.M_Categoria.getCategoriaActivas;
 import static sur.softsurena.metodos.M_Categoria.getCategorias;
+import static sur.softsurena.metodos.M_Cliente.getPersonasClientes;
 import static sur.softsurena.metodos.M_Producto.existeProducto;
 import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
 import static sur.softsurena.metodos.M_Turno.turnosActivoByUsuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 
 public final class frmFacturas extends javax.swing.JInternalFrame implements ActionListener {
+
+    private static final long serialVersionUID = 1L;
 
     private final Usuario usuario;
 
@@ -66,7 +70,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private Factura factura;
 
     private final String titulos[] = {"Cantidad", "Descripcion", "Montos"};
-    
+
     private DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
     private final Object[] registro = new Object[3];
@@ -89,21 +93,21 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             getPropiedad().load(is);
         } catch (FileNotFoundException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ARCHIVO_PRO_FACTURASPROP_NO_HA_SIDO_ENCONT, 
+                    Level.SEVERE,
+                    ARCHIVO_PRO_FACTURASPROP_NO_HA_SIDO_ENCONT,
                     ex
             );
         } catch (IOException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_CARGAR_EL_ARCHIVOS_DE_PROPIEDADE, 
+                    Level.SEVERE,
+                    ERROR_AL_CARGAR_EL_ARCHIVOS_DE_PROPIEDADE,
                     ex
             );
         }
     }
-    public static final String ERROR_AL_CARGAR_EL_ARCHIVOS_DE_PROPIEDADE 
+    public static final String ERROR_AL_CARGAR_EL_ARCHIVOS_DE_PROPIEDADE
             = "Error al cargar el archivos de propiedades proFacturas.prop";
-    public static final String ARCHIVO_PRO_FACTURASPROP_NO_HA_SIDO_ENCONT 
+    public static final String ARCHIVO_PRO_FACTURASPROP_NO_HA_SIDO_ENCONT
             = "Archivo proFacturas.prop no ha sido encontrado.";
 
     public Integer getIdCliente() {
@@ -119,6 +123,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }
 
     private static class NewSingletonHolder {
+
         private static final frmFacturas INSTANCE = new frmFacturas();
     }
 
@@ -662,8 +667,15 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         );
 
         jpCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("Categoria"));
+        jpCategoria.setToolTipText("Areas de la categorias registradas en el sistema.");
         jpCategoria.setAutoscrolls(true);
         jpCategoria.setMinimumSize(new java.awt.Dimension(0, 32));
+        jpCategoria.setName("jpCategoria"); // NOI18N
+        jpCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jpCategoriaMouseClicked(evt);
+            }
+        });
 
         jpBusqueda.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones de busqueda"));
         jpBusqueda.setMinimumSize(new java.awt.Dimension(0, 45));
@@ -692,7 +704,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         cbCriterio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Opcion Busqueda", "Codigo", "Descripcion", "En Detalle" }));
         cbCriterio.setSelectedIndex(1);
         cbCriterio.setFocusable(false);
-        cbCriterio.setMinimumSize(new java.awt.Dimension(150, 25));
         cbCriterio.setPreferredSize(new java.awt.Dimension(160, 25));
         jpBusqueda.add(cbCriterio);
 
@@ -713,10 +724,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
-                    .addComponent(jpCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4))
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(jpBusqueda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                    .addComponent(jpCategoria, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         jPanel10Layout.setVerticalGroup(
@@ -737,8 +748,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jpFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +767,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1267, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1039, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -851,20 +863,19 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
                     boton.addActionListener(this);
 
-                    boton.setIconTextGap(2);
-                    boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                    boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-                    boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-                    boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
+//                    boton.setIconTextGap(2);
+//                    boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+//                    boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+//                    boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+//                    boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
                     int ancho = 170, alto = 100;
 
                     boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
                     boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
                     boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
 
-                    boton.setLayout(new BorderLayout(8, 8));
-                    boton.requestFocusInWindow();
+//                    boton.setLayout(new BorderLayout(8, 8));
+//                    boton.requestFocusInWindow();
                     jpProductos.add(boton);
                     jpProductos.repaint();
                     jpProductos.validate();
@@ -876,11 +887,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         }
 
         if (cbCriterio.getSelectedIndex() == 3) {
-            
+
             if (txtCriterio.getText().isBlank()) {
                 return;
             }
-            
+
             if (!existeProducto(txtCriterio.getText().trim())) {
                 JOptionPane.showInternalMessageDialog(
                         this,
@@ -1034,8 +1045,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (!cmbCliente.isEnabled()) {
             return;
         }
-        //TODO Analizar el siguiente metodo para ser descomentado.
-//        estadoCliente();
+        estadoCliente();
     }//GEN-LAST:event_cmbClienteActionPerformed
 
     private void cmbClienteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClienteItemStateChanged
@@ -1101,7 +1111,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                     return;
                 }
             }
-            
+
         }
 
         frmPonerTemporal miTemporal = new frmPonerTemporal(
@@ -1184,8 +1194,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 }
             } catch (SQLException ex) {
                 LOG.log(
-                        Level.SEVERE, 
-                        "Error al leer los detalles de la factura.", 
+                        Level.SEVERE,
+                        "Error al leer los detalles de la factura.",
                         ex
                 );
             }
@@ -1442,7 +1452,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                }
 //            }
 //        }
-
 //        txtIdFactura.setText("" + getNumFac(getIdUsuario(), getTurno()));
         Map parametros = new HashMap();
 
@@ -1508,24 +1517,23 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }//GEN-LAST:event_formInternalFrameIconified
 
     private void cbTodosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbTodosMouseClicked
-        jpCategoria = new javax.swing.JPanel();
-        jpCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("Categoria"));
-        jpCategoria.setAutoscrolls(true);
-        jpCategoria.setMaximumSize(null);
-
         categoriaR();
 
         //TODO Hacer que el cbTodos lea la siguiente propiedad al iniciar este frmFactura.
         getPropiedad().setProperty("cbTodosUsuario", "" + cbTodos.isSelected());
 
         try {
-            getPropiedad().store(new FileWriter(
-                    new File(getClass().getResource("/sur/softsurena/properties/frmFacturaPropiedades.properties").toURI())),
+            getPropiedad().store(
+                    new FileWriter(
+                            new File(
+                                    getClass().getResource("/sur/softsurena/properties/frmFacturaPropiedades.properties").toURI()
+                            )
+                    ),
                     "Valor que permite obtener las categorias.");
         } catch (IOException | URISyntaxException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    "Error al cargar la URI de archivo properties frmFacturaPropiedades.properties", 
+                    Level.SEVERE,
+                    "Error al cargar la URI de archivo properties frmFacturaPropiedades.properties",
                     ex
             );
         }
@@ -1534,6 +1542,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
         formInternalFrameIconified(evt);
     }//GEN-LAST:event_formInternalFrameClosed
+
+    private void jpCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpCategoriaMouseClicked
+        if (evt.getClickCount() == 2)
+            categoriaR();
+    }//GEN-LAST:event_jpCategoriaMouseClicked
 
     /**
      * Es el metodo Sobre escrito que me permite hacer varias acciones en el.
@@ -1645,16 +1658,19 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             ImageIcon imagen = null;
 
-            if (Objects.isNull(producto.getImagenProducto())) {
+            if (Objects.isNull(producto.getImagen().getImagen64())) {
                 imagen = new ImageIcon("sur/softsurena/imagenes/NoImageTransp 96 x 96.png");
             } else {
-                imagen = imagenDecode64(producto.getImagenProducto(), 96, 96);
+                imagen = imagenDecode64(producto.getImagen().getImagen64(), 96, 96);
             }
 
-            Icon icon = new ImageIcon(imagen.getImage().getScaledInstance(
-                    64,
-                    64,
-                    Image.SCALE_DEFAULT));
+            Icon icon = new ImageIcon(
+                    imagen.getImage().getScaledInstance(
+                            64,
+                            64,
+                            Image.SCALE_DEFAULT
+                    )
+            );
 
             imagen.getImage().flush();
 
@@ -1707,78 +1723,103 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         tblDetalle.getColumnModel().getColumn(2).setCellRenderer(tcr);
     }
 
+    /**
+     * Este metodo realiza lo siguiente:
+     *
+     * 1) Crea una lista llamada categoriasList, el cual contendrá todas las
+     * categorias del sistema.
+     *
+     * 2) Dependiendo del componente checkbox llamado cbTodos, llamara el metodo
+     * que devuelva las categorias del sistema, que se necesite consultar.
+     *
+     * 3) Se eliminan los componente que existan dentro del panel jpCategoria.
+     *
+     *
+     */
     private void categoriaR() {
-        List<Categoria> categoriasList;
-
-        //Mandamos a buscar todas las categorias del sistema.
-        //TODO No se está obteniendo todas las categorias.
-        if (cbTodos.isSelected()) {
-            categoriasList = getCategorias(null,true);
-        } else {
-            categoriasList = getCategoriaActivas();
-        }
+        //jpCategoria = new javax.swing.JPanel();
+//        jpCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("Categoria"));
+//        jpCategoria.setToolTipText("Areas de la categorias registradas en el sistema.");
+//        jpCategoria.setAutoscrolls(true);
+//        jpCategoria.setMaximumSize(new java.awt.Dimension(64, 64));
+//        jpCategoria.setMinimumSize(new java.awt.Dimension(64, 64));
+//        jpCategoria.setName("jpCategoria");
 
         //Limpiamos el jPanel de las categorias.
         jpCategoria.removeAll();
         jpCategoria.repaint();
         jpCategoria.setLayout(new FlowLayout());
 
-        categoriasList.stream().forEach(categoria -> {
-            //Nombre de la categoria.
-            boton = new JButton(categoria.getDescripcion());
+        List<Categoria> categoriasList;
 
-            //ID de la categoria.
-            boton.setToolTipText("" + categoria.getId_categoria());
+        //TODO No se está obteniendo todas las categorias.
+        if (cbTodos.isSelected()) {
+            categoriasList = getCategorias(null, true);
+        } else {
+            categoriasList = getCategoriaActivas();
+        }
 
-            //Una constante del boton que indica que es una categoria.
-            boton.setMnemonic('c');
+        categoriasList.stream().forEach(
+                categoria -> {
+                    //Obteniendo la imagen de la categoria.
+                    ImageIcon imagen = Utilidades.imagenDecode64(categoria.getImage_texto(), 64, 64);
 
-            //Obteniendo la imagen de la categoria.
-            ImageIcon imagen = Utilidades.imagenDecode64(categoria.getImage_texto(), 64, 64);
+                    if (imagen.getIconHeight() == -1) {
+                        imagen = new Imagenes("NoImageTransp 96 x 96.png").getIcono();
+                    }
 
-            if (imagen.getIconHeight() == -1) {
-                imagen = new Imagenes("NoImageTransp 96 x 96.png").getIcono();
-            }
+                    Icon icon = new ImageIcon(
+                            imagen.getImage().getScaledInstance(
+                                    64, 64, Image.SCALE_DEFAULT));
 
-            Icon icon = new ImageIcon(
-                    imagen.getImage().getScaledInstance(
-                            64, 64, Image.SCALE_DEFAULT));
+                    //Nombre de la categoria.
+                    boton = new JButton(categoria.getDescripcion(), icon);
 
-            //imagen.getImage().flush();
-            //Personalizamos el boton. 
-            boton.setIcon(icon);
-            boton.addActionListener(this);
+                    //ID de la categoria.
+                    boton.setToolTipText("" + categoria.getId_categoria());
 
-            boton.validate();
-            boton.setIconTextGap(2);
-            boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-            boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                    //Una constante del boton que indica que es una categoria.
+                    boton.setMnemonic('c');
 
-            final int ancho = 120, alto = 95;
-            boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
-            boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
-            boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
+                    //imagen.getImage().flush();
+                    //Personalizamos el boton. 
+                    boton.addActionListener(this);
 
-            boton.setLayout(new FlowLayout());
-            jpCategoria.add(boton);
-            jpCategoria.repaint();
-            jpCategoria.validate();
-        });
+                    boton.validate();
+                    boton.setIconTextGap(2);
+                    boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                    boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                    boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                    boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
+                    final int ancho = 120, alto = 95;
+                    boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
+                    boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
+                    boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
+
+                    boton.setLayout(new FlowLayout());
+                    jpCategoria.add(boton);
+                    jpCategoria.repaint();
+                    jpCategoria.validate();
+                }
+        );
     }
 
-//    private void estadoCliente() {
-//        //Obtenemos el ID de la persona
-//        int idPersona = 0;
-//        try {
-//            idPersona = ((Persona) cmbCliente.getSelectedItem()).getId();
-//        } catch (Exception ex) {
-//            idPersona = 0;
-//        }
-//
-//        //Consultamos en la base de datos por el id de la persona.
+    /**
+     * Metodo que consulta los estados del cliente a consultar.
+     */
+    private void estadoCliente() {
+        //Obtenemos el ID de la persona
+        int idPersona = 0;
+        try {
+            idPersona = ((Cliente) cmbCliente.getSelectedItem()).getId_persona();
+        } catch (Exception ex) {
+            idPersona = 0;
+        }
+
+        System.out.println("idPersona del cliente? = " + idPersona);
+
+        //TODO esta trabajando en esta parte.
 //        ResultSet rs = getClientesPorDeudaCredito(idPersona);
 //
 //        int resp = JOptionPane.NO_OPTION;
@@ -1789,7 +1830,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                    + Utilidades.priceWithDecimal(rs.getDouble("credito")));
 //            JlCantidad2.setText("Deud Actu.:$"
 //                    + Utilidades.priceWithDecimal(rs.getDouble("deudaActual")));
-//            valorCredito = rs.getDouble("credito");
+//            var valorCredito = rs.getDouble("credito");
 //            if (idPersona != 0 && rbtCredito.isSelected()) {
 //                resp = JOptionPane.showInternalConfirmDialog(this, "Cliente: " + rs.getString("nombres")
 //                        + "\nSu credito es de: " + "RD$" + rs.getString("credito")
@@ -1797,32 +1838,30 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                        "Credito insuficiente", JOptionPane.YES_NO_OPTION);
 //            }
 //        } catch (SQLException ex) {
-//
 //            LOG.log(Level.SEVERE, ex.getMessage(), ex);
 //        }
 //
 //        switch (resp) {
-//            case JOptionPane.OK_OPTION:
-//
+//            case JOptionPane.OK_OPTION -> {
 //                frmAutorizacion miAut = new frmAutorizacion(null, true);
 //                miAut.setLocationRelativeTo(null);
 //                miAut.setVisible(true);
-//
-////Si la Autenticacion falla emitimos un mensaje de Usuario no valido.
+//                
+//                //Si la Autenticacion falla emitimos un mensaje de Usuario no valido.
 //                if (!miAut.isAceptado()) {
 //                    rbtContadoActionPerformed(null);
 //                }
+//            }
 //
-//                break;
-//
-//            case JOptionPane.NO_OPTION:
+//            case JOptionPane.NO_OPTION -> {
 //                rbtContado.setSelected(true);
 //                rbtContadoActionPerformed(null);
 //                rbtContado.validate();
 //                rbtContado.revalidate();
-//                break;
+//            }
 //        }
-//    }
+    }
+
     /**
      * Este metodo se esta ejecutando en dos metodos, son:
      * formInternalFrameOpened: Permite cargar la lista de los clientes en el
@@ -1837,22 +1876,23 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         cmbCliente.repaint();
 
         //TODO traer solo cliente.
-//        List<Cliente> clientesList = getClientes(
-//                FiltroBusqueda
-//                        .builder()
-//                        .estado(true)
-//                        .build()
-//        );
-//
-//        clientesList.stream().forEach(cliente -> {
-//            cmbCliente.addItem(cliente);
-//        });
+        List<Cliente> clientesList = getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .estado(true)
+                        .build()
+        );
 
+        clientesList.stream().forEach(
+                cliente -> {
+                    cmbCliente.addItem(cliente);
+                }
+        );
+        
         if (cmbCliente.getItemCount() > 0) {
             cmbCliente.setSelectedIndex(0);
         }
     }
-
 
     private void totales() {
         int num = tblDetalle.getRowCount();
@@ -2007,7 +2047,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 estado(bandera)
                 .build();
     }
-    
+
     private void opcion1() {
         int rta = JOptionPane.showInternalConfirmDialog(
                 this,

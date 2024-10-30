@@ -3,14 +3,14 @@
 /SophiaStudioMaven/target/
 
 /Entidades/.idea
-/Entidades/Logs
-/Entidades/target
+/Entidades/Logs/
+/Entidades/target/
 
-/Imagenes/target
+/Imagenes/target/
 
-/JHBingo/target
+/JHBingo/target/
 
-/JPA_Firebird/target
+/JPA_Firebird/target/
 
 /Entidades/nbproject/
 /Entidades/target/
@@ -19,6 +19,9 @@
 /Imagenes/nbproject/
 
 /ControlCliente/.vscode
-/ControlCliente/target
+/ControlCliente/target/
 
-/SistemaFacturacion/Logs
+/SistemaFacturacion/Logs/
+/SistemaFacturacion/target/
+/SistemaFacturacion/test-reports/
+*.log

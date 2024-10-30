@@ -141,12 +141,9 @@ public class M_Categoria {
             = "Se modificó la categoria correctamente.";
 
     /**
-     * Metodo para eliminar las categorias de la tablas V_CATEGORIAS. Para
-     * eliminar una categoria, ningun producto debe estar relacionado con esta
-     * categoria a eliminar.
-     *
-     * Actualizado el 17/05/2022. Actualizado el 05/06/2022. Nota: se le agrega
-     * la cantidad de registros afectos al mensaje.
+     * Metodo para eliminar las categorias del sistema. Para eliminar una
+     * categoria, ningun producto debe estar relacionado con esta categoria a
+     * eliminar.
      *
      * @param idCategoria Es el identificador del registro de la categorias.
      *
@@ -213,23 +210,27 @@ public class M_Categoria {
         List<Categoria> categorias = new ArrayList<>();
         final String sql
                 = "SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO " + (foto ? ", IMAGEN_TEXTO " : "")
-                + "FROM V_CATEGORIAS "
-                + "WHERE ID > 0 " + (Objects.isNull(estado) ? " " : estado ? " AND ESTADO " : " AND ESTADO IS FALSE ")
+                + "FROM VS_CATEGORIAS "
+                + "WHERE ID >= 0 " + (Objects.isNull(estado) ? " " : estado ? " AND ESTADO " : " AND ESTADO IS FALSE ")
                 + "ORDER BY 1;";
+        
+        System.out.println("sql = " + sql);
+        
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                categorias.add(Categoria
-                        .builder()
-                        .id_categoria(rs.getInt("ID"))
-                        .descripcion(rs.getString("DESCRIPCION"))
-                        .fecha_creacion(rs.getDate("FECHA_CREACION"))
-                        .estado(rs.getBoolean("ESTADO"))
-                        .image_texto(foto ? rs.getString("IMAGEN_TEXTO") : "")
-                        .build()
+                categorias.add(
+                        Categoria
+                                .builder()
+                                .id_categoria(rs.getInt("ID"))
+                                .descripcion(rs.getString("DESCRIPCION"))
+                                .fecha_creacion(rs.getDate("FECHA_CREACION"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .image_texto(foto ? rs.getString("IMAGEN_TEXTO") : "")
+                                .build()
                 );
             }
         } catch (SQLException ex) {
@@ -251,10 +252,14 @@ public class M_Categoria {
      */
     public synchronized static List<Categoria> getCategoriaActivas() {
         final String sql
-                = "SELECT ID, DESCRIPCION, IMAGEN_TEXTO "
-                + "FROM GET_CATEGORIA_ACTIVAS "
-                + "WHERE ID > 0;";
+                = """
+                  SELECT ID, DESCRIPCION, IMAGEN_TEXTO 
+                  FROM GET_CATEGORIA_ACTIVAS 
+                  WHERE ID > 0;
+                  """;
+        System.out.println("Estoy aqui: ".concat(sql) );
         List<Categoria> categoriasList = new ArrayList<>();
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -263,10 +268,14 @@ public class M_Categoria {
         )) {
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
-                    categoriasList.add(Categoria.builder().
-                            id_categoria(rs.getInt("ID")).
-                            descripcion(rs.getString("DESCRIPCION")).
-                            image_texto(rs.getString("IMAGEN_TEXTO")).build());
+                    categoriasList.add(
+                            Categoria
+                                    .builder()
+                                    .id_categoria(rs.getInt("ID"))
+                                    .descripcion(rs.getString("DESCRIPCION"))
+                                    .image_texto(rs.getString("IMAGEN_TEXTO"))
+                                    .build()
+                    );
                 }
             }
         } catch (SQLException ex) {
@@ -295,7 +304,7 @@ public class M_Categoria {
      */
     public synchronized static Boolean existeCategoria(String descripcion) {
         final String sql
-                = "SELECT (1) FROM V_CATEGORIAS WHERE DESCRIPCION STARTING WITH ?";
+                = "SELECT (1) FROM VS_CATEGORIAS WHERE DESCRIPCION STARTING WITH ?";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
