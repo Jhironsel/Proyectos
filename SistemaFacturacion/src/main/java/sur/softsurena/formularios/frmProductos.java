@@ -8,34 +8,30 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRFrame;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Imagen;
 import sur.softsurena.interfaces.IProducto;
-import static sur.softsurena.metodos.M_Categoria.getCategorias;
-import static sur.softsurena.metodos.M_Privilegio.privilegio;
-import static sur.softsurena.metodos.M_Producto.agregarProducto;
-import static sur.softsurena.metodos.M_Producto.borrarProductoPorID;
-import static sur.softsurena.metodos.M_Producto.existeProducto;
-import static sur.softsurena.metodos.M_Producto.generarCodigoBarra;
-import static sur.softsurena.metodos.M_Producto.generarProducto;
-import static sur.softsurena.metodos.M_Producto.getProductos;
-import static sur.softsurena.metodos.M_Producto.modificarProducto;
+import sur.softsurena.metodos.M_Categoria;
+import sur.softsurena.metodos.M_Privilegio;
+import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
-import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
-import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 
+/**
+ * TODO Recuerda que los botones de nuevo, modificar, borrar, se habilitaron de 
+ * forma rara. cuando acedimos a Admin Categorias.
+ * @author jhironsel
+ */
 public class frmProductos extends javax.swing.JInternalFrame implements IProducto {
 
     private static final long serialVersionUID = 1L;
@@ -45,13 +41,14 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private static FileNameExtensionFilter filter = null;
     private static int v_fila = 0;
     private static String criterioBusqueda = "";
+    private static frmPrincipal principal;
 
-    public static frmProductos getInstance() {
+    public static frmProductos getInstance(frmPrincipal principal) {
         /*
             Si un permiso a las vistas consultada anteriormente es negado, se 
         lanza una excepcion y la venta no se iniciará.
          */
-        if (!privilegio(
+        if (!M_Privilegio.privilegio(
                 Privilegio
                         .builder()
                         .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -70,6 +67,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             throw new ExceptionInInitializerError(mensaje);
         }
         
+        frmProductos.principal = principal;
 
         return NewSingletonHolder.INSTANCE;
     }
@@ -82,14 +80,13 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private frmProductos() {
 
         initComponents();
-        
-        
+
         //Se llena la tabla de producto por primera vez. 
         //TODO Revisar los permisos de este formlario.
         llenarTablaProductos(criterioBusqueda);
         reOrdenar();
         updateCategoria();
-        
+
         jpOpciones.setVisible(false);
         file = new JFileChooser();
 
@@ -126,6 +123,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             }
         };
         btnActualizarLista = new newscomponents.RSButtonGradientIcon_new();
+        btnControlPrecio = new newscomponents.RSButtonGradientIcon_new();
         jpMantenimiento = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -134,13 +132,16 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         txtNotas = new javax.swing.JTextArea();
         jlImagenProducto = new javax.swing.JLabel();
         txtCodigoBarra = new javax.swing.JTextField();
-        cbCategoria = new javax.swing.JComboBox();
+        cbCategoria = new javax.swing.JComboBox<>();
         txtDescripcion = new javax.swing.JTextField();
         btnAgregarFoto = new newscomponents.RSButtonGradientIcon_new();
         btnEliminarFoto = new newscomponents.RSButtonGradientIcon_new();
         cbActivo = new RSMaterialComponent.RSCheckBoxMaterial();
         jpESProductos = new javax.swing.JPanel();
         jpESHistorial = new javax.swing.JPanel();
+        jpESHistorial1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtProducto = new javax.swing.JTextField();
         jpOpciones = new javax.swing.JPanel();
         btnAdmCategorias = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnImprimirLista = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -153,7 +154,6 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
-        setResizable(true);
         setTitle("Productos");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
@@ -308,6 +308,16 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             }
         });
 
+        btnControlPrecio.setText("Control de precio");
+        btnControlPrecio.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
+        btnControlPrecio.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ATTACH_MONEY);
+        btnControlPrecio.setName("btnControlPrecio"); // NOI18N
+        btnControlPrecio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnControlPrecioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -325,11 +335,16 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         .addGap(4, 4, 4)
                         .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane5))
                 .addContainerGap())
         );
+
+        jPanel10Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnActualizarLista, btnControlPrecio});
+
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
@@ -342,7 +357,9 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -588,6 +605,34 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         jtpPrincipal.addTab("E/S Historial", jpESHistorial);
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel3.setText("Nombre Producto:");
+
+        txtProducto.setEditable(false);
+
+        javax.swing.GroupLayout jpESHistorial1Layout = new javax.swing.GroupLayout(jpESHistorial1);
+        jpESHistorial1.setLayout(jpESHistorial1Layout);
+        jpESHistorial1Layout.setHorizontalGroup(
+            jpESHistorial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpESHistorial1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jpESHistorial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(390, Short.MAX_VALUE))
+        );
+        jpESHistorial1Layout.setVerticalGroup(
+            jpESHistorial1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpESHistorial1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(615, Short.MAX_VALUE))
+        );
+
+        jtpPrincipal.addTab("Control de precio", jpESHistorial1);
+
         jpOpciones.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
 
         btnAdmCategorias.setText("Categoria");
@@ -782,8 +827,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                     cbCategoria.setSelectedIndex(-1);
                     break;
                 }
-                if (tblProducto.getValueAt(tblProducto.getSelectedRow(), 9).
-                        toString().equals(((Categoria) cbCategoria.getItemAt(i)).getDescripcion())) {
+                if (tblProducto.getValueAt(tblProducto.getSelectedRow(), 9)
+                        .toString()
+                        .equals(
+                                cbCategoria.getItemAt(i).getDescripcion()
+                        )) {
                     cbCategoria.setSelectedIndex(i);
                     break;
                 }
@@ -920,7 +968,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 return;
             }
 
-            Resultado resultados = borrarProductoPorID(id);
+            Resultado resultados = M_Producto.borrarProductoPorID(id);
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -942,19 +990,18 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
     /**
      * Este metodo se encarga de buscar un registro en la tabla de producto.
-     * 
-     * Si nos encontramos en la session de productos, mostrando el panel de 
-     * jpProductos, realizamos lo siguiente. 
-     * 
-     * 1) Mandamos a actualizar la tabla.
-     * 2) 
-     * 
+     *
+     * Si nos encontramos en la session de productos, mostrando el panel de
+     * jpProductos, realizamos lo siguiente.
+     *
+     * 1) Mandamos a actualizar la tabla. 2)
+     *
      * @param evt No utilizado por el momento.
      */
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (jtpPrincipal.getSelectedComponent() == jpProductos) {
             btnActualizarListaActionPerformed(null);
-            
+
             if (tblProducto.getRowCount() == 0) {
                 JOptionPane.showInternalMessageDialog(
                         this,
@@ -1032,7 +1079,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             // Si es nuevo validamos que el Producto no exista por su codigo de 
             //barra.
             if (v_nuevo) {
-                if (existeProducto(txtCodigoBarra.getText())) {
+                if (M_Producto.existeProducto(txtCodigoBarra.getText())) {
                     JOptionPane.showInternalMessageDialog(
                             this,
                             "Codigo de barra existente en el sistema",
@@ -1109,7 +1156,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 return;
             }
 
-            Resultado resultados = (v_nuevo ? agregarProducto(producto) : modificarProducto(producto));
+            Resultado resultados = (v_nuevo ? M_Producto.agregarProducto(producto) : M_Producto.modificarProducto(producto));
             JOptionPane.showInternalMessageDialog(
                     this,
                     resultados,
@@ -1148,11 +1195,19 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         cancelar(true, true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    
+    
     private void btnAdmCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCategoriasActionPerformed
-        frmCategorias miCategoria = new frmCategorias(null, true);
+        frmCategorias miCategoria = new frmCategorias(
+                principal, 
+                true
+        );
+        
         miCategoria.setLocationRelativeTo(this);
         miCategoria.setVisible(true);
+        
         updateCategoria();
+        
     }//GEN-LAST:event_btnAdmCategoriasActionPerformed
 
     private void btnImprimirListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirListaActionPerformed
@@ -1174,7 +1229,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             JasperPrint jp = JasperFillManager.fillReport(
                     masterReporte,
                     null,
-                    getCnn()
+                    Conexion.getCnn()
             );
 
             JasperViewer miView = new JasperViewer(jp, false);
@@ -1240,7 +1295,9 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        txtDescripcion.setText(generarProducto());
+                        txtDescripcion.setText(
+                                M_Producto.generarProducto()
+                        );
                     }
                 }
             }
@@ -1252,7 +1309,9 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        txtCodigoBarra.setText(generarCodigoBarra());
+                        txtCodigoBarra.setText(
+                                M_Producto.generarCodigoBarra()
+                        );
                     }
                 }
             }
@@ -1337,7 +1396,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         btnNuevo.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(
@@ -1350,7 +1409,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         );
 
         btnModificar.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(
@@ -1363,7 +1422,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         );
 
         btnBorrar.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(
@@ -1374,7 +1433,26 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                                 .build()
                 )
         );
+        
+        btnAdmCategorias.setVisible(
+                M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("SP_I_CATEGORIA")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
     }//GEN-LAST:event_formInternalFrameActivated
+
+    /**
+     * 
+     * @param evt No utilizado por el momento
+     */
+    private void btnControlPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnControlPrecioActionPerformed
+        
+    }//GEN-LAST:event_btnControlPrecioActionPerformed
 
     /**
      * Metodo utilizado para controla el comportamiento de los botones del
@@ -1448,18 +1526,18 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         //Modelo que se pasará a la tablas de productos.
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-        getProductos(
+        M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .criterioBusqueda(criterioBusqueda)
                         .filas(Boolean.TRUE)
                         .nCantidadFilas(
-                                Integer.valueOf(
+                                Integer.parseInt(
                                         jsCantidadFilas.getValue().toString()
                                 )
                         )
                         .nPaginaNro(
-                                Integer.valueOf(
+                                Integer.parseInt(
                                         jsPaginaNro.getValue().toString()
                                 )
                         )
@@ -1480,11 +1558,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         tblProducto.setModel(miTabla);
 
-        repararColumnaTable(tblProducto);
+        Utilidades.repararColumnaTable(tblProducto);
 
         int[] indices = {4};
 
-        columnasCheckBox(tblProducto, indices);
+        Utilidades.columnasCheckBox(tblProducto, indices);
 
         return tblProducto;
     }
@@ -1503,7 +1581,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         int id = ((Producto) tblProducto.getValueAt(v_fila, 2)).getId();
 
-        Producto producto = getProductos(
+        Producto producto = M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .id(id)
@@ -1528,7 +1606,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         );
 
         for (int i = 0; i < cbCategoria.getItemCount(); i++) {
-            int idCategoria = ((Categoria) cbCategoria.getItemAt(i)).getId_categoria();
+            int idCategoria = cbCategoria.getItemAt(i).getId_categoria();
             if (idCategoria == producto.getCategoria().getId_categoria()) {
                 cbCategoria.setSelectedIndex(i);
             }
@@ -1606,22 +1684,26 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         //Agregar primer elemento con id negativo
         //Lo agregamos al comboBox.
-        cbCategoria.addItem(Categoria
-                .builder()
-                .id_categoria(-1)
-                .descripcion("Seleccione categoria")
-                .build()
+        cbCategoria.addItem(
+                Categoria
+                        .builder()
+                        .id_categoria(-1)
+                        .descripcion("Seleccione categoria")
+                        .build()
         );
 
-        getCategorias(true, false).stream().forEach(categoria -> {
-            cbCategoria.addItem(Categoria
-                    .builder()
-                    .id_categoria(categoria.getId_categoria())
-                    .descripcion(categoria.getDescripcion())
-                    .fecha_creacion(categoria.getFecha_creacion())
-                    .build()
-            );
-        });
+        M_Categoria.getCategorias(true, false).stream().forEach(
+                categoria -> {
+                    cbCategoria.addItem(
+                            Categoria
+                                    .builder()
+                                    .id_categoria(categoria.getId_categoria())
+                                    .descripcion(categoria.getDescripcion())
+                                    .fecha_creacion(categoria.getFecha_creacion())
+                                    .build()
+                    );
+                }
+        );
 
         if (cbCategoria.getItemCount() < 2) {
             btnModificar.setEnabled(false);
@@ -1633,19 +1715,24 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     }
 
     /**
-     * Meto que permite colocar una imagen en el jlImagenProducto, la cual debe
-     * pasarsele por parametros un String con el path de la imagen.
+     * Metodo que permite colocar una imagen en el jlImagenProducto, la cual 
+     * debe pasarsele por parametros un String con el path de la imagen.
      *
-     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
-     * cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 3)
-     * btnAgregarFotoActionPerformed
+     * Este metodo es llamado desde: 
+     *  1) btnNuevoActionPerformed 
+     *  2) cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 
+     *  3) btnAgregarFotoActionPerformed
      *
      * @param file representa la ruta de la imagen en el sistema.
      */
     private void ponerImagenProducto(String file) {
         ImageIcon imagen = new ImageIcon(file);
 
-        Icon icon = new ImageIcon(imagen.getImage().getScaledInstance(155, 155, Image.SCALE_SMOOTH));
+        Icon icon = new ImageIcon(
+                imagen.getImage().getScaledInstance(
+                        155, 155, Image.SCALE_SMOOTH
+                )
+        );
 
         imagen.getImage().flush();
 
@@ -1661,6 +1748,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
     private static RSMaterialComponent.RSButtonMaterialIconOne btnBuscarProducto;
     public static RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
+    private newscomponents.RSButtonGradientIcon_new btnControlPrecio;
     private newscomponents.RSButtonGradientIcon_new btnEliminarFoto;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEntradaProducto;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEntradaSalidaProducto;
@@ -1670,9 +1758,10 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnSalidaProducto;
     private RSMaterialComponent.RSCheckBoxMaterial cbActivo;
-    private static javax.swing.JComboBox cbCategoria;
+    private static javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -1684,6 +1773,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private javax.swing.JLabel jlImagenProducto;
     private RSMaterialComponent.RSLabelIcon jlOpcionesMostrar;
     private javax.swing.JPanel jpESHistorial;
+    private javax.swing.JPanel jpESHistorial1;
     private javax.swing.JPanel jpESProductos;
     private javax.swing.JPanel jpMantenimiento;
     private static javax.swing.JPanel jpOpciones;
@@ -1695,6 +1785,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private javax.swing.JTextField txtCodigoBarra;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextArea txtNotas;
+    private javax.swing.JTextField txtProducto;
     // End of variables declaration//GEN-END:variables
 
 }

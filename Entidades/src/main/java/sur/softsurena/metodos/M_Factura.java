@@ -140,7 +140,7 @@ public class M_Factura {
     /**
      * Metodo que permite modificar las facturas que se encuentran en el sistema
      *
-     * Me cuestiono si campos como idCliente efectivo cambio deberian de estar
+     * TODO Me cuestiono si campos como idCliente efectivo cambio deberian de estar
      * aqui?
      *
      * Metodo Actualizado el 18/05/2022.

@@ -59,7 +59,9 @@ public class M_Categoria {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setString(1, categoria.getDescripcion());
-            ps.setString(2, Utilidades.imagenEncode64(categoria.getPathImage()));
+            ps.setString(2, Utilidades.imagenEncode64(
+                    categoria.getPathImage()
+            ));
             ps.setBoolean(3, categoria.getEstado());
 
             ResultSet rs = ps.executeQuery();
@@ -213,9 +215,7 @@ public class M_Categoria {
                 + "FROM VS_CATEGORIAS "
                 + "WHERE ID >= 0 " + (Objects.isNull(estado) ? " " : estado ? " AND ESTADO " : " AND ESTADO IS FALSE ")
                 + "ORDER BY 1;";
-        
-        System.out.println("sql = " + sql);
-        
+                
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -257,7 +257,6 @@ public class M_Categoria {
                   FROM GET_CATEGORIA_ACTIVAS 
                   WHERE ID > 0;
                   """;
-        System.out.println("Estoy aqui: ".concat(sql) );
         List<Categoria> categoriasList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(

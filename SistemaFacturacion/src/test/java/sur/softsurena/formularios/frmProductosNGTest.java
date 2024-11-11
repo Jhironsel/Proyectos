@@ -60,7 +60,7 @@ public class frmProductosNGTest {
     )
     public void testGetInstance() {
         assertNotNull(
-                frmProductos.getInstance(),
+                frmProductos.getInstance(new frmPrincipal()),
                 "Error al instanciar frmProductos."
         );
     }

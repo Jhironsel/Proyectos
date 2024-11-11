@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import static org.testng.Assert.*;
@@ -308,14 +307,12 @@ public class frmPrincipalNGTest {
             enabled = true,
             priority = 9,
             description = """
+                          Test que cierra todos los JInternalFrames.
                           """
     )
     public void testCerrarTodos() {
-        System.out.println("cerrarTodos");
         frmPrincipal instance = new frmPrincipal();
         instance.cerrarTodos();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 
@@ -323,7 +320,7 @@ public class frmPrincipalNGTest {
             enabled = true,
             priority = 9,
             description = """
-                          Permite verificar si una ventana interna abre 
+                          Permite verificar si una ventana interna abre
                           correctamente.
                           """
     )
@@ -332,7 +329,7 @@ public class frmPrincipalNGTest {
         abrirFormulario(new frmRestaurarDatos());
         abrirFormulario(new frmGraficos());
         abrirFormulario(frmClientes.getInstance());
-        abrirFormulario(frmProductos.getInstance());
+        abrirFormulario(frmProductos.getInstance(new frmPrincipal()));
         abrirFormulario(frmUsuarios.getInstance());
         abrirFormulario(frmFacturas.getInstance());
         abrirFormulario(frmAdministradorTurnos.getInstance());
@@ -350,12 +347,9 @@ public class frmPrincipalNGTest {
                           """
     )
     public void testGetFechaReporte() {
-        System.out.println("getFechaReporte");
         frmFechaReporte expResult = null;
         frmFechaReporte result = frmPrincipal.getFechaReporte();
         assertEquals(result, expResult);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     @Test(

@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -176,6 +175,7 @@ public class M_Producto implements IProducto {
         return productosList;
     }
 
+//------------------------------------------------------------------------------
     /**
      * Metodo utilizado para eliminar los productos del sistema, este solo
      * necesita de su ID o codigo de barra para localizarlo en la vista de
@@ -224,6 +224,7 @@ public class M_Producto implements IProducto {
     public static final String PRODUCTO__BORRADO__CORRECTAMENTE
             = "Producto Borrado Correctamente.";
 
+//------------------------------------------------------------------------------
     /**
      * Agregar producto a la base de datos en la tabla productos.
      *
@@ -285,6 +286,7 @@ public class M_Producto implements IProducto {
     public static final String PRODUCTO_AGREGADO_CORRECTAMENTE
             = "Producto agregado correctamente.";
 
+//------------------------------------------------------------------------------
     /**
      * Metodo que permite modificar los productos del sistema como a la
      * categoria a la que pertenece el producto, su codigo de barra, la
@@ -341,6 +343,7 @@ public class M_Producto implements IProducto {
     public static final String PRODUCTO__MODIFICADO__CORRECTAMENTE
             = "Producto Modificado Correctamente";
 
+//------------------------------------------------------------------------------
     /**
      * Metodo que nos permite verificar si una categoria esta asociada a un
      * producto del sistema, la cual no se permite su eliminacion.
@@ -350,14 +353,15 @@ public class M_Producto implements IProducto {
      * @return
      */
     public synchronized static boolean existeCategoriaProductos(int idCategoria) {
-        final String sql
-                = "SELECT (1) "
-                + "FROM RDB$DATABASE "
-                + "WHERE EXISTS ("
-                + "              SELECT (1) "
-                + "              FROM V_PRODUCTOS p "
-                + "              WHERE p.ID_CATEGORIA = ?"
-                + "             )";
+        final String sql = """
+                           SELECT (1) 
+                           FROM RDB$DATABASE 
+                           WHERE EXISTS (
+                                         SELECT (1) 
+                                         FROM V_PRODUCTOS p 
+                                         WHERE p.ID_CATEGORIA = ?
+                                        )
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -380,6 +384,7 @@ public class M_Producto implements IProducto {
         }
     }
 
+//------------------------------------------------------------------------------
     /**
      * Metodo que verifica la existencia de un producto por su codigo de barra o
      * descripción. Metodo actualizado el 26 de abril 2022
@@ -389,13 +394,16 @@ public class M_Producto implements IProducto {
      * @return
      */
     public synchronized static boolean existeProducto(String criterio) {
-        final String sql
-                = "SELECT (1) "
-                + "FROM RDB$DATABASE "
-                + "WHERE EXISTS(SELECT (1) "
-                + "             FROM V_PRODUCTOS "
-                + "             WHERE codigo STARTING WITH ? or "
-                + "                    descripcion STARTING WITH ?);";
+        final String sql = """
+                           SELECT (1) 
+                           FROM RDB$DATABASE 
+                           WHERE EXISTS(
+                                        SELECT (1) 
+                                        FROM V_PRODUCTOS 
+                                        WHERE codigo STARTING WITH ? or 
+                                              descripcion STARTING WITH ?
+                           );
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -420,39 +428,7 @@ public class M_Producto implements IProducto {
         }
     }
 
-    /**
-     * TODO obtener el precio del producto. Metodo que devuelve el precio de
-     * producto actual.
-     *
-     * @param idProducto identificador del producto.
-     * @return
-     */
-    public synchronized static BigDecimal getPrecioProducto(int idProducto) {
-
-        String sql = "";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(sql)) {
-
-            ps.setInt(1, idProducto);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getBigDecimal("precio");
-                } else {
-                    return new BigDecimal(0);
-                }
-            }
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return new BigDecimal(-1);
-        }
-    }
-
+//------------------------------------------------------------------------------
     public static String generarProducto() {
         StringBuilder telefonoMovil = new StringBuilder();
 
@@ -471,6 +447,7 @@ public class M_Producto implements IProducto {
         return telefonoMovil.toString();
     }
 
+//------------------------------------------------------------------------------
     public static String generarCodigoBarra() {
         StringBuilder telefonoMovil = new StringBuilder();
 

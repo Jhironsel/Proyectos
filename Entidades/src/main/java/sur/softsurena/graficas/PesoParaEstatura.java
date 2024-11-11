@@ -2,13 +2,15 @@ package sur.softsurena.graficas;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -23,11 +25,18 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.AlturaPeso;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getAlturaPeso;
 import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
+/**
+ *
+ * @author jhironsel
+ */
 public class PesoParaEstatura {
+
     private final String sexo;
     private Float SD3Neg;
     private Float SD2Neg;
@@ -36,12 +45,15 @@ public class PesoParaEstatura {
     private Float SD1;
     private Float SD2;
     private Float SD3;
-    private final int tamanoFigura;
     private final int idPaciente;
 
-    public PesoParaEstatura(int idPaciente, int tamanoFigura) {
+    /**
+     * Contructor para iniciarlizar las variables de idPaciente y tamañoFigura.
+     *
+     * @param idPaciente Identificador del paciente.
+     */
+    public PesoParaEstatura(int idPaciente) {
         sexo = getSexoPaciente(idPaciente);
-        this.tamanoFigura = tamanoFigura;
         this.idPaciente = idPaciente;
     }
 
@@ -49,10 +61,15 @@ public class PesoParaEstatura {
         XYSeriesCollection localXYSeriesCollection = new XYSeriesCollection();
         try {
             BufferedReader localBufferedReader = new BufferedReader(
-                    new InputStreamReader(XYSeriesCollection.class.
-                            getClassLoader().getResourceAsStream(
-                                    "datos/PesoParaEstatura.txt")));
+                    new InputStreamReader(
+                            XYSeriesCollection.class.getClassLoader().getResourceAsStream(
+                                    "datos\\PesoParaEstatura.txt"
+                            )
+                    )
+            );
+
             String str = localBufferedReader.readLine();
+
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, true);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, true);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, true);
@@ -65,36 +82,35 @@ public class PesoParaEstatura {
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 float f1 = Float.parseFloat(str.substring(0, 7).trim());//Para el Mes
-                
-                if (str.substring(11, 13).trim().equals("m") ) {//Determina Sexo
-                    localXYSeries1.add(f1, Float.parseFloat(str.substring(58, 64).trim())  );//SD3Neg
-                    localXYSeries2.add(f1, Float.parseFloat(str.substring(69, 75).trim())  );//SD2Neg
-                    localXYSeries3.add(f1, Float.parseFloat(str.substring(80, 86).trim())  );//SD1Neg
-                    localXYSeries4.add(f1, Float.parseFloat(str.substring(91, 97).trim())  );//SD0
-                    localXYSeries5.add(f1, Float.parseFloat(str.substring(99, 105).trim()) );//SD1
+
+                if (str.substring(11, 13).trim().equals("m")) {//Determina Sexo
+                    localXYSeries1.add(f1, Float.parseFloat(str.substring(58, 64).trim()));//SD3Neg
+                    localXYSeries2.add(f1, Float.parseFloat(str.substring(69, 75).trim()));//SD2Neg
+                    localXYSeries3.add(f1, Float.parseFloat(str.substring(80, 86).trim()));//SD1Neg
+                    localXYSeries4.add(f1, Float.parseFloat(str.substring(91, 97).trim()));//SD0
+                    localXYSeries5.add(f1, Float.parseFloat(str.substring(99, 105).trim()));//SD1
                     localXYSeries6.add(f1, Float.parseFloat(str.substring(107, 113).trim()));//SD2
                     localXYSeries7.add(f1, Float.parseFloat(str.substring(115, 119).trim()));//SD3
                     if (f1 == 120.0) {
-                        SD3Neg = Float.valueOf(str.substring(58, 64).trim())  ;
-                        SD2Neg = Float.valueOf(str.substring(69, 75).trim())  ;
-                        SD1Neg = Float.valueOf(str.substring(80, 86).trim())  ;
-                        SD0 =    Float.valueOf(str.substring(91, 97).trim())  ;
-                        SD1 =    Float.valueOf(str.substring(99, 105).trim()) ;
-                        SD2 =    Float.valueOf(str.substring(107, 113).trim());
-                        SD3 =    Float.valueOf(str.substring(115, 119).trim());
+                        SD3Neg = Float.valueOf(str.substring(58, 64).trim());
+                        SD2Neg = Float.valueOf(str.substring(69, 75).trim());
+                        SD1Neg = Float.valueOf(str.substring(80, 86).trim());
+                        SD0 = Float.valueOf(str.substring(91, 97).trim());
+                        SD1 = Float.valueOf(str.substring(99, 105).trim());
+                        SD2 = Float.valueOf(str.substring(107, 113).trim());
+                        SD3 = Float.valueOf(str.substring(115, 119).trim());
                     }
                 }
 
             }
 
-            ResultSet rs = getAlturaPeso(idPaciente);
-            try {
-                while (rs.next()) {
-                    localXYSeries8.add(rs.getFloat(4), rs.getFloat(5));
-                }
-            } catch (SQLException ex) {
-                LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            }
+            List<AlturaPeso> alturaPesoList = getAlturaPeso(idPaciente);
+
+            alturaPesoList.stream().forEach(
+                    dato -> {
+                        localXYSeries8.add(dato.getEstaturaMetro(), dato.getPesoKG());
+                    }
+            );
 
             localXYSeriesCollection.addSeries(localXYSeries1);
             localXYSeriesCollection.addSeries(localXYSeries2);
@@ -135,10 +151,10 @@ public class PesoParaEstatura {
 
         localXYPlot.setDomainCrosshairVisible(true);
         localXYPlot.setDomainCrosshairLockedOnData(true);
-        
+
         localXYPlot.setRangeCrosshairVisible(true);
         localXYPlot.setRangeCrosshairLockedOnData(true);
-        
+
         localXYPlot.setDomainZeroBaselineVisible(true);
         localXYPlot.setRangeZeroBaselineVisible(true);
 
@@ -204,7 +220,7 @@ public class PesoParaEstatura {
         renderer.setSeriesShapesVisible(6, false);
         renderer.setSeriesLinesVisible(7, false);
         renderer.setSeriesVisibleInLegend(7, false);
-       
+
         localXYPlot.setRenderer(renderer);
 
         if (sexo.equals("m")) {
@@ -224,5 +240,22 @@ public class PesoParaEstatura {
         ChartPanel localChartPanel = new ChartPanel(localJFreeChart);
         localChartPanel.setMouseWheelEnabled(true);//Zoom Deshabilitado
         return localChartPanel;
+    }
+
+    public static void main(String[] args) throws SQLException {
+
+        Conexion.getInstance("sysdba", "1", "softsurena.db", "localhost", "");
+        Conexion.verificar();
+        PesoParaEstatura peso = new PesoParaEstatura(0);
+        peso.createDemoPanel().setVisible(true);
+        
+        JFrame marco = new JFrame("Jhironsel");
+        
+        marco.add(peso.createDemoPanel());
+        
+        marco.setVisible(true);
+        
+        
+        Conexion.getCnn().close();
     }
 }

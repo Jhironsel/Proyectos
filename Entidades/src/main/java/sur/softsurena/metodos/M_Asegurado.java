@@ -36,7 +36,7 @@ public class M_Asegurado {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, asegurado.getId_persona());
+            ps.setInt(1, asegurado.getPersona().getId_persona());
             ps.setInt(2, asegurado.getId_ars());
             ps.setString(3, asegurado.getNo_nss());
             ps.setBoolean(3, asegurado.getEstado());
@@ -53,14 +53,18 @@ public class M_Asegurado {
             LOG.log(
                     Level.SEVERE,
                     ERROR_AL_REGISTRAR_ASEGURADO_EN_EL_SISTEM
-                            .formatted(asegurado.getId_persona()),
+                            .formatted(
+                                    asegurado.getPersona().getId_persona()
+                            ),
                     ex
             );
             return Resultado
                     .builder()
                     .mensaje(
                             ERROR_AL_REGISTRAR_ASEGURADO_EN_EL_SISTEM
-                                    .formatted(asegurado.getId_persona())
+                                    .formatted(
+                                            asegurado.getPersona().getId_persona()
+                                    )
                     )
                     .icono(JOptionPane.ERROR_MESSAGE)
                     .estado(Boolean.FALSE)

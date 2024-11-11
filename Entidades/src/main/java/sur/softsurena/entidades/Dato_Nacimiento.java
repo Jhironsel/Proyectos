@@ -11,7 +11,7 @@ public class Dato_Nacimiento {
     private final String fecha;
     private final String pesoNacimiento;
     private final String altura;
-    private final String PC;
+    private final String perimetrosCefalico;
     private final boolean cesarea;
     private final String tiempoGestacion;
 }

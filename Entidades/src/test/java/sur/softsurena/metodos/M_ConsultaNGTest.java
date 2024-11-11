@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Consulta;
+import sur.softsurena.entidades.Control_Consulta;
 import static sur.softsurena.metodos.M_Consulta.CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST;
 import sur.softsurena.utilidades.Resultado;
 
@@ -72,8 +73,15 @@ public class M_ConsultaNGTest {
         Resultado result = M_Consulta.agregarConsulta(
                 Consulta
                         .builder()
-                        .id_persona(paciente.getPaciente().getId_persona())
-                        .id_control_consulta(controlConsulta.getIdControlConsulta())
+                        .paciente(
+                                paciente.getPaciente()
+                        )
+                        .controlConsulta(
+                                Control_Consulta
+                                        .builder()
+                                        .id(controlConsulta.getIdControlConsulta())
+                                        .build()
+                        )
                         .turno(0)
                         .build()
         );

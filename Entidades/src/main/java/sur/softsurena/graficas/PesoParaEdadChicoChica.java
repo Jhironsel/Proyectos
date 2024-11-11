@@ -28,6 +28,7 @@ import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PesoParaEdadChicoChica {
+
     private final String sexo;
     private Float SD3Neg;
     private Float SD2Neg;
@@ -52,7 +53,6 @@ public class PesoParaEdadChicoChica {
                     new InputStreamReader(XYSeriesCollection.class.
                             getClassLoader().getResourceAsStream(
                                     "datos/PesoParaEdad.txt")));
-            String str = localBufferedReader.readLine();
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, true);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, true);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, true);
@@ -62,6 +62,8 @@ public class PesoParaEdadChicoChica {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
 
+            String str;
+            
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes
@@ -85,15 +87,15 @@ public class PesoParaEdadChicoChica {
                 }
 
             }
-            
-                ResultSet rs = getPesoKG(idPaciente);
-                try {
-                    while(rs.next()){
-                        localXYSeries8.add(rs.getFloat(3), rs.getFloat(4));
-                    }
-                } catch (SQLException ex) {
-                    LOG.log(Level.SEVERE, ex.getMessage(), ex);
+
+            ResultSet rs = getPesoKG(idPaciente);
+            try {
+                while (rs.next()) {
+                    localXYSeries8.add(rs.getFloat(3), rs.getFloat(4));
                 }
+            } catch (SQLException ex) {
+                LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            }
 
             localXYSeriesCollection.addSeries(localXYSeries1);
             localXYSeriesCollection.addSeries(localXYSeries2);
@@ -206,7 +208,7 @@ public class PesoParaEdadChicoChica {
         renderer.setSeriesLinesVisible(7, false);
         renderer.setSeriesVisibleInLegend(7, false);
 //        renderer.setSeriesShape(7, new Rectangle(0, 0, tamanoFigura, tamanoFigura));
-       
+
         localXYPlot.setRenderer(renderer);
 
         if (sexo.equals("m")) {

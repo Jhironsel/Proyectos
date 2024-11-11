@@ -65,8 +65,10 @@ public class M_PacienteNGTest {
 
     @Test(
             enabled = true,
-            description = "Test que realiza el ingreso de un paciente al sistema.",
-            priority = 0
+            priority = 0,
+            description = """
+                          Test que realiza el ingreso de un paciente al sistema.
+                          """
     )
     public void testAgregarEntidad() {
         persona.testAgregarEntidad();

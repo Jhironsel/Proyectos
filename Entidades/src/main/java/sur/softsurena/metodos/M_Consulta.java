@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Consulta;
+import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.Paciente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -30,8 +32,8 @@ public class M_Consulta {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, consulta.getId_persona());
-            ps.setInt(2, consulta.getId_control_consulta());
+            ps.setInt(1, consulta.getPaciente().getId_persona());
+            ps.setInt(2, consulta.getControlConsulta().getId());
             ps.setInt(3, consulta.getTurno());
             ps.setDate(4, consulta.getFecha());
 
@@ -75,7 +77,7 @@ public class M_Consulta {
         final String sql = """
                            SELECT ID, ID_PACIENTE, ID_CONTROL_CONSULTA, TURNO
                            FROM V_CONSULTAS  
-                           WHERE FECHA = ? and ESTADO;
+                           WHERE FECHA = ? AND ESTADO;
                            """;
         List<Consulta> consultaList = new ArrayList<>();
 
@@ -93,8 +95,18 @@ public class M_Consulta {
                             Consulta
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .id_persona(rs.getInt("ID_PACIENTE"))
-                                    .id_control_consulta(rs.getInt("ID_CONTROL_CONSULTA"))
+                                    .paciente(
+                                            Paciente
+                                                    .builder()
+                                                    .id_persona(rs.getInt("ID_PACIENTE"))
+                                                    .build()
+                                    )
+                                    .controlConsulta(
+                                            Control_Consulta
+                                                    .builder()
+                                                    .id(rs.getInt("ID_CONTROL_CONSULTA"))
+                                                    .build()
+                                    )
                                     .turno(rs.getInt("TURNO"))
                                     .build()
                     );

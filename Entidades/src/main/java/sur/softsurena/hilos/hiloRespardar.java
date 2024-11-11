@@ -8,18 +8,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class hiloRespardar extends Thread implements hiloMetodos {
-
-    private Boolean respardar = false;
+public class hiloRespardar extends Thread {
     private String usuarioMaster, claveMaster, RGBAK, BDR, BD, log;
 
     private JPasswordField pf;
 
     @Override
     public void run() {
-        
-        if (respardar) {
-            
             Process p;
             BufferedReader stdInput;
 //            Calendar miCan = Calendar.getInstance();
@@ -43,7 +38,10 @@ public class hiloRespardar extends Thread implements hiloMetodos {
                     if (linea != null) {
                         JOptionPane.showMessageDialog(
                                 null,
-                                "Usuario no cuenta con los permisos necesarios para realizar el backup.",
+                                """
+                                Usuario no cuenta con los permisos necesarios 
+                                para realizar el backup.
+                                """,
                                 "",
                                 JOptionPane.ERROR_MESSAGE);
                     }
@@ -53,25 +51,7 @@ public class hiloRespardar extends Thread implements hiloMetodos {
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, ex.getMessage(), ex);
             }
-            detener();
-        }//Para realizar el BackUp de la base de datos... Trabajando en segundo plano
     }
-
-
-    @Override
-    public void iniciar() {
-        respardar = true;
-    }
-    
-    @Override
-    public void detener() {
-        respardar = false;
-    }
-
-    @Override
-    public void correr() {
-        
-    }
-    
+   
 
 }

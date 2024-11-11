@@ -8,26 +8,26 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sur.softsurena.entidades.Categoria;
-import static sur.softsurena.metodos.M_Categoria.agregarCategoria;
-import static sur.softsurena.metodos.M_Categoria.borrarCategoria;
-import static sur.softsurena.metodos.M_Categoria.existeCategoria;
-import static sur.softsurena.metodos.M_Categoria.getCategorias;
-import static sur.softsurena.metodos.M_Categoria.modificarCategoria;
-import static sur.softsurena.metodos.M_Producto.existeCategoriaProductos;
+import sur.softsurena.metodos.M_Categoria;
+import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmCategorias extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private Integer idCategoria;
     private boolean nuevo = false, estado;
     private int respuestaFileChooser = JFileChooser.CANCEL_OPTION;
     private String ruta = "", nombreCategoria = "", source, dest;
+    private frmPrincipal principal;
 
-    public frmCategorias(java.awt.Frame parent, boolean modal) {
+    public frmCategorias(frmPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarCombo();
+        principal = parent;
     }
 
     @SuppressWarnings("unchecked")
@@ -207,7 +207,7 @@ public class frmCategorias extends javax.swing.JDialog {
          */
         idCategoria = ((Categoria) cbCategoria.getSelectedItem()).getId_categoria();
 
-        if (existeCategoriaProductos(idCategoria)) {
+        if (M_Producto.existeCategoriaProductos(idCategoria)) {
             JOptionPane.showMessageDialog(
                     this,
                     "No se permite eliminar categoria porque existe producto Asociados.",
@@ -217,7 +217,7 @@ public class frmCategorias extends javax.swing.JDialog {
             return;
         }
 
-        Resultado resultados = borrarCategoria(idCategoria);
+        Resultado resultados = M_Categoria.borrarCategoria(idCategoria);
 
         JOptionPane.showMessageDialog(
                 this,
@@ -252,13 +252,17 @@ public class frmCategorias extends javax.swing.JDialog {
 
         estado = ((Categoria) cbCategoria.getSelectedItem()).getEstado();
 
-        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(nombreCategoria, estado, false);
+        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
+                principal, nombreCategoria, estado, false
+        );
         miCategoria.setLocationRelativeTo(null);
         miCategoria.setVisible(true);
 
         if (miCategoria.getAceptar()) {
             if (!nombreCategoria.equals(miCategoria.txtCategoria.getText())) {
-                if (existeCategoria(miCategoria.txtCategoria.getText())) {
+                if (M_Categoria.existeCategoria(
+                        miCategoria.txtCategoria.getText()
+                )) {
                     JOptionPane.showMessageDialog(
                             this,
                             "Este nombre de Categoria Existe",
@@ -292,13 +296,19 @@ public class frmCategorias extends javax.swing.JDialog {
         //Activamos el Flag de registro Nuevo
         nuevo = true;
 
-        jlImagen.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource(
-                        "/sur/softsurena/imagenes/NoImageTransp 96 x 96.png")));
+        jlImagen.setIcon(
+                new javax.swing.ImageIcon(
+                        getClass().getResource(
+                                "/sur/softsurena/imagenes/NoImageTransp 96 x 96.png"
+                        )
+                )
+        );
 
-        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin("", false, true);
-        miCategoria.setLocationRelativeTo(null);
+        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
+                principal, "", false, true
+        );
         miCategoria.setVisible(true);
+        miCategoria.setLocationRelativeTo(null);
 
         //Pedimos el nombre de la categoria a crear.
         nombreCategoria = miCategoria.txtCategoria.getText();
@@ -313,7 +323,7 @@ public class frmCategorias extends javax.swing.JDialog {
         nombreCategoria = nombreCategoria.toUpperCase();
 
         //Consultamos la base de datos para saber si ese nombre de categoria existe.
-        if (existeCategoria(nombreCategoria)) {
+        if (M_Categoria.existeCategoria(nombreCategoria)) {
             JOptionPane.showMessageDialog(
                     this,
                     "Este nombre de Categoria ya existe en el sitema",
@@ -348,8 +358,13 @@ public class frmCategorias extends javax.swing.JDialog {
             fechaCreacion = "01.01.2000";
         }
 
-        jlImagen.setIcon(Utilidades.imagenDecode64(((Categoria) cbCategoria.getSelectedItem()).getImage_texto(), 96, 96));
-        
+        jlImagen.setIcon(
+                Utilidades.imagenDecode64(
+                        ((Categoria) cbCategoria.getSelectedItem()).getImage_texto(), 
+                        96, 
+                        96
+                )
+        );
 
         if (((Categoria) cbCategoria.getSelectedItem()).getEstado()) {
             jlEstado.setForeground(new java.awt.Color(37, 45, 223));
@@ -370,23 +385,24 @@ public class frmCategorias extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    /**
+     *
+     */
     private void guardar() {
         Resultado resultado;
         Categoria categoria = Categoria
-                            .builder()
-                            .id_categoria(nuevo ? -1 : idCategoria)
-                            .descripcion(nombreCategoria.strip())
-                            .pathImage(new File(ruta))
-                            .estado(estado)
-                            .build();
+                .builder()
+                .id_categoria(nuevo ? -1 : idCategoria)
+                .descripcion(nombreCategoria.strip())
+                .pathImage(new File(ruta))
+                .estado(estado)
+                .build();
         if (nuevo) {
-            //Ejecutamos la consulta siguiente para insertar la categoria.
-            resultado = agregarCategoria(categoria);
+            resultado = M_Categoria.agregarCategoria(categoria);
         } else {
-            resultado = modificarCategoria(categoria);
-
+            resultado = M_Categoria.modificarCategoria(categoria);
         }
-        
+
         JOptionPane.showMessageDialog(
                 this,
                 resultado,
@@ -397,14 +413,19 @@ public class frmCategorias extends javax.swing.JDialog {
         if (!resultado.getEstado()) {
             return;
         }
-        
+
         dest = ruta;
 
         if (respuestaFileChooser == JFileChooser.APPROVE_OPTION) {
             Utilidades.copyFileUsingFileChannels(source, dest);
             ImageIcon imagen = new ImageIcon(ruta);
-            Icon icon = new ImageIcon(imagen.getImage().getScaledInstance(72, 72,
-                    Image.SCALE_DEFAULT));
+            Icon icon = new ImageIcon(
+                    imagen.getImage().getScaledInstance(
+                            72,
+                            72,
+                            Image.SCALE_DEFAULT
+                    )
+            );
             imagen.getImage().flush();
             jlImagen.setIcon(icon);
             jlImagen.validate();
@@ -420,7 +441,8 @@ public class frmCategorias extends javax.swing.JDialog {
 
         cbCategoria.removeAllItems();
 
-        cbCategoria.addItem(Categoria
+        cbCategoria.addItem(
+                Categoria
                         .builder()
                         .id_categoria(-1)
                         .descripcion("Seleccione una categoria")
@@ -429,9 +451,10 @@ public class frmCategorias extends javax.swing.JDialog {
                         .estado(false)
                         .build()
         );
-        
-        getCategorias(null, true).stream().forEach(categoria -> {
-            cbCategoria.addItem(Categoria
+
+        M_Categoria.getCategorias(null, true).stream().forEach(categoria -> {
+            cbCategoria.addItem(
+                    Categoria
                             .builder()
                             .id_categoria(categoria.getId_categoria())
                             .descripcion(categoria.getDescripcion())
@@ -441,7 +464,7 @@ public class frmCategorias extends javax.swing.JDialog {
                             .build()
             );
         });
-        
+
         if (cbCategoria.getItemCount() > 0) {
             cbCategoria.setSelectedIndex(0);
         }
@@ -500,5 +523,5 @@ public class frmCategorias extends javax.swing.JDialog {
 
 /**
  * btnNuevoActionPerformed: 1) Colocamos el flag de nuevo a true. 2) Seteamos el
- * jlImagen a null
+ * jlImagen a null.
  */

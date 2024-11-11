@@ -24,7 +24,9 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.Medicamento;
+import sur.softsurena.entidades.Paciente;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.formularios.frmPrincipal;
 import sur.softsurena.graficas.LongitudAlturaParaEdadNino0a5anno;
@@ -33,6 +35,8 @@ import sur.softsurena.graficas.PesoParaEdadChicoChica;
 import sur.softsurena.graficas.PesoParaEstatura;
 import sur.softsurena.graficas.PesoParaLongitud;
 import sur.softsurena.hilos.hiloImpresionFactura;
+import static sur.softsurena.metodos.M_Consulta.getConsulta;
+import static sur.softsurena.metodos.M_D_MotivoConsulta.getDetalleMotivo;
 import static sur.softsurena.metodos.M_Medicamento.getMedicamentoActivo;
 import static sur.softsurena.metodos.M_Motivo_Consulta.agregarMotivo;
 import static sur.softsurena.metodos.M_Motivo_Consulta.getMotivo;
@@ -452,7 +456,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         jpMotivo.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jpMotivos.setBackground(new java.awt.Color(49, 163, 217));
-        jpMotivos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(1, 1, 1)), "Motivo de la consulta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(1, 1, 1))); // NOI18N
+        jpMotivos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(1, 1, 1)), "Motivo de la consulta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(1, 1, 1))); // NOI18N
         jpMotivos.setMinimumSize(new java.awt.Dimension(588, 241));
         jpMotivos.setPreferredSize(new java.awt.Dimension(588, 241));
         jpMotivos.setLayout(new java.awt.GridLayout(0, 4));
@@ -539,11 +543,6 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         txtEnfermedades.setComponentPopupMenu(jpmEnfermedades);
         txtEnfermedades.setEnabled(false);
         txtEnfermedades.setOpaque(false);
-        txtEnfermedades.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtEnfermedadesKeyReleased(evt);
-            }
-        });
         jspEnfermedades.setViewportView(txtEnfermedades);
 
         javax.swing.GroupLayout jpEnfermedadesLayout = new javax.swing.GroupLayout(jpEnfermedades);
@@ -847,23 +846,23 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jpEnfermedades4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1150, Short.MAX_VALUE)
+                        .addComponent(jpEnfermedades4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1140, Short.MAX_VALUE)
                         .addComponent(jpEnfermedades3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                            .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                             .addGap(0, 0, 0)
-                            .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)))
+                            .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)))
                     .addGap(0, 0, 0))
             );
             jPanel4Layout.setVerticalGroup(
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                        .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
+                        .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                        .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE))
                     .addComponent(jpEnfermedades3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, 0)
-                    .addComponent(jpEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                    .addComponent(jpEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                     .addGap(0, 0, 0))
             );
 
@@ -1000,14 +999,14 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             jpMetricasGraficasLayout.setHorizontalGroup(
                 jpMetricasGraficasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jpTipoGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 1150, Short.MAX_VALUE)
+                .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 1140, Short.MAX_VALUE)
             );
             jpMetricasGraficasLayout.setVerticalGroup(
                 jpMetricasGraficasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jpMetricasGraficasLayout.createSequentialGroup()
                     .addComponent(jpTipoGrafica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
-                    .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
                     .addGap(0, 0, 0))
             );
 
@@ -1219,10 +1218,6 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         teclas(evt);
     }//GEN-LAST:event_txtHallazgosKeyReleased
 
-    private void txtEnfermedadesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEnfermedadesKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEnfermedadesKeyReleased
-
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         ResultSet rs = getMotivo();
         jpMotivos.removeAll();
@@ -1292,18 +1287,14 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
             habilitarConsulta(true, false);
 
-            idPaciente = ((Categorias) jtPacientes.getValueAt(registro, 1)).getId();
+            idPaciente = ((Paciente) jtPacientes.getValueAt(registro, 1)).getId_persona();
 
-            getDetalleMotivo(((Categorias) jtPacientes.getValueAt(registro, 2)).getId(),
-                    (Integer) jtPacientes.getValueAt(registro, 0));
+            getDetalleMotivo(
+                    ((Paciente) jtPacientes.getValueAt(registro, 2)).getId_persona(),
+                    (Integer) jtPacientes.getValueAt(registro, 0)
+            );
 
-            try {
-                while (rs.next()) {
-                    ((JCheckBox) jpMotivos.getComponents()[rs.getInt(1)]).setSelected(true);
-                }
-            } catch (SQLException ex) {
-                //Instalar Logger
-            }
+            ((JCheckBox) jpMotivos.getComponents()[rs.getInt(1)]).setSelected(true);
 
             jpMotivo.validate();
             jpMotivo.revalidate();
@@ -1855,35 +1846,34 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         }
     }
 
-    public synchronized void llenarTabla(String fecha, String d) {
+    public synchronized void llenarTabla(Date fecha, String d) {
 
         jtPacientes.removeAll();
 
         String titulos[] = {
             "<html><b>Turno</b></html>",
-            "<html><b>Nombres</b></html>",
-            "<html><b>Apellidos</b></html>",
+            "<html><b>Nombre Completo</b></html>",
             "<html><b>Ars</b></html>",
-            "<html><b>Noº Ars</b></html>"};
+            "<html><b>Noº Ars</b></html>"
+        };
+
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-        Object fila[] = new Object[5];
+        Object fila[] = new Object[titulos.length];
 
-        rs = getConsulta(fecha);
+        List<Consulta> listaConsulta = getConsulta(Utilidades.javaDateToSqlDate(fecha));
 
-        try {
-            while (rs.next()) {
-                fila[0] = rs.getInt("Turno");
-                fila[1] = new Categorias(rs.getInt("idPaciente"), rs.getString("Nombres").trim());
-                fila[2] = new Categorias(rs.getInt("idConsulta"), rs.getString("Apellidos").trim());
-                fila[3] = rs.getString("idArs").trim();
-                fila[4] = rs.getString("Nonss").trim();
-                miTabla.addRow(fila);
-            }
-            jtPacientes.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        listaConsulta.stream().forEach(
+                dato -> {
+                    fila[0] = dato;
+                    fila[1] = dato.getPaciente();
+                    fila[2] = dato.getPaciente().getArs();
+                    fila[3] = dato.getPaciente().getAsegurado();
+                    miTabla.addRow(fila);
+                }
+        );
+
+        jtPacientes.setModel(miTabla);
     }
 
     public synchronized void llenarTablaGuia(int idPaciente) {
@@ -2084,9 +2074,9 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
         getFechaDoctores(
                 Utilidades.formatDate(
-                        dcReferimiento.getDate(), 
+                        dcReferimiento.getDate(),
                         ""
-                ), 
+                ),
                 actual
         );
 

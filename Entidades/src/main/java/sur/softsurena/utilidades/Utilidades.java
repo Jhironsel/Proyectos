@@ -20,8 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,13 +61,13 @@ import sur.softsurena.metodos.Imagenes;
 public class Utilidades {
 
     public static final Logger LOG = Logger.getLogger(Utilidades.class.getName());
-    
+
     static {
         final File file = new File("Logs/Log " + new Date().toString().replace(":", ".") + ".log");
-        try {     
+        try {
 
             FileHandler fh = new FileHandler(
-                    file.getPath(), 
+                    file.getPath(),
                     true
             );
 
@@ -80,14 +79,12 @@ public class Utilidades {
             LOG.addHandler(fh);
 
         } catch (IOException ex) {
-            //LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            System.err.println("Error al escribir log.");
             ex.printStackTrace(System.out);
         }
     }
-    
-    public static void limpiarDiretorio(String rutaDirectorio){
-        
+
+    public static void limpiarDiretorio(String rutaDirectorio) {
+
         File directorio = new File(rutaDirectorio);
 
         if (directorio.exists() && directorio.isDirectory()) {
@@ -301,7 +298,12 @@ public class Utilidades {
      */
     public static double objectToDouble(Object Obj) {
         String Str = Obj.toString();
-        String aux = Str.replace("R", "").replace("D", "").replace("$", "").trim();
+        String aux = Str
+                .replace("R", "")
+                .replace("D", "")
+                .replace("$", "")
+                .replace(",", ".")
+                .trim();
         return Double.parseDouble(aux);
     }
 
@@ -391,7 +393,7 @@ public class Utilidades {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
-        return "Foto NO Insertada";
+        return "";
     }
 
     //--------------------------------------------------------------------------
@@ -399,16 +401,19 @@ public class Utilidades {
      * Metodo utilizado para decodificar una cadena de string en base64 aun
      * formato de imagen PNG.
      *
-     * @param imagen64
-     * @param ancho
-     * @param alto
-     * @return
+     * @param imagen64 Este es el String en base64.
+     *
+     * @param ancho Este es el ancho de la imagen.
+     *
+     * @param alto Este es el alto de la imagen.
+     *
+     * @return Devuelve la imagen de tipo ImageIcon.
      */
     public synchronized static ImageIcon imagenDecode64(String imagen64, int ancho, int alto) {
-
+        
         byte[] data = Base64.decodeBase64(imagen64);
 
-        if (Objects.isNull(data) || data.length <= 1) {
+        if (!Base64.isBase64(imagen64) || Objects.isNull(data) || data.length <= 1) {
             return new Imagenes("NoImageTransp 96 x 96.png").getIcono(ancho, alto);
         }
 
@@ -418,7 +423,11 @@ public class Utilidades {
                             ImageIO.read(
                                     new ByteArrayInputStream(data)
                             )
-                    ).getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT)
+                    ).getImage().getScaledInstance(
+                            ancho,
+                            alto,
+                            Image.SCALE_DEFAULT
+                    )
             );
 
         } catch (IOException ex) {
@@ -427,7 +436,11 @@ public class Utilidades {
                     ex.getMessage(),
                     ex
             );
-            return new Imagenes("NoImageTransp 96 x 96.png").getIcono(ancho, alto);
+            return new Imagenes("NoImageTransp 96 x 96.png")
+                    .getIcono(
+                            ancho,
+                            alto
+                    );
         }
     }
 
@@ -512,6 +525,7 @@ public class Utilidades {
      * stringToDate("01.01.2000", "dd.MM.YYY")
      *
      * @param fecha
+     * @param formato
      * @return
      */
     public static Date stringToDate(String fecha, String formato) {
@@ -520,7 +534,7 @@ public class Utilidades {
         Date aux = null;
         try {
             aux = formatoDelTexto.parse(fecha);
-        } catch (Exception ex) {
+        } catch (ParseException ex) {
             LOG.log(
                     Level.SEVERE,
                     "Error al parsear la fecha en el sistema.",
@@ -691,6 +705,8 @@ public class Utilidades {
     //--------------------------------------------------------------------------
     /**
      * Metodo utilizado para centralizar las ventanas del tipo JInternalFrame
+     * 
+     * @param ventana
      */
     public static void centralizar(javax.swing.JInternalFrame ventana) {
         Dimension d = ventana.getDesktopPane().getSize();
@@ -731,6 +747,8 @@ public class Utilidades {
     /**
      * Dado un monto, este metodo devuelve un Array con la lista de cambios del
      * arreglo de coins.
+     * 
+     * TODO Implementar este metodo en el sistema de facturacion.
      *
      * @param amount Monto a menuduzar.
      *
@@ -744,15 +762,14 @@ public class Utilidades {
         Arrays.sort(coins, Comparator.reverseOrder());
 
         ArrayList<Integer> ans = new ArrayList<>(); // List to store selected coins
-
         // Iterate through the coin denominations
-        for (int i = 0; i < coins.length; i++) {
+        for (Integer coin : coins) {
             // Check if the current coin denomination can be used to reduce the remaining amount
-            if (coins[i] <= amount) {
+            if (coin <= amount) {
                 // Repeatedly subtract the coin denomination from the remaining amount
-                while (coins[i] <= amount) {
-                    ans.add(coins[i]); // Add the coin to the list of selected coins
-                    amount -= coins[i]; // Update the remaining amount
+                while (coin <= amount) {
+                    ans.add(coin); // Add the coin to the list of selected coins
+                    amount -= coin; // Update the remaining amount
                 }
             }
         }
@@ -762,11 +779,8 @@ public class Utilidades {
     //--------------------------------------------------------------------------
     public static void abrirURL(String enlace) {
         try {
-            URL url = new URL(enlace);
-
-            Desktop.getDesktop().browse(url.toURI());
-
-        } catch (MalformedURLException | URISyntaxException e1) {
+            Desktop.getDesktop().browse(URI.create(enlace));
+        } catch (MalformedURLException e1) {
             LOG.log(
                     Level.SEVERE,
                     ERROR_EN_LA_URL,
@@ -785,9 +799,8 @@ public class Utilidades {
      */
     public static final String ERROR_EN_LA_URL
             = "Error en la URL.";
-    
-    
-    public static void beep(){
+
+    public static void beep() {
         Toolkit.getDefaultToolkit().beep();
     }
 }

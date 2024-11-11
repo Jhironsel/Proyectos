@@ -4,7 +4,6 @@ import RSMaterialComponent.RSButtonMaterialIconOne;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.sql.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -15,20 +14,21 @@ import javax.swing.JTextField;
 import sur.softsurena.FirebirdEventos.FirebirdEventos;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.metodos.Imagenes;
-import static sur.softsurena.metodos.M_BaseDeDatos.GET_GUID;
 import static sur.softsurena.metodos.M_BaseDeDatos.periodoMaquina;
-import static sur.softsurena.metodos.M_BaseDeDatos.setLicencia;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class frmLogin extends javax.swing.JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private boolean txtUsuarioKeyPress = true;
-    private final ResourceBundle bundle;
+
+    private static ResourceBundle bundle = null;
 
     private static String sistema;
-    
+
     public RSButtonMaterialIconOne getBtnAceptar() {
         return btnAceptar;
     }
@@ -40,11 +40,12 @@ public final class frmLogin extends javax.swing.JFrame {
     public JTextField getTxtUsuario() {
         return txtUsuario;
     }
-    
-    
 
     public frmLogin(String language) {
-        bundle = ResourceBundle.getBundle("sur.softsurena.idioma.mensaje", new Locale(language));
+        bundle = ResourceBundle.getBundle(
+                "sur.softsurena.idioma.mensaje",
+                Locale.forLanguageTag(language)
+        );
         initComponents();
         cargarIconos();
         btnParametros.setVisible(false);//Boton parametros Invisible
@@ -315,7 +316,6 @@ public final class frmLogin extends javax.swing.JFrame {
                 dominio,
                 puerto);
 
-        
         Resultado resultado = Conexion.verificar();
 
         if (!resultado.getEstado()) {
@@ -449,16 +449,17 @@ public final class frmLogin extends javax.swing.JFrame {
         if (miRegistros.txtIdMaquina.getText().equalsIgnoreCase("cancelado")) {
             return;
         }
-        
-        //TODO Que hacer aqui cuando se termina de registrar.
 
+        //TODO Que hacer aqui cuando se termina de registrar.
         miRegistros.dispose();
 
     }
 
     public static void main(String args[]) {
+        Utilidades.beep();
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (javax.swing.UIManager.LookAndFeelInfo info
+                    : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("GTK+".equals(info.getName())) {
                     //GTK+, Nimbus, Metal, CDE/Motif
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -474,12 +475,13 @@ public final class frmLogin extends javax.swing.JFrame {
 
 //        FlatLaf.registerCustomDefaultsSource( "sur.softsurena.themes" );
 //        FlatLightLaf.setup();
-        java.awt.EventQueue.invokeLater(() -> {
-            frmLogin frmLogin = new frmLogin("es");
-            frmLogin.setVisible(true);
-            frmLogin.setLocationRelativeTo(null);
-        });
-
+        java.awt.EventQueue.invokeLater(
+                () -> {
+                    frmLogin frmLogin = new frmLogin("es");
+                    frmLogin.setVisible(true);
+                    frmLogin.setLocationRelativeTo(null);
+                }
+        );
         sistema = System.getProperty("os.name").strip();
     }
 
@@ -490,7 +492,7 @@ public final class frmLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private static javax.swing.JLabel JLSystema;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnParametros;
     private javax.swing.JPanel jPanel1;

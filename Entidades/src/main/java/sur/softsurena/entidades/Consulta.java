@@ -6,11 +6,19 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Consulta extends Paciente {
-    private final int id;
-    private final int id_control_consulta;
+public class Consulta {
+    private final Integer id;
+    private final Paciente paciente;
+    private final Control_Consulta controlConsulta;
     private final Date fecha;
-    private final int turno;
+    private final Integer turno;
     private final Boolean estado;
     private final String usuario;
+
+    @Override
+    public String toString() {
+        return turno.toString();
+    }
+    
+    
 }

@@ -15,6 +15,8 @@ public class Paciente extends Persona {
     private final Boolean cesarea;
     private final Integer tiempoGestacion;
     private final BigDecimal masaCefalica;
+    private final ARS ars;
+    private final Asegurado asegurado;
     
     @Override
     public String toString() {

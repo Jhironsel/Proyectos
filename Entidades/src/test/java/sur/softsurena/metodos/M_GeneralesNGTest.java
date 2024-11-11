@@ -180,8 +180,6 @@ public class M_GeneralesNGTest {
                           """
     )
     public void testGetEntidadByCedula() {
-        //System.out.println("Cedula a consultar: ".concat(cedula));
-
         Generales result = M_Generales.getEntidadByCedula(cedula);
 
         assertEquals(

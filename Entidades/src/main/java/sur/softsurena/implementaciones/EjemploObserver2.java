@@ -11,7 +11,7 @@ public class EjemploObserver2 implements Observer {
 
     @Override
     public void update() {
-        System.out.println("sur.softsurena.implementaciones.EjemploObserver2.update()");
+        
     }
     
 }

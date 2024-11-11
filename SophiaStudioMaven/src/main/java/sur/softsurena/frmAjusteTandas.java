@@ -36,7 +36,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
     Integer ent[] = null;
 
     private void llenarTabla() {
-        tblTabla.setRowHeight(22);
+        tblTandas.setRowHeight(22);
         Object obj[][] = null;
 
         try {
@@ -64,7 +64,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
-        tblTabla.setModel(new javax.swing.table.DefaultTableModel(
+        tblTandas.setModel(new javax.swing.table.DefaultTableModel(
                 obj, new String[]{
                     "Fecha Inicio", "Fecha Final", "Hora Inicio",
                     "Hora Final", "Lunes", "Martes", "Miercoles",
@@ -107,7 +107,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblTabla = new javax.swing.JTable();
+        tblTandas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btnInsertar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -165,8 +165,8 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
             }
         });
 
-        tblTabla.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
-        tblTabla.setModel(new javax.swing.table.DefaultTableModel(
+        tblTandas.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
+        tblTandas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -200,13 +200,12 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblTabla.setRowHeight(20);
-        tblTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblTandas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblTablaMouseClicked(evt);
+                tblTandasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblTabla);
+        jScrollPane1.setViewportView(tblTandas);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Botones de Acción", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
 
@@ -426,7 +425,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lSugerencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+                    .addComponent(lSugerencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -454,7 +453,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                             .addComponent(txtEdadMaxima, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(cbEdadMinimaMaxima)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtCantidad, txtEdadMaxima, txtEdadMinima});
@@ -522,7 +521,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -614,29 +613,29 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
         v_nuevo = false;
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void tblTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTablaMouseClicked
-        dchFechaInicial.setDate(objectToDate(tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 0)));
-        dchFechaFinal.setDate(objectToDate(tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 1)));
-        horaInicial.setTime(Utilidades.objectToTime(tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 2)));
-        horaFinal.setTime(Utilidades.objectToTime(tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 3)));
-        chLunes.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 4));
-        chMartes.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 5));
-        chMiercoles.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 6));
-        chJueves.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 7));
-        chViernes.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 8));
-        chSabado.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 9));
-        chDomingo.setSelected((boolean) tblTabla.getValueAt(
-                tblTabla.getSelectedRow(), 10));
+    private void tblTandasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTandasMouseClicked
+        dchFechaInicial.setDate(objectToDate(tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 0)));
+        dchFechaFinal.setDate(objectToDate(tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 1)));
+        horaInicial.setTime(Utilidades.objectToTime(tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 2)));
+        horaFinal.setTime(Utilidades.objectToTime(tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 3)));
+        chLunes.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 4));
+        chMartes.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 5));
+        chMiercoles.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 6));
+        chJueves.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 7));
+        chViernes.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 8));
+        chSabado.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 9));
+        chDomingo.setSelected((boolean) tblTandas.getValueAt(
+                tblTandas.getSelectedRow(), 10));
 //        ResultSet rs = getTandas(ent[tblTabla.getSelectedRow()]);
         ResultSet rs = null;
         try {
@@ -649,7 +648,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
-    }//GEN-LAST:event_tblTablaMouseClicked
+    }//GEN-LAST:event_tblTandasMouseClicked
     boolean v_nuevo = false;
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (cbEdadMinimaMaxima.isSelected()) {
@@ -677,9 +676,19 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
 
         Tanda miTanda = Tanda
                 .builder()
-                .id_tanda(((Tanda) tblTabla.getValueAt(tblTabla.getSelectedRow(), 0)).getId_tanda())
-                .anno_inicial(new java.sql.Date(dchFechaInicial.getCalendar().getTimeInMillis()))
-                .anno_final(new java.sql.Date(dchFechaFinal.getCalendar().getTimeInMillis()))
+                .id_tanda(
+                        ((Tanda) tblTandas.getValueAt(tblTandas.getSelectedRow(), 0)).getId_tanda()
+                )
+                .anno_inicial(
+                        new java.sql.Date(
+                                dchFechaInicial.getCalendar().getTimeInMillis()
+                        )
+                )
+                .anno_final(
+                        new java.sql.Date(
+                                dchFechaFinal.getCalendar().getTimeInMillis()
+                        )
+                )
                 .hora_inicial(
                         new java.sql.Time(
                                 horaInicial.getCalendarWithTime(
@@ -701,14 +710,20 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                 .viernes(chViernes.isSelected())
                 .sabados(chSabado.isSelected())
                 .domingos(chDomingo.isSelected())
-                .cantidad_estudiantes(Integer.valueOf(txtCantidad.getText()))
+                .cantidad_estudiantes(
+                        Integer.valueOf(
+                                txtCantidad.getText()
+                        )
+                )
                 .edad_minima(Integer.valueOf(txtEdadMinima.getText()))
                 .edad_maxima(Integer.valueOf(txtEdadMaxima.getText()))
                 .con_edad(cbEdadMinimaMaxima.isSelected())
                 .build();
-        System.out.println(miTanda);
         
-        Resultado resultado = (v_nuevo ? agregarTanda(miTanda) : modificarTanda(miTanda));
+        Resultado resultado = (
+                v_nuevo ? 
+                agregarTanda(miTanda) : modificarTanda(miTanda)
+                );
         
         JOptionPane.showInternalMessageDialog(
                 this, 
@@ -828,7 +843,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lSugerencia;
-    private javax.swing.JTable tblTabla;
+    private javax.swing.JTable tblTandas;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtEdadMaxima;
     private javax.swing.JTextField txtEdadMinima;

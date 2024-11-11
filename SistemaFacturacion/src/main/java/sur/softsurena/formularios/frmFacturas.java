@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -36,6 +37,8 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
+import sur.softsurena.entidades.Precio;
+import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Turno;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.formularios.frmPrincipal.mnuMovimientosNuevaFactura;
@@ -44,7 +47,9 @@ import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.metodos.M_Categoria.getCategoriaActivas;
 import static sur.softsurena.metodos.M_Categoria.getCategorias;
 import static sur.softsurena.metodos.M_Cliente.getPersonasClientes;
-import static sur.softsurena.metodos.M_Producto.existeProducto;
+import sur.softsurena.metodos.M_Precio;
+import sur.softsurena.metodos.M_Producto;
+import static sur.softsurena.metodos.M_Producto.getProductos;
 import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
 import static sur.softsurena.metodos.M_Turno.turnosActivoByUsuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
@@ -59,7 +64,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private static final long serialVersionUID = 1L;
 
-    private final Usuario usuario;
+    private static Usuario usuario = null;
 
     private Integer idCliente;
 
@@ -67,19 +72,19 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private JButton btn, boton;
 
-    private Factura factura;
+    private static Factura factura;
 
     private final String titulos[] = {"Cantidad", "Descripcion", "Montos"};
 
     private DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-    private final Object[] registro = new Object[3];
+    private final static Object[] registro = new Object[3];
 
     private final Properties propiedad;
 
     private final DefaultTableCellRenderer tcr;
 
-    private List<D_Factura> detalleFacturaList;
+    private static List<D_Factura> detalleFacturaList;
 
     private static Turno turno;
 
@@ -194,10 +199,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         rbtContado = new javax.swing.JRadioButton();
         rbtCredito = new javax.swing.JRadioButton();
         btnBuscarCliente = new newscomponents.RSButtonGradientIcon_new();
-        cmbCliente = new javax.swing.JComboBox();
-        jPanel14 = new javax.swing.JPanel();
-        JlCantidad1 = new javax.swing.JLabel();
-        JlCantidad2 = new javax.swing.JLabel();
+        cmbCliente = new javax.swing.JComboBox<>();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDetalle = new JTable(){
             @Override
@@ -563,24 +565,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         });
         jpCliente.add(cmbCliente);
 
-        org.jdesktop.swingx.HorizontalLayout horizontalLayout1 = new org.jdesktop.swingx.HorizontalLayout();
-        horizontalLayout1.setGap(20);
-        jPanel14.setLayout(horizontalLayout1);
-
-        JlCantidad1.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        JlCantidad1.setText("w");
-        JlCantidad1.setToolTipText("");
-        JlCantidad1.setMaximumSize(new java.awt.Dimension(360, 24));
-        jPanel14.add(JlCantidad1);
-
-        JlCantidad2.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        JlCantidad2.setText("w");
-        JlCantidad2.setToolTipText("");
-        JlCantidad2.setMaximumSize(new java.awt.Dimension(360, 26));
-        jPanel14.add(JlCantidad2);
-
-        jpCliente.add(jPanel14);
-
         jScrollPane5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jScrollPane5.setMaximumSize(new java.awt.Dimension(452, 300));
         jScrollPane5.setPreferredSize(new java.awt.Dimension(452, 200));
@@ -657,10 +641,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jpFacturasLayout.setVerticalGroup(
             jpFacturasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpFacturasLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jpCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jpCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -738,7 +722,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -788,26 +772,45 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         txtCriterio.requestFocusInWindow();
     }//GEN-LAST:event_formInternalFrameActivated
 
+    /**
+     * Este metodo permite hacer busqueda de productos en la base de datos y en
+     * la tabla de la factura que se esta realizando.
+     *
+     * 1) Permite cambiar la forma de buscar un producto por codigo.
+     *
+     * 2) Permite cambiar la forma de buscar un producto por descripcion.
+     *
+     * 3) Permite cambiar la forma de buscar un producto en la lista de detalle
+     * de la factura.
+     *
+     * 4) Limpia los resultados de la busqueda del sistema, cuando el comboBox
+     * de criterio esta en el index 0.
+     *
+     *
+     * @param evt No se esta utilizado en el sistema.
+     */
     private void txtCriterioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCriterioActionPerformed
-        //Cambio de tipo de criterio del comboBox
         if (txtCriterio.getText().trim().equals(",")) {
             cbCriterio.setSelectedIndex(1);
             txtCriterio.setText("");
             return;
         }
 
+//-----------------------------------------------------------------------------1
         if (txtCriterio.getText().trim().equals(".")) {
             cbCriterio.setSelectedIndex(2);
             txtCriterio.setText("");
             return;
         }
 
+//-----------------------------------------------------------------------------2
         if (txtCriterio.getText().trim().equals("-")) {
             cbCriterio.setSelectedIndex(3);
             txtCriterio.setText("");
             return;
         }
 
+//-----------------------------------------------------------------------------3
         if (cbCriterio.getSelectedIndex() == 0) {
             jpProductos.removeAll();
             jpProductos.repaint();
@@ -815,84 +818,100 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             return;
         }
 
-        String sql = "select Id, Codigo, Descripcion, imagePath "
-                + "from TABLA_PRODUCTOS ";
+//-----------------------------------------------------------------------------4
+        if (cbCriterio.getSelectedIndex() == 1
+                || cbCriterio.getSelectedIndex() == 2) {
 
-        if (cbCriterio.getSelectedIndex() == 1 || cbCriterio.getSelectedIndex() == 2) {
+            List<Producto> listaProductos = getProductos(
+                    FiltroBusqueda
+                            .builder()
+                            .build()
+            );
 
-            if (cbCriterio.getSelectedIndex() == 1) {
-                sql = "where Codigo = '" + txtCriterio.getText().trim() + "'";
-            }
-
-            if (cbCriterio.getSelectedIndex() == 2) {
-                sql = "where Descripcion CONTAINING '" + txtCriterio.getText().trim() + "'";
-            }
-
-//            ResultSet rs = getConsulta(sql);
-            ResultSet rs = null;
+            Predicate<Producto> predicado = null;
 
             jpProductos.removeAll();
             jpProductos.repaint();
             jpProductos.setLayout(new FlowLayout());
 
-            //TODO Crear la consulta que trae los productos que cumpla los crterios.
-            try {
-                while (rs.next()) {
-                    boton = new JButton(rs.getString("Descripcion").concat("                   ").substring(0, 17));
-                    boton.setToolTipText(rs.getString("IdProducto"));
-                    boton.setMnemonic('p');
-
-                    String im = "";
-
-                    if (rs.getString("imagepath") != null) {
-                        im = rs.getString("imagepath");
-                    }
-
-                    ImageIcon imagen = new ImageIcon(im);
-
-                    if (imagen.getIconHeight() == -1) {
-                        imagen = new ImageIcon("sur/softsurena/imagenes/NoImageTransp 96 x 96.png");
-                    }
-                    Icon icon = new ImageIcon(imagen.getImage().getScaledInstance(
-                            64,
-                            64,
-                            Image.SCALE_DEFAULT));
-                    imagen.getImage().flush();
-
-                    boton.setIcon(icon);
-
-                    boton.addActionListener(this);
-
-//                    boton.setIconTextGap(2);
-//                    boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//                    boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-//                    boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-//                    boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-                    int ancho = 170, alto = 100;
-
-                    boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
-                    boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
-                    boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
-
-//                    boton.setLayout(new BorderLayout(8, 8));
-//                    boton.requestFocusInWindow();
-                    jpProductos.add(boton);
-                    jpProductos.repaint();
-                    jpProductos.validate();
-                    boton.requestFocusInWindow();
-                }
-            } catch (SQLException ex) {
-                LOG.log(Level.SEVERE, "Error al cargar los productos.", ex);
+            if (cbCriterio.getSelectedIndex() == 1) {
+                predicado = (f) -> f.getCodigo().contains(
+                        txtCriterio.getText().trim()
+                );
             }
+
+            if (cbCriterio.getSelectedIndex() == 2) {
+                predicado = (f) -> f.getDescripcion().contains(
+                        txtCriterio.getText().trim()
+                );
+            }
+
+            listaProductos.stream().filter(predicado).forEach(
+                    producto -> {
+                        boton = new JButton(
+                                producto
+                                        .getDescripcion()
+                                        .concat("                   ")
+                                        .substring(0, 17)
+                        );
+                        boton.setToolTipText(producto.getId().toString());
+                        boton.setMnemonic('p');
+
+                        ImageIcon imagen = new ImageIcon(
+                                Utilidades.imagenDecode64(
+                                        producto.getImagen().getImagen64(),
+                                        64,
+                                        64
+                                ).getImage()
+                        );
+
+                        if (imagen.getIconHeight() <= 0) {
+                            imagen = new ImageIcon(
+                                    "sur/softsurena/imagenes/NoImageTransp 96 x 96.png"
+                            );
+                        }
+
+                        Icon icon = new ImageIcon(imagen.getImage());
+
+                        imagen.getImage().flush();
+
+                        boton.setIcon(icon);
+
+                        boton.addActionListener(this);
+
+                        boton.setIconTextGap(2);
+                        boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                        boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                        boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                        boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                        int ancho = 170, alto = 100;
+
+                        boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
+                        boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
+                        boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
+
+                        boton.setLayout(new BorderLayout(8, 8));
+                        boton.requestFocusInWindow();
+
+                        jpProductos.add(boton);
+                        jpProductos.repaint();
+                        jpProductos.validate();
+
+                        boton.requestFocusInWindow();
+                    }
+            );
         }
 
+//-----------------------------------------------------------------------------5
         if (cbCriterio.getSelectedIndex() == 3) {
 
             if (txtCriterio.getText().isBlank()) {
                 return;
             }
 
-            if (!existeProducto(txtCriterio.getText().trim())) {
+            if (!M_Producto.existeProducto(
+                    txtCriterio.getText().trim()
+            )) {
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "El Producto No Existe...",
@@ -903,6 +922,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 txtCriterio.setText("");
                 return;
             }
+
             //Detalle de Factura
             int num = tblDetalle.getRowCount();
             if (num == 0) {
@@ -918,7 +938,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             boolean dime = true;
             for (int i = 0; i < num; i++) {
                 //TODO Esto no tiene sentido.
-                if (factura.getId().equals(txtCriterio.getText().trim())) {
+                if (factura.getId().toString().equals(
+                        txtCriterio.getText().trim()
+                )) {
                     tblDetalle.setRowSelectionInterval(i, i);
                     dime = false;
                     txtCriterio.setText("");
@@ -936,7 +958,13 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 );
             }
         }
+//-----------------------------------------------------------------------------6
     }//GEN-LAST:event_txtCriterioActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
     private void rbtCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtCreditoActionPerformed
 
         if (evt == null) {
@@ -966,9 +994,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (cmbCliente.getItemCount() > 0) {
             cmbCliente.setSelectedIndex(0);
         }
-
-        JlCantidad1.setText("Limt Cred.:$0.00");
-        JlCantidad2.setText("Deud Actu.:$0.00");
     }//GEN-LAST:event_rbtContadoActionPerformed
 
     private void cbTodosProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosProductosActionPerformed
@@ -1045,21 +1070,16 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (!cmbCliente.isEnabled()) {
             return;
         }
-        estadoCliente();
     }//GEN-LAST:event_cmbClienteActionPerformed
 
     private void cmbClienteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClienteItemStateChanged
         if (cmbCliente.getSelectedIndex() == 0) {
-            JlCantidad1.setVisible(false);
-            JlCantidad2.setVisible(false);
             jpCliente.setSize(265, 86);
             jpCliente.setPreferredSize(new Dimension(265, 86));
             jpCliente.setMinimumSize(new Dimension(265, 86));
             jpCliente.setMaximumSize(new Dimension(265, 86));
 
         } else {
-            JlCantidad1.setVisible(true);
-            JlCantidad2.setVisible(true);
             jpCliente.setSize(265, 135);
             jpCliente.setPreferredSize(new Dimension(265, 135));
             jpCliente.setMinimumSize(new Dimension(265, 135));
@@ -1217,7 +1237,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             for (int i = 0; i <= cmbCliente.getItemCount() + 1; i++) {
 
-                if (((Cliente) cmbCliente.getItemAt(i)).getId_persona() == getIdCliente()) {
+                if (cmbCliente.getItemAt(i).getId_persona().equals(
+                        getIdCliente()
+                )) {
                     cmbCliente.setSelectedIndex(i);
                     totales();
                     break;
@@ -1308,14 +1330,23 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         miPrint.setVisible(true);
     }//GEN-LAST:event_btnImpresionUltimaActionPerformed
 
+    /**
+     * Metodo encargado de grabar la factura en el sistema.
+     *
+     * 1) Obtenemos el numero de la factura en el sistema.
+     *
+     * 2) Verificamos si la factura es acredito y haya un cliente seleccionado.
+     * Si esto se cumple hacemos que cajero seleccione un cliente.
+     *
+     * 3) TODO esta parte debe de verificar si la factura se encuentra en la bd.
+     * La factura debe de ir creandose en la base de datos.
+     *
+     * @param evt No utilizado en este metodo.
+     */
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        //Obtener el identificador de la Factura.
         Integer idFactura = Integer.valueOf(txtIdFactura.getText());
+//-----------------------------------------------------------------------------1
 
-        /*
-         * Validaciones Si credicto es verdadero y el cmbClientes es generico
-         * debe seleccionar un cliente de la lista.
-         */
         if (rbtCredito.isSelected() && cmbCliente.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1324,13 +1355,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                     JOptionPane.ERROR_MESSAGE
             );
             cmbCliente.requestFocusInWindow();
+            cmbCliente.showPopup();
             return;
         }
+//-----------------------------------------------------------------------------2
 
-        /*
-         * La cantidad del txtTotalCantidad debe estar presente, no se debe
-         * digitar en el.
-         */
         if (Utilidades.controlDouble(txtTotalCantidad.getValue()) == 0.0) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1341,6 +1370,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             txtCriterio.requestFocusInWindow();
             return;
         }
+//-----------------------------------------------------------------------------3
 
         double total = Utilidades.controlDouble(txtTotalValor.getValue());
 
@@ -1364,8 +1394,14 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 }
             }
         }
+//-----------------------------------------------------------------------------4
 
-        frmCalculoEfectivo miEfe = new frmCalculoEfectivo(null, true, total, rbtCredito.isSelected());
+        frmCalculoEfectivo miEfe = new frmCalculoEfectivo(
+                null,
+                true,
+                total,
+                rbtCredito.isSelected()
+        );
 
         miEfe.setLocationRelativeTo(null);
         miEfe.setVisible(true);
@@ -1373,10 +1409,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (miEfe.getResp() == 0) {
             return;
         }
+//-----------------------------------------------------------------------------5
 
-        //Adicionamos un consecutivo a la Factura oh numero d Factura proxima
-        char estado = rbtCredito.isSelected() ? 'c' : 'p';
-
+//        char estado = rbtCredito.isSelected() ? 'c' : 'p';
+//
 //        if (factura.getHeaderFactura().getEstado() == 'T') {
 //            //Preparar Factura Temporal
 //            HeaderFactura hf = HeaderFactura.builder().
@@ -1394,21 +1430,21 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                return;
 //            } else {
 //                for (int i = 1; i <= factura.getDetalleFactura().size(); i++) {
-////                    if (!agregarOrInsertarDetalleFactura(
-////                            facturas.getId(),
-////                            i,
-////                            facturas.getDetalleFactura().get(i).getIdProducto(),
-////                            facturas.getDetalleFactura().get(i).getPrecio(),
-////                            facturas.getDetalleFactura().get(i).getCantidad())) {
-////
-////                        borrarFactura(idFactura);
-////
-////                        JOptionPane.showInternalMessageDialog(
-////                              this,
-////                              "Ocurrio un error Temporal Detallle"
-////                        );
-////                        return;
-////                    }
+//                    if (!agregarOrInsertarDetalleFactura(
+//                            facturas.getId(),
+//                            i,
+//                            facturas.getDetalleFactura().get(i).getIdProducto(),
+//                            facturas.getDetalleFactura().get(i).getPrecio(),
+//                            facturas.getDetalleFactura().get(i).getCantidad())) {
+//
+//                        borrarFactura(idFactura);
+//
+//                        JOptionPane.showInternalMessageDialog(
+//                              this,
+//                              "Ocurrio un error Temporal Detallle"
+//                        );
+//                        return;
+//                    }
 //                }
 //            }
 //        } else {
@@ -1453,7 +1489,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //            }
 //        }
 //        txtIdFactura.setText("" + getNumFac(getIdUsuario(), getTurno()));
-        Map parametros = new HashMap();
+//----------------------------------------------------------------------------
+        Map<String, Integer> parametros = new HashMap<>();
 
         parametros.put("idFactura", idFactura);
 
@@ -1463,8 +1500,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 "/Reportes/factura.jasper",
                 parametros,
                 frmPrincipal.jPanelImpresion,
-                frmPrincipal.jprImpresion).start();
-
+                frmPrincipal.jprImpresion
+        ).start();
+//----------------------------------------------------------------------------
         totales();
 
         rbtContado.doClick();
@@ -1472,6 +1510,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         nombreCliente = "";
     }//GEN-LAST:event_btnGrabarActionPerformed
 
+    /**
+     *
+     * @param evt No se esta utilizando en el metodo.
+     */
     private void btnLimpiarF12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarF12ActionPerformed
         frmDetalleQuitarEliminar miForm = new frmDetalleQuitarEliminar(null, true);
 
@@ -1499,7 +1541,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         getClientesCombo();
 
         for (int i = 0; i < cmbCliente.getItemCount(); i++) {
-            if (((Cliente) cmbCliente.getItemAt(i)).getId_persona() == cliente.getId_persona()) {
+            if (cmbCliente.getItemAt(i).getId_persona().equals(
+                    cliente.getId_persona()
+            )) {
                 cmbCliente.setSelectedIndex(i);
                 break;
             }
@@ -1554,27 +1598,36 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      * Este metodo detecta varias acciones que realiza el usuario al crear una
      * factura.
      *
-     * @param actionEvent
+     * 1) Validamos que el parametro del metodo no sea nulo.
+     *
+     * 2) Obtenemos las propiedades del boton pulsado.
+     *
+     * 3) Condicional que se cumple cuando Mnemonic es P
+     *
+     * 4) Condicional que se cumple cuando Mnemonic es C
+     *
+     *
+     * @param actionEvent este parametro no puede ser nulo y es utilizado para
+     * obtener informacion del boton pulsado en los productos consultados.
+     *
      */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        //Parametro no puede ser nulo.
         if (actionEvent == null) {
             return;
         }
-
-        //Se obtiene el boton presionado.
+//-----------------------------------------------------------------------------1
         try {
             btn = (JButton) actionEvent.getSource();
         } catch (Exception eb) {
             return;
         }
-
+//-----------------------------------------------------------------------------2
         /*
          * La siguiente condicional es utilizada para obtener el producto a 
          * facturar. 
          */
-        if (btn.getMnemonic() == 80) {//Para cuando btn en su Mnemonic es P
+        if (btn.getMnemonic() == 80) { //Para cuando btn en su Mnemonic es P
             /*
              * El siguiente bucle permite obtener la cantidad del producto a
              * facturar.
@@ -1584,26 +1637,24 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
              * cantidad, parseandola, la cual es de tipo Double.
              *
              * Si introduce una cantidad valida el ciclo se rompe.
-             * 
+             *
              * la variable cantidad es la cantidad ingresada por el usuario de 
              * un producto.
              *
              */
-            if (validarCantidad().getEstado()) {
+            Resultado validarCantidad = validarCantidad();
+            if (validarCantidad.getEstado()) {
                 return;
             }
 
             String idProducto = btn.getToolTipText();
 
-            ResultSet rs = null;
-
-            double precio = 0;
-            try {
-                rs.next();
-                precio = rs.getDouble("Precio");
-            } catch (SQLException ex) {
-                LOG.log(Level.SEVERE, "Error al obtener precio.", ex);
-            }//Fin de obtener el precio del producto
+            Precio precio = M_Precio.getEntity(
+                    FiltroBusqueda
+                            .builder()
+                            .id(Integer.valueOf(idProducto))
+                            .build()
+            );
 
 //            facturas.add(
 //                    tblDetalle.getRowCount(),
@@ -1617,12 +1668,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                    )
 //                    null
 //            );//Cantidad
-            txtPrecio.setValue(precio);
+            txtPrecio.setValue(precio.getPrecio());
 
-            registro[0] = validarCantidad().getCantidadDecimal();
+            registro[0] = validarCantidad.getCantidadDecimal();
             registro[1] = btn.getText();
             registro[2] = Utilidades.priceWithDecimal(
-                    precio * validarCantidad().getCantidadDecimal()
+                    precio.getPrecio().doubleValue() * validarCantidad.getCantidadDecimal()
             );
 
             miTabla.addRow(registro);
@@ -1632,7 +1683,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jpProductos.repaint();
             jpProductos.setLayout(new FlowLayout());
 
-            tblDetalle.changeSelection(tblDetalle.getRowCount() - 1, 0, false, false);//Seleccionar ultimo elemento
+            //Seleccionar ultimo elemento
+            tblDetalle.changeSelection(tblDetalle.getRowCount() - 1, 0, false, false);
             tblDetalle.requestFocusInWindow();
 
             totales();
@@ -1641,63 +1693,67 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             return;
         }//Fin de la inclusion de producto....
 
-        int idCategoria = Integer.parseInt(btn.getToolTipText());
+//-----------------------------------------------------------------------------3
+        if (btn.getMnemonic() == 67) {//Para cuando btn en su Mnemonic es C
+            int idCategoria = Integer.parseInt(btn.getToolTipText());
 
-        jpProductos.removeAll();
-        jpProductos.repaint();
-        jpProductos.setLayout(new FlowLayout());
-
-        getProductosByCategoria(
-                idCategoria,
-                cbTodosProductos.isSelected()).stream().forEach(producto -> {
-
-            boton = new JButton(producto.getDescripcion());
-            boton.setToolTipText(producto.getId().toString());
-
-            boton.setMnemonic('P');
-
-            ImageIcon imagen = null;
-
-            if (Objects.isNull(producto.getImagen().getImagen64())) {
-                imagen = new ImageIcon("sur/softsurena/imagenes/NoImageTransp 96 x 96.png");
-            } else {
-                imagen = imagenDecode64(producto.getImagen().getImagen64(), 96, 96);
-            }
-
-            Icon icon = new ImageIcon(
-                    imagen.getImage().getScaledInstance(
-                            64,
-                            64,
-                            Image.SCALE_DEFAULT
-                    )
-            );
-
-            imagen.getImage().flush();
-
-            boton.setIcon(icon);
-
-            boton.addActionListener(this);
-
-            boton.setIconTextGap(2);
-            boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-            boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-            boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-            int ancho = 170, alto = 100;
-
-            boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
-            boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
-            boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
-
-            boton.setLayout(new BorderLayout(8, 8));
-
-            jpProductos.add(boton);
+            jpProductos.removeAll();
             jpProductos.repaint();
-            jpProductos.validate();
+            jpProductos.setLayout(new FlowLayout());
 
-        });
+            getProductosByCategoria(
+                    idCategoria,
+                    cbTodosProductos.isSelected()).stream().forEach(
+                    producto -> {
 
+                        boton = new JButton(producto.getDescripcion());
+                        boton.setToolTipText(producto.getId().toString());
+
+                        boton.setMnemonic('P');
+
+                        ImageIcon imagen = null;
+
+                        if (Objects.isNull(producto.getImagen().getImagen64())) {
+                            imagen = new ImageIcon("sur/softsurena/imagenes/NoImageTransp 96 x 96.png");
+                        } else {
+                            imagen = imagenDecode64(producto.getImagen().getImagen64(), 96, 96);
+                        }
+
+                        Icon icon = new ImageIcon(
+                                imagen.getImage().getScaledInstance(
+                                        64,
+                                        64,
+                                        Image.SCALE_DEFAULT
+                                )
+                        );
+
+                        imagen.getImage().flush();
+
+                        boton.setIcon(icon);
+
+                        boton.addActionListener(this);
+
+                        boton.setIconTextGap(2);
+                        boton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                        boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                        boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                        boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+                        int ancho = 170, alto = 100;
+
+                        boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
+                        boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
+                        boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
+
+                        boton.setLayout(new BorderLayout(8, 8));
+
+                        jpProductos.add(boton);
+                        jpProductos.repaint();
+                        jpProductos.validate();
+
+                    }
+            );
+        }
     }//Fin de actionPerformed
 
     private void repararRegistro() {
@@ -1762,7 +1818,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         categoriasList.stream().forEach(
                 categoria -> {
                     //Obteniendo la imagen de la categoria.
-                    ImageIcon imagen = Utilidades.imagenDecode64(categoria.getImage_texto(), 64, 64);
+                    ImageIcon imagen = Utilidades.imagenDecode64(
+                            categoria.getImage_texto(),
+                            64,
+                            64
+                    );
 
                     if (imagen.getIconHeight() == -1) {
                         imagen = new Imagenes("NoImageTransp 96 x 96.png").getIcono();
@@ -1806,63 +1866,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }
 
     /**
-     * Metodo que consulta los estados del cliente a consultar.
-     */
-    private void estadoCliente() {
-        //Obtenemos el ID de la persona
-        int idPersona = 0;
-        try {
-            idPersona = ((Cliente) cmbCliente.getSelectedItem()).getId_persona();
-        } catch (Exception ex) {
-            idPersona = 0;
-        }
-
-        System.out.println("idPersona del cliente? = " + idPersona);
-
-        //TODO esta trabajando en esta parte.
-//        ResultSet rs = getClientesPorDeudaCredito(idPersona);
-//
-//        int resp = JOptionPane.NO_OPTION;
-//
-//        try {
-//            rs.next();
-//            JlCantidad1.setText("Limt Cred.:$"
-//                    + Utilidades.priceWithDecimal(rs.getDouble("credito")));
-//            JlCantidad2.setText("Deud Actu.:$"
-//                    + Utilidades.priceWithDecimal(rs.getDouble("deudaActual")));
-//            var valorCredito = rs.getDouble("credito");
-//            if (idPersona != 0 && rbtCredito.isSelected()) {
-//                resp = JOptionPane.showInternalConfirmDialog(this, "Cliente: " + rs.getString("nombres")
-//                        + "\nSu credito es de: " + "RD$" + rs.getString("credito")
-//                        + "\nDesea Continuar?",
-//                        "Credito insuficiente", JOptionPane.YES_NO_OPTION);
-//            }
-//        } catch (SQLException ex) {
-//            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-//        }
-//
-//        switch (resp) {
-//            case JOptionPane.OK_OPTION -> {
-//                frmAutorizacion miAut = new frmAutorizacion(null, true);
-//                miAut.setLocationRelativeTo(null);
-//                miAut.setVisible(true);
-//                
-//                //Si la Autenticacion falla emitimos un mensaje de Usuario no valido.
-//                if (!miAut.isAceptado()) {
-//                    rbtContadoActionPerformed(null);
-//                }
-//            }
-//
-//            case JOptionPane.NO_OPTION -> {
-//                rbtContado.setSelected(true);
-//                rbtContadoActionPerformed(null);
-//                rbtContado.validate();
-//                rbtContado.revalidate();
-//            }
-//        }
-    }
-
-    /**
      * Este metodo se esta ejecutando en dos metodos, son:
      * formInternalFrameOpened: Permite cargar la lista de los clientes en el
      * JComboBox al abrirse el Formulario.
@@ -1888,7 +1891,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                     cmbCliente.addItem(cliente);
                 }
         );
-        
+
         if (cmbCliente.getItemCount() > 0) {
             cmbCliente.setSelectedIndex(0);
         }
@@ -1936,8 +1939,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JlCantidad1;
-    private javax.swing.JLabel JlCantidad2;
     private newscomponents.RSButtonGradientIcon_new btnBuscarCliente;
     private newscomponents.RSButtonGradientIcon_new btnBuscarTemporal;
     private newscomponents.RSButtonGradientIcon_new btnGastos;
@@ -1951,7 +1952,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private javax.swing.JCheckBox cbPrevista;
     private javax.swing.JCheckBox cbTodos;
     private javax.swing.JCheckBox cbTodosProductos;
-    private javax.swing.JComboBox cmbCliente;
+    private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1960,7 +1961,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2042,9 +2042,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         } while (bandera);//Fin del bucle.
 
-        return Resultado.builder().
-                cantidadDecimal(cantidad).
-                estado(bandera)
+        return Resultado
+                .builder()
+                .cantidadDecimal(cantidad)
+                .estado(bandera)
                 .build();
     }
 

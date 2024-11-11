@@ -1133,8 +1133,12 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         frmDatosNacimiento n = new frmDatosNacimiento(null, true);
 
-        n.txtCedula.setValue(new Categorias(((Categorias) txtCedula.getValue()).getId(),
-                ((Categorias) txtCedula.getValue()).getDescripcion()));
+        n.txtCedula.setValue(
+                new Categorias(
+                        ((Categorias) txtCedula.getValue()).getId(),
+                        ((Categorias) txtCedula.getValue()).getDescripcion()
+                )
+        );
         n.setLocationRelativeTo(null);
         n.setVisible(true);
     }//GEN-LAST:event_btnDatosNacimientoActionPerformed
@@ -1295,7 +1299,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnValidaCedulaPacienteActionPerformed
 
     private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
-        // TODO add your handling code here:
+        txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1442,9 +1446,12 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
             txtCedulaPadre.setValue(padre);
 
-            txtCedula.setValue(new Categorias(
-                    ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId(),
-                    ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getDescripcion()));
+            txtCedula.setValue(
+                    new Categorias(
+                            ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId(),
+                            ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getDescripcion()
+                    )
+            );
 
             txtPNombre.setText(String.valueOf(tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 3)));
             txtApellidos.setText(String.valueOf(tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 4)));

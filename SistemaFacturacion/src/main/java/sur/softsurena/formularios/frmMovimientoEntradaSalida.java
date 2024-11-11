@@ -20,7 +20,9 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
         implements Runnable {
 
-    private Object registro[] = new Object[3];
+    private static final long serialVersionUID = 1L;
+
+    private final Object registro[] = new Object[3];
     private DefaultTableModel miTabla;
 
     public frmMovimientoEntradaSalida() {
@@ -145,7 +147,7 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
                             "Reportes/MovimientoES.jasper"
                     );
 
-            Map parametros = new HashMap();
+            Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha", fecha);
 
             JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros);

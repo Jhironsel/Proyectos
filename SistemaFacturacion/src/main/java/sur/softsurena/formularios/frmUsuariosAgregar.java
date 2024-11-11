@@ -92,11 +92,6 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         txtUserName.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         txtUserName.setName("txtUserName"); // NOI18N
         txtUserName.setPlaceholder("ID Usuario");
-        txtUserName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtUserNameFocusLost(evt);
-            }
-        });
         txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUserNameActionPerformed(evt);
@@ -981,11 +976,6 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btnEditarTagActionPerformed
 
-    private void txtUserNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUserNameFocusLost
-        // TODO Seria bueno cargar los roles que tiene el supuesto usuario a 
-        // registrar, como medida de seguridad, puede ser que algun rol se quede
-        // registrado en el sistema.
-    }//GEN-LAST:event_txtUserNameFocusLost
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarRol;

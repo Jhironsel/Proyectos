@@ -4,13 +4,26 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
+import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmEmpresaDatos extends javax.swing.JInternalFrame {
-    
-    public frmEmpresaDatos() {
+
+    private static final long serialVersionUID = 1L;
+
+    private final File file, directorio;
+
+    public frmEmpresaDatos() throws IOException {
         initComponents();
+        file = new File("ArchivosConfiguracion/Empresa.ini");
+        directorio = new File("ArchivosConfiguracion\\");
+        if (!directorio.exists()) {
+            directorio.mkdir();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +120,6 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
 
         btnAceptar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnAceptar1.setForeground(new java.awt.Color(1, 1, 1));
-        btnAceptar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Aceptar 32 x 32.png"))); // NOI18N
         btnAceptar1.setMnemonic('a');
         btnAceptar1.setText("Aceptar");
         btnAceptar1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -126,7 +138,6 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
 
         btnCancelar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnCancelar1.setForeground(new java.awt.Color(1, 1, 1));
-        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Cancelar 32 x 32.png"))); // NOI18N
         btnCancelar1.setMnemonic('c');
         btnCancelar1.setText("Cancelar");
         btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
@@ -238,7 +249,7 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
 
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
         grabarConfiguracion(txtNombreEmpresa.getText(),
-                txtTelefonoEmpresa.getText(),txtCorreo.getText(),
+                txtTelefonoEmpresa.getText(), txtCorreo.getText(),
                 txtRNC.getText(), txtDireccion.getText(), txtTipoEmpresa.getText(),
                 txtPorCiento.getText());
         dispose();
@@ -265,21 +276,25 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtTelefonoEmpresa;
     private javax.swing.JTextField txtTipoEmpresa;
     // End of variables declaration//GEN-END:variables
-    
-    private void cargarConfiguracion() {
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
 
-        try {
-            if(System.getProperty("os.name").equals("Linux")){
-                archivo = new File("/home/"+System.getProperty("user.name")+"/Empresa.ini");
-            }else{
-                archivo = new File("c:\\Empresa.ini");
+    private void cargarConfiguracion() {
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                Utilidades.LOG.getLogger(
+                        frmEmpresaDatos.class.getName()
+                ).log(
+                        Level.SEVERE, 
+                        "No puede leerse el archivo Empresa.ini", 
+                        ex
+                );
             }
-            
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
+        }
+        
+        try (FileReader fr = new FileReader(file); 
+                BufferedReader br = new BufferedReader(fr);) {
 
             String linea;
 
@@ -305,55 +320,49 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
                 if (linea.startsWith("PorCiento =")) {
                     txtPorCiento.setText(new String(linea.substring(11)));
                 }
-                
+
             }
 
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "<Definir error.>", ex);
-        } finally {
-            try {
-                if (fr != null) 
-                {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                
-            }
+        } catch (IOException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al no encontrar el archivo de entrada o salida.",
+                    ex
+            );
         }
     }
+
+    /**
+     *
+     * @param nombre
+     * @param Telefono
+     * @param Correo
+     * @param RNC
+     * @param Direccion
+     * @param TipoEmpresa
+     * @param PorCiento
+     */
     private void grabarConfiguracion(String nombre,
             String Telefono, String Correo, String RNC,
             String Direccion, String TipoEmpresa,
-            String PorCiento) {
-        
-        //TODO Tratar de usar el TRY WITH RESOURCES
-//        try (FileWriter fw ; PrintWriter pw = null;){
-//            if(System.getProperty("os.name").equals("Linux")){
-//                fw = new FileWriter("/home/"+System.getProperty("user.name")+"/Empresa.ini");
-//            }else{
-//                fw = new FileWriter("c:\\Empresa.ini");
-//            }
-//            
-//            pw = new PrintWriter(fw);
-//
-//            pw.println("[General]");
-//            pw.println("Nombre =" + nombre);
-//            pw.println("Telefono =" + Telefono);
-//            pw.println("Correo =" + Correo);
-//            pw.println("RNC =" + RNC);
-//            pw.println("Direccion =" + Direccion);
-//            pw.println("TipoEmpresa =" + TipoEmpresa);
-//            pw.println("PorCiento =" + PorCiento);
-//        } catch (Exception e1) {
-//            LOG.log(Level.SEVERE, e1.getMessage(), e1);
-//        } finally {
-//            try {
-//                if (fw != null) {
-//                    fw.close();
-//                }
-//            } catch (Exception e2) {
-//                LOG.log(Level.SEVERE, e2.getMessage(), e2);
-//            }
-//        }
+            String PorCiento
+    ) {
+
+        try (FileWriter fw = new FileWriter(file); PrintWriter pw = new PrintWriter(fw);) {
+            pw.println("[General]");
+            pw.println("Nombre =" + nombre);
+            pw.println("Telefono =" + Telefono);
+            pw.println("Correo =" + Correo);
+            pw.println("RNC =" + RNC);
+            pw.println("Direccion =" + Direccion);
+            pw.println("TipoEmpresa =" + TipoEmpresa);
+            pw.println("PorCiento =" + PorCiento);
+        } catch (Exception e1) {
+            LOG.log(
+                    Level.SEVERE,
+                    e1.getMessage(),
+                    e1
+            );
+        }
     }
 }

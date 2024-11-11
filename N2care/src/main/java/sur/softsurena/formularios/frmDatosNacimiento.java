@@ -3,9 +3,7 @@ package sur.softsurena.formularios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import static sur.softsurena.datos.select.SelectMetodos.getDatosNacimiento;
-import sur.softsurena.entidades.Categorias;
-import sur.softsurena.entidades.FechaHora;
+import sur.softsurena.utilidades.FechaHora;
 
 public class frmDatosNacimiento extends javax.swing.JDialog {
 
@@ -222,13 +220,19 @@ public class frmDatosNacimiento extends javax.swing.JDialog {
         }
 
         FechaHora f = new FechaHora(dchFechaNacimiento.getDate());
-        JOptionPane.showMessageDialog(this, agregarDatosNacimiento(new DatosNacimiento(
-                        ((Categorias) txtCedula.getValue()).getId(), f.getFecha(),
-                        txtPesoNacer.getValue().toString(),
-                        txtEstaturaNacer.getValue().toString(),
-                        cbCesarea.isSelected(),
-                        txtTiempoGestacion.getValue().toString(),
-                        txtPC.getValue().toString())),
+        JOptionPane.showMessageDialog(
+                this,
+                agregarDatosNacimiento(
+                        new DatosNacimiento(
+                                ((Categorias) txtCedula.getValue()).getId(), 
+                                f.getFecha(),
+                                txtPesoNacer.getValue().toString(),
+                                txtEstaturaNacer.getValue().toString(),
+                                cbCesarea.isSelected(),
+                                txtTiempoGestacion.getValue().toString(),
+                                txtPC.getValue().toString()
+                        )
+                ),
                 "Resultados de la operacion",
                 JOptionPane.DEFAULT_OPTION);
         dispose();
@@ -239,21 +243,17 @@ public class frmDatosNacimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        ResultSet d = getDatosNacimiento(((Categorias) txtCedula.getValue()).getId());
+        ResultSet d = getDatosNacimiento(
+                ((Categorias) txtCedula.getValue()).getId()
+        );
 
-        try {
-            while (d.next()) {
-                dchFechaNacimiento.setDate(d.getDate("FECHANACIMIENTO"));
-                txtPesoNacer.setValue(d.getObject("PESONACIMIENTOKG"));
-                txtEstaturaNacer.setValue(d.getDouble("ALTURA") * 100);
-                jlResultado.setText("IMC: " + d.getString("MC"));
-                txtTiempoGestacion.setValue(d.getDouble("TIEMPOGESTACION"));
-                cbCesarea.setSelected(d.getBoolean("CESAREA"));
-                txtPC.setValue(d.getObject("PC"));
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        dchFechaNacimiento.setDate(d.getDate("FECHANACIMIENTO"));
+        txtPesoNacer.setValue(d.getObject("PESONACIMIENTOKG"));
+        txtEstaturaNacer.setValue(d.getDouble("ALTURA") * 100);
+        jlResultado.setText("IMC: " + d.getString("MC"));
+        txtTiempoGestacion.setValue(d.getDouble("TIEMPOGESTACION"));
+        cbCesarea.setSelected(d.getBoolean("CESAREA"));
+        txtPC.setValue(d.getObject("PC"));
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

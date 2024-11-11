@@ -469,7 +469,6 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
 
         String userName = ((Usuario) tblCajerosDisponible.getValueAt(cajeroSelectRow, 0)).getUser_name();
         
-        System.out.println("userName = " + userName);
         crearReporte(userName);
     }//GEN-LAST:event_tblCajerosDisponibleMouseClicked
 

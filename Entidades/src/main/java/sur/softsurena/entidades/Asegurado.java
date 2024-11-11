@@ -7,9 +7,10 @@ import sur.softsurena.abstracta.Persona;
 
 @SuperBuilder
 @Getter
-public class Asegurado extends Persona {
+public class Asegurado {
 
-    private final int id_ars;
+    private final Integer id_ars;
+    private final Persona persona;
     private final String no_nss;
     private final Boolean estado;
 

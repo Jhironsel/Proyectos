@@ -14,6 +14,8 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class frmRestaurarDatos extends javax.swing.JInternalFrame implements Runnable {
 
+    private static final long serialVersionUID = 1L;
+
     private Thread hilo;
     private boolean procesar = false;
     private Connection cnn = null;

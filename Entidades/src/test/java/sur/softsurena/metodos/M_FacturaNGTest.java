@@ -15,6 +15,7 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.HeaderFactura;
+import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_Factura.ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA;
 import static sur.softsurena.metodos.M_Factura.FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM;
 import static sur.softsurena.metodos.M_Factura.FACTURA__BORRADA__CORRECTAMENTE;
@@ -108,21 +109,36 @@ public class M_FacturaNGTest {
                         D_Factura
                                 .builder()
                                 .idLinea(0)
-                                .idProducto(0)
+                                .producto(
+                                        Producto
+                                                .builder()
+                                                .id(0)
+                                                .build()
+                                )
                                 .precio(BigDecimal.TEN)
                                 .cantidad(BigDecimal.ONE)
                                 .build(),
                         D_Factura
                                 .builder()
                                 .idLinea(0)
-                                .idProducto(0)
+                                .producto(
+                                        Producto
+                                                .builder()
+                                                .id(0)
+                                                .build()
+                                )
                                 .precio(BigDecimal.TEN)
                                 .cantidad(BigDecimal.ONE)
                                 .build(),
                         D_Factura
                                 .builder()
                                 .idLinea(0)
-                                .idProducto(0)
+                                .producto(
+                                        Producto
+                                                .builder()
+                                                .id(0)
+                                                .build()
+                                )
                                 .precio(BigDecimal.TEN)
                                 .cantidad(BigDecimal.ONE)
                                 .build()

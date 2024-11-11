@@ -3,10 +3,12 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.D_MotivoConsulta;
+import sur.softsurena.entidades.D_Motivo_Consulta;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -24,7 +26,7 @@ public class M_D_MotivoConsulta {
      *
      * @return
      */
-    public static Resultado borrarDetalleMotivoConsulta(D_MotivoConsulta dmc) {
+    public static Resultado borrarDetalleMotivoConsulta(D_Motivo_Consulta dmc) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_D_MOTIVO_CONSULTA (?, ?)";
 
@@ -34,8 +36,8 @@ public class M_D_MotivoConsulta {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, dmc.getIdConsulta());
-            ps.setInt(2, dmc.getIdMotivoConsulta());
+            ps.setInt(1, dmc.getId_consulta());
+            ps.setInt(2, dmc.getId_motivo_consulta());
 
             ps.executeUpdate();
 
@@ -74,7 +76,7 @@ public class M_D_MotivoConsulta {
      *
      * @return
      */
-    public synchronized static Resultado agregarDetallleConsulta(D_MotivoConsulta dmc) {
+    public synchronized static Resultado agregarDetallleConsulta(D_Motivo_Consulta dmc) {
         final String sql
                 = "EXECUTE PROCEDURE SP_I_D_MOTIVO_CONSULTA (?,?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -82,8 +84,8 @@ public class M_D_MotivoConsulta {
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-            ps.setInt(1, dmc.getIdConsulta());
-            ps.setInt(2, dmc.getIdMotivoConsulta());
+            ps.setInt(1, dmc.getId_consulta());
+            ps.setInt(2, dmc.getId_motivo_consulta());
 
             ps.executeUpdate();
             return Resultado
@@ -112,21 +114,26 @@ public class M_D_MotivoConsulta {
             = "Detalles agregados correctamente";
 
     /**
-     * TODO Devolver una lista.
+     * Una lista de los motivos que generaron la consulta del paciente. 
      *
-     * @param idConsulta
-     * @param turno
-     * @return
+     * @param idConsulta identificador de la consulta que desea obtener los 
+     * motivo de la consulta.
+     * 
+     * @return returna una lista de motivos de la consulta del paciente por su
+     * numero de consulta. 
+     * 
      */
-    public synchronized static ResultSet getDetalleMotivo(
-            int idConsulta, int turno
+    public synchronized static List<D_Motivo_Consulta> getDetalleMotivo(
+            int idConsulta
     ) {
         final String sql
-                = """
-                  SELECT IDMCONSULTA 
-                  FROM V_DETALLEMOTIVOCONSULTA d 
-                  WHERE d.IDCONSULTA = ? and d.TURNO = ?
+                = """                  
+                  SELECT ID, ID_MOTIVO_CONSULTA
+                  FROM V_D_MOTIVO_CONSULTA 
+                  WHERE ID_CONSULTA = ?
                   """;
+        
+        List<D_Motivo_Consulta> lista = new ArrayList<>();
         
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -135,15 +142,29 @@ public class M_D_MotivoConsulta {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, idConsulta);
-            ps.setInt(2, turno);
             
-            return ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                lista.add(
+                        D_Motivo_Consulta
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .id_motivo_consulta(rs.getInt("ID_MOTIVO_CONSULTA"))
+                                .build()
+                );
+            }
+            
+            
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ERROR_AL_CONSULTAR_LA_VISTA_V_DETALLEMOTI,
+            LOG.log(
+                    Level.SEVERE, 
+                    ERROR_AL_CONSULTAR_LA_VISTA_V_DETALLEMOTI,
                     ex
             );
-            return null;
         }
+        
+        return lista;
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_DETALLEMOTI 
             = "Error al consultar la vista V_DETALLEMOTIVOCONSULTA del sistema.";

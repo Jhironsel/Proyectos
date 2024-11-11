@@ -392,25 +392,14 @@ public class M_ProductoNGTest {
 
     @Test(
             enabled = false,
-            description = "",
+            description = """
+                          """,
             priority = 1
     )
     public void testExisteProducto() {
         String criterio = "";
         boolean expResult = false;
         boolean result = M_Producto.existeProducto(criterio);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 1
-    )
-    public void testGetPrecioProducto() {
-        int idProducto = 0;
-        BigDecimal expResult = null;
-        BigDecimal result = M_Producto.getPrecioProducto(idProducto);
         assertEquals(result, expResult);
     }
 

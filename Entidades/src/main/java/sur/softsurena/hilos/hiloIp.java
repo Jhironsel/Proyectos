@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class hiloIp extends Thread implements hiloMetodos {
+public class hiloIp extends Thread {
 
     private Boolean iniciar = false;
 
@@ -53,21 +53,10 @@ public class hiloIp extends Thread implements hiloMetodos {
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, ex.getMessage(), ex);
             }
-            detener();
+            iniciar = false;
         }
     }
 
-    @Override
-    public void detener() {
-        iniciar = false;
-    }
-
-    @Override
-    public void iniciar() {
-        iniciar = true;
-    }
-
-    @Override
     public void correr() {
 
     }

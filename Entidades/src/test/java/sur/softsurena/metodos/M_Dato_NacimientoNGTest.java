@@ -1,6 +1,7 @@
 package sur.softsurena.metodos;
 
 import java.sql.ResultSet;
+import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -9,6 +10,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.AlturaPeso;
 import sur.softsurena.entidades.Dato_Nacimiento;
 
 /**
@@ -47,21 +49,7 @@ public class M_Dato_NacimientoNGTest {
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testAgregarDatosNacimiento() {
-        Dato_Nacimiento dato = null;
-        M_Dato_Nacimiento instance = new M_Dato_Nacimiento();
-        String expResult = "";
-        String result = instance.agregarDatosNacimiento(dato);
-        assertEquals(result, expResult);
-    }
-    
+    }    
     
     @Test(
             enabled = false,
@@ -73,15 +61,20 @@ public class M_Dato_NacimientoNGTest {
 //        assertEquals(result, expResult);
     }
 
+    /**
+     * TODO Este Metodo siguiente esta completo.
+     */
     @Test(
             enabled = false,
             priority = 0,
-            description = ""
+            description = """
+                          
+                          """
     )
     public void testGetAlturaPeso() {
         int idPaciente = 0;
         ResultSet expResult = null;
-        ResultSet result = M_Dato_Nacimiento.getAlturaPeso(idPaciente);
+        List<AlturaPeso> result = M_Dato_Nacimiento.getAlturaPeso(idPaciente);
         assertEquals(result, expResult);
     }
 

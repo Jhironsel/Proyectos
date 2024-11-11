@@ -1,7 +1,9 @@
 package sur.softsurena.formularios;
 
-public class frmCategoriasAdmin extends javax.swing.JFrame {
-    private static Boolean aceptar;
+import javax.swing.JFrame;
+
+public class frmCategoriasAdmin extends javax.swing.JDialog {
+    private Boolean aceptar;
     private static final long serialVersionUID = 1L;
 
     public Boolean getAceptar() {
@@ -12,8 +14,8 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
         this.aceptar = aceptar;
     }
     
-    public frmCategoriasAdmin(String categoria, Boolean estado, boolean nuevo) {
-        super((nuevo ? "Agregando categoria" : "Modificando categoria"), null);
+    public frmCategoriasAdmin(JFrame principal, String categoria, Boolean estado, boolean nuevo) {
+        super(principal, (nuevo ? "Agregando categoria" : "Modificando categoria"), true);
         initComponents();
         txtCategoria.setText(categoria);
         jcbEstado.setSelected(estado);
@@ -31,7 +33,8 @@ public class frmCategoriasAdmin extends javax.swing.JFrame {
         btnCancelar = new newscomponents.RSButtonGradientIcon_new();
         btnGrabar = new newscomponents.RSButtonGradientIcon_new();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setIconImage(null);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);

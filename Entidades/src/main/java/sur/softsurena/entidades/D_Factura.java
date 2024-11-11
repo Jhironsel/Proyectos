@@ -9,19 +9,17 @@ import lombok.experimental.SuperBuilder;
 public class D_Factura {
 
     private final Integer idLinea;
-    private final Integer idProducto;
+    private final Producto producto;
     private final BigDecimal precio;
     private final BigDecimal cantidad;
-    
-    private final String descripcion;
     
     @Override
     public String toString() {
         return "DetalleFactura{"
                 + "idLinea=" + idLinea
-                + ", idProducto=" + idProducto
-                + ", descripcion=" + descripcion
-                + ", precio=" + precio
+                + ", idProducto=" + producto.getId()
+                + ", descripcion=" + producto.getDescripcion()
+                + ", precio=" + precio.doubleValue()
                 + ", cantidad=" + cantidad
                 + '}';
     }

@@ -28,11 +28,14 @@ public class Persona {
     @Override
     public String toString() {
         StringBuilder nombre = new StringBuilder();
-        nombre.append(pnombre).
-                append(" ").
-                append((snombre.isBlank() ? "" : snombre)).
-                append(" ").
-                append(apellidos);
+        
+        nombre
+                .append(pnombre)
+                .append(" ")
+                .append((snombre.isBlank() ? "" : snombre))
+                .append(" ")
+                .append(apellidos);
+        
         return nombre.toString();
     }
 

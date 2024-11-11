@@ -3,9 +3,11 @@ package sur.softsurena.formularios;
 import java.awt.Color;
 import javax.swing.JLabel;
 import sur.softsurena.metodos.Imagenes;
-import static sur.softsurena.utilidades.Utilidades.abrirURL;
+import sur.softsurena.utilidades.Utilidades;
 
 public class frmAcercaDe extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     public JLabel getJlDesarrollador() {
         return jlDesarrollador;
@@ -171,15 +173,15 @@ public class frmAcercaDe extends javax.swing.JDialog {
     }//GEN-LAST:event_jlLogoMouseClicked
 
     private void rSButtonMaterialIconOne1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialIconOne1ActionPerformed
-        abrirURL("https://www.facebook.com/jhironsel");
+        Utilidades.abrirURL("https://www.facebook.com/jhironsel");
     }//GEN-LAST:event_rSButtonMaterialIconOne1ActionPerformed
 
     private void rSButtonMaterialIconOne2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialIconOne2ActionPerformed
-        abrirURL("https://www.instagram.com/jhironsel");
+        Utilidades.abrirURL("https://www.instagram.com/jhironsel");
     }//GEN-LAST:event_rSButtonMaterialIconOne2ActionPerformed
 
     private void rSButtonMaterialIconOne3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonMaterialIconOne3ActionPerformed
-        abrirURL("https://github.com/Jhironsel");
+        Utilidades.abrirURL("https://github.com/Jhironsel");
     }//GEN-LAST:event_rSButtonMaterialIconOne3ActionPerformed
     
 

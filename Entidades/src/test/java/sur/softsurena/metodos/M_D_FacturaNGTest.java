@@ -17,6 +17,7 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.HeaderFactura;
+import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_D_Factura.DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME;
 import sur.softsurena.utilidades.Resultado;
 
@@ -56,7 +57,7 @@ public class M_D_FacturaNGTest {
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
-    
+
     //--------------------------------------------------------------------------
     @AfterMethod
     public void tearDownMethod() throws Exception {
@@ -100,45 +101,59 @@ public class M_D_FacturaNGTest {
                                 D_Factura
                                         .builder()
                                         .idLinea(0)
-                                        .idProducto(0)
+                                        .producto(
+                                                Producto
+                                                        .builder()
+                                                        .id(0)
+                                                        .build()
+                                        )
                                         .precio(BigDecimal.TEN)
                                         .cantidad(BigDecimal.TWO)
-                                        .build(), 
+                                        .build(),
                                 D_Factura
                                         .builder()
                                         .idLinea(1)
-                                        .idProducto(0)
+                                        .producto(
+                                                Producto
+                                                        .builder()
+                                                        .id(0)
+                                                        .build()
+                                        )
                                         .precio(BigDecimal.TEN)
                                         .cantidad(BigDecimal.TWO)
-                                        .build(), 
+                                        .build(),
                                 D_Factura
                                         .builder()
                                         .idLinea(2)
-                                        .idProducto(0)
+                                        .producto(
+                                                Producto
+                                                        .builder()
+                                                        .id(0)
+                                                        .build()
+                                        )
                                         .precio(BigDecimal.TEN)
                                         .cantidad(BigDecimal.TWO)
                                         .build()
                         )
                 )
                 .build();
-                
+
         Resultado result = M_D_Factura.agregarDetalleFactura(
-                0, 
+                0,
                 f.getDetalleFactura()
         );
-        
-        assertEquals(result, 
+
+        assertEquals(result,
                 Resultado
-                    .builder()
-                    .mensaje(DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build()
+                        .builder()
+                        .mensaje(DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
     }
-    
-    //--------------------------------------------------------------------------
 
+    //--------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 0,
@@ -148,63 +163,13 @@ public class M_D_FacturaNGTest {
     )
     public void testGetBuscarTemporal() {
         Integer idFactura = 0;
-        
-        List<D_Factura> buscarTemporal 
+
+        List<D_Factura> buscarTemporal
                 = M_D_Factura.getBuscarTemporal(idFactura);
-        
+
         assertTrue(
-                buscarTemporal.isEmpty(), 
+                buscarTemporal.isEmpty(),
                 "La lista de factura Temporales se encuentra con registros."
         );
-    }
-    
-    //--------------------------------------------------------------------------
-
-    /**
-     * TODO Trabajando en este metodo de prueba.
-     * 
-     */
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testGetFacturasDetalladas() {
-        int idFactura = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_D_Factura.getFacturasDetalladas(idFactura);
-        assertEquals(result, expResult);
-    }
-    
-    //--------------------------------------------------------------------------
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testGetFacturasDetalladaPorCliente_String() {
-        String idCliente = "";
-        ResultSet expResult = null;
-        ResultSet result = M_D_Factura.getFacturasDetalladaPorCliente(idCliente);
-        assertEquals(result, expResult);
-    }
-    
-    //--------------------------------------------------------------------------
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testGetFacturasDetalladaPorCliente_String_int() {
-        String idCliente = "";
-        int idFactura = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_D_Factura.getFacturasDetalladaPorCliente(idCliente, idFactura);
-        assertEquals(result, expResult);
     }
 }

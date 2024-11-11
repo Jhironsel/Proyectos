@@ -1,6 +1,5 @@
 package sur.softsurena.formularios;
 
-import RSMaterialComponent.RSButtonMaterialIconOne;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -10,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -30,41 +28,25 @@ import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoPersona;
 import sur.softsurena.interfaces.ICliente;
 import sur.softsurena.metodos.M_Cliente;
-import static sur.softsurena.metodos.M_Cliente.agregarClienteById;
-import static sur.softsurena.metodos.M_Cliente.borrarCliente;
 import sur.softsurena.metodos.M_ContactoEmail;
-import static sur.softsurena.metodos.M_ContactoEmail.agregarContactosEmail;
-import static sur.softsurena.metodos.M_ContactoEmail.correo;
-import static sur.softsurena.metodos.M_ContactoEmail.generarCorreo;
-import static sur.softsurena.metodos.M_ContactoEmail.getCorreoByID;
 import sur.softsurena.metodos.M_ContactoTel;
-import static sur.softsurena.metodos.M_ContactoTel.agregarContactosTel;
-import static sur.softsurena.metodos.M_ContactoTel.generarTelMovil;
-import static sur.softsurena.metodos.M_ContactoTel.getTelefonoByID;
-import static sur.softsurena.metodos.M_ContactoTel.telefono;
 import sur.softsurena.metodos.M_Direccion;
-import static sur.softsurena.metodos.M_Direccion.agregarDireccion;
-import static sur.softsurena.metodos.M_Direccion.getDireccionByID;
-import static sur.softsurena.metodos.M_Distrito_Municipal.getDistritosMunicipales;
-import static sur.softsurena.metodos.M_EstadoCivil.getEstadoCivilList;
+import sur.softsurena.metodos.M_Distrito_Municipal;
+import sur.softsurena.metodos.M_EstadoCivil;
 import sur.softsurena.metodos.M_Generales;
-import static sur.softsurena.metodos.M_Generales.generarCedula;
-import static sur.softsurena.metodos.M_Municipio.getMunicipio;
+import sur.softsurena.metodos.M_Municipio;
 import sur.softsurena.metodos.M_Persona;
-import static sur.softsurena.metodos.M_Privilegio.privilegio;
-import static sur.softsurena.metodos.M_Provincia.getProvincias;
-import static sur.softsurena.metodos.M_Sexo.getSexoList;
-import static sur.softsurena.metodos.M_TipoPersona.getTipoPersonaList;
+import sur.softsurena.metodos.M_Privilegio;
+import sur.softsurena.metodos.M_Provincia;
+import sur.softsurena.metodos.M_Sexo;
+import sur.softsurena.metodos.M_TipoPersona;
 import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
-import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
-import static sur.softsurena.utilidades.Utilidades.eliminarRegistroTabla;
-import static sur.softsurena.utilidades.Utilidades.formatDate;
-import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
-import static sur.softsurena.utilidades.Utilidades.sqlDateToUtilDate;
-import static sur.softsurena.utilidades.Utilidades.validarCampo;
+import sur.softsurena.utilidades.Utilidades;
 
 public class frmClientes extends javax.swing.JInternalFrame implements ICliente {
+
+    private static final long serialVersionUID = 1L;
 
     private Boolean v_nuevo = false;
 
@@ -85,15 +67,13 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private static Integer idCliente;
 
     private static Object registro[];
-    
-    
 
     public static frmClientes getInstance() {
         /*
             Si un permiso a las vistas consultada anteriormente es negado, se 
         lanza una excepcion y la venta no se iniciará.
          */
-        if (!privilegio(
+        if (!M_Privilegio.privilegio(
                 Privilegio
                         .builder()
                         .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -281,7 +261,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         txtCedula1.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         txtCedula1.setName("txtCedula"); // NOI18N
 
-        setBorder(javax.swing.BorderFactory.createMatteBorder(25, 10, 10, 10, new java.awt.Color(37, 45, 223)));
+        setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(37, 45, 223)));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -425,7 +405,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     .addGroup(jpClientesLayout.createSequentialGroup()
                         .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane6)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         jpClientesLayout.setVerticalGroup(
@@ -438,7 +418,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1267,7 +1247,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
                     .addComponent(jtpPrincipal))
                 .addContainerGap())
         );
@@ -1275,7 +1255,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+                .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1288,13 +1268,13 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
+                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
+                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1353,8 +1333,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //Mandamos a borrar el cliente y obtenemos el resultado de la operacion
         //y almacenamos en una variable.
-        Resultado resultados = borrarCliente(
-                ((Generales) tblClientes.getValueAt(
+        Resultado resultados = M_Cliente.borrarCliente(
+                ((Persona) tblClientes.getValueAt(
                         tblClientes.getSelectedRow(), 0)).getId_persona()
         );
 
@@ -1364,8 +1344,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 "",
                 resultados.getIcono()
         );
-
-
     }//GEN-LAST:event_btnBorrarClienteActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -1378,7 +1356,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 JOptionPane.QUESTION_MESSAGE
         );
 
-        if (validarCampo(txtCedula1)) {
+        if (Utilidades.validarCampo(txtCedula1)) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Error en el campo de la cedula, Vuelva a digitarla de nuevo",
@@ -1405,60 +1383,84 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-
+    /**
+     * Metodo para guardar los registros del sistema.
+     *
+     * 1) Se valida la cedula registrada en el campo del sistema. Mostramos un
+     * mensaje de error si la cedula no cumple con el patron mostramos un
+     * mensaje de advertencia, dicho patron debe ser 000-0000000-0.
+     *
+     * 2)Se valida que la cedula pase el algoritmo de cedulas dominicana, En
+     * caso de que no sea valida, lanzamos advertencia. Si el usuario responde
+     * que si, el flujo sigue, en caso contrario volvemos a la ventaja generales
+     * se realiza peticion de focus al componente txtCedula. Y se deja el texto
+     * de la cedula seleccionado.
+     *
+     * 3) Validamos el primer nombre del cliente que no este vacio. En caso de
+     * ser necesario nos cambiamos a la ventana correspondiente...
+     *
+     * 4) Validamos que el campo apellidos no este vacio.
+     *
+     * 5) Validamos que el campo de la fecha no sea nulo.
+     *
+     * 6) Nos aseguramos que la fecha ingresada sea menor que la fecha actual.
+     *
+     * 7) Valida que el cliente cuente con una direccion fisica. Si el usuario
+     * indica que no se va a registrar una direccion, el flujo continua.
+     *
+     * 8) Valida que exista una forma de contactar a una persona por su correo o
+     * telefono registrado en el sistema.
+     *
+     * Cuando es un nuevo registros.:
+     *
+     * Cuando se actualiza un registro.:
+     *
+     *
+     * @param evt
+     */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        //Validamos el campo de la cedula de la persona.
-        if (validarCampo(txtCedula)) {
-            //Mostramos un mensaje de error si la cedula no cumple el patron 
+        if (Utilidades.validarCampo(txtCedula)) {
+            // 
             //de una cedula.
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Error en el campo de la cedula, Vuelva a digitarla de nuevo",
+                    """
+                    Error en el campo de la cedula, Vuelva a digitarla de nuevo.
+                    """,
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             return;
         }
-
-        //Validamos que la cedula sea valida
+//-----------------------------------------------------------------------------1
         if (!M_Generales.cedula(txtCedula.getValue().toString())) {
-            //En caso de que no sea valida, lanzamos advertencia.
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
-                    Cedula no pasa la prueba de validación.
+                    La cedula %s no pasa la prueba de validación.
                     Desea continuar?
-                    """,
+                    """.formatted(txtCedula.getValue().toString()),
                     "",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE,
                     null
             );
 
-            //si la respuesta de la opcion es no, entonces.
             if (resp == JOptionPane.NO_OPTION) {
-                //Nos movemos al jtp que contiene el campo de la cedula. 
                 jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
 
-                //Hacemos focos en este campo.
-                txtCedula.requestFocusInWindow();
+                txtCedula.requestFocus();
 
-                //Seleccionamos de la posicion inicial
                 txtCedula.setSelectionStart(0);
 
-                //Hasta el final del campo.
                 txtCedula.setSelectionEnd(
                         txtCedula.getValue().toString().length()
                 );
-
-                //Nos devolvemos.
                 return;
             }
         }
-
-        //Validamos que el primer campo no este vacio.
+//-----------------------------------------------------------------------------2
         if (txtPNombre.getText().isBlank()) {
-            //En caso que este vacio, notificamos al usuario.
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe digitar un nombre...",
@@ -1466,34 +1468,28 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     JOptionPane.ERROR_MESSAGE
             );
 
-            //Seleccionamos el componente jtp que contiene el campo
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
 
-            //Obtenemos focos. 
             txtPNombre.requestFocusInWindow();
 
-            //Nos devolvemos.
             return;
         }
-
-        //Validamos el apellido del cliente.
+//-----------------------------------------------------------------------------3
         if (txtApellidos.getText().isBlank()) {
-            //En caso que este vacio, notificamos al usuario.
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe digitar un apellido...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            //Seleccionamos el componente jtp que contiene el campo
+
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
 
-            //Obtenemos focos. 
             txtApellidos.requestFocusInWindow();
 
-            //Nos devolvemos.
             return;
         }
+//-----------------------------------------------------------------------------4
 
         if (Objects.isNull(dchFechaNacimiento.getDate())) {
             JOptionPane.showInternalMessageDialog(
@@ -1506,7 +1502,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             dchFechaNacimiento.requestFocusInWindow();
             return;
         }
-
+//-----------------------------------------------------------------------------5
         if (dchFechaNacimiento.getDate().after(new Date())) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1517,16 +1513,14 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
             dchFechaNacimiento.requestFocusInWindow();
             return;
-        }//Validacion 4
-
+        }
+//-----------------------------------------------------------------------------6
         if (tblDireccion.getRowCount() < 1) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
-                    
                     Cliente no cuenta con una dirrecion.
                     Desea agregar una direccion?
-                    
                     """,
                     "",
                     JOptionPane.YES_NO_OPTION,
@@ -1538,16 +1532,14 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 txtDireccion.requestFocusInWindow();
                 return;
             }
-        }//Validacion 5
-
+        }
+//-----------------------------------------------------------------------------7
         if (tblCorreos.getRowCount() < 1 & tblTelefonos.getRowCount() < 1) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
-                    
                     No existe forma de contactar al cliente.
                     Desea agreguar un numero de telefono o correo electronico?
-                    
                     """,
                     "",
                     JOptionPane.YES_NO_OPTION,
@@ -1561,10 +1553,12 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
 
-        }//Validacion 6
-
+        }
+//-----------------------------------------------------------------------------8
         //Buscar la cedula en la base de datos.
-        Generales cedula = M_Generales.getEntidadByCedula(txtCedula.getValue().toString());
+        Generales cedula = M_Generales.getEntidadByCedula(
+                txtCedula.getValue().toString()
+        );
 
         idCliente = -1;
 
@@ -1598,7 +1592,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
         } else {
-            idCliente = ((Generales) tblClientes.getValueAt(
+            idCliente = ((Persona) tblClientes.getValueAt(
                     tblClientes.getSelectedRow(), 0)).getId_persona();
         }
 
@@ -1610,7 +1604,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 ? "" : " " + txtSNombre.getText())
                 + " " + txtApellidos.getText()
                 + "<br><b>Cedula no.: </b> " + txtCedula.getText()
-                + "<br><b>Fecha Nacimiento: </b>" + formatDate(dchFechaNacimiento.getDate(), "dd-MM-yyyy")
+                + "<br><b>Fecha Nacimiento: </b>" + Utilidades.formatDate(
+                        dchFechaNacimiento.getDate(),
+                        "dd-MM-yyyy"
+                )
                 + "<br><b>Estado del Cliente: </b>" + cbEstado.getText()
                 + "<br><b>Desea continuar? </b></html>",
                 """
@@ -1627,8 +1624,14 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 = Persona
                         .builder()
                         .id_persona(idCliente)
-                        .persona(((TipoPersona) jcbPersona.getSelectedItem()).getAbreviatura())
-                        .sexo(((Sexo) jcbSexo.getSelectedItem()).getAbreviatura())
+                        .persona(
+                                ((TipoPersona) jcbPersona.getSelectedItem())
+                                        .getAbreviatura()
+                        )
+                        .sexo(
+                                ((Sexo) jcbSexo.getSelectedItem())
+                                        .getAbreviatura()
+                        )
                         .pnombre(txtPNombre.getText())
                         .snombre(txtSNombre.getText())
                         .apellidos(txtApellidos.getText())
@@ -1654,7 +1657,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         if (v_nuevo && resultados.getEstado()) {
             mensajeResultado(
-                    agregarClienteById(idCliente),
+                    M_Cliente.agregarClienteById(idCliente),
                     false
             );
 
@@ -1770,8 +1773,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        txtCedula.setText(generarCedula());
-                        validarCampo(txtCedula);
+                        txtCedula.setText(
+                                M_Generales.generarCedula()
+                        );
+                        Utilidades.validarCampo(txtCedula);
                     }
                 }
             }
@@ -1818,7 +1823,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private void jcbProvinciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProvinciasActionPerformed
         jcbMunicipios.removeAllItems();
 
-        getMunicipio(
+        M_Municipio.getMunicipio(
                 jcbProvincias.getSelectedIndex() <= 0
                 ? 0 : ((Provincia) jcbProvincias.getSelectedItem()).getId()
         ).stream().forEach(
@@ -1837,8 +1842,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         jcbDistritoMunicipal.removeAllItems();
 
-        getDistritosMunicipales(jcbMunicipios.getSelectedIndex() <= 0 ? 0
-                : ((Municipio) jcbMunicipios.getSelectedItem()).getId()
+        M_Distrito_Municipal.getDistritosMunicipales(
+                jcbMunicipios.getSelectedIndex() <= 0
+                ? 0 : ((Municipio) jcbMunicipios.getSelectedItem())
+                        .getId()
         ).stream().forEach(distrito -> {
             jcbDistritoMunicipal.addItem(distrito);
         });
@@ -1984,7 +1991,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             );
             tblDireccion.setModel(v_dtmDireccion);
         } else {
-            agregarDireccion(direccion);
+            M_Direccion.agregarDireccion(direccion);
         }
 
         LimpiarComboBoxProMuniDistr();
@@ -1993,7 +2000,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_btnAgregarDireccionesActionPerformed
 
     private void btnBorrarDirrecionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarDirrecionActionPerformed
-        eliminarRegistroTabla(tblDireccion, v_dtmDireccion, v_direccionesList);
+        Utilidades.eliminarRegistroTabla(
+                tblDireccion,
+                v_dtmDireccion,
+                v_direccionesList
+        );
 
         btnDireccionEnable(false);
 
@@ -2013,7 +2024,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        txtTelelfonoMovil.setText(generarTelMovil());
+                        txtTelelfonoMovil.setText(
+                                M_ContactoTel.generarTelMovil()
+                        );
                         int numero = (int) (Math.random() * 10);
                         jrbMovil.setSelected((numero % 2) == 0);
                         jrbResidencial.setSelected((numero % 2) != 0);
@@ -2024,7 +2037,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_txtTelelfonoMovilKeyPressed
 
     private void btnAgregarTelefonoMovilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTelefonoMovilActionPerformed
-        if (validarCampo(txtTelelfonoMovil)) {
+        if (Utilidades.validarCampo(txtTelelfonoMovil)) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe digitar numero telefonico valido!",
@@ -2036,7 +2049,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         //Esta validacion deberia de ser si el cliente en nacional
-        if (!telefono(txtTelelfonoMovil.getValue().toString())) {
+        if (!M_ContactoTel.telefono(
+                txtTelelfonoMovil.getValue().toString()
+        )) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe digitar numero telefonico valido!",
@@ -2115,7 +2130,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             });
             tblTelefonos.setModel(v_dtmTelefono);
         } else {
-            agregarContactosTel(contactoTel);
+            M_ContactoTel.agregarContactosTel(contactoTel);
         }
 
         limpiarTxtTelefonoMovil();
@@ -2137,7 +2152,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         }
 
-        eliminarRegistroTabla(tblTelefonos, v_dtmTelefono, v_contactosTelsList);
+        Utilidades.eliminarRegistroTabla(tblTelefonos, v_dtmTelefono, v_contactosTelsList);
 
         btnBorrarTelefono.setEnabled(false);
         btnTelefonoEnable(false);
@@ -2157,7 +2172,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         //Verificamos que sea un correo valido.
-        if (!correo(txtCorreo.getText())) {
+        if (!M_ContactoEmail.correo(
+                txtCorreo.getText()
+        )) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe digitar correo electronico valido.",
@@ -2167,7 +2184,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             txtCorreo.requestFocusInWindow();
             return;
         }
+
         Boolean por_defecto = true;
+
         if (tblCorreos.getRowCount() > 0) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
@@ -2238,7 +2257,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
             tblCorreos.setModel(v_dtmCorreo);
         } else {
-            agregarContactosEmail(contactoEmail);
+            M_ContactoEmail.agregarContactosEmail(contactoEmail);
         }
 
         txtCorreo.setText("");
@@ -2253,7 +2272,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         }
 
-        eliminarRegistroTabla(tblCorreos, v_dtmCorreo, v_contactosCorreosList);
+        Utilidades.eliminarRegistroTabla(
+                tblCorreos, 
+                v_dtmCorreo, 
+                v_contactosCorreosList
+        );
         btnCorreoEnable(false);
 
     }//GEN-LAST:event_btnBorrarCorreoActionPerformed
@@ -2274,7 +2297,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        if (validarCampo(txtCedula)) {
+        if (Utilidades.validarCampo(txtCedula)) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Error en el campo de la cedula, Vuelva a digitarla de nuevo",
@@ -2326,7 +2349,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                      * devuelve falso, es por ello se valida la negacion de
                      * false, para obtener true.
                      */
-                    Resultado resultado = agregarClienteById(idCliente);
+                    Resultado resultado = M_Cliente.agregarClienteById(idCliente);
 
                     //!resultado.getEstado();
                     JOptionPane.showInternalMessageDialog(
@@ -2353,32 +2376,32 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //2) Llenar los comboBox de las provincias.
         jcbProvincias.removeAllItems();
-        getProvincias().stream().forEach(
+        M_Provincia.getProvincias().stream().forEach(
                 provincia -> jcbProvincias.addItem(provincia)
         );
 
         //3) Llenar los comboBox de las personas juridicas.
         jcbPersona.removeAllItems();
-        getTipoPersonaList().stream().forEach(
+        M_TipoPersona.getTipoPersonaList().stream().forEach(
                 tipoPersona -> jcbPersona.addItem(tipoPersona)
         );
 
         //4) Obtener la lista de sexo de personas.
         jcbSexo.removeAllItems();
-        getSexoList().stream().forEach(
+        M_Sexo.getSexoList().stream().forEach(
                 sexo -> jcbSexo.addItem(sexo)
         );
 
         //5) Obtener la lista de estado civil de las personas.
         jcbEstadoCivil.removeAllItems();
-        getEstadoCivilList().stream().forEach(
+        M_EstadoCivil.getEstadoCivilList().stream().forEach(
                 estadoCivil -> jcbEstadoCivil.addItem(estadoCivil)
         );
 
         //Validando los botones por consultas. 
         //Permiso para el boton de nuevo
         btnNuevoCliente.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -2386,7 +2409,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                                 .nombre_campo("^")
                                 .build()
                 )
-                && privilegio(
+                && M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -2398,7 +2421,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //Permiso para el boton de Borrar
         btnBorrarCliente.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -2410,7 +2433,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //Permiso para el boton de Modificar
         btnEditarCliente.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -2430,7 +2453,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        txtCorreo.setText(generarCorreo());
+                        txtCorreo.setText(
+                                M_ContactoEmail.generarCorreo()
+                        );
                     }
                 }
             }
@@ -2788,22 +2813,22 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private static void limpiarTablaCorreo() {
         v_dtmCorreo = new DefaultTableModel(null, TITULOS_CORREO);
         tblCorreos.setModel(v_dtmCorreo);
-        repararColumnaTable(tblCorreos);
-        columnasCheckBox(tblCorreos, new int[]{2, 3});
+        Utilidades.repararColumnaTable(tblCorreos);
+        Utilidades.columnasCheckBox(tblCorreos, new int[]{2, 3});
     }
 
     private static void limpiarTablaDireccion() {
         v_dtmDireccion = new DefaultTableModel(null, TITULOS_DIRECCION);
         tblDireccion.setModel(v_dtmDireccion);
-        repararColumnaTable(tblDireccion);
-        columnasCheckBox(tblDireccion, new int[]{5, 6});
+        Utilidades.repararColumnaTable(tblDireccion);
+        Utilidades.columnasCheckBox(tblDireccion, new int[]{5, 6});
     }
 
     private static void limpiarTablaTelefono() {
         v_dtmTelefono = new DefaultTableModel(null, TITULOS_TELEFONO);
         tblTelefonos.setModel(v_dtmTelefono);
-        repararColumnaTable(tblTelefonos);
-        columnasCheckBox(tblTelefonos, new int[]{3, 4});
+        Utilidades.repararColumnaTable(tblTelefonos);
+        Utilidades.columnasCheckBox(tblTelefonos, new int[]{3, 4});
     }
 
     private void limpiarListas() {
@@ -2971,7 +2996,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         txtSNombre.setText(persona.getSnombre());
         txtApellidos.setText(persona.getApellidos());
         dchFechaNacimiento.setDate(
-                sqlDateToUtilDate(
+                Utilidades.sqlDateToUtilDate(
                         persona.getFecha_nacimiento()
                 )
         );
@@ -3036,17 +3061,18 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
      * @param criterioBusqueda
      *
      */
-    public synchronized static void llenarTablaClientes(int id,
-            String criterioBusqueda) {
+    public synchronized static void llenarTablaClientes(
+            int id,
+            String criterioBusqueda
+    ) {
 
-        if (Objects.isNull(criterioBusqueda)) {
-            criterioBusqueda = "";
-        }
-
-        if (criterioBusqueda.isBlank()) {
-            criterioBusqueda = frmClientes.criterioBusqueda;
-        }
-
+//        if (Objects.isNull(criterioBusqueda)) {
+//            criterioBusqueda = "";
+//        }
+//
+//        if (criterioBusqueda.isBlank()) {
+//            criterioBusqueda = frmClientes.criterioBusqueda;
+//        }
         registro = new Object[TITULOS_CLIENTE.length];
 
         DefaultTableModel dtmClientes = new DefaultTableModel(null, TITULOS_CLIENTE);
@@ -3064,11 +3090,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     registro[5] = String.valueOf(
                             cliente.getSexo()
                     ).equalsIgnoreCase("M") ? "MASCULINO" : "FEMENINO";
-                    registro[6] = formatDate(
+                    registro[6] = Utilidades.formatDate(
                             cliente.getFecha_nacimiento(),
                             "dd/MM/yyyy"
                     );
-                    registro[7] = formatDate(
+                    registro[7] = Utilidades.formatDate(
                             cliente.getFecha_ingreso(),
                             "dd/MM/yyyy"
                     );
@@ -3089,7 +3115,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
         registro = new Object[TITULOS_CORREO.length];
         limpiarTablaCorreo();
-        getCorreoByID(idCliente).stream().forEach(
+        M_ContactoEmail.getCorreoByID(idCliente).stream().forEach(
                 p_correo -> {
                     registro[0] = p_correo;
                     registro[1] = p_correo.getFecha();
@@ -3111,7 +3137,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
         registro = new Object[TITULOS_TELEFONO.length];
         limpiarTablaTelefono();
-        getTelefonoByID(idCliente).stream().forEach(p_telefono -> {
+        M_ContactoTel.getTelefonoByID(idCliente).stream().forEach(p_telefono -> {
             registro[0] = p_telefono;
             registro[1] = p_telefono.getTipo();
             registro[2] = p_telefono.getFecha();
@@ -3133,7 +3159,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
         registro = new Object[TITULOS_DIRECCION.length];
         limpiarTablaDireccion();
-        getDireccionByID(idCliente).stream().forEach(
+        M_Direccion.getDireccionByID(idCliente).stream().forEach(
                 p_direccione -> {
                     registro[0] = p_direccione.getProvincia();
                     registro[1] = p_direccione.getMunicipio();

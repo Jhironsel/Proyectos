@@ -2,6 +2,8 @@ package sur.softsurena.formularios;
 
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +24,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
-import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
@@ -32,20 +34,14 @@ import sur.softsurena.jfilechooser.ImageFileView;
 import sur.softsurena.jfilechooser.ImageFilter;
 import sur.softsurena.jfilechooser.ImagePreview;
 import sur.softsurena.metodos.Imagenes;
-import static sur.softsurena.metodos.M_E_S_SYS.getLogo;
-import static sur.softsurena.metodos.M_E_S_SYS.insertLogo;
-import static sur.softsurena.metodos.M_Privilegio.privilegio;
-import static sur.softsurena.metodos.M_Role.comprobandoRolesDisponibles;
-import static sur.softsurena.metodos.M_Role.setRole;
-import static sur.softsurena.metodos.M_Turno.getTurnosActivos;
-import static sur.softsurena.metodos.M_Turno.usuarioTurnoActivo;
-import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
+import sur.softsurena.metodos.M_E_S_SYS;
+import sur.softsurena.metodos.M_Privilegio;
+import sur.softsurena.metodos.M_Role;
+import sur.softsurena.metodos.M_Turno;
+import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.DesktopConFondo;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
-import static sur.softsurena.utilidades.Utilidades.LOG;
-import static sur.softsurena.utilidades.Utilidades.centralizar;
-import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 
 public final class frmPrincipal extends javax.swing.JFrame {
 
@@ -60,7 +56,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     public frmPrincipal() {
 
-        usuario = getUsuarioActual();
+        usuario = M_Usuario.getUsuarioActual();
 
         initComponents();
         ((DesktopConFondo) dpnEscritorio).setImagen("/sur/softsurena/imagenes/Fondo 1024 x 723.jpg");
@@ -968,7 +964,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         if (resp == JFileChooser.APPROVE_OPTION) {
 
-            insertLogo(1, file.getSelectedFile());
+            M_E_S_SYS.insertLogo(
+                    file.getSelectedFile()
+            );
 
             cargarLogo();
             jlLogoEmpresa.validate();
@@ -991,19 +989,47 @@ public final class frmPrincipal extends javax.swing.JFrame {
         miRestaurar.start();
     }//GEN-LAST:event_jlRespaldarMouseClicked
 
+    /**
+     * TODO Realizar el procedimiento de restaurar una base de datos.
+     *
+     * Metodo que nos permite Restaurar una base de datos.
+     *
+     * 1) Creamos un objecto de tipo File, y la condicional para verificar que
+     * la ruta de Data\\ exista. En caso de no existir crearla.
+     *
+     * 2) Creamos un objecto de tipo JFileChooser para asignarle el file
+     * anterior, le agregamos el FileNameExtensionFilter para ser asignado a
+     * este objecto. Abrimos el jFileChooser para buscar la base de dato a
+     * restaurar, Si
+     *
+     * @param evt
+     */
     private void jlRestaurarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRestaurarMouseClicked
-        //TODO Realizar el procedimiento de restaurar una base de datos.
-        JFileChooser miFile = new JFileChooser(System.getProperty("user.dir") + "/Data");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Base de Datos",
-                "fbk", "FBK");
-        miFile.setFileFilter(filter);
+        File file = new File("Data\\");
 
-        Integer respuesta = miFile.showOpenDialog(this);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+//-----------------------------------------------------------------------------1
+        JFileChooser jFileChooser = new JFileChooser(file);
 
-        if (Objects.isNull(respuesta) || respuesta == JFileChooser.CANCEL_OPTION) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Base de Datos",
+                "fbk",
+                "FBK"
+        );
+
+        jFileChooser.setFileFilter(filter);
+
+        Integer respuesta = jFileChooser.showOpenDialog(this);
+
+        if (respuesta.equals(JFileChooser.CANCEL_OPTION)
+                || Objects.isNull(respuesta)) {
             return;
-        }//Elegir el backup de la base de datos a restaurar...
+        }
+//-----------------------------------------------------------------------------2
 
+        //Elegir el backup de la base de datos a restaurar...
         String usuarioMaster = JOptionPane.showInputDialog(
                 this,
                 "Nombre de Usuario: ",
@@ -1028,7 +1054,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
             return;
         }
 
-        //TODO Completar esta tarea.
 //        BDR = miFile.getSelectedFile();
 //        RGBAK = System.getProperty("user.dir") + "/respaldo/gbak";
 
@@ -1134,11 +1159,25 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmDeudaActionPerformed
 
     private void btnEstablecerEncabezadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerEncabezadoActionPerformed
-//        mensaje();
-        frmEncabezado encabezado2 = new frmEncabezado(null, true);
-        encabezado2.setLocationRelativeTo(null);
-        encabezado2.setVisible(true);
+        try {
+            //        mensaje();
+            abrirFormularioCentralizado(new frmEmpresaDatos());
+            
 
+        } catch (IOException ex) {
+            Utilidades.LOG.getLogger(
+                    frmPrincipal.class.getName()
+            ).log(
+                    Level.SEVERE, 
+                    "El formulario de frmEmpresaDatos tiene problemas.", 
+                    ex
+            );
+        }
+        //TODO Este es el formulario que va aqui.
+        
+//        frmEncabezado encabezado2 = new frmEncabezado(null, true);
+//        encabezado2.setLocationRelativeTo(null);
+//        encabezado2.setVisible(true);
     }//GEN-LAST:event_btnEstablecerEncabezadoActionPerformed
 
     private void btnSeleccionarImpresoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarImpresoraActionPerformed
@@ -1161,7 +1200,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuMantenimientoClientesActionPerformed
 
     private void mnuMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProductosActionPerformed
-        abrirFormulario(frmProductos.getInstance());
+        abrirFormulario(frmProductos.getInstance(this));
     }//GEN-LAST:event_mnuMantenimientoProductosActionPerformed
 
     private void mnuOpcionesCambioClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpcionesCambioClaveActionPerformed
@@ -1188,7 +1227,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuOpcionesSalirActionPerformed
 
     private void mnuMovimientosNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosNuevaFacturaActionPerformed
-        if (!usuarioTurnoActivo(usuario.getUser_name())) {
+        if (!M_Turno.usuarioTurnoActivo(
+                usuario.getUser_name()
+        )) {
             JOptionPane.showMessageDialog(
                     this,
                     "Usuario no cuenta con Turno para Facturar...!",
@@ -1242,13 +1283,13 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         rol = (rol.equalsIgnoreCase("ADMINISTRADOR") ? "RDB$ADMIN" : rol);
 
-        Resultado role = setRole(rol);
+        Resultado role = M_Role.setRole(rol);
 
         if (!role.getEstado()) {
             return;
         }
 
-        usuario = getUsuarioActual();
+        usuario = M_Usuario.getUsuarioActual();
 
         cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
     }//GEN-LAST:event_cbRolesPopupMenuWillBecomeInvisible
@@ -1277,10 +1318,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
             JasperReport masterReporte
                     = (JasperReport) JRLoader.loadObjectFromFile(miFile);
 
-            Map parametros = new HashMap();
+            Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha", fecha);
 
-            JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros, getCnn());
+            JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros, Conexion.getCnn());
 
             JasperViewer miView = new JasperViewer(jp, false);
             miView.setTitle("Reporte de movimiento de inventario...");
@@ -1288,7 +1329,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             miView.setVisible(true);
 
         } catch (JRException ex) {
-            LOG.log(
+            Utilidades.LOG.log(
                     Level.SEVERE,
                     "Error al crear ventana de cliente.",
                     ex
@@ -1304,7 +1345,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private void panelUsuario() {
         jsEstatus.setVisible(false);
         btnOcultarPanel.setVisible(false);
-        if (privilegio(
+        if (M_Privilegio.privilegio(
                 Privilegio
                         .builder()
                         .privilegio(
@@ -1325,13 +1366,15 @@ public final class frmPrincipal extends javax.swing.JFrame {
             };
             Object[] rowData2 = new Object[columnas2.length];
 
-            getTurnosActivos().forEach(turno -> {
-                rowData2[0] = "Ident. Turno: " + turno.getId()
+            M_Turno.getTurnosActivos().stream().forEach(
+                    turno -> {
+                        rowData2[0] = "Ident. Turno: " + turno.getId()
                         + " Cajero: " + turno.getTurno_usuario()
                         + " Fecha inicio" + turno.getFecha_hora_inicio();
 
-                modelo2.addRow(rowData2);
-            });
+                        modelo2.addRow(rowData2);
+                    }
+            );
 
             jtCajero.setModel(modelo2);
         }
@@ -1370,7 +1413,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             formulario.setMaximum(false);
             formulario.setMaximum(true);
         } catch (PropertyVetoException ex) {
-            LOG.log(
+            Utilidades.LOG.log(
                     Level.SEVERE,
                     "Error al crear ventana de cliente.",
                     ex
@@ -1397,7 +1440,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         }
 
         if (formulario instanceof frmReporteFacturas) {
-            centralizar(formulario);
+            Utilidades.centralizar(formulario);
         }
 
         formulario.setVisible(true);
@@ -1468,7 +1511,13 @@ public final class frmPrincipal extends javax.swing.JFrame {
      * Metodo que carga el logo de la empresa.
      */
     private void cargarLogo() {
-        jlLogoEmpresa.setIcon(imagenDecode64(getLogo(), 320, 145));
+        jlLogoEmpresa.setIcon(
+                Utilidades.imagenDecode64(
+                        M_E_S_SYS.getLogo(),
+                        320,
+                        145
+                )
+        );
     }
 
     /**
@@ -1477,7 +1526,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
      */
     public void barraMenu() {
         mnuMantenimientoClientes.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1487,7 +1536,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMantenimientoProductos.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1497,7 +1546,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMantenimientoProveedores.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1507,7 +1556,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMantenimientoAlmacenes.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1517,7 +1566,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMantenimientoUsuarios.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1539,7 +1588,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         Menu de sistema de nomina, proceso de validación.
          */
         mnuSistemaNomina.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1549,7 +1598,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuSistemaGestorGastos.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1568,7 +1617,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         Menu de sistema de movientos de facturas, proceso de validación. 
          */
         mnuMovimientosNuevaFactura.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1578,7 +1627,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMovimientosReporteFactura.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1588,7 +1637,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMovimientosInventario.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1598,7 +1647,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMovimientosDeudas.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -1608,7 +1657,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 )
         );
         mnuMovimientosAbrirTurno.setVisible(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
@@ -1658,7 +1707,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         );
 
         //Se carga los roles del usuario en el comboBox.
-        comprobandoRolesDisponibles(
+        M_Role.comprobandoRolesDisponibles(
                 usuario.getUser_name().strip(),
                 true
         ).stream().forEach(
@@ -1761,5 +1810,4 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField txtGanancia;
     private javax.swing.JFormattedTextField txtVenta;
     // End of variables declaration//GEN-END:variables
-
 }
