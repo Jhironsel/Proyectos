@@ -66,13 +66,13 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
                                 selectedItem.toString())).getDescripcion()
                 );
                 if (cmbProducto.getSelectedIndex() != 0) {
-                    txtCantidad.requestFocusInWindow();
+                    txtCantidad.requestFocus();
                 }
             }
         });
         textAutoCompleter.setMode(0);
         textAutoCompleter.setCaseSensitive(false);
-        txtBuscarCodigo.requestFocusInWindow();
+        txtBuscarCodigo.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -563,12 +563,12 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
             txtBuscarCodigo.setText(((Categoria) cmbProducto.getSelectedItem()).getDescripcion());
 //            txtPrecio.setText(((Categoria) cmbProducto.getSelectedItem()).getPrecio().toString());
         }
-        txtCantidad.requestFocusInWindow();
+        txtCantidad.requestFocus();
     }//GEN-LAST:event_cmbProductoItemStateChanged
     private void txtBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarCodigoActionPerformed
         buscarCodigo(txtBuscarCodigo.getText());
         if (cmbProducto.getSelectedIndex() != 0) {
-            txtCantidad.requestFocusInWindow();
+            txtCantidad.requestFocus();
         }
     }//GEN-LAST:event_txtBuscarCodigoActionPerformed
     private void buscarCodigo(String idProducto) {
@@ -599,7 +599,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
         if (cmbProducto.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(null,
                     "Debe Seleccinar un Producto...");
-            cmbProducto.requestFocusInWindow();
+            cmbProducto.requestFocus();
             return;
         }
         try {
@@ -616,7 +616,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
                     totales();
                     txtBuscarCodigo.setText("");
                     cmbProducto.setSelectedIndex(0);
-                    txtBuscarCodigo.requestFocusInWindow();
+                    txtBuscarCodigo.requestFocus();
                     return;
                 }
             }
@@ -630,7 +630,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
         if (tblDetalle.getRowCount() == 0) {
             JOptionPane.showMessageDialog(null,
                     "Debe Ingresar Detalle de la Factura...");
-            txtBuscarCodigo.requestFocusInWindow();
+            txtBuscarCodigo.requestFocus();
         } else {
             grabarFactura();
         }
@@ -860,7 +860,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
         JlCantidad1.setText("");
         limpiarTabla();
         totales();
-        txtBuscarCodigo.requestFocusInWindow();
+        txtBuscarCodigo.requestFocus();
     }
 
     private void limpiarCampitos() {
@@ -868,7 +868,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
         cmbCliente.setSelectedIndex(0);
         txtBuscarCodigo.setText("");
         txtCantidad.setText("");
-        txtBuscarCodigo.requestFocusInWindow();
+        txtBuscarCodigo.requestFocus();
     }
 
     private void limpiarTabla() {
@@ -901,14 +901,14 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
                 txtBuscarCodigo.getText().equals("")) {
             JOptionPane.showMessageDialog(null,
                     "Debe Seleccinar un Producto o Buscarlo por Codigo...");
-            txtBuscarCodigo.requestFocusInWindow();
+            txtBuscarCodigo.requestFocus();
             return;
         }
 
         if (txtCantidad.getText().equals("")) {
             JOptionPane.showMessageDialog(null,
                     "Debe Ingresar Cantidad...");
-            txtCantidad.requestFocusInWindow();
+            txtCantidad.requestFocus();
             return;
         }
         
@@ -918,7 +918,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
             JOptionPane.showMessageDialog(null,
                     "Debe Digitar un Valor Mayor a Cero...");
             txtCantidad.setText("");
-            txtCantidad.requestFocusInWindow();
+            txtCantidad.requestFocus();
             return;
         }//Fin Validaciones
 //

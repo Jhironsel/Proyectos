@@ -45,11 +45,11 @@ public class Acceso extends HttpServlet {
             if (accion.equalsIgnoreCase("editar")) {
                 req.setAttribute(
                         "cliente",
-                        M_Cliente.getPersonaCliente(
+                        M_Cliente.getPersonasClientes(
                                 FiltroBusqueda
                                         .builder()
                                         .id(
-                                                Integer.parseInt(
+                                                Integer.valueOf(
                                                         req.getParameter("idCliente")
                                                 )
                                         )
@@ -188,15 +188,25 @@ public class Acceso extends HttpServlet {
     }
 
     /**
+     * Metodo que consulta a la base de datos y trae los clientes activos en el 
+     * sistema.
      * 
      * @param req
+     * 
      * @param resp
+     * 
      * @throws ServletException
+     * 
      * @throws IOException 
      */
     private void accionDefauld(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        clientes = M_Cliente.getPersonasClientes(null);
+        clientes = M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
 
         BigDecimal saldoTotal = BigDecimal.ZERO;
 

@@ -182,21 +182,21 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     private void rbtNombesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtNombesActionPerformed
         txtCriterio.setText("");
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
         llenarTabla();
     }//GEN-LAST:event_rbtNombesActionPerformed
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         llenarTabla();
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
     }//GEN-LAST:event_formWindowOpened
     private void rbtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtApellidosActionPerformed
         txtCriterio.setText("");
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
         llenarTabla();
     }//GEN-LAST:event_rbtApellidosActionPerformed
     private void rbtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtIDActionPerformed
         txtCriterio.setText("");
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
         llenarTabla();
     }//GEN-LAST:event_rbtIDActionPerformed
     private void txtCriterioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCriterioActionPerformed

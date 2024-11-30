@@ -9,8 +9,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Generales;
+import sur.softsurena.entidades.TipoSangre;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA;
@@ -127,30 +129,37 @@ public class M_GeneralesNGTest {
         Resultado result = M_Generales.agregarEntidad(
                 Generales
                         .builder()
-                        .id_persona(persona.getIdPersona())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(
+                                                M_PersonaNGTest
+                                                        .persona()
+                                                        .getId_persona()
+                                        )
+                                        .build()
+                        )
                         .cedula(M_Generales.generarCedula())
-                        .id_tipo_sangre(0)
+                        .tipoSangre(
+                                TipoSangre
+                                        .builder()
+                                        .id(0)
+                                        .build()
+                        )
                         .estado_civil('X')
                         .build()
         );
 
         assertEquals(
-                result.getMensaje(),
-                GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS,
+                result,
+                Resultado
+                    .builder()
+                    .mensaje(GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
                 ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
         );
-
-        assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
-                ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
-        );
-
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
-        );
-
     }
 
     @Test(
@@ -162,7 +171,9 @@ public class M_GeneralesNGTest {
                           """
     )
     public void testGetEntidad() {
-        Generales result = M_Generales.getEntidad(persona.getIdPersona());
+        Generales result = M_Generales.getEntidad(
+                M_PersonaNGTest.persona().getId_persona()
+        );
 
         assertNotNull(
                 result,
@@ -183,8 +194,8 @@ public class M_GeneralesNGTest {
         Generales result = M_Generales.getEntidadByCedula(cedula);
 
         assertEquals(
-                result.getId_persona(),
-                persona.getIdPersona(),
+                result.getPersona().getId_persona(),
+                M_PersonaNGTest.persona().getId_persona(),
                 "Los identificadores no son iguales."
         );
     }
@@ -198,27 +209,35 @@ public class M_GeneralesNGTest {
         Resultado result = M_Generales.modificarEntidad(
                 Generales
                         .builder()
-                        .id_persona(persona.getIdPersona())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(
+                                                M_PersonaNGTest
+                                                        .persona()
+                                                        .getId_persona()
+                                        )
+                                        .build()
+                        )
                         .cedula(M_Generales.generarCedula())
-                        .id_tipo_sangre(0)
+                        .tipoSangre(
+                                TipoSangre
+                                        .builder()
+                                        .id(0)
+                                        .build()
+                        )
                         .estado_civil('X')
                         .build()
         );
 
         assertEquals(
-                result.getMensaje(),
-                GENERALES_ACTUALIZADA_CORRECTAMENTE,
-                ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S
-        );
-
-        assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
-                ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S
-        );
-
-        assertTrue(
-                result.getEstado(),
+                result,
+                Resultado
+                    .builder()
+                    .mensaje(GENERALES_ACTUALIZADA_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
                 ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S
         );
     }
@@ -229,8 +248,9 @@ public class M_GeneralesNGTest {
             description = ""
     )
     public void testBorrarEntidad() {
-        
-        Resultado result = M_Generales.borrarEntidad(persona.getIdPersona());
+        Resultado result = M_Generales.borrarEntidad(
+                M_PersonaNGTest.persona().getId_persona()
+        );
         
         assertEquals(
                 result, 
@@ -245,17 +265,4 @@ public class M_GeneralesNGTest {
         
         persona.testEliminarEntidad();
     }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testEliminarEntidad() {
-        Integer id = null;
-        Resultado expResult = null;
-        Resultado result = M_Generales.eliminarEntidad(id);
-        assertEquals(result, expResult);
-    }
-
 }

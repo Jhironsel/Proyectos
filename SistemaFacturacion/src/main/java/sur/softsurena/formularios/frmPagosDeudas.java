@@ -1,12 +1,9 @@
 package sur.softsurena.formularios;
 
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -18,23 +15,24 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmPagosDeudas extends javax.swing.JDialog {
 
-    private final JButton boton;
-    private final JTextFieldDateEditor editor;
+    private static final long serialVersionUID = 1L;
+
     private DefaultTableModel miTabla;
     private int cliAct;
     private final DefaultTableCellRenderer tcr;
 
-    public frmPagosDeudas(java.awt.Frame parent, boolean modal, int idDeuda,
-            String txtIDCliente, JTextField txtNombres, JTextField txtApellidos,
-            JDateChooser dchFecha, Object monto) {
+    public frmPagosDeudas(
+            java.awt.Frame parent, 
+            boolean modal, 
+            int idDeuda,
+            String txtIDCliente, 
+            JTextField txtNombres, 
+            JTextField txtApellidos,
+            Object monto
+    ) {
         super(parent, modal);
         initComponents();
         tcr = new DefaultTableCellHeaderRenderer();
-        boton = this.dchFecha.getCalendarButton();
-        boton.setEnabled(false);
-
-        editor = (JTextFieldDateEditor) this.dchFecha.getDateEditor();
-        editor.setEditable(false);
 
         txtIdDeuda.setText("" + idDeuda);
 
@@ -53,7 +51,6 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         this.txtIDCliente.setValue(txtIDCliente);
         this.txtNombres.setText(txtNombres.getText());
         this.txtApellidos.setText(txtApellidos.getText());
-        this.dchFecha.setDate(dchFecha.getDate());
         txtMonto.setValue(monto);
         llenarTabla(idDeuda);
     }
@@ -79,8 +76,6 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         txtApellidos = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtMonto = new javax.swing.JFormattedTextField();
-        jLabel9 = new javax.swing.JLabel();
-        dchFecha = new com.toedter.calendar.JDateChooser();
         btnSalir = new javax.swing.JButton();
         txtMontoPagado = new javax.swing.JFormattedTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -203,21 +198,6 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         txtMonto.setPreferredSize(new java.awt.Dimension(52, 21));
         txtMonto.setValue(0);
 
-        jLabel9.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel9.setText("Fecha:");
-        jLabel9.setFocusable(false);
-        jLabel9.setPreferredSize(new java.awt.Dimension(52, 21));
-        jLabel9.setRequestFocusEnabled(false);
-        jLabel9.setVerifyInputWhenFocusTarget(false);
-
-        dchFecha.setForeground(new java.awt.Color(1, 1, 1));
-        dchFecha.setAutoscrolls(true);
-        dchFecha.setFocusTraversalPolicyProvider(true);
-        dchFecha.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        dchFecha.setPreferredSize(new java.awt.Dimension(52, 21));
-        dchFecha.setVerifyInputWhenFocusTarget(false);
-
         btnSalir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnSalir.setForeground(new java.awt.Color(1, 1, 1));
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Salir 32 x 32.png"))); // NOI18N
@@ -289,11 +269,9 @@ public class frmPagosDeudas extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dchFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtIdDeuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
@@ -329,9 +307,7 @@ public class frmPagosDeudas extends javax.swing.JDialog {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
                 .addGap(21, 21, 21)
@@ -424,7 +400,6 @@ public class frmPagosDeudas extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnSalir;
-    private com.toedter.calendar.JDateChooser dchFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -432,7 +407,6 @@ public class frmPagosDeudas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDeudasPagas;
     private javax.swing.JTextField txtApellidos;

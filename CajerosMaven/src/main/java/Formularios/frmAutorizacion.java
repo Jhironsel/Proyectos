@@ -120,7 +120,7 @@ public class frmAutorizacion extends javax.swing.JDialog {
     }//GEN-LAST:event_txtPassActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        txtPass.requestFocusInWindow();
+        txtPass.requestFocus();
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

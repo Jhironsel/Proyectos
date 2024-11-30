@@ -207,7 +207,7 @@ public class MainForm
                         );
                         dlg.setVisible(true);
                     } catch (Exception ex) {
-                        farRequestedSpinner.requestFocusInWindow();
+                        farRequestedSpinner.requestFocus();
                     }
                 });
         verifyButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -236,7 +236,7 @@ public class MainForm
         UpdateUI();
         setVisible(true);
 
-        enrollButton.requestFocusInWindow();
+        enrollButton.requestFocus();
     }
 
     private void UpdateUI() {

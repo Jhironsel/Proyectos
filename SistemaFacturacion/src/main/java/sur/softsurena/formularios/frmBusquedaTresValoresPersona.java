@@ -10,7 +10,7 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
         initComponents();
         jPanel2.removeAll();
         jPanel2.add(txtTodo);
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -233,16 +233,16 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTodoActionPerformed
-//      txtApellidos.requestFocusInWindow();
+//      txtApellidos.requestFocus();
     }//GEN-LAST:event_txtTodoActionPerformed
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void jrbTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbTodoActionPerformed
         txtTodo.setText("");
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
         
         
         jPanel2.removeAll();
@@ -252,12 +252,12 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
                         new java.awt.Color(0, 0, 255), 2, true), "Todo ")
         );
         
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
     }//GEN-LAST:event_jrbTodoActionPerformed
 
     private void jrbNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbNombresActionPerformed
         txtTodo.setText("");
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
         
         jPanel2.removeAll();
         jPanel2.add(txtTodo);
@@ -266,12 +266,12 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
                         new java.awt.Color(0, 0, 255), 2, true), "Nombres ")
         );
         
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
     }//GEN-LAST:event_jrbNombresActionPerformed
 
     private void jrbCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbCedulaActionPerformed
         txtCedula.setValue(null);
-        txtCedula.requestFocusInWindow();
+        txtCedula.requestFocus();
         
         jPanel2.removeAll();
         jPanel2.add(txtCedula);
@@ -280,12 +280,12 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
                         new java.awt.Color(0, 0, 255), 2, true), "Cedulas ")
         );
         
-        txtCedula.requestFocusInWindow();
+        txtCedula.requestFocus();
     }//GEN-LAST:event_jrbCedulaActionPerformed
 
     private void jrbApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbApellidosActionPerformed
         txtTodo.setText("");
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
         
         
         jPanel2.removeAll();
@@ -295,7 +295,7 @@ public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
                         new java.awt.Color(0, 0, 255), 2, true), "Apellidos ")
         );
         
-        txtTodo.requestFocusInWindow();
+        txtTodo.requestFocus();
     }//GEN-LAST:event_jrbApellidosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

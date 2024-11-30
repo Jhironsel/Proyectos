@@ -39,44 +39,12 @@ public class M_Producto implements IProducto {
     public synchronized static List<Producto> getProductos(FiltroBusqueda filtro) {
         List<Producto> listaProducto = new ArrayList<>();
 
-        final String sql
-                = "SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, "
-                + "      NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, "
-                + "      ESTADO "
-                + "FROM GET_PRODUCTOS "
-                + "WHERE  ID = ? OR "
-                + "          TRIM(CODIGO) STARTING WITH TRIM(?) OR "
-                + "          TRIM(CODIGO) CONTAINING TRIM(?) OR "
-                + "          TRIM(DESCRIPCION) STARTING WITH TRIM(?) OR "
-                + "          TRIM(DESCRIPCION) CONTAINING TRIM(?) OR "
-                + "          ID_CATEGORIA IN( SELECT c.ID "
-                + "                             FROM VS_CATEGORIAS c "
-                + "                             WHERE UPPER(TRIM(c.DESCRIPCION)) STARTING WITH UPPER(TRIM(?))) "
-                + (Objects.isNull(filtro.getEstado()) ? "" : (filtro.getEstado() ? " AND ESTADO " : " AND ESTADO IS FALSE "))
-                + " ORDER BY ID "
-                + (Objects.isNull(filtro.getFilas()) ? "" : (filtro.getFilas() ? "ROWS (? - 1) * ? + 1 TO (? + (1 - 1)) * ?;" : ""));
-
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlProductos(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, (Objects.isNull(filtro.getId()) ? -1 : (int) filtro.getId()));
-
-            ps.setString(2, (Objects.isNull(filtro.getCriterioBusqueda()) ? "" : filtro.getCriterioBusqueda()));
-            ps.setString(3, (Objects.isNull(filtro.getCriterioBusqueda()) ? "" : filtro.getCriterioBusqueda()));
-            ps.setString(4, (Objects.isNull(filtro.getCriterioBusqueda()) ? "" : filtro.getCriterioBusqueda()));
-            ps.setString(5, (Objects.isNull(filtro.getCriterioBusqueda()) ? "" : filtro.getCriterioBusqueda()));
-            ps.setString(6, (Objects.isNull(filtro.getCriterioBusqueda()) ? "" : filtro.getCriterioBusqueda()));
-
-            if (!Objects.isNull(filtro.getFilas()) && filtro.getFilas()) {
-                //Parametros para la paginacion de contenido de las tablas.
-                ps.setInt(7, filtro.getNPaginaNro());
-                ps.setInt(8, filtro.getNCantidadFilas());
-                ps.setInt(9, filtro.getNPaginaNro());
-                ps.setInt(10, filtro.getNCantidadFilas());
-            }
 
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
@@ -120,10 +88,66 @@ public class M_Producto implements IProducto {
     public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS_CON_L
             = "Error al consultar la base de datos con la vista GET_PRODUCTOS del sistema.";
 
+    protected static String sqlProductos(FiltroBusqueda filtro) {
+        Boolean f_id = Objects.isNull(filtro.getId());
+        Boolean f_estado = Objects.isNull(filtro.getEstado());
+        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
+        Boolean f_where = (f_id && f_estado && f_criterio);
+        Boolean f_row = Objects.isNull(filtro.getFilas());
+
+        String r1 = (f_where ? "" : "WHERE ");
+        String r2 = (f_id ? "" : "ID = %d ".formatted(filtro.getId()));
+        String r3 = (f_id ? "" : (f_estado ? "" : "AND "));
+        String r4 = (f_estado ? "" : filtro.getEstado() ? "ESTADO " : "ESTADO IS FALSE ");
+        String r5 = (f_criterio ? "" : """
+                                       %sTRIM(CODIGO) STARTING WITH TRIM('%s') OR
+                                                              TRIM(CODIGO) CONTAINING TRIM('%s') OR
+                                                              TRIM(DESCRIPCION) STARTING WITH TRIM('%s') OR
+                                                              TRIM(DESCRIPCION) CONTAINING TRIM('%s') OR
+                                                              ID_CATEGORIA IN(
+                                                                             SELECT ID
+                                                                             FROM VS_CATEGORIAS
+                                                                             WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('%s'))
+                                                              ) 
+                                       """.formatted(
+                                               f_id && f_estado ? "":"OR ",
+                                               filtro.getCriterioBusqueda(),
+                                               filtro.getCriterioBusqueda(),
+                                               filtro.getCriterioBusqueda(),
+                                               filtro.getCriterioBusqueda(),
+                                               filtro.getCriterioBusqueda()
+                                       )
+                );
+
+        return """
+                SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, 
+                NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, 
+                ESTADO 
+                FROM GET_PRODUCTOS
+                %S%S%S%S%S
+                """.strip().trim().formatted(r1, r2, r3, r4, r5).strip().trim()
+                .concat("\nORDER BY ID").strip().trim()
+                .concat(
+                        f_row ? "" : (
+                                filtro.getFilas() ? 
+                                        "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                                .formatted(
+                                                        filtro.getNPaginaNro(),
+                                                        filtro.getNCantidadFilas(),
+                                                        filtro.getNPaginaNro(),
+                                                        filtro.getNCantidadFilas()
+                                                ) : 
+                                        ""
+                                )).strip().trim();
+    }
+
+//------------------------------------------------------------------------------
     /**
      * Permite obtener los productos del sistema por una categoria identificada
      * por su ID y su estado definido por el sistema.
      *
+     * TODO 27/11/2024 pasarle un filtro a este metodo.
+     * 
      * @param idCategoria Categoria que se necesita consultar.
      * @param estado el estado por la categoria del producto.
      * @return
@@ -271,7 +295,7 @@ public class M_Producto implements IProducto {
                     ERROR_AL__INSERTAR__PRODUCTO,
                     ex
             );
-            
+
             return Resultado
                     .builder()
                     .id(-1)

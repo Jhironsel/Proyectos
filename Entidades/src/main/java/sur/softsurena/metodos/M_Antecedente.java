@@ -17,10 +17,13 @@ public class M_Antecedente {
     /**
      * Permite eliminar un antecedente registrado previamente del sistema.
      *
-     * @param idAntecedente
+     * @param antecedente contiene el identificador de la consulta a borrar.
+     * 
      * @return
      */
-    public synchronized static Resultado borrarAntecedente(int idAntecedente) {
+    public synchronized static Resultado borrarAntecedente(
+            Antecedente antecedente
+    ) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_ANTECEDENTE(?);";
 
@@ -30,10 +33,10 @@ public class M_Antecedente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, idAntecedente);
+            ps.setInt(1, antecedente.getId());
 
             ps.execute();
-            
+
             return Resultado
                     .builder()
                     .mensaje(BORRADO_CORRECTAMENTE)
@@ -42,8 +45,8 @@ public class M_Antecedente {
                     .build();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_BORRAR_PACIENTE, 
+                    Level.SEVERE,
+                    ERROR_AL_BORRAR_PACIENTE,
                     ex
             );
             return Resultado
@@ -54,9 +57,9 @@ public class M_Antecedente {
                     .build();
         }
     }
-    public static final String BORRADO_CORRECTAMENTE 
+    public static final String BORRADO_CORRECTAMENTE
             = "Antecendente borrado correctamente";
-    public static final String ERROR_AL_BORRAR_PACIENTE 
+    public static final String ERROR_AL_BORRAR_PACIENTE
             = "Error al borrar paciente...";
 
     /**
@@ -66,16 +69,16 @@ public class M_Antecedente {
      * Los antecedentes son aquellos que el paciente a tenido antes de la
      * consulta programada.
      *
-     * @param id_consulta Identificador de la consulta, dicha consulta ya
-     * contiene el id Del paciente.
-     *
-     * @param descripcion Es una pequeña descripcion del antecendete que el
+     * @param antecedente objeto que contiene el identificador de la consulta de 
+     * dicha consulta, tambien una pequeña descripcion del antecendete que el
      * paciente padeció antes de la consulta.
      *
      * @return retorna una cadena o mensaje con la accion realizada por el
      * sistema.
      */
-    public synchronized static Resultado agregarAntecedente(int id_consulta, String descripcion) {
+    public synchronized static Resultado agregarAntecedente(
+            Antecedente antecedente
+    ) {
         final String sql
                 = "SELECT O_ID FROM SP_I_ANTECEDENTE (?, ?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -84,17 +87,18 @@ public class M_Antecedente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, id_consulta);
-            ps.setString(2, descripcion);
-            
+            ps.setInt(1, antecedente.getId_consulta());
+            ps.setString(2, antecedente.getDescripcion());
+
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs.next()) {
                 return Resultado
                         .builder()
                         .id(rs.getInt("O_ID"))
                         .mensaje(ANTECEDENTE_AGREGADO_CORRECTAMENTE)
                         .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
                         .build();
             }
         } catch (SQLException ex) {
@@ -109,6 +113,7 @@ public class M_Antecedente {
                 .id(-1)
                 .mensaje(ERROR_AL_INSERTAR__ANTECEDENTES)
                 .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
                 .build();
     }
     public static final String ANTECEDENTE_AGREGADO_CORRECTAMENTE
@@ -120,12 +125,14 @@ public class M_Antecedente {
      * Metodo que permite actualizar los antecendente de un paciente. Se utiliza
      * el identificador del antecedente para ser actualizado.
      *
-     * @param idAntecedente
-     * @param descrpcion
+     * @param antecedente objecto que contiene el identificador del registro y 
+     * la descripcion del antecedente del paciente. 
+     * 
      * @return
      */
-    public static synchronized Resultado modificarAntecedente(int idAntecedente,
-            String descrpcion) {
+    public static synchronized Resultado modificarAntecedente(
+            Antecedente antecedente
+    ) {
         final String sql = "EXECUTE PROCEDURE SP_U_ANTECEDENTE(?, ?);";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -134,8 +141,8 @@ public class M_Antecedente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, idAntecedente);
-            ps.setString(2, descrpcion);
+            ps.setInt(1, antecedente.getId());
+            ps.setString(2, antecedente.getDescripcion());
 
             ps.executeUpdate();
 
@@ -165,30 +172,35 @@ public class M_Antecedente {
             = "Error al modificar el antecendete...";
 
     /**
-     * [INFO TABLA] Es una tabla utilizada para almacenar los antecedentes de
+     * Es una tabla utilizada para almacenar los antecedentes de
      * los pacientes del sistema, dicho antecedente describe la condicion de los
      * paciente en el momento de la consulta.
      *
-     * @param idPaciente Identificador del paciente, que tiene registros de
-     * historico de los antecedentes.
+     * @param antecedente objecto que contiene identificador de la consulta, 
+     * que tiene registros de historico de los antecedentes.
      *
      * @return Se obtiene una lista de todos los antecendentes de los registros
      * del paciente.
      */
     public synchronized static List<Antecedente> getAntecedentes(
-            int idPaciente) {
+            Antecedente antecedente
+    ) {
         final String sql
                 = "SELECT ID, ID_CONSULTA, DESCRIPCION "
                 + "FROM V_ANTECEDENTES "
                 + "WHERE ID = ?;";
+
         List<Antecedente> lista = new ArrayList<>();
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, idPaciente);
+
+            ps.setInt(1, antecedente.getId());
+
             try (ResultSet rs = ps.executeQuery();) {
 
                 while (rs.next()) {
@@ -202,14 +214,14 @@ public class M_Antecedente {
                     );
                 }
             }
-            return lista;
+
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
                     "Error al consultar la vista V_ANTECEDENTES del sistema.",
                     ex
             );
-            return lista;
         }
+        return lista;
     }
 }

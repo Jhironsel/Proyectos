@@ -9,35 +9,11 @@ import sur.softsurena.abstracta.Persona;
 @Getter
 public class Asegurado {
 
-    private final Integer id_ars;
+    private final Integer id;
+    private final ARS ars;
     private final Persona persona;
     private final String no_nss;
     private final Boolean estado;
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + this.id_ars;
-        hash = 83 * hash + Objects.hashCode(this.no_nss);
-        hash = 83 * hash + Objects.hashCode(this.estado);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Asegurado other = (Asegurado) obj;
-        
-        return Objects.equals(this.no_nss, other.no_nss);
-    }
 
     @Override
     public String toString() {

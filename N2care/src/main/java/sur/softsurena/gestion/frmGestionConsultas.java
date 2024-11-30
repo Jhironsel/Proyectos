@@ -831,7 +831,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
         
 //        if (dchFecha.getDate() == null) {
 //            JOptionPane.showInternalMessageDialog(this, "Debe seleccionar una fecha.");
-//            dchFecha.requestFocusInWindow();
+//            dchFecha.requestFocus();
 //            btnFecha.doClick();
 //            return;
 //        }
@@ -841,7 +841,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
         
 //        if (dchFecha.getDate() == null) {
 //            JOptionPane.showInternalMessageDialog(this, "Debe seleccionar una fecha.");
-//            dchFecha.requestFocusInWindow();
+//            dchFecha.requestFocus();
 //            btnFecha.doClick();
 //            return;
 //        }
@@ -850,7 +850,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
     private void btnReporteIdPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteIdPacienteActionPerformed
 //        if (dchFecha.getDate() == null) {
 //            JOptionPane.showInternalMessageDialog(this, "Debe seleccionar una fecha.");
-//            dchFecha.requestFocusInWindow();
+//            dchFecha.requestFocus();
 //            btnFecha.doClick();
 //            return;
 //        }
@@ -859,7 +859,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
     private void btnReporteSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteSexoActionPerformed
 //        if (dchFecha.getDate() == null) {
 //            JOptionPane.showInternalMessageDialog(this, "Debe seleccionar una fecha.");
-//            dchFecha.requestFocusInWindow();
+//            dchFecha.requestFocus();
 //            btnFecha.doClick();
 //            return;
 //        }
@@ -869,14 +869,14 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
         if (txtCodigoVerificacion.getText().trim().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe digitar el codigo de verificacion.");
-            txtCodigoVerificacion.requestFocusInWindow();
+            txtCodigoVerificacion.requestFocus();
             return;
         }
 
         if (txtNombreApellidosSeguro.getText().trim().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe seleccionar un paciente.");
-            txtNombreApellidosSeguro.requestFocusInWindow();
+            txtNombreApellidosSeguro.requestFocus();
             return;
         }
 
@@ -976,7 +976,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
             txtTotal.setValue(total);
 
-            txtCodigoVerificacion.requestFocusInWindow();
+            txtCodigoVerificacion.requestFocus();
         }
     }//GEN-LAST:event_tblGestionPacientesMouseClicked
 
@@ -986,7 +986,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
           un registro, se devuelve si la condicion se cumple. */
         if (txtNombreApellidosSeguro.getText().trim().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this, "Debe seleccionar un paciente.");
-            txtNombreApellidosSeguro.requestFocusInWindow();
+            txtNombreApellidosSeguro.requestFocus();
             return;
         }
 
@@ -994,7 +994,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             JOptionPane.showInternalMessageDialog(this,
                     "No existe una consulta pre-programada en esta fecha "
                     + Utilidades.formatDate(dcConsulta.getDate(), ""));
-            cbFechaUsuario.requestFocusInWindow();
+            cbFechaUsuario.requestFocus();
             return;
         }
 
@@ -1074,7 +1074,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
     private void txtNombreApellidosSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreApellidosSeguroActionPerformed
         if (jtpFormularios.getSelectedIndex() == 0) {
-            btnRegistre.requestFocusInWindow();
+            btnRegistre.requestFocus();
         }
     }//GEN-LAST:event_txtNombreApellidosSeguroActionPerformed
 
@@ -1094,24 +1094,24 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
     private void btnLimpiarCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarCampoActionPerformed
         txtNombreApellidosSeguro.setText("");
-        txtNombreApellidosSeguro.requestFocusInWindow();
+        txtNombreApellidosSeguro.requestFocus();
         llenarTabla("");
     }//GEN-LAST:event_btnLimpiarCampoActionPerformed
 
     private void rbSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbSeguroActionPerformed
-        txtNombreApellidosSeguro.requestFocusInWindow();
+        txtNombreApellidosSeguro.requestFocus();
     }//GEN-LAST:event_rbSeguroActionPerformed
 
     private void rbApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbApellidosActionPerformed
-        txtNombreApellidosSeguro.requestFocusInWindow();
+        txtNombreApellidosSeguro.requestFocus();
     }//GEN-LAST:event_rbApellidosActionPerformed
 
     private void rbNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNombreActionPerformed
-        txtNombreApellidosSeguro.requestFocusInWindow();
+        txtNombreApellidosSeguro.requestFocus();
     }//GEN-LAST:event_rbNombreActionPerformed
 
     private void rbCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbCedulaActionPerformed
-        txtNombreApellidosSeguro.requestFocusInWindow();
+        txtNombreApellidosSeguro.requestFocus();
     }//GEN-LAST:event_rbCedulaActionPerformed
 
     private void cbFechaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFechaUsuarioActionPerformed
@@ -1143,7 +1143,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
     private void txtCodigoVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVerificacionActionPerformed
         
-        btnVerificarCita.requestFocusInWindow();
+        btnVerificarCita.requestFocus();
     }//GEN-LAST:event_txtCodigoVerificacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

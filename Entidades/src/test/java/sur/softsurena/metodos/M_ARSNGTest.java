@@ -53,7 +53,7 @@ public class M_ARSNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-    
+
     @Test(
             enabled = true,
             priority = 0,
@@ -62,7 +62,7 @@ public class M_ARSNGTest {
                           el sistema.
                           """
     )
-    public void testAgregarArs() {
+    public void testAgregarARS() {
         Resultado result = M_ARS.agregarARS(
                 ARS
                         .builder()
@@ -96,7 +96,7 @@ public class M_ARSNGTest {
 
         id_ARS = result.getId();
     }
-
+    
     @Test(
             enabled = true,
             priority = 1,
@@ -233,5 +233,58 @@ public class M_ARSNGTest {
                 result.isEmpty(),
                 ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
         );
+    }
+
+    
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          Test para verificar que la consulta es la correcta.
+                          """
+    )
+    public void testSqlARS() {
+        String expResult = """
+                           SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                           FROM V_ARS;
+                           """.strip().trim();
+        
+        String result = M_ARS.sqlARS(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
+        
+        assertEquals(result, expResult);
+        //----------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                    FROM V_ARS
+                    WHERE ESTADO;
+                    """.strip().trim();
+        
+        result = M_ARS.sqlARS(
+                FiltroBusqueda
+                        .builder()
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+        
+        assertEquals(result, expResult);
+        //----------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                    FROM V_ARS
+                    WHERE ESTADO IS FALSE;
+                    """.strip().trim();
+        
+        result = M_ARS.sqlARS(
+                FiltroBusqueda
+                        .builder()
+                        .estado(Boolean.FALSE)
+                        .build()
+        );
+        
+        assertEquals(result, expResult);
     }
 }

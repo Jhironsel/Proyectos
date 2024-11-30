@@ -1033,7 +1033,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
         cliUsuario = 0;
         mostrarRegistro();
-        btnPrimero.requestFocusInWindow();
+        btnPrimero.requestFocus();
     }//GEN-LAST:event_btnPrimeroActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -1053,7 +1053,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             cliUsuario = numeroUsuarios - 1;
         }
         mostrarRegistro();
-        btnAnterior.requestFocusInWindow();
+        btnAnterior.requestFocus();
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
@@ -1069,7 +1069,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             cliUsuario = 0;
         }
         mostrarRegistro();
-        btnSiguiente.requestFocusInWindow();
+        btnSiguiente.requestFocus();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
@@ -1082,7 +1082,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
         cliUsuario = numeroUsuarios - 1;
         mostrarRegistro();
-        btnUltimo.requestFocusInWindow();
+        btnUltimo.requestFocus();
     }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -1129,7 +1129,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     "Debe Digitar un Nombre...",
                     "Ventana de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
             return;
         }
         if (txtApellidos.getText().trim().equals("")) {
@@ -1137,7 +1137,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     "Debe Digitar Apellidos...",
                     "Ventana de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
         if (txtUserName.getText().trim().isEmpty()) {
@@ -1145,7 +1145,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     "Debe Digitar Login del Usuario...",
                     "Ventana de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtUserName.requestFocusInWindow();
+            txtUserName.requestFocus();
             return;
         }
         if (cbPerfil.getSelectedIndex() == 0) {
@@ -1153,7 +1153,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     "Debe seleccionar un Perfil!",
                     "Ventana de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            cbPerfil.requestFocusInWindow();
+            cbPerfil.requestFocus();
             return;
         }
         
@@ -1164,7 +1164,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     JOptionPane.YES_NO_OPTION);
             if (opc == JOptionPane.NO_OPTION) {
                 cbEstado.setSelected(true);
-                btnGuardar.requestFocusInWindow();
+                btnGuardar.requestFocus();
                 return;
             }
         }
@@ -1177,7 +1177,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                         "Debe Digitar la Clave del usuario...",
                         "Ventana de validacion",
                         JOptionPane.DEFAULT_OPTION);
-                txtClave.requestFocusInWindow();
+                txtClave.requestFocus();
                 return;
             }
 
@@ -1186,7 +1186,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                         "Debe Digitar la Clave del usuario...",
                         "Verifique la clave, por favor!",
                         JOptionPane.DEFAULT_OPTION);
-                txtClaveRepetir.requestFocusInWindow();
+                txtClaveRepetir.requestFocus();
                 return;
             }
 
@@ -1198,7 +1198,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                         JOptionPane.DEFAULT_OPTION);
                 txtClave.setText("");
                 txtClaveRepetir.setText("");
-                txtClave.requestFocusInWindow();
+                txtClave.requestFocus();
                 return;
             }
         }
@@ -1343,13 +1343,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
     private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
         if (btnGuardar.isEnabled()) {
-            btnGuardar.requestFocusInWindow();
+            btnGuardar.requestFocus();
         }
     }//GEN-LAST:event_cbEstadoActionPerformed
 
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
         if (btnGuardar.isEnabled()) {
-            txtClaveRepetir.requestFocusInWindow();
+            txtClaveRepetir.requestFocus();
         }
     }//GEN-LAST:event_txtClaveActionPerformed
 
@@ -1372,7 +1372,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
     private void jcbAdministradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbAdministradorActionPerformed
         if (btnGuardar.isEnabled()) {
-            btnGuardar.requestFocusInWindow();
+            btnGuardar.requestFocus();
         }
     }//GEN-LAST:event_jcbAdministradorActionPerformed
 
@@ -1380,37 +1380,37 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (btnGuardar.isEnabled()) {
             
             txtExequatur.setValue(null);
-            txtExequatur.requestFocusInWindow();
+            txtExequatur.requestFocus();
         }
     }//GEN-LAST:event_cbPerfilPopupMenuWillBecomeInvisible
 
     private void txtExequaturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtExequaturActionPerformed
         if (btnGuardar.isEnabled()) {
-            txtUserName.requestFocusInWindow();
+            txtUserName.requestFocus();
         }
     }//GEN-LAST:event_txtExequaturActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
         if (btnGuardar.isEnabled()) {
-            txtSNombre.requestFocusInWindow();
+            txtSNombre.requestFocus();
         }
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
         if (btnGuardar.isEnabled()) {
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
         }
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
         if (btnGuardar.isEnabled()) {
-            txtEspecialidad.requestFocusInWindow();
+            txtEspecialidad.requestFocus();
         }
     }//GEN-LAST:event_txtApellidosActionPerformed
 
     private void txtEspecialidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEspecialidadActionPerformed
         if (btnGuardar.isEnabled()) {
-            cbPerfil.requestFocusInWindow();
+            cbPerfil.requestFocus();
         }
     }//GEN-LAST:event_txtEspecialidadActionPerformed
 
@@ -1435,7 +1435,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                             JOptionPane.DEFAULT_OPTION);
 
                     if (resp == JOptionPane.NO_OPTION) {
-                        txtUserName.requestFocusInWindow();
+                        txtUserName.requestFocus();
                         txtUserName.setSelectionStart(0);
                         txtUserName.setSelectionEnd(txtUserName.getText().length());
                         return;
@@ -1456,7 +1456,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 if (opc == JOptionPane.YES_OPTION) {
                     borrarUsuario(txtUserName.getText().trim().toUpperCase(), true);
                 } else {
-                    txtUserName.requestFocusInWindow();
+                    txtUserName.requestFocus();
                     txtUserName.setSelectionStart(0);
                     txtUserName.setSelectionEnd(txtUserName.getText().length());
                     return;
@@ -1704,7 +1704,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         cbEstado.setSelected(false);
         jcbAdministrador.setSelected(false);
         cbPerfil.setSelectedIndex(0);
-        txtPNombre.requestFocusInWindow();
+        txtPNombre.requestFocus();
     }
 
     private synchronized void ordenarTabla() {

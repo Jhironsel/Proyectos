@@ -343,7 +343,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 //        txtNumero.setText("" + (idMaximoRegistro() + 1));
-        txtNumeroFactura.requestFocusInWindow();
+        txtNumeroFactura.requestFocus();
     }//GEN-LAST:event_formWindowOpened
 
     private void cbEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbEstadoMouseClicked
@@ -359,11 +359,11 @@ public class frmEntradaProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_cbEstadoItemStateChanged
 
     private void txtPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioActionPerformed
-        btnAgregar.requestFocusInWindow();
+        btnAgregar.requestFocus();
     }//GEN-LAST:event_txtPrecioActionPerformed
 
     private void txtEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntradaActionPerformed
-        txtCosto.requestFocusInWindow();
+        txtCosto.requestFocus();
     }//GEN-LAST:event_txtEntradaActionPerformed
 
     private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
@@ -389,7 +389,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtCodigoProducto.setText("");
-            txtCodigoProducto.requestFocusInWindow();
+            txtCodigoProducto.requestFocus();
             return;
         }
 
@@ -403,15 +403,15 @@ public class frmEntradaProducto extends javax.swing.JDialog {
         });
 
         jlImagen.validate();
-        txtEntrada.requestFocusInWindow();
+        txtEntrada.requestFocus();
     }//GEN-LAST:event_txtCodigoProductoActionPerformed
 
     private void txtNumeroFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroFacturaActionPerformed
-        txtCodigoProducto.requestFocusInWindow();
+        txtCodigoProducto.requestFocus();
     }//GEN-LAST:event_txtNumeroFacturaActionPerformed
 
     private void txtCostoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostoActionPerformed
-        txtPrecio.requestFocusInWindow();
+        txtPrecio.requestFocus();
     }//GEN-LAST:event_txtCostoActionPerformed
 
     private void txtNumeroFacturaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumeroFacturaKeyReleased
@@ -419,7 +419,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNumeroFacturaKeyReleased
 
     private void txtImpuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtImpuestoActionPerformed
-        btnAgregar.requestFocusInWindow();
+        btnAgregar.requestFocus();
     }//GEN-LAST:event_txtImpuestoActionPerformed
 
     private void txtCostoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCostoFocusGained
@@ -458,7 +458,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtNumeroFactura.requestFocusInWindow();
+            txtNumeroFactura.requestFocus();
             return;
         }
 
@@ -469,7 +469,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCodigoProducto.requestFocusInWindow();
+            txtCodigoProducto.requestFocus();
             return;
         }
 
@@ -491,7 +491,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtEntrada.requestFocusInWindow();
+            txtEntrada.requestFocus();
             return;
         }
 
@@ -514,7 +514,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCosto.requestFocusInWindow();
+            txtCosto.requestFocus();
             return;
         }
 
@@ -535,7 +535,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtPrecio.requestFocusInWindow();
+            txtPrecio.requestFocus();
             return;
         }
 
@@ -561,7 +561,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
 
             txtCosto.setText("");
             txtPrecio.setText("");
-            txtCosto.requestFocusInWindow();
+            txtCosto.requestFocus();
 
             return;
         }
@@ -578,7 +578,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
             if (resp == JOptionPane.YES_OPTION) {
                 txtImpuesto.setEditable(true);
                 txtImpuesto.setText("0.00");
-                txtImpuesto.requestFocusInWindow();
+                txtImpuesto.requestFocus();
                 txtImpuesto.setSelectionStart(0);
                 txtImpuesto.setSelectionEnd(txtImpuesto.getText().length());
                 impuesto = true;
@@ -597,7 +597,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtImpuesto.requestFocusInWindow();
+                txtImpuesto.requestFocus();
                 return;
             }
             BigDecimal c = new BigDecimal(txtImpuesto.getText());
@@ -610,7 +610,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtImpuesto.setText("");
-                txtImpuesto.requestFocusInWindow();
+                txtImpuesto.requestFocus();
                 return;
             }
         }
@@ -630,7 +630,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
         txtNumeroFactura.setEditable(false);
         quitarImagen();
         limpiar();
-        txtCodigoProducto.requestFocusInWindow();
+        txtCodigoProducto.requestFocus();
 
         impuesto = false;
     }//GEN-LAST:event_btnAgregarActionPerformed

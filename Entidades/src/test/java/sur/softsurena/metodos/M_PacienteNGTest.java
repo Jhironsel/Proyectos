@@ -11,6 +11,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
@@ -24,12 +25,12 @@ import static sur.softsurena.metodos.M_Paciente.PACIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_MODIFICADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.getListEntidad;
 import sur.softsurena.utilidades.Resultado;
+import sur.softsurena.utilidades.Utilidades;
 
 @Getter
 public class M_PacienteNGTest {
 
     private M_PersonaNGTest persona;
-    private Paciente paciente;
 
     public M_PacienteNGTest() {
         persona = new M_PersonaNGTest();
@@ -73,9 +74,7 @@ public class M_PacienteNGTest {
     public void testAgregarEntidad() {
         persona.testAgregarEntidad();
 
-        generarPaciente();
-
-        Resultado result = M_Paciente.agregarEntidad(paciente);
+        Resultado result = M_Paciente.agregarEntidad(generarPaciente());
 
         assertEquals(
                 result,
@@ -89,7 +88,7 @@ public class M_PacienteNGTest {
         );
 
         assertTrue(
-                persona.getIdPersona() > 0,
+                M_PersonaNGTest.persona().getId_persona() > 0,
                 ERROR_AL_INSERTAR_PACIENTE
         );
     }
@@ -100,9 +99,7 @@ public class M_PacienteNGTest {
             priority = 1
     )
     public void testModificarEntidad() {
-        generarPaciente();
-
-        Resultado result = M_Paciente.modificarEntidad(paciente);
+        Resultado result = M_Paciente.modificarEntidad(generarPaciente());
 
         assertEquals(
                 result,
@@ -122,7 +119,9 @@ public class M_PacienteNGTest {
             priority = 2
     )
     public void testGetEntidad() {
-        Paciente result = M_Paciente.getEntidad(persona.getIdPersona());
+        Paciente result = M_Paciente.getEntidad(
+                M_PersonaNGTest.persona().getId_persona()
+        );
 
         assertNotNull(
                 result,
@@ -157,7 +156,7 @@ public class M_PacienteNGTest {
     public void testGetSexoPaciente() {
         assertTrue(
                 M_Paciente.getSexoPaciente(
-                        persona.getIdPersona()
+                        M_PersonaNGTest.persona().getId_persona()
                 ).equals("M"),
                 ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
         );
@@ -238,7 +237,9 @@ public class M_PacienteNGTest {
             priority = 3
     )
     public void testEliminarEntidad() {
-        Resultado result = M_Paciente.eliminarEntidad(persona.getIdPersona());
+        Resultado result = M_Paciente.eliminarEntidad(
+                M_PersonaNGTest.persona().getId_persona()
+        );
 
         assertEquals(
                 result,
@@ -248,16 +249,25 @@ public class M_PacienteNGTest {
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build(),
-                ERROR_AL_BORRAR_PACIENTE.formatted(persona.getIdPersona())
+                ERROR_AL_BORRAR_PACIENTE.formatted(
+                        M_PersonaNGTest.persona().getId_persona()
+                )
         );
 
         persona.testEliminarEntidad();
     }
 
-    public synchronized void generarPaciente() {
-        paciente = Paciente
+    public synchronized Paciente generarPaciente() {
+        return Paciente
                 .builder()
-                .id_persona(persona.getIdPersona())
+                .persona(
+                        Persona
+                                .builder()
+                                .id_persona(
+                                        M_PersonaNGTest.persona().getId_persona()
+                                )
+                                .build()
+                )
                 .pesoNacimiento(BigDecimal.TEN)
                 .altura(new BigDecimal("14.98"))
                 .perimetroCefalico(new BigDecimal(8.5d))

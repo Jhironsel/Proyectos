@@ -98,8 +98,7 @@ public class hiloRestaurar extends Thread {
      * 2) Obtenemos la clave del usuario. Si el usuario ingresa una clave en
      * blanco detenemos el proceso.
      *
-     *
-     *
+     * @return 
      */
     public boolean correr() {
         usuarioMaster = JOptionPane.showInputDialog(
@@ -124,7 +123,7 @@ public class hiloRestaurar extends Thread {
                 JOptionPane.INFORMATION_MESSAGE
         );
 
-        pf.requestFocusInWindow();
+        pf.requestFocus();
 
         if (claveMaster.isBlank()) {
             return true;

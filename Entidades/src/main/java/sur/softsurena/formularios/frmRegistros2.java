@@ -175,7 +175,7 @@ public class frmRegistros2 extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtIdMaquina.requestFocusInWindow();
+            txtIdMaquina.requestFocus();
             return;
         }
         if (txtClave1.getPassword().length == 0) {
@@ -185,7 +185,7 @@ public class frmRegistros2 extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtClave1.requestFocusInWindow();
+            txtClave1.requestFocus();
             return;
         }
 
@@ -196,7 +196,7 @@ public class frmRegistros2 extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtClave2.requestFocusInWindow();
+            txtClave2.requestFocus();
             return;
         }
 
@@ -207,7 +207,7 @@ public class frmRegistros2 extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtClaveServidor.requestFocusInWindow();
+            txtClaveServidor.requestFocus();
             return;
         }
 
@@ -218,7 +218,7 @@ public class frmRegistros2 extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            dchFecha.requestFocusInWindow();
+            dchFecha.requestFocus();
             return;
         }
 

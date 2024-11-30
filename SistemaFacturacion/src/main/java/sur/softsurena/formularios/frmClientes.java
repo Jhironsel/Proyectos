@@ -26,6 +26,7 @@ import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Provincia;
 import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoPersona;
+import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.interfaces.ICliente;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_ContactoEmail;
@@ -99,7 +100,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private void btnDireccionEnable(boolean valor) {
         btnEditarDireccion.setEnabled(valor);
         btnBorrarDirrecion.setEnabled(valor);
-        txtDireccion.requestFocusInWindow();
+        txtDireccion.requestFocus();
     }
 
     private void mensajeResultado(Resultado resultado, boolean estado) {
@@ -139,7 +140,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         new java.awt.Font("FreeSans", 0, 12)));
 
         v_editor.addActionListener((ActionEvent e) -> {
-            jcbEstadoCivil.requestFocusInWindow();
+            jcbEstadoCivil.requestFocus();
             jcbEstadoCivil.showPopup();
         });
 
@@ -179,21 +180,21 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jpMantenimiento2 = new javax.swing.JPanel();
         jtpGeneralesDireccionContactos = new javax.swing.JTabbedPane();
         jpGenerales = new javax.swing.JPanel();
-        jcbSexo = new javax.swing.JComboBox();
+        jcbSexo = new javax.swing.JComboBox<>();
         txtSNombre = new javax.swing.JTextField();
-        jcbPersona = new javax.swing.JComboBox();
+        jcbPersona = new javax.swing.JComboBox<>();
         cbEstado = new javax.swing.JCheckBox();
         txtCedula = new javax.swing.JFormattedTextField();
         dchFechaNacimiento = new com.toedter.calendar.JDateChooser();
         btnCedulaValidad = new RSMaterialComponent.RSButtonMaterialIconOne();
         txtApellidos = new javax.swing.JTextField();
-        jcbEstadoCivil = new javax.swing.JComboBox();
+        jcbEstadoCivil = new javax.swing.JComboBox<>();
         txtPNombre = new javax.swing.JTextField();
         jpDireccion = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jcbProvincias = new RSMaterialComponent.RSComboBox();
-        jcbMunicipios = new RSMaterialComponent.RSComboBox();
-        jcbDistritoMunicipal = new RSMaterialComponent.RSComboBox();
+        jcbProvincias = new javax.swing.JComboBox<>();
+        jcbMunicipios = new javax.swing.JComboBox<>();
+        jcbDistritoMunicipal = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         btnAgregarDirecciones = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -308,11 +309,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 "Cedula", "Persona", "Primer Nombre", "Segundo Nombre", "Apellidos", "Sexo", "Fecha Nacimiento", "Fecha de Ingreso", "Estado"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[]{
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -587,14 +588,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             .addGroup(jpGeneralesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpGeneralesLayout.createSequentialGroup()
-                        .addComponent(jcbPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbEstadoCivil, 0, 174, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpGeneralesLayout.createSequentialGroup()
                         .addComponent(txtPNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -605,7 +598,15 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCedulaValidad, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(cbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jpGeneralesLayout.createSequentialGroup()
+                        .addComponent(jcbPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbEstadoCivil, 0, 180, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jpGeneralesLayout.setVerticalGroup(
@@ -641,10 +642,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         jPanel5.setLayout(new java.awt.GridLayout(1, 3, 6, 0));
 
-        jcbProvincias.setForeground(new java.awt.Color(37, 45, 223));
-        jcbProvincias.setColorFondo(new java.awt.Color(255, 255, 255));
         jcbProvincias.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        jcbProvincias.setName("jcbProvincia"); // NOI18N
+        jcbProvincias.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Provincia", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        jcbProvincias.setName("jcbPersona"); // NOI18N
         jcbProvincias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbProvinciasActionPerformed(evt);
@@ -657,11 +657,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         });
         jPanel5.add(jcbProvincias);
 
-        jcbMunicipios.setForeground(new java.awt.Color(37, 45, 223));
-        jcbMunicipios.setColorFondo(new java.awt.Color(255, 255, 255));
-        jcbMunicipios.setEnabled(false);
         jcbMunicipios.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        jcbMunicipios.setName("jcbMunicipios"); // NOI18N
+        jcbMunicipios.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Municipio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        jcbMunicipios.setName("jcbPersona"); // NOI18N
         jcbMunicipios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbMunicipiosActionPerformed(evt);
@@ -674,11 +672,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         });
         jPanel5.add(jcbMunicipios);
 
-        jcbDistritoMunicipal.setForeground(new java.awt.Color(37, 45, 223));
-        jcbDistritoMunicipal.setColorFondo(new java.awt.Color(255, 255, 255));
-        jcbDistritoMunicipal.setEnabled(false);
         jcbDistritoMunicipal.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        jcbDistritoMunicipal.setName("jcbDistritoMunicipal"); // NOI18N
+        jcbDistritoMunicipal.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Distrito Municipal", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        jcbDistritoMunicipal.setName("jcbPersona"); // NOI18N
         jcbDistritoMunicipal.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -770,11 +766,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 "Provincia", "Municipio", "Distrito Municipal", "Calle y No. Casa", "Fecha", "Estado", "Por defecto"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[] {
                 java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -816,7 +812,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1079,7 +1075,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 .addGap(3, 3, 3)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1255,7 +1251,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addComponent(jtpPrincipal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1268,13 +1264,13 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+                .addComponent(jspGeneral)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jspGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
+                .addComponent(jspGeneral)
                 .addGap(0, 0, 0))
         );
 
@@ -1300,8 +1296,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         //Se agrega el panel de manteniento y se muestra.
         cambioBoton(true);
 
-        idCliente = ((Persona) tblClientes.getValueAt(
-                tblClientes.getSelectedRow(), 0)).getId_persona();
+        idCliente = ((Generales) tblClientes.getValueAt(
+                tblClientes.getSelectedRow(), 0
+        )).getPersona().getId_persona();
 
         //Al mostrarse el modulo de mantenimiento se deberia mostrar la 
         //informacion del cliente.
@@ -1470,7 +1467,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
 
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
 
             return;
         }
@@ -1485,7 +1482,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
 
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
 
             return;
         }
@@ -1499,7 +1496,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     JOptionPane.ERROR_MESSAGE
             );
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
-            dchFechaNacimiento.requestFocusInWindow();
+            dchFechaNacimiento.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------5
@@ -1511,7 +1508,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     JOptionPane.ERROR_MESSAGE
             );
             jtpGeneralesDireccionContactos.setSelectedComponent(jpGenerales);
-            dchFechaNacimiento.requestFocusInWindow();
+            dchFechaNacimiento.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------6
@@ -1529,7 +1526,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             );
             if (resp == JOptionPane.YES_OPTION) {
                 jtpGeneralesDireccionContactos.setSelectedComponent(jpDireccion);
-                txtDireccion.requestFocusInWindow();
+                txtDireccion.requestFocus();
                 return;
             }
         }
@@ -1563,9 +1560,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         idCliente = -1;
 
         //Condicional para saber si no esta vacia la lista. 
-        if (cedula.getId_persona() > 0) {
+        if (cedula.getPersona().getId_persona() > 0) {
             //Cliente existe en la base de datos. 
-            idCliente = cedula.getId_persona(); //Validacion 8
+            idCliente = cedula.getPersona().getId_persona(); //Validacion 8
         }
 
         // si es nuevo validamos que el Cliente no exista
@@ -1665,13 +1662,23 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     M_Generales.agregarEntidad(
                             Generales
                                     .builder()
-                                    .id_persona(idCliente)
+                                    .persona(
+                                            Persona
+                                                    .builder()
+                                                    .id_persona(idCliente)
+                                                    .build()
+                                    )
                                     .cedula(txtCedula.getValue().toString())
                                     .estado_civil(
                                             ((EstadoCivil) jcbEstadoCivil.getSelectedItem())
                                                     .getAbreviatura()
                                     )
-                                    .id_tipo_sangre(0)
+                                    .tipoSangre(
+                                            TipoSangre
+                                                    .builder()
+                                                    .id(0)
+                                                    .build()
+                                    )
                                     .build()
                     ),
                     false
@@ -1761,7 +1768,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_btnHistorialClientesActionPerformed
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        btnCedulaValidad.requestFocusInWindow();
+        btnCedulaValidad.requestFocus();
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
@@ -1776,7 +1783,14 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         txtCedula.setText(
                                 M_Generales.generarCedula()
                         );
-                        Utilidades.validarCampo(txtCedula);
+                        boolean cedula = Utilidades.validarCampo(txtCedula);
+
+                        if (cedula) {
+                            System.out.println("Cedula OK.");
+                        } else {
+                            System.out.println("Cedula no cumple.");
+                        }
+
                     }
                 }
             }
@@ -1784,8 +1798,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_txtCedulaKeyPressed
 
     private void jcbPersonaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jcbPersonaPopupMenuWillBecomeInvisible
-        dchFechaNacimiento.requestFocusInWindow();
-        v_editor.requestFocusInWindow();
+        dchFechaNacimiento.requestFocus();
+        v_editor.requestFocus();
     }//GEN-LAST:event_jcbPersonaPopupMenuWillBecomeInvisible
 
     private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
@@ -1794,11 +1808,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         } else {
             cbEstado.setText("Inactivo");
         }
-        btnGuardar.requestFocusInWindow();
+        btnGuardar.requestFocus();
     }//GEN-LAST:event_cbEstadoActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
-        txtSNombre.requestFocusInWindow();
+        txtSNombre.requestFocus();
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
@@ -1806,61 +1820,19 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             txtPNombre.setText(txtSNombre.getText());
             txtSNombre.setText("");
         }
-        txtApellidos.requestFocusInWindow();
+        txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
-        jcbPersona.requestFocusInWindow();
+        jcbPersona.requestFocus();
         jcbPersona.showPopup();
 
     }//GEN-LAST:event_txtApellidosActionPerformed
 
     private void jcbEstadoCivilPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jcbEstadoCivilPopupMenuWillBecomeInvisible
-        jcbSexo.requestFocusInWindow();
+        jcbSexo.requestFocus();
         jcbSexo.showPopup();
     }//GEN-LAST:event_jcbEstadoCivilPopupMenuWillBecomeInvisible
-
-    private void jcbProvinciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProvinciasActionPerformed
-        jcbMunicipios.removeAllItems();
-
-        M_Municipio.getMunicipio(
-                jcbProvincias.getSelectedIndex() <= 0
-                ? 0 : ((Provincia) jcbProvincias.getSelectedItem()).getId()
-        ).stream().forEach(
-                municipio -> jcbMunicipios.addItem(municipio)
-        );
-
-        if (jcbProvincias.getSelectedIndex() > 0) {
-            jcbMunicipios.setEnabled(true);
-            jcbMunicipios.requestFocusInWindow();
-        } else {
-            jcbMunicipios.setEnabled(false);
-        }
-    }//GEN-LAST:event_jcbProvinciasActionPerformed
-
-    private void jcbMunicipiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbMunicipiosActionPerformed
-
-        jcbDistritoMunicipal.removeAllItems();
-
-        M_Distrito_Municipal.getDistritosMunicipales(
-                jcbMunicipios.getSelectedIndex() <= 0
-                ? 0 : ((Municipio) jcbMunicipios.getSelectedItem())
-                        .getId()
-        ).stream().forEach(distrito -> {
-            jcbDistritoMunicipal.addItem(distrito);
-        });
-
-        if (jcbMunicipios.getSelectedIndex() > 0) {
-            jcbDistritoMunicipal.setEnabled(true);
-            jcbDistritoMunicipal.requestFocusInWindow();
-        } else {
-            jcbDistritoMunicipal.setEnabled(false);
-        }
-    }//GEN-LAST:event_jcbMunicipiosActionPerformed
-
-    private void jcbDistritoMunicipalPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jcbDistritoMunicipalPopupMenuWillBecomeInvisible
-        txtDireccion.requestFocusInWindow();
-    }//GEN-LAST:event_jcbDistritoMunicipalPopupMenuWillBecomeInvisible
 
 
     private void btnAgregarDireccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarDireccionesActionPerformed
@@ -1872,7 +1844,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            jcbProvincias.requestFocusInWindow();
+            jcbProvincias.requestFocus();
             jcbProvincias.showPopup();
             return;
         }
@@ -1885,7 +1857,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            jcbMunicipios.requestFocusInWindow();
+            jcbMunicipios.requestFocus();
             jcbMunicipios.showPopup();
             return;
         }
@@ -1898,7 +1870,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtDireccion.requestFocusInWindow();
+            txtDireccion.requestFocus();
             return;
         }
 
@@ -2140,7 +2112,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
     private void limpiarTxtTelefonoMovil() {
         txtTelelfonoMovil.setValue("");
-        txtTelelfonoMovil.requestFocusInWindow();
+        txtTelelfonoMovil.requestFocus();
         jrbMovil.setSelected(true);
     }
 
@@ -2167,7 +2139,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCorreo.requestFocusInWindow();
+            txtCorreo.requestFocus();
             return;
         }
 
@@ -2181,7 +2153,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCorreo.requestFocusInWindow();
+            txtCorreo.requestFocus();
             return;
         }
 
@@ -2261,7 +2233,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         txtCorreo.setText("");
-        txtCorreo.requestFocusInWindow();
+        txtCorreo.requestFocus();
     }//GEN-LAST:event_btnAgregarCorreoActionPerformed
 
     private void btnBorrarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCorreoActionPerformed
@@ -2273,8 +2245,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         Utilidades.eliminarRegistroTabla(
-                tblCorreos, 
-                v_dtmCorreo, 
+                tblCorreos,
+                v_dtmCorreo,
                 v_contactosCorreosList
         );
         btnCorreoEnable(false);
@@ -2293,7 +2265,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     JOptionPane.ERROR_MESSAGE
             );
             txtCedula.setValue(null);
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -2305,7 +2277,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     JOptionPane.ERROR_MESSAGE
             );
             txtCedula.setValue(null);
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -2313,7 +2285,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 txtCedula.getValue().toString()
         );
 
-        if (cedula.getId_persona() < 0) {
+        if (cedula.getPersona().getId_persona() < 0) {
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -2321,9 +2293,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     "",
                     JOptionPane.INFORMATION_MESSAGE
             );
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
         } else {
-            idCliente = cedula.getId_persona();
+            idCliente = cedula.getPersona().getId_persona();
 
             if (v_nuevo) {
                 if (idCliente > 0 && !M_Persona.getEntidad(idCliente).getEstado()) {
@@ -2498,7 +2470,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 //        int idRegistro = ((Direccion) tblDireccion.getValueAt(
 //                tblDireccion.getSelectedRow(), 3)).getId();
         for (int i = 0; i < jcbProvincias.getItemCount(); i++) {
-            int provinciaCombo = ((Provincia) jcbProvincias.getItemAt(i)).getId();
+            int provinciaCombo = jcbProvincias.getItemAt(i).getId();
             if (provinciaCombo == provinciaTbl) {
                 jcbProvincias.setSelectedIndex(i);
                 break;
@@ -2506,7 +2478,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         for (int i = 0; i < jcbMunicipios.getItemCount(); i++) {
-            int municipioCombo = ((Municipio) jcbMunicipios.getItemAt(i)).getId();
+            int municipioCombo = jcbMunicipios.getItemAt(i).getId();
             if (municipioCombo == municipioTbl) {
                 jcbMunicipios.setSelectedIndex(i);
                 break;
@@ -2514,7 +2486,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         for (int i = 0; i < jcbDistritoMunicipal.getItemCount(); i++) {
-            int distritoCombo = ((Distrito_municipal) jcbDistritoMunicipal.getItemAt(i)).getId();
+            int distritoCombo = jcbDistritoMunicipal.getItemAt(i).getId();
             if (distritoCombo == distritoTbl) {
                 jcbDistritoMunicipal.setSelectedIndex(i);
                 break;
@@ -2546,54 +2518,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             }
         }
     }//GEN-LAST:event_jtpGeneralesDireccionContactosKeyPressed
-
-    private void jcbProvinciasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbProvinciasKeyPressed
-        if (evt.isControlDown()) {
-            if (evt.isAltDown()) {
-                if (evt.isShiftDown()) {
-                    if (evt.isAltGraphDown()) {
-                        int cantidad = jcbProvincias.getItemCount();
-                        int randon = (int) (Math.random() * cantidad);
-                        if (randon == 0) {
-                            randon++;
-                        }
-                        jcbProvincias.setSelectedIndex(randon);
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_jcbProvinciasKeyPressed
-
-    private void jcbDistritoMunicipalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbDistritoMunicipalKeyPressed
-        if (evt.isControlDown()) {
-            if (evt.isAltDown()) {
-                if (evt.isShiftDown()) {
-                    if (evt.isAltGraphDown()) {
-                        int cantidad = jcbDistritoMunicipal.getItemCount();
-                        int randon = (int) (Math.random() * cantidad);
-                        jcbDistritoMunicipal.setSelectedIndex(randon);
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_jcbDistritoMunicipalKeyPressed
-
-    private void jcbMunicipiosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbMunicipiosKeyPressed
-        if (evt.isControlDown()) {
-            if (evt.isAltDown()) {
-                if (evt.isShiftDown()) {
-                    if (evt.isAltGraphDown()) {
-                        int cantidad = jcbMunicipios.getItemCount();
-                        int randon = (int) (Math.random() * cantidad);
-                        if (randon == 0) {
-                            randon++;
-                        }
-                        jcbMunicipios.setSelectedIndex(randon);
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_jcbMunicipiosKeyPressed
 
     private void btnImprimirInforme1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirInforme1ActionPerformed
         // TODO Trabajando en la impresion del listado de los clientes.
@@ -2644,6 +2568,95 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_jcbSexoPopupMenuWillBecomeInvisible
 
+    private void jcbProvinciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProvinciasActionPerformed
+        jcbMunicipios.removeAllItems();
+
+        M_Municipio.getMunicipio(
+                jcbProvincias.getSelectedIndex() <= 0
+                ? 0 : ((Provincia) jcbProvincias.getSelectedItem()).getId()
+        ).stream().forEach(
+                municipio -> jcbMunicipios.addItem(municipio)
+        );
+
+        if (jcbProvincias.getSelectedIndex() > 0) {
+            jcbMunicipios.setEnabled(true);
+            jcbMunicipios.requestFocus();
+        } else {
+            jcbMunicipios.setEnabled(false);
+        }
+    }//GEN-LAST:event_jcbProvinciasActionPerformed
+
+    private void jcbProvinciasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbProvinciasKeyPressed
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        int cantidad = jcbProvincias.getItemCount();
+                        int randon = (int) (Math.random() * cantidad);
+                        if (randon == 0) {
+                            randon++;
+                        }
+                        jcbProvincias.setSelectedIndex(randon);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jcbProvinciasKeyPressed
+
+    private void jcbMunicipiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbMunicipiosActionPerformed
+        jcbDistritoMunicipal.removeAllItems();
+
+        M_Distrito_Municipal.getDistritosMunicipales(
+                jcbMunicipios.getSelectedIndex() <= 0
+                ? 0 : ((Municipio) jcbMunicipios.getSelectedItem())
+                        .getId()
+        ).stream().forEach(distrito -> {
+            jcbDistritoMunicipal.addItem(distrito);
+        });
+
+        if (jcbMunicipios.getSelectedIndex() > 0) {
+            jcbDistritoMunicipal.setEnabled(true);
+            jcbDistritoMunicipal.requestFocus();
+        } else {
+            jcbDistritoMunicipal.setEnabled(false);
+        }
+    }//GEN-LAST:event_jcbMunicipiosActionPerformed
+
+    private void jcbMunicipiosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbMunicipiosKeyPressed
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        int cantidad = jcbMunicipios.getItemCount();
+                        int randon = (int) (Math.random() * cantidad);
+                        if (randon == 0) {
+                            randon++;
+                        }
+                        jcbMunicipios.setSelectedIndex(randon);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jcbMunicipiosKeyPressed
+
+    private void jcbDistritoMunicipalPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jcbDistritoMunicipalPopupMenuWillBecomeInvisible
+        txtDireccion.requestFocus();
+    }//GEN-LAST:event_jcbDistritoMunicipalPopupMenuWillBecomeInvisible
+
+    private void jcbDistritoMunicipalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jcbDistritoMunicipalKeyPressed
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        int cantidad = jcbDistritoMunicipal.getItemCount();
+                        int randon = (int) (Math.random() * cantidad);
+                        jcbDistritoMunicipal.setSelectedIndex(randon);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jcbDistritoMunicipalKeyPressed
+
     /**
      * Este metodo valida que: <br>
      * 1) Que en la tabla de los clientes del sistema deben de existir mas
@@ -2686,7 +2699,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         //Verificamos que el registro no sea de un cliente generico, de serlo lo 
         // devolvemos true para que el proceso no continue. 
         if (((Generales) tblClientes.getValueAt(
-                tblClientes.getSelectedRow(), 0)).getId_persona() == 0) {
+                tblClientes.getSelectedRow(),
+                0)).getPersona().getId_persona() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Cliente GENERICO no puede ser %s".formatted(accion),
@@ -2793,9 +2807,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         if (v_nuevo) {
             txtCedula.setText("");
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
         } else {
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
         }
         //nuevasTablasDirTelCor();
     }
@@ -2840,13 +2854,13 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private void btnCorreoEnable(boolean valor) {
         btnEditarCorreo.setEnabled(valor);
         btnBorrarCorreo.setEnabled(valor);
-        txtCorreo.requestFocusInWindow();
+        txtCorreo.requestFocus();
     }
 
     private void btnTelefonoEnable(boolean valor) {
         btnEditarTelefono.setEnabled(valor);
         btnBorrarTelefono.setEnabled(valor);
-        txtTelelfonoMovil.requestFocusInWindow();
+        txtTelelfonoMovil.requestFocus();
     }
 
     private void LimpiarComboBoxProMuniDistr() {
@@ -2863,7 +2877,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //Limpiamos el campo de la direccion.
         txtDireccion.setText("");
-        txtDireccion.requestFocusInWindow();
+        txtDireccion.requestFocus();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2910,17 +2924,17 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     @Getter
-    private RSMaterialComponent.RSComboBox jcbDistritoMunicipal;
+    private javax.swing.JComboBox<Distrito_municipal> jcbDistritoMunicipal;
     @Getter
-    private javax.swing.JComboBox jcbEstadoCivil;
+    private javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
     @Getter
-    private RSMaterialComponent.RSComboBox jcbMunicipios;
+    private javax.swing.JComboBox<Municipio> jcbMunicipios;
     @Getter
-    private javax.swing.JComboBox jcbPersona;
+    private javax.swing.JComboBox<TipoPersona> jcbPersona;
     @Getter
-    private RSMaterialComponent.RSComboBox jcbProvincias;
+    private javax.swing.JComboBox<Provincia> jcbProvincias;
     @Getter
-    private javax.swing.JComboBox jcbSexo;
+    private javax.swing.JComboBox<Sexo> jcbSexo;
     private javax.swing.JLabel jlFechaCreacion;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
@@ -2979,41 +2993,39 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
      *
      * El mismo idCliente es utilizado para obtener la lista de direcciones,
      * lista de correo y lista de telefonos del cliente.<br\>
+     *
+     * TODO 24/11/2024 Comprobar que este metodo traer consigo una persona.
      */
     private void mostrarRegistro() {
-        if (Objects.isNull(idCliente) || idCliente < 0) {
-            idCliente = frmClientes.idCliente;
-        }
-
-        Cliente persona = M_Cliente.getPersonaCliente(
+        List<Cliente> lista = M_Cliente.getPersonasClientes(
                 FiltroBusqueda
                         .builder()
                         .id(idCliente)
                         .build()
         );
 
-        txtPNombre.setText(persona.getPnombre());
-        txtSNombre.setText(persona.getSnombre());
-        txtApellidos.setText(persona.getApellidos());
+        txtPNombre.setText(lista.getFirst().getPersona().getPnombre());
+        txtSNombre.setText(lista.getFirst().getPersona().getSnombre());
+        txtApellidos.setText(lista.getFirst().getPersona().getApellidos());
         dchFechaNacimiento.setDate(
                 Utilidades.sqlDateToUtilDate(
-                        persona.getFecha_nacimiento()
+                        lista.getFirst().getPersona().getFecha_nacimiento()
                 )
         );
-        cbEstado.setSelected(persona.getEstado());
+        cbEstado.setSelected(lista.getFirst().getPersona().getEstado());
         cbEstado.setText(
-                persona.getEstado() ? "Activo" : "Inactivo"
+                lista.getFirst().getPersona().getEstado() ? "Activo" : "Inactivo"
         );
         jlFechaCreacion.setText(
                 "Fecha de Ingreso: ".concat(
-                        persona.getFecha_ingreso().toString()
+                        lista.getFirst().getPersona().getFecha_ingreso().toString()
                 )
         );
 
         //------BUSCAR TIPO DE PERSONA------------------------------------------
         for (int i = 0; i < jcbPersona.getItemCount(); i++) {
-            if (persona.getPersona().equals(
-                    ((TipoPersona) jcbPersona.getItemAt(i)).getAbreviatura()
+            if (lista.getFirst().getPersona().equals(
+                    jcbPersona.getItemAt(i).getAbreviatura()
             )) {
                 jcbPersona.setSelectedIndex(i);
                 break;
@@ -3022,8 +3034,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //-----BUSCAR SEXO------------------------------------------------------
         for (int i = 0; i < jcbSexo.getItemCount(); i++) {
-            if (persona.getSexo().equals(
-                    ((Sexo) jcbSexo.getItemAt(i)).getAbreviatura()
+            if (lista.getFirst().getPersona().getSexo().equals(
+                    jcbSexo.getItemAt(i).getAbreviatura()
             )) {
                 jcbSexo.setSelectedIndex(i);
                 break;
@@ -3037,7 +3049,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         for (int i = 0; i < jcbEstadoCivil.getItemCount(); i++) {
             if (general.getEstado_civil().equals(
-                    ((EstadoCivil) jcbEstadoCivil.getItemAt(i)).getAbreviatura()
+                    jcbEstadoCivil.getItemAt(i).getAbreviatura()
             )) {
                 jcbEstadoCivil.setSelectedIndex(i);
                 break;
@@ -3066,39 +3078,44 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             String criterioBusqueda
     ) {
 
-//        if (Objects.isNull(criterioBusqueda)) {
-//            criterioBusqueda = "";
-//        }
-//
-//        if (criterioBusqueda.isBlank()) {
-//            criterioBusqueda = frmClientes.criterioBusqueda;
-//        }
+        if (Objects.isNull(criterioBusqueda)) {
+            criterioBusqueda = "";
+        }
+
         registro = new Object[TITULOS_CLIENTE.length];
 
         DefaultTableModel dtmClientes = new DefaultTableModel(null, TITULOS_CLIENTE);
 
-        //TODO settear el filtro al siguiente metodo.
-        M_Cliente.getPersonasClientes(null).stream().forEach(
+        //TODO 23/11/2024 TESTE he puesto el filtro, pero hay que ver que parametros 
+        //lleva.
+        M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .filas(Boolean.TRUE)
+                        .nCantidadFilas((int) jsCantidadFilas.getValue())
+                        .nPaginaNro((int) jsPaginaNro.getValue())
+                        .build()
+        ).stream().forEach(
                 cliente -> {
-                    registro[0] = cliente.getGenerales();
+                    registro[0] = cliente.getPersona().getGenerales();
                     registro[1] = String.valueOf(
                             cliente.getPersona()
                     ).equalsIgnoreCase("j") ? "JURÍDICA" : "FÍSICA";
-                    registro[2] = cliente.getPnombre();
-                    registro[3] = cliente.getSnombre();
-                    registro[4] = cliente.getApellidos();
+                    registro[2] = cliente.getPersona().getPnombre();
+                    registro[3] = cliente.getPersona().getSnombre();
+                    registro[4] = cliente.getPersona().getApellidos();
                     registro[5] = String.valueOf(
-                            cliente.getSexo()
+                            cliente.getPersona().getSexo()
                     ).equalsIgnoreCase("M") ? "MASCULINO" : "FEMENINO";
                     registro[6] = Utilidades.formatDate(
-                            cliente.getFecha_nacimiento(),
+                            cliente.getPersona().getFecha_nacimiento(),
                             "dd/MM/yyyy"
                     );
                     registro[7] = Utilidades.formatDate(
-                            cliente.getFecha_ingreso(),
+                            cliente.getPersona().getFecha_ingreso(),
                             "dd/MM/yyyy"
                     );
-                    registro[8] = cliente.getEstado();
+                    registro[8] = cliente.getPersona().getEstado();
 
                     dtmClientes.addRow(registro);
                 }

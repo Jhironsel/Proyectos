@@ -3,6 +3,7 @@ package sur.softsurena.formularios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
@@ -11,12 +12,17 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla, miTabla2, miTabla3;
     private TableColumn miTableColumn = null;
@@ -258,28 +264,24 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void tblFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFacturaMouseClicked
+        String idFactura = tblFactura.getValueAt(tblFactura.getSelectedRow(), 0).toString();
+        DefaultTableModel modelo = (DefaultTableModel) tblDetalleFactura.getModel();
+        int filas = tblDetalleFactura.getRowCount();
+        for (int i = 0; filas > i; i++) {
+            modelo.removeRow(0);
+        }
+        String sql = """
+                     SELECT factura.idFactura, factura.idCliente, nombres||' '||apellidos AS nombreFull,
+                     fecha, idLinea, (select p.Descripcion
+                                        from PRODUCTOS p
+                                        where p.idProducto = DETALLEFACTURA.IDPRODUCTO ) as Descripcion,
+                     idProducto, precio, cantidad, precio * cantidad AS Valor
+                     FROM factura
+                     INNER JOIN cliente ON factura.idCliente = cliente.idCliente
+                     INNER JOIN detalleFactura ON factura.idFactura = detalleFactura.idFactura
+                     WHERE factura.idFactura ='idFactura';
+                     """;
         try {
-            String idFactura = tblFactura.getValueAt(tblFactura.getSelectedRow(), 0).toString();
-
-            DefaultTableModel modelo = (DefaultTableModel) tblDetalleFactura.getModel();
-
-            int filas = tblDetalleFactura.getRowCount();
-
-            for (int i = 0; filas > i; i++) {
-                modelo.removeRow(0);
-            }
-
-            String sql 
-                    = "SELECT factura.idFactura, factura.idCliente, nombres||' '||apellidos AS nombreFull, "
-                    + "        fecha, idLinea, (select p.Descripcion "
-                    + "                            from PRODUCTOS p "
-                    + "                            where p.idProducto = DETALLEFACTURA.IDPRODUCTO ) as Descripcion, "
-                    + "        idProducto, precio, cantidad, precio * cantidad AS Valor "
-                    + "FROM factura \n"
-                    + "INNER JOIN cliente ON factura.idCliente = cliente.idCliente "
-                    + "INNER JOIN detalleFactura ON factura.idFactura = detalleFactura.idFactura "
-                    + "WHERE factura.idFactura ='" + idFactura + "'";
-
             ResultSet rs = null;
 
             String registro[] = new String[5];
@@ -303,7 +305,11 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
             txtTotal.setValue(suma);
             tblDetalleFactura.setModel(miTabla3);
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error al obtener facturas del cliente.", ex);
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al obtener facturas del cliente.",
+                    ex
+            );
         }
 
         if (evt.getClickCount() == 2) {
@@ -329,7 +335,6 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
         ajusteDetalle();
 
         String idCliente = tblClientes.getValueAt(tblClientes.getSelectedRow(), 0).toString();
-
 
         try {
             DefaultTableModel modelo = (DefaultTableModel) tblFactura.getModel();
@@ -368,7 +373,11 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
             }
             tblFactura.setModel(miTabla2);
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error al obtener los detalles del cliente.", ex);
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al obtener los detalles del cliente.",
+                    ex
+            );
         }
     }//GEN-LAST:event_tblClientesMouseClicked
 
@@ -383,15 +392,15 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         if (tblDetalleFactura.getRowCount() == 0) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "No ha seleccionado Factura",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             return;
         }
-        
-        Map parametros = new HashMap();
+
+        Map<String, Object> parametros = new HashMap<>();
         parametros.put("idFactura", Integer.valueOf(
                 tblFactura.getValueAt(
                         tblFactura.getSelectedRow(), 0).toString()));
@@ -399,10 +408,10 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
                 true,
                 false,
                 "/Reportes/factura(copia).jasper",
-                parametros, 
-                frmPrincipal.jPanelImpresion, 
+                parametros,
+                frmPrincipal.jPanelImpresion,
                 frmPrincipal.jprImpresion);
-        
+
         impresionFactura.start();
     }//GEN-LAST:event_btnImprimirActionPerformed
     void tablaClientes() {
@@ -411,25 +420,20 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
         Object registro[] = new Object[titulos.length];
 
         miTabla = new DefaultTableModel(null, titulos);
-        
-        
+
         //TODO Trabajos
-//        List<Cliente> clientesList = getClientes(
-//                FiltroBusqueda.
-//                        builder().
-//                        filas(false).
-//                        criterioBusqueda(txtCriterio.getText().strip()).
-//                        build()
-//        
-//        );
-//
-//
-//        clientesList.forEach(c ->{
-//            registro[0] = c;
-//            registro[1] = c.getGenerales().getCedula();
-//            miTabla.addRow(registro);
-//        });
-        
+        M_Cliente.getPersonasClientes(
+                FiltroBusqueda.
+                        builder().
+                        criterioBusqueda(txtCriterio.getText().strip()).
+                        build()
+        ).stream().forEach(
+                cliente -> {
+                    registro[0] = cliente;
+                    registro[1] = cliente.getPersona().getGenerales();
+                    miTabla.addRow(registro);
+                }
+        );
         tblClientes.setModel(miTabla);
 
         /*Ancho de Columnas de Clientes*/

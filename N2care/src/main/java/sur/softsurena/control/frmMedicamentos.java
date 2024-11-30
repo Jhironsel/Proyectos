@@ -521,7 +521,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
         cliMedicamento = 0;
         mostrarRegistro();
-        btnPrimero.requestFocusInWindow();
+        btnPrimero.requestFocus();
     }//GEN-LAST:event_btnPrimeroActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -538,7 +538,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
         mostrarRegistro();
         if (evt != null) {
-            btnAnterior.requestFocusInWindow();
+            btnAnterior.requestFocus();
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
@@ -556,7 +556,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
         mostrarRegistro();
         if (evt != null) {
-            btnSiguiente.requestFocusInWindow();
+            btnSiguiente.requestFocus();
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -570,7 +570,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
         cliMedicamento = numeroMedicamentos - 1;
         mostrarRegistro();
-        btnUltimo.requestFocusInWindow();
+        btnUltimo.requestFocus();
     }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -606,7 +606,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         if (resp.equals("Crear Medicamento")) {
             txtNombreMedicamentos.setEditable(true);
-            txtNombreMedicamentos.requestFocusInWindow();
+            txtNombreMedicamentos.requestFocus();
 
             JComboExp.miBoton.setVisible(true);
 
@@ -630,7 +630,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
             cbProveedores.setSelectedIndex(-1);
             cbProveedores.setEditable(true);
-            cbProveedores.requestFocusInWindow();
+            cbProveedores.requestFocus();
             JComboExp.miBoton.setVisible(false);
             JComboExp.miBoton.setEnabled(false);
         }
@@ -661,7 +661,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         if (resp.equals("Modificar Proveedor")) {
             cbProveedores.setEditable(true);
-            cbProveedores.requestFocusInWindow();
+            cbProveedores.requestFocus();
             txtTelefono.setEditable(true);
             txtCodigoProveedor.setEditable(true);
             cbEstadoProveedor.setEnabled(true);
@@ -670,7 +670,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         if (resp.equals("Modificar Medicamento")) {
             txtNombreMedicamentos.setEditable(true);
-            txtNombreMedicamentos.requestFocusInWindow();
+            txtNombreMedicamentos.requestFocus();
 
             btnImagenBuscar.setEnabled(true);
 
@@ -687,7 +687,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             if (cbProveedores.getSelectedItem() == null) {
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe digitar el nombre del proveedor");
-                cbProveedores.requestFocusInWindow();
+                cbProveedores.requestFocus();
                 return;
             }
 
@@ -695,7 +695,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe digitar un telefono correctamnte");
                 txtTelefono.setValue(null);
-                txtTelefono.requestFocusInWindow();
+                txtTelefono.requestFocus();
                 txtTelefono.setEditable(true);
                 return;
             }
@@ -703,7 +703,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             if (txtCodigoProveedor.getText().isEmpty()) {
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe digitar el codigo del proveedor");
-                txtCodigoProveedor.requestFocusInWindow();
+                txtCodigoProveedor.requestFocus();
                 return;
             }
 
@@ -714,7 +714,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE);
                 if (resp == JOptionPane.NO_OPTION) {
-                    cbEstadoProveedor.requestFocusInWindow();
+                    cbEstadoProveedor.requestFocus();
                     return;
                 }
 
@@ -748,14 +748,14 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             if (txtNombreMedicamentos.getText().isEmpty()) { //Validando nombre de Medicamento
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe digitar el nombre del medicamento");
-                txtNombreMedicamentos.requestFocusInWindow();
+                txtNombreMedicamentos.requestFocus();
                 return;
             }
 
             if (cbProveedores.getSelectedIndex() <= 0) {//Validando un proveedor Seleccionado
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe seleccionar un proveedor de la lista.");
-                cbProveedores.requestFocusInWindow();
+                cbProveedores.requestFocus();
                 cbProveedores.showPopup();
                 return;
             }
@@ -779,7 +779,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         JOptionPane.QUESTION_MESSAGE);
 
                 if (resp == JOptionPane.NO_OPTION) {
-                    btnImagenBuscar.requestFocusInWindow();
+                    btnImagenBuscar.requestFocus();
                     return;
                 }
             }
@@ -888,10 +888,10 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
     private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
         
-        txtCodigoProveedor.requestFocusInWindow();
+        txtCodigoProveedor.requestFocus();
         if (btnGuardar.isEnabled() && resp.equals("Crear Proveedor")) {
             txtCodigoProveedor.setEditable(true);
-            txtCodigoProveedor.requestFocusInWindow();
+            txtCodigoProveedor.requestFocus();
         }
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
@@ -1016,7 +1016,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
         
         if (btnGuardar.isEnabled() & resp.equals("Crear Proveedor")) {
-            txtTelefono.requestFocusInWindow();
+            txtTelefono.requestFocus();
             txtTelefono.setEditable(true);
         }
         setDatosComboBox();
@@ -1220,7 +1220,7 @@ private void mostrarRegistro() {
                         getSelectedIndex())).isEstado()
         );
         if (btnGuardar.isEnabled()) {
-            txtNombreMedicamentos.requestFocusInWindow();
+            txtNombreMedicamentos.requestFocus();
         }
     }
 

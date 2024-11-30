@@ -6,12 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Almacen;
-import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.Turno;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -20,149 +21,36 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Turno {
-
     /**
-     * Metodo actualizado el 26 de abril 2022. Este metodo esta combinado con el
-     * metodo usuarioTurnoActivo.
-     *
-     * @param userName Id del usuario a identificar.
-     * @return Valor que identifica el turno activo del usuario consultado.
-     */
-    public synchronized static Turno turnosActivoByUsuario(String userName) {
-        final String sql
-                = """
-                  SELECT ID, ID_ALMACEN, NOMBRE_ALMACEN, ID_FACTURA
-                  FROM GET_TURNOS 
-                  WHERE ESTADO AND UPPER(TRIM(TURNO_USUARIO)) STARTING WITH UPPER(TRIM(?));
-                  """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setString(1, userName.toUpperCase().strip());
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Turno
-                            .builder()
-                            .id(rs.getInt("ID"))
-                            .almacen(
-                                    Almacen
-                                            .builder()
-                                            .id(rs.getInt("ID_ALMACEN"))
-                                            .nombre(rs.getString("NOMBRE_ALMACEN"))
-                                            .build()
-                            )
-                            .factura(
-                                    Factura
-                                            .builder()
-                                            .id(rs.getInt("ID_FACTURA"))
-                                            .build()
-                            )
-                            .build();
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-        return Turno.
-                builder().
-                id(-1).
-                almacen(
-                        Almacen.
-                                builder().
-                                id(-1).
-                                nombre("Almacen no encontrado.").
-                                build()
-                ).
-                build();
-    }
-
-    /**
-     * Metodo utilizado para verificar si un empleado o cajero cuenta con un
-     * turno habilitado por un usuario autorizado que le permita facturar en el
-     * sistema.
-     *
-     * Metodo actualizado el 17/05/2022.
-     *
-     * @param userName Valor que utilizan los usuario en el sistema para iniciar
-     * session.
-     * @return Retorna true si el usuario cuenta con un turno habierto y false
-     * si no cuenta con un turno abierto.
-     */
-    public synchronized static boolean usuarioTurnoActivo(String userName) {
-        return (turnosActivoByUsuario(userName).getId() >= 0);
-    }
-
-    /**
-     *
+     * TODO 24/11/2024 Trata de agregar NonNull al parametro del metodo.
+     * @param filtro
      * @return
      */
-    public static List<Turno> getTurnosActivos() {
-        final String sql
-                = "SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO "
-                + "FROM GET_TURNOS "
-                + "WHERE ESTADO;";
+    public static List<Turno> getTurnos(@NonNull FiltroBusqueda filtro) {
         List<Turno> turnosList = new ArrayList<>();
+
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlGetTurnos(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    turnosList.add(Turno.builder().
-                            id(rs.getInt("ID")).
-                            turno_usuario(rs.getString("TURNO_USUARIO")).
-                            fecha_hora_inicio(rs.getTimestamp("FECHA_HORA_INICIO")).
-                            build());
-
-                }
-                return turnosList;
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @param userName
-     * @return
-     */
-    public static List<Turno> getTurnosByUserName(String userName) {
-        final String sql = """
-                    SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                            ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO,
-                            MONTO_CREDITO 
-                    FROM GET_TURNOS 
-                    WHERE ESTADO IS FALSE AND TURNO_USUARIO STARTING WITH ? 
-                  """;
-        List<Turno> turnosList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-
-            ps.setString(1, userName);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    turnosList.add(Turno.builder().
-                            id(rs.getInt("ID")).
-                            fecha_hora_inicio(rs.getTimestamp("FECHA_HORA_INICIO")).
-                            fecha_hora_final(rs.getTimestamp("FECHA_HORA_FINAL")).
-                            monto_facturado(rs.getBigDecimal("MONTO_FACTURADO")).
-                            monto_devuelto(rs.getBigDecimal("MONTO_DEVUELTO")).
-                            monto_efectivo(rs.getBigDecimal("MONTO_EFECTIVO")).
-                            monto_credito(rs.getBigDecimal("MONTO_CREDITO")).build());
+                    turnosList.add(
+                            Turno
+                                    .builder()
+                                    .id(rs.getInt("ID"))
+                                    .turno_usuario(rs.getString("TURNO_USUARIO"))
+                                    .fecha_hora_inicio(rs.getTimestamp("FECHA_HORA_INICIO"))
+                                    .fecha_hora_final(rs.getTimestamp("FECHA_HORA_FINAL"))
+                                    .estado(rs.getBoolean("ESTADO"))
+                                    .monto_facturado(rs.getBigDecimal("MONTO_FACTURADO"))
+                                    .monto_devuelto(rs.getBigDecimal("MONTO_DEVUELTO"))
+                                    .monto_efectivo(rs.getBigDecimal("MONTO_EFECTIVO"))
+                                    .monto_credito(rs.getBigDecimal("MONTO_CREDITO"))
+                                    .build()
+                    );
                 }
             }
         } catch (SQLException ex) {
@@ -171,27 +59,41 @@ public class M_Turno {
         }
         return turnosList;
     }
-
+    
+    protected static String sqlGetTurnos(FiltroBusqueda filtro){
+        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
+        
+        return """
+               SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
+               ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
+               FROM V_TURNOS 
+               WHERE %s%s
+               """.formatted(
+                       (filtro.getEstado() ? "ESTADO ":"ESTADO IS FALSE "),
+                       f_criterio ? 
+                                "" : 
+                                "AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('%s'));"
+                                        .formatted(filtro.getCriterioBusqueda())
+               );
+    }
+    
+//------------------------------------------------------------------------------
+    
     /**
      * Metodo que nos permite habilitar a los cajeros al modulo de facturacion.
-     *
      * 
-     * TODO evitar modificar la tabla de producto en mantedimiento de productos.
-     * 
-     * @param id_almacen
      * @param idUsuario
      * @return
      */
-    public synchronized static Resultado habilitarTurno(int id_almacen, String idUsuario) {
-        final String sql = "EXECUTE PROCEDURE ADMIN_HABILITAR_TURNO(?, ?)";
+    public synchronized static Resultado habilitarTurno(String idUsuario) {
+        final String sql = "EXECUTE PROCEDURE ADMIN_HABILITAR_TURNO(?)";
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            cs.setInt(1, id_almacen);
-            cs.setString(2, idUsuario);
+            cs.setString(1, idUsuario);
 
             cs.execute();
 

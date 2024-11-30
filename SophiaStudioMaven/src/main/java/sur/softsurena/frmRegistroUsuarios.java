@@ -237,29 +237,29 @@ public class frmRegistroUsuarios extends javax.swing.JInternalFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (txtNombre.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Nombre de Usuario en blanco...!");
-            txtNombre.requestFocusInWindow();
+            txtNombre.requestFocus();
             return;
         }
         if (txtNombre.getText().contains(" ")) {
             JOptionPane.showMessageDialog(this, "Nombre Contiene Espacio...!");
             txtNombre.setText("");
-            txtNombre.requestFocusInWindow();
+            txtNombre.requestFocus();
             return;
         }
         if (txtApellidos.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Apellido de Usuario en blanco...!");
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
         if (txtClave.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Clave de Usuario en blanco...!");
-            txtClave.requestFocusInWindow();
+            txtClave.requestFocus();
             return;
         }
 
         if (txtClave.getText().length() > 8) {
             JOptionPane.showMessageDialog(this, "Clave de Usuario muy larga, Solo 8 digitos...!");
-            txtClave.requestFocusInWindow();
+            txtClave.requestFocus();
             return;
         }
 

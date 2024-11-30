@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.utilidades.FiltroBusqueda;
@@ -22,18 +23,12 @@ public class M_ARS {
      * @param filtro
      * @return retorna una lista completa de los seguros sociales del sistema.
      */
-    public synchronized static List<ARS> getARS(FiltroBusqueda filtro) {
-        final String sql
-                = "SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, "
-                + "       CANTIDAD_REGISTRO "
-                + "FROM V_ARS "
-                + (Objects.isNull(filtro.getEstado()) ? ";" : filtro.getEstado()
-                ? "WHERE ESTADO; " : "WHERE ESTADO IS FALSE;");
+    public synchronized static List<ARS> getARS(@NonNull FiltroBusqueda filtro) {
 
         List<ARS> arsList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlARS(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -63,6 +58,19 @@ public class M_ARS {
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
             = "Error al consultar la vista V_ARS del sistema.";
+
+    protected static String sqlARS(FiltroBusqueda filtro) {
+
+        return """
+               SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+               FROM V_ARS
+               %s
+               """.formatted(
+                Objects.isNull(filtro.getEstado()) ? "" : filtro.getEstado()
+                ? "WHERE ESTADO" : "WHERE ESTADO IS FALSE"
+        ).strip().trim().concat(";");
+    }
+//------------------------------------------------------------------------------
 
     /**
      * Procedimiento que permite agregar los seguros de los paciente al sistema.
@@ -118,6 +126,7 @@ public class M_ARS {
             = "Seguro agregado correctamente";
     public static final String ERROR_AL_INSERTAR__SEGURO
             = "Error al insertar Seguro...";
+//------------------------------------------------------------------------------
 
     /**
      * Metodo que modifica las ARS del sistema.
@@ -165,6 +174,7 @@ public class M_ARS {
     public static final String ERROR_AL_MODIFICAR_SEGURO
             = "Error al modificar seguro...";
 
+//------------------------------------------------------------------------------
     /**
      * Trata de eliminar un registro de la tabla ARS, la cual debe tener una
      *

@@ -1326,38 +1326,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         repararColumnaTable(tblListadoUsuarios);
     }
-
-//    /**
-//     * Metodo descontinuado, en su lugar llenarTblRolesDisponibles.
-//     *
-//     * @param userName
-//     */
-//    private void llenarTblRolesUsuarios(String userName) {
-//        tblRolesUsuario.removeAll();
-//        String[] titulos = {"Roles del usuarios", "Con administración"};
-//        Object[] registro = new Object[titulos.length];
-//        DefaultTableModel miTabla = new DefaultTableModel(null, titulos) {
-//            @Override
-//            public boolean isCellEditable(int row, int column) {
-//                return false;
-//            }
-//        };
-//
-//        comprobandoRol(userName).stream().forEach(
-//                rol -> {
-//                    registro[0] = rol;
-//                    registro[1] = rol.getOpcionPermiso() != 0;
-//                    miTabla.addRow(registro);
-//                }
-//        );
-//
-//        tblRolesUsuario.setModel(miTabla);
-//
-//        int[] indices = {1};
-//        columnasCheckBox(tblRolesUsuario, indices);
-//
-//        repararColumnaTable(tblRolesUsuario);
-//    }
+    
     /**
      *
      * @param userName

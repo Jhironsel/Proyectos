@@ -37,7 +37,6 @@ public class M_Asegurado {
         )) {
 
             ps.setInt(1, asegurado.getPersona().getId_persona());
-            ps.setInt(2, asegurado.getId_ars());
             ps.setString(3, asegurado.getNo_nss());
             ps.setBoolean(3, asegurado.getEstado());
 

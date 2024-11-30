@@ -223,7 +223,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
             return;
         }
         txtBaseFuente.setText(miFile.getSelectedFile().getAbsolutePath());
-        txtUsuario.requestFocusInWindow();
+        txtUsuario.requestFocus();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnProcederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcederActionPerformed
@@ -234,7 +234,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            btnBuscar.requestFocusInWindow();
+            btnBuscar.requestFocus();
             return;
         }
         if (txtUsuario.getText().isEmpty()) {
@@ -244,7 +244,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtUsuario.requestFocusInWindow();
+            txtUsuario.requestFocus();
             return;
         }
         if (txtClave.getPassword().length == 0) {
@@ -254,7 +254,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtClave.requestFocusInWindow();
+            txtClave.requestFocus();
             return;
         }
 
@@ -282,16 +282,16 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        txtClave.requestFocusInWindow();
+        txtClave.requestFocus();
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
-        btnProceder.requestFocusInWindow();
+        btnProceder.requestFocus();
     }//GEN-LAST:event_txtClaveActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         txtBaseActual.setText(pathBaseDeDatos());
-        btnBuscar.requestFocusInWindow();
+        btnBuscar.requestFocus();
     }//GEN-LAST:event_formInternalFrameOpened
 
 

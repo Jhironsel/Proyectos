@@ -275,7 +275,7 @@ public final class frmLogin extends javax.swing.JFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtUsuario.requestFocusInWindow();
+            txtUsuario.requestFocus();
             return;
         }
 
@@ -286,7 +286,7 @@ public final class frmLogin extends javax.swing.JFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtClave.requestFocusInWindow();
+            txtClave.requestFocus();
             return;
         }//Fin de validaciones de campos
 
@@ -342,7 +342,7 @@ public final class frmLogin extends javax.swing.JFrame {
 
             txtClave.setText("");
             txtUsuario.setText("");
-            txtUsuario.requestFocusInWindow();
+            txtUsuario.requestFocus();
             return;
         }
 
@@ -418,7 +418,7 @@ public final class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnParametrosActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        txtClave.requestFocusInWindow();
+        txtClave.requestFocus();
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed

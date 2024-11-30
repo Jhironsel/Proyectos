@@ -127,7 +127,7 @@ public class frmEtiquetas extends javax.swing.JDialog {
                     "", 
                     JOptionPane.ERROR_MESSAGE
             );
-            txtPropiedad.requestFocusInWindow();
+            txtPropiedad.requestFocus();
             return;
         }
         if(txtValor.getText().isBlank()){
@@ -137,7 +137,7 @@ public class frmEtiquetas extends javax.swing.JDialog {
                     "", 
                     JOptionPane.ERROR_MESSAGE
             );
-            txtValor.requestFocusInWindow();
+            txtValor.requestFocus();
             return;
         }
         
@@ -148,7 +148,7 @@ public class frmEtiquetas extends javax.swing.JDialog {
                     "", 
                     JOptionPane.ERROR_MESSAGE
             );
-            txtPropiedad.requestFocusInWindow();
+            txtPropiedad.requestFocus();
             return;
         }
         
@@ -157,7 +157,7 @@ public class frmEtiquetas extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtPropiedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPropiedadActionPerformed
-        txtValor.requestFocusInWindow();
+        txtValor.requestFocus();
     }//GEN-LAST:event_txtPropiedadActionPerformed
 
     private void txtValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorActionPerformed

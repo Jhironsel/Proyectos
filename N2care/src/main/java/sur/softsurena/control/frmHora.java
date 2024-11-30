@@ -166,7 +166,7 @@ public class frmHora extends javax.swing.JDialog {
                     "Cantidad de paciente no suficiente...!", 
                     "Proceso de validacion",
                     JOptionPane.INFORMATION_MESSAGE);
-            jsCantPaciente.requestFocusInWindow();
+            jsCantPaciente.requestFocus();
             return;
         }
         aceptar = true;

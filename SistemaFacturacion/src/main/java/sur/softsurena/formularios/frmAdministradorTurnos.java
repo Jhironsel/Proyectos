@@ -3,16 +3,12 @@ package sur.softsurena.formularios;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import rojerusan.RSComboBox;
-import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.Usuario;
-import static sur.softsurena.metodos.M_Almacen.getAlmacenesList;
 import static sur.softsurena.metodos.M_Cajero.getCajeros;
+import sur.softsurena.metodos.M_Turno;
 import static sur.softsurena.metodos.M_Turno.cerrarTurno;
-import static sur.softsurena.metodos.M_Turno.getTurnosActivos;
-import static sur.softsurena.metodos.M_Turno.getTurnosByUserName;
 import static sur.softsurena.metodos.M_Turno.habilitarTurno;
-import static sur.softsurena.metodos.M_Turno.usuarioTurnoActivo;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -299,20 +295,13 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         String userName = ((Usuario) tblCajerosDisponible.getValueAt(
                 userSelected, 0)).getUser_name();
 
-        //Si el objeto idUsuario es igual a N/A.
-        if (userName.equals("N/A")) {
-            //Mostramos mensaje de error siguiente.
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Seleccionar un Usuario",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-
         //Verificamos si el usuario tiene turno abierto
-        if (usuarioTurnoActivo(userName)) {
+        if (!M_Turno.getTurnos(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(userName)
+                        .build()
+        ).isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Usuario cuenta con turno abierto.",
@@ -322,35 +311,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
             return;
         }
 
-        RSComboBox comboAlmacenes = new RSComboBox();
-        comboAlmacenes.removeAllItems();
-
-        comboAlmacenes.addItem(
-                Almacen
-                        .builder()
-                        .nombre("Seleccione un almacen.")
-                        .id(-1)
-                        .build()
-        );
-
-        getAlmacenesList(-1, "").stream().forEach(almacen -> {
-            comboAlmacenes.addItem(almacen);
-        });
-
-        JOptionPane.showInternalMessageDialog(
-                this,
-                comboAlmacenes,
-                "De que almacen se va a facturar?",
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-        int id_almacen = ((Almacen) comboAlmacenes.getSelectedItem()).getId();
-
-        if (id_almacen == -1) {
-            return;
-        }
-
-        Resultado resultado = habilitarTurno(id_almacen, userName);
+        Resultado resultado = habilitarTurno(userName);
 
         //Si el usuario no tiene turno abierto, procedemos habilitar turno.
         JOptionPane.showInternalMessageDialog(
@@ -378,7 +339,13 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         Integer idTurno = (Integer) tblTurnosActivos.getValueAt(rowSelected, 0);
         String userName = tblTurnosActivos.getValueAt(rowSelected, 1).toString();
 
-        if (!usuarioTurnoActivo(userName)) {
+        //TODO 24/11/2024 Validar que esta condicional funciona.
+        if (M_Turno.getTurnos(
+                FiltroBusqueda
+                        .builder()
+                        .estado(true)
+                        .criterioBusqueda(userName)
+                        .build()).isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Usuario sin Turno Abierto...",
@@ -418,10 +385,12 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
         Object[] rowData = new Object[columnas.length];
 
-        getCajeros().stream().forEach(cajero -> {
-            rowData[0] = cajero;
-            modelo.addRow(rowData);
-        });
+        getCajeros().stream().forEach(
+                cajero -> {
+                    rowData[0] = cajero;
+                    modelo.addRow(rowData);
+                }
+        );
 
         tblCajerosDisponible.setModel(modelo);
     }//GEN-LAST:event_btnActualizarCajerosDisponiblesActionPerformed
@@ -436,13 +405,20 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
         Object[] rowData2 = new Object[columnas2.length];
 
-        getTurnosActivos().forEach(turno -> {
-            rowData2[0] = turno.getId();
-            rowData2[1] = turno.getTurno_usuario();
-            rowData2[2] = turno.getFecha_hora_inicio();
+        M_Turno.getTurnos(
+                FiltroBusqueda
+                        .builder()
+                        .estado(true)
+                        .build()
+        ).forEach(
+                turno -> {
+                    rowData2[0] = turno.getId();
+                    rowData2[1] = turno.getTurno_usuario();
+                    rowData2[2] = turno.getFecha_hora_inicio();
 
-            modelo2.addRow(rowData2);
-        });
+                    modelo2.addRow(rowData2);
+                }
+        );
 
         tblTurnosActivos.setModel(modelo2);
     }//GEN-LAST:event_btnActualizarTurnosActivosActionPerformed
@@ -468,7 +444,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         int cajeroSelectRow = tblCajerosDisponible.getSelectedRow();
 
         String userName = ((Usuario) tblCajerosDisponible.getValueAt(cajeroSelectRow, 0)).getUser_name();
-        
+
         crearReporte(userName);
     }//GEN-LAST:event_tblCajerosDisponibleMouseClicked
 
@@ -530,8 +506,14 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
 
         var rowData2 = new Object[columnas2.length];
-
-        getTurnosByUserName(userName).stream().forEach(
+        
+        //TODO 25/11/2024 No se realmente que estado debe llevar.
+        M_Turno.getTurnos(FiltroBusqueda
+                .builder()
+                .criterioBusqueda(userName)
+                .estado(Boolean.TRUE)
+                .build()
+        ).stream().forEach(
                 turnos -> {
                     rowData2[0] = turnos.getId();
                     rowData2[1] = turnos.getFecha_hora_inicio();
@@ -540,7 +522,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
                     rowData2[4] = turnos.getMonto_devuelto();
                     rowData2[5] = turnos.getMonto_efectivo();
                     rowData2[6] = turnos.getMonto_credito();
-                    
+
                     modelo2.addRow(rowData2);
                 }
         );

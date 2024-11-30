@@ -17,7 +17,6 @@ import static sur.softsurena.metodos.M_Antecedente.BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_BORRAR_PACIENTE;
 import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_MODIFICAR_ANTECEDENTE;
 import static sur.softsurena.metodos.M_Antecedente.agregarAntecedente;
-import static sur.softsurena.metodos.M_Antecedente.getAntecedentes;
 import static sur.softsurena.metodos.M_Antecedente.modificarAntecedente;
 import sur.softsurena.utilidades.Resultado;
 
@@ -71,8 +70,11 @@ public class M_AntecedentesNGTest {
         consulta.testAgregarConsulta();
 
         Resultado result = agregarAntecedente(
-                consulta.getIdConsulta(),
-                "Prueba de antecendetes"
+                Antecedente
+                        .builder()
+                        .id_consulta(consulta.getIdConsulta())
+                        .descripcion("Prueba de antecendetes")
+                        .build()
         );
 
         assertEquals(
@@ -90,25 +92,20 @@ public class M_AntecedentesNGTest {
             priority = 0
     )
     public void testModificarAntecedente() {
-        Resultado resultado = modificarAntecedente(
-                id_antecedente,
-                "Actualizado"
-        );
-
-        assertTrue(
-                resultado.getEstado(),
-                ERROR_AL_MODIFICAR_ANTECEDENTE
-        );
-
-        assertTrue(
-                resultado.getMensaje().equals(
-                        ANTECEDENTE_MODIFICADO_CORRECTAMENTE
+        assertEquals(
+                modificarAntecedente(
+                        Antecedente
+                                .builder()
+                                .id(id_antecedente)
+                                .descripcion("Actualizado")
+                                .build()
                 ),
-                ERROR_AL_MODIFICAR_ANTECEDENTE
-        );
-
-        assertTrue(
-                resultado.getIcono() == JOptionPane.INFORMATION_MESSAGE,
+                Resultado
+                        .builder()
+                        .mensaje(ANTECEDENTE_MODIFICADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_MODIFICAR_ANTECEDENTE
         );
     }
@@ -120,12 +117,24 @@ public class M_AntecedentesNGTest {
     )
     public void testGetAntecedentes() {
         int idPadre = 0;
-        List<Antecedente> result = M_Antecedente.getAntecedentes(idPadre);
-        assertTrue(result.isEmpty(), "La tabla de antecedentes contiene informacion.");
+        List<Antecedente> result = M_Antecedente.getAntecedentes(
+                Antecedente
+                        .builder()
+                        .id(idPadre)
+                        .build()
+        );
+        
+        assertTrue(
+                result.isEmpty(), 
+                "La tabla de antecedentes contiene informacion."
+        );
 
         //Consultado el registro
-        List<Antecedente> lista = getAntecedentes(
-                id_antecedente
+        List<Antecedente> lista = M_Antecedente.getAntecedentes(
+                Antecedente
+                        .builder()
+                        .id(id_antecedente)
+                        .build()
         );
 
         assertNotNull(
@@ -136,29 +145,26 @@ public class M_AntecedentesNGTest {
 
     @Test(
             enabled = true,
-            description = "",
-            priority = 0
+            priority = 0,
+            description = """
+                          """
     )
     public void testBorrarAntecedente() {
-        Resultado result = M_Antecedente.borrarAntecedente(id_antecedente);
-
         assertEquals(
-                result.getMensaje(),
-                BORRADO_CORRECTAMENTE,
+                M_Antecedente.borrarAntecedente(
+                        Antecedente
+                                .builder()
+                                .id(id_antecedente)
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_BORRAR_PACIENTE
         );
-
-        assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
-                ERROR_AL_BORRAR_PACIENTE
-        );
-
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL_BORRAR_PACIENTE
-        );
-
         consulta.testEliminarConsulta();
         paciente.testEliminarEntidad();
     }

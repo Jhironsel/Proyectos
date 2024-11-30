@@ -1,13 +1,18 @@
 package sur.softsurena.metodos;
 
+import com.mxrck.autocompleter.tests.Person;
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.Cleanup;
+import lombok.NonNull;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Generales;
+import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -17,6 +22,11 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_Generales {
 
+    /**
+     * Genera una cedula automaticamente para pruebas en el sistema.
+     * 
+     * @return devuelve una cedula valida en el sistema.
+     */
     public static String generarCedula() {
         int primerDigito = (int) (Math.random() * 4) + 1;
         int segundoDigito = (int) (Math.random() * 5);
@@ -65,6 +75,15 @@ public class M_Generales {
     }
 
 
+    /**
+     * Verifica se una cedula cumple con los requisito para una cedula 
+     * dominicana.
+     * 
+     * @param cedula cedula para validar.
+     * 
+     * @return devuelve true si es autentica o falso en caso contrario.
+     * 
+     */
     public static boolean cedula(String cedula) {
         // Eliminar guiones y espacios en blanco
         cedula = cedula.replaceAll("[\\s-]+", "");
@@ -101,6 +120,7 @@ public class M_Generales {
     public static Generales getEntidad(Integer id) {
         final String sql = """
                            SELECT 
+                                ID, 
                                 CEDULA, 
                                 ID_TIPO_SANGRE, 
                                 ESTADO_CIVIL
@@ -122,8 +142,14 @@ public class M_Generales {
             if (rs.next()) {
                 return Generales
                         .builder()
+                        .id(rs.getInt("ID"))
+                        .tipoSangre(
+                                TipoSangre
+                                        .builder()
+                                        .id(rs.getInt("ID_TIPO_SANGRE"))
+                                        .build()
+                        )
                         .cedula(rs.getString("CEDULA"))
-                        .id_tipo_sangre(rs.getInt("ID_TIPO_SANGRE"))
                         .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
                         .build();
             }
@@ -138,7 +164,12 @@ public class M_Generales {
         return Generales
                 .builder()
                 .cedula("000-0000000-0")
-                .id_tipo_sangre(0)
+                .tipoSangre(
+                        TipoSangre
+                                .builder()
+                                .id(0)
+                                .build()
+                )
                 .estado_civil('X')
                 .build();
     }
@@ -150,7 +181,7 @@ public class M_Generales {
                                 ID_TIPO_SANGRE, 
                                 ESTADO_CIVIL
                            FROM V_GENERALES
-                           WHERE CEDULA STARTING WITH ?;
+                           WHERE CEDULA LIKE ?;
                            """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -166,8 +197,18 @@ public class M_Generales {
             if (rs.next()) {
                 return Generales
                         .builder()
-                        .id_persona(rs.getInt("ID_PERSONA"))
-                        .id_tipo_sangre(rs.getInt("ID_TIPO_SANGRE"))
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(rs.getInt("ID_PERSONA"))
+                                        .build()
+                        )
+                        .tipoSangre(
+                                TipoSangre
+                                        .builder()
+                                        .id(rs.getInt("ID_TIPO_SANGRE"))
+                                        .build()
+                        )
                         .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
                         .build();
             }
@@ -181,8 +222,18 @@ public class M_Generales {
         }
         return Generales
                 .builder()
-                .id_persona(-1)
-                .id_tipo_sangre(0)
+                .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(-1)
+                                        .build()
+                        )
+                        .tipoSangre(
+                                TipoSangre
+                                        .builder()
+                                        .id(0)
+                                        .build()
+                        )
                 .estado_civil('X')
                 .build();
     }
@@ -193,24 +244,24 @@ public class M_Generales {
      * @param general
      * @return
      */
-    public static Resultado agregarEntidad(Generales general) {
+    public static Resultado agregarEntidad(@NonNull Generales general) {
         final String sql = """
-                           EXECUTE PROCEDURE SP_I_GENERAL (?,?,?,?);
+                           EXECUTE PROCEDURE SP_I_GENERAL(?,?,?,?)
                            """;
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
+        try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, general.getId_persona());
-            ps.setString(2, general.getCedula());
-            ps.setInt(3, general.getId_tipo_sangre());
-            ps.setString(4, general.getEstado_civil().toString());
+            cs.setInt(1, general.getPersona().getId_persona());
+            cs.setString(2, general.getCedula());
+            cs.setInt(3, general.getTipoSangre().getId());
+            cs.setString(4, general.getEstado_civil().toString());
 
-            ps.execute();
+            cs.executeUpdate();
 
             return Resultado
                     .builder()
@@ -258,9 +309,9 @@ public class M_Generales {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, general.getId_persona());
+            ps.setInt(1, general.getPersona().getId_persona());
             ps.setString(2, general.getCedula());
-            ps.setInt(3, general.getId_tipo_sangre());
+            ps.setInt(3, general.getTipoSangre().getId());
             ps.setString(4, general.getEstado_civil().toString());
 
             ps.execute();
@@ -328,11 +379,7 @@ public class M_Generales {
                 .build();
     }
     public static final String ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE
-            = "Error al borrar las generales en el sistema. [Codigo: s%]";
+            = "Error al borrar las generales en el sistema. [ Codigo: %d ]";
     public static final String GENERALES_BORRADA_CORRECTAMENTE_DEL_SISTE
             = "Generales borrada correctamente del sistema.";
-
-    public static Resultado eliminarEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

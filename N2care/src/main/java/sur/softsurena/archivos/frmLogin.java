@@ -159,7 +159,7 @@ public class frmLogin extends javax.swing.JFrame {
             txtUsuario.setEditable(false);
             txtClave.setEditable(false);
         }
-        txtUsuario.requestFocusInWindow();
+        txtUsuario.requestFocus();
     }//GEN-LAST:event_btnMostrarLoginMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -169,13 +169,13 @@ public class frmLogin extends javax.swing.JFrame {
                 /*Empezamos validando los dos campos si estan vacios*/
                 if (txtUsuario.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Inserte un Usuario");
-                    txtUsuario.requestFocusInWindow();
+                    txtUsuario.requestFocus();
                     swinWorker = null;
                     return null;
                 }
                 if (txtClave.getPassword().length == 0) {
                     JOptionPane.showMessageDialog(null, "Inserte una clave");
-                    txtClave.requestFocusInWindow();
+                    txtClave.requestFocus();
                     swinWorker = null;
                     return null;
                 }
@@ -218,7 +218,7 @@ public class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_txtClaveActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        txtClave.requestFocusInWindow();
+        txtClave.requestFocus();
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     public static void main(String[] args) {

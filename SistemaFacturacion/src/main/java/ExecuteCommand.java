@@ -8,7 +8,9 @@ public class ExecuteCommand {
 
     public static void main(String[] args) {
         try {
-            Process process = Runtime.getRuntime().exec("lsblk -o NAME,UUID");
+            String[] comandos = {"lsblk -o NAME,UUID"};
+            Process process = Runtime.getRuntime().exec(comandos);
+            
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line, aux = "\n";
             while ((line = reader.readLine()) != null) {

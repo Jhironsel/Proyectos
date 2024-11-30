@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class EntradaProducto {
     
     private final Integer id;
-    private final Integer idProvedor; //Identificador del proveedor
+    private final Integer idProveedor; //Identificador del proveedor
     private final String cod_factura; //Encabezado de la factura.
     private final int linea; //Linea consecutiva de la entrada de producto
     private final int idProducto; //Identificador del producto. 

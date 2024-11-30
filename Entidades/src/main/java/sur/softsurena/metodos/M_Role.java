@@ -34,7 +34,7 @@ public class M_Role {
                     SELECT r.ROL, r.DESCRIPCION, a.ADMINISTRACION
                     FROM GET_ROLES r
                     LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND 
-                                           TRIM(a.USER_NAME) STARTING WITH TRIM(UPPER(?))
+                                           TRIM(a.USER_NAME) LIKE TRIM(UPPER(?))
                     WHERE a.USER_NAME IS %s NULL;
                 """.formatted((disponible ? "NOT" : ""));
 

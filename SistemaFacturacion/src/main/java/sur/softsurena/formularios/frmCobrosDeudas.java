@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import static sur.softsurena.metodos.M_Deuda.getDeudas;
@@ -17,6 +18,8 @@ import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmCobrosDeudas extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private int idTurno;
     private String nombreCajero;
@@ -49,13 +52,10 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         txtMonto.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMonto.setValue(0.0);
-                        txtMonto.setSelectionStart(3);
-                        txtMonto.setSelectionEnd(txtMonto.getText().length());
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    txtMonto.setValue(0.0);
+                    txtMonto.setSelectionStart(3);
+                    txtMonto.setSelectionEnd(txtMonto.getText().length());
                 });
             }
         });
@@ -65,7 +65,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbCliente = new javax.swing.JComboBox();
+        cmbCliente = new javax.swing.JComboBox<>();
         btnPagar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnBuscarCliente = new javax.swing.JButton();
@@ -355,22 +355,34 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cmbCliente.removeAllItems();
-        cmbCliente.addItem(Cliente
+        cmbCliente.addItem(
+                Cliente
                         .builder()
-                        .id_persona(-1)
-                        .pnombre("Seleccione un cliente")
-                        .snombre("")
-                        .apellidos("")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(-1)
+                                        .pnombre("Seleccione un cliente")
+                                        .snombre("")
+                                        .apellidos("")
+                                        .build()
+                        )
                         .build()
         );
 
         getDeudas().stream().forEach(cliente -> {
-            cmbCliente.addItem(Cliente
+            cmbCliente.addItem(
+                    Cliente
                             .builder()
-                            .id_persona(cliente.getId_persona())
-                            .pnombre(cliente.getPnombre())
-                            .snombre(cliente.getSnombre())
-                            .apellidos(cliente.getApellidos())
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .id_persona(cliente.getCliente().getPersona().getId_persona())
+                                            .pnombre(cliente.getCliente().getPersona().getPnombre())
+                                            .snombre(cliente.getCliente().getPersona().getSnombre())
+                                            .apellidos(cliente.getCliente().getPersona().getApellidos())
+                                            .build()
+                            )
                             .build()
             );
         });
@@ -384,7 +396,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbCliente.requestFocusInWindow();
+            cmbCliente.requestFocus();
             return;
         }
         if (tblDeudas.getSelectedRow() == -1) {
@@ -409,7 +421,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0.0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
 
@@ -421,7 +433,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0.0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
 
@@ -474,7 +486,10 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
     private void cmbClienteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClienteItemStateChanged
-        llenarTabla(((Cliente) cmbCliente.getItemAt(cmbCliente.getSelectedIndex())).getId_persona());
+        llenarTabla(
+                cmbCliente.getItemAt(
+                        cmbCliente.getSelectedIndex()
+                ).getPersona().getId_persona());
 
         txtMonto.setValue(0.0);
         txtDeuda.setValue(0.0);
@@ -493,7 +508,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbClienteItemStateChanged
     private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
         txtMonto.grabFocus();
-        txtMonto.requestFocusInWindow();
+        txtMonto.requestFocus();
     }//GEN-LAST:event_cmbClienteActionPerformed
     private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
         btnPagarActionPerformed(evt);
@@ -511,7 +526,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         }
         txtMontoPago.setValue(montoPagado);
         txtSaldo.setValue(Utilidades.objectToDouble(txtDeuda.getValue()) - Utilidades.objectToDouble(txtMontoPago.getValue()));
-        txtMonto.requestFocusInWindow();
+        txtMonto.requestFocus();
     }//GEN-LAST:event_tblDeudasMouseClicked
 
     private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
@@ -525,13 +540,29 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
     }//GEN-LAST:event_txtMontoKeyTyped
 
     private void imprimirPago() {
-        Map parametros = new HashMap();
+        Map<String, Object> parametros = new HashMap<>();
         parametros.put("nombreCajero", getNombreCajero());
-        parametros.put("idFactura", Utilidades.objectToInt(tblDeudas.getValueAt(tblDeudas.getSelectedRow(), 0)));
-        parametros.put("montoFactura", Utilidades.objectToDouble(tblDeudas.getValueAt(tblDeudas.getSelectedRow(), 1)));
+        parametros.put(
+                "idFactura", 
+                Utilidades.objectToInt(tblDeudas.getValueAt(
+                        tblDeudas.getSelectedRow(), 0
+                ))
+        );
+        parametros.put(
+                "montoFactura", 
+                Utilidades.objectToDouble(
+                        tblDeudas.getValueAt(tblDeudas.getSelectedRow(), 1))
+        );
         parametros.put("idTurno", "" + getIdTurno());
-        parametros.put("idCliente", ((Cliente) cmbCliente.getItemAt(cmbCliente.getSelectedIndex())).getId_persona());
-        parametros.put("nombreCliente", ((Cliente) cmbCliente.getItemAt(cmbCliente.getSelectedIndex())).toString());
+        parametros.put(
+                "idCliente", 
+                cmbCliente.getItemAt(
+                        cmbCliente.getSelectedIndex()
+                ).getPersona().getId_persona());
+        parametros.put(
+                "nombreCliente", 
+                cmbCliente.getItemAt(cmbCliente.getSelectedIndex()).toString()
+        );
 
         hiloImpresionFactura impresionFactura = new hiloImpresionFactura(
                 true,
@@ -605,13 +636,13 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, "Error al obtener pagos de deudas externas.", ex);
         }
-        txtMonto.requestFocusInWindow();
+        txtMonto.requestFocus();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnPagar;
-    private javax.swing.JComboBox cmbCliente;
+    private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;

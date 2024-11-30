@@ -20,12 +20,12 @@ public class frmHorario extends javax.swing.JInternalFrame {
     private static TableRowSorter<TableModel> modeloOrdenado;
 
     public frmHorario() {
-        
+
         initComponents();
     }
 
     public synchronized static frmHorario getControlCita() {
-        
+
         if (controlCita == null) {
             controlCita = new frmHorario();
         }
@@ -223,12 +223,12 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        
+
         if (cbDoctores.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe seleccionar un doctor de la lista",
                     "Validacion de proceso", JOptionPane.INFORMATION_MESSAGE);
-            cbDoctores.requestFocusInWindow();
+            cbDoctores.requestFocus();
             cbDoctores.showPopup();
             return;
         }
@@ -239,7 +239,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        
+
         if (jtConsulta.getSelectedRow() < 0) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe seleccionar una consulta de la tabla!");
@@ -262,13 +262,13 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        
+
         llenarCombox();
         llenarTabla();
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void jtConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtConsultaMouseClicked
-        
+
         for (int i = 0; i < cbDoctores.getItemCount(); i++) {
             if (((Categorias) cbDoctores.getItemAt(i)).getDescripcion().trim().equals(((Categorias) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 0)).getDescripcion().trim())) {
                 cbDoctores.setSelectedIndex(i);
@@ -280,7 +280,6 @@ public class frmHorario extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
 
         llenarTabla();
     }//GEN-LAST:event_cbDoctoresActionPerformed
@@ -299,27 +298,25 @@ public class frmHorario extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     public static synchronized void llenarTabla() {
-        
 
         String titulos[] = {"Dia", "Cantidad Paciente", "Hora Inicial",
             "Hora Final"};
-        
+
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-        
         jtConsulta.revalidate();
         jtConsulta.validate();
-        
+
         Integer doctores = cbDoctores.getSelectedIndex();
-        
+
         if (doctores == 0) {
             jtConsulta.setModel(new DefaultTableModel());
             return;
         }
-        
+
         String idUsuario = ((Categorias) cbDoctores.getSelectedItem()).
                 getDescripcion().trim();
-        
+
         Object registro[] = new Object[4];
 
         rs = getHorario(idUsuario.trim());
@@ -343,7 +340,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }
 
     public static String dia(String dia) {
-        
+
         switch (dia) {
             case "Lu":
                 return "Lunes";
@@ -365,19 +362,23 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }
 
     private synchronized void llenarCombox() {
-        
         cbDoctores.removeAllItems();
+        
         ResultSet rs = getUsuarioDoctor();
+        
         cbDoctores.addItem(new Categorias("Seleccione un Doctor", "N/A"));
+        
         try {
             while (rs.next()) {
-                cbDoctores.addItem(new Categorias(
-                        rs.getString("LoginUser").trim(), rs.getString("P_Nombre")
-                        + " "
-                        + rs.getString("S_Nombre").replace("-", "")
-                        + " "
-                        + rs.getString("Apellidos")
-                ));
+                cbDoctores.addItem(
+                        new Categorias(
+                                rs.getString("LoginUser").trim(), rs.getString("P_Nombre")
+                                + " "
+                                + rs.getString("S_Nombre").replace("-", "")
+                                + " "
+                                + rs.getString("Apellidos")
+                        )
+                );
             }
         } catch (SQLException ex) {
             //Instalar Logger
@@ -385,10 +386,12 @@ public class frmHorario extends javax.swing.JInternalFrame {
     }
 
     public void centralizar() {
-        setBounds((dpnEscritorio.getWidth() - this.getWidth()) / 2,
+        setBounds(
+                (dpnEscritorio.getWidth() - this.getWidth()) / 2,
                 (dpnEscritorio.getHeight() - this.getHeight()) / 2,
                 730,
-                480);
+                480
+        );
         pack();
     }
 }

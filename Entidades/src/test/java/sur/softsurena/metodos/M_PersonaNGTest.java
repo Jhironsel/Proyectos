@@ -29,7 +29,7 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
 @Getter
 public class M_PersonaNGTest {
 
-    private int idPersona;
+    private static int idPersona;
 
     public M_PersonaNGTest() {
     }
@@ -108,7 +108,9 @@ public class M_PersonaNGTest {
     )
     public void testModificarEntidad() {
 
-        Resultado result = M_Persona.modificarEntidad(persona());
+        Resultado result = M_Persona.modificarEntidad(
+                persona()
+        );
 
         assertEquals(
                 result,
@@ -187,7 +189,7 @@ public class M_PersonaNGTest {
         );
     }
 
-    private Persona persona() {
+    public static Persona persona() {
         return Persona
                 .builder()
                 .id_persona(idPersona)

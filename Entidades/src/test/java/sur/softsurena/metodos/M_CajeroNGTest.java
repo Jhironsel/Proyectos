@@ -51,22 +51,9 @@ public class M_CajeroNGTest {
     )
     public void testGetCajeros() {
         List result = M_Cajero.getCajeros();
-        assertTrue(
+        assertFalse(
                 result.isEmpty(), 
                 "La tabla de cajero NO contiene usuarios"
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = "Nos permite tener los nombres de los cajeros del sistema.",
-            priority = 1
-    )
-    public void testGetCajerosName() {
-        List result = M_Cajero.getCajerosName();
-        assertTrue(
-                result.isEmpty(),
-                "NO Existen cajeros registrados."
         );
     }
 }

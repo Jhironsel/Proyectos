@@ -470,27 +470,27 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
-        txtPNombre.requestFocusInWindow();
+        txtPNombre.requestFocus();
     }//GEN-LAST:event_txtUserNameActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
-        txtSNombre.requestFocusInWindow();
+        txtSNombre.requestFocus();
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
-        txtClave1.requestFocusInWindow();
+        txtClave1.requestFocus();
     }//GEN-LAST:event_txtApellidosActionPerformed
 
     private void txtClave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClave1ActionPerformed
-        txtClave2.requestFocusInWindow();
+        txtClave2.requestFocus();
     }//GEN-LAST:event_txtClave1ActionPerformed
 
     private void txtClave2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClave2ActionPerformed
-        txtDescripcion.requestFocusInWindow();
+        txtDescripcion.requestFocus();
     }//GEN-LAST:event_txtClave2ActionPerformed
 
     private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
-        txtApellidos.requestFocusInWindow();
+        txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     /**
@@ -550,7 +550,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtUserName.requestFocusInWindow();
+            txtUserName.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------1
@@ -561,7 +561,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------2
@@ -572,7 +572,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------3        
@@ -602,7 +602,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtClave1.requestFocusInWindow();
+                txtClave1.requestFocus();
                 return;
             }
 
@@ -613,7 +613,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtClave2.requestFocusInWindow();
+                txtClave2.requestFocus();
                 return;
             }
         }
@@ -627,7 +627,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             );
             txtClave2.setText("");
             txtClave1.setText("");
-            txtClave1.requestFocusInWindow();
+            txtClave1.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------6
@@ -685,7 +685,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 nuevo = false;
                 txtClave1.setText("");
                 txtClave2.setText("");
-                txtClave1.requestFocusInWindow();
+                txtClave1.requestFocus();
                 return;
             }
 

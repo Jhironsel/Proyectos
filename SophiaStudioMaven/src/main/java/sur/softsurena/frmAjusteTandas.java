@@ -659,7 +659,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtEdadMinima.requestFocusInWindow();
+                txtEdadMinima.requestFocus();
                 return;
             }
             if (txtEdadMaxima.getText().isBlank()) {
@@ -669,7 +669,7 @@ public class frmAjusteTandas extends javax.swing.JInternalFrame {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtEdadMaxima.requestFocusInWindow();
+                txtEdadMaxima.requestFocus();
                 return;
             }
         }

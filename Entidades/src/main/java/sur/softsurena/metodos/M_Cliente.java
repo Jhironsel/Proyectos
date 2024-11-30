@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.Cleanup;
+import lombok.NonNull;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
@@ -65,6 +68,7 @@ public class M_Cliente {
             = "Error al insertar Cliente al sistema.";
     public static final String CLIENTE__AGREGADO__CORRECTAMENTE
             = "Cliente Agregado Correctamente";
+//------------------------------------------------------------------------------
 
     /**
      * Este procedimiento tiene la habilidad de borrar los registros de las
@@ -113,24 +117,21 @@ public class M_Cliente {
             = "Cliente borrado correctamente.";
     public static final String CLIENTE_NO_PUEDE_SER_BORRADO
             = "Cliente no puede ser borrado.";
+//------------------------------------------------------------------------------
 
     /**
      * Metodo que permite obtener los cliente del sistema.
      *
+     *
      * @param filtro
      * @return
      */
-    public synchronized static List<Cliente> getPersonasClientes(FiltroBusqueda filtro) {
-        final String sql = """
-                            SELECT 
-                                ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, 
-                                SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL, 
-                                FECHA_INGRESO, ESTADO
-                            FROM GET_PERSONA_CLIENTES
-                           """;
+    public synchronized static List<Cliente> getPersonasClientes(
+            @NonNull FiltroBusqueda filtro
+    ) {
         List<Cliente> clientes = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlPersonaClientes(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -143,23 +144,36 @@ public class M_Cliente {
                 clientes.add(
                         Cliente
                                 .builder()
-                                .id_persona(rs.getInt("ID"))
-                                .generales(
-                                        Generales
+                                .persona(
+                                        Persona
                                                 .builder()
                                                 .id_persona(rs.getInt("ID"))
-                                                .cedula(rs.getString("CEDULA"))
-                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .generales(
+                                                        Generales
+                                                                .builder()
+                                                                .persona(
+                                                                        Persona
+                                                                                .builder()
+                                                                                .id_persona(rs.getInt("ID"))
+                                                                                .build()
+                                                                )
+                                                                .cedula(rs.getString("CEDULA"))
+                                                                .estado_civil(
+                                                                        rs.getString("ESTADO_CIVIL")
+                                                                                .charAt(0)
+                                                                )
+                                                                .build()
+                                                )
+                                                .persona(rs.getString("PERSONA").charAt(0))
+                                                .pnombre(rs.getString("PNOMBRE"))
+                                                .snombre(rs.getString("SNOMBRE"))
+                                                .apellidos(rs.getString("APELLIDOS"))
+                                                .sexo(rs.getString("SEXO").charAt(0))
+                                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                                .estado(rs.getBoolean("ESTADO"))
                                                 .build()
                                 )
-                                .persona(rs.getString("PERSONA").charAt(0))
-                                .pnombre(rs.getString("PNOMBRE"))
-                                .snombre(rs.getString("SNOMBRE"))
-                                .apellidos(rs.getString("APELLIDOS"))
-                                .sexo(rs.getString("SEXO").charAt(0))
-                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                                .estado(rs.getBoolean("ESTADO"))
                                 .build()
                 );
             }
@@ -173,66 +187,71 @@ public class M_Cliente {
         }
         return clientes;
     }
-    private static final String ERROR_AL_CONSULTA_LA_VISTA_GET_PERSONA_CL
+    public static final String ERROR_AL_CONSULTA_LA_VISTA_GET_PERSONA_CL
             = "Error al consulta la vista GET_PERSONA_CLIENTES";
 
     /**
-     * Metodo que permite obtener los cliente del sistema.
      *
      * @param filtro
      * @return
      */
-    public synchronized static Cliente getPersonaCliente(FiltroBusqueda filtro) {
-        final String sql = """
-                            SELECT 
-                                ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, 
-                                SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL, 
-                                FECHA_INGRESO, ESTADO
-                            FROM GET_PERSONA_CLIENTES
-                            WHERE ID = ?
-                           """;
-        Cliente cliente = Cliente.builder().build();
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
+    protected static String sqlPersonaClientes(
+            FiltroBusqueda filtro
+    ) {
+        Boolean f_id = Objects.isNull(filtro.getId());
+        Boolean f_estado = Objects.isNull(filtro.getEstado());
+        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
 
-            ps.setInt(1, filtro.getId());
-            
-            @Cleanup
-            ResultSet rs = ps.executeQuery();
+        Boolean f_where = (f_id && f_estado && f_criterio);
 
-            if(rs.next()) {
-                cliente = Cliente
-                        .builder()
-                        .id_persona(rs.getInt("ID"))
-                        .generales(
-                                Generales
-                                        .builder()
-                                        .cedula(rs.getString("CEDULA"))
-                                        .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
-                                        .build()
+        Boolean f_fila = Objects.isNull(filtro.getFilas());
+
+        String s_where = (f_where ? "" : "WHERE ");
+        String s_id = (f_id ? "" : "ID = %d ".formatted(filtro.getId()));
+        String s_and = (f_id ? "" : (f_estado ? "" : "AND "));
+
+        String s_estado = (f_estado
+                ? "" : (filtro.getEstado() ? "ESTADO " : "ESTADO IS FALSE "));
+
+        String s_and2 = (f_estado || f_criterio ? "" : "AND ");
+
+        String s_criterio = (f_criterio ? "" : """
+                                               CEDULA LIKE '%s' 
+                                               OR PNOMBRE LIKE '%s'
+                                               OR SNOMBRE LIKE '%s'
+                                               OR APELLIDOS LIKE '%s' 
+                                               """.formatted(
+                filtro.getCriterioBusqueda(),
+                filtro.getCriterioBusqueda(),
+                filtro.getCriterioBusqueda(),
+                filtro.getCriterioBusqueda()
+        ));
+
+        String s_fila = (f_fila
+                ? "" : (filtro.getFilas()
+                ? "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                        .formatted(
+                                filtro.getNPaginaNro(),
+                                filtro.getNCantidadFilas(),
+                                filtro.getNPaginaNro(),
+                                filtro.getNCantidadFilas()
                         )
-                        .persona(rs.getString("PERSONA").charAt(0))
-                        .pnombre(rs.getString("PNOMBRE"))
-                        .snombre(rs.getString("SNOMBRE"))
-                        .apellidos(rs.getString("APELLIDOS"))
-                        .sexo(rs.getString("SEXO").charAt(0))
-                        .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                        .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                        .estado(rs.getBoolean("ESTADO"))
-                        .build();
-            }
+                : ""));
 
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTA_LA_VISTA_GET_PERSONA_CL,
-                    ex
-            );
-        }
-        return cliente;
+        return """
+               SELECT 
+                   ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, 
+                   SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL, 
+                   FECHA_INGRESO, ESTADO
+               FROM GET_PERSONA_CLIENTES
+               """.concat(s_where)
+                .concat(s_id)
+                .concat(s_and)
+                .concat(s_estado)
+                .concat(s_and2)
+                .concat(s_criterio)
+                .concat(s_fila)
+                .strip()
+                .trim();
     }
 }

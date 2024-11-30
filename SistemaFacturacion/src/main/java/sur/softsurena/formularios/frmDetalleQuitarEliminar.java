@@ -1,6 +1,9 @@
 package sur.softsurena.formularios;
 
 public class frmDetalleQuitarEliminar extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
+    
     private int opcion = 3;
 
     public int getOpcion() {

@@ -41,7 +41,8 @@ public class M_UsuarioNGTest {
                 "Error al conectarse..."
         );
     }
-
+//------------------------------------------------------------------------------
+    
     @AfterClass
     public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
@@ -54,7 +55,9 @@ public class M_UsuarioNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
+    
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = true,
             description = "",
@@ -69,7 +72,8 @@ public class M_UsuarioNGTest {
                 "La contraseña no fue cambiada. "
         );
     }
-
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = true,
             description = """
@@ -123,7 +127,7 @@ public class M_UsuarioNGTest {
         result = M_Usuario.agregarUsuario(
                 Usuario
                         .builder()
-                        .user_name("Jhironsel")
+                        .user_name("Jhironsel2")
                         .clave("1")
                         .pnombre("Jhironsel")
                         .snombre(null)
@@ -146,7 +150,7 @@ public class M_UsuarioNGTest {
                 ERROR_AL_AGREGAR__USUARIO
         );
     }
-    
+//------------------------------------------------------------------------------
     
     @Test(
             enabled = true,
@@ -176,7 +180,7 @@ public class M_UsuarioNGTest {
         Resultado result = M_Usuario.modificarUsuario(
                 Usuario
                         .builder()
-                        .user_name("JHIRONSEL")
+                        .user_name("JHIRONSEL2")
                         .clave("1")
                         .pnombre("Jhironsel")
                         .snombre("Jhadiel")
@@ -200,11 +204,8 @@ public class M_UsuarioNGTest {
                 ERROR_AL_MODIFICAR_USUARIO
         );
     }
-
+//------------------------------------------------------------------------------
     
-    
-    
-
     @Test(
             enabled = true,
             description = """
@@ -237,7 +238,8 @@ public class M_UsuarioNGTest {
         Usuario result = M_Usuario.getUsuario(userName);
         assertEquals(result, expResult);
     }
-
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = false,
             description = "",
@@ -248,7 +250,8 @@ public class M_UsuarioNGTest {
         List result = M_Usuario.getUsuarios();
         assertEquals(result, expResult);
     }
-
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = false,
             description = "",
@@ -259,7 +262,8 @@ public class M_UsuarioNGTest {
         List result = M_Usuario.getNombresUsuarios();
         assertEquals(result, expResult);
     }
-
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = false,
             description = "",
@@ -271,8 +275,7 @@ public class M_UsuarioNGTest {
         boolean result = M_Usuario.existeUsuarioByUserName(userName);
         assertEquals(result, expResult);
     }
-    
-    
+//------------------------------------------------------------------------------
     
     @Test(
             enabled = true,
@@ -293,7 +296,7 @@ public class M_UsuarioNGTest {
                     .build(), 
                 ERROR_AL_BORRAR_USUARIO+" Prueba."
         );
-        result = M_Usuario.borrarUsuario("Jhironsel");
+        result = M_Usuario.borrarUsuario("Jhironsel2");
         assertEquals(
                 result, 
                 Resultado
@@ -302,7 +305,7 @@ public class M_UsuarioNGTest {
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build(), 
-                ERROR_AL_BORRAR_USUARIO+" Jhironsel."
+                ERROR_AL_BORRAR_USUARIO+" Jhironsel2."
         );
     }
 }

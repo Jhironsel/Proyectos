@@ -534,7 +534,7 @@ public class frmPrincipal extends javax.swing.JFrame implements Runnable {
         dpnEscritorio.add(miPadre);
         miPadre.show();
         miPadre.txtCedula.setEnabled(true);
-        miPadre.txtCedula.requestFocusInWindow();
+        miPadre.txtCedula.requestFocus();
     }//GEN-LAST:event_mnuRegistroPadreActionPerformed
     private void mnuModificarPadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuModificarPadreActionPerformed
         cerrarFormularios();
@@ -560,7 +560,7 @@ public class frmPrincipal extends javax.swing.JFrame implements Runnable {
                 miPadreModificar.txtMovil.setText(rs.getString("Telefono2"));
                 miPadreModificar.jcbEstado.setSelectedIndex(rs.getInt("Estado"));
                 miPadreModificar.txtCorreo.setText(rs.getString("Correo"));
-                miPadreModificar.txtNombre.requestFocusInWindow();
+                miPadreModificar.txtNombre.requestFocus();
                 miPadreModificar.txtCedula.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(this, "Padre no Encontrado.");

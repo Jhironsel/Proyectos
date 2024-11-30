@@ -2,13 +2,15 @@ package sur.softsurena.formularios;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Factura;
-import static sur.softsurena.metodos.M_Factura.getFacturas;
+import static sur.softsurena.metodos.M_M_Factura.getFacturas;
 import sur.softsurena.utilidades.Utilidades;
 
-public class frmReporteFacturas extends javax.swing.JInternalFrame
-       {
+public class frmReporteFacturas extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     public frmReporteFacturas() {
 
@@ -29,9 +31,6 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
                                 new java.awt.Color(0, 0, 255)), "Fecha final"));
     }
 
-    
-    
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -46,7 +45,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
         jPanel2 = new javax.swing.JPanel();
         cmbFacturaInicial = new javax.swing.JComboBox();
         cmbFacturaFinal = new javax.swing.JComboBox();
-        cmbCliente = new javax.swing.JComboBox();
+        cmbCliente = new javax.swing.JComboBox<>();
         jCheckBox1 = new javax.swing.JCheckBox();
 
         setClosable(true);
@@ -96,7 +95,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dchFechaInicial, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                    .addComponent(dchFechaInicial, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
                     .addComponent(dchFechaFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -107,7 +106,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
                 .addComponent(dchFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dchFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Por Fecha", jPanel1);
@@ -123,7 +122,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbFacturaInicial, 0, 379, Short.MAX_VALUE)
+                    .addComponent(cmbFacturaInicial, 0, 361, Short.MAX_VALUE)
                     .addComponent(cmbFacturaFinal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -151,19 +150,16 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGenerar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(cmbCliente, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(txtArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnSeleccionArchivo)))
-                            .addComponent(jCheckBox1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cmbCliente, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(txtArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnSeleccionArchivo))
+                        .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,10 +174,10 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBox1)
                 .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -196,16 +192,20 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
         //Cargamos Clientes
         Cliente cli = Cliente
                 .builder()
-                .id_persona(-1)
-                .pnombre("Seleccione un cliente")
-                .snombre("")
-                .apellidos("")
+                .persona(
+                        Persona
+                                .builder()
+                                .id_persona(-1)
+                                .pnombre("Seleccione un cliente")
+                                .snombre("")
+                                .apellidos("")
+                                .build()
+                )
                 .build();
 
         cmbCliente.addItem(cli);
 
         //TODO Traer solo clientes.
-        
 //        getClientes(
 //                FiltroBusqueda
 //                        .builder()
@@ -215,9 +215,10 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
 //            cmbCliente.addItem(cliente);
 //        });
 
+
         //Cargamos Facturas
-        Factura fac = 
-                Factura
+        Factura factura
+                = Factura
                         .builder()
                         .id(-1)
                         .build();
@@ -226,10 +227,12 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
 
         cmbFacturaFinal.addItem(cli);
 
-        getFacturas().stream().forEach(x -> {
-            cmbFacturaInicial.addItem(fac);
-            cmbFacturaFinal.addItem(fac);
-        });
+        getFacturas().stream().forEach(
+                x -> {
+                    cmbFacturaInicial.addItem(factura);
+                    cmbFacturaFinal.addItem(factura);
+                }
+        );
 
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -246,7 +249,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         if (txtArchivo.getText().isBlank()) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe ingresar o Selecionar un Nombre de Archivo...",
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -265,49 +268,49 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
 
         if (cmbCliente.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe Selecionar un Cliente.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbCliente.requestFocusInWindow();
+            cmbCliente.requestFocus();
             return;
         }
-        
+
         String filtro = "WHERE factura.idCliente = '"
-                + ((Cliente) cmbCliente.getSelectedItem()).getId_persona() + "'";
+                + ((Cliente) cmbCliente.getSelectedItem()).getPersona().getId_persona() + "'";
 
         //Para Realizar la Consulta por Numero de Factura...
         //Si las factura es seleccionada.
         if (cmbFacturaInicial.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe Selecionar una Factura Inicial...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbFacturaInicial.requestFocusInWindow();
+            cmbFacturaInicial.requestFocus();
             return;
         }
         if (cmbFacturaFinal.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe Selecionar una Factura Final...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbFacturaFinal.requestFocusInWindow();
+            cmbFacturaFinal.requestFocus();
             return;
         }
 
         if (cmbFacturaInicial.getSelectedIndex() > cmbFacturaFinal.getSelectedIndex()) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Factura Inicial Maryor que la Final",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbFacturaInicial.requestFocusInWindow();
+            cmbFacturaInicial.requestFocus();
             return;
         }
 
@@ -320,22 +323,22 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
         //Si la fecha es seleccionada.
         if (dchFechaInicial.getDate() == null) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe Selecionar una Fecha Inicial...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            dchFechaInicial.requestFocusInWindow();
+            dchFechaInicial.requestFocus();
             return;
         }
         if (dchFechaFinal.getDate() == null) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Debe Selecionar una Fecha Final...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            dchFechaFinal.requestFocusInWindow();
+            dchFechaFinal.requestFocus();
             return;
         }
 
@@ -349,7 +352,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
 
 //            Reporte.reporteFacturas(archivo, getConsulta(sql));
         JOptionPane.showInternalMessageDialog(
-                this, 
+                this,
                 "Reporte Generado...",
                 "",
                 JOptionPane.INFORMATION_MESSAGE
@@ -370,7 +373,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnGenerar;
     private javax.swing.JButton btnSeleccionArchivo;
-    private javax.swing.JComboBox cmbCliente;
+    private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.JComboBox cmbFacturaFinal;
     private javax.swing.JComboBox cmbFacturaInicial;
     private com.toedter.calendar.JDateChooser dchFechaFinal;

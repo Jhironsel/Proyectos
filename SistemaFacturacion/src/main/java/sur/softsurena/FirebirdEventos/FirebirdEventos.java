@@ -8,6 +8,7 @@ import static sur.softsurena.formularios.frmClientes.llenarTablaClientes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
 import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
 import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
+import sur.softsurena.formularios.frmDeudas;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
 import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -90,6 +91,16 @@ public class FirebirdEventos extends FBEventManager {
                         new Object[]{event.getEventName(), event.getEventCount()}
                 );
                 llenarTablaCorreos(null);
+            });
+            
+            //Evento de Correo de cliente.**************************************
+            addEventListener("EVENT_DEUDA", (DatabaseEvent event) -> {
+                LOG.log(
+                        Level.INFO,
+                        "Event [{0}] occured {1} time(s)",
+                        new Object[]{event.getEventName(), event.getEventCount()}
+                );
+                frmDeudas.llenarTabla();
             });
         } catch (SQLException ex) {
             LOG.log(

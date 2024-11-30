@@ -40,6 +40,7 @@ import sur.softsurena.metodos.M_Role;
 import sur.softsurena.metodos.M_Turno;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.DesktopConFondo;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -1227,9 +1228,13 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuOpcionesSalirActionPerformed
 
     private void mnuMovimientosNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosNuevaFacturaActionPerformed
-        if (!M_Turno.usuarioTurnoActivo(
-                usuario.getUser_name()
-        )) {
+        if (M_Turno.getTurnos(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(usuario.getUser_name())
+                        .estado(true)
+                        .build()
+        ).isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
                     "Usuario no cuenta con Turno para Facturar...!",
@@ -1366,7 +1371,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
             };
             Object[] rowData2 = new Object[columnas2.length];
 
-            M_Turno.getTurnosActivos().stream().forEach(
+            M_Turno.getTurnos(
+                    FiltroBusqueda
+                            .builder()
+                            .estado(true)
+                            .build()
+            ).stream().forEach(
                     turno -> {
                         rowData2[0] = "Ident. Turno: " + turno.getId()
                         + " Cajero: " + turno.getTurno_usuario()
@@ -1408,6 +1418,8 @@ public final class frmPrincipal extends javax.swing.JFrame {
         if (!dpnEscritorio.isAncestorOf(formulario)) {
             dpnEscritorio.add(formulario);
         }
+        
+        formulario.setVisible(true);
 
         try {
             formulario.setMaximum(false);
@@ -1420,7 +1432,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
             );
         }
 
-        formulario.setVisible(true);
 
         System.gc();
     }
@@ -1656,6 +1667,17 @@ public final class frmPrincipal extends javax.swing.JFrame {
                                 .build()
                 )
         );
+        
+        mnuMovimientosDeudas.setVisible(
+                M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
+                                .nombre_relacion("GET_DEUDAS")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
         mnuMovimientosAbrirTurno.setVisible(
                 M_Privilegio.privilegio(
                         Privilegio
@@ -1786,7 +1808,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuAyudaAyuda;
     private javax.swing.JMenu mnuMantenimiento;
     private javax.swing.JMenuItem mnuMantenimientoAlmacenes;
-    private javax.swing.JMenuItem mnuMantenimientoClientes;
+    public static javax.swing.JMenuItem mnuMantenimientoClientes;
     private javax.swing.JMenuItem mnuMantenimientoProductos;
     private javax.swing.JMenuItem mnuMantenimientoProveedores;
     private javax.swing.JMenuItem mnuMantenimientoUsuarios;

@@ -165,7 +165,7 @@ public class frmLogin extends javax.swing.JDialog {
             txtUsuario.setText("");
             txtClave.setText("");
             
-            txtUsuario.requestFocusInWindow();
+            txtUsuario.requestFocus();
             
             return;
         }
@@ -184,7 +184,7 @@ public class frmLogin extends javax.swing.JDialog {
     }//GEN-LAST:event_txtClaveActionPerformed
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
-        txtClave.requestFocusInWindow();
+        txtClave.requestFocus();
     }//GEN-LAST:event_txtUsuarioActionPerformed
     
 

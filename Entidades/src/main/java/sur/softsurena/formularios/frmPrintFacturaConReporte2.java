@@ -154,7 +154,7 @@ public class frmPrintFacturaConReporte2 extends javax.swing.JDialog {
         jlFactura.setIcon(icon);
         jlFactura.validate();
         p = new Point(0, imagen.getIconHeight());
-        btnAceptar.requestFocusInWindow();
+        btnAceptar.requestFocus();
         cbCopia.setSelected(getCopia());
     }//GEN-LAST:event_formWindowOpened
 

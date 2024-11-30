@@ -2,6 +2,8 @@ package sur.softsurena.metodos;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.Control_Consulta;
 import static sur.softsurena.metodos.M_Consulta.CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST;
+import static sur.softsurena.metodos.M_Consulta.ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -69,12 +72,12 @@ public class M_ConsultaNGTest {
     public void testAgregarConsulta() {
         paciente.testAgregarEntidad();
         controlConsulta.testAgregarControlConsulta();
-
+        
         Resultado result = M_Consulta.agregarConsulta(
                 Consulta
                         .builder()
                         .paciente(
-                                paciente.getPaciente()
+                                paciente.generarPaciente()
                         )
                         .controlConsulta(
                                 Control_Consulta
@@ -82,10 +85,11 @@ public class M_ConsultaNGTest {
                                         .id(controlConsulta.getIdControlConsulta())
                                         .build()
                         )
-                        .turno(0)
+                        .linea(0)
+                        .fecha(new Date(Calendar.getInstance().getTimeInMillis()))
                         .build()
         );
-
+        
         assertEquals(
                 result,
                 Resultado
@@ -140,15 +144,16 @@ public class M_ConsultaNGTest {
                           """
     )
     public void testEliminarConsulta() {
-        Resultado expResult
-                = Resultado
+        assertEquals(
+                M_Consulta.eliminarConsulta(idConsulta), 
+                Resultado
                         .builder()
                         .mensaje(CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST)
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
-                        .build();
-        Resultado result = M_Consulta.eliminarConsulta(idConsulta);
-        assertEquals(result, expResult);
+                        .build(), 
+                ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA
+        );
         
         
         controlConsulta.testBorrarControlConsulta();

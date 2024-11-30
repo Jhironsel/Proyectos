@@ -26,7 +26,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-<!--        <maven.compiler.source>21</maven.compiler.source>
+        <!--        <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>-->
     </properties>
     <dependencies>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>jaybird</artifactId>
-            <version>5.0.5.java11</version>
+            <version>5.0.6.java11</version>
         </dependency>
         
         <!--Utilizada para determinar los dialectos de firebird y las base de datos.-->
@@ -43,7 +43,7 @@
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
             <version>6.6.0.Final</version>
-<!--            <version>6.5.2.Final</version>-->
+            <!--            <version>6.5.2.Final</version>-->
         </dependency>
         
         <!--Dependecia para crear los POJO o JavaBeans de manera mas facil.-->
@@ -85,9 +85,9 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
             <type>jar</type>
-<!--            <exclusions>
+            <!--            <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
@@ -212,7 +212,7 @@
             <!--<version>2.0.13</version>-->
         </dependency>
         
-<!--        Dependecia de SophiaStudio-->
+        <!--        Dependecia de SophiaStudio-->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -222,8 +222,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>3.3.3</version>
-<!--            <version>3.3.1</version>-->
+            <version>3.3.5</version>
             <type>jar</type>
         </dependency>
         
@@ -252,8 +251,7 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.5.1</version>
-            <!--<version>3.4.1</version>-->
+            <version>3.5.2</version>
         </dependency>
         
         <dependency>
@@ -274,13 +272,12 @@
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
-            <version>RELEASE220</version>
+            <version>RELEASE230</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.3.4</version>
-            <!--<version>1.3.2</version>-->
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -289,6 +286,11 @@
             <type>jar</type>
         </dependency>
         
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
         
     </dependencies>
     <name>Proyectos</name>

@@ -36,7 +36,7 @@ public class M_Entrada_Producto {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, eProducto.getIdProvedor());
+            ps.setInt(1, eProducto.getIdProveedor());
             ps.setString(2, eProducto.getCod_factura());
             ps.setInt(3, eProducto.getLinea());
             ps.setInt(4, eProducto.getIdProducto());
@@ -111,15 +111,16 @@ public class M_Entrada_Producto {
      * @return
      */
     public synchronized static ResultSet getEntradaProducto(int mes, int year) {
-        final String sql 
-                = "SELECT "
-                + "     r.FECHAENTRADA, "
-                + "     IIF(r.OP = '+', 'Entrada', 'Salida') as operacion, "
-                + "     r.IDUSUARIO "
-                + "FROM TABLA_ENTRADAS_PRUDUCTO r "
-                + "WHERE EXTRACT(MONTH FROM r.FECHAENTRADA) = ? and "
-                + "      EXTRACT(YEAR FROM r.FECHAENTRADA) = ? "
-                + "GROUP BY r.FECHAENTRADA,  r.OP, r.IDUSUARIO";
+        final String sql = """
+                            SELECT 
+                                r.FECHAENTRADA, 
+                                IIF(r.OP = '+', 'Entrada', 'Salida') as operacion, 
+                                r.IDUSUARIO 
+                            FROM TABLA_ENTRADAS_PRUDUCTO r 
+                            WHERE EXTRACT(MONTH FROM r.FECHAENTRADA) = ? and 
+                                  EXTRACT(YEAR FROM r.FECHAENTRADA) = ? 
+                            GROUP BY r.FECHAENTRADA,  r.OP, r.IDUSUARIO
+                           """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql, 
                 ResultSet.TYPE_FORWARD_ONLY,

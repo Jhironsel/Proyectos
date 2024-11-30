@@ -26,8 +26,10 @@ public class M_Cajero {
         List<Cajero> cajerosList = new ArrayList<>();
 
         final String SELECT
-                = "SELECT USER_NAME, ROL, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, DESCRIPCION "
-                + "FROM GET_CAJEROS;";
+                = """
+                  SELECT USER_NAME, ROL, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, DESCRIPCION 
+                  FROM GET_CAJEROS;
+                  """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 SELECT,
@@ -59,39 +61,4 @@ public class M_Cajero {
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_DE_GET_CAJERO
             = "Error al consultar la vista de GET_CAJEROS.";
-
-    /**
-     * Metodo que devuelve una lista de nombres de usuarios del sistema.
-     *
-     * @return El valor devuelto de este metodo es una lista de nombres de
-     * usuarios del sistema.
-     */
-    public synchronized static List<Cajero> getCajerosName() {
-        List<Cajero> cajerosList = new ArrayList<>();
-
-        final String SELECT
-                = "SELECT USER_NAME FROM GET_CAJEROS;";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                SELECT,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    cajerosList.add(Cajero.builder().
-                            user_name(rs.getString("USER_NAME")).
-                            build());
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTAR_LA_VISTA_DE_GET_CAJERO,
-                    ex
-            );
-        }
-        return cajerosList;
-    }
 }

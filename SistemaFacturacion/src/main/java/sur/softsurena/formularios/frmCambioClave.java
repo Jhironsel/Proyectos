@@ -245,7 +245,7 @@ public class frmCambioClave extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNuevaActionPerformed
-        txtConfirmacion.requestFocusInWindow();
+        txtConfirmacion.requestFocus();
     }//GEN-LAST:event_txtNuevaActionPerformed
 
     private void txtConfirmacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtConfirmacionActionPerformed
@@ -267,7 +267,7 @@ public class frmCambioClave extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtNueva.requestFocusInWindow();
+            txtNueva.requestFocus();
             return;
         }
         
@@ -278,7 +278,7 @@ public class frmCambioClave extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtConfirmacion.requestFocusInWindow();
+            txtConfirmacion.requestFocus();
             return;
         }
 

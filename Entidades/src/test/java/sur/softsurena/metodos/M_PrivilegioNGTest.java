@@ -64,23 +64,88 @@ public class M_PrivilegioNGTest {
                                 .privilegio(
                                         Privilegio.PRIVILEGIO_SELECT
                                 )
-                                .nombre_relacion("GET_CAJEROS")
+                                .nombre_relacion("GET_PRODUCTOS")
                                 .build()
         );
-        assertTrue(result, "No se tiene acceso a GET_CAJEROS");
-        
+        assertTrue(result, "No se tiene acceso a GET_PRODUCTOS");
+        //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
                         .builder()
                         .privilegio(
                                 Privilegio.PRIVILEGIO_SELECT
                         )
-                        .nombre_relacion("V_ALMACENES")
+                        .nombre_relacion("GET_TURNOS")
                         .build()
         );
-        assertTrue(result, "No se tiene acceso a V_ALMACENES");
-        
-        
+        assertTrue(result, "No se tiene acceso a GET_TURNOS");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("GET_PERSONA_CLIENTES")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a GET_PERSONA_CLIENTES");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("GET_CATEGORIA_ACTIVAS")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a GET_CATEGORIA_ACTIVAS");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("V_CATEGORIAS")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a V_CATEGORIAS");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("V_M_FACTURAS")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a V_M_FACTURAS");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("V_PRECIOS")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a V_PRECIOS");
+        //----------------------------------------------------------------------
+        result = M_Privilegio.privilegio(
+                Privilegio
+                        .builder()
+                        .privilegio(
+                                Privilegio.PRIVILEGIO_SELECT
+                        )
+                        .nombre_relacion("V_TURNOS")
+                        .build()
+        );
+        assertTrue(result, "No se tiene acceso a V_TURNOS");
+        //----------------------------------------------------------------------
     }
 
 }

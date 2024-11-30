@@ -212,7 +212,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtEfectivo.requestFocusInWindow();
+            txtEfectivo.requestFocus();
             return;
         }
         resp = 1;
@@ -243,7 +243,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEfectivoActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        txtEfectivo.requestFocusInWindow();
+        txtEfectivo.requestFocus();
     }//GEN-LAST:event_formWindowActivated
     private void calculoEfectivo() {
         BigDecimal total, efe, dev;
@@ -251,7 +251,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
         efe = new BigDecimal(txtEfectivo.getValue().toString());
 
         if (efe.compareTo(BigDecimal.ZERO) == 0) {
-            txtEfectivo.requestFocusInWindow();
+            txtEfectivo.requestFocus();
             return;
         }
 
@@ -266,11 +266,11 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtEfectivo.requestFocusInWindow();
+            txtEfectivo.requestFocus();
             txtEfectivo.setValue(0);
             return;
         }
-        btnAceptar.requestFocusInWindow();
+        btnAceptar.requestFocus();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

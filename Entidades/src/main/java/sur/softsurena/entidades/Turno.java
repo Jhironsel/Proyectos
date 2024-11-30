@@ -10,8 +10,6 @@ import lombok.experimental.SuperBuilder;
 public class Turno {
 
     private final int id;
-    private final Almacen almacen;
-    private final Factura factura;
     private final String turno_usuario;
     private final Timestamp fecha_hora_inicio;
     private final Timestamp fecha_hora_final;

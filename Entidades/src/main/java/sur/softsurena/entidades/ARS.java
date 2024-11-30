@@ -15,13 +15,28 @@ public class ARS {
     private final Integer cantidad_registro;
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ARS{");
+        sb.append("id=").append(id);
+        sb.append(", descripcion=").append(descripcion);
+        sb.append(", covertura=").append(covertura);
+        sb.append(", estado=").append(estado);
+        sb.append(", cantidad_registro=").append(cantidad_registro);
+        sb.append('}');
+        return sb.toString();
+    }
+    
+    
+
+    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.descripcion);
-        hash = 97 * hash + Objects.hashCode(this.covertura);
-        hash = 97 * hash + Objects.hashCode(this.estado);
-        hash = 97 * hash + Objects.hashCode(this.cantidad_registro);
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.descripcion);
+        hash = 29 * hash + Objects.hashCode(this.covertura);
+        hash = 29 * hash + Objects.hashCode(this.estado);
+        hash = 29 * hash + Objects.hashCode(this.cantidad_registro);
         return hash;
     }
 
@@ -40,11 +55,17 @@ public class ARS {
         if (!Objects.equals(this.descripcion, other.descripcion)) {
             return false;
         }
-        return Objects.equals(this.id, other.id);
-    }    
-    
-    @Override
-    public String toString() {
-        return descripcion;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.covertura, other.covertura)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        return Objects.equals(this.cantidad_registro, other.cantidad_registro);
     }
+    
+    
 }

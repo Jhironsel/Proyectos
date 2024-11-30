@@ -318,7 +318,7 @@ public class frmInscripcion extends javax.swing.JInternalFrame {
         
         if(txtPago.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "Debe ingresar Pago de Inscripcion!!");
-            txtPago.requestFocusInWindow();
+            txtPago.requestFocus();
             return;
         }
         

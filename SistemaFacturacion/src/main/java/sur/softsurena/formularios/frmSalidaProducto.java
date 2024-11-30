@@ -216,7 +216,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtConceptoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtConceptoFocusLost
-        btnGuardar.requestFocusInWindow();
+        btnGuardar.requestFocus();
     }//GEN-LAST:event_txtConceptoFocusLost
 
     private void txtConceptoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtConceptoKeyReleased
@@ -225,7 +225,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 //        txtOperacion.setText("" + (Datos.idMaximoRegistro() + 1));
-        txtCodigo.requestFocusInWindow();
+        txtCodigo.requestFocus();
     }//GEN-LAST:event_formWindowOpened
 
     private void cbEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbEstadoMouseClicked
@@ -250,7 +250,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtCodigo.setText("");
-                txtCodigo.requestFocusInWindow();
+                txtCodigo.requestFocus();
                 return;
             }
 
@@ -285,7 +285,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                 cbEstado.setText("Inactivo");
             }
 
-            txtSalida.requestFocusInWindow();
+            txtSalida.requestFocus();
 
         } catch (SQLException | IOException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -293,7 +293,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void txtSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSalidaActionPerformed
-        txtConcepto.requestFocusInWindow();
+        txtConcepto.requestFocus();
     }//GEN-LAST:event_txtSalidaActionPerformed
 
     private void txtSalidaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSalidaFocusGained
@@ -322,7 +322,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCodigo.requestFocusInWindow();
+            txtCodigo.requestFocus();
             return;
         }
 
@@ -333,7 +333,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtConcepto.requestFocusInWindow();
+            txtConcepto.requestFocus();
             return;
         }
 
@@ -346,7 +346,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtSalida.requestFocusInWindow();
+            txtSalida.requestFocus();
             return;
         }
 
@@ -357,7 +357,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtSalida.requestFocusInWindow();
+            txtSalida.requestFocus();
             return;
         }
 
@@ -405,7 +405,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
         txtSalida.setText("0.00");
         txtConcepto.setText("");
         txtExistencia.setText("");
-        txtCodigo.requestFocusInWindow();
+        txtCodigo.requestFocus();
     }
 
     private void quitarImagen() {

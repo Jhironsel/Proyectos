@@ -896,7 +896,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "Digite cedula del paciente.",
                     "Proceso de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -905,7 +905,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "Digite un Nombre.",
                     "Proceso de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
             return;
         }
 
@@ -914,7 +914,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "Digite los Apellidos.",
                     "Proceso de validacion",
                     JOptionPane.DEFAULT_OPTION);
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
 
@@ -925,7 +925,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (resp == JOptionPane.YES_OPTION) {
-                cbSeguro.requestFocusInWindow();
+                cbSeguro.requestFocus();
                 cbSeguro.showPopup();
                 return;
             }
@@ -934,7 +934,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         if (cbSeguro.getSelectedIndex() != 0 && txtNoSeguro.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe de digitar el numero de seguro.!");
-            txtNoSeguro.requestFocusInWindow();
+            txtNoSeguro.requestFocus();
             return;
         }
 
@@ -959,7 +959,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                         "Proceso de validacion",
                         JOptionPane.DEFAULT_OPTION);
                 txtCedula.setValue(null);
-                txtCedula.requestFocusInWindow();
+                txtCedula.requestFocus();
                 return;
             }
         } else if (!existePaciente(
@@ -970,7 +970,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "Proceso de validacion",
                     JOptionPane.DEFAULT_OPTION);
 
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             txtCedula.setEditable(true);
             txtCedula.setValue(null);
             return;
@@ -1194,19 +1194,19 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
 
-        txtPNombre.requestFocusInWindow();
+        txtPNombre.requestFocus();
         Utilidades.showTooltip(txtPNombre);
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
 
-        txtApellidos.requestFocusInWindow();
+        txtApellidos.requestFocus();
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
         if (cbSeguro.isShowing() && btnGuardar.isEnabled()) {
 
-            cbSeguro.requestFocusInWindow();
+            cbSeguro.requestFocus();
             cbSeguro.showPopup();
         }
 
@@ -1216,18 +1216,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         if (btnGuardar.isEnabled()) {
 
             txtNoSeguro.setValue(null);
-            txtNoSeguro.requestFocusInWindow();
+            txtNoSeguro.requestFocus();
         }
     }//GEN-LAST:event_cbSeguroActionPerformed
 
     private void txtCedulaPadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaPadreActionPerformed
 
-        btnGuardar.requestFocusInWindow();
+        btnGuardar.requestFocus();
     }//GEN-LAST:event_txtCedulaPadreActionPerformed
 
     private void txtCedulaMadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaMadreActionPerformed
 
-        txtCedulaPadre.requestFocusInWindow();
+        txtCedulaPadre.requestFocus();
     }//GEN-LAST:event_txtCedulaMadreActionPerformed
 
     private void jlAgregarFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAgregarFotoMouseClicked
@@ -1277,20 +1277,20 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     private void txtNoSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoSeguroActionPerformed
 
-        cbSexo.requestFocusInWindow();
+        cbSexo.requestFocus();
     }//GEN-LAST:event_txtNoSeguroActionPerformed
 
     private void cbSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSexoActionPerformed
         if (btnGuardar.isEnabled()) {
 
-            cbSangre.requestFocusInWindow();
+            cbSangre.requestFocus();
         }
     }//GEN-LAST:event_cbSexoActionPerformed
 
     private void cbSangreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSangreActionPerformed
         if (btnGuardar.isEnabled()) {
 
-            txtCedulaMadre.requestFocusInWindow();
+            txtCedulaMadre.requestFocus();
         }
     }//GEN-LAST:event_cbSangreActionPerformed
 
@@ -1586,7 +1586,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             //txt Vaciar
             limpiarCampo();
             txtCedula.grabFocus();
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
         }
 
     }

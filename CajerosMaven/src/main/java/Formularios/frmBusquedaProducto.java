@@ -194,19 +194,19 @@ public class frmBusquedaProducto extends javax.swing.JDialog {
 
     private void rbtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtDescripcionActionPerformed
         txtCriterio.setText("");
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
         llenarTabla();
     }//GEN-LAST:event_rbtDescripcionActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         llenarTabla();
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
 
     }//GEN-LAST:event_formWindowOpened
 
     private void rbtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtIDActionPerformed
         txtCriterio.setText("");
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
         llenarTabla();
     }//GEN-LAST:event_rbtIDActionPerformed
 

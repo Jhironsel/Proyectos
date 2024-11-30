@@ -9,12 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Deuda {
+
+    private static int id_deuda;
 
     /**
      * Es el metodo utilizado para obtener la lista de las deudas registrada en
@@ -29,10 +35,11 @@ public class M_Deuda {
      * @return
      */
     public static synchronized List<Deuda> getDeudas() {
-        final String sql
-                = "SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,"
-                + "     ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA "
-                + "FROM GET_DEUDAS";
+        final String sql = """
+                           SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
+                                ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA 
+                           FROM GET_DEUDAS
+                           """;
 
         List<Deuda> deudasList = new ArrayList<>();
 
@@ -48,15 +55,31 @@ public class M_Deuda {
                             Deuda
                                     .builder()
                                     .id_deuda(rs.getInt("ID"))
-                                    .id_persona(rs.getInt("ID_CLIENTE"))
+                                    .cliente(
+                                            Cliente
+                                                    .builder()
+                                                    .persona(
+                                                            Persona
+                                                                    .builder()
+                                                                    .id_persona(rs.getInt("ID_CLIENTE"))
+                                                                    .pnombre(rs.getString("P_NOMBRE"))
+                                                                    .snombre(rs.getString("S_NOMBRE"))
+                                                                    .apellidos(rs.getString("APELLIDOS"))
+                                                                    .generales(
+                                                                            Generales
+                                                                                    .builder()
+                                                                                    .cedula(rs.getString("CEDULA"))
+                                                                                    .build()
+                                                                    )
+                                                                    .build()
+                                                    )
+                                                    .build()
+                                    )
                                     .concepto(rs.getString("CONCEPTO"))
                                     .monto(rs.getBigDecimal("MONTO"))
                                     .fecha(rs.getDate("FECHA"))
                                     .hora(rs.getTime("HORA"))
-                                    .estadoDeudaDesc(rs.getString("ESTADO"))
-                                    .pnombre(rs.getString("P_NOMBRE"))
-                                    .snombre(rs.getString("S_NOMBRE"))
-                                    .apellidos(rs.getString("APELLIDOS"))
+                                    .estadoDeuda(rs.getString("ESTADO").charAt(0))
                                     .build()
                     );
                 }
@@ -134,26 +157,57 @@ public class M_Deuda {
     }
 
     /**
+     * Este metodo permite registrar las deudas en el sistema. Solo pide por el
+     * momento id del cliente, el concepto de la deuda y el monto de la deuda.
      *
      * @param miDeuda
+     *
      * @return
      */
-    public synchronized static boolean insertDeudas(Deuda miDeuda) {
-        final String sql = "EXECUTE PROCEDURE INSER_DEUDAS (?, ?, ?)";
-        try (CallableStatement cs = getCnn().prepareCall(
+    public synchronized static Resultado insertDeudas(@NonNull Deuda miDeuda) {
+        final String sql = """
+                           SELECT O_ID
+                           FROM SP_I_M_DEUDAS (?,?,?);
+                           """;
+        try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            cs.setInt(1, miDeuda.getId_persona());
-            cs.setString(3, miDeuda.getConcepto());
-            cs.setBigDecimal(4, miDeuda.getMonto());
-            return cs.execute();
+
+            ps.setInt(1, miDeuda.getCliente().getPersona().getId_persona());
+            ps.setString(2, miDeuda.getConcepto());
+            ps.setBigDecimal(3, miDeuda.getMonto());
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                id_deuda = rs.getInt("O_ID");
+
+                return Resultado
+                        .builder()
+                        .id(id_deuda)
+                        .mensaje("Registro de deuda exitoso.")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build();
+            }
+
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
         }
+        return Resultado
+                .builder()
+                .id(-1)
+                .mensaje("Error al insertar la deuda.")
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
 
     /**

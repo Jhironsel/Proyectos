@@ -7,12 +7,19 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
-import sur.softsurena.entidades.HeaderFactura;
-import static sur.softsurena.metodos.M_Factura.agregarFacturaNombre;
+import sur.softsurena.entidades.M_Factura;
+import sur.softsurena.entidades.Turno;
+import static sur.softsurena.metodos.M_M_Factura.agregarFacturaNombre;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
+import sur.softsurena.utilidades.Resultado;
 
 public class frmPonerTemporal extends java.awt.Dialog {
+
+    private static final long serialVersionUID = 1L;
 
     private String nombreCliente, userName;
     private Integer idFactura, idCliente, idTurno;
@@ -22,11 +29,11 @@ public class frmPonerTemporal extends java.awt.Dialog {
 
     public frmPonerTemporal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        
+
         initComponents();
         tcr = new DefaultTableCellHeaderRenderer();
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -138,27 +145,48 @@ public class frmPonerTemporal extends java.awt.Dialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        HeaderFactura hf = HeaderFactura.builder().
-                id_persona(idCliente).
-                idTurno(idTurno).
-                estadoFactura('t').
-                userName(userName)//.
-                //nombreTemp(nombreCliente)
-                .build();
-                
-        Factura f = Factura.builder().id(idFactura).headerFactura(hf).build();
+        Resultado resultado = agregarFacturaNombre(
+                Factura
+                        .builder()
+                        .id(idFactura)
+                        .m_factura(
+                                M_Factura
+                                        .builder()
+                                        .cliente(
+                                                Cliente
+                                                        .builder()
+                                                        .persona(
+                                                                Persona
+                                                                        .builder()
+                                                                        .id_persona(idCliente)
+                                                                        .build()
+                                                        )
+                                                        .build()
+                                        )
+                                        .turno(
+                                                Turno
+                                                        .builder()
+                                                        .id(idTurno)
+                                                        .build()
+                                        )
+                                        .estadoFactura('t')
+                                        .userName(userName)
+                                        .nombreTemporal(nombreCliente)
+                                        .build()
+                        ).build()
+        );
         
-        if (agregarFacturaNombre(f).getId() < 1) {
+        if (!resultado.getEstado()) {
             JOptionPane.showMessageDialog(
-                    this, 
-                    "Esta compra no se ha registrado...",
+                    this,
+                    resultado.getMensaje(),
                     "",
-                    JOptionPane.ERROR_MESSAGE
+                    resultado.getIcono()
             );
             return;
         } else {
-            for (int i = 0; i < facturas.getDetalleFactura().size(); i++) {
-                
+            
+            for (D_Factura d_factura : facturas.getD_factura()) {
 //                if (agregarDetalleFactura(f) == -1) {
 //                    borrarFactura(idFactura);
 //                    JOptionPane.showMessageDialog(
@@ -170,6 +198,7 @@ public class frmPonerTemporal extends java.awt.Dialog {
 //                    return;
 //                }
             }
+            
         }
         setVisible(false);
     }//GEN-LAST:event_btnGrabarActionPerformed
@@ -178,12 +207,12 @@ public class frmPonerTemporal extends java.awt.Dialog {
     public void repararRegistro2() {
         TableColumn miTableColumn;
         int[] columWidth = {80, 200, 15};
-        
+
         for (int i = 0; i < columWidth.length; i++) {
             miTableColumn = tblDetalle.getColumnModel().getColumn(i);
             miTableColumn.setPreferredWidth(columWidth[i]);
         }
-        
+
         tcr.setHorizontalAlignment(SwingConstants.RIGHT);
         tcr.setFont(new java.awt.Font("Tahoma", 50, 80));
         tcr.setBackground(Color.yellow);
@@ -194,14 +223,14 @@ public class frmPonerTemporal extends java.awt.Dialog {
     private void totales() {
         int num = tblDetalle.getRowCount();
         BigDecimal sumVal = BigDecimal.ZERO;
-        
+
         for (int i = 0; i < num; i++) {
             sumVal = sumVal.add(new BigDecimal(tblDetalle.getValueAt(i, 2).toString()));
         }
-        
+
         txtTotalValor.setText("RD$" + sumVal);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnGrabar;

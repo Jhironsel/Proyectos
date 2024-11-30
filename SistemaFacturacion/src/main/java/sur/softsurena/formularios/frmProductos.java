@@ -782,7 +782,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void txtCodigoBarraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoBarraActionPerformed
-        cbCategoria.requestFocusInWindow();
+        cbCategoria.requestFocus();
         cbCategoria.showPopup();
     }//GEN-LAST:event_txtCodigoBarraActionPerformed
     private void txtCodigoBarraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoBarraKeyReleased
@@ -791,7 +791,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         txtCodigoBarra.setText(replaceAll);
     }//GEN-LAST:event_txtCodigoBarraKeyReleased
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        txtCodigoBarra.requestFocusInWindow();
+        txtCodigoBarra.requestFocus();
     }//GEN-LAST:event_txtDescripcionActionPerformed
     private void jlImagenProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlImagenProductoMouseClicked
 
@@ -817,7 +817,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     }//GEN-LAST:event_txtNotasKeyReleased
 
     private void cbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriaActionPerformed
-        txtNotas.requestFocusInWindow();
+        txtNotas.requestFocus();
     }//GEN-LAST:event_cbCategoriaActionPerformed
 
     private void cbCategoriaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbCategoriaPopupMenuWillBecomeInvisible
@@ -881,7 +881,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 cbCategoria.setSelectedIndex(0);
             }
 
-            txtDescripcion.requestFocusInWindow();
+            txtDescripcion.requestFocus();
         } else if (jtpPrincipal.getSelectedComponent() == jpMantenimiento) {
 
         } else if (jtpPrincipal.getSelectedComponent() == jpESProductos) {
@@ -929,7 +929,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             //en la tabla. 
             mostrarRegistro();
 
-            txtDescripcion.requestFocusInWindow();
+            txtDescripcion.requestFocus();
         } else if (jtpPrincipal.getSelectedComponent() == jpMantenimiento) {
 
         } else if (jtpPrincipal.getSelectedComponent() == jpESProductos) {
@@ -1048,7 +1048,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtCodigoBarra.requestFocusInWindow();
+                txtCodigoBarra.requestFocus();
                 return;
             }
 
@@ -1060,7 +1060,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtDescripcion.requestFocusInWindow();
+                txtDescripcion.requestFocus();
                 return;
             }
 
@@ -1072,7 +1072,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                cbCategoria.requestFocusInWindow();
+                cbCategoria.requestFocus();
                 return;
             }
 
@@ -1087,7 +1087,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                             JOptionPane.ERROR_MESSAGE
                     );
                     txtCodigoBarra.setText("");
-                    txtCodigoBarra.requestFocusInWindow();
+                    txtCodigoBarra.requestFocus();
                     return;
                 }
             }
@@ -1364,7 +1364,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
     private void txtNotasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNotasKeyTyped
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_TAB)
-            btnAgregarFoto.requestFocusInWindow();
+            btnAgregarFoto.requestFocus();
     }//GEN-LAST:event_txtNotasKeyTyped
 
     private void jsCantidadFilasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsCantidadFilasStateChanged

@@ -357,7 +357,7 @@ public class frmParametros extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtValor1.setText("");
-                txtValor1.requestFocusInWindow();
+                txtValor1.requestFocus();
                 return;
             }
 
@@ -374,7 +374,7 @@ public class frmParametros extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtValor2.setText("");
-                txtValor2.requestFocusInWindow();
+                txtValor2.requestFocus();
                 return;
             }
 
@@ -391,7 +391,7 @@ public class frmParametros extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtValor3.setText("");
-                txtValor3.requestFocusInWindow();
+                txtValor3.requestFocus();
                 return;
             }
 
@@ -408,7 +408,7 @@ public class frmParametros extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtValor4.setText("");
-                txtValor4.requestFocusInWindow();
+                txtValor4.requestFocus();
                 return;
             }
         }
@@ -421,7 +421,7 @@ public class frmParametros extends javax.swing.JFrame {
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
-                txtHost.requestFocusInWindow();
+                txtHost.requestFocus();
                 return;
             }
         }
@@ -441,7 +441,7 @@ public class frmParametros extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
                 txtPuerto.setText("");
-                txtPuerto.requestFocusInWindow();
+                txtPuerto.requestFocus();
                 return;
             }
         }
@@ -502,9 +502,9 @@ public class frmParametros extends javax.swing.JFrame {
         txtHost.setEnabled(!estado);
 
         if (estado) {
-            txtValor1.requestFocusInWindow();
+            txtValor1.requestFocus();
         } else {
-            txtHost.requestFocusInWindow();
+            txtHost.requestFocus();
         }
     }
 
@@ -543,7 +543,7 @@ public class frmParametros extends javax.swing.JFrame {
                         if (servidor.getConPuerto()) {
                             txtPuerto.setText(servidor.getPuerto());
                         }
-                        txtPuerto.requestFocusInWindow();
+                        txtPuerto.requestFocus();
                     } else {
                         txtPuerto.setEnabled(false);
                         txtPuerto.setText("");
@@ -552,7 +552,7 @@ public class frmParametros extends javax.swing.JFrame {
             } else {
                 if (chbPuerto.isSelected()) {
                     txtPuerto.setEnabled(true);
-                    txtPuerto.requestFocusInWindow();
+                    txtPuerto.requestFocus();
                 } else {
                     txtPuerto.setEnabled(false);
                     txtPuerto.setText("");

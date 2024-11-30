@@ -128,7 +128,7 @@ public class frmBusquedaProducto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         llenarTabla();
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
 
     }//GEN-LAST:event_formWindowOpened
 

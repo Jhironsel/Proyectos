@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.Control_Consulta;
@@ -32,9 +33,9 @@ public class M_Consulta {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, consulta.getPaciente().getId_persona());
+            ps.setInt(1, consulta.getPaciente().getPersona().getId_persona());
             ps.setInt(2, consulta.getControlConsulta().getId());
-            ps.setInt(3, consulta.getTurno());
+            ps.setInt(3, consulta.getLinea());
             ps.setDate(4, consulta.getFecha());
 
             ResultSet rs = ps.executeQuery();
@@ -75,7 +76,7 @@ public class M_Consulta {
      */
     public synchronized static List<Consulta> getConsulta(Date fecha) {
         final String sql = """
-                           SELECT ID, ID_PACIENTE, ID_CONTROL_CONSULTA, TURNO
+                           SELECT ID, ID_PACIENTE, ID_CONTROL_CONSULTA, LINEA
                            FROM V_CONSULTAS  
                            WHERE FECHA = ? AND ESTADO;
                            """;
@@ -98,7 +99,14 @@ public class M_Consulta {
                                     .paciente(
                                             Paciente
                                                     .builder()
-                                                    .id_persona(rs.getInt("ID_PACIENTE"))
+                                                    .persona(
+                                                            Persona
+                                                                    .builder()
+                                                                    .id_persona(
+                                                                            rs.getInt("ID_PACIENTE")
+                                                                    )
+                                                                    .build()
+                                                    )
                                                     .build()
                                     )
                                     .controlConsulta(
@@ -107,7 +115,7 @@ public class M_Consulta {
                                                     .id(rs.getInt("ID_CONTROL_CONSULTA"))
                                                     .build()
                                     )
-                                    .turno(rs.getInt("TURNO"))
+                                    .linea(rs.getInt("LINEA"))
                                     .build()
                     );
                 }

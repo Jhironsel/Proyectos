@@ -1,9 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
@@ -16,8 +12,6 @@ import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
-import sur.softsurena.entidades.HeaderFactura;
-import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_D_Factura.DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME;
 import sur.softsurena.utilidades.Resultado;
 
@@ -64,11 +58,8 @@ public class M_D_FacturaNGTest {
     }
 
     //--------------------------------------------------------------------------
-    /**
-     * TODO trabajando en este metodo de prueba.
-     */
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
                           Metodo que agrega detalles de las facturas en el 
@@ -76,74 +67,12 @@ public class M_D_FacturaNGTest {
                           """
     )
     public void testAgregarDetalleFactura() {
-        Factura f = Factura
-                .builder()
-                .id(0)
-                .headerFactura(
-                        HeaderFactura
-                                .builder()
-                                .id(0)
-                                .idContactoTel(0)
-                                .idContactoEmail(0)
-                                .idContactoDireccion(0)
-                                .idTurno(0)
-                                .fechaHora(
-                                        new Timestamp(
-                                                new GregorianCalendar()
-                                                        .getTimeInMillis()
-                                        )
-                                )
-                                .estadoFactura('e')
-                                .build()
-                )
-                .detalleFactura(
-                        List.of(
-                                D_Factura
-                                        .builder()
-                                        .idLinea(0)
-                                        .producto(
-                                                Producto
-                                                        .builder()
-                                                        .id(0)
-                                                        .build()
-                                        )
-                                        .precio(BigDecimal.TEN)
-                                        .cantidad(BigDecimal.TWO)
-                                        .build(),
-                                D_Factura
-                                        .builder()
-                                        .idLinea(1)
-                                        .producto(
-                                                Producto
-                                                        .builder()
-                                                        .id(0)
-                                                        .build()
-                                        )
-                                        .precio(BigDecimal.TEN)
-                                        .cantidad(BigDecimal.TWO)
-                                        .build(),
-                                D_Factura
-                                        .builder()
-                                        .idLinea(2)
-                                        .producto(
-                                                Producto
-                                                        .builder()
-                                                        .id(0)
-                                                        .build()
-                                        )
-                                        .precio(BigDecimal.TEN)
-                                        .cantidad(BigDecimal.TWO)
-                                        .build()
-                        )
-                )
-                .build();
-
         Resultado result = M_D_Factura.agregarDetalleFactura(
-                0,
-                f.getDetalleFactura()
+                Factura.getFacturaTest()
         );
 
-        assertEquals(result,
+        assertEquals(
+                result,
                 Resultado
                         .builder()
                         .mensaje(DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME)
@@ -167,9 +96,9 @@ public class M_D_FacturaNGTest {
         List<D_Factura> buscarTemporal
                 = M_D_Factura.getBuscarTemporal(idFactura);
 
-        assertTrue(
+        assertFalse(
                 buscarTemporal.isEmpty(),
-                "La lista de factura Temporales se encuentra con registros."
+                "La lista de factura Temporales no se encuentra con registros."
         );
     }
 }

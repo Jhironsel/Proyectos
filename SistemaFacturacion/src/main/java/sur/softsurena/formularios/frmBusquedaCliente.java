@@ -2,18 +2,23 @@ package sur.softsurena.formularios;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import lombok.Getter;
 import sur.softsurena.entidades.Cliente;
-import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.utilidades.FiltroBusqueda;
 
+/**
+ * 
+ * @author jhironsel
+ */
+@Getter
 public class frmBusquedaCliente extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
 
-    Cliente cliente;
-
-    public Cliente getCliente() {
-        return cliente;
-    }
+    private transient Cliente cliente;
 
     public frmBusquedaCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -125,8 +130,7 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         llenarTabla();
-        txtCriterio.requestFocusInWindow();
-
+        txtCriterio.requestFocus();
     }//GEN-LAST:event_formWindowOpened
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -153,21 +157,27 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
         llenarTabla();
     }//GEN-LAST:event_txtCriterioKeyReleased
 
+    /**
+     * Permite obtener la lista de clietne que cumplan con el criterio de 
+     * busqueda, dichos criterios seran la cedula, nombres o apellidos.
+     * 
+     * TODO 24/11/2024 Analizar este metodo si esta funcionado.
+     * 
+     */
     private void llenarTabla() {
         String titulos[] = {"Lista de Clientes"};
         miTabla = new DefaultTableModel(null, titulos);
-        //TODO CREAR un lista especiales de clientes en M_Clientes.
-//        List<Cliente> clientesList = getClientes(
-//                FiltroBusqueda.
-//                        builder().
-//                        criterioBusqueda(txtCriterio.getText().strip()).
-//                        build()
-//        );
+
         Object registro[] = new Object[1];
 
-        M_Persona.getListEntidad().stream().forEach(
-                clienteList -> {
-                    registro[0] = clienteList;
+        M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(txtCriterio.getText().strip())
+                        .build()
+        ).stream().forEach(
+                clienteR -> {
+                    registro[0] = clienteR;
 
                     miTabla.addRow(registro);
                 }

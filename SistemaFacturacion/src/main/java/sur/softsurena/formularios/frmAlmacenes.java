@@ -16,9 +16,9 @@ import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 
 public class frmAlmacenes extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
     private static boolean v_nuevo;
     private static String criterioBusqueda;
-    private static final long serialVersionUID = 1L;
 
     public static frmAlmacenes getInstance() {
         if (!privilegio(
@@ -70,21 +70,19 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconOne();
         jtpPrincipal = new javax.swing.JTabbedPane();
         jpAlmacenesTbl = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblAlmacenes = new RSMaterialComponent.RSTableMetro();
-        RSPGMantenimiento = new rojeru_san.rspanel.RSPanelGradiente();
-        rSPanelShadow1 = new rojeru_san.rspanel.RSPanelShadow();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblAlmacenes = new javax.swing.JTable();
+        RSPGMantenimiento = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDetalleUbicacion = new javax.swing.JTextArea();
-        rsEstado = new RSMaterialComponent.RSSwitch();
-        txtNombreAlmacen = new rojeru_san.rsfield.RSTextFullRound();
-        rSPanelShadow2 = new rojeru_san.rspanel.RSPanelShadow();
-        rSCheckBox1 = new rojerusan.RSCheckBox();
-        rSCheckBox3 = new rojerusan.RSCheckBox();
-        rSLabelAnimated1 = new rojeru_san.rslabel.RSLabelAnimated();
-        labelIcon1 = new necesario.LabelIcon();
+        rsEstado = new javax.swing.JCheckBox();
+        txtNombreAlmacen = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
 
-        setBorder(javax.swing.BorderFactory.createMatteBorder(25, 10, 10, 10, new java.awt.Color(37, 45, 223)));
+        setBorder(null);
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -109,7 +107,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
             }
         });
 
-        jpBotones.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Botones de Acción ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 0, 14), new java.awt.Color(0, 0, 0))); // NOI18N
+        jpBotones.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Botones de Acción ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("DejaVu Sans", 0, 14), new java.awt.Color(0, 0, 204))); // NOI18N
         jpBotones.setMaximumSize(new java.awt.Dimension(787, 81));
         jpBotones.setMinimumSize(new java.awt.Dimension(787, 81));
         jpBotones.setName("jpBotones"); // NOI18N
@@ -196,7 +194,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jpBotones2, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                .addComponent(jpBotones2, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
         );
 
@@ -204,118 +202,110 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
         jpAlmacenesTbl.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
 
-        jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
-
-        tblAlmacenes.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
         tblAlmacenes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nombre Almacen", "Ubicacion", "Estado"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tblAlmacenes);
+        ));
+        jScrollPane3.setViewportView(tblAlmacenes);
 
         javax.swing.GroupLayout jpAlmacenesTblLayout = new javax.swing.GroupLayout(jpAlmacenesTbl);
         jpAlmacenesTbl.setLayout(jpAlmacenesTblLayout);
         jpAlmacenesTblLayout.setHorizontalGroup(
             jpAlmacenesTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpAlmacenesTblLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 829, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(jpAlmacenesTblLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 770, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
         );
         jpAlmacenesTblLayout.setVerticalGroup(
             jpAlmacenesTblLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpAlmacenesTblLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
         );
 
-        jtpPrincipal.addTab("Lista de Almacen", jpAlmacenesTbl);
+        jtpPrincipal.addTab("Lista de Almacenes", jpAlmacenesTbl);
 
-        RSPGMantenimiento.setColorPrimario(new java.awt.Color(153, 153, 255));
-        RSPGMantenimiento.setGradiente(rojeru_san.rspanel.RSPanelGradiente.Gradiente.HORIZONTAL);
-
-        rSPanelShadow1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(java.awt.Color.blue, 2, true), " Almacen ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Almacen ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(37, 45, 223))); // NOI18N
 
         txtDetalleUbicacion.setColumns(20);
         txtDetalleUbicacion.setLineWrap(true);
         txtDetalleUbicacion.setRows(5);
         txtDetalleUbicacion.setToolTipText("Descripcion breve de la ubica");
         txtDetalleUbicacion.setWrapStyleWord(true);
-        txtDetalleUbicacion.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true), " Detalle de la ubicacion ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(0, 0, 255))); // NOI18N
+        txtDetalleUbicacion.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true), " Detalle de la ubicacion ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
         jScrollPane2.setViewportView(txtDetalleUbicacion);
 
-        rsEstado.setToolTipText("Estado del almacen");
+        rsEstado.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        rsEstado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        rsEstado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        txtNombreAlmacen.setToolTipText("Nombre del local o ubicacion donde se depositan los articulos.");
-        txtNombreAlmacen.setPhColor(new java.awt.Color(0, 0, 204));
-        txtNombreAlmacen.setPlaceholder("Ingrese nombre del almacen");
+        txtNombreAlmacen.setForeground(new java.awt.Color(0, 0, 204));
+        txtNombreAlmacen.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Ingrese nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 204))); // NOI18N
 
-        javax.swing.GroupLayout rSPanelShadow1Layout = new javax.swing.GroupLayout(rSPanelShadow1);
-        rSPanelShadow1.setLayout(rSPanelShadow1Layout);
-        rSPanelShadow1Layout.setHorizontalGroup(
-            rSPanelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rSPanelShadow1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rSPanelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(rSPanelShadow1Layout.createSequentialGroup()
-                        .addComponent(txtNombreAlmacen, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtNombreAlmacen)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(rsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        rSPanelShadow1Layout.setVerticalGroup(
-            rSPanelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rSPanelShadow1Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rSPanelShadow1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombreAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rsEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtNombreAlmacen, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2)
                 .addContainerGap())
         );
 
-        rSPanelShadow2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Estados del Almacen. ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
-        rSPanelShadow2.setOpaque(false);
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Opciones del almacen ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(37, 45, 223))); // NOI18N
 
-        rSCheckBox1.setText("Se permite hacer facturas ");
-        rSCheckBox1.setDoubleBuffered(true);
+        jCheckBox1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jCheckBox1.setForeground(new java.awt.Color(0, 0, 255));
+        jCheckBox1.setText("Se permite hacer facturas");
 
-        rSCheckBox3.setText("Se permite cantidades negativas");
-        rSCheckBox3.setDoubleBuffered(true);
+        jCheckBox2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jCheckBox2.setForeground(new java.awt.Color(0, 0, 255));
+        jCheckBox2.setText("Se permite cantidades negativas");
 
-        javax.swing.GroupLayout rSPanelShadow2Layout = new javax.swing.GroupLayout(rSPanelShadow2);
-        rSPanelShadow2.setLayout(rSPanelShadow2Layout);
-        rSPanelShadow2Layout.setHorizontalGroup(
-            rSPanelShadow2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rSPanelShadow2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rSPanelShadow2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rSCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rSCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCheckBox1)
+                    .addComponent(jCheckBox2))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
-        rSPanelShadow2Layout.setVerticalGroup(
-            rSPanelShadow2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rSPanelShadow2Layout.createSequentialGroup()
-                .addComponent(rSCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rSCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 141, Short.MAX_VALUE))
+                .addComponent(jCheckBox2)
+                .addContainerGap(200, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout RSPGMantenimientoLayout = new javax.swing.GroupLayout(RSPGMantenimiento);
@@ -323,36 +313,23 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         RSPGMantenimientoLayout.setHorizontalGroup(
             RSPGMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RSPGMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rSPanelShadow1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(38, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rSPanelShadow2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         RSPGMantenimientoLayout.setVerticalGroup(
             RSPGMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(RSPGMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
-                .addGroup(RSPGMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rSPanelShadow1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rSPanelShadow2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RSPGMantenimientoLayout.createSequentialGroup()
+                .addContainerGap(159, Short.MAX_VALUE)
+                .addGroup(RSPGMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Mantenimiento", RSPGMantenimiento);
-
-        rSLabelAnimated1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
-        rSLabelAnimated1.setText("Mantenimiento de Almacenes");
-        rSLabelAnimated1.setDoubleBuffered(true);
-        rSLabelAnimated1.setFont(new java.awt.Font("FreeMono", 3, 36)); // NOI18N
-
-        labelIcon1.setToolTipText("Click para actualizar la lista del almacen.");
-        labelIcon1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.UPDATE);
-        labelIcon1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                labelIcon1MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -361,24 +338,16 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 863, Short.MAX_VALUE)
-                    .addComponent(jtpPrincipal, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(labelIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(rSLabelAnimated1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 790, Short.MAX_VALUE)
+                    .addComponent(jtpPrincipal, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(rSLabelAnimated1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                    .addComponent(labelIcon1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
+                .addContainerGap()
                 .addComponent(jtpPrincipal)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -495,7 +464,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtNombreAlmacen.requestFocusInWindow();
+            txtNombreAlmacen.requestFocus();
             return;
         }//Validacion 1
 
@@ -512,12 +481,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
             );
 
             if (resp == JOptionPane.NO_OPTION) {
-                txtDetalleUbicacion.requestFocusInWindow();
+                txtDetalleUbicacion.requestFocus();
                 return;
             }
         }//Validacion 2
 
-        if (!rsEstado.isActivado()) {
+        if (!rsEstado.isSelected()) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
@@ -530,7 +499,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
             );
 
             if (resp == JOptionPane.NO_OPTION) {
-                txtDetalleUbicacion.requestFocusInWindow();
+                txtDetalleUbicacion.requestFocus();
                 return;
             }
         }
@@ -548,7 +517,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                     builder().
                     nombre(txtNombreAlmacen.getText()).
                     ubicacion(txtDetalleUbicacion.getText()).
-                    estado(rsEstado.isActivado()).
+                    estado(rsEstado.isSelected()).
                     build()
             );
         } else {
@@ -578,10 +547,6 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         llenarTabla(-1, "");
     }//GEN-LAST:event_formInternalFrameOpened
-
-    private void labelIcon1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIcon1MouseClicked
-        llenarTabla(-1, "");
-    }//GEN-LAST:event_labelIcon1MouseClicked
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         btnNuevo.setEnabled(
@@ -620,29 +585,27 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private rojeru_san.rspanel.RSPanelGradiente RSPGMantenimiento;
+    private javax.swing.JPanel RSPGMantenimiento;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel jpAlmacenesTbl;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
     private javax.swing.JTabbedPane jtpPrincipal;
-    private necesario.LabelIcon labelIcon1;
-    private rojerusan.RSCheckBox rSCheckBox1;
-    private rojerusan.RSCheckBox rSCheckBox3;
-    private rojeru_san.rslabel.RSLabelAnimated rSLabelAnimated1;
-    private rojeru_san.rspanel.RSPanelShadow rSPanelShadow1;
-    private rojeru_san.rspanel.RSPanelShadow rSPanelShadow2;
-    private RSMaterialComponent.RSSwitch rsEstado;
-    private static RSMaterialComponent.RSTableMetro tblAlmacenes;
+    private javax.swing.JCheckBox rsEstado;
+    public static javax.swing.JTable tblAlmacenes;
     private javax.swing.JTextArea txtDetalleUbicacion;
-    private rojeru_san.rsfield.RSTextFullRound txtNombreAlmacen;
+    private javax.swing.JTextField txtNombreAlmacen;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -680,7 +643,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         btnGuardar.setEnabled(activo);
         btnCancelar.setEnabled(activo);
 
-        rsEstado.setActivado(activo);
+        rsEstado.setSelected(activo);
         txtNombreAlmacen.setText("");
         txtDetalleUbicacion.setText("");
 
@@ -740,12 +703,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 return false;
             }
 
-            Class[] types = new Class[]{
+            Class<?>[] types = new Class<?>[]{
                 java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
             @Override
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
         };
@@ -769,8 +732,6 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         columnasCheckBox(tblAlmacenes, indices);
 
         repararColumnaTable(tblAlmacenes);
-
-        tblAlmacenes.setBackgoundHover(new java.awt.Color(102, 102, 255));
 
         return tblAlmacenes;
     }

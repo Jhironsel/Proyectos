@@ -444,7 +444,7 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
                     "Padre no encontrado!!!",
                     "Identificacion Invalida...!", JOptionPane.ERROR_MESSAGE);
             limpiearCampos();
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             btnInscribir.setEnabled(false);
             return;
         }
@@ -459,7 +459,7 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
                         "Padre Inactivo, revisar Deudas y Suspensiones...",
                         "Padre Actualmente Inactivo", JOptionPane.ERROR_MESSAGE);
                 limpiearCampos();
-                txtCedula.requestFocusInWindow();
+                txtCedula.requestFocus();
                 btnInscribir.setEnabled(false);
                 return;
             }

@@ -7,9 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.ContactoEmail;
+import sur.softsurena.entidades.ContactoTel;
+import sur.softsurena.entidades.Direccion;
 import sur.softsurena.entidades.Factura;
-import sur.softsurena.entidades.HeaderFactura;
+import sur.softsurena.entidades.M_Factura;
+import sur.softsurena.entidades.Turno;
 import static sur.softsurena.metodos.M_D_Factura.agregarDetalleFactura;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -18,7 +24,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  *
  * @author jhironsel
  */
-public class M_Factura {
+public class M_M_Factura {
 
     /**
      * Consulta que nos permite obtener los ID de las facturas.
@@ -81,17 +87,15 @@ public class M_Factura {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, factura.getHeaderFactura().getId_persona());
-            ps.setInt(2, factura.getHeaderFactura().getIdContactoTel());
-            ps.setInt(3, factura.getHeaderFactura().getIdContactoDireccion());
-            ps.setInt(4, factura.getHeaderFactura().getIdContactoEmail());
-            ps.setInt(5, factura.getHeaderFactura().getIdTurno());
-            ps.setBigDecimal(6, factura.getHeaderFactura().getTotal());
-            ps.setBigDecimal(7, factura.getHeaderFactura().getEfectivo());
+            ps.setInt(1, factura.getM_factura().getCliente().getPersona().getId_persona());
+            ps.setInt(2, factura.getM_factura().getContactoTel().getId());
+            ps.setInt(3, factura.getM_factura().getDireccion().getId());
+            ps.setInt(4, factura.getM_factura().getContactoEmail().getId());
+            ps.setInt(5, factura.getM_factura().getTurno().getId());
             ps.setString(8, String.valueOf(
-                    factura.getHeaderFactura().getEstadoFactura()
+                    factura.getM_factura().getEstadoFactura()
             ));
-            ps.setString(9, factura.getHeaderFactura().getNombreTemporal());
+            ps.setString(9, factura.getM_factura().getNombreTemporal());
 
             ResultSet rs = ps.executeQuery();
 
@@ -100,8 +104,7 @@ public class M_Factura {
             int idFactura = rs.getInt("ID");
 
             Resultado resultado = agregarDetalleFactura(
-                    idFactura,
-                    factura.getDetalleFactura()
+                    factura
             );
 
             if (!resultado.getEstado()) {
@@ -140,49 +143,61 @@ public class M_Factura {
     /**
      * Metodo que permite modificar las facturas que se encuentran en el sistema
      *
-     * TODO Me cuestiono si campos como idCliente efectivo cambio deberian de estar
-     * aqui?
      *
      * Metodo Actualizado el 18/05/2022.
-     *
-     * TODO CREAR SP.
      *
      * @param f Objeto de la clase Factura.
      * @return retorna true si fue modificada y false si hubo un error en la
      * modificacion de la factura.
      */
-    public synchronized static boolean modificarFactura(Factura f) {
+    public synchronized static Resultado modificarFactura(Factura f) {
         final String sql
-                = "UPDATE V_FACTURAS a SET "
-                + "    a.ID_CLIENTE = ?, "
-                + "    a.EFECTIVO = ?, "
-                + "    a.CAMBIO = ?, "
-                + "    a.ESTADO = ? "
-                + "WHERE "
-                + "    a.ID = ?";
+                = """
+                  EXECUTE PROCEDURE SP_U_FACTURA (
+                        ?, --'ID', 
+                        ?, --'ID_CONTACTOS_TEL', 
+                        ?, --'ID_CONTACTOS_DIRECCIONES', 
+                        ?, --'ID_CONTACTOS_EMAIL', 
+                        ?, --'ID_TURNO', 
+                        ?, --'ESTADO_FACTURA', 
+                        ?, --'NOMBRE_TEMP'
+                  );
+                  """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, f.getHeaderFactura().getId_persona());
-            ps.setBigDecimal(2, f.getHeaderFactura().getEfectivo());
-            ps.setBigDecimal(3, f.getHeaderFactura().getTotal());
-            ps.setString(4, "" + f.getHeaderFactura().getEstadoFactura());
-            ps.setInt(5, f.getId());
+            ps.setInt(1, f.getM_factura().getId());
+            ps.setInt(2, f.getM_factura().getContactoTel().getId());
+            ps.setInt(3, f.getM_factura().getDireccion().getId());
+            ps.setInt(4, f.getM_factura().getContactoEmail().getId());
+            ps.setInt(5, f.getM_factura().getTurno().getId());
+            ps.setString(6, f.getM_factura().getEstadoFactura().toString());
+            ps.setString(7, f.getM_factura().getNombreTemporal());
 
             ps.executeUpdate();
-            return true;
+            return Resultado
+                    .builder()
+                    .mensaje("Factura modificada correctamente.")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
+            return Resultado
+                    .builder()
+                    .mensaje("Error al modificar la factura.")
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
     }
 
     /**
      * TODO CREAR VISTA. Devolver una lista.
-     * 
+     *
      * @param filtro
      * @return
      */
@@ -246,6 +261,9 @@ public class M_Factura {
     /**
      * Para obtener las facturas temporales del sistema.
      *
+     * TODO este metodo deberia de llamar realmente las facturas temporales del
+     * sistema.
+     *
      * @return
      */
     public synchronized static List<Factura> getTemporales() {
@@ -259,8 +277,6 @@ public class M_Factura {
                     ID_CONTACTOS_EMAIL, 
                     ID_TURNO, 
                     FECHA_HORA, 
-                    TOTAL, 
-                    EFECTIVO, 
                     ESTADO_FACTURA, 
                     NOMBRE_TEMP, 
                     USER_NAME, 
@@ -285,23 +301,51 @@ public class M_Factura {
                             Factura
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .headerFactura(
-                                            HeaderFactura
+                                    .m_factura(
+                                            M_Factura
                                                     .builder()
-                                                    .id_persona(rs.getInt("ID_CLIENTE"))
-                                                    .idContactoTel(rs.getInt("ID_CONTACTOS_TEL"))
-                                                    .idContactoDireccion(rs.getInt("ID_CONTACTOS_DIRECCIONES"))
-                                                    .idContactoEmail(rs.getInt("ID_CONTACTOS_EMAIL"))
-                                                    .idTurno(rs.getInt("ID_TURNO"))
+                                                    .cliente(
+                                                            Cliente
+                                                                    .builder()
+                                                                    .persona(
+                                                                            Persona
+                                                                                    .builder()
+                                                                                    .id_persona(rs.getInt("ID_CLIENTE"))
+                                                                                    .pnombre(rs.getString("PNOMBRE"))
+                                                                                    .snombre(rs.getString("SNOMBRE"))
+                                                                                    .apellidos(rs.getString("APELLIDOS"))
+                                                                                    .build()
+                                                                    )
+                                                                    .build()
+                                                    )
+                                                    .contactoTel(
+                                                            ContactoTel
+                                                                    .builder()
+                                                                    .id(rs.getInt("ID_CONTACTOS_TEL"))
+                                                                    .build()
+                                                    )
+                                                    .direccion(
+                                                            Direccion
+                                                                    .builder()
+                                                                    .id(rs.getInt("ID_CONTACTOS_DIRECCIONES"))
+                                                                    .build()
+                                                    )
+                                                    .contactoEmail(
+                                                            ContactoEmail
+                                                                    .builder()
+                                                                    .id(rs.getInt("ID_CONTACTOS_EMAIL"))
+                                                                    .build()
+                                                    )
+                                                    .turno(
+                                                            Turno
+                                                                    .builder()
+                                                                    .id(rs.getInt("ID_TURNO"))
+                                                                    .build()
+                                                    )
                                                     .fechaHora(rs.getTimestamp("FECHA_HORA"))
-                                                    .total(rs.getBigDecimal("TOTAL"))
-                                                    .efectivo(rs.getBigDecimal("EFECTIVO"))
                                                     .estadoFactura(rs.getString("ESTADO_FACTURA").charAt(0))
                                                     .nombreTemporal(rs.getString("NOMBRE_TEMP"))
                                                     .userName(rs.getString("USER_NAME"))
-                                                    .pnombre(rs.getString("PNOMBRE"))
-                                                    .snombre(rs.getString("SNOMBRE"))
-                                                    .apellidos(rs.getString("APELLIDOS"))
                                                     .build()
                                     )
                                     .build()

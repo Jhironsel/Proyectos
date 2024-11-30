@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,11 +15,21 @@ import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
- *
+ * 
  * @author jhironsel
  */
 public class M_Persona {
 
+    /**
+     * Nos permite agregar una persona al sistema y dovolver el identificador 
+     * asignado.
+     * 
+     * @param persona objeto persona que tiene una caracteristica de la persona 
+     * que va hacer registrado en el sistema.
+     * 
+     * @return nos devolver un objeto Resultado que contiene el 
+     * identificador asignado.
+     */
     public static Resultado agregarEntidad(Persona persona) {
         final String sql = """
                            SELECT ID_PERSONA
@@ -73,21 +84,23 @@ public class M_Persona {
                 .estado(Boolean.FALSE)
                 .build();
     }
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
+    
     public static final String REGISTRO_DE_PERSONA_CORRECTAMENTE
             = "Registro de persona correctamente.";
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA
             = "Error al registrar persona al sistema. [CODIGO: %s]";
 
     //--------------------------------------------------------------------------
+    /**
+     * Metodo que modifica a una persona en el sistema.
+     * 
+     * @param persona persona que sera modificada en el sistema.
+     * 
+     * @return Devuelve un resultado indicando el resultado de la operacion. 
+     */
     public static Resultado modificarEntidad(Persona persona) {
         final String sql = """
-                        EXECUTE PROCEDURE SP_U_PERSONA (?, ?, ?, ?, ?, ?, ?, ?);
+                           EXECUTE PROCEDURE SP_U_PERSONA (?, ?, ?, ?, ?, ?, ?, ?);
                            """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -130,18 +143,21 @@ public class M_Persona {
         }
 
     }
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA
             = "Error actualizar persona en el sistema.";
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String PERSONA_ACTUALIZADA_CORRECTAMENTE
             = "Persona actualizada correctamente.";
 
     //--------------------------------------------------------------------------
+    
+    /**
+     * Retorna una lista la lista completa del sistema de las personas 
+     * registrada.
+     * 
+     * @return devuelve una lista de persona en el sistema completa.
+     * 
+     * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
+     */
     public static List<Persona> getListEntidad() {
         final String sql = """
                             SELECT 
@@ -191,7 +207,9 @@ public class M_Persona {
             }
 
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE,
+            LOG.log(
+                    Level.SEVERE, 
+                    ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE,
                     ex
             );
         }
@@ -201,6 +219,14 @@ public class M_Persona {
             = "Error al consultar la vista V_PERSONAS del sistema.";
 
     //--------------------------------------------------------------------------
+    
+    /**
+     * Obtiene las propiedades de una persona en el sistema por su identificador.
+     * 
+     * @param id identificador de la persona.
+     * 
+     * @return retorna un objeto de la clase Persona.
+     */
     public static Persona getEntidad(Integer id) {
         final String sql = """
                            SELECT 
@@ -259,20 +285,27 @@ public class M_Persona {
     }
 
     //--------------------------------------------------------------------------
-    public static Resultado eliminarEntidad(Integer id) {
+    /**
+     * Metodo que elimina a una persona del sistema por su identificador.
+     * 
+     * @param id identificador de la persona.
+     * 
+     * @return Objeto resultado de la persona.
+     */
+    public static Resultado eliminarEntidad(int id) {
         final String sql = """
-                           EXECUTE PROCEDURE SP_D_PERSONA (?);
+                           EXECUTE PROCEDURE SP_D_PERSONA(?)
                            """;
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
+        try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, id);
+            cs.setInt(1, id);
 
-            ps.execute();
+            cs.execute();
 
             return Resultado
                     .builder()
@@ -297,15 +330,9 @@ public class M_Persona {
                 .build();
     }
 
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String REGISTRO_DE_PERSONA_ELIMINADO_CORRECTAMEN
             = "Registro de persona eliminado correctamente.";
 
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S
             = "Error al eliminar registros. \n[CODIGO: %d ]";
 

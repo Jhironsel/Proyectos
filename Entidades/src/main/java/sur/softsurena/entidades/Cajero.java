@@ -7,5 +7,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Cajero extends Usuario{
 
-    
+    private final Integer id;
+    private final Integer cantidadFactura;
 }

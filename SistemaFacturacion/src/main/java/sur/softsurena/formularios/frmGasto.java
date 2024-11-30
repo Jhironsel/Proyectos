@@ -164,7 +164,7 @@ public class frmGasto extends java.awt.Dialog {
     }//GEN-LAST:event_closeDialog
 
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
-        txtMonto.requestFocusInWindow();
+        txtMonto.requestFocus();
     }//GEN-LAST:event_txtDescripcionActionPerformed
 
     private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
@@ -193,7 +193,7 @@ public class frmGasto extends java.awt.Dialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtDescripcion.requestFocusInWindow();
+            txtDescripcion.requestFocus();
             return;
         }
         if (txtMonto.getValue() == null) {
@@ -204,7 +204,7 @@ public class frmGasto extends java.awt.Dialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0.0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
 
@@ -218,7 +218,7 @@ public class frmGasto extends java.awt.Dialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0.0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
 

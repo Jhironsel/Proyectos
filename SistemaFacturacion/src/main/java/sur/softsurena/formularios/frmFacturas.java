@@ -33,6 +33,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.D_Factura;
@@ -46,12 +47,12 @@ import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.metodos.M_Categoria.getCategoriaActivas;
 import static sur.softsurena.metodos.M_Categoria.getCategorias;
-import static sur.softsurena.metodos.M_Cliente.getPersonasClientes;
+import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Precio;
 import sur.softsurena.metodos.M_Producto;
 import static sur.softsurena.metodos.M_Producto.getProductos;
 import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
-import static sur.softsurena.metodos.M_Turno.turnosActivoByUsuario;
+import sur.softsurena.metodos.M_Turno;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.FiltroBusqueda;
@@ -137,9 +138,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         usuario = getUsuarioActual();
 
-        turno = turnosActivoByUsuario(usuario.getUser_name());
-
-        txtCriterio.requestFocusInWindow();
+        txtCriterio.requestFocus();
 
         tcr = new DefaultTableCellHeaderRenderer();
 
@@ -199,7 +198,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         rbtContado = new javax.swing.JRadioButton();
         rbtCredito = new javax.swing.JRadioButton();
         btnBuscarCliente = new newscomponents.RSButtonGradientIcon_new();
-        cmbCliente = new javax.swing.JComboBox<>();
+        cmbClientes = new javax.swing.JComboBox<>();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblDetalle = new JTable(){
             @Override
@@ -355,7 +354,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         btnPagoDeuda.setToolTipText("<html><center>Gasto<br>F7</center></html>");
         btnPagoDeuda.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
         btnPagoDeuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPagoDeuda.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ATTACH_MONEY);
         btnPagoDeuda.setName("btnTemporal"); // NOI18N
         btnPagoDeuda.setRound(30);
         btnPagoDeuda.setSizeIcon(40.0F);
@@ -548,22 +546,22 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         jpCliente.add(jPanel9);
 
-        cmbCliente.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
-        cmbCliente.setForeground(new java.awt.Color(0, 0, 255));
-        cmbCliente.setEnabled(false);
-        cmbCliente.setLightWeightPopupEnabled(false);
-        cmbCliente.setMaximumSize(new java.awt.Dimension(363, 26));
-        cmbCliente.addItemListener(new java.awt.event.ItemListener() {
+        cmbClientes.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        cmbClientes.setForeground(new java.awt.Color(0, 0, 255));
+        cmbClientes.setEnabled(false);
+        cmbClientes.setLightWeightPopupEnabled(false);
+        cmbClientes.setMaximumSize(new java.awt.Dimension(363, 26));
+        cmbClientes.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbClienteItemStateChanged(evt);
+                cmbClientesItemStateChanged(evt);
             }
         });
-        cmbCliente.addActionListener(new java.awt.event.ActionListener() {
+        cmbClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbClienteActionPerformed(evt);
+                cmbClientesActionPerformed(evt);
             }
         });
-        jpCliente.add(cmbCliente);
+        jpCliente.add(cmbClientes);
 
         jScrollPane5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jScrollPane5.setMaximumSize(new java.awt.Dimension(452, 300));
@@ -765,11 +763,18 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        turno = turnosActivoByUsuario(usuario.getUser_name());
+        turno = M_Turno.getTurnos(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(usuario.getUser_name())
+                        .estado(true)
+                        .build()
+        ).getFirst();
         txtTurno.setText("Turno: " + turno.getId());
-        jlAlmacen.setText("Almacen: " + turno.getAlmacen().getNombre());
-        txtIdFactura.setText(turno.getFactura().getId().toString());
-        txtCriterio.requestFocusInWindow();
+        //TODO 24/11/2024 Obtener los valores de los siguiente componente.
+//        jlAlmacen.setText("Almacen: " + turno.getAlmacen().getNombre());
+//        txtIdFactura.setText(turno.getFactura().getId().toString());
+        txtCriterio.requestFocus();
     }//GEN-LAST:event_formInternalFrameActivated
 
     /**
@@ -891,13 +896,13 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                         boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
 
                         boton.setLayout(new BorderLayout(8, 8));
-                        boton.requestFocusInWindow();
+                        boton.requestFocus();
 
                         jpProductos.add(boton);
                         jpProductos.repaint();
                         jpProductos.validate();
 
-                        boton.requestFocusInWindow();
+                        boton.requestFocus();
                     }
             );
         }
@@ -972,14 +977,14 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         }
 
         //Si la venta sera a credito, debe seleccionarse un cliente.
-        cmbCliente.setEnabled(true);
+        cmbClientes.setEnabled(true);
 
         //Se habilita el boton que permite obtener los clientes.
         btnBuscarCliente.setEnabled(true);
 
         //Se seleccionan el primero Item del comboBox.
-        if (cmbCliente.getItemCount() > 0) {
-            cmbCliente.setSelectedIndex(0);
+        if (cmbClientes.getItemCount() > 0) {
+            cmbClientes.setSelectedIndex(0);
         }
     }//GEN-LAST:event_rbtCreditoActionPerformed
 
@@ -989,10 +994,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             rbtContado.doClick();
         }
 
-        cmbCliente.setEnabled(false);
+        cmbClientes.setEnabled(false);
 
-        if (cmbCliente.getItemCount() > 0) {
-            cmbCliente.setSelectedIndex(0);
+        if (cmbClientes.getItemCount() > 0) {
+            cmbClientes.setSelectedIndex(0);
         }
     }//GEN-LAST:event_rbtContadoActionPerformed
 
@@ -1066,14 +1071,14 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         formInternalFrameIconified(evt);
     }//GEN-LAST:event_formInternalFrameClosing
 
-    private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
-        if (!cmbCliente.isEnabled()) {
+    private void cmbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientesActionPerformed
+        if (!cmbClientes.isEnabled()) {
             return;
         }
-    }//GEN-LAST:event_cmbClienteActionPerformed
+    }//GEN-LAST:event_cmbClientesActionPerformed
 
-    private void cmbClienteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClienteItemStateChanged
-        if (cmbCliente.getSelectedIndex() == 0) {
+    private void cmbClientesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbClientesItemStateChanged
+        if (cmbClientes.getSelectedIndex() == 0) {
             jpCliente.setSize(265, 86);
             jpCliente.setPreferredSize(new Dimension(265, 86));
             jpCliente.setMinimumSize(new Dimension(265, 86));
@@ -1085,7 +1090,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jpCliente.setMinimumSize(new Dimension(265, 135));
             jpCliente.setMaximumSize(new Dimension(265, 135));
         }
-    }//GEN-LAST:event_cmbClienteItemStateChanged
+    }//GEN-LAST:event_cmbClientesItemStateChanged
 
     private void btnPonerTemporalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporalActionPerformed
         if (tblDetalle.getRowCount() == 0) {
@@ -1098,7 +1103,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             return;
         }
 
-        if (factura.getDetalleFactura().get(0) == null) {
+        if (factura.getD_factura().get(0) == null) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Ha ocurrido un error de factura realice de nuevo...",
@@ -1108,8 +1113,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             return;
         }
 
-        if (cmbCliente.getSelectedIndex() > 0) {
-            nombreCliente = ((Cliente) cmbCliente.getSelectedItem()).toString();
+        if (cmbClientes.getSelectedIndex() > 0) {
+            nombreCliente = ((Cliente) cmbClientes.getSelectedItem()).toString();
         } else {
 
             if (Objects.isNull(nombreCliente) || nombreCliente.isBlank()) {
@@ -1220,7 +1225,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 );
             }
 
-            precio();//Precio porque acaba de ser creada
+            //TODO 25/11/2024 Precio porque acaba de ser creada
+            precio();
 
             sql = "SELECT r.IDCLIENTE, nombreCliente "
                     + "FROM FACTURA r "
@@ -1235,12 +1241,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 LOG.log(Level.SEVERE, "Error al cargar la factura.", ex);
             }
 
-            for (int i = 0; i <= cmbCliente.getItemCount() + 1; i++) {
+            for (int i = 0; i <= cmbClientes.getItemCount() + 1; i++) {
 
-                if (cmbCliente.getItemAt(i).getId_persona().equals(
+                if (cmbClientes.getItemAt(i).getId_persona().equals(
                         getIdCliente()
                 )) {
-                    cmbCliente.setSelectedIndex(i);
+                    cmbClientes.setSelectedIndex(i);
                     totales();
                     break;
                 }
@@ -1347,15 +1353,15 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         Integer idFactura = Integer.valueOf(txtIdFactura.getText());
 //-----------------------------------------------------------------------------1
 
-        if (rbtCredito.isSelected() && cmbCliente.getSelectedIndex() == 0) {
+        if (rbtCredito.isSelected() && cmbClientes.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Debe Seleccinar un Cliente...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbCliente.requestFocusInWindow();
-            cmbCliente.showPopup();
+            cmbClientes.requestFocus();
+            cmbClientes.showPopup();
             return;
         }
 //-----------------------------------------------------------------------------2
@@ -1367,7 +1373,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCriterio.requestFocusInWindow();
+            txtCriterio.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------3
@@ -1506,7 +1512,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         totales();
 
         rbtContado.doClick();
-        factura.getDetalleFactura().clear();
+        factura.getD_factura().clear();
         nombreCliente = "";
     }//GEN-LAST:event_btnGrabarActionPerformed
 
@@ -1540,11 +1546,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         }
         getClientesCombo();
 
-        for (int i = 0; i < cmbCliente.getItemCount(); i++) {
-            if (cmbCliente.getItemAt(i).getId_persona().equals(
-                    cliente.getId_persona()
+        for (int i = 0; i < cmbClientes.getItemCount(); i++) {
+            if (cmbClientes.getItemAt(i).getId_persona().equals(
+                    cliente.getPersona().getId_persona()
             )) {
-                cmbCliente.setSelectedIndex(i);
+                cmbClientes.setSelectedIndex(i);
                 break;
             }
         }
@@ -1685,11 +1691,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             //Seleccionar ultimo elemento
             tblDetalle.changeSelection(tblDetalle.getRowCount() - 1, 0, false, false);
-            tblDetalle.requestFocusInWindow();
+            tblDetalle.requestFocus();
 
             totales();
             txtCriterio.setText("");
-            txtCriterio.requestFocusInWindow();
+            txtCriterio.requestFocus();
             return;
         }//Fin de la inclusion de producto....
 
@@ -1875,25 +1881,24 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      *
      */
     private void getClientesCombo() {
-        cmbCliente.removeAllItems();
-        cmbCliente.repaint();
+        cmbClientes.removeAllItems();
+        cmbClientes.repaint();
 
-        //TODO traer solo cliente.
-        List<Cliente> clientesList = getPersonasClientes(
+        M_Cliente.getPersonasClientes(
                 FiltroBusqueda
                         .builder()
                         .estado(true)
                         .build()
-        );
-
-        clientesList.stream().forEach(
+        ).stream().forEach(
                 cliente -> {
-                    cmbCliente.addItem(cliente);
+                    cmbClientes.addItem(cliente.getPersona());
                 }
         );
 
-        if (cmbCliente.getItemCount() > 0) {
-            cmbCliente.setSelectedIndex(0);
+        
+
+        if (cmbClientes.getItemCount() > 0) {
+            cmbClientes.setSelectedIndex(0);
         }
     }
 
@@ -1920,7 +1925,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private void nueva() {
         mnuMovimientosNuevaFactura.doClick();
         nombreCliente = "";
-        factura.getDetalleFactura().clear();
+        factura.getD_factura().clear();
     }
 
     private void precio() {
@@ -1934,7 +1939,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             txtPrecio.setValue(0.0);
             return;
         }
-        txtPrecio.setValue(factura.getDetalleFactura().get(cell).getPrecio());
+        txtPrecio.setValue(factura.getD_factura().get(cell).getPrecio());
     }
 
 
@@ -1952,7 +1957,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private javax.swing.JCheckBox cbPrevista;
     private javax.swing.JCheckBox cbTodos;
     private javax.swing.JCheckBox cbTodosProductos;
-    private javax.swing.JComboBox<Cliente> cmbCliente;
+    private javax.swing.JComboBox<Persona> cmbClientes;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

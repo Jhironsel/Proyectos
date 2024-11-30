@@ -33,16 +33,48 @@ public class Persona {
                 .append(pnombre)
                 .append(" ")
                 .append((snombre.isBlank() ? "" : snombre))
-                .append(" ")
+                .append((snombre.isBlank() ? "" : " "))
                 .append(apellidos);
         
         return nombre.toString();
     }
+    
+    public String getJSON() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Persona{");
+        sb.append("id_persona=").append(id_persona);
+        sb.append(", persona=").append(persona);
+        sb.append(", pnombre=").append(pnombre);
+        sb.append(", snombre=").append(snombre);
+        sb.append(", apellidos=").append(apellidos);
+        sb.append(", sexo=").append(sexo);
+        sb.append(", fecha_nacimiento=").append(fecha_nacimiento);
+        sb.append(", fecha_ingreso=").append(fecha_ingreso);
+        sb.append(", fecha_hora_ultima_update=").append(fecha_hora_ultima_update);
+        sb.append(", estado=").append(estado);
+        sb.append(", user_name=").append(user_name);
+        sb.append(", rol=").append(rol);
+        sb.append(", generales=").append(generales);
+        sb.append('}');
+        return sb.toString();
+    }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.id_persona);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id_persona);
+        hash = 47 * hash + Objects.hashCode(this.persona);
+        hash = 47 * hash + Objects.hashCode(this.pnombre);
+        hash = 47 * hash + Objects.hashCode(this.snombre);
+        hash = 47 * hash + Objects.hashCode(this.apellidos);
+        hash = 47 * hash + Objects.hashCode(this.sexo);
+        hash = 47 * hash + Objects.hashCode(this.fecha_nacimiento);
+        hash = 47 * hash + Objects.hashCode(this.fecha_ingreso);
+        hash = 47 * hash + Objects.hashCode(this.fecha_hora_ultima_update);
+        hash = 47 * hash + Objects.hashCode(this.estado);
+        hash = 47 * hash + Objects.hashCode(this.user_name);
+        hash = 47 * hash + Objects.hashCode(this.rol);
+        hash = 47 * hash + Objects.hashCode(this.generales);
         return hash;
     }
 
@@ -59,10 +91,31 @@ public class Persona {
         }
         final Persona other = (Persona) obj;
         
-        if (!Objects.equals(this.id_persona, other.id_persona)) {
+        if (!Objects.equals(this.pnombre, other.pnombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.snombre, other.snombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.apellidos, other.apellidos)) {
             return false;
         }
         
-        return true;
+        if (!Objects.equals(this.id_persona, other.id_persona)) {
+            return false;
+        }
+        if (!Objects.equals(this.persona, other.persona)) {
+            return false;
+        }
+        if (!Objects.equals(this.sexo, other.sexo)) {
+            return false;
+        }
+        if (!Objects.equals(this.fecha_nacimiento, other.fecha_nacimiento)) {
+            return false;
+        }
+        if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        return Objects.equals(this.generales, other.generales);
     }
 }

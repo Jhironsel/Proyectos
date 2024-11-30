@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.entidades.Usuario;
+import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -26,7 +27,7 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
         jmMes = new com.toedter.calendar.JMonthChooser();
         jyAnno = new com.toedter.calendar.JYearChooser();
         cbCajeros = new javax.swing.JCheckBox();
-        jcbUsuarios = new javax.swing.JComboBox();
+        jcbUsuarios = new javax.swing.JComboBox<>();
         cbFechaFacturas = new javax.swing.JCheckBox();
         jsInicio = new javax.swing.JSpinner();
         cbIntervalosFactura = new javax.swing.JCheckBox();
@@ -242,35 +243,11 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        String sql = "SELECT r.IDUSUARIO, (r.NOMBRES||' '||r.APELLIDOS) AS Nombre "
-                + "FROM TABLA_USUARIOS r "
-                + "WHERE r.ESTADO = 1 AND r.BORRADO LIKE 'n'";
-
-        Usuario user = Usuario.builder().
-                user_name("").
-                pnombre("").
-                snombre("").
-                apellidos("").build();
-
-        jcbUsuarios.addItem(user);
-
-        ResultSet rs = null;
-
-        try {
-            while (rs.next()) {
-                user = Usuario.builder().
-                        user_name("").
-                        pnombre("").
-                        snombre("").
-                        apellidos("").build();
-
-                jcbUsuarios.addItem(user);
+        M_Usuario.getUsuarios().stream().forEach(
+            usuario -> {
+                jcbUsuarios.addItem(usuario);
             }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-
-
+        );
     }//GEN-LAST:event_formWindowOpened
 
     private void cbCajerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCajerosActionPerformed
@@ -413,7 +390,7 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
     private javax.swing.JCheckBox cbSinFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JComboBox<String> jcEstados;
-    private javax.swing.JComboBox jcbUsuarios;
+    private javax.swing.JComboBox<Usuario> jcbUsuarios;
     private com.toedter.calendar.JDateChooser jdDia;
     private com.toedter.calendar.JDateChooser jdDiaRango;
     private com.toedter.calendar.JMonthChooser jmMes;

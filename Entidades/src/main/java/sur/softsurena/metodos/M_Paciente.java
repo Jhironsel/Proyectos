@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.utilidades.Resultado;
@@ -35,21 +36,24 @@ public class M_Paciente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
             ps.setInt(1, idPaciente);
 
             ResultSet rs = ps.executeQuery();
 
-            rs.next();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
 
-            return rs.getString(1);
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE,
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE,
                     ex
             );
-            return "X";
         }
+        return "X";
     }
     public static final String ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
             = "Error al consultar el sexo de un paciente en el sistema.";
@@ -266,6 +270,7 @@ public class M_Paciente {
 
     //--------------------------------------------------------------------------
     /**
+     * TODO 14/11/2024 Pasar el parametros de filtro de busquedas.
      *
      * @return
      */
@@ -292,15 +297,20 @@ public class M_Paciente {
                 pacienteList.add(
                         Paciente
                                 .builder()
-                                .id_persona(rs.getInt("ID"))
-                                .pnombre(rs.getString("PNOMBRE"))
-                                .snombre(rs.getString("SNOMBRE"))
-                                .apellidos(rs.getString("APELLIDOS"))
-                                .sexo(rs.getString("SEXO").charAt(0))
-                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                                .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
-                                .estado(rs.getBoolean("ESTADO"))
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .id_persona(rs.getInt("ID"))
+                                                .pnombre(rs.getString("PNOMBRE"))
+                                                .snombre(rs.getString("SNOMBRE"))
+                                                .apellidos(rs.getString("APELLIDOS"))
+                                                .sexo(rs.getString("SEXO").charAt(0))
+                                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                                .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
+                                                .estado(rs.getBoolean("ESTADO"))
+                                                .build()
+                                )
                                 .pesoNacimiento(rs.getBigDecimal("PESO_NACIMIENTO_KG"))
                                 .altura(rs.getBigDecimal("ALTURA"))
                                 .perimetroCefalico(rs.getBigDecimal("PERIMETRO_CEFALICO"))
@@ -351,15 +361,20 @@ public class M_Paciente {
             if (rs.next()) {
                 return Paciente
                         .builder()
-                        .id_persona(rs.getInt("ID"))
-                        .pnombre(rs.getString("PNOMBRE"))
-                        .snombre(rs.getString("SNOMBRE"))
-                        .apellidos(rs.getString("APELLIDOS"))
-                        .sexo(rs.getString("SEXO").charAt(0))
-                        .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                        .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                        .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
-                        .estado(rs.getBoolean("ESTADO"))
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(rs.getInt("ID"))
+                                        .pnombre(rs.getString("PNOMBRE"))
+                                        .snombre(rs.getString("SNOMBRE"))
+                                        .apellidos(rs.getString("APELLIDOS"))
+                                        .sexo(rs.getString("SEXO").charAt(0))
+                                        .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                        .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                        .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
+                                        .estado(rs.getBoolean("ESTADO"))
+                                        .build()
+                        )
                         .pesoNacimiento(rs.getBigDecimal("PESO_NACIMIENTO_KG"))
                         .altura(rs.getBigDecimal("ALTURA"))
                         .perimetroCefalico(rs.getBigDecimal("PERIMETRO_CEFALICO"))
@@ -406,7 +421,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, paciente.getId_persona());
+            ps.setInt(1, paciente.getPersona().getId_persona());
             ps.setBigDecimal(2, paciente.getPesoNacimiento());
             ps.setBigDecimal(3, paciente.getAltura());
             ps.setBigDecimal(4, paciente.getPerimetroCefalico());
@@ -465,7 +480,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, paciente.getId_persona());
+            ps.setInt(1, paciente.getPersona().getId_persona());
             ps.setBigDecimal(2, paciente.getPesoNacimiento());
             ps.setBigDecimal(3, paciente.getAltura());
             ps.setBigDecimal(4, paciente.getPerimetroCefalico());

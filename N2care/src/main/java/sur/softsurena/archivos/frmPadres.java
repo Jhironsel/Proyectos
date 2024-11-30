@@ -46,7 +46,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
                     if (evt.getPropertyName().equals("date")
                     && cbSeguro.isShowing() && cbSeguro.isEnabled()
                     && editor.isEditable()) {
-                        cbSeguro.requestFocusInWindow();
+                        cbSeguro.requestFocus();
                         cbSeguro.showPopup();
                     }
                 });
@@ -972,7 +972,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         }
         cliPadre = 0;
         mostrarRegistro();
-        btnPrimero.requestFocusInWindow();
+        btnPrimero.requestFocus();
     }//GEN-LAST:event_btnPrimeroActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
@@ -984,7 +984,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             cliPadre = numeroPadres - 1;
         }
         mostrarRegistro();
-        btnAnterior.requestFocusInWindow();
+        btnAnterior.requestFocus();
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
@@ -996,7 +996,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             cliPadre = 0;
         }
         mostrarRegistro();
-        btnSiguiente.requestFocusInWindow();
+        btnSiguiente.requestFocus();
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
@@ -1005,7 +1005,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         }
         cliPadre = numeroPadres - 1;
         mostrarRegistro();
-        btnUltimo.requestFocusInWindow();
+        btnUltimo.requestFocus();
     }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -1024,7 +1024,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         btnValidaCedulaPadre.setEnabled(true);
 
         txtCedula.setEditable(true);
-        txtCedula.requestFocusInWindow();
+        txtCedula.requestFocus();
         txtCedula.setValue(null);
         Utilidades.showTooltip(txtCedula);
     }//GEN-LAST:event_btnNuevoActionPerformed
@@ -1042,7 +1042,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
                     "Debe seleccionar un registro de la tabla",
                     "Proceso de validacion de datos",
                     JOptionPane.DEFAULT_OPTION);
-            jtPadres.requestFocusInWindow();
+            jtPadres.requestFocus();
             return;
         }
 
@@ -1056,7 +1056,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             JOptionPane.showInternalConfirmDialog(this,
                     "Inserte la cedula!!!", "Olvida algo!",
                     JOptionPane.DEFAULT_OPTION);
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -1064,7 +1064,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             JOptionPane.showInternalConfirmDialog(this,
                     "Inserte el Nombre!!!", "Olvida algo!",
                     JOptionPane.DEFAULT_OPTION);
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
             return;
         }
 
@@ -1072,7 +1072,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             JOptionPane.showInternalConfirmDialog(this,
                     "Inserte el Apellido...", "Olvida algo!",
                     JOptionPane.DEFAULT_OPTION);
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
 
@@ -1082,14 +1082,14 @@ public class frmPadres extends javax.swing.JInternalFrame {
                     "Confirmacion de procedimiento",
                     JOptionPane.YES_NO_OPTION);
             if (opc == JOptionPane.NO_OPTION) {
-                cbSeguro.requestFocusInWindow();
+                cbSeguro.requestFocus();
                 return;
             }
         } else if (txtNoSeguro.getText().isEmpty()) {
             JOptionPane.showInternalConfirmDialog(this,
                     "Inserte el No. de Ars...", "Olvida algo!",
                     JOptionPane.DEFAULT_OPTION);
-            txtNoSeguro.requestFocusInWindow();
+            txtNoSeguro.requestFocus();
             return;
         }
 
@@ -1097,7 +1097,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             JOptionPane.showInternalConfirmDialog(this,
                     "Debe indicar una fecha de nacimiento...",
                     "Olvida algo!", JOptionPane.DEFAULT_OPTION);
-            dchFechaNacimiento.requestFocusInWindow();
+            dchFechaNacimiento.requestFocus();
             return;
         }
 
@@ -1105,7 +1105,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             JOptionPane.showInternalConfirmDialog(this,
                     "La Fecha de Nacimiento debe ser Anterior a la Fecha Actual",
                     "Olvida algo!", JOptionPane.DEFAULT_OPTION);
-            dchFechaNacimiento.requestFocusInWindow();
+            dchFechaNacimiento.requestFocus();
             return;
         }//FIN de las Validaciones..........................
 
@@ -1327,13 +1327,13 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
         
-        txtApellidos.requestFocusInWindow();
+        txtApellidos.requestFocus();
         Utilidades.showTooltip(txtApellidos);
     }//GEN-LAST:event_txtPNombreActionPerformed
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
         
-        btnValidaCedulaPadre.requestFocusInWindow();
+        btnValidaCedulaPadre.requestFocus();
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
@@ -1350,7 +1350,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
         
-        btnGuardar.requestFocusInWindow();
+        btnGuardar.requestFocus();
         Utilidades.showTooltip(btnGuardar);
     }//GEN-LAST:event_txtDireccionActionPerformed
 
@@ -1498,11 +1498,11 @@ public class frmPadres extends javax.swing.JInternalFrame {
         if (cbSeguro.getSelectedIndex() == 0 & cbSeguro.isEnabled()) {
             
             txtNoSeguro.setValue(null);
-            cbSexo.requestFocusInWindow();
+            cbSexo.requestFocus();
             cbSexo.showPopup();
         }
         if (cbSeguro.getSelectedIndex() != 0 & cbSeguro.isEnabled()) {
-            txtNoSeguro.requestFocusInWindow();
+            txtNoSeguro.requestFocus();
             Utilidades.showTooltip(txtNoSeguro);
         }
     }//GEN-LAST:event_cbSeguroActionPerformed
@@ -1518,7 +1518,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
         
-        cbSexo.requestFocusInWindow();
+        cbSexo.requestFocus();
         cbSexo.showPopup();
         Utilidades.showTooltip(cbSexo);
     }//GEN-LAST:event_txtNoSeguroActionPerformed
@@ -1530,7 +1530,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         if (cedula == null) {
             JOptionPane.showInternalMessageDialog(this, "Cedula no valida");
             txtCedula.setValue(null);
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -1542,7 +1542,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
                         JOptionPane.WARNING_MESSAGE);
 
                 txtCedula.setValue(null);
-                txtCedula.requestFocusInWindow();
+                txtCedula.requestFocus();
                 return;
             }
         }
@@ -1602,14 +1602,14 @@ public class frmPadres extends javax.swing.JInternalFrame {
                         }
                     } else {//De lo contrario limpio el campo y intento de nuevo.
                         txtCedula.setValue(null);
-                        txtCedula.requestFocusInWindow();
+                        txtCedula.requestFocus();
                         return false;
                     }
 
                 } else {
                     controlesEditable(false);
                     btnGuardar.setEnabled(true);
-                    txtPNombre.requestFocusInWindow();
+                    txtPNombre.requestFocus();
                     navegador(!nuevo);
                 }
                 return true;
@@ -1623,7 +1623,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
         
-        cbSangre.requestFocusInWindow();
+        cbSangre.requestFocus();
         cbSangre.showPopup();
         Utilidades.showTooltip(cbSangre);
     }//GEN-LAST:event_cbSexoItemStateChanged
@@ -1812,7 +1812,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         
         if (!nuevo) {
             txtCedula.setEditable(false);
-            txtPNombre.requestFocusInWindow();
+            txtPNombre.requestFocus();
         }
 
         btnPrimero.setEnabled(b);

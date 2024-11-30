@@ -70,7 +70,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         jtGuiaVigilanciaDesarrollo.setVisible(false);
         dcVigilanciaDesarrollo.setVisible(false);
         btnAplicarFecha.setVisible(false);
-        txtNombres.requestFocusInWindow();
+        txtNombres.requestFocus();
 
         nuevaTabla();
     }
@@ -1191,7 +1191,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         jpMotivos.add(jCheckBox1);
         jpMotivos.add(jlAgregarMotivo);
         jpMotivos.add(jlEliminarMotivo);
-        jlAgregarMotivo.requestFocusInWindow();
+        jlAgregarMotivo.requestFocus();
         pack();
     }//GEN-LAST:event_jlAgregarMotivoMouseClicked
 
@@ -1596,7 +1596,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             txtFiltroMedicamentos.setEnabled(true);
             tblReceta.setEnabled(true);
             btnAgregarMedicamento.setEnabled(true);
-            txtFiltroMedicamentos.requestFocusInWindow();
+            txtFiltroMedicamentos.requestFocus();
         } else {
             jcbMedicamentos.setEnabled(false);
             txtFiltroMedicamentos.setEnabled(false);
@@ -1694,7 +1694,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         ordenarTablaReceta();
         jcbMedicamentos.setSelectedIndex(0);
         txtFiltroMedicamentos.setText("");
-        txtFiltroMedicamentos.requestFocusInWindow();
+        txtFiltroMedicamentos.requestFocus();
     }//GEN-LAST:event_txtFiltroMedicamentosActionPerformed
 
     private void btnAgregarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMedicamentoActionPerformed
@@ -1706,7 +1706,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             return;
         }
         if (jcbIncluirReceta.isSelected()) {
-            txtFiltroMedicamentos.requestFocusInWindow();
+            txtFiltroMedicamentos.requestFocus();
         }
     }//GEN-LAST:event_jcbMedicamentosActionPerformed
     private void updateGrafica() {

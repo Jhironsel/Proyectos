@@ -346,41 +346,41 @@ public class frmModificarPadre extends javax.swing.JInternalFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (txtCedula.getText().equals("")) {
             lSugenrencia.setText("Cedula en Blanco, Digite Numero de Cedula...!");
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
         if (txtNombre.getText().equals("")) {
             lSugenrencia.setText("Digite el Nombre...!");
-            txtNombre.requestFocusInWindow();
+            txtNombre.requestFocus();
             return;
         }
         if (txtApellidos.getText().equals("")) {
             lSugenrencia.setText("Digite el Apellido...!");
-            txtApellidos.requestFocusInWindow();
+            txtApellidos.requestFocus();
             return;
         }
         if (txtDireccion.getText().equals("")) {
             lSugenrencia.setText("Digite la Direccion");
-            txtDireccion.requestFocusInWindow();
+            txtDireccion.requestFocus();
             return;
         }
         if (jcbSexo.getSelectedIndex() == -1) {
             lSugenrencia.setText("Selecione Tipo de Sexo del Padre...!");
-            jcbSexo.requestFocusInWindow();
+            jcbSexo.requestFocus();
             return;
         }
         if (txtTelefono.getText().equals("")) {
             lSugenrencia.setText("Debe Digitar por lo Menos un numero de Contacto...!");
-            txtMovil.requestFocusInWindow();
+            txtMovil.requestFocus();
             return;
         }else if (txtMovil.getText().equals("")) {
             lSugenrencia.setText("Debe Digitar por lo Menos un numero de Contacto...!");
-            txtMovil.requestFocusInWindow();
+            txtMovil.requestFocus();
             return;
         }        
         if (jcbEstado.getSelectedIndex() == -1) {
             lSugenrencia.setText("Selecione Tipo de Estado del Padre...!");
-            jcbEstado.requestFocusInWindow();
+            jcbEstado.requestFocus();
             return;
         }
         PadreMadres miPadre = new PadreMadres(getIdPadre(),

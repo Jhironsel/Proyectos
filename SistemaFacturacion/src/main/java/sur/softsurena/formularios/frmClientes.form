@@ -74,7 +74,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jspGeneral" pref="854" max="32767" attributes="0"/>
+              <Component id="jspGeneral" max="32767" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -82,7 +82,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jspGeneral" pref="684" max="32767" attributes="0"/>
+              <Component id="jspGeneral" max="32767" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -118,7 +118,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jtpPrincipal" pref="583" max="32767" attributes="0"/>
+                      <Component id="jtpPrincipal" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jpBotones" min="-2" pref="81" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -231,18 +231,8 @@
                           <SubComponents>
                             <Component class="rojerusan.RSTableMetro1" name="tblClientes">
                               <Properties>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                  <Table columnCount="9" rowCount="1">
-                                    <Column editable="true" title="Cedula" type="java.lang.String"/>
-                                    <Column editable="true" title="Persona" type="java.lang.String"/>
-                                    <Column editable="true" title="Primer Nombre" type="java.lang.String"/>
-                                    <Column editable="true" title="Segundo Nombre" type="java.lang.String"/>
-                                    <Column editable="true" title="Apellidos" type="java.lang.String"/>
-                                    <Column editable="true" title="Sexo" type="java.lang.String"/>
-                                    <Column editable="true" title="Fecha Nacimiento" type="java.lang.Object"/>
-                                    <Column editable="true" title="Fecha de Ingreso" type="java.lang.Object"/>
-                                    <Column editable="true" title="Estado" type="java.lang.Boolean"/>
-                                  </Table>
+                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                  <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null, null, null, null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Cedula&quot;, &quot;Persona&quot;, &quot;Primer Nombre&quot;, &quot;Segundo Nombre&quot;, &quot;Apellidos&quot;, &quot;Sexo&quot;, &quot;Fecha Nacimiento&quot;, &quot;Fecha de Ingreso&quot;, &quot;Estado&quot;&#xa;    }&#xa;) {&#xa;    Class&lt;?&gt;[] types = new Class&lt;?&gt;[]{&#xa;        java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class&#xa;    };&#xa;&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;}" type="code"/>
                                 </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="FreeMono" size="14" style="1"/>
@@ -259,7 +249,7 @@
                                 <Property name="name" type="java.lang.String" value="tblClientes" noResource="true"/>
                               </Properties>
                               <AuxValues>
-                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;@Override&#xa;public boolean isCellEditable(int rowIndex, int colIndex) { &#xa;    return false; //Las celdas no son editables. &#xa;}&#xa;}"/>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;    @Override&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Las celdas no son editables.&#xa;    }&#xa;}"/>
                                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
                                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                               </AuxValues>
@@ -510,15 +500,6 @@
                                           <Group type="102" attributes="0">
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jcbPersona" min="-2" pref="180" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="dchFechaNacimiento" min="-2" pref="180" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jcbEstadoCivil" pref="174" max="32767" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jcbSexo" min="-2" pref="180" max="-2" attributes="0"/>
-                                                  </Group>
                                                   <Component id="txtApellidos" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="txtPNombre" max="32767" attributes="0"/>
@@ -531,6 +512,15 @@
                                                       <Component id="btnCedulaValidad" min="-2" pref="48" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="cbEstado" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jcbPersona" min="-2" pref="180" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="dchFechaNacimiento" min="-2" pref="180" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jcbEstadoCivil" pref="180" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jcbSexo" min="-2" pref="180" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
@@ -595,7 +585,7 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
-                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Sexo&gt;"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="txtSNombre">
@@ -659,7 +649,7 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
-                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TipoPersona&gt;"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JCheckBox" name="cbEstado">
@@ -825,7 +815,7 @@
                                       </Events>
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
-                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;EstadoCivil&gt;"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="txtPNombre">
@@ -909,7 +899,7 @@
                                               <EmptySpace min="-2" max="-2" attributes="0"/>
                                               <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                                              <Component id="jScrollPane3" pref="267" max="32767" attributes="0"/>
+                                              <Component id="jScrollPane3" pref="264" max="32767" attributes="0"/>
                                               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -924,21 +914,27 @@
                                         <Property name="rows" type="int" value="1"/>
                                       </Layout>
                                       <SubComponents>
-                                        <Component class="RSMaterialComponent.RSComboBox" name="jcbProvincias">
+                                        <Component class="javax.swing.JComboBox" name="jcbProvincias">
                                           <Properties>
-                                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="df" green="2d" red="25" type="rgb"/>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="FreeMono" size="14" style="1"/>
                                             </Property>
                                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                               <StringArray count="0"/>
                                             </Property>
-                                            <Property name="colorFondo" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                <TitledBorder title="Provincia">
+                                                  <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                                                    <LineBorder roundedCorners="true" thickness="2">
+                                                      <Color PropertyName="color" blue="df" green="2d" red="25" type="rgb"/>
+                                                    </LineBorder>
+                                                  </Border>
+                                                  <Font PropertyName="font" name="FreeSans" size="12" style="0"/>
+                                                </TitledBorder>
+                                              </Border>
                                             </Property>
-                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                              <Font name="FreeMono" size="14" style="1"/>
-                                            </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbProvincia" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbProvinciasActionPerformed"/>
@@ -946,25 +942,30 @@
                                           </Events>
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
-                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Provincia&gt;"/>
                                           </AuxValues>
                                         </Component>
-                                        <Component class="RSMaterialComponent.RSComboBox" name="jcbMunicipios">
+                                        <Component class="javax.swing.JComboBox" name="jcbMunicipios">
                                           <Properties>
-                                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="df" green="2d" red="25" type="rgb"/>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="FreeMono" size="14" style="1"/>
                                             </Property>
                                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                               <StringArray count="0"/>
                                             </Property>
-                                            <Property name="colorFondo" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                <TitledBorder title="Municipio">
+                                                  <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                                                    <LineBorder roundedCorners="true" thickness="2">
+                                                      <Color PropertyName="color" blue="df" green="2d" red="25" type="rgb"/>
+                                                    </LineBorder>
+                                                  </Border>
+                                                  <Font PropertyName="font" name="FreeSans" size="12" style="0"/>
+                                                </TitledBorder>
+                                              </Border>
                                             </Property>
-                                            <Property name="enabled" type="boolean" value="false"/>
-                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                              <Font name="FreeMono" size="14" style="1"/>
-                                            </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbMunicipios" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbMunicipiosActionPerformed"/>
@@ -972,24 +973,30 @@
                                           </Events>
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
+                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Municipio&gt;"/>
                                           </AuxValues>
                                         </Component>
-                                        <Component class="RSMaterialComponent.RSComboBox" name="jcbDistritoMunicipal">
+                                        <Component class="javax.swing.JComboBox" name="jcbDistritoMunicipal">
                                           <Properties>
-                                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="df" green="2d" red="25" type="rgb"/>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="FreeMono" size="14" style="1"/>
                                             </Property>
                                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                               <StringArray count="0"/>
                                             </Property>
-                                            <Property name="colorFondo" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                                <TitledBorder title="Distrito Municipal">
+                                                  <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                                                    <LineBorder roundedCorners="true" thickness="2">
+                                                      <Color PropertyName="color" blue="df" green="2d" red="25" type="rgb"/>
+                                                    </LineBorder>
+                                                  </Border>
+                                                  <Font PropertyName="font" name="FreeSans" size="12" style="0"/>
+                                                </TitledBorder>
+                                              </Border>
                                             </Property>
-                                            <Property name="enabled" type="boolean" value="false"/>
-                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                              <Font name="FreeMono" size="14" style="1"/>
-                                            </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbDistritoMunicipal" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="jcbDistritoMunicipalPopupMenuWillBecomeInvisible"/>
@@ -997,6 +1004,7 @@
                                           </Events>
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
+                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Distrito_municipal&gt;"/>
                                           </AuxValues>
                                         </Component>
                                       </SubComponents>
@@ -1126,16 +1134,8 @@
                                       <SubComponents>
                                         <Component class="rojerusan.RSTableMetro1" name="tblDireccion">
                                           <Properties>
-                                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                              <Table columnCount="7" rowCount="1">
-                                                <Column editable="true" title="Provincia" type="java.lang.Object"/>
-                                                <Column editable="true" title="Municipio" type="java.lang.Object"/>
-                                                <Column editable="true" title="Distrito Municipal" type="java.lang.Object"/>
-                                                <Column editable="true" title="Calle y No. Casa" type="java.lang.Object"/>
-                                                <Column editable="true" title="Fecha" type="java.lang.Object"/>
-                                                <Column editable="true" title="Estado" type="java.lang.Boolean"/>
-                                                <Column editable="true" title="Por defecto" type="java.lang.Boolean"/>
-                                              </Table>
+                                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null, null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Provincia&quot;, &quot;Municipio&quot;, &quot;Distrito Municipal&quot;, &quot;Calle y No. Casa&quot;, &quot;Fecha&quot;, &quot;Estado&quot;, &quot;Por defecto&quot;&#xa;    }&#xa;) {&#xa;    Class&lt;?&gt;[] types = new Class&lt;?&gt;[] {&#xa;        java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class&#xa;    };&#xa;&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;}" type="code"/>
                                             </Property>
                                             <Property name="autoResizeMode" type="int" value="0"/>
                                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1157,7 +1157,7 @@
                                             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblDireccionMouseClicked"/>
                                           </Events>
                                           <AuxValues>
-                                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;@Override&#xa;public boolean isCellEditable(int rowIndex, int colIndex) { &#xa;    return false; //Las celdas no son editables. &#xa;}&#xa;}"/>
+                                            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;    @Override&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Las celdas no son editables.&#xa;    }&#xa;}"/>
                                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                           </AuxValues>
                                         </Component>
@@ -1464,7 +1464,7 @@
                                                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                                                       <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jScrollPane4" pref="280" max="32767" attributes="0"/>
+                                                      <Component id="jScrollPane4" pref="284" max="32767" attributes="0"/>
                                                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>

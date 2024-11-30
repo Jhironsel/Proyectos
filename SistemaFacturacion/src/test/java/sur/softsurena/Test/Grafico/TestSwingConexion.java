@@ -3,7 +3,7 @@ package sur.softsurena.Test.Grafico;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
-import static sur.softsurena.utilidades.Utilidades.LOG;
+import sur.softsurena.utilidades.Utilidades;
 import xy.ui.testing.Tester;
 import xy.ui.testing.editor.TestEditor;
 import xy.ui.testing.util.TestingUtils;
@@ -14,7 +14,7 @@ public class TestSwingConexion {
     }
 
     public static void main(String[] args) throws IOException, Exception {
-        editTestSwing("testSwing/testInsertCliente.stt");
+        editTestSwing("testSwing/testDeudaInsert.stt");
         
 //        Tester tester = new Tester();
         
@@ -31,11 +31,10 @@ public class TestSwingConexion {
 
         //Crear un objecto de la clase Tester
         Tester tester = new Tester();
-
         try {
             tester.loadFromFile(new File(ruta));
         } catch (IOException ex) {
-            LOG.getLogger(
+            Utilidades.LOG.getLogger(
                     TestSwingConexion.class.getName()
             ).log(
                     Level.SEVERE,
@@ -50,5 +49,7 @@ public class TestSwingConexion {
         //Abre el editor
         testEditor.setLastTesterFile(new File(ruta));
         testEditor.open();
+        
+        tester.replayAll();
     }
 }

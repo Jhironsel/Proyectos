@@ -11,10 +11,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Factura;
 import sur.softsurena.hilos.hiloImpresionFactura;
-import static sur.softsurena.metodos.M_Factura.getTemporales;
+import static sur.softsurena.metodos.M_M_Factura.getTemporales;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 
 public final class frmBuscarTemporal extends java.awt.Dialog {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
     private boolean aceptar;
@@ -171,11 +173,12 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
 
         //Creamos un mapa de los valores de la factura, la cual se requiere el 
         //identificador de la factura. 
-        Map parametros = new HashMap();
+        Map<String, Object> parametros = new HashMap<>();
 
         parametros.put("idFactura", Integer.valueOf(
                 miTabla.getValueAt(
-                        tblDetalle.getSelectedRow(), 0).toString()));
+                        tblDetalle.getSelectedRow(), 0
+                ).toString()));
 
         hiloImpresionFactura miFactura
                 = new hiloImpresionFactura(
@@ -209,29 +212,32 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
     /**
      * Metodo utilizado para llenar las tablas de las facturas que existen en
-     * temporal. Actualizado el 05 Junio 2022: nota:
+     * temporal.
+     *
+     * TODO Testear las verdadera factura temporales.
+     *
      */
     private void llenarTabla() {
-        String titulos[] = {"N° Factura", "Nombre Cliente", "Fecha", "Hora",
-            "Cajero", "Monto"};
+        String titulos[] = {"N° Factura", "Nombre Cliente", "Fecha/Hora",
+            "Cajero"};
         miTabla = new DefaultTableModel(null, titulos);
-        //Consulta a la base de datos que trae los registros
+
         List<Factura> temporalesList = getTemporales();
-        //Objecto utlizado en la construción de la tabla.
-        Object registro[] = new Object[6];
+
+        Object registro[] = new Object[titulos.length];
 
         temporalesList.stream().forEach(
                 temporal -> {
                     registro[0] = temporal.getId();
 
-                    if (temporal.getHeaderFactura().getId_persona() == 0) {
-                        registro[1] = temporal.getHeaderFactura().getNombreTemporal();
+                    if (temporal.getM_factura().getCliente().getPersona().getId_persona() == 0) {
+                        registro[1] = temporal.getM_factura().getNombreTemporal();
                     } else {
-                        registro[1] = temporal.toString();
+                        registro[1] = temporal.getM_factura().getCliente();
                     }
 
-                    registro[2] = temporal.getHeaderFactura().getFecha_ingreso();
-                    registro[3] = temporal.getHeaderFactura().getUserName();
+                    registro[2] = temporal.getM_factura().getFechaHora();
+                    registro[3] = temporal.getM_factura().getUserName();
 
                     miTabla.addRow(registro);//Se van insertando los registros.
 

@@ -59,9 +59,8 @@ import org.apache.commons.codec.binary.Base64;
 import sur.softsurena.metodos.Imagenes;
 
 public class Utilidades {
-
+    
     public static final Logger LOG = Logger.getLogger(Utilidades.class.getName());
-
     static {
         final File file = new File("Logs/Log " + new Date().toString().replace(":", ".") + ".log");
         try {
@@ -77,6 +76,7 @@ public class Utilidades {
             fh.setFormatter(new SimpleFormatter());
 
             LOG.addHandler(fh);
+            
 
         } catch (IOException ex) {
             ex.printStackTrace(System.out);
@@ -254,20 +254,6 @@ public class Utilidades {
         } catch (NumberFormatException nfe) {
             return false;
         }
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * Utilizado....
-     *
-     * Para campos que tenga javaDateToSqlDate( stringToDate("08.06.2012",
-     * "dd.MM.yyyy") )
-     *
-     * @param date
-     * @return
-     */
-    public static java.sql.Date javaDateToSqlDate(java.util.Date date) {
-        return new java.sql.Date(date.getTime());
     }
 
     //--------------------------------------------------------------------------
@@ -518,6 +504,22 @@ public class Utilidades {
     }
 
     //--------------------------------------------------------------------------
+    
+
+    //--------------------------------------------------------------------------
+    /**
+     * Utilizado....
+     *
+     * Para campos que tenga javaDateToSqlDate( stringToDate("08.06.2012",
+     * "dd.MM.yyyy") )
+     *
+     * @param date
+     * @return
+     */
+    public static java.sql.Date javaDateToSqlDate(java.util.Date date) {
+        return new java.sql.Date(date.getTime());
+    }
+    
     /**
      * Para campos de tipo fecha sql.
      *
@@ -718,7 +720,7 @@ public class Utilidades {
         try {
             campo.commitEdit();
         } catch (ParseException ex) {
-            campo.requestFocusInWindow();
+            campo.requestFocus();
             campo.selectAll();
             return true;
         }

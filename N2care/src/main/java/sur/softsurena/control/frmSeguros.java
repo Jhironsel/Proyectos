@@ -335,13 +335,13 @@ public class frmSeguros extends javax.swing.JInternalFrame {
         //Validacciones
         if (txtNombre.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(this, "Debe digitar un nombre!");
-            txtNombre.requestFocusInWindow();
+            txtNombre.requestFocus();
             return;
         }
         if (Utilidades.objectToDouble(txtCovertura.getValue()) == 0.00) {
             JOptionPane.showInternalMessageDialog(this,
                     "Indique el monto en porciento de la covertura");
-            txtCovertura.requestFocusInWindow();
+            txtCovertura.requestFocus();
             return;
         }
 

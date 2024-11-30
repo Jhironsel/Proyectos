@@ -1,14 +1,12 @@
 package sur.softsurena.formularios;
 
-import com.toedter.calendar.JTextFieldDateEditor;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -16,25 +14,36 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
+import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_Deuda;
 import static sur.softsurena.metodos.M_Deuda.insertDeudas;
 import static sur.softsurena.metodos.M_Deuda.modificarDeuda;
-import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
+import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
+/**
+ * TODO 29/11/2024 buscar la foto del cliente o deudor.
+ *
+ * @author jhironsel
+ */
 public class frmDeudas extends javax.swing.JInternalFrame {
 
-    private int cliAct = 0;
+    private static final long serialVersionUID = 1L;
+
+    private static int cliAct = 0;
     private boolean nuevo;
-    private DefaultTableModel miTabla;
-    private final JButton button;
-    private final DefaultTableCellRenderer tcr;
+    private static DefaultTableModel miTabla;
+    private static DefaultTableCellRenderer tcr;
 
     public static frmDeudas getInstance() {
         return NewSingletonHolder.INSTANCE;
     }
+    private static Cliente cliente;
 
     private static class NewSingletonHolder {
 
@@ -48,19 +57,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         txtMonto.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMonto.setSelectionStart(3);
-                        txtMonto.setSelectionEnd(txtMonto.getText().length());
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    txtMonto.setSelectionStart(3);
+                    txtMonto.setSelectionEnd(txtMonto.getText().length());
                 });
             }
         });
-        JTextFieldDateEditor editor = (JTextFieldDateEditor) dchFecha.getDateEditor();
-        editor.setEditable(false);
-        button = dchFecha.getCalendarButton();
-        button.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -68,13 +70,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        jtpPrincipal = new javax.swing.JTabbedPane();
+        jpListaDeuda = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClientes = new JTable(){
             @Override
-            public boolean isCellEditable(int rowIndex, int colIndex) { 
-                return false; //Las celdas no son editables. 
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Las celdas no son editables.
             }
         };
         jPanel9 = new javax.swing.JPanel();
@@ -89,17 +91,17 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         btnVerPagos = new javax.swing.JButton();
         btnAbonar = new javax.swing.JButton();
         btnAnular = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jpRegistroDeuda = new javax.swing.JPanel();
         rSPanelMaterialGradient1 = new RSMaterialComponent.RSPanelMaterialGradient();
         txtCedula = new javax.swing.JFormattedTextField();
         btnGetCliente = new javax.swing.JButton();
-        txtNombres = new javax.swing.JTextField();
+        txtPNombre = new javax.swing.JTextField();
         txtApellidos = new javax.swing.JTextField();
         txtMonto = new javax.swing.JFormattedTextField();
-        dchFecha = new com.toedter.calendar.JDateChooser();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtConcepto = new javax.swing.JTextArea();
         jlFoto = new javax.swing.JLabel();
+        txtSNombre = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -120,7 +122,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(800, 600));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameActivated(evt);
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -137,19 +138,25 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle de Deuda", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
+        jpListaDeuda.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle de Deuda", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            Class<?>[] types = new Class<?>[] {
+                Deuda.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+
+            public Class<?> getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblClientesMouseClicked(evt);
@@ -251,32 +258,32 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         });
         jPanel7.add(btnAnular);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jpListaDeudaLayout = new javax.swing.GroupLayout(jpListaDeuda);
+        jpListaDeuda.setLayout(jpListaDeudaLayout);
+        jpListaDeudaLayout.setHorizontalGroup(
+            jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+            .addGroup(jpListaDeudaLayout.createSequentialGroup()
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+        jpListaDeudaLayout.setVerticalGroup(
+            jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpListaDeudaLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jTabbedPane1.addTab("Listado", jPanel1);
+        jtpPrincipal.addTab("Listado", jpListaDeuda);
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Deudor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
+        jpRegistroDeuda.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Deudor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
 
         txtCedula.setEditable(false);
-        txtCedula.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Cedula ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
+        txtCedula.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Cedula ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
         try {
             txtCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
         } catch (java.text.ParseException ex) {
@@ -293,13 +300,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 txtCedulaActionPerformed(evt);
             }
         });
-        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCedulaKeyReleased(evt);
-            }
-        });
 
         btnGetCliente.setText("Clientes");
+        btnGetCliente.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
         btnGetCliente.setEnabled(false);
         btnGetCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,27 +310,27 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             }
         });
 
-        txtNombres.setEditable(false);
-        txtNombres.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        txtNombres.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Nombres ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
-        txtNombres.setDoubleBuffered(true);
-        txtNombres.setFocusTraversalPolicyProvider(true);
-        txtNombres.setPreferredSize(new java.awt.Dimension(52, 21));
-        txtNombres.addActionListener(new java.awt.event.ActionListener() {
+        txtPNombre.setEditable(false);
+        txtPNombre.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtPNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Primer Nombre ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
+        txtPNombre.setDoubleBuffered(true);
+        txtPNombre.setFocusTraversalPolicyProvider(true);
+        txtPNombre.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtPNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombresActionPerformed(evt);
+                txtPNombreActionPerformed(evt);
             }
         });
-        txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNombresKeyReleased(evt);
+                txtPNombreKeyReleased(evt);
             }
         });
 
         txtApellidos.setEditable(false);
         txtApellidos.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         txtApellidos.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtApellidos.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Apellidos ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
+        txtApellidos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Apellidos ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
         txtApellidos.setDoubleBuffered(true);
         txtApellidos.setFocusTraversalPolicyProvider(true);
         txtApellidos.setPreferredSize(new java.awt.Dimension(52, 21));
@@ -342,9 +345,8 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             }
         });
 
-        txtMonto.setEditable(false);
-        txtMonto.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Monto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
-        txtMonto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        txtMonto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Monto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
+        txtMonto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
         txtMonto.setToolTipText("Indique el limite de credito del Cliente");
         txtMonto.setDoubleBuffered(true);
         txtMonto.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
@@ -357,27 +359,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 txtMontoActionPerformed(evt);
             }
         });
-        txtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtMontoKeyTyped(evt);
-            }
-        });
 
-        dchFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Fecha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
-        dchFecha.setForeground(new java.awt.Color(1, 1, 1));
-        dchFecha.setAutoscrolls(true);
-        dchFecha.setFocusTraversalPolicyProvider(true);
-        dchFecha.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        dchFecha.setPreferredSize(new java.awt.Dimension(52, 21));
-        dchFecha.setVerifyInputWhenFocusTarget(false);
-
-        txtConcepto.setEditable(false);
         txtConcepto.setColumns(20);
         txtConcepto.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         txtConcepto.setLineWrap(true);
         txtConcepto.setToolTipText("Inserte el concepto de la deuda...");
         txtConcepto.setWrapStyleWord(true);
-        txtConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Concepto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
+        txtConcepto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Concepto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
         txtConcepto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtConceptoKeyReleased(evt);
@@ -385,73 +373,85 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         });
         jScrollPane5.setViewportView(txtConcepto);
 
-        jlFoto.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Foto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeMono", 0, 19), new java.awt.Color(37, 45, 223))); // NOI18N
+        jlFoto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Foto ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
+
+        txtSNombre.setEditable(false);
+        txtSNombre.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtSNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Segundo Nombre ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
+        txtSNombre.setDoubleBuffered(true);
+        txtSNombre.setFocusTraversalPolicyProvider(true);
+        txtSNombre.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtSNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSNombreActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout rSPanelMaterialGradient1Layout = new javax.swing.GroupLayout(rSPanelMaterialGradient1);
         rSPanelMaterialGradient1.setLayout(rSPanelMaterialGradient1Layout);
         rSPanelMaterialGradient1Layout.setHorizontalGroup(
             rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
-                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(dchFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGetCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jlFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnGetCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(txtSNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jlFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
         rSPanelMaterialGradient1Layout.setVerticalGroup(
             rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
-                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGetCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jlFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
+                        .addComponent(jlFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(121, 121, 121))
+                    .addGroup(rSPanelMaterialGradient1Layout.createSequentialGroup()
+                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnGetCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(rSPanelMaterialGradient1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(41, 41, 41))
         );
 
-        dchFecha.getAccessibleContext().setAccessibleParent(this);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout jpRegistroDeudaLayout = new javax.swing.GroupLayout(jpRegistroDeuda);
+        jpRegistroDeuda.setLayout(jpRegistroDeudaLayout);
+        jpRegistroDeudaLayout.setHorizontalGroup(
+            jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(rSPanelMaterialGradient1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        jpRegistroDeudaLayout.setVerticalGroup(
+            jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
                 .addComponent(rSPanelMaterialGradient1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Matenimiento", jPanel3);
+        jtpPrincipal.addTab("Registro de Deuda", jpRegistroDeuda);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Botones de Acción"));
         jPanel2.setMaximumSize(new java.awt.Dimension(787, 81));
@@ -535,14 +535,14 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(jtpPrincipal)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, Short.MAX_VALUE)
+                .addComponent(jtpPrincipal)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -552,98 +552,111 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        btnGetClienteActionPerformed(evt);
-    }//GEN-LAST:event_txtCedulaActionPerformed
-
-    private void txtCedulaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyReleased
-        char caracter = evt.getKeyChar();
-
-        if (caracter == '-') {
-            return;
-        }
-        if (caracter < '0' || (caracter > '9')) {
-            evt.consume();  // ignorar el evento de teclado
-        }
-    }//GEN-LAST:event_txtCedulaKeyReleased
-
-    private void txtNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresActionPerformed
-        txtApellidos.requestFocusInWindow();
-    }//GEN-LAST:event_txtNombresActionPerformed
-
-    private void txtNombresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyReleased
-        txtNombres.setText(txtNombres.getText().toUpperCase());
-    }//GEN-LAST:event_txtNombresKeyReleased
-
-    private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
-        txtMonto.requestFocusInWindow();
-    }//GEN-LAST:event_txtApellidosActionPerformed
-
-    private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
-        txtApellidos.setText(txtApellidos.getText().toUpperCase());
-    }//GEN-LAST:event_txtApellidosKeyReleased
-
-    private void txtConceptoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtConceptoKeyReleased
-        txtConcepto.setText(txtConcepto.getText().toUpperCase());
-    }//GEN-LAST:event_txtConceptoKeyReleased
-
-    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
-        txtConcepto.requestFocusInWindow();
-    }//GEN-LAST:event_txtMontoActionPerformed
-
-    private void btnGetClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetClienteActionPerformed
-        /*
-            Obtenemos la cedula del cliente de la caja de texto o jTextField.
-         */
-        String cedula = txtCedula.getValue().toString();
-
-        /*
-            Validamos el campo para saber si está vacio o está en blanco.
-         */
-        if (cedula.isEmpty() || cedula.isBlank()) {
+        if (!txtCedula.isEditValid()) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Inserte una cedula Valida, Ej: 000-0000000-0",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtCedula.setValue("");
-            txtCedula.requestFocusInWindow();
+            limpiarCedula();
+            return;
+        }
+        mostrarRegistro(txtCedula.getText());
+    }//GEN-LAST:event_txtCedulaActionPerformed
+
+    private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
+
+    }//GEN-LAST:event_txtPNombreActionPerformed
+
+    private void txtPNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPNombreKeyReleased
+        txtPNombre.setText(txtPNombre.getText().toUpperCase());
+    }//GEN-LAST:event_txtPNombreKeyReleased
+
+    private void txtConceptoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtConceptoKeyReleased
+        txtConcepto.setText(txtConcepto.getText().toUpperCase());
+    }//GEN-LAST:event_txtConceptoKeyReleased
+
+    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
+
+        if (!txtMonto.isEditValid()) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Ingrese un monto valido",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
-        /*
-            Validamos si el cliente existe en la base de datos.
-         */
-        Integer idCliente
-                = M_Generales.getEntidadByCedula(cedula).getId_persona();
+        var monto = new BigDecimal(txtMonto.getValue().toString());
 
-        if (idCliente != -1) {
+        if (monto.compareTo(BigDecimal.ZERO) <= 0) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Solo valores mayores que cero.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
 
-            nuevo();
+        txtConcepto.requestFocus();
+    }//GEN-LAST:event_txtMontoActionPerformed
 
-//            getConsulta(
-//                    "SELECT r.NOMBRES, r.APELLIDOS "
-//                    + "FROM TABLA_CLIENTES r "
-//                    + "WHERE r.IDCLIENTE like '" + idCliente + "'");
-            ResultSet rs = null;
+    private void btnGetClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetClienteActionPerformed
+        frmBusquedaCliente miBusqueda = new frmBusquedaCliente(null, true);
+        miBusqueda.setLocationRelativeTo(null);
+        miBusqueda.setVisible(true);
 
-            try {
-                rs.next();
-                txtNombres.setText(rs.getString(1));
-                txtApellidos.setText(rs.getString(2));
-            } catch (SQLException ex) {
-                LOG.log(Level.SEVERE, "Error al cargar los datos de los clientes.", ex);
+        if (miBusqueda.getCliente() == null) {
+            return;
+        }
+
+        mostrarRegistro(
+                miBusqueda
+                        .getCliente()
+                        .getPersona()
+                        .getGenerales()
+                        .getCedula()
+        );
+    }//GEN-LAST:event_btnGetClienteActionPerformed
+
+    /**
+     * Metodo encargado de mostrar la informacion del deudor en el
+     * mantenimiento.
+     *
+     */
+    private void mostrarRegistro(String cedula) {
+        var listaClientes = M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(cedula)
+                        .build()
+        );
+
+        if (!listaClientes.isEmpty()) {
+            cliente = listaClientes.getFirst();
+
+            if (cliente.getPersona().getId_persona() <= 0) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Cliente generico no puede crear deuda.",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                limpiarCedula();
+                return;
             }
 
-            btnGetCliente.setEnabled(false);
+            txtCedula.setText(cliente.getPersona().getGenerales().getCedula());
+            txtPNombre.setText(cliente.getPersona().getPnombre());
+            txtSNombre.setText(cliente.getPersona().getSnombre());
+            txtApellidos.setText(cliente.getPersona().getApellidos());
 
             txtCedula.setEditable(false);
-            txtNombres.setEditable(false);
-            txtApellidos.setEditable(false);
-
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
         } else {
-            //Cliente no existe
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     "Desea registrar este usuario al sistema?",
@@ -651,26 +664,21 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
             );
-
-            //Activamos el Flag de registro Nuevo
-            nuevo = true;
-            if (resp == JOptionPane.OK_OPTION) {
-
-//                mnuArchivosCliente.doClick();
+            if (resp == JOptionPane.YES_OPTION) {
+                frmPrincipal.mnuMantenimientoClientes.doClick();
             } else {
-
-                btnCancelarActionPerformed(evt);
+                limpiarCedula();
             }
         }
-    }//GEN-LAST:event_btnGetClienteActionPerformed
+    }
 
     private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
         if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
         cliAct = tblClientes.getSelectedRow();
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_tblClientesMouseClicked
 
     private void cbTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosActionPerformed
@@ -693,35 +701,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         llenarTabla();
     }//GEN-LAST:event_cbNulaActionPerformed
 
-    private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
-        char caracter = evt.getKeyChar();
-        if (caracter == '.') {
-            return;
-        }
-        if (caracter == ',') {
-            return;
-        }
-        if (caracter == 'R') {
-            return;
-        }
-        if (caracter == 'D') {
-            return;
-        }
-        if (caracter == '$') {
-            return;
-        }
-        if (caracter < '0' || (caracter > '9')) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtMontoKeyTyped
-
     private void btnReiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarActionPerformed
         if (tblClientes.getRowCount() < 1) {
             return;
         }
 
         if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -756,7 +742,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 JOptionPane.INFORMATION_MESSAGE
         );
         llenarTabla();
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_btnReiniciarActionPerformed
 
     private void btnVerPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerPagosActionPerformed
@@ -764,10 +750,15 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        frmPagosDeudas miPagos = new frmPagosDeudas(null, true,
+        frmPagosDeudas miPagos = new frmPagosDeudas(
+                null,
+                true,
                 Utilidades.objectToInt(tblClientes.getValueAt(cliAct, 0)),
-                txtCedula.getText().trim(), txtNombres,
-                txtApellidos, dchFecha, txtMonto.getValue());
+                txtCedula.getText().trim(),
+                txtPNombre,
+                txtApellidos,
+                txtMonto.getValue()
+        );
         miPagos.setLocationRelativeTo(null);
         miPagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
@@ -776,7 +767,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 //      TODO Analizar y Descomentar.  
 //      if(tblClientes.getRowCount()  < 1) return;
 //        if(btnCancelar.isEnabled()){
-//            txtIDCliente.requestFocusInWindow();
+//            txtIDCliente.requestFocus();
 //            return;
 //        }
 //        JOptionPane.showInternalMessageDialog(
@@ -794,7 +785,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
         if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -817,18 +808,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 JOptionPane.INFORMATION_MESSAGE
         );
         llenarTabla();
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_btnAnularActionPerformed
 
-    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        if (btnGetCliente.isEnabled()) {
-            btnGetClienteActionPerformed(null);
-        }
-    }//GEN-LAST:event_formInternalFrameActivated
-
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        jtpPrincipal.remove(jpRegistroDeuda);
         llenarTabla();
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnGetTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetTotalActionPerformed
@@ -872,6 +858,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             LOG.log(Level.SEVERE, "Error al cargar las sumas de las deudas.", ex);
         }
         msg = "<html><big>" + msg + "</big></html>";
+
         JOptionPane.showInternalMessageDialog(
                 this,
                 msg,
@@ -882,88 +869,65 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGetTotalActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        tblClientes.setEnabled(false);//Deshabilitamos la tabla de cliente
-        txtCedula.setEditable(true);//Campo de la cedula editable
-        btnGetCliente.setEnabled(true);//Se habitan el boton de obtener datos del cliente
-        btnCancelar.setEnabled(true);//Deshabitamos el boton cancelar
-        btnModificar.setEnabled(false);//Deshabitamos el boton modificar
-        txtCedula.grabFocus();//Garantizar el focus
-        txtCedula.requestFocusInWindow();//Peticion del focus
-        txtCedula.setValue("");//Iniciamos el valor del focus
-        nuevo = true;//Buscamos un nuevo registros de dueda...
+        nuevo(false);
+        nuevo = true;
+        txtCedula.requestFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+        if (tblClientes.getRowCount() == 0) {
             return;
         }
-        String idCliente = txtCedula.getText().replace("-", "").trim();
-        if (idCliente.isEmpty()) {
-
+        if (tblClientes.getSelectedRow() == -1) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Debe seleccionar cliente...",
+                    "Debe seleccionar cliente...!!!",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
-        //Botones Para Deshabilitar:
-        btnNuevo.setEnabled(false);
-        btnModificar.setEnabled(false);
-        btnBorrar.setEnabled(false);
-        btnBuscar.setEnabled(false);
-        tblClientes.setEnabled(false);
+        if (!tblClientes.getValueAt(
+                tblClientes.getSelectedRow(),
+                5
+        ).toString().equalsIgnoreCase("i")) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "No se permite modificar deudas cuando el estado es diferente de iniciada.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
 
-        btnGuardar.setEnabled(true);
-        btnCancelar.setEnabled(true);
+        mostrarRegistro(
+                tblClientes.getValueAt(
+                        tblClientes.getSelectedRow(),
+                        1
+                ).toString()
+        );
 
-        //Caja de Texto Habilitado
-        txtNombres.setEditable(true);
-        txtApellidos.setEditable(true);
-        txtMonto.setEditable(true);
-        txtConcepto.setEditable(true);
-
-        //Desactivamos el Flag de registro Nuevo
+        nuevo(false);
         nuevo = false;
-
-        txtNombres.requestFocusInWindow();
+        txtConcepto.requestFocus();
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    /**
+     * TODO 28/11/2024 probar los metodos de la clase de prueba.
+     *
+     * @param evt
+     */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        String idCliente = txtCedula.getText().replace("-", "").trim();
-        if (idCliente.isEmpty()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Digitar un ID de Cliente...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtCedula.requestFocusInWindow();
-            return;
-        }
 
-        if (txtNombres.getText().isBlank()) {
+        if (txtCedula.getText().trim().isBlank()) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Debe Digitar un Nombre...",
+                    "Debe digitar una cedula del Cliente...",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtNombres.requestFocusInWindow();
-            return;
-        }
-
-        if (txtApellidos.getText().isBlank()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Digitar un Apellido...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtApellidos.requestFocusInWindow();
+            limpiarCedula();
             return;
         }
 
@@ -977,7 +941,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
 
@@ -988,7 +952,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtConcepto.requestFocusInWindow();
+            txtConcepto.requestFocus();
             return;
         }
 
@@ -1001,42 +965,55 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            txtConcepto.requestFocusInWindow();
+            txtConcepto.requestFocus();
             return;
         }
 
         //Creamos el Objeto Cliente y los agregamos a Datos
-        Deuda miDeuda = Deuda.builder().id_persona(-1).build();
+        Deuda miDeuda = Deuda
+                .builder()
+                .cliente(
+                        cliente
+                )
+                .concepto(txtConcepto.getText())
+                .monto(new BigDecimal(txtMonto.getValue().toString()))
+                .build();
 
 //                new Deudas(idCliente, getIdUsuario(),
 //                txtConcepto.getText(), monto);
         String accion = "editar";
         if (nuevo) {
-            accion = "Inserta";
-        }
-        String concepto;
-
-        if (txtConcepto.getText().length() >= 51) {
-            concepto = txtConcepto.getText().substring(0, 49);
-        } else {
-            concepto = txtConcepto.getText();
+            accion = "inserta";
         }
 
         int resp = JOptionPane.showInternalConfirmDialog(
                 this,
-                "<html><b><big>Se va a " + accion + " deuda de: </big></b><big>"
-                + txtNombres.getText() + " " + txtApellidos.getText()
-                + "</big></html>"
-                + "\n<html><b><big>Cedula no.: </big></b><big>"
-                + txtCedula.getValue() + "</big></html>"
-                + "\n<html><b><big>Monto de deuda es: </big></b><big>"
-                + txtMonto.getText() + "</big></html>"
-                + "\n<html><b><big>Por Concepto de: </big></b><big>"
-                + concepto + "</big></html>"
-                + "\n<html><b><big>De fecha nacimiento: </big></b><big>"
-                + Utilidades.formatDate(dchFecha.getDate(), "dd-MM-yyyy")
-                + "</big></html>"
-                + "\n<html><b><big>Desea continuar? </big></b></html>",
+                """
+                <html>
+                    <b><big>Se va a %s deuda a: </big></b> <big> %s %s </big><br/>
+                    <b><big>Cedula no.: </big></b> <big> %s </big><br/>
+                    <b><big>Monto de deuda es: </big></b><big>%s</big><br/>
+                    <b><big>Por Concepto de: </big></b><big>%s</big><br/>
+                    <big>De fecha : </big></b><big>%s</big><br/>
+                    <b><big>Desea continuar? </big></b>
+                </html>
+                """.formatted(
+                        accion,
+                        cliente.getPersona()
+                                .getPnombre()
+                                .concat(" ")
+                                .concat(
+                                        cliente.getPersona()
+                                                .getSnombre()
+                                ).trim().strip(),
+                        cliente.getPersona().getApellidos(),
+                        cliente.getPersona().getGenerales().getCedula(),
+                        txtMonto.getText(),
+                        txtConcepto.getText()
+                                .concat(" ".repeat(50))
+                                .substring(0, 49).trim().strip(),
+                        Utilidades.formatDate(new Date(), "dd-MM-yyyy")
+                ),
                 "",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
@@ -1045,46 +1022,45 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         if (resp == JOptionPane.NO_OPTION) {
             return;
         }
+
+        Resultado rs = Resultado
+                .builder()
+                .mensaje("Error al %s registro del sistema.".formatted(accion))
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .build();
         if (nuevo) {
-            if (insertDeudas(miDeuda)) {
-                JOptionPane.showInternalMessageDialog(
-                        this,
-                        "Registro de deuda Insertada!",
-                        "",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            } else {
-                JOptionPane.showInternalMessageDialog(
-                        this,
-                        "Falla de registro!",
-                        "",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            }
+            rs = insertDeudas(miDeuda);
         } else {
             //TODO se debe analizar si las deudas son modificables.
         }
+
+        JOptionPane.showInternalMessageDialog(
+                this,
+                rs.getMensaje(),
+                "",
+                rs.getIcono()
+        );
 
         llenarTabla();
         btnCancelarActionPerformed(evt);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        cancelar();
+        nuevo(true);
         nuevo = false;
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
         if (tblClientes.getRowCount() == 0) {
-
             return;
         }
-        String idCliente = txtCedula.getText().replace("-", "").trim();
+
+        String idCliente = txtCedula.getText().trim();
 
         if (idCliente.isEmpty()) {
             JOptionPane.showInternalMessageDialog(
@@ -1095,6 +1071,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             );
             return;
         }
+
         String idDeuda = tblClientes.getValueAt(tblClientes.getSelectedRow(), 0).toString();
         int rta = JOptionPane.showInternalConfirmDialog(
                 this,
@@ -1111,12 +1088,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         cliAct = 0;
         //Actualizamos los cambios en la Tabla
         llenarTabla();
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
         if (tblClientes.getRowCount() == 0) {
@@ -1155,97 +1132,68 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 break;
             }
         }
-        mostrarRegistro();
+//        mostrarRegistro();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void mostrarRegistro() {
-        txtCedula.setValue("");
-        if (tblClientes.getRowCount() == 0) {
-            return;
+    private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
+        txtApellidos.setText(txtApellidos.getText().toUpperCase());
+    }//GEN-LAST:event_txtApellidosKeyReleased
+
+    private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
+        txtMonto.requestFocus();
+    }//GEN-LAST:event_txtApellidosActionPerformed
+
+    private void txtSNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSNombreActionPerformed
+        txtApellidos.requestFocus();
+    }//GEN-LAST:event_txtSNombreActionPerformed
+
+    private void nuevo(Boolean valor) {
+        if (!valor) {
+            jtpPrincipal.addTab("Mantenimiento", jpRegistroDeuda);
+            jtpPrincipal.setSelectedComponent(jpRegistroDeuda);
+        } else {
+            jtpPrincipal.setSelectedComponent(jpListaDeuda);
+            jtpPrincipal.remove(jpRegistroDeuda);
         }
 
-        txtCedula.setText(tblClientes.getValueAt(cliAct, 1).toString());
-        txtNombres.setText(tblClientes.getValueAt(cliAct, 2).toString());
-        txtApellidos.setText(tblClientes.getValueAt(cliAct, 3).toString());
-        txtConcepto.setText(tblClientes.getValueAt(cliAct, 4).toString());
-        txtMonto.setValue(Utilidades.objectToDouble(tblClientes.getValueAt(cliAct, 5)));
-        dchFecha.setDate(Utilidades.objectToDate(tblClientes.getValueAt(cliAct, 6)));
-
-        tblClientes.setRowSelectionInterval(cliAct, cliAct);
-        txtCedula.setEditable(false);
-    }
-
-    private void cancelar() {
-        btnNuevo.setEnabled(true);
-        btnModificar.setEnabled(true);
-        btnBorrar.setEnabled(true);
-        btnBuscar.setEnabled(true);
-        tblClientes.setEnabled(true);
-
-        //Caja de Texto Deshabitar
-        btnGuardar.setEnabled(false);
-        btnCancelar.setEnabled(false);
-        btnGetCliente.setEnabled(false);
-
-        txtCedula.setEditable(false);
-        txtNombres.setEditable(false);
-        txtApellidos.setEditable(false);
-        txtMonto.setEditable(false);
-        txtConcepto.setEditable(false);
-
-        reset('s');
-    }
-
-    private void reset(char idCliente) {
-        if (idCliente == 's') {
-            txtCedula.setValue("");
-        }
-
-        txtNombres.setText("");
-        txtApellidos.setText("");
-        txtMonto.setValue(0);
-        dchFecha.setDate(new Date());
-        txtConcepto.setText("");
-    }
-
-    private void nuevo() {
         //Botones Para Deshabilitar:
-        btnNuevo.setEnabled(false);
-        btnModificar.setEnabled(false);
-        btnBorrar.setEnabled(false);
-        btnBuscar.setEnabled(false);
+        btnNuevo.setEnabled(valor);
+        btnModificar.setEnabled(valor);
+        btnBorrar.setEnabled(valor);
+        btnBuscar.setEnabled(valor);
+        tblClientes.setEnabled(valor);
 
-        btnGuardar.setEnabled(true);
-        btnCancelar.setEnabled(true);
+        btnGetCliente.setEnabled(!valor);
 
-        //Caja de Texto Habilitado
-        txtNombres.setEditable(true);
-        txtApellidos.setEditable(true);
-        txtMonto.setEditable(true);
-        txtConcepto.setEditable(true);
+        txtPNombre.setText("");
+        txtMonto.setValue(0);
+        txtConcepto.setText("");
 
-        reset('n');
+        btnGuardar.setEnabled(!valor);
+        btnCancelar.setEnabled(!valor);
+
+        if (nuevo) {
+            limpiarCedula();
+        }
+        txtCedula.setEditable(!nuevo);
     }
 
-    private void llenarTabla() {
-        String titulos[] = {"Numero", "Cedula Cliente", "Primer Nombre", "Segundo Nombre",
-            "Apellidos", "Concepto", "Monto", "Fecha", "Estado"};
+    public static void llenarTabla() {
+        String titulos[] = {
+            "Nombre completo", "Cedula Cliente", "Concepto", "Monto", "Fecha",
+            "Estado"
+        };
         Object registro[] = new Object[titulos.length];
         miTabla = new DefaultTableModel(null, titulos);
 
-        List<Deuda> deudasList = new ArrayList<>();
-
-        //TODO Buscar la cedula del cliente.
-        deudasList.stream().forEach(
-                x -> {
-                    registro[0] = "Buscar la cedula";
-                    registro[1] = x.getPnombre();
-                    registro[2] = x.getSnombre();
-                    registro[3] = x.getApellidos();
-                    registro[4] = x.getConcepto();
-                    registro[5] = x.getMonto();
-                    registro[6] = x.getFecha();
-                    registro[7] = x.getEstado();
+        M_Deuda.getDeudas().stream().forEach(
+                deuda -> {
+                    registro[0] = deuda;
+                    registro[1] = deuda.getCliente().getPersona().getGenerales();
+                    registro[2] = deuda.getConcepto();
+                    registro[3] = deuda.getMonto();
+                    registro[4] = deuda.getFecha();
+                    registro[5] = deuda.getEstadoDeuda();
                     miTabla.addRow(registro);
                 }
         );
@@ -1257,42 +1205,35 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             tblClientes.setRowSelectionInterval(cliAct, cliAct);
         }
 
-        //Para Alinear el Texto de la Table a la Derecha...
-        tcr.setHorizontalAlignment(SwingConstants.RIGHT);
+        tcr.setHorizontalAlignment(SwingConstants.RIGHT);//Monto
+        tblClientes.getColumnModel().getColumn(3).setCellRenderer(tcr);
+
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);//Estado
         tblClientes.getColumnModel().getColumn(5).setCellRenderer(tcr);
 
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-        tblClientes.getColumnModel().getColumn(7).setCellRenderer(tcr);
-
         TableColumn miTableColumn;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblClientes.getColumnModel().getColumn(i);
             if (i == 0) {
-                miTableColumn.setPreferredWidth(30);
+                miTableColumn.setPreferredWidth(120);
             }
             if (i == 1) {
-                miTableColumn.setPreferredWidth(80);
+                miTableColumn.setPreferredWidth(25);
             }
             if (i == 2) {
-                miTableColumn.setPreferredWidth(130);
+                miTableColumn.setPreferredWidth(900);
             }
             if (i == 3) {
-                miTableColumn.setPreferredWidth(130);
+                miTableColumn.setPreferredWidth(30);
             }
             if (i == 4) {
-                miTableColumn.setPreferredWidth(250);
+                miTableColumn.setPreferredWidth(15);
             }
             if (i == 5) {
-                miTableColumn.setPreferredWidth(50);
-            }
-            if (i == 6) {
-                miTableColumn.setPreferredWidth(50);
-            }
-            if (i == 7) {
-                miTableColumn.setPreferredWidth(40);
+                miTableColumn.setPreferredWidth(10);
             }
         }
-        mostrarRegistro();
+//        mostrarRegistro();
     }
 
     private String estados() {
@@ -1313,7 +1254,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
     private void direccion(String direccion) {
         if (!tblClientes.isEnabled()) {
-            txtCedula.requestFocusInWindow();
+            txtCedula.requestFocus();
             return;
         }
 
@@ -1324,28 +1265,34 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         switch (direccion) {
             case "a":
                 cliAct = 0;
-                mostrarRegistro();
+//                mostrarRegistro();
                 break;
             case "b":
                 cliAct--;
                 if (cliAct == -1) {
 //                    cliAct = getDatos().numeroDeudas(estados()) - 1;
                 }
-                mostrarRegistro();
+//                mostrarRegistro();
                 break;
             case "c":
                 cliAct++;
 //                if (cliAct == numeroDeudas(estados())) {
 //                    cliAct = 0;
 //                }
-                mostrarRegistro();
+//                mostrarRegistro();
                 break;
             case "d":
 //                cliAct = getDatos().numeroDeudas(estados()) - 1;
-                mostrarRegistro();
+//                mostrarRegistro();
                 break;
         }
     }
+
+    private void limpiarCedula() {
+        txtCedula.setValue(null);
+        txtCedula.requestFocus();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbonar;
     private javax.swing.JButton btnAnular;
@@ -1365,23 +1312,23 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox cbNula;
     private javax.swing.JCheckBox cbPagada;
     private javax.swing.JCheckBox cbTodos;
-    private com.toedter.calendar.JDateChooser dchFecha;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel jlFoto;
+    private javax.swing.JPanel jpListaDeuda;
+    private javax.swing.JPanel jpRegistroDeuda;
+    private javax.swing.JTabbedPane jtpPrincipal;
     private RSMaterialComponent.RSPanelMaterialGradient rSPanelMaterialGradient1;
-    private javax.swing.JTable tblClientes;
+    private static javax.swing.JTable tblClientes;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JFormattedTextField txtCedula;
     private javax.swing.JTextArea txtConcepto;
     private javax.swing.JFormattedTextField txtMonto;
-    private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextField txtPNombre;
+    private javax.swing.JTextField txtSNombre;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Persona;
@@ -17,6 +18,8 @@ import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmCobrosClientes extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private int idTurno;
     private String nombreCajero;
@@ -377,12 +380,18 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cmbCliente.removeAllItems();
-        cmbCliente.addItem(Cliente
+        cmbCliente.addItem(
+                Cliente
                         .builder()
-                        .id_persona(-1)
-                        .pnombre("Seleccione un Cliente...")
-                        .snombre("")
-                        .apellidos("")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(-1)
+                                        .pnombre("Seleccione un Cliente...")
+                                        .snombre("")
+                                        .apellidos("")
+                                        .build()
+                        )
                         .build()
         );
 
@@ -405,7 +414,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            cmbCliente.requestFocusInWindow();
+            cmbCliente.requestFocus();
             return;
         }
 
@@ -431,7 +440,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
             txtMonto.setValue(0.0);
-            txtMonto.requestFocusInWindow();
+            txtMonto.requestFocus();
             return;
         }
         if (Monto.compareTo(montoTotal) == 1) {
@@ -490,13 +499,41 @@ public class frmCobrosClientes extends javax.swing.JDialog {
                 JOptionPane.INFORMATION_MESSAGE
         );
 
-        Map parametros = new HashMap();
-        parametros.put("nombreCajero", getNombreCajero());
-        parametros.put("idFactura", Utilidades.objectToInt(tblFacturas.getValueAt(tblFacturas.getSelectedRow(), 0)));
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put(
+                "nombreCajero", 
+                getNombreCajero()
+        );
+        parametros.put(
+                "idFactura", 
+                Utilidades.objectToInt(
+                        tblFacturas.getValueAt(
+                                tblFacturas.getSelectedRow(), 
+                                0
+                        )
+                )
+        );
         parametros.put("idTurno", "" + getIdTurno());
-        parametros.put("idCliente", ((Cliente) cmbCliente.getItemAt(cmbCliente.getSelectedIndex())).getId_persona());
-        parametros.put("nombreCliente", ((Cliente) cmbCliente.getItemAt(cmbCliente.getSelectedIndex())).toString());
-        parametros.put("montoFactura", Utilidades.objectToDouble(tblFacturas.getValueAt(tblFacturas.getSelectedRow(), 1)));
+        parametros.put(
+                "idCliente", 
+                ((Cliente) cmbCliente.getItemAt(
+                        cmbCliente.getSelectedIndex()
+                )).getPersona().getId_persona()
+        );
+        parametros.put(
+                "nombreCliente", 
+                ((Cliente) cmbCliente.getItemAt(
+                        cmbCliente.getSelectedIndex()
+                )).toString()
+        );
+        parametros.put(
+                "montoFactura", 
+                Utilidades.objectToDouble(
+                        tblFacturas.getValueAt(
+                                tblFacturas.getSelectedRow(), 1
+                        )
+                )
+        );
 
         hiloImpresionFactura miHilo = new hiloImpresionFactura(
                 true, //Mostrar Reporte
@@ -514,10 +551,10 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         frmBusquedaCliente miBusqueda = new frmBusquedaCliente(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
+        
+        Cliente persona = miBusqueda.getCliente();
 
-        Cliente cliente = miBusqueda.getCliente();
-
-        if (cliente == null) {
+        if (persona == null) {
             return;
         }
 
@@ -549,7 +586,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     }//GEN-LAST:event_cmbClienteItemStateChanged
     private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
         txtMonto.grabFocus();
-        txtMonto.requestFocusInWindow();
+        txtMonto.requestFocus();
     }//GEN-LAST:event_cmbClienteActionPerformed
     private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
         btnPagarActionPerformed(evt);

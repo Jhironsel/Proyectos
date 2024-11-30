@@ -10,19 +10,17 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Deuda extends Persona{
+public class Deuda{
     private final Integer id_deuda;
-    private final Integer id_cliente;
-    private final Integer id_factura;
+    private final Cliente cliente;
     private final String concepto;
     private final BigDecimal monto;
     private final Date fecha;
     private final Time hora;
     private final Character estadoDeuda;
-    private final String estadoDeudaDesc;
 
     @Override
     public String toString() {
-        return super.toString();
+        return cliente.toString();
     }
 }

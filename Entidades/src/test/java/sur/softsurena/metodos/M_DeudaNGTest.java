@@ -90,15 +90,17 @@ public class M_DeudaNGTest {
         assertEquals(result, expResult);
     }
 
+    //TODO 28/11/2024 terminar esta prueba en el sistema.
     @Test(
             enabled = false,
             priority = 0,
-            description = ""
+            description = """
+                          """
     )
     public void testInsertDeudas() {
         Deuda miDeuda = null;
         boolean expResult = false;
-        boolean result = M_Deuda.insertDeudas(miDeuda);
+        Resultado result = M_Deuda.insertDeudas(miDeuda);
         assertEquals(result, expResult);
     }
     
