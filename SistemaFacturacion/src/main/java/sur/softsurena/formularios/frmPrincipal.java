@@ -43,6 +43,7 @@ import sur.softsurena.utilidades.DesktopConFondo;
 import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class frmPrincipal extends javax.swing.JFrame {
 
@@ -107,7 +108,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jlUser = new RSMaterialComponent.RSLabelTextIcon();
         liWork = new necesario.LabelIcon();
-        cbRoles = new RSMaterialComponent.RSComboBox();
+        cbRoles = new javax.swing.JComboBox<>();
         jsEstatus = new javax.swing.JScrollPane();
         pEstatus = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -329,12 +330,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
         liWork.setOpaque(true);
         liWork.setLayout(new java.awt.GridLayout(1, 0));
 
-        cbRoles.setColorSeleccionTXT(new java.awt.Color(37, 45, 223));
-        cbRoles.setItemHeight(20);
-        cbRoles.setMaximumSize(new java.awt.Dimension(200, 40));
-        cbRoles.setMinimumSize(new java.awt.Dimension(50, 30));
-        cbRoles.setName("cbRoles"); // NOI18N
-        cbRoles.setPreferredSize(new java.awt.Dimension(200, 40));
+        cbRoles.setMaximumSize(new java.awt.Dimension(150, 150));
+        cbRoles.setMinimumSize(new java.awt.Dimension(140, 140));
+        cbRoles.setPreferredSize(new java.awt.Dimension(140, 140));
         cbRoles.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -684,7 +682,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuOpciones.setText("Opciones");
         mnuOpciones.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
-        mnuOpcionesCambioClave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnuOpcionesCambioClave.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuOpcionesCambioClave.setMnemonic('m');
         mnuOpcionesCambioClave.setText("Cambio de Clave ...");
@@ -695,7 +692,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuOpciones.add(mnuOpcionesCambioClave);
 
-        mnuOpcionesCambioUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         mnuOpcionesCambioUsuario.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuOpcionesCambioUsuario.setMnemonic('b');
         mnuOpcionesCambioUsuario.setText("Cambio de Usuario ...");
@@ -746,6 +742,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuMantenimiento.add(mnuMantenimientoProductos);
 
+        mnuMantenimientoProveedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         mnuMantenimientoProveedores.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMantenimientoProveedores.setMnemonic('P');
         mnuMantenimientoProveedores.setText("Proveedores ...");
@@ -756,6 +753,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuMantenimiento.add(mnuMantenimientoProveedores);
 
+        mnuMantenimientoAlmacenes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnuMantenimientoAlmacenes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMantenimientoAlmacenes.setMnemonic('P');
         mnuMantenimientoAlmacenes.setText("Almacenes ...");
@@ -766,7 +764,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuMantenimiento.add(mnuMantenimientoAlmacenes);
 
-        mnuMantenimientoUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        mnuMantenimientoUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         mnuMantenimientoUsuarios.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMantenimientoUsuarios.setText("Usuarios ...");
         mnuMantenimientoUsuarios.addActionListener(new java.awt.event.ActionListener() {
@@ -784,6 +782,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuSistemas.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         mnuSistemas.setName("mnuSistemas"); // NOI18N
 
+        mnuSistemaNomina.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
         mnuSistemaNomina.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuSistemaNomina.setMnemonic('P');
         mnuSistemaNomina.setText("Nomina ...");
@@ -794,6 +793,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuSistemas.add(mnuSistemaNomina);
 
+        mnuSistemaGestorGastos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
         mnuSistemaGestorGastos.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuSistemaGestorGastos.setMnemonic('P');
         mnuSistemaGestorGastos.setText("Gestor de gastos ...");
@@ -811,7 +811,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuMovimientos.setText("Movimientos");
         mnuMovimientos.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
-        mnuMovimientosNuevaFactura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
+        mnuMovimientosNuevaFactura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
         mnuMovimientosNuevaFactura.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMovimientosNuevaFactura.setText("Nueva Factura...");
         mnuMovimientosNuevaFactura.addActionListener(new java.awt.event.ActionListener() {
@@ -822,7 +822,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuMovimientos.add(mnuMovimientosNuevaFactura);
         mnuMovimientos.add(jSeparator5);
 
-        mnuMovimientosReporteFactura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
+        mnuMovimientosReporteFactura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
         mnuMovimientosReporteFactura.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMovimientosReporteFactura.setText("Reporte de Facturas...");
         mnuMovimientosReporteFactura.addActionListener(new java.awt.event.ActionListener() {
@@ -832,7 +832,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         });
         mnuMovimientos.add(mnuMovimientosReporteFactura);
 
-        mnuMovimientosInventario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
+        mnuMovimientosInventario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0));
         mnuMovimientosInventario.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMovimientosInventario.setText("Inventario...");
         mnuMovimientosInventario.addActionListener(new java.awt.event.ActionListener() {
@@ -853,7 +853,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuMovimientos.add(mnuMovimientosDeudas);
         mnuMovimientos.add(jSeparator4);
 
-        mnuMovimientosAbrirTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
+        mnuMovimientosAbrirTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
         mnuMovimientosAbrirTurno.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMovimientosAbrirTurno.setText("Administrador de turnos ...");
         mnuMovimientosAbrirTurno.addActionListener(new java.awt.event.ActionListener() {
@@ -1163,10 +1163,8 @@ public final class frmPrincipal extends javax.swing.JFrame {
         try {
             //        mensaje();
             abrirFormularioCentralizado(new frmEmpresaDatos());
-            
-
         } catch (IOException ex) {
-            Utilidades.LOG.getLogger(
+            LOG.getLogger(
                     frmPrincipal.class.getName()
             ).log(
                     Level.SEVERE, 
@@ -1283,22 +1281,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mnuAyudaAyudaActionPerformed
 
-    private void cbRolesPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbRolesPopupMenuWillBecomeInvisible
-        String rol = ((Role) cbRoles.getSelectedItem()).getRoleName();
-
-        rol = (rol.equalsIgnoreCase("ADMINISTRADOR") ? "RDB$ADMIN" : rol);
-
-        Resultado role = M_Role.setRole(rol);
-
-        if (!role.getEstado()) {
-            return;
-        }
-
-        usuario = M_Usuario.getUsuarioActual();
-
-        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
-    }//GEN-LAST:event_cbRolesPopupMenuWillBecomeInvisible
-
     private void mnuMantenimientoProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProveedoresActionPerformed
         abrirFormulario(frmProveedores.getInstance());
     }//GEN-LAST:event_mnuMantenimientoProveedoresActionPerformed
@@ -1314,6 +1296,23 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private void mnuSistemaGestorGastosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSistemaGestorGastosActionPerformed
         abrirFormulario(frmGestorGastos.getInstance());
     }//GEN-LAST:event_mnuSistemaGestorGastosActionPerformed
+
+    private void cbRolesPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbRolesPopupMenuWillBecomeInvisible
+        String rol = ((Role) cbRoles.getSelectedItem()).getRoleName();
+        
+
+        rol = (rol.equalsIgnoreCase("ADMINISTRADOR") ? "RDB$ADMIN" : rol);
+
+        Resultado role = M_Role.setRole(rol);
+
+        if (!role.getEstado()) {
+            return;
+        }
+
+        usuario = M_Usuario.getUsuarioActual();
+
+        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
+    }//GEN-LAST:event_cbRolesPopupMenuWillBecomeInvisible
 
     //TODO Metodo de JasperReport
     private void imprimirReporte(Date fecha) {
@@ -1752,7 +1751,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnEstablecerEncabezado;
     private javax.swing.JButton btnOcultarPanel;
     private javax.swing.JButton btnSeleccionarImpresora;
-    private RSMaterialComponent.RSComboBox cbRoles;
+    private javax.swing.JComboBox<Role> cbRoles;
     public static javax.swing.JDesktopPane dpnEscritorio;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JLabel jLabel1;

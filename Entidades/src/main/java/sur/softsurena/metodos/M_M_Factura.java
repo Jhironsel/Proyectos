@@ -27,43 +27,6 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_M_Factura {
 
     /**
-     * Consulta que nos permite obtener los ID de las facturas.
-     *
-     * @return Devuelve un lista de los identificadores unicos de las faturas.
-     */
-    public synchronized static List<Factura> getFacturas() {
-
-        final String sql
-                = "SELECT ID FROM V_M_FACTURAS ORDER BY 1";
-
-        List<Factura> facturasList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    facturasList.add(
-                            Factura
-                                    .builder()
-                                    .id(rs.getInt("ID"))
-                                    .build());
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al consultar la vista V_M_FACTURAS del sistema.",
-                    ex
-            );
-        }
-        return facturasList;
-    }
-
-    /**
      * Metodo para agregar las facturas al temporar del sistema.
      *
      * Este metodo fue actualizado el dia 24 abril del 2022. Este metodo fue
@@ -143,10 +106,8 @@ public class M_M_Factura {
     /**
      * Metodo que permite modificar las facturas que se encuentran en el sistema
      *
-     *
-     * Metodo Actualizado el 18/05/2022.
-     *
      * @param f Objeto de la clase Factura.
+     * 
      * @return retorna true si fue modificada y false si hubo un error en la
      * modificacion de la factura.
      */
@@ -154,13 +115,13 @@ public class M_M_Factura {
         final String sql
                 = """
                   EXECUTE PROCEDURE SP_U_FACTURA (
-                        ?, --'ID', 
-                        ?, --'ID_CONTACTOS_TEL', 
-                        ?, --'ID_CONTACTOS_DIRECCIONES', 
-                        ?, --'ID_CONTACTOS_EMAIL', 
-                        ?, --'ID_TURNO', 
-                        ?, --'ESTADO_FACTURA', 
-                        ?, --'NOMBRE_TEMP'
+                        ?, --ID
+                        ?, --ID_CONTACTOS_TEL
+                        ?, --ID_CONTACTOS_DIRECCIONES
+                        ?, --ID_CONTACTOS_EMAIL
+                        ?, --ID_TURNO
+                        ?, --ESTADO_FACTURA
+                        ?, --NOMBRE_TEMP
                   );
                   """;
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -192,69 +153,6 @@ public class M_M_Factura {
                     .icono(JOptionPane.ERROR_MESSAGE)
                     .estado(Boolean.FALSE)
                     .build();
-        }
-    }
-
-    /**
-     * TODO CREAR VISTA. Devolver una lista.
-     *
-     * @param filtro
-     * @return
-     */
-    public synchronized static ResultSet getReporteFacturas(String filtro) {
-        String sql
-                = "SELECT f.idFactura, f.idCliente, (c.nombres||' '||c.apellidos) AS nombreFull, "
-                + "        f.fecha, d.idLinea, p.idProducto, p.descripcion, "
-                + "        precio,   d.cantidad, precio * d.cantidad AS Valor "
-                + "FROM tabla_facturas f "
-                + "INNER JOIN tabla_clientes c ON f.idCliente = c.idCliente "
-                + "INNER JOIN detalleFactura d ON f.idFactura = d.idFactura "
-                + "INNER JOIN tabla_productos p ON p.idproducto = d.idproducto "
-                + filtro;
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            return ps.executeQuery();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return null;
-        }
-    }
-
-    /**
-     * TODO CREAR VISTA. Devolver una lista.
-     *
-     * @param idFactura
-     * @return
-     */
-    public synchronized static ResultSet getFacturasNombreClientes(int idFactura) {
-        final String sql
-                = "SELECT r.IDCLIENTE, nombreCliente "
-                + "FROM TABLA_FACTURAS r "
-                + "WHERE r.IDFACTURA = ?"
-                + "order by 1";
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, idFactura);
-            return ps.executeQuery();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return null;
         }
     }
 
@@ -367,8 +265,6 @@ public class M_M_Factura {
      * suministrado.
      *
      * Nota: las facturas pueden eliminarse si el estado es nula.
-     *
-     * Actualizado el 17/05/2022.
      *
      * @param id Es el identificador del registro de la factura.
      * @return Devuelve un mensaje de la acción

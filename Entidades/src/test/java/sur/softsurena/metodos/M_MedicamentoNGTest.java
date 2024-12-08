@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Medicamento;
+import sur.softsurena.utilidades.Resultado;
 
 /**
  *
@@ -58,7 +59,7 @@ public class M_MedicamentoNGTest {
     public void testModificarMedicamento() {
         Medicamento m = null;
         String expResult = "";
-        String result = M_Medicamento.modificarMedicamento(m);
+        Resultado result = M_Medicamento.modificarMedicamento(m);
         assertEquals(result, expResult);
     }
 

@@ -69,22 +69,7 @@ public class M_FacturaNGTest {
     }
 
     //--------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Verificamos que no existe registros de facturas en 
-                          el sitema.
-                          """
-    )
-    public void testGetFacturas() {
-        assertFalse(
-                M_M_Factura.getFacturas().isEmpty(),
-                "No Existe registros de facturas en el sistema."
-        );
-    }
-    
-    //--------------------------------------------------------------------------
+
     @Test(
             enabled = true,
             priority = 0,
@@ -156,32 +141,6 @@ public class M_FacturaNGTest {
                     .estado(Boolean.TRUE)
                     .build()
         );
-    }
-
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetReporteFacturas() {
-        String filtro = "";
-        ResultSet expResult = null;
-        ResultSet result = M_M_Factura.getReporteFacturas(filtro);
-        assertEquals(result, expResult);
-    }
-
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetFacturasNombreClientes() {
-        if(id_factura < 0) return;
-        ResultSet expResult = null;
-        ResultSet result = M_M_Factura.getFacturasNombreClientes(id_factura);
-        assertEquals(result, expResult);
     }
 
     //--------------------------------------------------------------------------

@@ -14,16 +14,23 @@ import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 
 public class frmEntradaProducto extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private frmBusquedaProducto miBusqueda;
     private Boolean impuesto = false;
     private final DefaultTableModel miTabla;
-    private Object registro[];
+    private transient Object registro[];
 
     public frmEntradaProducto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        
+        initComponents();
+        
         String titulos[] = {"Codigo Art.", "Descripcion", "Cantidad", "Costo", "Precio",
             "Impuesto", "%Impuesto"};
+        
         registro = new Object[titulos.length];
+        
         miTabla = new DefaultTableModel(null, titulos) {
             @Override
             public Class<?> getColumnClass(int column) {
@@ -34,7 +41,8 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                 }
             }
         };
-        initComponents();
+        
+        tbArticulos.setModel(miTabla);
     }
 
     @SuppressWarnings("unchecked")
@@ -454,7 +462,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
         if (txtNumeroFactura.getText().isBlank()) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Debe Proporcional la factura asociada a este registros de productos",
+                    "Debe Proporcional la factura asociada a este registros de productos.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -474,7 +482,6 @@ public class frmEntradaProducto extends javax.swing.JDialog {
         }
 
         if (miBusqueda == null) {
-            //TODO determinar cual es el icono de este dialog.
             JOptionPane.showMessageDialog(
                     this,
                     "Vuelva a buscar el articulo.",
@@ -600,6 +607,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                 txtImpuesto.requestFocus();
                 return;
             }
+            
             BigDecimal c = new BigDecimal(txtImpuesto.getText());
 
             if (c.compareTo(BigDecimal.ZERO) <= 0) {
@@ -615,7 +623,12 @@ public class frmEntradaProducto extends javax.swing.JDialog {
             }
         }
 
-        Producto p = Producto.builder().id(-1).descripcion("").build();
+        Producto p = Producto
+                .builder()
+                .id(-1)
+                .descripcion("")
+                .build();
+        
         registro[0] = miBusqueda.getRespuesta();//p
         registro[1] = txtDescripcionProducto.getText();
         registro[2] = entrada;

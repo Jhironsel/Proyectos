@@ -494,51 +494,51 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     }//GEN-LAST:event_txtSNombreActionPerformed
 
     /**
-     * Se realizan las siguientes validaciones. 
-     * 
-     * 1) Se valida que el userName no este en blanco. 
-     * 
-     * 2) Se valida que el primer nombre no este en blanco. 
-     * 
-     * 3) Se valida que el apellido no este en blanco. 
-     * 
-     * 4) Se pregunta si desea dejar el usuario inactivo. Si el usuario responde 
-     * que no el usuario pasa a estar activo automaticamente, en caso contrario 
-     * prosigue con el registro. 
-     * 
-     * 5) Se valida que las clave y la confirmacion no esten en blanco cuando se
-     * procede a registrar un nuevo registro. 
-     * 
-     * 6) Se procede a comprar la clave y la confirmacion de la clave. 
-     * 
-     * 7) Se valida los registros de roles cuando se esta modificando un 
-     * registro, si el usuario no agrego roles al registro de usuario cuando se 
-     * modifica un registro en el sistema, se le pregunta si desea continuar 
-     * con el registros de nuevo usuario sin registro.
+     * Se realizan las siguientes validaciones.
      *
-     * 8) Si el  usuario no tiene registros de en la tabla de roles se le 
+     * 1) Se valida que el userName no este en blanco.
+     *
+     * 2) Se valida que el primer nombre no este en blanco.
+     *
+     * 3) Se valida que el apellido no este en blanco.
+     *
+     * 4) Se pregunta si desea dejar el usuario inactivo. Si el usuario responde
+     * que no el usuario pasa a estar activo automaticamente, en caso contrario
+     * prosigue con el registro.
+     *
+     * 5) Se valida que las clave y la confirmacion no esten en blanco cuando se
+     * procede a registrar un nuevo registro.
+     *
+     * 6) Se procede a comprar la clave y la confirmacion de la clave.
+     *
+     * 7) Se valida los registros de roles cuando se esta modificando un
+     * registro, si el usuario no agrego roles al registro de usuario cuando se
+     * modifica un registro en el sistema, se le pregunta si desea continuar con
+     * el registros de nuevo usuario sin registro.
+     *
+     * 8) Si el usuario no tiene registros de en la tabla de roles se le
      * pregunta si desea continuar sin roles del usuario.
-     * 
-     * 9) Se verifica que no exista un usuario con el mismo nombre de usuario 
-     * en el sistema. En caso de que se encuentre el usuario tendrá la opcion de 
+     *
+     * 9) Se verifica que no exista un usuario con el mismo nombre de usuario en
+     * el sistema. En caso de que se encuentre el usuario tendrá la opcion de
      * cargar el usuario nueve.
-     * 
+     *
      * 10) Se muestra el mensaje con la informacion del usuario.
-     * 
+     *
      * 11) Se procesa la tags del usuario.
-     * 
+     *
      * 12) Se procesa las etiquetas del usuario.
      *
-     * 13) Se procede crear el objeto usuario tomando el userName, PNombre, 
-     * SNombre, Apellidos, la descripcion, la clave, se lista la tags del 
+     * 13) Se procede crear el objeto usuario tomando el userName, PNombre,
+     * SNombre, Apellidos, la descripcion, la clave, se lista la tags del
      * usuario, el estado del registro, si es Administrador, la lista de roles.
      *
-     * 14) Se envia el registro a la base de datos dependiendo del tipo, si es nuevo
-     * registro o modificando un registro a la base de datos.
+     * 14) Se envia el registro a la base de datos dependiendo del tipo, si es
+     * nuevo registro o modificando un registro a la base de datos.
      *
      * 15) Se muestra un mensaje con los resultado de la operacion.
-     * 
-     * 16) Se cierra el formulario en el sistema. 
+     *
+     * 16) Se cierra el formulario en el sistema.
      *
      * @param evt No utilizado por el momento.
      */
@@ -669,7 +669,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 return;
             }
         }
-        
+
 //-----------------------------------------------------------------------------8
         if (existeUsuarioByUserName(txtUserName.getText().strip()) && nuevo) {
             int respuesta = JOptionPane.showConfirmDialog(
@@ -690,7 +690,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             }
 
         }
-        
+
 //-----------------------------------------------------------------------------9
         String mensaje
                 = "<html>"
@@ -721,7 +721,6 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             return;
         }
 //----------------------------------------------------------------------------10
-
 
         List<Role> rolesList = new ArrayList<>();
 
@@ -764,7 +763,6 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 .build();
 
 //----------------------------------------------------------------------------13
-
         Resultado resultado = (nuevo ? agregarUsuario(usuario) : modificarUsuario(usuario));
 
 //----------------------------------------------------------------------------14
@@ -1055,17 +1053,16 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
         tblRoles.removeAll();
 
-        comprobandoRolesDisponibles(usuario.getUser_name(), true).stream()
-                .forEach(
-                        rol -> {
-                            registro2[0] = rol;
-                            registro2[1] = rol.getOpcionPermiso() == 2;
-                            //El 2 indica que si administra el role.
-                            registro2[2] = rol.getDescripcion();
+        comprobandoRolesDisponibles(usuario.getUser_name(), true).stream().forEach(
+                rol -> {
+                    registro2[0] = rol;
+                    registro2[1] = rol.getOpcionPermiso() == 2;
+                    //El 2 indica que si administra el role.
+                    registro2[2] = rol.getDescripcion();
 
-                            dtmRoles.addRow(registro2);
-                        }
-                );
+                    dtmRoles.addRow(registro2);
+                }
+        );
 
         tblRoles.setModel(dtmRoles);
 

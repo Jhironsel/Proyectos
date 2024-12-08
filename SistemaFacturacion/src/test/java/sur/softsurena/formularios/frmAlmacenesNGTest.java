@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.utilidades.FiltroBusqueda;
 
 /**
  *
@@ -62,13 +63,20 @@ public class frmAlmacenesNGTest {
 
     @Test(
             enabled = true,
-            description = "",
-            priority = 1
+            priority = 1,
+            description = """
+                          Test para verrificar las consultas a la base de datos
+                          de los registros de almacenes registrados.
+                          """
     )
     public void testLlenarTabla() {
-        int id = 0;
-        String criterioBusqueda = "";
-        JTable tabla = frmAlmacenes.llenarTabla(id, criterioBusqueda);
+        JTable tabla = frmAlmacenes.llenarTabla(
+                FiltroBusqueda
+                        .builder()
+                        .id(0)
+                        .criterioBusqueda("")
+                        .build()
+        );
         
         assertNotNull(
                 tabla,

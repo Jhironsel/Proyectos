@@ -6,8 +6,9 @@ import sur.softsurena.utilidades.Utilidades;
 
 public class frmFechaReporte extends java.awt.Dialog {
 
+    private static final long serialVersionUID = 1L;
     private static Date fecha;
-
+    
     public Date getFecha() {
         return fecha;
     }

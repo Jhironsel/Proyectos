@@ -62,8 +62,8 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-<!--                    <parallel>methods</parallel>-->
-<!--                    <threadCount>10</threadCount>-->
+                    <!--                    <parallel>methods</parallel>-->
+                    <!--                    <threadCount>10</threadCount>-->
                 </configuration>
             </plugin>
             <plugin>

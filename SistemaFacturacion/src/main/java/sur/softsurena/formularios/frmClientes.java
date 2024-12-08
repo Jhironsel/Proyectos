@@ -94,6 +94,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
             throw new ExceptionInInitializerError(mensaje);
         }
+
+        if (!Objects.isNull(NewSingletonHolder.INSTANCE)) {
+            btnBotonesPrivilegios();
+        }
+
         return NewSingletonHolder.INSTANCE;
     }
 
@@ -644,7 +649,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         jcbProvincias.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         jcbProvincias.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Provincia", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        jcbProvincias.setName("jcbPersona"); // NOI18N
+        jcbProvincias.setName("jcbProvincias"); // NOI18N
         jcbProvincias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbProvinciasActionPerformed(evt);
@@ -659,7 +664,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         jcbMunicipios.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         jcbMunicipios.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Municipio", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        jcbMunicipios.setName("jcbPersona"); // NOI18N
+        jcbMunicipios.setName("jcbMunicipios"); // NOI18N
         jcbMunicipios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbMunicipiosActionPerformed(evt);
@@ -674,7 +679,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         jcbDistritoMunicipal.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         jcbDistritoMunicipal.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Distrito Municipal", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        jcbDistritoMunicipal.setName("jcbPersona"); // NOI18N
+        jcbDistritoMunicipal.setName("jcbDistritoMunicipal"); // NOI18N
         jcbDistritoMunicipal.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -923,11 +928,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 "Numero", "Tipo", "Fecha", "Estado", "Por defecto"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[] {
                 java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -1039,11 +1044,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 "Correo", "Fecha", "Estado", "Por defecto"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[] {
                 java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -1589,8 +1594,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
         } else {
-            idCliente = ((Persona) tblClientes.getValueAt(
-                    tblClientes.getSelectedRow(), 0)).getId_persona();
+            idCliente = ((Generales) tblClientes.getValueAt(
+                    tblClientes.getSelectedRow(), 0
+            )).getPersona().getId_persona();
         }
 
         int resp = JOptionPane.showInternalConfirmDialog(
@@ -2343,6 +2349,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_btnCedulaValidadActionPerformed
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        btnBotonesPrivilegios();
+    }//GEN-LAST:event_formInternalFrameOpened
+
+    private static void btnBotonesPrivilegios() {
         //1) Llenar la lista de clientes en el sistema.
         llenarTablaClientes(-1, "");
 
@@ -2370,7 +2380,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 estadoCivil -> jcbEstadoCivil.addItem(estadoCivil)
         );
 
-        //Validando los botones por consultas. 
+        //Validando los botones por consultas.
         //Permiso para el boton de nuevo
         btnNuevoCliente.setEnabled(
                 M_Privilegio.privilegio(
@@ -2414,7 +2424,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                                 .build()
                 )
         );
-    }//GEN-LAST:event_formInternalFrameOpened
+    }
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
         btnAgregarCorreo.doClick();
@@ -2888,7 +2898,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarDirecciones;
     @Getter
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarTelefonoMovil;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCliente;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCorreo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarDirrecion;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarTelefono;
@@ -2896,7 +2906,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
     @Getter
     private RSMaterialComponent.RSButtonMaterialIconOne btnCedulaValidad;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarCliente;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnEditarCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarCorreo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarDireccion;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarTelefono;
@@ -2905,7 +2915,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     private RSMaterialComponent.RSButtonMaterialIconOne btnHistorialClientes;
     private RSMaterialComponent.RSButtonMaterialIconOne btnImprimirInforme1;
     @Getter
-    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
     private javax.swing.JCheckBox cbEstado;
     @Getter
     private com.toedter.calendar.JDateChooser dchFechaNacimiento;
@@ -2926,15 +2936,15 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
     @Getter
     private javax.swing.JComboBox<Distrito_municipal> jcbDistritoMunicipal;
     @Getter
-    private javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
+    private static javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
     @Getter
     private javax.swing.JComboBox<Municipio> jcbMunicipios;
     @Getter
-    private javax.swing.JComboBox<TipoPersona> jcbPersona;
+    private static javax.swing.JComboBox<TipoPersona> jcbPersona;
     @Getter
-    private javax.swing.JComboBox<Provincia> jcbProvincias;
+    private static javax.swing.JComboBox<Provincia> jcbProvincias;
     @Getter
-    private javax.swing.JComboBox<Sexo> jcbSexo;
+    private static javax.swing.JComboBox<Sexo> jcbSexo;
     private javax.swing.JLabel jlFechaCreacion;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;

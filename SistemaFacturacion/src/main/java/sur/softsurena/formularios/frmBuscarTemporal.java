@@ -207,7 +207,12 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
             return;
         }
         setAceptar(true);
-        setFactura(tblDetalle.getValueAt(tblDetalle.getSelectedRow(), 0).toString());
+        setFactura(
+                tblDetalle.getValueAt(
+                        tblDetalle.getSelectedRow(), 
+                        0
+                ).toString()
+        );
         dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
     /**

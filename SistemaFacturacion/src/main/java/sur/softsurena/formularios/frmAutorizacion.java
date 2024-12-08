@@ -8,6 +8,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class frmAutorizacion extends javax.swing.JDialog {
 
     private static boolean aceptar = false;
+    private static final long serialVersionUID = 1L;
     
     public boolean isAceptado() {
         return aceptar;

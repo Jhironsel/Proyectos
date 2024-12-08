@@ -1,15 +1,15 @@
 package sur.softsurena.metodos;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
-import org.apache.commons.codec.binary.Base64;
+import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Medicamento;
+import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -18,60 +18,66 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Medicamento {
-    
+
     /**
-     * TODO CREAR SP.
-     * @param m
-     * @return 
+     * TODO 06/12/2024 este metodo esta pensando en modificar los medicamentos 
+     * registrados en el sistema. 
+     *
+     * @param medicamento 
+     * 
+     * @return
      */
-    public synchronized static String modificarMedicamento(Medicamento m) {
-        final String sql = "UPDATE V_MEDICAMENTOS "
-                + "SET "
-                + "IDPROVEEDOR = ?, "
-                + "DESCRIPCION = ?, "
-                + "FOTO = ?, "
-                + "ESTADO = ? "
-                + "WHERE IDMedicamento = ?";
+    public synchronized static Resultado modificarMedicamento(
+            @NonNull Medicamento medicamento
+    ) {
+        final String sql = "";
 
-        try {
-            FileInputStream imageInFile = null;
-            String imageDataString = null;
-            if (m.getPathImagen() != null) {
-                imageInFile = new FileInputStream(m.getPathImagen());
-                byte imageData[] = new byte[(int) m.getPathImagen().length()];
-                imageInFile.read(imageData);
-                // Converting Image byte array into Base64 String
-                imageDataString = Base64.encodeBase64URLSafeString(imageData);
-            }
-            PreparedStatement ps = null;
-
-            ps = getCnn().prepareStatement(sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT);
-
-            ps.setInt(1, m.getId_proveedor());
-            ps.setString(2, m.getDescripcion());
-            ps.setString(3, Utilidades.imagenEncode64(m.getPathImagen()));
-            ps.setBoolean(4, m.isEstado());
-            ps.setInt(5, m.getId());
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                    sql,
+                    ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY,
+                    ResultSet.CLOSE_CURSORS_AT_COMMIT
+            )){
+            
+            ps.setInt(1, medicamento.getId_proveedor());
+            ps.setString(2, medicamento.getDescripcion());
+            ps.setString(3, Utilidades.imagenEncode64(medicamento.getPathImagen()));
+            ps.setBoolean(4, medicamento.isEstado());
+            ps.setInt(5, medicamento.getId());
 
             ps.executeUpdate();
 
-            return MEDICAMENTO_MODIFICADO_CORRECTAMENTE;
-        } catch (SQLException | IOException ex) {
+            return Resultado
+                    .builder()
+                    .mensaje(MEDICAMENTO_MODIFICADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
-        return ERROR_AL_MODIFICAR__MEDICAMENTO;
+        return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_MODIFICAR__MEDICAMENTO)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
     }
     public static final String ERROR_AL_MODIFICAR__MEDICAMENTO = "Error al modificar Medicamento...";
     public static final String MEDICAMENTO_MODIFICADO_CORRECTAMENTE = "Medicamento modificado correctamente";
+//------------------------------------------------------------------------------
 
+    /**
+     * Metodo que devuelve una lista de medicamento registrado en el sistema.
+     * 
+     * @return 
+     */
     public synchronized static List<Medicamento> getMedicamentoActivo() {
         final String sql = "SELECT ID, DESCRIPCION "
                 + "FROM V_PRODUCTOS "
-                + "WHERE estado ORDER BY 2";
-        
+                + "WHERE estado "
+                + "ORDER BY 2";
+
         List<Medicamento> medicamentoList = null;
 
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
@@ -79,14 +85,14 @@ public class M_Medicamento {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             try (ResultSet rs = ps.executeQuery();) {
-                while(rs.next()){
+                while (rs.next()) {
                     medicamentoList.add(Medicamento.builder().
                             id(rs.getInt("ID")).
                             descripcion(rs.getString("DESCRIPCION")).
                             build());
-                    
+
                 }
-            } 
+            }
             return medicamentoList;
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -94,14 +100,17 @@ public class M_Medicamento {
         }
     }
 
+//------------------------------------------------------------------------------
     /**
      * 
      * @param idMedicamento
-     * @return 
+     * @return
      */
     public synchronized static ResultSet getMedicamentoFoto(String idMedicamento) {
 
-        final String sql = "SELECT FOTO FROM V_MEDICAMENTOS "
+        final String sql 
+                = "SELECT FOTO "
+                + "FROM V_MEDICAMENTOS "
                 + "WHERE idMedicamento = ?";
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -116,10 +125,11 @@ public class M_Medicamento {
         }
     }
 
+//------------------------------------------------------------------------------
     /**
-     * 
+     *
      * @param estado
-     * @return 
+     * @return
      */
     public synchronized static ResultSet getMedicamento(boolean estado) {
         final String sql = "SELECT CODIGO_PROVEEDOR, IDMEDICAMENTO, "

@@ -2,6 +2,7 @@ package sur.softsurena.formularios;
 
 import java.awt.Image;
 import java.io.File;
+import java.util.Objects;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -13,6 +14,11 @@ import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
+/**
+ * Clase que nos permite mostrar las categorias del sistema.
+ * 
+ * @author jhironsel
+ */
 public class frmCategorias extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -20,8 +26,9 @@ public class frmCategorias extends javax.swing.JDialog {
     private Integer idCategoria;
     private boolean nuevo = false, estado;
     private int respuestaFileChooser = JFileChooser.CANCEL_OPTION;
-    private String ruta = "", nombreCategoria = "", source, dest;
-    private frmPrincipal principal;
+    private String nombreCategoria;
+    private File imagenCategoria;
+    private final frmPrincipal principal;
 
     public frmCategorias(frmPrincipal parent, boolean modal) {
         super(parent, modal);
@@ -41,9 +48,9 @@ public class frmCategorias extends javax.swing.JDialog {
         btnBorrar = new newscomponents.RSButtonGradientIcon_new();
         jLabel1 = new javax.swing.JLabel();
         jlfecha = new RSMaterialComponent.RSLabelTextIcon();
-        cbCategoria = new RSMaterialComponent.RSComboBox();
         btnCancelar = new newscomponents.RSButtonGradientIcon_new();
         jlEstado = new RSMaterialComponent.RSLabelTextIcon();
+        cbCategoria = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(339, 218));
@@ -106,16 +113,6 @@ public class frmCategorias extends javax.swing.JDialog {
         jlfecha.setText("Fecha de creacción: -");
         jlfecha.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DATE_RANGE);
 
-        cbCategoria.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                cbCategoriaPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-
         btnCancelar.setBackground(new java.awt.Color(255, 0, 0));
         btnCancelar.setText("Cancelar");
         btnCancelar.setColorPrimario(new java.awt.Color(255, 0, 0));
@@ -133,6 +130,16 @@ public class frmCategorias extends javax.swing.JDialog {
         jlEstado.setText("Inactivo");
         jlEstado.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
 
+        cbCategoria.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                cbCategoriaPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -144,11 +151,12 @@ public class frmCategorias extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlEstado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jlfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jlEstado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlfecha, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jlImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -163,9 +171,9 @@ public class frmCategorias extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
+                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jlfecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jlEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,16 +253,19 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         nuevo = false;
+        
+        Categoria categoria = (Categoria) cbCategoria.getSelectedItem();
 
-        idCategoria = ((Categoria) cbCategoria.getSelectedItem()).getId_categoria();
+        idCategoria = categoria.getId_categoria();
 
-        nombreCategoria = ((Categoria) cbCategoria.getSelectedItem()).getDescripcion();
+        nombreCategoria = categoria.getDescripcion();
 
-        estado = ((Categoria) cbCategoria.getSelectedItem()).getEstado();
+        estado = categoria.getEstado();
 
         frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
                 principal, nombreCategoria, estado, false
         );
+        
         miCategoria.setLocationRelativeTo(null);
         miCategoria.setVisible(true);
 
@@ -289,7 +300,6 @@ public class frmCategorias extends javax.swing.JDialog {
                 }
             }
         }
-        miCategoria.dispose();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -312,33 +322,27 @@ public class frmCategorias extends javax.swing.JDialog {
 
         //Pedimos el nombre de la categoria a crear.
         nombreCategoria = miCategoria.txtCategoria.getText();
+        estado = miCategoria.jcbEstado.isSelected();
 
-        //Si nombre de la categoria esta' nula o vacia nos devolvemos. 
-        if (nombreCategoria.isBlank() || nombreCategoria == null) {
-            dispose();
+        if (Objects.isNull(nombreCategoria) || nombreCategoria.isBlank()) {
             return;
         }
 
-        //La convertimos a Mayuscula.
-        nombreCategoria = nombreCategoria.toUpperCase();
-
         //Consultamos la base de datos para saber si ese nombre de categoria existe.
-        if (M_Categoria.existeCategoria(nombreCategoria)) {
+        if (M_Categoria.existeCategoria(nombreCategoria.toUpperCase())) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Este nombre de Categoria ya existe en el sitema",
+                    "Este nombre de Categoria ya existe en el sistema.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
-        estado = miCategoria.jcbEstado.isSelected();
-
         //Avisamos al usuario que le toca elegir la imagen de la categoria.
         JOptionPane.showMessageDialog(
                 this,
-                "Siguiente paso es para elejir una imagen para la Categoria " + nombreCategoria,
+                "Siguiente paso es para elejir una imagen para la Categoria " + nombreCategoria.toUpperCase(),
                 "",
                 JOptionPane.INFORMATION_MESSAGE
         );
@@ -346,22 +350,34 @@ public class frmCategorias extends javax.swing.JDialog {
         if (buscarImagen()) {
             guardar();
         } else {
-            jlImagen.setIcon(null);
+            jlImagen.setIcon(
+                    new javax.swing.ImageIcon(
+                            getClass().getResource(
+                                    "/sur/softsurena/imagenes/NoImageTransp 96 x 96.png"
+                            )
+                    )
+            );
         }
     }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cbCategoriaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbCategoriaPopupMenuWillBecomeInvisible
         String fechaCreacion;
         try {
-            fechaCreacion = ((Categoria) cbCategoria.getSelectedItem()).getFecha_creacion().toString();
+            fechaCreacion = (
+                    (Categoria) cbCategoria.getSelectedItem()
+                    ).getFecha_creacion().toString();
         } catch (java.lang.NullPointerException e) {
             fechaCreacion = "01.01.2000";
         }
 
         jlImagen.setIcon(
                 Utilidades.imagenDecode64(
-                        ((Categoria) cbCategoria.getSelectedItem()).getImage_texto(), 
-                        96, 
+                        ((Categoria) cbCategoria.getSelectedItem()).getImage_texto(),
+                        96,
                         96
                 )
         );
@@ -381,10 +397,6 @@ public class frmCategorias extends javax.swing.JDialog {
         jlfecha.setText("Fecha de creacción: " + fechaCreacion);
     }//GEN-LAST:event_cbCategoriaPopupMenuWillBecomeInvisible
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
     /**
      *
      */
@@ -394,7 +406,7 @@ public class frmCategorias extends javax.swing.JDialog {
                 .builder()
                 .id_categoria(nuevo ? -1 : idCategoria)
                 .descripcion(nombreCategoria.strip())
-                .pathImage(new File(ruta))
+                .pathImage(imagenCategoria)
                 .estado(estado)
                 .build();
         if (nuevo) {
@@ -414,11 +426,15 @@ public class frmCategorias extends javax.swing.JDialog {
             return;
         }
 
-        dest = ruta;
-
         if (respuestaFileChooser == JFileChooser.APPROVE_OPTION) {
-            Utilidades.copyFileUsingFileChannels(source, dest);
-            ImageIcon imagen = new ImageIcon(ruta);
+            
+            Utilidades.copyFileUsingFileChannels(
+                    imagenCategoria, 
+                    new File("imagenCategoria/".concat(imagenCategoria.getName()))
+            );
+            
+            ImageIcon imagen = new ImageIcon(imagenCategoria.getPath());
+            
             Icon icon = new ImageIcon(
                     imagen.getImage().getScaledInstance(
                             72,
@@ -432,7 +448,6 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         respuestaFileChooser = JFileChooser.CANCEL_OPTION;
-        ruta = "";
 
         actualizarCombo();
     }
@@ -475,8 +490,9 @@ public class frmCategorias extends javax.swing.JDialog {
         JFileChooser jfileChooser = new JFileChooser();
 
         //Preparamos el tipo de extension que se van a filtrar en el JFileChooser.
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagenes",
-                "jpg", "png", "PNG", "JPG");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Imagenes","jpg", "png", "PNG", "JPG"
+        );
 
         //Colocamos el filtro a jFileChooser.
         jfileChooser.setFileFilter(filter);
@@ -489,14 +505,18 @@ public class frmCategorias extends javax.swing.JDialog {
             return false;
         }
 
-        source = jfileChooser.getSelectedFile().getAbsolutePath();
-        dest = "imagesCategorias/";
+        imagenCategoria = jfileChooser.getSelectedFile();
 
-        ImageIcon imagen = new ImageIcon(source);
+        ImageIcon imagen = new ImageIcon(imagenCategoria.getPath());
 
         //Tamaño de icono
-        Icon icon = new ImageIcon(imagen.getImage().getScaledInstance(72, 72,
-                Image.SCALE_DEFAULT));
+        Icon icon = new ImageIcon(
+                imagen.getImage().getScaledInstance(
+                        72,
+                        72,
+                        Image.SCALE_DEFAULT
+                )
+        );
 
         imagen.getImage().flush();
 
@@ -512,7 +532,7 @@ public class frmCategorias extends javax.swing.JDialog {
     private newscomponents.RSButtonGradientIcon_new btnCancelar;
     private newscomponents.RSButtonGradientIcon_new btnModificar;
     private newscomponents.RSButtonGradientIcon_new btnNuevo;
-    private RSMaterialComponent.RSComboBox cbCategoria;
+    private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private RSMaterialComponent.RSLabelTextIcon jlEstado;
@@ -520,8 +540,3 @@ public class frmCategorias extends javax.swing.JDialog {
     private RSMaterialComponent.RSLabelTextIcon jlfecha;
     // End of variables declaration//GEN-END:variables
 }
-
-/**
- * btnNuevoActionPerformed: 1) Colocamos el flag de nuevo a true. 2) Seteamos el
- * jlImagen a null.
- */

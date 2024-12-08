@@ -10,35 +10,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import lombok.Getter;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import static sur.softsurena.metodos.M_Deuda.getDeudas;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
+@Getter
 public class frmCobrosDeudas extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
 
     private int idTurno;
     private String nombreCajero;
-
-    public String getNombreCajero() {
-        return nombreCajero;
-    }
-
-    public void setNombreCajero(String nombreCajero) {
-        this.nombreCajero = nombreCajero;
-    }
-
-    public int getIdTurno() {
-        return idTurno;
-    }
-
-    public void setIdTurno(int idTurno) {
-        this.idTurno = idTurno;
-    }
 
     public frmCobrosDeudas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -370,22 +357,28 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                         .build()
         );
 
-        getDeudas().stream().forEach(cliente -> {
-            cmbCliente.addItem(
-                    Cliente
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .id_persona(cliente.getCliente().getPersona().getId_persona())
-                                            .pnombre(cliente.getCliente().getPersona().getPnombre())
-                                            .snombre(cliente.getCliente().getPersona().getSnombre())
-                                            .apellidos(cliente.getCliente().getPersona().getApellidos())
-                                            .build()
-                            )
-                            .build()
-            );
-        });
+        getDeudas(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        ).stream().forEach(
+                cliente -> {
+                    cmbCliente.addItem(
+                            Cliente
+                                    .builder()
+                                    .persona(
+                                            Persona
+                                                    .builder()
+                                                    .id_persona(cliente.getCliente().getPersona().getId_persona())
+                                                    .pnombre(cliente.getCliente().getPersona().getPnombre())
+                                                    .snombre(cliente.getCliente().getPersona().getSnombre())
+                                                    .apellidos(cliente.getCliente().getPersona().getApellidos())
+                                                    .build()
+                                    )
+                                    .build()
+                    );
+                }
+        );
     }//GEN-LAST:event_formWindowOpened
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
@@ -543,24 +536,24 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("nombreCajero", getNombreCajero());
         parametros.put(
-                "idFactura", 
+                "idFactura",
                 Utilidades.objectToInt(tblDeudas.getValueAt(
                         tblDeudas.getSelectedRow(), 0
                 ))
         );
         parametros.put(
-                "montoFactura", 
+                "montoFactura",
                 Utilidades.objectToDouble(
                         tblDeudas.getValueAt(tblDeudas.getSelectedRow(), 1))
         );
         parametros.put("idTurno", "" + getIdTurno());
         parametros.put(
-                "idCliente", 
+                "idCliente",
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
                 ).getPersona().getId_persona());
         parametros.put(
-                "nombreCliente", 
+                "nombreCliente",
                 cmbCliente.getItemAt(cmbCliente.getSelectedIndex()).toString()
         );
 

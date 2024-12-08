@@ -939,8 +939,8 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
 //            }
 //        }
 //
-//        //Adicionamos Productos a la Tabla
-//        ///////////////////////////////////////////////////////////////////////////////////
+        //Adicionamos Productos a la Tabla
+
 //        Object registro[] = new Object[5];
 //        registro[0] = miProducto.getIdProducto();
 //        registro[1] = miProducto.getDescripcion();

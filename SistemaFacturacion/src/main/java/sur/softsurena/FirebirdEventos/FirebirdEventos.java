@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
+import sur.softsurena.formularios.frmAlmacenes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaClientes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
 import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
@@ -11,6 +12,7 @@ import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
 import sur.softsurena.formularios.frmDeudas;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
 import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {
@@ -93,7 +95,7 @@ public class FirebirdEventos extends FBEventManager {
                 llenarTablaCorreos(null);
             });
             
-            //Evento de Correo de cliente.**************************************
+            //Evento de Deudas de clientes.*************************************
             addEventListener("EVENT_DEUDA", (DatabaseEvent event) -> {
                 LOG.log(
                         Level.INFO,
@@ -101,6 +103,22 @@ public class FirebirdEventos extends FBEventManager {
                         new Object[]{event.getEventName(), event.getEventCount()}
                 );
                 frmDeudas.llenarTabla();
+            });
+            
+            //Evento de Almacenes del sistema.**********************************
+            addEventListener("EVENT_ALMACEN", (DatabaseEvent event) -> {
+                LOG.log(
+                        Level.INFO,
+                        "Event [{0}] occured {1} time(s)",
+                        new Object[]{event.getEventName(), event.getEventCount()}
+                );
+                frmAlmacenes.llenarTabla(
+                        FiltroBusqueda
+                                .builder()
+                                .id(-1)
+                                .criterioBusqueda("")
+                                .build()
+                );
             });
         } catch (SQLException ex) {
             LOG.log(

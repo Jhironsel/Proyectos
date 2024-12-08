@@ -47,44 +47,43 @@ public class M_Proveedor {
             );
             */
             //ps.setInt(1, proveedor.getCodigoProveedor());
-            ps.setString(2, proveedor.getPnombre());
-            ps.setString(3, proveedor.getSnombre());
-            ps.setBoolean(4, proveedor.getEstado());
+            ps.setString(2, proveedor.getPersona().getPnombre());
+            ps.setString(3, proveedor.getPersona().getSnombre());
+            ps.setBoolean(4, proveedor.getPersona().getEstado());
 
             ps.executeUpdate();
             return Resultado
                     .builder()
-                    .mensaje(__PROVEEDOR_AGREGADO_CORRECTAMENTE)
+                    .mensaje(PROVEEDOR_AGREGADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
         } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    __ERROR_AL_INSERTAR__PROVEEDOR, 
+            LOG.log(Level.SEVERE, 
+                    ERROR_AL_INSERTAR__PROVEEDOR, 
                     ex
             );
             return Resultado
                     .builder()
-                    .mensaje(__ERROR_AL_INSERTAR__PROVEEDOR)
+                    .mensaje(ERROR_AL_INSERTAR__PROVEEDOR)
                     .icono(JOptionPane.ERROR_MESSAGE)
                     .estado(Boolean.FALSE)
                     .build();
         }
     }
-    public static final String __ERROR_AL_INSERTAR__PROVEEDOR 
+    private static final String ERROR_AL_INSERTAR__PROVEEDOR 
             = "⛔ Error al insertar Proveedor...";
-    public static final String __PROVEEDOR_AGREGADO_CORRECTAMENTE 
+    private static final String PROVEEDOR_AGREGADO_CORRECTAMENTE 
             = "🆗 Proveedor agregado correctamente.";
 
     /**
      * Metodo que permite la actualizacion de los proveedores del sistema de
      * factura.
      *
-     * @param p
+     * @param proveedor
      * @return
      */
-    public synchronized static Resultado modificarProveedor(Proveedor p) {
+    public synchronized static Resultado modificarProveedor(Proveedor proveedor) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_PROVEEDOR(?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -93,15 +92,15 @@ public class M_Proveedor {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, p.getId_persona());
-            ps.setString(2, p.getCodigoProveedor());
-            ps.setString(3, p.getPersona() + "");
-            ps.setString(4, p.getPnombre());
-            ps.setString(5, p.getSnombre());
-            ps.setString(6, p.getApellidos());
-            ps.setString(7, p.getSexo() + "");
-            ps.setDate(8, p.getFecha_nacimiento());
-            ps.setBoolean(9, p.getEstado());
+            ps.setInt(1, proveedor.getPersona().getId_persona());
+            ps.setString(2, proveedor.getCodigoProveedor());
+            ps.setString(3, proveedor.getPersona() + "");
+            ps.setString(4, proveedor.getPersona().getPnombre());
+            ps.setString(5, proveedor.getPersona().getSnombre());
+            ps.setString(6, proveedor.getPersona().getApellidos());
+            ps.setString(7, proveedor.getPersona().getSexo() + "");
+            ps.setDate(8, proveedor.getPersona().getFecha_nacimiento());
+            ps.setBoolean(9, proveedor.getPersona().getEstado());
 
             ps.executeUpdate();
             return Resultado
@@ -124,9 +123,9 @@ public class M_Proveedor {
                     .build();
         }
     }
-    public static final String ERROR_AL_MODIFICAR_CONSULTA 
+    private static final String ERROR_AL_MODIFICAR_CONSULTA 
             = "Error al modificar proveedor...";
-    public static final String CONSULTA_MODIFICADO_CORRECTAMENTE 
+    private static final String CONSULTA_MODIFICADO_CORRECTAMENTE 
             = "Proveedor modificado correctamente";
 
     /**

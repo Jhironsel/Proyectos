@@ -59,8 +59,9 @@ import org.apache.commons.codec.binary.Base64;
 import sur.softsurena.metodos.Imagenes;
 
 public class Utilidades {
-    
+
     public static final Logger LOG = Logger.getLogger(Utilidades.class.getName());
+
     static {
         final File file = new File("Logs/Log " + new Date().toString().replace(":", ".") + ".log");
         try {
@@ -76,7 +77,6 @@ public class Utilidades {
             fh.setFormatter(new SimpleFormatter());
 
             LOG.addHandler(fh);
-            
 
         } catch (IOException ex) {
             ex.printStackTrace(System.out);
@@ -142,12 +142,9 @@ public class Utilidades {
         txt.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        txt.setSelectionStart(inicio);
-                        txt.setSelectionEnd(txt.getText().length());
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    txt.setSelectionStart(inicio);
+                    txt.setSelectionEnd(txt.getText().length());
                 });
             }
         });
@@ -155,7 +152,7 @@ public class Utilidades {
 
     //--------------------------------------------------------------------------
     /**
-     * TODO llevar esto a un metodo para jasper
+     * Actualmente este metodo no esta siendo utilizando en ninguna parte.
      *
      * @param filePath
      * @param print
@@ -171,17 +168,10 @@ public class Utilidades {
             BufferedImage rendered_image = (BufferedImage) printManager.printToImage(print, 0, 1.6f);
             ImageIO.write(rendered_image, "png", ouputStream);
 
-        } catch (IOException x) {
+        } catch (IOException | JRException x) {
             JOptionPane.showMessageDialog(
                     null,
                     x.getLocalizedMessage(),
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        } catch (JRException e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    e.getLocalizedMessage(),
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -210,8 +200,10 @@ public class Utilidades {
      * @param source
      * @param name
      */
-    public static void copyFileUsingFileChannels(String source, String name) {
-        try (InputStream in = new FileInputStream(source); OutputStream out = new FileOutputStream("imagenes/" + name);) {
+    public static void copyFileUsingFileChannels(File source, File name) {
+
+        try (
+                InputStream in = new FileInputStream(source); OutputStream out = new FileOutputStream(name);) {
             byte[] buf = new byte[1024];
             int len;
 
@@ -396,7 +388,7 @@ public class Utilidades {
      * @return Devuelve la imagen de tipo ImageIcon.
      */
     public synchronized static ImageIcon imagenDecode64(String imagen64, int ancho, int alto) {
-        
+
         byte[] data = Base64.decodeBase64(imagen64);
 
         if (!Base64.isBase64(imagen64) || Objects.isNull(data) || data.length <= 1) {
@@ -504,8 +496,6 @@ public class Utilidades {
     }
 
     //--------------------------------------------------------------------------
-    
-
     //--------------------------------------------------------------------------
     /**
      * Utilizado....
@@ -519,7 +509,7 @@ public class Utilidades {
     public static java.sql.Date javaDateToSqlDate(java.util.Date date) {
         return new java.sql.Date(date.getTime());
     }
-    
+
     /**
      * Para campos de tipo fecha sql.
      *
@@ -707,7 +697,7 @@ public class Utilidades {
     //--------------------------------------------------------------------------
     /**
      * Metodo utilizado para centralizar las ventanas del tipo JInternalFrame
-     * 
+     *
      * @param ventana
      */
     public static void centralizar(javax.swing.JInternalFrame ventana) {
@@ -749,7 +739,7 @@ public class Utilidades {
     /**
      * Dado un monto, este metodo devuelve un Array con la lista de cambios del
      * arreglo de coins.
-     * 
+     *
      * TODO Implementar este metodo en el sistema de facturacion.
      *
      * @param amount Monto a menuduzar.

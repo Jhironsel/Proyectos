@@ -104,7 +104,7 @@
     <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>jcbProvincia</componentName>
+        <componentName>jcbProvincias</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -193,7 +193,7 @@
     <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>jcbProvincia</componentName>
+        <componentName>jcbProvincias</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>

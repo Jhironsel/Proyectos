@@ -390,9 +390,13 @@ public class frmPagos extends javax.swing.JInternalFrame {
             lSugerencia.setText("No puede ingresar letras!!!");
         }
     }//GEN-LAST:event_txtMatriculaKeyTyped
+    
     int id_Tanda;
+    
     String periodo;
+    
     private DefaultTableModel miTabla;
+    
     private void btnBuscarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEstudianteActionPerformed
 //            ResultSet rs = misFb.getEstudiante(txtMatricula.getText());
         ResultSet rs = null;
@@ -474,11 +478,14 @@ public class frmPagos extends javax.swing.JInternalFrame {
             lSugerencia.setText("No puede ingresar letras!!!");
         }
     }//GEN-LAST:event_txtPagoKeyTyped
+    
     private void cerrar() {
         frmPrincipal miPrincipal = new frmPrincipal();
         miPrincipal.dpnEscritorio.getDesktopManager().closeFrame(this);
     }
+    
     private final String logotipo = "/Reportes/Logo.jpg";
+    
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
         if (txtPago.getText().equals("")) {
             lSugerencia.setText("Inserte una Cantidad");

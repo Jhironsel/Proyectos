@@ -16,14 +16,17 @@ import xy.ui.testing.util.TestingUtils;
  *
  * @author jhironsel
  */
-@Test(enabled = false)
+@Test(enabled = true)
 public class frmProductosNGTest {
 
     public frmProductosNGTest() {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.<init>()");
     }
+//------------------------------------------------------------------------------
 
     @BeforeClass
     public void setUpClass() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.setUpClass()");
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -36,42 +39,53 @@ public class frmProductosNGTest {
                 "Error al conectarse..."
         );
     }
+//------------------------------------------------------------------------------
 
     @AfterClass
     public void tearDownClass() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.tearDownClass()");
         Conexion.getCnn().close();
     }
+//------------------------------------------------------------------------------
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.setUpMethod()");
     }
+//------------------------------------------------------------------------------
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.tearDownMethod()");
     }
+//------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
                           Test que se verificar el formulario de productos del
                           sistema.
+                          Debe ser el primer metodo en ejecutarse.
                           """
     )
     public void testGetInstance() {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testGetInstance()");
         assertNotNull(
                 frmProductos.getInstance(new frmPrincipal()),
                 "Error al instanciar frmProductos."
         );
     }
+//------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 1,
             description = """
                           """
     )
     public void testLlenarTablaProductos() {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testLlenarTablaProductos()");
         String criterioBusqueda = "";
         JTable tabla = frmProductos.llenarTablaProductos(criterioBusqueda);
 
@@ -81,56 +95,55 @@ public class frmProductosNGTest {
         );
 
         assertTrue(
-                tabla.getRowCount() == 0,
+                tabla.getRowCount() > 0,
                 """
                 La tabla de producto contiene informacion.
                 """
         );
     }
+//------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
-            priority = 1,
-            description = """
-                          """
-    )
-    public void testInsertProducto() throws Exception {
-
-        TestingUtils.assertSuccessfulReplay(
-                new Tester(),
-                new File("testSwing/testInsertProducto.stt")
-        );
-
-    }
-
-    @Test(
-            enabled = false,
+            enabled = true,
             priority = 2,
             description = """
                           """
     )
-    public void testUpdateProducto() throws Exception {
-
+    public void testInsertProducto() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testInsertProducto()");
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
-                new File("testSwing/testUpdateProducto.stt")
+                new File("testSwing/testInsertProducto.stt")
         );
-
     }
+//------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 3,
             description = """
                           """
     )
-    public void testDeleteProducto() throws Exception {
+    public void testUpdateProducto() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testUpdateProducto()");
+        TestingUtils.assertSuccessfulReplay(
+                new Tester(),
+                new File("testSwing/testUpdateProducto.stt")
+        );
+    }
+//------------------------------------------------------------------------------
 
+    @Test(
+            enabled = true,
+            priority = 4,
+            description = """
+                          """
+    )
+    public void testDeleteProducto() throws Exception {
+        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testDeleteProducto()");
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testDeleteProducto.stt")
         );
-
     }
-
 }

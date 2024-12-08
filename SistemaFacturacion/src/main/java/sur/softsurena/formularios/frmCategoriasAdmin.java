@@ -3,9 +3,10 @@ package sur.softsurena.formularios;
 import javax.swing.JFrame;
 
 public class frmCategoriasAdmin extends javax.swing.JDialog {
-    private Boolean aceptar;
     private static final long serialVersionUID = 1L;
 
+    private Boolean aceptar;
+    
     public Boolean getAceptar() {
         return aceptar;
     }
@@ -19,7 +20,9 @@ public class frmCategoriasAdmin extends javax.swing.JDialog {
         initComponents();
         txtCategoria.setText(categoria);
         jcbEstado.setSelected(estado);
+        
         jcbEstadoActionPerformed(null);
+        
         setLocationRelativeTo(null);
     }
 
@@ -131,13 +134,13 @@ public class frmCategoriasAdmin extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCategoriaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        dispose();
         setAceptar(false);
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        dispose();
         setAceptar(true);
+        dispose();
     }//GEN-LAST:event_btnGrabarActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

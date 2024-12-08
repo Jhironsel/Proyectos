@@ -61,7 +61,8 @@ public class M_Categoria {
             ps.setString(1, categoria.getDescripcion());
             ps.setString(2, Utilidades.imagenEncode64(
                     categoria.getPathImage()
-            ));
+            )
+            );
             ps.setBoolean(3, categoria.getEstado());
 
             ResultSet rs = ps.executeQuery();
@@ -197,11 +198,9 @@ public class M_Categoria {
      * Esta consulta nos trae todas las categorias registrada en el sistema.
      * Incluyendo los campos de la imagen y estado.
      *
-     * Metodo creado 11 Julio 2022.
-     *
-     *
      * @param estado Bandera que permite obtener un los estados de las
      * categorias del sistema.
+     *
      * @param foto Bandera que permite indicar al metodo si incluye foto de las
      * categorias.
      *
@@ -210,12 +209,16 @@ public class M_Categoria {
      */
     public synchronized static List<Categoria> getCategorias(Boolean estado, boolean foto) {
         List<Categoria> categorias = new ArrayList<>();
-        final String sql
-                = "SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO " + (foto ? ", IMAGEN_TEXTO " : "")
-                + "FROM VS_CATEGORIAS "
-                + "WHERE ID >= 0 " + (Objects.isNull(estado) ? " " : estado ? " AND ESTADO " : " AND ESTADO IS FALSE ")
-                + "ORDER BY 1;";
-                
+        final String sql = """
+                           SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO%s
+                           FROM VS_CATEGORIAS
+                           WHERE ID >= 0 %s
+                           ORDER BY 1;
+                           """.formatted(
+                (foto ? ", IMAGEN_TEXTO" : ""),
+                (Objects.isNull(estado) ? "" : estado ? "AND ESTADO " : "AND ESTADO IS FALSE ")
+        );
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -288,11 +291,7 @@ public class M_Categoria {
     }
 
     /**
-     * Metodo que permite investigar si existe una descripcion de una categoria
-     * ya existente.
-     *
-     * Metodo actualizado, 06 julio 2022.: Se le aplicó una restructuración
-     * completa al metodo llevando el sql a la clase categoria.
+     * Metodo que permite investigar si existe una descripcion de una categoria.
      *
      * @param descripcion Es la descripcion que se pretende dar a la categoria
      * la cual este metodo verifica de comprobar si existe o no. devolviendo
@@ -303,7 +302,7 @@ public class M_Categoria {
      */
     public synchronized static Boolean existeCategoria(String descripcion) {
         final String sql
-                = "SELECT (1) FROM VS_CATEGORIAS WHERE DESCRIPCION STARTING WITH ?";
+                = "SELECT (1) FROM VS_CATEGORIAS WHERE DESCRIPCION LIKE ?";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

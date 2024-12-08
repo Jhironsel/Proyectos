@@ -7,14 +7,20 @@ import javax.swing.SwingUtilities;
 
 public class frmCalculoEfectivo extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private int resp;
 
     public int getResp() {
         return resp;
     }
 
-    public frmCalculoEfectivo(java.awt.Frame parent, boolean modal, double total,
-            boolean credito) {
+    public frmCalculoEfectivo(
+            java.awt.Frame parent, 
+            boolean modal, 
+            double total,
+            boolean credito
+    ) {
         super(parent, modal);
         initComponents();
 
@@ -44,7 +50,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
             }
         });
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -140,7 +146,6 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
         txtDevuelta.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
         txtDevuelta.setFocusTraversalPolicyProvider(true);
         txtDevuelta.setFont(new java.awt.Font("Ubuntu", 0, 48)); // NOI18N
-        txtDevuelta.setNextFocusableComponent(btnAceptar);
         txtDevuelta.setValue(0.0);
         txtDevuelta.setVerifyInputWhenFocusTarget(false);
         txtDevuelta.addActionListener(new java.awt.event.ActionListener() {
@@ -195,13 +200,16 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
     private void btnAceptarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseEntered
         btnAceptar.setForeground(Color.BLUE);
         calculoEfectivo();
     }//GEN-LAST:event_btnAceptarMouseEntered
+
     private void btnAceptarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAceptarMouseExited
         btnAceptar.setForeground(Color.BLACK);
     }//GEN-LAST:event_btnAceptarMouseExited
+
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         BigDecimal efe = new BigDecimal(txtEfectivo.getValue().toString());
 
@@ -245,6 +253,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         txtEfectivo.requestFocus();
     }//GEN-LAST:event_formWindowActivated
+
     private void calculoEfectivo() {
         BigDecimal total, efe, dev;
         total = new BigDecimal(txtTotal.getValue().toString());
@@ -272,6 +281,7 @@ public class frmCalculoEfectivo extends javax.swing.JDialog {
         }
         btnAceptar.requestFocus();
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;

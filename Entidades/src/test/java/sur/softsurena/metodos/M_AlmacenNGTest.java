@@ -15,6 +15,7 @@ import static sur.softsurena.metodos.M_Almacen.ALMACEN_ACTUALIZADO_CORRECTAMENTE
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_ELIMINADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ERROR_AL_ELIMINAR_ALMACEN;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -59,13 +60,13 @@ public class M_AlmacenNGTest {
             priority = 0
     )
     public void testGetAlmacenesList() {
-        List result = M_Almacen.getAlmacenesList(0, "^+-*/");
-        assertFalse(
-                result.isEmpty(),
-                "La tabla de almacen NO esta vacia."
+        List result = M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(-1)
+                        .criterioBusqueda("^+-*/")
+                        .build()
         );
-
-        result = M_Almacen.getAlmacenesList(-1, "*");
         assertTrue(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
@@ -120,25 +121,49 @@ public class M_AlmacenNGTest {
             priority = 2
     )
     public void testGetAlmacenes2List() {
-        List result = M_Almacen.getAlmacenesList(idAlmacen, "^+-*/");
+        List result = M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(idAlmacen)
+                        .criterioBusqueda("^+-*/")
+                        .build()
+        );
         assertFalse(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(idAlmacen2, "Seleccione");
+        result = M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(idAlmacen2)
+                        .criterioBusqueda("Seleccione")
+                        .build()
+        );
         assertFalse(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(-1, "Registro");
+        result = M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(-1)
+                        .criterioBusqueda("Registro")
+                        .build()
+        );
         assertFalse(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(-1, "Texto");
+        result = M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(-1)
+                        .criterioBusqueda("Texto")
+                        .build()
+        );
         assertFalse(
                 result.isEmpty(),
                 "La tabla de almacen NO esta vacia."

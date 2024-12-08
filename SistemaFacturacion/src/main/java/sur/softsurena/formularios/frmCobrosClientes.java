@@ -13,7 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -67,7 +69,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cmbCliente = new javax.swing.JComboBox();
+        cmbCliente = new javax.swing.JComboBox<>();
         btnPagar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnBuscarCliente = new javax.swing.JButton();
@@ -395,14 +397,12 @@ public class frmCobrosClientes extends javax.swing.JDialog {
                         .build()
         );
 
-        //TODO Crear una lista de cliente especialmente.
-//        getClientes(
-//                FiltroBusqueda
-//                        .builder()
-//                        .estado(true)
-//                        .build()
-//        )
-        M_Persona.getListEntidad().stream().forEach(
+        M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .estado(true)
+                        .build()
+        ).stream().forEach(
                 cliente -> cmbCliente.addItem(cliente)
         );
     }//GEN-LAST:event_formWindowOpened
@@ -664,10 +664,11 @@ public class frmCobrosClientes extends javax.swing.JDialog {
             String titulos[] = {"No° Pago", "Fecha", "Hora", "Monto Pagado"};
 
             DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
+            
             String sql = "SELECT r.IDPAGODEUDA, r.FECHA, r.HORA, r.MONTOPAGO "
                     + "FROM TABLA_PAGODEUDA r "
                     + "where r.IDFACTURA = " + idFactura + "";
-//            ResultSet rs = getConsulta(sql);
+            
             ResultSet rs = null;
             Object registro[] = new Object[4];
             int i = 1;
@@ -688,7 +689,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnPagar;
-    private javax.swing.JComboBox cmbCliente;
+    private javax.swing.JComboBox<Cliente> cmbCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

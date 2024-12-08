@@ -9,13 +9,25 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Almacen;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Almacen {
 
-    public synchronized static List<Almacen> getAlmacenesList(int id,
-            String criterioBusqueda) {
+    /**
+     * Metodo que consulta al sistema sobre los almacenes registrados en el 
+     * sistema.
+     * 
+     * @param filtro Es un objeto que almacenes los balores de busquedas en el 
+     * sistema. en este caso los id de los registros del sistema o los criterios
+     * de busquedas en el sistema. 
+     * 
+     * @return Una lista de los resultados del sistema.
+     */
+    public synchronized static List<Almacen> getAlmacenesList(
+            FiltroBusqueda filtro
+    ) {
         final String sql
                 = """
                     SELECT 
@@ -24,7 +36,10 @@ public class M_Almacen {
                         UBICACION, 
                         ESTADO 
                     FROM V_ALMACENES 
-                    WHERE ID = ? OR UPPER(NOMBRE) STARTING WITH UPPER(?);
+                    WHERE 
+                        ID = ? OR 
+                        UPPER(NOMBRE) STARTING WITH UPPER(?) OR
+                        UPPER(NOMBRE) CONTAINING UPPER(?);
                 """;
 
         List<Almacen> almacenList = new ArrayList<>();
@@ -35,8 +50,9 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, id);
-            ps.setString(2, criterioBusqueda);
+            ps.setInt(1, filtro.getId());
+            ps.setString(2, filtro.getCriterioBusqueda());
+            ps.setString(3, filtro.getCriterioBusqueda());
 
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
@@ -65,7 +81,7 @@ public class M_Almacen {
      * Metodo utilizado para agregar almacenes fisico o virtuales de las
      * mercancias.
      *
-     * @param almacen
+     * @param almacen 
      * @return
      */
     public synchronized static Resultado agregarAlmacen(Almacen almacen) {
@@ -117,7 +133,7 @@ public class M_Almacen {
      * o relacionado.
      *
      *
-     * @param id
+     * @param id identificador del registros del sistema.
      * @return
      */
     public synchronized static Resultado eliminarAlmacen(int id) {
@@ -161,8 +177,11 @@ public class M_Almacen {
 
     //--------------------------------------------------------------------------
     /**
-     *
-     * @param almacen
+     * Metodo utilizado para actualizar los registros del sistema de los 
+     * almacenes registrados. 
+     * 
+     * @param almacen 
+     * 
      * @return
      */
     public synchronized static Resultado actualizarAlmacen(Almacen almacen) {

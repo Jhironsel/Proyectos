@@ -2,10 +2,9 @@ package sur.softsurena.formularios;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
-import sur.softsurena.entidades.Factura;
-import static sur.softsurena.metodos.M_M_Factura.getFacturas;
+import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmReporteFacturas extends javax.swing.JInternalFrame {
@@ -42,9 +41,6 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         dchFechaInicial = new com.toedter.calendar.JDateChooser();
         dchFechaFinal = new com.toedter.calendar.JDateChooser();
-        jPanel2 = new javax.swing.JPanel();
-        cmbFacturaInicial = new javax.swing.JComboBox();
-        cmbFacturaFinal = new javax.swing.JComboBox();
         cmbCliente = new javax.swing.JComboBox<>();
         jCheckBox1 = new javax.swing.JCheckBox();
 
@@ -111,35 +107,6 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Por Fecha", jPanel1);
 
-        cmbFacturaInicial.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)), "Factura inicial"));
-
-        cmbFacturaFinal.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)), "Factura final"));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbFacturaInicial, 0, 361, Short.MAX_VALUE)
-                    .addComponent(cmbFacturaFinal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cmbFacturaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cmbFacturaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbFacturaFinal, cmbFacturaInicial});
-
-        jTabbedPane1.addTab("Por rango", jPanel2);
-
         cmbCliente.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255)), "Listado de clientes"));
 
         jCheckBox1.setText("Parametrizada");
@@ -184,56 +151,16 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        /*
-            El campo o ComboBox de cliente debe de estar habilitado cuando es
-        seleccionado y quiera buscarse los numero o identificador de factura. 
-        
-         */
         //Cargamos Clientes
-        Cliente cli = Cliente
-                .builder()
-                .persona(
-                        Persona
-                                .builder()
-                                .id_persona(-1)
-                                .pnombre("Seleccione un cliente")
-                                .snombre("")
-                                .apellidos("")
-                                .build()
-                )
-                .build();
-
-        cmbCliente.addItem(cli);
-
-        //TODO Traer solo clientes.
-//        getClientes(
-//                FiltroBusqueda
-//                        .builder()
-//                        .estado(true)
-//                        .build()
-//        ).stream().forEach(cliente -> {
-//            cmbCliente.addItem(cliente);
-//        });
-
-
-        //Cargamos Facturas
-        Factura factura
-                = Factura
+        cmbCliente.removeAllItems();
+        M_Cliente.getPersonasClientes(
+                FiltroBusqueda
                         .builder()
-                        .id(-1)
-                        .build();
-
-        cmbFacturaInicial.addItem(cli);
-
-        cmbFacturaFinal.addItem(cli);
-
-        getFacturas().stream().forEach(
-                x -> {
-                    cmbFacturaInicial.addItem(factura);
-                    cmbFacturaFinal.addItem(factura);
-                }
-        );
-
+                        .estado(true)
+                        .build()
+        ).stream().forEach(cliente -> {
+            cmbCliente.addItem(cliente);
+        });
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnSeleccionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionArchivoActionPerformed
@@ -256,15 +183,17 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
             );
             return;
         }
-        //TODO Investigar que hace esta variable.
-        String archivo = txtArchivo.getText();
-        String sql = "SELECT factura.idFactura, factura.idCliente, "
-                + " (nombres||' '||apellidos) AS nombreFull, "
-                + "fecha, idLinea, idProducto, (select descripcion from productos where idProducto like detalleFactura.idProducto) as descripcion, precio, "
-                + "cantidad, precio * cantidad AS Valor "
-                + "FROM factura "
-                + "INNER JOIN cliente ON factura.idCliente = cliente.idCliente "
-                + "INNER JOIN detalleFactura ON factura.idFactura = detalleFactura.idFactura ";
+        //TODO 02/12/2024 Trabajo aqui.
+        String sql = """
+                     SELECT factura.idFactura, factura.idCliente, (nombres||' '||apellidos) AS nombreFull,
+                        fecha, idLinea, idProducto, (select descripcion 
+                                                    from productos 
+                                                    where idProducto like detalleFactura.idProducto) as descripcion, 
+                        precio, cantidad, precio * cantidad AS Valor 
+                     FROM factura 
+                     INNER JOIN cliente ON factura.idCliente = cliente.idCliente 
+                     INNER JOIN detalleFactura ON factura.idFactura = detalleFactura.idFactura;
+                     """;
 
         if (cmbCliente.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
@@ -280,44 +209,6 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
         String filtro = "WHERE factura.idCliente = '"
                 + ((Cliente) cmbCliente.getSelectedItem()).getPersona().getId_persona() + "'";
 
-        //Para Realizar la Consulta por Numero de Factura...
-        //Si las factura es seleccionada.
-        if (cmbFacturaInicial.getSelectedIndex() == 0) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Selecionar una Factura Inicial...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            cmbFacturaInicial.requestFocus();
-            return;
-        }
-        if (cmbFacturaFinal.getSelectedIndex() == 0) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Selecionar una Factura Final...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            cmbFacturaFinal.requestFocus();
-            return;
-        }
-
-        if (cmbFacturaInicial.getSelectedIndex() > cmbFacturaFinal.getSelectedIndex()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Factura Inicial Maryor que la Final",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            cmbFacturaInicial.requestFocus();
-            return;
-        }
-
-        filtro = "WHERE factura.idFactura >= "
-                + ((Factura) cmbFacturaInicial.getSelectedItem()).getId()
-                + " and factura.idFactura <= "
-                + ((Factura) cmbFacturaFinal.getSelectedItem()).getId();
 
         //Para Realizar la Consulta por Fecha...
         //Si la fecha es seleccionada.
@@ -360,27 +251,14 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
         dispose();
 
     }//GEN-LAST:event_btnGenerarActionPerformed
-    private void habilitarCampos() {
-        dchFechaInicial.setEnabled(false);
-        dchFechaFinal.setEnabled(false);
-
-        cmbCliente.setEnabled(false);
-
-        cmbFacturaInicial.setEnabled(false);
-        cmbFacturaFinal.setEnabled(false);
-
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnGenerar;
     private javax.swing.JButton btnSeleccionArchivo;
     private javax.swing.JComboBox<Cliente> cmbCliente;
-    private javax.swing.JComboBox cmbFacturaFinal;
-    private javax.swing.JComboBox cmbFacturaInicial;
     private com.toedter.calendar.JDateChooser dchFechaFinal;
     private com.toedter.calendar.JDateChooser dchFechaInicial;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField txtArchivo;
     // End of variables declaration//GEN-END:variables

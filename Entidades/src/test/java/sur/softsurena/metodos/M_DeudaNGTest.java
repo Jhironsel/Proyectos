@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Deuda;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -33,7 +34,7 @@ public class M_DeudaNGTest {
                 "3050"
         );
         assertTrue(
-                Conexion.verificar().getEstado(), 
+                Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
     }
@@ -50,46 +51,46 @@ public class M_DeudaNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
+    
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 0,
-            description = ""
+            description = """
+                          Por el momento la tabla de deudas contiene registros.
+                          """
     )
     public void testGetDeudas() {
-        assertTrue(
-                M_Deuda.getDeudas().isEmpty(), 
-                "La tabla de deuda no esta vacia."
+        assertFalse(
+                M_Deuda.getDeudas(
+                        FiltroBusqueda
+                                .builder()
+                                .build()
+                ).isEmpty(),
+                "La tabla de deuda esta vacia."
         );
     }
-
+    
+//------------------------------------------------------------------------------
     @Test(
             enabled = false,
             priority = 0,
             description = ""
     )
     public void testModificarDeuda() {
-        int idDeuda = 0;
-        String op = "";
+        
         Resultado expResult = null;
-        Resultado result = M_Deuda.modificarDeuda(idDeuda, op);
+        Resultado result = M_Deuda.modificarDeuda(
+                Deuda
+                        .builder()
+                        .id_deuda(0)
+                        .concepto("")
+                        .monto(BigDecimal.ONE)
+                        .build()
+        );
         assertEquals(result, expResult);
     }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testPagoDeuda() {
-        int idDeuda = 0;
-        int idTurno = 0;
-        BigDecimal monto = null;
-        Boolean expResult = null;
-        Boolean result = M_Deuda.pagoDeuda(idDeuda, idTurno, monto);
-        assertEquals(result, expResult);
-    }
-
+//------------------------------------------------------------------------------
     //TODO 28/11/2024 terminar esta prueba en el sistema.
     @Test(
             enabled = false,
@@ -103,89 +104,54 @@ public class M_DeudaNGTest {
         Resultado result = M_Deuda.insertDeudas(miDeuda);
         assertEquals(result, expResult);
     }
-    
+//------------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
-            description = ""
+            description = """
+                          """
     )
-    public void testGetDeudaClientesEstado() {
-        String estado = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Deuda.getDeudaClientesEstado(estado);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetDeudaCliente() {
-        String idCliente = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Deuda.getDeudaCliente(idCliente);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetDeudaClienteExterna() {
-        String idDeuda = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Deuda.getDeudaClienteExterna(idDeuda);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetPagoDeudasExterna() {
-        int idDeuda = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Deuda.getPagoDeudasExterna(idDeuda);
-        assertEquals(result, expResult);
-    }
-    
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetPagoDeudas() {
-        int idFactura = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Deuda.getPagoDeudas(idFactura);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetDeudaActual() {
-        String idCliente = "";
-        BigDecimal expResult = null;
-        BigDecimal result = M_Deuda.getDeudaActual(idCliente);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testSumaMontoPagoDeudaExterna() {
-        int idDeuda = 0;
-        BigDecimal expResult = null;
-        BigDecimal result = M_Deuda.sumaMontoPagoDeudaExterna(idDeuda);
-        assertEquals(result, expResult);
+    public void testSqlGetDeudas() {
+        String expResult = """
+                           SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
+                           ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
+                           FROM GET_DEUDAS
+                           """;
+        String result = M_Deuda.sqlGetDeudas(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
+        assertEquals(result, expResult.trim().strip());
+        //----------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
+                    ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
+                    FROM GET_DEUDAS
+                    WHERE ID = 0
+                    """;
+        result = M_Deuda.sqlGetDeudas(
+                FiltroBusqueda
+                        .builder()
+                        .id(0)
+                        .build()
+        );
+        assertEquals(result, expResult.trim().strip());
+        //----------------------------------------------------------------------        
+        expResult = """
+                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
+                    ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
+                    FROM GET_DEUDAS
+                    WHERE CEDULA LIKE '012'
+                    """;
+        result = M_Deuda.sqlGetDeudas(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda("012")
+                        .build()
+        );
+        assertEquals(result, expResult.trim().strip());
+        //----------------------------------------------------------------------
     }
 
 }

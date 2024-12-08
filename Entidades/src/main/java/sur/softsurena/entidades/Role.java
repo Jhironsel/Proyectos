@@ -14,6 +14,12 @@ public class Role {
     private final int opcionPermiso;
     private final boolean conAdmin;
 
+    /**
+     * Este metodo trata de retornar la representacion de role lo mas simple 
+     * posible. 
+     * 
+     * @return
+     */
     @Override
     public String toString() {
         if(Objects.isNull(roleName)){

@@ -7,6 +7,8 @@ import sur.softsurena.utilidades.Utilidades;
 
 public class frmBusquedaProducto extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private DefaultTableModel miTabla;
     private String respuesta = "";
 

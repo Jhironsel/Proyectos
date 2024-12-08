@@ -55,9 +55,14 @@ public class hiloImpresionFactura extends Thread {
      * @param jPanelImpresion
      * @param jprImpresion
      */
-    public hiloImpresionFactura(Boolean preVista, Boolean credito,
-            String fileReporte, Map parametros, JPanel jPanelImpresion,
-            JProgressBar jprImpresion) {
+    public hiloImpresionFactura(
+            Boolean preVista, 
+            Boolean credito,
+            String fileReporte, 
+            Map parametros, 
+            JPanel jPanelImpresion,
+            JProgressBar jprImpresion
+    ) {
         this.preVista = preVista;
         this.credito = credito;
         this.fileReporte = fileReporte;

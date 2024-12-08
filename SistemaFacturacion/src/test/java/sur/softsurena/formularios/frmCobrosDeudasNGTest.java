@@ -52,35 +52,10 @@ public class frmCobrosDeudasNGTest {
             description = """
                           """
     )
-    public void testSetNombreCajero() {
-        String nombreCajero = "";
-        frmCobrosDeudas instance = null;
-        instance.setNombreCajero(nombreCajero);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
     public void testGetIdTurno() {
         frmCobrosDeudas instance = null;
         int expResult = 0;
         int result = instance.getIdTurno();
         assertEquals(result, expResult);
     }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testSetIdTurno() {
-        int idTurno = 0;
-        frmCobrosDeudas instance = null;
-        instance.setIdTurno(idTurno);
-    }
-
 }

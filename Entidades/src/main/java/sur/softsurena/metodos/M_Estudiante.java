@@ -206,8 +206,9 @@ public class M_Estudiante{
      * @param matricula
      * @param fechaPago
      */
-    public synchronized static void pPagoMensualidad(String idUsuario, String pago, String matricula,
-            String fechaPago) {
+    public synchronized static void pPagoMensualidad(
+            String idUsuario, String pago, String matricula, String fechaPago
+    ) {
 
         final String sql = "EXECUTE PROCEDURE P_PAGO_MENSUALIDAD(" + idUsuario + ","
                 + pago + "," + matricula + ",'" + fechaPago + "')";

@@ -1309,8 +1309,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (resp == 1) {
 
             frmCobrosDeudas miPagoDeuda = new frmCobrosDeudas(null, closable);
-            miPagoDeuda.setNombreCajero(usuario.getUser_name());
-            miPagoDeuda.setIdTurno(turno.getId());
+//            miPagoDeuda.setNombreCajero(usuario.getUser_name());
+//            miPagoDeuda.setIdTurno(turno.getId());
             miPagoDeuda.setLocationRelativeTo(null);
             miPagoDeuda.setVisible(true);
 
@@ -1674,6 +1674,16 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                    )
 //                    null
 //            );//Cantidad
+            
+            if(Objects.isNull(precio.getPrecio())){
+                JOptionPane.showInternalMessageDialog(
+                        this, 
+                        "Producto no cuenta con precio registrados", 
+                        "", 
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
             txtPrecio.setValue(precio.getPrecio());
 
             registro[0] = validarCantidad.getCantidadDecimal();

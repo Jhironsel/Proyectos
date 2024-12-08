@@ -123,10 +123,14 @@ public class M_ClienteNGTest {
                           """
     )
     public void testGetPersonasClientes() {
-        System.out.println("getPersonasClientes");
-        FiltroBusqueda filtro = null;
         List expResult = null;
-        List result = M_Cliente.getPersonasClientes(filtro);
+        
+        List result = M_Cliente.getPersonasClientes(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
+        
         assertEquals(result, expResult);
     }
 

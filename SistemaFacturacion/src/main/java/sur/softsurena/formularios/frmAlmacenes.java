@@ -6,19 +6,31 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.Privilegio;
+import sur.softsurena.metodos.M_Almacen;
 import static sur.softsurena.metodos.M_Almacen.agregarAlmacen;
 import static sur.softsurena.metodos.M_Almacen.getAlmacenesList;
 import static sur.softsurena.metodos.M_Privilegio.privilegio;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
-import static sur.softsurena.utilidades.Utilidades.LOG;
 import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
 import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 
+/**
+ * Formulario que administra los registros de los almacenes del sistema.
+ * 
+ * Queda pediente varias tareas, el formulario hace las 
+ * funciones basicas como registrar, borrar, modificar y buscar registros en el 
+ * sistema.
+ * 
+ * TODO 01/12/2024 Queda pendiente agregar las opciones de jpOpcionesAlmacen,
+ * en la base de datos agregar estos campos booleando del almacen. 
+ * 
+ * @author jhironsel
+ */
 public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
     private static boolean v_nuevo;
-    private static String criterioBusqueda;
 
     public static frmAlmacenes getInstance() {
         if (!privilegio(
@@ -31,8 +43,10 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                         .build()
         )) {
 
-            final String mensaje = "No cuenta con permisos para ver la información de"
-                    + " este módulo.";
+            final String mensaje = """
+                                   No cuenta con permisos para ver la información de
+                                   este módulo.
+                                   """;
 
             JOptionPane.showInternalMessageDialog(
                     null,
@@ -46,6 +60,16 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         return NewSingletonHolder.INSTANCE;
     }
 
+    private int idAlmacen() {
+        if(tblAlmacenes.getRowCount() == 0) return -1;
+        if(tblAlmacenes.getSelectedRow() == -1) return -1;
+        
+        return ((Almacen) tblAlmacenes.getValueAt(
+                tblAlmacenes.getSelectedRow(),
+                0
+        )).getId();
+    }
+
     private static class NewSingletonHolder {
 
         private static final frmAlmacenes INSTANCE = new frmAlmacenes();
@@ -53,6 +77,10 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private frmAlmacenes() {
         initComponents();
+        
+        //TODO Esperando implementacion.
+        jpOpcionesAlmacen.setVisible(false);
+        
         jtpPrincipal.remove(RSPGMantenimiento);
     }
 
@@ -78,7 +106,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         txtDetalleUbicacion = new javax.swing.JTextArea();
         rsEstado = new javax.swing.JCheckBox();
         txtNombreAlmacen = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
+        jpOpcionesAlmacen = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
 
@@ -250,6 +278,11 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
         txtNombreAlmacen.setForeground(new java.awt.Color(0, 0, 204));
         txtNombreAlmacen.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Ingrese nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 204))); // NOI18N
+        txtNombreAlmacen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreAlmacenActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -277,7 +310,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Opciones del almacen ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(37, 45, 223))); // NOI18N
+        jpOpcionesAlmacen.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), " Opciones del almacen ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(37, 45, 223))); // NOI18N
 
         jCheckBox1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jCheckBox1.setForeground(new java.awt.Color(0, 0, 255));
@@ -287,20 +320,20 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         jCheckBox2.setForeground(new java.awt.Color(0, 0, 255));
         jCheckBox2.setText("Se permite cantidades negativas");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout jpOpcionesAlmacenLayout = new javax.swing.GroupLayout(jpOpcionesAlmacen);
+        jpOpcionesAlmacen.setLayout(jpOpcionesAlmacenLayout);
+        jpOpcionesAlmacenLayout.setHorizontalGroup(
+            jpOpcionesAlmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpOpcionesAlmacenLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpOpcionesAlmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCheckBox1)
                     .addComponent(jCheckBox2))
                 .addContainerGap(79, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        jpOpcionesAlmacenLayout.setVerticalGroup(
+            jpOpcionesAlmacenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpOpcionesAlmacenLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBox1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -316,7 +349,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 .addContainerGap(38, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpOpcionesAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(42, Short.MAX_VALUE))
         );
         RSPGMantenimientoLayout.setVerticalGroup(
@@ -325,7 +358,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 .addContainerGap(159, Short.MAX_VALUE)
                 .addGroup(RSPGMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jpOpcionesAlmacen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(154, Short.MAX_VALUE))
         );
 
@@ -371,74 +404,57 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
         //Se agrega el panel de manteniento y se muestra.
         cambioBoton(true);
-//
-//        //Se obtiene el id del cliente para ser modificado.
-//        Integer idCliente
-//        = ((Personas) tblClientes.getValueAt(
-//            tblClientes.getSelectedRow(), 0)).getId_persona();
-//
-//    //Al mostrarse el modulo de mantenimiento se deberia mostrar la
-//    //informacion del cliente.
-//    mostrarRegistro(idCliente);
-//
-//    //Se modifica el ancho de cada columna en todas las tablas siguiente.
-//    repararColumnaTable(tblCorreos);
-//    repararColumnaTable(tblDireccion);
-//    repararColumnaTable(tblTelefonos);
+        
+        M_Almacen.getAlmacenesList(
+                FiltroBusqueda
+                        .builder()
+                        .id(idAlmacen())
+                        .criterioBusqueda("")
+                        .build()
+        ).stream().forEach(
+                almacen -> {
+                    txtNombreAlmacen.setText(almacen.getNombre());
+                    txtDetalleUbicacion.setText(almacen.getUbicacion());
+                    rsEstado.setSelected(almacen.getEstado());
+                }
+        );
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        //TODO Crear proceso para borrar almacen.
-//        //Validamos que está correcto en la tabla.
-//        //Si el metodo devuelve true devolvemos el proceso.
-//        if (validarRegistro()) {
-//            return;
-//        }
-//
-//        //Mostramos un mensaje de advertencia si el usuario desea continuar con
-//        //la eliminación del registro.
-//        int rta = JOptionPane.showConfirmDialog(this,
-//            "¿Esta Seguro de Eliminar Registro del Cliente?",
-//            "",
-//            JOptionPane.YES_NO_OPTION,
-//            JOptionPane.QUESTION_MESSAGE);
-//
-//        //Si el usuario responde a que no a las opciones entonces devolvemos el
-//        //proceso.
-//        if (rta == JOptionPane.NO_OPTION) {
-//            return;
-//        }
-//
-//        //Para eliminar un registro de un cliente obtenemos el ID y su estado
-//        int idCliente = ((Clientes) tblClientes.getValueAt(
-//            tblClientes.getSelectedRow(), 0)).getId_persona();
-//
-//    //Mandamos a borrar el cliente y obtenemos el resultado de la operacion
-//    //y almacenamos en una variable.
-//    TODO recibir aqui el objecto resultados.
-//    String mensaje = borrarCliente(idCliente);
-//
-//    //Posibles icono a utilizar en el JOpcionPane
-//    int icono = mensaje.equals(Clientes.CLIENTE_BORRADO_CORRECTAMENTE)
-//    ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE;
-//
-//    JOptionPane.showInternalMessageDialog(
-//        this,
-//        mensaje,
-//        "",
-//        icono);
-//
-//        repararColumnaTable(tblClientes);
+        //Validamos que está correcto en la tabla.
+        //Si el metodo devuelve true devolvemos el proceso.
+        if (validarRegistro()) {
+            return;
+        }
+
+        //Mostramos un mensaje de advertencia si el usuario desea continuar con
+        //la eliminación del registro.
+        int rta = JOptionPane.showConfirmDialog(this,
+                "¿Esta seguro de eliminar el registro del sistema?",
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        //Si el usuario responde a que no a las opciones entonces devolvemos el
+        //proceso.
+        if (rta == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        //Para eliminar un registro de un cliente obtenemos el ID y su estado
+        Resultado resultado = M_Almacen.eliminarAlmacen(idAlmacen());
+
+        JOptionPane.showInternalMessageDialog(
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
+        repararColumnaTable(tblAlmacenes);
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        //Hilo creado para ganar focus en la ventana de JopcionPane en buscar
-        //cedula
-        //        v_hilo = new Thread(this);
-        //        v_hilo.start();
-        //        v_hilo.interrupt();
-
-        //        txtCedula1.setValue("");
         String resp = JOptionPane.showInternalInputDialog(
                 this,
                 "Ingrese su criterio de busqueda.\n[Nombre]",
@@ -446,13 +462,17 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 JOptionPane.QUESTION_MESSAGE
         );
 
-        criterioBusqueda = resp;
-
         if (Objects.isNull(resp) || resp.isBlank()) {
-            return;
+            resp = "";
         }
 
-        llenarTabla(-1, criterioBusqueda);
+        llenarTabla(
+                FiltroBusqueda
+                        .builder()
+                        .id(-1)
+                        .criterioBusqueda(resp)
+                        .build()
+        );
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -498,34 +518,24 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                     JOptionPane.WARNING_MESSAGE
             );
 
-            if (resp == JOptionPane.NO_OPTION) {
-                txtDetalleUbicacion.requestFocus();
-                return;
-            }
+            rsEstado.setSelected(resp == JOptionPane.NO_OPTION);
         }
 
-        Resultado resultado = Resultado
+
+        //Creamos objeto del almacen.
+        var almacen = Almacen
                 .builder()
-                .id(-1)
-                .mensaje("Este proceso esta en desarrollo. ")
-                .icono(JOptionPane.ERROR_MESSAGE)
-                .estado(Boolean.FALSE)
+                .id(idAlmacen())
+                .nombre(txtNombreAlmacen.getText())
+                .ubicacion(txtDetalleUbicacion.getText())
+                .estado(rsEstado.isSelected())
                 .build();
 
+        Resultado resultado;
         if (v_nuevo) {
-            resultado = agregarAlmacen(Almacen.
-                    builder().
-                    nombre(txtNombreAlmacen.getText()).
-                    ubicacion(txtDetalleUbicacion.getText()).
-                    estado(rsEstado.isSelected()).
-                    build()
-            );
+            resultado = agregarAlmacen(almacen);
         } else {
-            //TODO Crear proceso para modificar almacen.
-        }
-
-        if (!resultado.getEstado()) {
-            LOG.severe("Este PROCESO no esta terminado.");
+            resultado = M_Almacen.actualizarAlmacen(almacen);
         }
 
         JOptionPane.showInternalMessageDialog(
@@ -535,7 +545,6 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 resultado.getIcono()
         );
 
-        llenarTabla(-1, "");
         btnCancelarActionPerformed(evt);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -545,7 +554,13 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        llenarTabla(-1, "");
+        llenarTabla(
+                FiltroBusqueda
+                        .builder()
+                        .id(-1)
+                        .criterioBusqueda("")
+                        .build()
+        );
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
@@ -583,6 +598,10 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         );
     }//GEN-LAST:event_formInternalFrameActivated
 
+    private void txtNombreAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreAlmacenActionPerformed
+        txtDetalleUbicacion.requestFocus();
+    }//GEN-LAST:event_txtNombreAlmacenActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel RSPGMantenimiento;
@@ -595,12 +614,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel jpAlmacenesTbl;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
+    private javax.swing.JPanel jpOpcionesAlmacen;
     private javax.swing.JTabbedPane jtpPrincipal;
     private javax.swing.JCheckBox rsEstado;
     public static javax.swing.JTable tblAlmacenes;
@@ -683,17 +702,14 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     /**
      * Metodo encargado de llenar el sistema de los almacenes registrados.
      *
-     * @param id
-     *
-     * @param criterioBusqueda
-     *
+     * @param filtro
      * @return
      */
-    public synchronized static JTable llenarTabla(int id, String criterioBusqueda) {
+    public synchronized static JTable llenarTabla(FiltroBusqueda filtro) {
 
         final String titulos[] = {"Nombre", "Ubicacion", "Estado"};
 
-        if (criterioBusqueda.equalsIgnoreCase("evento")) {
+        if (filtro.getCriterioBusqueda().equalsIgnoreCase("evento")) {
             //criterioBusqueda = frmClientes.criterioBusqueda;
         }
 
@@ -714,7 +730,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         };
 
         Object registro[] = new Object[titulos.length];
-        getAlmacenesList(id, criterioBusqueda).stream().forEach(
+        getAlmacenesList(filtro).stream().forEach(
                 almacen -> {
                     registro[0] = almacen;
                     registro[1] = almacen.getUbicacion();

@@ -22,10 +22,11 @@ import sur.softsurena.utilidades.Resultado;
 public class M_ARSNGTest {
 
     private Integer id_ARS;
-
+//------------------------------------------------------------------------------
     public M_ARSNGTest() {
     }
-
+    
+//------------------------------------------------------------------------------
     @BeforeClass
     public void setUpClass() throws Exception {
         Conexion.getInstance(
@@ -40,20 +41,24 @@ public class M_ARSNGTest {
                 "Error al conectarse..."
         );
     }
-
+//------------------------------------------------------------------------------
+    
     @AfterClass
     public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
     }
-
+//------------------------------------------------------------------------------
+    
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
+//------------------------------------------------------------------------------
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
+//------------------------------------------------------------------------------
+    
     @Test(
             enabled = true,
             priority = 0,
@@ -97,6 +102,7 @@ public class M_ARSNGTest {
         id_ARS = result.getId();
     }
     
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 1,
@@ -120,6 +126,7 @@ public class M_ARSNGTest {
 
     }
 
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 2,
@@ -148,11 +155,14 @@ public class M_ARSNGTest {
         );
     }
 
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 3,
-            description = "Test en cargado de verificar la consultas de las "
-                    + "ARS del sistema."
+            description = """
+                          Test en cargado de verificar la consultas de las 
+                          ARS del sistema.
+                          """
     )
     public void testGetARS2() {
         List result2 = M_ARS.getARS(
@@ -168,6 +178,7 @@ public class M_ARSNGTest {
 
     }
 
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 4,
@@ -189,6 +200,7 @@ public class M_ARSNGTest {
         );
     }
 
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 5,
@@ -198,7 +210,6 @@ public class M_ARSNGTest {
                           """
     )
     public void testBorrarSeguro() {
-        
         Resultado result = M_ARS.borrarSeguro(id_ARS);
                 
         assertEquals(
@@ -211,7 +222,6 @@ public class M_ARSNGTest {
                     .build(),
                 ERROR_AL_BORRAR_ARS
         );
-        
     }
 
     @Test(
@@ -244,6 +254,7 @@ public class M_ARSNGTest {
                           """
     )
     public void testSqlARS() {
+//------------------------------------------------------------------------------
         String expResult = """
                            SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                            FROM V_ARS;
@@ -256,7 +267,8 @@ public class M_ARSNGTest {
         );
         
         assertEquals(result, expResult);
-        //----------------------------------------------------------------------
+        
+//------------------------------------------------------------------------------
         expResult = """
                     SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                     FROM V_ARS
@@ -271,7 +283,8 @@ public class M_ARSNGTest {
         );
         
         assertEquals(result, expResult);
-        //----------------------------------------------------------------------
+        
+//------------------------------------------------------------------------------
         expResult = """
                     SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                     FROM V_ARS

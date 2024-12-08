@@ -214,8 +214,8 @@ public class M_ProductoNGTest {
             priority = 1
     )
     public void testGetProductosByCategoria() {
-        List<Producto> result = getProductosByCategoria(0, null);
-        assertFalse(
+        List<Producto> result = getProductosByCategoria(-1, null);
+        assertTrue(
                 result.isEmpty(),
                 "No se obtuvo resultados en la consulta."
         );

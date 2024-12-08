@@ -173,8 +173,8 @@ public class M_ARS {
             = "Seguro modificado correctamente";
     public static final String ERROR_AL_MODIFICAR_SEGURO
             = "Error al modificar seguro...";
-
 //------------------------------------------------------------------------------
+
     /**
      * Trata de eliminar un registro de la tabla ARS, la cual debe tener una
      *

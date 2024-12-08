@@ -85,23 +85,33 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.0</version>
             <type>jar</type>
-            <!--            <exclusions>
+            <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
-            </exclusions>-->
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-pdf</artifactId>
+            <version>7.0.0</version>
         </dependency>
         
         <!--Dependencia para uso de Codificacion y Deco- en base64-->
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.17.1</version>
-            <!--<version>1.17.0</version>-->
-            <type>jar</type>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.3.0</version>
         </dependency>
         
         <!--
@@ -109,12 +119,20 @@
         el control de estas conexiones.
         -->
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.17.1</version>
+            <!--<version>1.17.0</version>-->
+            <type>jar</type>
+        </dependency><dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.12.0</version>
-        </dependency>
+        </dependency><!--Libreria utilizada para crear los graficos de barra entre otros-->
         
-        <!--Libreria utilizada para crear los graficos de barra entre otros-->
+        
+        
+        
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
@@ -122,30 +140,26 @@
             <!--<version>1.5.4</version>-->
         </dependency>
         
+        <!--Libreria que nos permite crear pruebas a los modulos de los sitema 
+        hechos en java swing.-->
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jcommon</artifactId>
             <version>1.0.24</version>
         </dependency>
         
-        <!--Libreria que nos permite crear pruebas a los modulos de los sitema 
-        hechos en java swing.-->
+        <!--Dependencia para los componente de software en java swing-->
         <dependency>
             <groupId>com.github.dotxyteam</groupId>
             <artifactId>swing-testing-toolkit</artifactId>
             <version>1.8.12</version>
             <!--<version>1.8.10</version>-->
-        </dependency>
-        
-        <!--Dependencia para los componente de software en java swing-->
-        <dependency>
+        </dependency><dependency>
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
             <type>jar</type>
-        </dependency>
-        
-        <!--Dependencia de tercero como RojeruSan RSMMaterialComponents entre 
+        </dependency><!--Dependencia de tercero como RojeruSan RSMMaterialComponents entre 
         otros-->
         
         <dependency>
@@ -160,13 +174,13 @@
             <version>1</version>
         </dependency>
         
+        
+        
         <dependency>
             <groupId>sur.softsurena</groupId>
             <artifactId>RojeruSan.full_9.6</artifactId>
             <version>1</version>
-        </dependency>
-        
-        <dependency>
+        </dependency><dependency>
             <groupId>sur.softsurena</groupId>
             <artifactId>RojeruSan.full_6</artifactId>
             <version>1</version>
@@ -198,21 +212,21 @@
         </dependency>
         
         
+        
+        
+        
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.16</version>
             <!--<version>2.0.13</version>-->
-        </dependency>
-        
-        <dependency>
+        </dependency><dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.16</version>
             <!--<version>2.0.13</version>-->
-        </dependency>
-        
-        <!--        Dependecia de SophiaStudio-->
+        </dependency><!--        Dependecia de SophiaStudio-->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -222,7 +236,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>3.3.5</version>
+            <version>3.4.0</version>
             <type>jar</type>
         </dependency>
         
@@ -231,23 +245,23 @@
             <artifactId>jlayer</artifactId>
             <version>1.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+        
+        
+        
         
         
         
         <!--Dependencia para las pruebas unitarias de los sistema-->
         <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency><dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.10.2</version>
             <type>jar</type>
-        </dependency>
-        
-        <!--Mis dependencias-->       
+        </dependency><!--Mis dependencias-->       
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>

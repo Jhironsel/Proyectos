@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
@@ -14,9 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
-import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Deuda;
 import static sur.softsurena.metodos.M_Deuda.insertDeudas;
 import static sur.softsurena.metodos.M_Deuda.modificarDeuda;
@@ -43,7 +40,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     public static frmDeudas getInstance() {
         return NewSingletonHolder.INSTANCE;
     }
-    private static Cliente cliente;
+    private static Deuda deuda;
 
     private static class NewSingletonHolder {
 
@@ -562,7 +559,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             limpiarCedula();
             return;
         }
-        mostrarRegistro(txtCedula.getText());
+        mostrarRegistro(
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(txtCedula.getText())
+                        .build()
+        );
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     private void txtPNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
@@ -614,11 +616,16 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         }
 
         mostrarRegistro(
-                miBusqueda
-                        .getCliente()
-                        .getPersona()
-                        .getGenerales()
-                        .getCedula()
+                FiltroBusqueda
+                        .builder()
+                        .criterioBusqueda(
+                                miBusqueda
+                                        .getCliente()
+                                        .getPersona()
+                                        .getGenerales()
+                                        .getCedula()
+                        )
+                        .build()
         );
     }//GEN-LAST:event_btnGetClienteActionPerformed
 
@@ -627,18 +634,18 @@ public class frmDeudas extends javax.swing.JInternalFrame {
      * mantenimiento.
      *
      */
-    private void mostrarRegistro(String cedula) {
-        var listaClientes = M_Cliente.getPersonasClientes(
-                FiltroBusqueda
-                        .builder()
-                        .criterioBusqueda(cedula)
-                        .build()
+    private void mostrarRegistro(FiltroBusqueda filtro) {
+        var listaClientes = M_Deuda.getDeudas(
+                filtro
         );
 
+        //Si la lista no esta vacia entonces.
         if (!listaClientes.isEmpty()) {
-            cliente = listaClientes.getFirst();
+            //Obtenemos el primer registro de la consulta.
+            deuda = listaClientes.getFirst();
 
-            if (cliente.getPersona().getId_persona() <= 0) {
+            //No puede ser el cliente generico del sistema.
+            if (deuda.getCliente().getPersona().getId_persona() <= 0) {
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "Cliente generico no puede crear deuda.",
@@ -649,14 +656,20 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 return;
             }
 
-            txtCedula.setText(cliente.getPersona().getGenerales().getCedula());
-            txtPNombre.setText(cliente.getPersona().getPnombre());
-            txtSNombre.setText(cliente.getPersona().getSnombre());
-            txtApellidos.setText(cliente.getPersona().getApellidos());
+            txtCedula.setValue(deuda.getCliente().getPersona().getGenerales().getCedula());
+            txtPNombre.setText(deuda.getCliente().getPersona().getPnombre());
+            txtSNombre.setText(deuda.getCliente().getPersona().getSnombre());
+            txtApellidos.setText(deuda.getCliente().getPersona().getApellidos());
+
+            if (!nuevo) {
+                txtMonto.setValue(deuda.getMonto());
+                txtConcepto.setText(deuda.getConcepto());
+            }
 
             txtCedula.setEditable(false);
             txtMonto.requestFocus();
-        } else {
+        } else {//Si la lista esta vacia, entonces.
+
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     "Desea registrar este usuario al sistema?",
@@ -732,15 +745,15 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         }
 
         //TODO Sacar el Metodo de modificar la deuda y hacer que devuelva un Resultados.
-        JOptionPane.showInternalMessageDialog(
-                this,
-                modificarDeuda(
-                        Integer.parseInt(tblClientes.getValueAt(cliAct, 0).toString()),
-                        "i"
-                ),
-                "",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+//        JOptionPane.showInternalMessageDialog(
+//                this,
+//                modificarDeuda(
+//                        Integer.parseInt(tblClientes.getValueAt(cliAct, 0).toString()),
+//                        "i"
+//                ),
+//                "",
+//                JOptionPane.INFORMATION_MESSAGE
+//        );
         llenarTabla();
 //        mostrarRegistro();
     }//GEN-LAST:event_btnReiniciarActionPerformed
@@ -763,21 +776,42 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         miPagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
 
+    /**
+     * Metodo que permite abonar a una deuda.
+     * 
+     * TODO Analizar y Descomentar.
+     * 
+     * @param evt No utilizado por el momento.
+     */
     private void btnAbonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbonarActionPerformed
-//      TODO Analizar y Descomentar.  
-//      if(tblClientes.getRowCount()  < 1) return;
-//        if(btnCancelar.isEnabled()){
-//            txtIDCliente.requestFocus();
-//            return;
-//        }
-//        JOptionPane.showInternalMessageDialog(
-//                  this, 
-//                  misDatos.modificarDeuda(
-//                      tblClientes.getValueAt(cliAct, 0)), 
-//                  "a")
-//        );
-//        llenarTabla();
-//        mostrarRegistro();
+        if (tblClientes.getRowCount() < 1) {
+            return;
+        }
+
+        if (btnCancelar.isEnabled()) {
+            txtCedula.requestFocus();
+            return;
+        }
+
+//        modificarDeuda(
+//                        tblClientes.getValueAt(cliAct, 0)),
+//                "a");
+        modificarDeuda(
+                Deuda.builder().build()
+        );
+        
+        JOptionPane.showInternalMessageDialog(
+                this,
+                "",
+                "",
+                -1
+        );
+
+        llenarTabla();
+
+        mostrarRegistro(
+                FiltroBusqueda.builder().build()
+        );
     }//GEN-LAST:event_btnAbonarActionPerformed
 
     private void btnAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnularActionPerformed
@@ -799,14 +833,14 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
         //TODO Analizar y Testear este metodo de modificarDeuda()
         //Hacer que ese metodo revuelva un resultados.
-        JOptionPane.showInternalMessageDialog(
-                this,
-                modificarDeuda(
-                        Integer.parseInt(tblClientes.getValueAt(cliAct, 0).toString()),
-                        "n"),
-                "",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+//        JOptionPane.showInternalMessageDialog(
+//                this,
+//                modificarDeuda(
+//                        Integer.parseInt(tblClientes.getValueAt(cliAct, 0).toString()),
+//                        "n"),
+//                "",
+//                JOptionPane.INFORMATION_MESSAGE
+//        );
         llenarTabla();
 //        mostrarRegistro();
     }//GEN-LAST:event_btnAnularActionPerformed
@@ -875,9 +909,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        //Debe existir registros en la tabla de clientes.
         if (tblClientes.getRowCount() == 0) {
             return;
         }
+
+        //Debe de tener un cliente seleccionado.
         if (tblClientes.getSelectedRow() == -1) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -888,6 +925,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
+        //Verificamos que la deuda tenga el estado de iniciada. 
         if (!tblClientes.getValueAt(
                 tblClientes.getSelectedRow(),
                 5
@@ -901,16 +939,21 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
+        //Mostrar el registro.
         mostrarRegistro(
-                tblClientes.getValueAt(
-                        tblClientes.getSelectedRow(),
-                        1
-                ).toString()
+                FiltroBusqueda
+                        .builder()
+                        .id(
+                                ((Deuda) tblClientes.getValueAt(
+                                        tblClientes.getSelectedRow(),
+                                        0
+                                )).getId_deuda()
+                        )
+                        .build()
         );
 
         nuevo(false);
         nuevo = false;
-        txtConcepto.requestFocus();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
@@ -972,8 +1015,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         //Creamos el Objeto Cliente y los agregamos a Datos
         Deuda miDeuda = Deuda
                 .builder()
+                .id_deuda(deuda.getId_deuda())
                 .cliente(
-                        cliente
+                        deuda.getCliente()
                 )
                 .concepto(txtConcepto.getText())
                 .monto(new BigDecimal(txtMonto.getValue().toString()))
@@ -999,15 +1043,15 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 </html>
                 """.formatted(
                         accion,
-                        cliente.getPersona()
+                        deuda.getCliente().getPersona()
                                 .getPnombre()
                                 .concat(" ")
                                 .concat(
-                                        cliente.getPersona()
+                                        deuda.getCliente().getPersona()
                                                 .getSnombre()
                                 ).trim().strip(),
-                        cliente.getPersona().getApellidos(),
-                        cliente.getPersona().getGenerales().getCedula(),
+                        deuda.getCliente().getPersona().getApellidos(),
+                        deuda.getCliente().getPersona().getGenerales().getCedula(),
                         txtMonto.getText(),
                         txtConcepto.getText()
                                 .concat(" ".repeat(50))
@@ -1031,7 +1075,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         if (nuevo) {
             rs = insertDeudas(miDeuda);
         } else {
-            //TODO se debe analizar si las deudas son modificables.
+            rs = modificarDeuda(miDeuda);
         }
 
         JOptionPane.showInternalMessageDialog(
@@ -1165,14 +1209,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
         btnGetCliente.setEnabled(!valor);
 
-        txtPNombre.setText("");
-        txtMonto.setValue(0);
-        txtConcepto.setText("");
-
         btnGuardar.setEnabled(!valor);
         btnCancelar.setEnabled(!valor);
 
         if (nuevo) {
+            txtPNombre.setText("");
+            txtMonto.setValue(0);
+            txtConcepto.setText("");
             limpiarCedula();
         }
         txtCedula.setEditable(!nuevo);
@@ -1186,14 +1229,18 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         Object registro[] = new Object[titulos.length];
         miTabla = new DefaultTableModel(null, titulos);
 
-        M_Deuda.getDeudas().stream().forEach(
-                deuda -> {
-                    registro[0] = deuda;
-                    registro[1] = deuda.getCliente().getPersona().getGenerales();
-                    registro[2] = deuda.getConcepto();
-                    registro[3] = deuda.getMonto();
-                    registro[4] = deuda.getFecha();
-                    registro[5] = deuda.getEstadoDeuda();
+        M_Deuda.getDeudas(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        ).stream().forEach(
+                deudaR -> {
+                    registro[0] = deudaR;
+                    registro[1] = deudaR.getCliente().getPersona().getGenerales();
+                    registro[2] = deudaR.getConcepto();
+                    registro[3] = deudaR.getMonto();
+                    registro[4] = deudaR.getFecha();
+                    registro[5] = deudaR.getEstadoDeuda();
                     miTabla.addRow(registro);
                 }
         );

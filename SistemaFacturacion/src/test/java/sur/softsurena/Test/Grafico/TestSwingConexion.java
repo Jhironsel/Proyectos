@@ -14,10 +14,18 @@ public class TestSwingConexion {
     }
 
     public static void main(String[] args) throws IOException, Exception {
-        editTestSwing("testSwing/testDeudaInsert.stt");
+        editTestSwing("testSwing/testUpdateCliente.stt", false);
+//        editTestSwing("testSwing/Lento.stt", false);
         
-//        Tester tester = new Tester();
-        
+        //Deuda
+//        editTestSwing("testSwing/testDeuda.stt", true);
+//        editTestSwing("testSwing/testDeudaInsert.stt", true);
+//        
+//        
+//        editTestSwing("testSwing/testDeudaInsert.stt", true);
+//        editTestSwing("testSwing/testDeudaInsert.stt", true);
+//        editTestSwing("testSwing/testDeudaInsert.stt", true);
+
 //        TestingUtils.assertSuccessfulReplay(
 //                new File("testSwing/testParametros.stt")
 //        );
@@ -27,7 +35,7 @@ public class TestSwingConexion {
 //        );
     }
 
-    public static void editTestSwing(String ruta) {
+    public static void editTestSwing(String ruta, boolean replayAll) {
 
         //Crear un objecto de la clase Tester
         Tester tester = new Tester();
@@ -49,7 +57,8 @@ public class TestSwingConexion {
         //Abre el editor
         testEditor.setLastTesterFile(new File(ruta));
         testEditor.open();
-        
-        tester.replayAll();
+        if(replayAll){
+            tester.replayAll();
+        }
     }
 }

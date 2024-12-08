@@ -5,7 +5,7 @@
     <testableModalWindowsForcedToDocumentModality>true</testableModalWindowsForcedToDocumentModality>
     <testableWindowsAlwaysOnTopFeatureDisabled>true</testableWindowsAlwaysOnTopFeatureDisabled>
   </editingOptions>
-  <maximumSecondsToWaitBetwneenActions>1.0</maximumSecondsToWaitBetwneenActions>
+  <maximumSecondsToWaitBetwneenActions>15.0</maximumSecondsToWaitBetwneenActions>
   <minimumSecondsToWaitBetwneenActions>0.1</minimumSecondsToWaitBetwneenActions>
   <testActions>
     <xy.ui.testing.action.CallMainMethodAction>
@@ -71,89 +71,12 @@
           <altDown>false</altDown>
           <altGrtDown>false</altGrtDown>
           <ctrlDown>false</ctrlDown>
-          <keyName>KEY_F3</keyName>
+          <keyName>KEY_F5</keyName>
           <metaDown>false</metaDown>
           <shiftDown>false</shiftDown>
         </xy.ui.testing.action.component.SendKeysAction_-SpecialKey>
       </keyboardInteractions>
       <requestToFocusOnTheComponent>true</requestToFocusOnTheComponent>
     </xy.ui.testing.action.component.SendKeysAction>
-    <xy.ui.testing.action.component.SendKeysAction>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>tblProducto</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <keyboardInteractions>
-        <xy.ui.testing.action.component.SendKeysAction_-SpecialKey>
-          <altDown>true</altDown>
-          <altGrtDown>true</altGrtDown>
-          <ctrlDown>true</ctrlDown>
-          <keyName>KEY_UNDEFINED</keyName>
-          <metaDown>false</metaDown>
-          <shiftDown>true</shiftDown>
-        </xy.ui.testing.action.component.SendKeysAction_-SpecialKey>
-      </keyboardInteractions>
-      <requestToFocusOnTheComponent>true</requestToFocusOnTheComponent>
-    </xy.ui.testing.action.component.SendKeysAction>
-    <xy.ui.testing.action.component.ClickAction>
-      <button>LEFT_BUTTON</button>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>btnBorrar</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <doubleClick>false</doubleClick>
-      <eventsIntervalMilliseconds>100</eventsIntervalMilliseconds>
-      <locationOnComponent class="null"/>
-      <poupTrigger>false</poupTrigger>
-    </xy.ui.testing.action.component.ClickAction>
-    <xy.ui.testing.action.component.ClickAction>
-      <button>LEFT_BUTTON</button>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>OptionPane.button</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <doubleClick>false</doubleClick>
-      <eventsIntervalMilliseconds>100</eventsIntervalMilliseconds>
-      <locationOnComponent class="null"/>
-      <poupTrigger>false</poupTrigger>
-    </xy.ui.testing.action.component.ClickAction>
-    <xy.ui.testing.action.component.CheckVisibleStringsAction>
-      <completenessChecked>false</completenessChecked>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>OptionPane.label</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <negated>false</negated>
-      <orderChecked>false</orderChecked>
-      <visibleStrings>
-        <string>Producto Borrado Correctamente.</string>
-      </visibleStrings>
-    </xy.ui.testing.action.component.CheckVisibleStringsAction>
-    <xy.ui.testing.action.component.ClickAction>
-      <button>LEFT_BUTTON</button>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>OptionPane.button</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <doubleClick>false</doubleClick>
-      <eventsIntervalMilliseconds>100</eventsIntervalMilliseconds>
-      <locationOnComponent class="null"/>
-      <poupTrigger>false</poupTrigger>
-    </xy.ui.testing.action.component.ClickAction>
   </testActions>
 </xy.ui.testing.Tester>

@@ -24,7 +24,7 @@
       <disabled>false</disabled>
       <keyboardInteractions>
         <xy.ui.testing.action.component.SendKeysAction_-WriteText>
-          <text>jhironsel</text>
+          <text>sysdba</text>
         </xy.ui.testing.action.component.SendKeysAction_-WriteText>
       </keyboardInteractions>
       <requestToFocusOnTheComponent>true</requestToFocusOnTheComponent>
@@ -154,11 +154,10 @@
     </xy.ui.testing.action.component.SendKeysAction>
     <xy.ui.testing.action.component.ClickAction>
       <button>LEFT_BUTTON</button>
-      <componentFinder class="xy.ui.testing.finder.DisplayedStringComponentFinder">
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
+        <componentName>btnGuardar</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <visibleString>Guardar</visibleString>
-        <visibleStringInTree>false</visibleStringInTree>
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
@@ -173,7 +172,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <doubleClick>false</doubleClick>
@@ -187,7 +186,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.body</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <negated>false</negated>
@@ -202,7 +201,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <doubleClick>false</doubleClick>
@@ -210,13 +209,5 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
-    <xy.ui.testing.action.window.CloseWindowAction>
-      <disabled>false</disabled>
-      <windowIndex>0</windowIndex>
-    </xy.ui.testing.action.window.CloseWindowAction>
-    <xy.ui.testing.action.SystemExitCallInterceptionAction>
-      <disabled>false</disabled>
-      <oppposite>true</oppposite>
-    </xy.ui.testing.action.SystemExitCallInterceptionAction>
   </testActions>
 </xy.ui.testing.Tester>

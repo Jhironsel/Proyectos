@@ -586,6 +586,7 @@
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
                                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Sexo&gt;"/>
+                                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="txtSNombre">
@@ -650,6 +651,7 @@
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
                                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;TipoPersona&gt;"/>
+                                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JCheckBox" name="cbEstado">
@@ -816,6 +818,7 @@
                                       <AuxValues>
                                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
                                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;EstadoCivil&gt;"/>
+                                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                       </AuxValues>
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="txtPNombre">
@@ -934,7 +937,7 @@
                                                 </TitledBorder>
                                               </Border>
                                             </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbProvincias" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbProvinciasActionPerformed"/>
@@ -943,6 +946,7 @@
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
                                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Provincia&gt;"/>
+                                            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                           </AuxValues>
                                         </Component>
                                         <Component class="javax.swing.JComboBox" name="jcbMunicipios">
@@ -965,7 +969,7 @@
                                                 </TitledBorder>
                                               </Border>
                                             </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbMunicipios" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbMunicipiosActionPerformed"/>
@@ -996,7 +1000,7 @@
                                                 </TitledBorder>
                                               </Border>
                                             </Property>
-                                            <Property name="name" type="java.lang.String" value="jcbPersona" noResource="true"/>
+                                            <Property name="name" type="java.lang.String" value="jcbDistritoMunicipal" noResource="true"/>
                                           </Properties>
                                           <Events>
                                             <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="jcbDistritoMunicipalPopupMenuWillBecomeInvisible"/>
@@ -1400,14 +1404,8 @@
                                               <SubComponents>
                                                 <Component class="rojerusan.RSTableMetro1" name="tblTelefonos">
                                                   <Properties>
-                                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                                      <Table columnCount="5" rowCount="1">
-                                                        <Column editable="true" title="Numero" type="java.lang.String"/>
-                                                        <Column editable="true" title="Tipo" type="java.lang.String"/>
-                                                        <Column editable="true" title="Fecha" type="java.lang.Object"/>
-                                                        <Column editable="true" title="Estado" type="java.lang.Boolean"/>
-                                                        <Column editable="true" title="Por defecto" type="java.lang.Boolean"/>
-                                                      </Table>
+                                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Numero&quot;, &quot;Tipo&quot;, &quot;Fecha&quot;, &quot;Estado&quot;, &quot;Por defecto&quot;&#xa;    }&#xa;) {&#xa;    Class&lt;?&gt;[] types = new Class&lt;?&gt;[] {&#xa;        java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class&#xa;    };&#xa;&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;}" type="code"/>
                                                     </Property>
                                                     <Property name="autoResizeMode" type="int" value="0"/>
                                                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1427,7 +1425,7 @@
                                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblTelefonosMouseClicked"/>
                                                   </Events>
                                                   <AuxValues>
-                                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;@Override&#xa;public boolean isCellEditable(int rowIndex, int colIndex) { &#xa;    return false; //Las celdas no son editables. &#xa;}&#xa;}"/>
+                                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;    @Override&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Las celdas no son editables.&#xa;    }&#xa;}"/>
                                                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                                   </AuxValues>
                                                 </Component>
@@ -1577,15 +1575,8 @@
                                               <SubComponents>
                                                 <Component class="rojerusan.RSTableMetro1" name="tblCorreos">
                                                   <Properties>
-                                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                                                      <Table columnCount="4" rowCount="1">
-                                                        <Column editable="true" title="Correo" type="java.lang.String"/>
-                                                        <Column editable="true" title="Fecha" type="java.lang.Object">
-                                                          <Data value=""/>
-                                                        </Column>
-                                                        <Column editable="true" title="Estado" type="java.lang.Boolean"/>
-                                                        <Column editable="true" title="Por defecto" type="java.lang.Boolean"/>
-                                                      </Table>
+                                                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, &quot;&quot;, null, null}&#xa;    },&#xa;    new String [] {&#xa;        &quot;Correo&quot;, &quot;Fecha&quot;, &quot;Estado&quot;, &quot;Por defecto&quot;&#xa;    }&#xa;) {&#xa;    Class&lt;?&gt;[] types = new Class&lt;?&gt;[] {&#xa;        java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class&#xa;    };&#xa;&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return types [columnIndex];&#xa;    }&#xa;}" type="code"/>
                                                     </Property>
                                                     <Property name="autoResizeMode" type="int" value="0"/>
                                                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1605,7 +1596,7 @@
                                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblCorreosMouseClicked"/>
                                                   </Events>
                                                   <AuxValues>
-                                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;@Override&#xa;public boolean isCellEditable(int rowIndex, int colIndex) { &#xa;    return false; //Las celdas no son editables. &#xa;}&#xa;}"/>
+                                                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;    @Override&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Las celdas no son editables.&#xa;    }&#xa;}"/>
                                                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                                                   </AuxValues>
                                                 </Component>
@@ -1701,6 +1692,7 @@
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                       </AuxValues>
                     </Component>
                     <Component class="RSMaterialComponent.RSButtonMaterialIconOne" name="btnEditarCliente">
@@ -1715,6 +1707,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarClienteActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+                      </AuxValues>
                     </Component>
                     <Component class="RSMaterialComponent.RSButtonMaterialIconOne" name="btnBorrarCliente">
                       <Properties>
@@ -1728,6 +1723,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBorrarClienteActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+                      </AuxValues>
                     </Component>
                     <Component class="RSMaterialComponent.RSButtonMaterialIconOne" name="btnBuscar">
                       <Properties>

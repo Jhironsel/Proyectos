@@ -6,8 +6,9 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class Proveedor extends Persona {
+public class Proveedor {
 
+    private final Persona persona;
     private final String codigoProveedor;
 
     @Override

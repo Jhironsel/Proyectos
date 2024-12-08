@@ -16,7 +16,7 @@ public class frmClientesNGTest {
 
     public frmClientesNGTest() {
     }
-
+//------------------------------------------------------------------------------
     @BeforeClass
     public void setUpClass() throws Exception {
         Conexion.getInstance(
@@ -31,25 +31,28 @@ public class frmClientesNGTest {
                 "Error al conectarse..."
         );
     }
-
+    
+//------------------------------------------------------------------------------
     @AfterClass
     public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
     }
-
+    
+//------------------------------------------------------------------------------
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
-
+    
+//------------------------------------------------------------------------------
     @AfterMethod
     public void tearDownMethod() throws Exception {
         //frmClientes instance = frmClientes.getInstance();
         //instance.getBtnCancelar().doClick();
     }
 
-    //--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
     @Test(
-        enabled = false,
+        enabled = true,
             priority = 0,
             description = """
                           Prueba Swing.
@@ -63,9 +66,9 @@ public class frmClientesNGTest {
         );
     }
 
-    //--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
     @Test(
-        enabled = false,
+        enabled = true,
             priority = 1,
             description = """
                           Prueba Swing.
@@ -79,9 +82,9 @@ public class frmClientesNGTest {
         );
     }
     
-    //--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
     @Test(
-        enabled = false,
+        enabled = true,
             priority = 2,
             description = """
                           Prueba Swing.
@@ -95,9 +98,9 @@ public class frmClientesNGTest {
         );
     }
     
-    //--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
     @Test(
-        enabled = false,
+        enabled = true,
             priority = 3,
             description = """
                           Prueba Swing.
@@ -110,7 +113,6 @@ public class frmClientesNGTest {
                 new File("testSwing/testBorrarCliente.stt")
         );
     }
-    //--------------------------------------------------------------------------
 }
 
 /**
