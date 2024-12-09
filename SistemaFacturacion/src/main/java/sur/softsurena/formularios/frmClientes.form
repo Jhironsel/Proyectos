@@ -248,6 +248,9 @@
                                 </Property>
                                 <Property name="name" type="java.lang.String" value="tblClientes" noResource="true"/>
                               </Properties>
+                              <Events>
+                                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblClientesKeyPressed"/>
+                              </Events>
                               <AuxValues>
                                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new rojerusan.RSTableMetro1(){&#xa;    @Override&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Las celdas no son editables.&#xa;    }&#xa;}"/>
                                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>

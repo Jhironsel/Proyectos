@@ -77,8 +77,7 @@
       </keyboardInteractions>
       <requestToFocusOnTheComponent>true</requestToFocusOnTheComponent>
     </xy.ui.testing.action.component.SendKeysAction>
-    <xy.ui.testing.action.component.specific.SelectTableRowAction>
-      <addedToExistingSelection>false</addedToExistingSelection>
+    <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>tblClientes</componentName>
@@ -86,9 +85,18 @@
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
-      <firstItemToSelect>1</firstItemToSelect>
-      <lastItemToSelect>1</lastItemToSelect>
-    </xy.ui.testing.action.component.specific.SelectTableRowAction>
+      <keyboardInteractions>
+        <xy.ui.testing.action.component.SendKeysAction_-SpecialKey>
+          <altDown>true</altDown>
+          <altGrtDown>true</altGrtDown>
+          <ctrlDown>true</ctrlDown>
+          <keyName>KEY_UNDEFINED</keyName>
+          <metaDown>false</metaDown>
+          <shiftDown>true</shiftDown>
+        </xy.ui.testing.action.component.SendKeysAction_-SpecialKey>
+      </keyboardInteractions>
+      <requestToFocusOnTheComponent>true</requestToFocusOnTheComponent>
+    </xy.ui.testing.action.component.SendKeysAction>
     <xy.ui.testing.action.component.ClickAction>
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">

@@ -65,7 +65,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
     private static String criterioBusqueda = "";
 
-    private static Integer idCliente;
+    private static Integer idCliente;//TODO 09/12/2024 Esta variable se encuentra 43 veces.
 
     private static Object registro[];
 
@@ -327,6 +327,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         tblClientes.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblClientes.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblClientes.setName("tblClientes"); // NOI18N
+        tblClientes.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblClientesKeyPressed(evt);
+            }
+        });
         jScrollPane6.setViewportView(tblClientes);
 
         jScrollPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
@@ -1294,6 +1299,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         if (validarRegistro("modificar.")) {
             return;
         }
+        
+        limpiarTablasDirTelCorr();
 
         //Se hace false para indicar que es una modificacion de registro.
         v_nuevo = false;
@@ -1336,8 +1343,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         //Mandamos a borrar el cliente y obtenemos el resultado de la operacion
         //y almacenamos en una variable.
         Resultado resultados = M_Cliente.borrarCliente(
-                ((Persona) tblClientes.getValueAt(
-                        tblClientes.getSelectedRow(), 0)).getId_persona()
+                ((Generales) tblClientes.getValueAt(
+                        tblClientes.getSelectedRow(), 
+                        0
+                )).getPersona().getId_persona()
         );
 
         JOptionPane.showInternalMessageDialog(
@@ -2666,6 +2675,22 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             }
         }
     }//GEN-LAST:event_jcbDistritoMunicipalKeyPressed
+
+    private void tblClientesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblClientesKeyPressed
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        int randon = (int) (Math.random() * tblClientes.getRowCount());
+                        
+                        if(randon == 0) randon = 1;
+                        
+                        tblClientes.setRowSelectionInterval(randon, randon);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_tblClientesKeyPressed
 
     /**
      * Este metodo valida que: <br>
