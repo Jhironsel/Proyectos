@@ -149,18 +149,23 @@ public class M_Producto implements IProducto {
      * TODO 27/11/2024 pasarle un filtro a este metodo.
      * 
      * @param idCategoria Categoria que se necesita consultar.
+     * 
      * @param estado el estado por la categoria del producto.
+     * 
      * @return
      */
     public synchronized static List<Producto> getProductosByCategoria(
-            int idCategoria,
-            Boolean estado
+            int idCategoria, Boolean estado
     ) {
         final String sql
                 = "SELECT ID, DESCRIPCION, IMAGEN_PRODUCTO "
                 + "FROM GET_PRODUCTOS "
-                + "WHERE ID_CATEGORIA = ? " + (Objects.isNull(estado) ? ";"
-                : (estado ? " AND ESTADO;" : " AND ESTADO IS FALSE;"));
+                + "WHERE ID_CATEGORIA = ? " + (
+                Objects.isNull(estado) ? ";" : (    estado ? 
+                                                    " AND ESTADO;" : 
+                                                    " AND ESTADO IS FALSE;"
+                                                )
+                );
 
         List<Producto> productosList = new ArrayList<>();
 

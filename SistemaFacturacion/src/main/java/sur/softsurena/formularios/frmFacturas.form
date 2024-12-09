@@ -136,7 +136,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane3" pref="1039" max="32767" attributes="0"/>
+          <Component id="jScrollPane3" pref="1071" max="32767" attributes="0"/>
           <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
@@ -145,7 +145,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="524" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" pref="544" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -884,7 +884,7 @@
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jScrollPane4" max="32767" attributes="0"/>
-                              <Component id="jpBusqueda" alignment="0" pref="564" max="32767" attributes="0"/>
+                              <Component id="jpBusqueda" alignment="0" pref="596" max="32767" attributes="0"/>
                               <Component id="jpCategoria" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -899,7 +899,7 @@
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jpBusqueda" min="-2" pref="78" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" pref="306" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" pref="320" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>

@@ -1,9 +1,7 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.JOptionPane;
-import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -18,28 +16,26 @@ import static sur.softsurena.metodos.M_M_Factura.ERROR_AL_INSERTAR_FACTURA_AL_SI
 import static sur.softsurena.metodos.M_M_Factura.FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM;
 import static sur.softsurena.metodos.M_M_Factura.FACTURA__BORRADA__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_M_Factura.OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__FA;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
  *
  * @author jhironsel
  */
-@Getter
-public class M_FacturaNGTest {
-
+public class M_M_FacturaNGTest {
+    
     private int id_factura = -1;
     private Factura factura;
-
-    public M_FacturaNGTest() {
+    
+    public M_M_FacturaNGTest() {
         factura = Factura
                 .builder()
                 .build();
     }
-    
-    //--------------------------------------------------------------------------
-    
+
     @BeforeClass
-    public void setUpClass() throws Exception {
+    public static void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -54,33 +50,16 @@ public class M_FacturaNGTest {
     }
 
     @AfterClass
-    public void tearDownClass() throws Exception {
+    public static void tearDownClass() throws Exception {
         Conexion.getCnn().close();
     }
 
-    //--------------------------------------------------------------------------
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
 
-    //--------------------------------------------------------------------------
     @AfterMethod
     public void tearDownMethod() throws Exception {
-    }
-
-    //--------------------------------------------------------------------------
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = ""
-    )
-    public void testGetTemporales() {
-        List result = M_M_Factura.getTemporales();
-        assertTrue(
-                result.isEmpty(), 
-                "La lista de facturas temporales se encuentra con registros."
-        );
     }
 
     //--------------------------------------------------------------------------
@@ -121,7 +100,6 @@ public class M_FacturaNGTest {
         id_factura = result.getId();
         
     }
-
     //--------------------------------------------------------------------------
     @Test(
             enabled = false,
@@ -140,6 +118,24 @@ public class M_FacturaNGTest {
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build()
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = ""
+    )
+    public void testFacturaEstado() {
+        List result = M_M_Factura.getFacturaEstado(
+                FiltroBusqueda
+                        .builder()
+                        .estadoFactura('t')
+                        .build()
+        );
+        assertTrue(
+                result.isEmpty(), 
+                "La lista de facturas temporales se encuentra con registros."
         );
     }
 
@@ -168,4 +164,93 @@ public class M_FacturaNGTest {
 
     }
 
+    /**
+     * Test of sqlGetTemporal method, of class M_M_Factura.
+     */
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          
+                          """
+    )
+    public void testSqlGetTemporal() {
+        String expResult = """
+                           SELECT
+                              ID,
+                              ID_CLIENTE,
+                              ID_CONTACTOS_TEL,
+                              ID_CONTACTOS_DIRECCIONES,
+                              ID_CONTACTOS_EMAIL,
+                              ID_TURNO,
+                              FECHA_HORA,
+                              ESTADO_FACTURA,
+                              NOMBRE_TEMP,
+                              USER_NAME,
+                              PNOMBRE,
+                              SNOMBRE,
+                              APELLIDOS
+                           FROM GET_M_FACTURAS
+                           ;
+                           """;
+        String result = M_M_Factura.sqlFacturaEstado(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
+        assertEquals(result, expResult);
+        
+        expResult = """
+                    SELECT
+                       ID,
+                       ID_CLIENTE,
+                       ID_CONTACTOS_TEL,
+                       ID_CONTACTOS_DIRECCIONES,
+                       ID_CONTACTOS_EMAIL,
+                       ID_TURNO,
+                       FECHA_HORA,
+                       ESTADO_FACTURA,
+                       NOMBRE_TEMP,
+                       USER_NAME,
+                       PNOMBRE,
+                       SNOMBRE,
+                       APELLIDOS
+                    FROM GET_M_FACTURAS
+                    WHERE ESTADO_FACTURA = 't';
+                    """;
+        result = M_M_Factura.sqlFacturaEstado(
+                FiltroBusqueda
+                        .builder()
+                        .estadoFactura('t')
+                        .build()
+        );
+        assertEquals(result, expResult);
+        
+        expResult = """
+                    SELECT
+                       ID,
+                       ID_CLIENTE,
+                       ID_CONTACTOS_TEL,
+                       ID_CONTACTOS_DIRECCIONES,
+                       ID_CONTACTOS_EMAIL,
+                       ID_TURNO,
+                       FECHA_HORA,
+                       ESTADO_FACTURA,
+                       NOMBRE_TEMP,
+                       USER_NAME,
+                       PNOMBRE,
+                       SNOMBRE,
+                       APELLIDOS
+                    FROM GET_M_FACTURAS
+                    WHERE ESTADO_FACTURA = 'i';
+                    """;
+        result = M_M_Factura.sqlFacturaEstado(
+                FiltroBusqueda
+                        .builder()
+                        .estadoFactura('i')
+                        .build()
+        );
+        assertEquals(result, expResult);
+    }
+    
 }

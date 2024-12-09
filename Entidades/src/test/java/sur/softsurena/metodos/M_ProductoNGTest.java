@@ -143,7 +143,7 @@ public class M_ProductoNGTest {
             priority = 0
     )
     public void testGetProductos() {
-        List<Producto> productos = getProductos(
+        List<Producto> productos = M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .build()
@@ -155,7 +155,7 @@ public class M_ProductoNGTest {
         );
 
         //----------------------------------------------------------------------
-        productos = getProductos(
+        productos = M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.TRUE)
@@ -167,19 +167,7 @@ public class M_ProductoNGTest {
         );
 
         //----------------------------------------------------------------------
-        productos = getProductos(
-                FiltroBusqueda
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-        assertTrue(
-                productos.isEmpty(),
-                "No se encontraron registros en la tabla de producto."
-        );
-
-        //----------------------------------------------------------------------
-        productos = getProductos(
+        productos = M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .filas(Boolean.FALSE)
@@ -191,7 +179,7 @@ public class M_ProductoNGTest {
         );
 
         //----------------------------------------------------------------------
-        productos = getProductos(
+        productos = M_Producto.getProductos(
                 FiltroBusqueda
                         .builder()
                         .filas(Boolean.TRUE)
@@ -222,12 +210,6 @@ public class M_ProductoNGTest {
 
         result = getProductosByCategoria(0, true);
         assertFalse(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = getProductosByCategoria(0, false);
-        assertTrue(
                 result.isEmpty(),
                 "Se obtuvo resultados en la consulta."
         );

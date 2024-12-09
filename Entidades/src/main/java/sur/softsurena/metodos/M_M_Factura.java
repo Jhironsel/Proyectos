@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cliente;
@@ -17,6 +19,7 @@ import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.entidades.Turno;
 import static sur.softsurena.metodos.M_D_Factura.agregarDetalleFactura;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -159,36 +162,17 @@ public class M_M_Factura {
     /**
      * Para obtener las facturas temporales del sistema.
      *
-     * TODO este metodo deberia de llamar realmente las facturas temporales del
-     * sistema.
-     *
+     * @param filtro
      * @return
      */
-    public synchronized static List<Factura> getTemporales() {
-        final String sql
-                = """
-                  SELECT 
-                    ID, 
-                    ID_CLIENTE, 
-                    ID_CONTACTOS_TEL, 
-                    ID_CONTACTOS_DIRECCIONES, 
-                    ID_CONTACTOS_EMAIL, 
-                    ID_TURNO, 
-                    FECHA_HORA, 
-                    ESTADO_FACTURA, 
-                    NOMBRE_TEMP, 
-                    USER_NAME, 
-                    PNOMBRE, 
-                    SNOMBRE, 
-                    APELLIDOS
-                  FROM GET_M_FACTURAS
-                  WHERE ESTADO_FACTURA = 't';
-                  """;
+    public synchronized static List<Factura> getFacturaEstado(
+            @NonNull FiltroBusqueda filtro
+    ) {
 
         List<Factura> facturaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlFacturaEstado(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -260,6 +244,32 @@ public class M_M_Factura {
         return facturaList;
     }
 
+    protected static String sqlFacturaEstado(FiltroBusqueda filtro) {
+        return """
+                 SELECT
+                    ID,
+                    ID_CLIENTE,
+                    ID_CONTACTOS_TEL,
+                    ID_CONTACTOS_DIRECCIONES,
+                    ID_CONTACTOS_EMAIL,
+                    ID_TURNO,
+                    FECHA_HORA,
+                    ESTADO_FACTURA,
+                    NOMBRE_TEMP,
+                    USER_NAME,
+                    PNOMBRE,
+                    SNOMBRE,
+                    APELLIDOS
+                 FROM GET_M_FACTURAS
+                 %s
+                  """.formatted(
+                          (Objects.isNull(filtro.getEstadoFactura()) ? 
+                                  ";":
+                                  "WHERE ESTADO_FACTURA = '%c';".formatted(filtro.getEstadoFactura()))
+                  );
+    }
+    
+//------------------------------------------------------------------------------
     /**
      * Metodo que elimina las facturas del sistema por el identificador
      * suministrado.

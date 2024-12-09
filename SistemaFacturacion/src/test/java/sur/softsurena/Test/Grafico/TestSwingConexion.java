@@ -14,7 +14,7 @@ public class TestSwingConexion {
     }
 
     public static void main(String[] args) throws IOException, Exception {
-        editTestSwing("testSwing/testUpdateCliente.stt", false);
+        editTestSwing("testSwing/testConsultaFacturaTemporal.stt", true);
 //        editTestSwing("testSwing/Lento.stt", false);
         
         //Deuda

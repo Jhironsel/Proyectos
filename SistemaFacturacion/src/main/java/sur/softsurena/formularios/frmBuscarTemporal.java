@@ -11,8 +11,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Factura;
 import sur.softsurena.hilos.hiloImpresionFactura;
-import static sur.softsurena.metodos.M_M_Factura.getTemporales;
+import sur.softsurena.metodos.M_M_Factura;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
+import sur.softsurena.utilidades.FiltroBusqueda;
 
 public final class frmBuscarTemporal extends java.awt.Dialog {
 
@@ -47,6 +48,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDetalle = new JTable(){
             @Override
@@ -80,10 +82,12 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
                 "N° Factura", "Nombre Cliente", "Fecha", "Hora", "Cajero", "Monto"
             }
         ));
+        tblDetalle.setName("tblDetalle"); // NOI18N
         jScrollPane1.setViewportView(tblDetalle);
 
         btnAceptar.setText("Aceptar");
         btnAceptar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DONE);
+        btnAceptar.setName("btnAceptar"); // NOI18N
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
@@ -93,6 +97,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         btnImprimirCuenta.setText("Imprimir Cuenta");
         btnImprimirCuenta.setColorPrimario(new java.awt.Color(51, 255, 51));
         btnImprimirCuenta.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PRINT);
+        btnImprimirCuenta.setName("btnImprimirCuenta"); // NOI18N
         btnImprimirCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImprimirCuentaActionPerformed(evt);
@@ -103,6 +108,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         btnCancelar.setColorPrimario(new java.awt.Color(255, 0, 0));
         btnCancelar.setColorPrimarioHover(new java.awt.Color(255, 51, 102));
         btnCancelar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
+        btnCancelar.setName("btnCancelar"); // NOI18N
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -130,6 +136,27 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
                     .addComponent(btnImprimirCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(85, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -139,17 +166,14 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -159,62 +183,62 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         llenarTabla();
     }//GEN-LAST:event_formWindowOpened
 
-    private void btnImprimirCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirCuentaActionPerformed
-        //Debe haber una factura selecciona
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (tblDetalle.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(
-                    this,
-                    "No ha seleccionado Factura",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
+                this,
+                "Debe selecionar una Factura...",
+                "",
+                JOptionPane.ERROR_MESSAGE
             );
             return;
         }
-
-        //Creamos un mapa de los valores de la factura, la cual se requiere el 
-        //identificador de la factura. 
-        Map<String, Object> parametros = new HashMap<>();
-
-        parametros.put("idFactura", Integer.valueOf(
-                miTabla.getValueAt(
-                        tblDetalle.getSelectedRow(), 0
-                ).toString()));
-
-        hiloImpresionFactura miFactura
-                = new hiloImpresionFactura(
-                        true, //Mostrar Reporte
-                        false, //No se requiere copia del documento
-                        "/Reportes/factura.jasper",
-                        parametros,
-                        frmPrincipal.jPanelImpresion,
-                        frmPrincipal.jprImpresion);
-        miFactura.start();
-    }//GEN-LAST:event_btnImprimirCuentaActionPerformed
+        setAceptar(true);
+        setFactura(
+            tblDetalle.getValueAt(
+                tblDetalle.getSelectedRow(),
+                0
+            ).toString()
+        );
+        dispose();
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         setAceptar(false);
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+    private void btnImprimirCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirCuentaActionPerformed
+        //Debe haber una factura selecciona
         if (tblDetalle.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(
-                    this,
-                    "Debe selecionar una Factura...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
+                this,
+                "No ha seleccionado Factura",
+                "",
+                JOptionPane.ERROR_MESSAGE
             );
             return;
         }
-        setAceptar(true);
-        setFactura(
-                tblDetalle.getValueAt(
-                        tblDetalle.getSelectedRow(), 
-                        0
-                ).toString()
-        );
-        dispose();
-    }//GEN-LAST:event_btnAceptarActionPerformed
+
+        //Creamos un mapa de los valores de la factura, la cual se requiere el
+        //identificador de la factura.
+        Map<String, Object> parametros = new HashMap<>();
+
+        parametros.put("idFactura", Integer.valueOf(
+            miTabla.getValueAt(
+                tblDetalle.getSelectedRow(), 0
+            ).toString()));
+
+            hiloImpresionFactura miFactura
+            = new hiloImpresionFactura(
+                true, //Mostrar Reporte
+                false, //No se requiere copia del documento
+                "/Reportes/factura.jasper",
+                parametros,
+                frmPrincipal.jPanelImpresion,
+                frmPrincipal.jprImpresion);
+            miFactura.start();
+    }//GEN-LAST:event_btnImprimirCuentaActionPerformed
     /**
      * Metodo utilizado para llenar las tablas de las facturas que existen en
      * temporal.
@@ -225,9 +249,15 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
     private void llenarTabla() {
         String titulos[] = {"N° Factura", "Nombre Cliente", "Fecha/Hora",
             "Cajero"};
+        int columnWidth[] = {10,50,20,20};
         miTabla = new DefaultTableModel(null, titulos);
 
-        List<Factura> temporalesList = getTemporales();
+        List<Factura> temporalesList = M_M_Factura.getFacturaEstado(
+                FiltroBusqueda
+                        .builder()
+                        .estadoFactura('t')
+                        .build()
+        );
 
         Object registro[] = new Object[titulos.length];
 
@@ -250,34 +280,16 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         );
         //Se agrega el modelo a la tabla.
         tblDetalle.setModel(miTabla);
+
         //Para Alinear el Texto de la Table a la Derecha...
         tcr.setHorizontalAlignment(SwingConstants.CENTER);
         tblDetalle.getColumnModel().getColumn(0).setCellRenderer(tcr);
-        tcr.setHorizontalAlignment(SwingConstants.RIGHT);
-        tblDetalle.getColumnModel().getColumn(5).setCellRenderer(tcr);
 
         //Ordenando las columnas
         TableColumn miTableColumn;
-        for (int i = 0; i <= 5; i++) {
+        for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblDetalle.getColumnModel().getColumn(i);
-            if (i == 0) {
-                miTableColumn.setPreferredWidth(170);
-            }
-            if (i == 1) {
-                miTableColumn.setPreferredWidth(400);
-            }
-            if (i == 2) {
-                miTableColumn.setPreferredWidth(150);
-            }
-            if (i == 3) {
-                miTableColumn.setPreferredWidth(130);
-            }
-            if (i == 4) {
-                miTableColumn.setPreferredWidth(130);
-            }
-            if (i == 5) {
-                miTableColumn.setPreferredWidth(160);
-            }
+            miTableColumn.setPreferredWidth(columnWidth[i]);
         }
     }
 
@@ -286,6 +298,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
     private newscomponents.RSButtonGradientIcon_new btnCancelar;
     private newscomponents.RSButtonGradientIcon_new btnImprimirCuenta;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable tblDetalle;
     // End of variables declaration//GEN-END:variables

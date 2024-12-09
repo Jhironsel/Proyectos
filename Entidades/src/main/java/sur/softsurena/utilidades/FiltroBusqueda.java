@@ -17,4 +17,6 @@ public class FiltroBusqueda {
     private final int nCantidadFilas;
     
     private final Boolean conImagen;
+    
+    private final Character estadoFactura;
 }
