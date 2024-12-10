@@ -53,7 +53,6 @@ public class PCefalicoChicoChica {
                     new InputStreamReader(XYSeriesCollection.class.
                             getClassLoader().getResourceAsStream(
                                     "datos/PCefalico.txt")));
-            String str = localBufferedReader.readLine();
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, false);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, false);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, false);
@@ -62,7 +61,9 @@ public class PCefalicoChicoChica {
             XYSeries localXYSeries6 = new XYSeries("SD2", true, false);
             XYSeries localXYSeries7 = new XYSeries("SD3", true, false);
             XYSeries localXYSeries8 = new XYSeries("DATOS", true, false);
-
+            
+            localBufferedReader.readLine();
+            String str;
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes

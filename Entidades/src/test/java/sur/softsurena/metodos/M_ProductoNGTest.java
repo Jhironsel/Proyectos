@@ -21,7 +21,6 @@ import static sur.softsurena.metodos.M_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__BORRADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.agregarProducto;
-import static sur.softsurena.metodos.M_Producto.getProductos;
 import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
 import static sur.softsurena.metodos.M_Producto.modificarProducto;
 import sur.softsurena.utilidades.FiltroBusqueda;

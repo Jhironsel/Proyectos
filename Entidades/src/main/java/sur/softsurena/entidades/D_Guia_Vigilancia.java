@@ -8,16 +8,24 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class D_Guia_Vigilancia {
 
-    private final int id;
-    private final int id_paciente;
+    private final Integer id;
+    private final Guia_Vigilancia_Desarrollo gvd;
+    private final Paciente paciente;
     private final Timestamp fecha;
 
     @Override
     public String toString() {
-        return "D_guia_vigilancia{" + 
-                " id=" + id + 
-                ", id_paciente=" + id_paciente + 
-                ", fecha=" + fecha + 
-                '}';
+        return paciente.toString();
+    }
+    
+    public String getJSON() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("D_Guia_Vigilancia{");
+        sb.append("id=").append(id);
+        sb.append(", gvd=").append(gvd);
+        sb.append(", paciente=").append(paciente);
+        sb.append(", fecha=").append(fecha);
+        sb.append('}');
+        return sb.toString();
     }
 }
