@@ -8,22 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
-import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmEmpresaDatos extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private final File file, directorio;
+    private final File file;
 
     public frmEmpresaDatos() throws IOException {
         initComponents();
         file = new File("ArchivosConfiguracion/Empresa.ini");
-        directorio = new File("ArchivosConfiguracion\\");
-        if (!directorio.exists()) {
-            directorio.mkdir();
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -39,15 +34,9 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
         txtRNC = new javax.swing.JTextField();
         txtTelefonoEmpresa = new javax.swing.JTextField();
         txtNombreEmpresa = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         btnAceptar1 = new javax.swing.JButton();
         btnCancelar1 = new javax.swing.JButton();
+        txtMensaje = new javax.swing.JTextPane();
 
         setClosable(true);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
@@ -70,53 +59,31 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
 
         txtPorCiento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtPorCiento.setForeground(new java.awt.Color(1, 1, 1));
+        txtPorCiento.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " %Ganancina Productos "));
 
         txtDireccion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtDireccion.setForeground(new java.awt.Color(1, 1, 1));
+        txtDireccion.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Direcciòn "));
 
         txtTipoEmpresa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTipoEmpresa.setForeground(new java.awt.Color(1, 1, 1));
+        txtTipoEmpresa.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Tipo de Empresa "));
 
         txtCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtCorreo.setForeground(new java.awt.Color(1, 1, 1));
+        txtCorreo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Correo electrónico"));
 
         txtRNC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtRNC.setForeground(new java.awt.Color(1, 1, 1));
+        txtRNC.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " RNC "));
 
         txtTelefonoEmpresa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTelefonoEmpresa.setForeground(new java.awt.Color(1, 1, 1));
+        txtTelefonoEmpresa.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Telefono/s "));
 
         txtNombreEmpresa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtNombreEmpresa.setForeground(new java.awt.Color(1, 1, 1));
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel1.setText("Nombre de la Empresa: ");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel2.setText("Telefonos: ");
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel6.setText("Correo Eletronico: ");
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel5.setText("%Ganancina Productos: ");
-
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel4.setText("Direccion: ");
-        jLabel4.setToolTipText("");
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel3.setText("RNC : ");
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(1, 1, 1));
-        jLabel7.setText("Tipo de Empresa: ");
+        txtNombreEmpresa.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Nombre de la empresa "));
 
         btnAceptar1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnAceptar1.setForeground(new java.awt.Color(1, 1, 1));
@@ -146,73 +113,54 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
             }
         });
 
+        txtMensaje.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Mensaje de Tickes "));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnCancelar1)
-                        .addGap(95, 95, 95)
-                        .addComponent(btnAceptar1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtTipoEmpresa, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtRNC, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombreEmpresa, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPorCiento, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnAceptar1))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNombreEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtRNC, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTipoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPorCiento, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtNombreEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addContainerGap()
+                .addComponent(txtNombreEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel2)
-                    .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel6)
-                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtTelefonoEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtRNC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                .addComponent(txtCorreo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                .addComponent(txtRNC)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtTipoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                .addComponent(txtDireccion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtPorCiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                .addComponent(txtTipoEmpresa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPorCiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar1)
                     .addComponent(btnAceptar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -225,7 +173,7 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
         );
 
         pack();
@@ -248,10 +196,16 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAceptar1MouseExited
 
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
-        grabarConfiguracion(txtNombreEmpresa.getText(),
-                txtTelefonoEmpresa.getText(), txtCorreo.getText(),
-                txtRNC.getText(), txtDireccion.getText(), txtTipoEmpresa.getText(),
-                txtPorCiento.getText());
+        grabarConfiguracion(
+                txtNombreEmpresa.getText(),
+                txtTelefonoEmpresa.getText(),
+                txtCorreo.getText(),
+                txtRNC.getText(),
+                txtDireccion.getText(),
+                txtTipoEmpresa.getText(),
+                txtPorCiento.getText(),
+                txtMensaje.getText()
+        );
         dispose();
     }//GEN-LAST:event_btnAceptar1ActionPerformed
 
@@ -259,17 +213,11 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar1;
     private javax.swing.JButton btnCancelar1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
+    public javax.swing.JTextPane txtMensaje;
     private javax.swing.JTextField txtNombreEmpresa;
     private javax.swing.JTextField txtPorCiento;
     private javax.swing.JTextField txtRNC;
@@ -283,7 +231,7 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
             try {
                 file.createNewFile();
             } catch (IOException ex) {
-                Utilidades.LOG.getLogger(
+                LOG.getLogger(
                         frmEmpresaDatos.class.getName()
                 ).log(
                         Level.SEVERE, 
@@ -320,9 +268,10 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
                 if (linea.startsWith("PorCiento =")) {
                     txtPorCiento.setText(new String(linea.substring(11)));
                 }
-
+                if (linea.startsWith("Mensaje =")) {
+                    txtMensaje.setText(new String(linea.substring(9)));
+                }
             }
-
         } catch (IOException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -335,28 +284,33 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
     /**
      *
      * @param nombre
-     * @param Telefono
-     * @param Correo
+     * @param telefono
+     * @param correo
      * @param RNC
-     * @param Direccion
-     * @param TipoEmpresa
-     * @param PorCiento
+     * @param direccion
+     * @param tipoEmpresa
+     * @param porCiento
      */
-    private void grabarConfiguracion(String nombre,
-            String Telefono, String Correo, String RNC,
-            String Direccion, String TipoEmpresa,
-            String PorCiento
+    private void grabarConfiguracion(
+            String nombre,
+            String telefono,
+            String correo,
+            String RNC,
+            String direccion,
+            String tipoEmpresa,
+            String porCiento,
+            String mensaje
     ) {
-
         try (FileWriter fw = new FileWriter(file); PrintWriter pw = new PrintWriter(fw);) {
             pw.println("[General]");
             pw.println("Nombre =" + nombre);
-            pw.println("Telefono =" + Telefono);
-            pw.println("Correo =" + Correo);
+            pw.println("Telefono =" + telefono);
+            pw.println("Correo =" + correo);
             pw.println("RNC =" + RNC);
-            pw.println("Direccion =" + Direccion);
-            pw.println("TipoEmpresa =" + TipoEmpresa);
-            pw.println("PorCiento =" + PorCiento);
+            pw.println("Direccion =" + direccion);
+            pw.println("TipoEmpresa =" + tipoEmpresa);
+            pw.println("PorCiento =" + porCiento);
+            pw.println("Mensaje =" + mensaje);
         } catch (Exception e1) {
             LOG.log(
                     Level.SEVERE,

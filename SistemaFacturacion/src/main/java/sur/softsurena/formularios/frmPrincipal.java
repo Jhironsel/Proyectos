@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
@@ -113,10 +114,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         pEstatus = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jlLogoEmpresa = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        txtGanancia = new javax.swing.JFormattedTextField();
-        txtCosto = new javax.swing.JFormattedTextField();
-        txtVenta = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtCajero = new JTable(){
             @Override
@@ -376,29 +373,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setLayout(new java.awt.GridLayout(3, 1, 0, 5));
-
-        txtGanancia.setEditable(false);
-        txtGanancia.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ganancias", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        txtGanancia.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
-        txtGanancia.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtGanancia.setToolTipText("");
-        jPanel2.add(txtGanancia);
-
-        txtCosto.setEditable(false);
-        txtCosto.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Costo del Inventario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        txtCosto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
-        txtCosto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtCosto.setToolTipText("");
-        jPanel2.add(txtCosto);
-
-        txtVenta.setEditable(false);
-        txtVenta.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Proyección de venta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        txtVenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
-        txtVenta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtVenta.setToolTipText("");
-        jPanel2.add(txtVenta);
-
         jtCajero.setFont(new java.awt.Font("DejaVu Sans", 0, 12)); // NOI18N
         jtCajero.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -614,8 +588,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                     .addComponent(jlLogoEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                     .addComponent(btnEstablecerEncabezado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                     .addComponent(btnSeleccionarImpresora, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
@@ -627,9 +600,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlLogoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -1161,22 +1132,14 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     private void btnEstablecerEncabezadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerEncabezadoActionPerformed
         try {
-            //        mensaje();
             abrirFormularioCentralizado(new frmEmpresaDatos());
         } catch (IOException ex) {
-            LOG.getLogger(
-                    frmPrincipal.class.getName()
-            ).log(
+            LOG.log(
                     Level.SEVERE, 
                     "El formulario de frmEmpresaDatos tiene problemas.", 
                     ex
             );
         }
-        //TODO Este es el formulario que va aqui.
-        
-//        frmEncabezado encabezado2 = new frmEncabezado(null, true);
-//        encabezado2.setLocationRelativeTo(null);
-//        encabezado2.setVisible(true);
     }//GEN-LAST:event_btnEstablecerEncabezadoActionPerformed
 
     private void btnSeleccionarImpresoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarImpresoraActionPerformed
@@ -1299,7 +1262,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     private void cbRolesPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbRolesPopupMenuWillBecomeInvisible
         String rol = ((Role) cbRoles.getSelectedItem()).getRoleName();
-        
 
         rol = (rol.equalsIgnoreCase("ADMINISTRADOR") ? "RDB$ADMIN" : rol);
 
@@ -1390,19 +1352,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     }
 
-//    private void panorama() {
-//        ResultSet rs = getConsulta(
-//                "SELECT cast(r.VENTA as numeric(15,2)) as VENTA, "
-//                + "     cast(r.COSTO as numeric(15,2)) as COSTO FROM PANORAMA r");
-//        try {
-//            rs.next();
-//            txtVenta.setValue(rs.getDouble("venta"));
-//            txtCosto.setValue(rs.getDouble("costo"));
-//            txtGanancia.setValue(rs.getDouble("venta") - rs.getDouble("costo"));
-//        } catch (SQLException ex) {
-//            LOG.log(Level.SEVERE, "Error al crear ventana de cliente.", ex);
-//        }
-//    }
     protected void cerrarTodos() {
         for (JInternalFrame allFrame : dpnEscritorio.getAllFrames()) {
             if (allFrame != null) {
@@ -1417,7 +1366,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         if (!dpnEscritorio.isAncestorOf(formulario)) {
             dpnEscritorio.add(formulario);
         }
-        
+
         formulario.setVisible(true);
 
         try {
@@ -1430,7 +1379,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
                     ex
             );
         }
-
 
         System.gc();
     }
@@ -1666,7 +1614,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                                 .build()
                 )
         );
-        
+
         mnuMovimientosDeudas.setVisible(
                 M_Privilegio.privilegio(
                         Privilegio
@@ -1759,7 +1707,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
     public static javax.swing.JLabel jLabelImpresion;
     private rojerusan.RSMenuBar jMenuBar;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     public static javax.swing.JPanel jPanelImpresion;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1827,8 +1774,5 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pEstatus;
     private rojeru_san.rsdate.RSLabelFecha rSLabelFecha1;
     private rojeru_san.rsdate.RSLabelHora rSLabelHora1;
-    private javax.swing.JFormattedTextField txtCosto;
-    private javax.swing.JFormattedTextField txtGanancia;
-    private javax.swing.JFormattedTextField txtVenta;
     // End of variables declaration//GEN-END:variables
 }
