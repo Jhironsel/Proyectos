@@ -46,10 +46,7 @@ public class M_TiposSangresNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
-    /**
-     * Test of getTipoSangre method, of class M_TiposSangres.
-     */
+    
     @Test(
             enabled = true,
             priority = 0,

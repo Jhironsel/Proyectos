@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import com.mxrck.autocompleter.tests.Person;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -174,7 +173,7 @@ public class M_Generales {
                 .build();
     }
 
-    public static Generales getEntidadByCedula(String cedula) {
+    public static Generales getEntidadByCedula(@NonNull String cedula) {
         final String sql = """
                            SELECT 
                                 ID_PERSONA, 

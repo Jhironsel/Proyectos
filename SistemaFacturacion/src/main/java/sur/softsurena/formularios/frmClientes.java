@@ -1299,7 +1299,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         if (validarRegistro("modificar.")) {
             return;
         }
-        
+
         limpiarTablasDirTelCorr();
 
         //Se hace false para indicar que es una modificacion de registro.
@@ -1344,7 +1344,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         //y almacenamos en una variable.
         Resultado resultados = M_Cliente.borrarCliente(
                 ((Generales) tblClientes.getValueAt(
-                        tblClientes.getSelectedRow(), 
+                        tblClientes.getSelectedRow(),
                         0
                 )).getPersona().getId_persona()
         );
@@ -1655,7 +1655,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         .estado(cbEstado.isSelected())
                         .build();
 
-        Resultado resultados = (v_nuevo ? M_Persona.agregarEntidad(persona) : M_Persona.modificarEntidad(persona));
+        Resultado resultados = (v_nuevo ? M_Persona.insert(persona) : M_Persona.update(persona));
 
         if (!resultados.getEstado()) {
             mensajeResultado(
@@ -2313,7 +2313,12 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             idCliente = cedula.getPersona().getId_persona();
 
             if (v_nuevo) {
-                if (idCliente > 0 && !M_Persona.getEntidad(idCliente).getEstado()) {
+                if (idCliente > 0 && !M_Persona.getList(
+                        FiltroBusqueda
+                                .builder()
+                                .id(idCliente)
+                                .build()
+                ).getFirst().getEstado()) {
                     int resp = JOptionPane.showInternalConfirmDialog(
                             this,
                             """
@@ -2682,9 +2687,11 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int randon = (int) (Math.random() * tblClientes.getRowCount());
-                        
-                        if(randon == 0) randon = 1;
-                        
+
+                        if (randon == 0) {
+                            randon = 1;
+                        }
+
                         tblClientes.setRowSelectionInterval(randon, randon);
                     }
                 }

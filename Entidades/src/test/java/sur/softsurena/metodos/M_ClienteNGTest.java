@@ -9,10 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.Cliente;
-import sur.softsurena.entidades.Generales;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_NO_PUEDE_SER_BORRADO;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE__AGREGADO__CORRECTAMENTE;
@@ -21,7 +18,6 @@ import static sur.softsurena.metodos.M_Cliente.agregarClienteById;
 import static sur.softsurena.metodos.M_Cliente.borrarCliente;
 import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
-import sur.softsurena.utilidades.Utilidades;
 
 /**
  *
@@ -70,7 +66,7 @@ public class M_ClienteNGTest {
             description = ""
     )
     public void testAgregarClienteById() {
-        persona.testAgregarEntidad();
+        persona.testInsert();
 
         Resultado result = agregarClienteById(
                 M_PersonaNGTest.persona().getId_persona()
@@ -112,7 +108,7 @@ public class M_ClienteNGTest {
                 CLIENTE_NO_PUEDE_SER_BORRADO
         );
 
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 
     @Test(

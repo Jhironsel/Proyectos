@@ -29,7 +29,7 @@ import sur.softsurena.utilidades.Resultado;
 public class M_DireccionNGTest {
 
     private int id_direccion;
-    private M_PersonaNGTest persona;
+    private final M_PersonaNGTest persona;
 
     public M_DireccionNGTest() {
         persona = new M_PersonaNGTest();
@@ -72,7 +72,7 @@ public class M_DireccionNGTest {
     )
     public void testAgregarDireccion() {
         
-        persona.testAgregarEntidad();
+        persona.testInsert();
         
         Resultado result = agregarDireccion(
                 Direccion
@@ -214,6 +214,6 @@ public class M_DireccionNGTest {
                 ERROR_AL_BORRAR_EL_REGISTRO_DE_LA_DIRECCI
         );
 
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 }

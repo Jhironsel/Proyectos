@@ -64,7 +64,7 @@ public class M_ContactoTelNGTest {
                           """
     )
     public void testAgregarContactosTel() {
-        persona.testAgregarEntidad();
+        persona.testInsert();
 
         Resultado result = M_ContactoTel.agregarContactosTel(
                 telefono()
@@ -155,7 +155,7 @@ public class M_ContactoTelNGTest {
                         .build(),
                 M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN_
         );
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 
     @Test(

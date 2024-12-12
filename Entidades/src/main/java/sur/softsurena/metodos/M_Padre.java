@@ -1,12 +1,23 @@
 package sur.softsurena.metodos;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.ARS;
+import sur.softsurena.entidades.Asegurado;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
+import sur.softsurena.entidades.TipoSangre;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -18,39 +29,107 @@ public class M_Padre {
 
     /**
      * TODO Devolver una lista.
-     * 
-     * @param cedula
+     *
+     * @param filtro
+     *
      * @return
      */
-    public synchronized static ResultSet getPadresRecuperar(String cedula) {
-        final String sql
-                = "SELECT NOMBRES, APELLIDOS, SEXO, IDTIPOSANGRE, IDARS, "
-                + "NONSS, TELEFONO, MOVIL, CORREO, DIRECCION, CIUDAD, "
-                + "FECHANACIMIENTO "
-                + "FROM V_PADRES "
-                + "WHERE CEDULA = ? AND ESTADO IS FALSE;";
+    public synchronized static List<Padre> getPadres(
+            @NonNull FiltroBusqueda filtro
+    ) {
+
+        List<Padre> listaPadre = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlGetPadres(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
-            ps.setString(1, cedula);
+            ResultSet rs = ps.executeQuery();
 
-            return ps.executeQuery();
+            while (rs.next()) {
+                listaPadre.add(
+                        Padre
+                                .builder()
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .id_persona(rs.getInt("ID"))
+                                                .pnombre(rs.getString("PNOMBRE"))
+                                                .snombre(rs.getString("SNOMBRE"))
+                                                .apellidos(rs.getString("APELLIDOS"))
+                                                .sexo(rs.getString("SEXO").charAt(0))
+                                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                                .estado(rs.getBoolean("ESTADO_PERSONA"))
+                                                .build()
+                                )
+                                .tipoSangre(
+                                        TipoSangre
+                                                .builder()
+                                                .id(rs.getInt("ID_TIPO_SANGREE"))
+                                                .build()
+                                )
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(
+                                                        rs.getString("ESTADO_CIVIL").charAt(0)
+                                                )
+                                                .build()
+                                )
+                                .asegurado(
+                                        Asegurado
+                                                .builder()
+                                                .ars(
+                                                        ARS
+                                                                .builder()
+                                                                .id(rs.getInt("ID_ARS"))
+                                                                .build()
+                                                )
+                                                .no_nss(rs.getString("NO_NSS"))
+                                                .estado(rs.getBoolean("ESTADO_SEGURO"))
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
-            return null;
         }
+        return listaPadre;
     }
 
+    protected static String sqlGetPadres(FiltroBusqueda filtro) {
+        Boolean criterio = Objects.isNull(filtro.getCriterioBusqueda());
+        Boolean estado = Objects.isNull(filtro.getEstado());
+        Boolean id = Objects.isNull(filtro.getId());
+        Boolean where = criterio && estado && id;
+        return """
+               SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, ESTADO_PERSONA,
+                    ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
+                    NO_NSS, ESTADO_SEGURO
+               FROM GET_PADRES
+               %s%s%s%s
+                """.trim().strip().formatted(
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(filtro.getId()),
+                criterio ? "" : ("CEDULA LIKE '%s' ".formatted(filtro.getCriterioBusqueda())),
+                estado ? "" : (filtro.getEstado() ? "ESTADO_PERSONA " : "ESTADO_PERSONA IS FALSE")
+        ).trim().strip();
+    }
+//------------------------------------------------------------------------------
+
     /**
-     * Metodo que permite agregar los padres al sistema pediatrico. 
+     * Metodo que permite agregar los padres al sistema pediatrico.
+     *
      * @param padre
      * @return
      */
@@ -63,12 +142,12 @@ public class M_Padre {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setString(5, padre.getPnombre());
-            ps.setString(6, padre.getSnombre());
-            ps.setString(7, padre.getApellidos());
-            ps.setString(8, "" + padre.getSexo());
-            ps.setDate(9, padre.getFecha_nacimiento());
-            ps.setBoolean(10, padre.getEstado());
+            ps.setString(5, padre.getPersona().getPnombre());
+            ps.setString(6, padre.getPersona().getSnombre());
+            ps.setString(7, padre.getPersona().getApellidos());
+            ps.setString(8, "" + padre.getPersona().getSexo());
+            ps.setDate(9, padre.getPersona().getFecha_nacimiento());
+            ps.setBoolean(10, padre.getPersona().getEstado());
 
             ResultSet rs = ps.executeQuery();
 
@@ -85,8 +164,8 @@ public class M_Padre {
                     .build();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_AGREGAR_PADRE_AL_SISTEMA, 
+                    Level.SEVERE,
+                    ERROR_AL_AGREGAR_PADRE_AL_SISTEMA,
                     ex
             );
             return Resultado
@@ -99,9 +178,9 @@ public class M_Padre {
         }
 
     }
-    public static final String ERROR_AL_AGREGAR_PADRE_AL_SISTEMA 
+    public static final String ERROR_AL_AGREGAR_PADRE_AL_SISTEMA
             = "Error al agregar padre al sistema";
-    public static final String PADRE__AGREGADO__EXITOSAMENTE 
+    public static final String PADRE__AGREGADO__EXITOSAMENTE
             = "Padre Agregado Exitosamente!";
 
     /**
@@ -110,7 +189,7 @@ public class M_Padre {
      * @return
      */
     public synchronized static Resultado modificarPadre(Padre p) {
-        final String sql 
+        final String sql
                 = "EXECUTE PROCEDURE SP_U_PADRE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -119,12 +198,12 @@ public class M_Padre {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setString(6, p.getPnombre());
-            ps.setString(7, p.getSnombre());
-            ps.setString(8, p.getApellidos());
-            ps.setString(9, p.getSexo().toString());
-            ps.setDate(10, p.getFecha_nacimiento());
-            ps.setBoolean(11, p.getEstado());
+            ps.setString(6, p.getPersona().getPnombre());
+            ps.setString(7, p.getPersona().getSnombre());
+            ps.setString(8, p.getPersona().getApellidos());
+            ps.setString(9, p.getPersona().getSexo().toString());
+            ps.setDate(10, p.getPersona().getFecha_nacimiento());
+            ps.setBoolean(11, p.getPersona().getEstado());
 
             ps.executeUpdate();
             return Resultado
@@ -135,8 +214,8 @@ public class M_Padre {
                     .build();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_MODIFICAR_PADRE, 
+                    Level.SEVERE,
+                    ERROR_AL_MODIFICAR_PADRE,
                     ex
             );
             return Resultado
@@ -147,46 +226,62 @@ public class M_Padre {
                     .build();
         }
     }
-    public static final String ERROR_AL_MODIFICAR_PADRE 
+    public static final String ERROR_AL_MODIFICAR_PADRE
             = "Error al modificar padre...";
     public static final String PADRE_MODIFICADO_CORRECTAMENTE
             = "Padre modificado correctamente";
 
     /**
-     * TODO Crear SP.
-     * @param cedula
+     * Metodo que elimina el registro del identificador de la tabla
+     * PERSONAS_PADRES.
+     *
+     * @param id
+     *
      * @return
      */
-    public synchronized static String borrarPadre(String cedula) {
+    public synchronized static Resultado borrarPadre(int id) {
         final String sql
-                = "UPDATE V_Padres "
-                + "SET "
-                + "    ESTADO = FALSE "
-                + "WHERE "
-                + "    CEDULA = ?";
-        try (PreparedStatement ps = getCnn().prepareStatement(
+                = "EXECUTE PROCEDURE SP_D_PERSONA_PADRE (?)";
+
+        try (CallableStatement ps = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-
-            ps.setString(1, cedula);
+            ps.setInt(1, id);
 
             ps.executeUpdate();
-            return "Borrado o inactivo correctamente";
+
+            return Resultado
+                    .builder()
+                    .mensaje(BORRADO_DE_REGISTRO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
-            return "Error al borrar padre...";
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_BORRAR_PADRE)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
     }
+    public static final String ERROR_AL_BORRAR_PADRE
+            = "Error al borrar Registro.!!!";
+    public static final String BORRADO_DE_REGISTRO_CORRECTAMENTE
+            = "Borrado de registro correctamente.!!!";
 
     /**
      * TODO CREAR VISTA.
+     *
      * @param idPadre
      * @return
      */
@@ -205,8 +300,8 @@ public class M_Padre {
             return ps.executeQuery();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return null;
@@ -214,30 +309,7 @@ public class M_Padre {
     }
 
     /**
-     *
-     * @return
-     */
-    public static ResultSet getPadreMadres() {
-        final String sql = "SELECT * FROM PADREMADRES";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            return ps.executeQuery();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
-                    ex
-            );
-            return null;
-        }
-    }
-
-    /**
+     * TODO CREAR VISTA.
      *
      * @param cedula
      * @return
@@ -256,8 +328,8 @@ public class M_Padre {
             return rs.next();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return false;
@@ -283,8 +355,8 @@ public class M_Padre {
             return ps.executeQuery();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return null;
@@ -311,8 +383,8 @@ public class M_Padre {
             return ps.executeQuery();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return null;
@@ -343,8 +415,8 @@ public class M_Padre {
             return ps.executeQuery();
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return null;
@@ -360,7 +432,7 @@ public class M_Padre {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setString(1, cedula);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("IDPADRE");
@@ -371,8 +443,8 @@ public class M_Padre {
 
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }

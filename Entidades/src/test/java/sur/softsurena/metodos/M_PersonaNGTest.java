@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -12,12 +11,12 @@ import org.testng.annotations.Test;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.metodos.M_Persona.ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA;
-import static sur.softsurena.metodos.M_Persona.ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA;
 import static sur.softsurena.metodos.M_Persona.PERSONA_ACTUALIZADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Persona.REGISTRO_DE_PERSONA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Persona.REGISTRO_DE_PERSONA_ELIMINADO_CORRECTAMEN;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
@@ -71,9 +70,9 @@ public class M_PersonaNGTest {
                           y obtener su ID en la variable idPersona.
                           """
     )
-    public void testAgregarEntidad() {
+    public void testInsert() {
 
-        Resultado result = M_Persona.agregarEntidad(
+        Resultado result = M_Persona.insert(
                 persona()
         );
 
@@ -106,9 +105,9 @@ public class M_PersonaNGTest {
                           previamente insertado.
                           """
     )
-    public void testModificarEntidad() {
+    public void testUpdate() {
 
-        Resultado result = M_Persona.modificarEntidad(
+        Resultado result = M_Persona.update(
                 persona()
         );
 
@@ -133,34 +132,28 @@ public class M_PersonaNGTest {
                           datos del sistema.
                           """
     )
-    public void testGetEntidad() {
-        Persona result = M_Persona.getEntidad(idPersona);
+    public void testGetList() {
+        Persona result = M_Persona.getList(
+                FiltroBusqueda
+                        .builder()
+                        .id(idPersona)
+                        .build()
+        ).getFirst();
         assertNotNull(
                 result,
                 "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
         );
 
-        result = M_Persona.getEntidad(0);
+        result = M_Persona.getList(
+                FiltroBusqueda
+                        .builder()
+                        .id(0)
+                        .build()
+        ).getFirst();
+
         assertNotNull(
                 result,
                 "Registros de CLIENTE GENERICO NO ENCONTRADO."
-        );
-    }
-
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            priority = 3,
-            description = """
-                          Test que permite obtener todos los registros del 
-                          sistema.
-                          """
-    )
-    public void testGetListEntidad() {
-        List result = M_Persona.getListEntidad();
-        assertFalse(
-                result.isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
         );
     }
 
@@ -173,9 +166,9 @@ public class M_PersonaNGTest {
                           la tabla de Persona.
                           """
     )
-    public void testEliminarEntidad() {
+    public void testDelete() {
 
-        Resultado result = M_Persona.eliminarEntidad(idPersona);
+        Resultado result = M_Persona.delete(idPersona);
 
         assertEquals(
                 result,
@@ -207,4 +200,61 @@ public class M_PersonaNGTest {
                 .build();
     }
 
+    @Test
+    public void testSqlList() {
+
+        String expResult = """
+                           SELECT 
+                               ID, 
+                               PERSONA, 
+                               PNOMBRE, 
+                               SNOMBRE, 
+                               APELLIDOS, 
+                               SEXO, 
+                               FECHA_NACIMIENTO, 
+                               FECHA_INGRESO,
+                               FECHA_HORA_ULTIMO_UPDATE, 
+                               ESTADO, 
+                               USER_NAME, 
+                               ROL_USUARIO
+                           FROM V_PERSONAS
+                           """;
+
+        assertEquals(
+                M_Persona.sqlList(
+                        FiltroBusqueda
+                                .builder()
+                                .build()
+                ),
+                expResult.strip().trim()
+        );
+
+        expResult = """
+                    SELECT 
+                        ID, 
+                        PERSONA, 
+                        PNOMBRE, 
+                        SNOMBRE, 
+                        APELLIDOS, 
+                        SEXO, 
+                        FECHA_NACIMIENTO, 
+                        FECHA_INGRESO,
+                        FECHA_HORA_ULTIMO_UPDATE, 
+                        ESTADO, 
+                        USER_NAME, 
+                        ROL_USUARIO
+                    FROM V_PERSONAS
+                    WHERE ID = -1
+                    """;
+        
+        assertEquals(
+                M_Persona.sqlList(
+                        FiltroBusqueda
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                expResult.strip().trim()
+        );
+    }
 }

@@ -89,7 +89,7 @@ public class Acceso extends HttpServlet {
 
         if (!Objects.isNull(accion)) {
             if (accion.equalsIgnoreCase("insertar")) {
-                Resultado resultado = M_Persona.agregarEntidad(
+                Resultado resultado = M_Persona.insert(
                         Persona.
                                 builder()
                                 .persona('F')
@@ -126,7 +126,7 @@ public class Acceso extends HttpServlet {
             }
 
             if (accion.equalsIgnoreCase("modificar")) {
-                M_Persona.modificarEntidad(
+                M_Persona.update(
                         Persona
                                 .builder()
                                 .id_persona(

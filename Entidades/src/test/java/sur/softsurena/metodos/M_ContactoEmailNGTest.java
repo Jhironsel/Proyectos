@@ -69,7 +69,7 @@ public class M_ContactoEmailNGTest {
     )
     public void testAgregarContactosEmail() {
 
-        persona.testAgregarEntidad();
+        persona.testInsert();
 
         Resultado result = M_ContactoEmail.agregarContactosEmail(
                 ContactoEmail
@@ -203,6 +203,6 @@ public class M_ContactoEmailNGTest {
                         .build(),
                 ERROR_AL_BORRAR_EL_CONTACTO_DE_CORREO_DEL
         );
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 }

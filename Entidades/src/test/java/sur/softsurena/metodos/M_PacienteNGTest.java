@@ -25,12 +25,11 @@ import static sur.softsurena.metodos.M_Paciente.PACIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_MODIFICADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.getListEntidad;
 import sur.softsurena.utilidades.Resultado;
-import sur.softsurena.utilidades.Utilidades;
 
 @Getter
 public class M_PacienteNGTest {
 
-    private M_PersonaNGTest persona;
+    private final M_PersonaNGTest persona;
 
     public M_PacienteNGTest() {
         persona = new M_PersonaNGTest();
@@ -72,7 +71,7 @@ public class M_PacienteNGTest {
                           """
     )
     public void testAgregarEntidad() {
-        persona.testAgregarEntidad();
+        persona.testInsert();
 
         Resultado result = M_Paciente.agregarEntidad(generarPaciente());
 
@@ -254,7 +253,7 @@ public class M_PacienteNGTest {
                 )
         );
 
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 
     public synchronized Paciente generarPaciente() {

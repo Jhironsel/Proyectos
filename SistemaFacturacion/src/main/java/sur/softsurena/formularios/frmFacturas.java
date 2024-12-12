@@ -1292,7 +1292,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new String[]{"<html><big>Credito</big></html>", "<html><big>Externa</big></html", "<html><big>Cancelar</big></html"},
+                new String[]{
+                    "<html><big>Credito</big></html>", 
+                    "<html><big>Externa</big></html", 
+                    "<html><big>Cancelar</big></html"
+                },
                 0
         );
 

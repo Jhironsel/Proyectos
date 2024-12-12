@@ -124,7 +124,7 @@ public class M_GeneralesNGTest {
                           """
     )
     public void testAgregarEntidad() {
-        persona.testAgregarEntidad();
+        persona.testInsert();
 
         Resultado result = M_Generales.agregarEntidad(
                 Generales
@@ -263,6 +263,6 @@ public class M_GeneralesNGTest {
                 ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE
         );
         
-        persona.testEliminarEntidad();
+        persona.testDelete();
     }
 }

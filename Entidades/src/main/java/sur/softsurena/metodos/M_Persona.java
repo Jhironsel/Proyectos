@@ -6,31 +6,117 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.Cleanup;
+import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
- * 
+ *
  * @author jhironsel
  */
 public class M_Persona {
 
     /**
-     * Nos permite agregar una persona al sistema y dovolver el identificador 
-     * asignado.
-     * 
-     * @param persona objeto persona que tiene una caracteristica de la persona 
-     * que va hacer registrado en el sistema.
-     * 
-     * @return nos devolver un objeto Resultado que contiene el 
-     * identificador asignado.
+     * Retorna una lista la lista completa del sistema de las personas
+     * registrada.
+     *
+     * @param filtro
+     *
+     * @return devuelve una lista de persona en el sistema completa.
+     *
+     * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
      */
-    public static Resultado agregarEntidad(Persona persona) {
+    public static List<Persona> getList(
+            @NonNull FiltroBusqueda filtro
+    ) {
+        List<Persona> personaList = new ArrayList<>();
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sqlList(filtro),
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                personaList.add(
+                        Persona
+                                .builder()
+                                .id_persona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .user_name(rs.getString("USER_NAME"))
+                                .rol(rs.getString("ROL_USUARIO"))
+                                .build()
+                );
+            }
+
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE,
+                    ex
+            );
+        }
+        return personaList;
+    }
+    public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
+            = "Error al consultar la vista V_PERSONAS del sistema.";
+
+    protected static String sqlList(FiltroBusqueda filtro) {
+        Boolean id = Objects.isNull(filtro.getId());
+        Boolean where = id;
+        
+        return """
+               SELECT 
+                   ID, 
+                   PERSONA, 
+                   PNOMBRE, 
+                   SNOMBRE, 
+                   APELLIDOS, 
+                   SEXO, 
+                   FECHA_NACIMIENTO, 
+                   FECHA_INGRESO,
+                   FECHA_HORA_ULTIMO_UPDATE, 
+                   ESTADO, 
+                   USER_NAME, 
+                   ROL_USUARIO
+               FROM V_PERSONAS
+               %s%s
+               """.strip().trim().formatted(
+                       where ? "":"WHERE ",
+                       id ? "": "ID = %d ".formatted(filtro.getId())
+               ).strip().trim();
+    }
+//------------------------------------------------------------------------------
+
+    /**
+     * Nos permite agregar una persona al sistema y dovolver el identificador
+     * asignado.
+     *
+     * @param persona objeto persona que tiene una caracteristica de la persona
+     * que va hacer registrado en el sistema.
+     *
+     * @return nos devolver un objeto Resultado que contiene el identificador
+     * asignado.
+     */
+    public static Resultado insert(Persona persona) {
         final String sql = """
                            SELECT ID_PERSONA
                            FROM SP_I_PERSONA(?,?,?,?,?,?,?);
@@ -84,7 +170,7 @@ public class M_Persona {
                 .estado(Boolean.FALSE)
                 .build();
     }
-    
+
     public static final String REGISTRO_DE_PERSONA_CORRECTAMENTE
             = "Registro de persona correctamente.";
     public static final String ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA
@@ -93,12 +179,12 @@ public class M_Persona {
     //--------------------------------------------------------------------------
     /**
      * Metodo que modifica a una persona en el sistema.
-     * 
+     *
      * @param persona persona que sera modificada en el sistema.
-     * 
-     * @return Devuelve un resultado indicando el resultado de la operacion. 
+     *
+     * @return Devuelve un resultado indicando el resultado de la operacion.
      */
-    public static Resultado modificarEntidad(Persona persona) {
+    public static Resultado update(Persona persona) {
         final String sql = """
                            EXECUTE PROCEDURE SP_U_PERSONA (?, ?, ?, ?, ?, ?, ?, ?);
                            """;
@@ -149,150 +235,14 @@ public class M_Persona {
             = "Persona actualizada correctamente.";
 
     //--------------------------------------------------------------------------
-    
-    /**
-     * Retorna una lista la lista completa del sistema de las personas 
-     * registrada.
-     * 
-     * @return devuelve una lista de persona en el sistema completa.
-     * 
-     * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
-     */
-    public static List<Persona> getListEntidad() {
-        final String sql = """
-                            SELECT 
-                                ID, 
-                                PERSONA, 
-                                PNOMBRE, 
-                                SNOMBRE, 
-                                APELLIDOS, 
-                                SEXO, 
-                                FECHA_NACIMIENTO, 
-                                FECHA_INGRESO,
-                                FECHA_HORA_ULTIMO_UPDATE, 
-                                ESTADO, 
-                                USER_NAME, 
-                                ROL_USUARIO
-                            FROM V_PERSONAS
-                           """;
-        List<Persona> personaList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                personaList.add(
-                        Persona
-                                .builder()
-                                .id_persona(rs.getInt("ID"))
-                                .persona(rs.getString("PERSONA").charAt(0))
-                                .pnombre(rs.getString("PNOMBRE"))
-                                .snombre(rs.getString("SNOMBRE"))
-                                .apellidos(rs.getString("APELLIDOS"))
-                                .sexo(rs.getString("SEXO").charAt(0))
-                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                                .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
-                                .estado(rs.getBoolean("ESTADO"))
-                                .user_name(rs.getString("USER_NAME"))
-                                .rol(rs.getString("ROL_USUARIO"))
-                                .build()
-                );
-            }
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE,
-                    ex
-            );
-        }
-        return personaList;
-    }
-    public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
-            = "Error al consultar la vista V_PERSONAS del sistema.";
-
-    //--------------------------------------------------------------------------
-    
-    /**
-     * Obtiene las propiedades de una persona en el sistema por su identificador.
-     * 
-     * @param id identificador de la persona.
-     * 
-     * @return retorna un objeto de la clase Persona.
-     */
-    public static Persona getEntidad(Integer id) {
-        final String sql = """
-                           SELECT 
-                                ID, 
-                                PERSONA, 
-                                PNOMBRE, 
-                                SNOMBRE, 
-                                APELLIDOS, 
-                                SEXO, 
-                                FECHA_NACIMIENTO, 
-                                FECHA_INGRESO,
-                                FECHA_HORA_ULTIMO_UPDATE, 
-                                ESTADO, 
-                                USER_NAME, 
-                                ROL_USUARIO
-                           FROM V_PERSONAS
-                           WHERE ID = ?
-                           """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT,
-                ResultSet.CONCUR_READ_ONLY
-        )) {
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Persona
-                            .builder()
-                            .id_persona(rs.getInt("ID"))
-                            .persona(rs.getString("PERSONA").charAt(0))
-                            .pnombre(rs.getString("PNOMBRE"))
-                            .snombre(rs.getString("SNOMBRE"))
-                            .apellidos(rs.getString("APELLIDOS"))
-                            .sexo(rs.getString("SEXO").charAt(0))
-                            .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
-                            .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                            .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
-                            .estado(rs.getBoolean("ESTADO"))
-                            .user_name(rs.getString("USER_NAME"))
-                            .rol(rs.getString("ROL_USUARIO"))
-                            .build();
-                }
-            }
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE,
-                    ex
-            );
-        }
-        return Persona.builder().build();
-    }
-
-    //--------------------------------------------------------------------------
     /**
      * Metodo que elimina a una persona del sistema por su identificador.
-     * 
+     *
      * @param id identificador de la persona.
-     * 
+     *
      * @return Objeto resultado de la persona.
      */
-    public static Resultado eliminarEntidad(int id) {
+    public static Resultado delete(int id) {
         final String sql = """
                            EXECUTE PROCEDURE SP_D_PERSONA(?)
                            """;
@@ -335,5 +285,4 @@ public class M_Persona {
 
     public static final String ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S
             = "Error al eliminar registros. \n[CODIGO: %d ]";
-
 }
