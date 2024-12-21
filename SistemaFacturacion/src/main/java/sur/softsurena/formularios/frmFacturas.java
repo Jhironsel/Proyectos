@@ -41,7 +41,6 @@ import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.Precio;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Turno;
-import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.formularios.frmPrincipal.mnuMovimientosNuevaFactura;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.Imagenes;
@@ -64,8 +63,6 @@ import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 public final class frmFacturas extends javax.swing.JInternalFrame implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-
-    private static Usuario usuario = null;
 
     private Integer idCliente;
 
@@ -135,8 +132,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private frmFacturas() {
         initComponents();
-
-        usuario = getUsuarioActual();
 
         txtCriterio.requestFocus();
 
@@ -766,7 +761,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         turno = M_Turno.getTurnos(
                 FiltroBusqueda
                         .builder()
-                        .criterioBusqueda(usuario.getUser_name())
+                        .criterioBusqueda(
+                                getUsuarioActual().getUser_name()
+                        )
                         .estado(true)
                         .build()
         ).getFirst();
@@ -1302,7 +1299,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         if (resp == 0) {
             frmCobrosClientes miPagoCliente = new frmCobrosClientes(null, closable);
-            miPagoCliente.setNombreCajero(usuario.getUser_name());
             miPagoCliente.setIdTurno(turno.getId());
             miPagoCliente.setLocationRelativeTo(null);
             miPagoCliente.setVisible(true);
@@ -1353,6 +1349,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      * @param evt No utilizado en este metodo.
      */
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
+        //TODO 20/12/2024 Debe de obtenerse este numero de factura en el sistema.
         Integer idFactura = Integer.valueOf(txtIdFactura.getText());
 //-----------------------------------------------------------------------------1
 

@@ -24,7 +24,7 @@ public class M_Control_Consulta {
      * @param controlConsulta
      * @return
      */
-    public synchronized static Resultado agregarControlConsulta(Control_Consulta controlConsulta) {
+    public synchronized static Resultado insert(Control_Consulta controlConsulta) {
         final String sql
                 = """
                   SELECT O_ID
@@ -45,6 +45,7 @@ public class M_Control_Consulta {
             ps.setBoolean(6, controlConsulta.getEstado());
 
             ResultSet rs = ps.executeQuery();
+            
             rs.next();
 
             return Resultado
@@ -80,7 +81,7 @@ public class M_Control_Consulta {
      * @param controlConsulta
      * @return
      */
-    public static synchronized Resultado modificarControlConsulta(
+    public static synchronized Resultado update(
             Control_Consulta controlConsulta
     ) {
         final String sql
@@ -223,7 +224,7 @@ public class M_Control_Consulta {
      *
      * @return
      */
-    public synchronized static Resultado borrarControlConsulta(int idControlConsulta) {
+    public synchronized static Resultado delete(int idControlConsulta) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_CONTROL_CONSULTA (?);";
         try (PreparedStatement ps = getCnn().prepareStatement(

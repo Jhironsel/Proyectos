@@ -1,18 +1,16 @@
 package sur.softsurena.metodos;
 
 import java.awt.Image;
-import java.io.InputStream;
-import java.net.URL;
 import javax.swing.ImageIcon;
-import lombok.Getter;
 import lombok.NonNull;
 
-@Getter
 public class Imagenes {
 
     private String ruta = "";
 
-    public Imagenes(@NonNull String archivoExtension) {
+    public Imagenes(
+            @NonNull String archivoExtension
+    ) {
 
         if (archivoExtension.isBlank()) {
             archivoExtension = "NoImageTransp 96 x 96.png";
@@ -65,9 +63,9 @@ public class Imagenes {
 //        Background background = new Background(backgroundImage);
 //        anchorPane.setBackground(background);
 //    }
-    private InputStream dame(String ruta) {
-        return getClass().getResourceAsStream(ruta);
-    }
+//    private InputStream dame(String ruta) {
+//        return getClass().getResourceAsStream(ruta);
+//    }
 
 //    public static Image convertToFxImage(String nombreImagenConExtension) throws IOException {
 //        

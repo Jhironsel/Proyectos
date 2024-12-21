@@ -296,7 +296,8 @@ public class frmCambioClave extends javax.swing.JDialog {
 
         //Cambiamos la Clave
         //r es la variable resultado que espera la operacion sea realizada. 
-        boolean resultado = cambioClave(getUsuarioActual().getUser_name().strip(), 
+        boolean resultado = cambioClave(
+                getUsuarioActual().getUser_name().strip(), 
                 nueva
         );
         

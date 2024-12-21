@@ -242,11 +242,14 @@ public class M_Usuario {
      * sistema que ha iniciado sessión actualmente.<br/>
      */
     public synchronized static Usuario getUsuarioActual() {
-        final String sql
-                = "SELECT TRIM(CURRENT_USER) USUARIO, "
-                + "     IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', "
-                + "         'ADMINISTRADOR', TRIM(CURRENT_ROLE)) ROLE "
-                + "FROM RDB$DATABASE";
+        final String sql = """
+                           SELECT TRIM(CURRENT_USER) USUARIO, 
+                                IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', 
+                                    'ADMINISTRADOR', 
+                                    TRIM(CURRENT_ROLE)
+                           ) ROLE 
+                           FROM RDB$DATABASE
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

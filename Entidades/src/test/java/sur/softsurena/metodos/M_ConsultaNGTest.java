@@ -70,7 +70,7 @@ public class M_ConsultaNGTest {
     )
     public void testInsert() {
         paciente.testInsert();
-        controlConsulta.testAgregarControlConsulta();
+        controlConsulta.testInsert();
         
         Resultado result = M_Consulta.insert(
                 Consulta
@@ -135,7 +135,7 @@ public class M_ConsultaNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
+            priority = 5,
             description = """
                           Test que permite eliminar una consulta ya programada.
                           Tambien, elimina el control de la consulta creada y 
@@ -155,7 +155,7 @@ public class M_ConsultaNGTest {
         );
         
         
-        controlConsulta.testBorrarControlConsulta();
+        controlConsulta.testDelete();
         paciente.testDelete();
     }
 }

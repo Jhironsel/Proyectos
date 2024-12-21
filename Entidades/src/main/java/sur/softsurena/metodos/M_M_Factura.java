@@ -28,6 +28,38 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_M_Factura {
+    
+    public synchronized static int getIDFacturaNueva(int idTurno) {
+        final String sql = """
+                           SELECT ID_FACTURA
+                           FROM ADMIN_GET_ID_FACTURA_NUEVA (?)
+                           """;
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
+        )) {
+            ps.setInt(1, idTurno);
+
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                
+                
+                return rs.getInt("ID_FACTURA");
+            }
+            
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA,
+                    ex
+            );
+        }
+        return -1;
+    }
 
     /**
      * Metodo para agregar las facturas al temporar del sistema.

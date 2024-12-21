@@ -68,9 +68,9 @@ public class M_Control_ConsultaNGTest {
                           sistema.
                           """
     )
-    public void testAgregarControlConsulta() {
+    public void testInsert() {
 
-        Resultado result = M_Control_Consulta.agregarControlConsulta(
+        Resultado result = M_Control_Consulta.insert(
                 controlConsulta()
         );
 
@@ -94,9 +94,9 @@ public class M_Control_ConsultaNGTest {
             priority = 1,
             description = ""
     )
-    public void testModificarControlConsulta() {
+    public void testUpdate() {
         
-        Resultado result = M_Control_Consulta.modificarControlConsulta(
+        Resultado result = M_Control_Consulta.update(
                 controlConsulta()
         );
         
@@ -154,8 +154,8 @@ public class M_Control_ConsultaNGTest {
             priority = 5,
             description = "Prueba que elimina una consulta del sistema."
     )
-    public void testBorrarControlConsulta() {
-        Resultado result = M_Control_Consulta.borrarControlConsulta(
+    public void testDelete() {
+        Resultado result = M_Control_Consulta.delete(
                 idControlConsulta
         );
 

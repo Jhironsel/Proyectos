@@ -16,7 +16,6 @@ import org.testng.annotations.Test;
 public class frmFacturasNGTest {
 
     public frmFacturasNGTest() {
-        System.out.println("ESTOY AQUI CONSTRUCTOR");
         System.out.println("sur.softsurena.formularios.frmFacturasNGTest.<init>()");
     }
 

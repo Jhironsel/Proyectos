@@ -126,7 +126,7 @@ public class M_M_FacturaNGTest {
             priority = 0,
             description = ""
     )
-    public void testFacturaEstado() {
+    public void testGetFacturaEstado() {
         List result = M_M_Factura.getFacturaEstado(
                 FiltroBusqueda
                         .builder()
@@ -174,7 +174,7 @@ public class M_M_FacturaNGTest {
                           
                           """
     )
-    public void testSqlGetTemporal() {
+    public void testSqlFacturaEstado() {
         String expResult = """
                            SELECT
                               ID,
@@ -252,5 +252,18 @@ public class M_M_FacturaNGTest {
         );
         assertEquals(result, expResult);
     }
-    
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          
+                          """
+    )
+    public void testGetIDFacturaNueva() {
+        int idTurno = 0;
+        int expResult = 0;
+        int result = M_M_Factura.getIDFacturaNueva(idTurno);
+        assertEquals(result, expResult);
+    }
 }

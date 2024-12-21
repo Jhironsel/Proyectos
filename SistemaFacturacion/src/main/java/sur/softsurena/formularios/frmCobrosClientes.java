@@ -15,6 +15,7 @@ import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Persona;
+import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -24,15 +25,6 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
 
     private int idTurno;
-    private String nombreCajero;
-
-    public String getNombreCajero() {
-        return nombreCajero;
-    }
-
-    public void setNombreCajero(String nombreCajero) {
-        this.nombreCajero = nombreCajero;
-    }
 
     public int getIdTurno() {
         return idTurno;
@@ -502,7 +494,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put(
                 "nombreCajero", 
-                getNombreCajero()
+                getUsuarioActual().getUser_name()
         );
         parametros.put(
                 "idFactura", 
