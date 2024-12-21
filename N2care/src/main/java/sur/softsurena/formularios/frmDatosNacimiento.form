@@ -32,113 +32,73 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="txtCedula" min="-2" pref="145" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="jLabel2" alignment="0" min="-2" pref="240" max="-2" attributes="0"/>
-                  <Component id="dchFechaNacimiento" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="txtTiempoGestacion" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbCesarea" min="-2" pref="104" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="btnGuardar" min="-2" pref="116" max="-2" attributes="0"/>
+                  <Component id="txtCedula" alignment="0" max="32767" attributes="0"/>
+                  <Component id="dchFechaNacimiento" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtPesoNacer" alignment="1" max="32767" attributes="0"/>
+                          <Component id="txtPC" alignment="1" max="32767" attributes="0"/>
+                          <Component id="cbCesarea" alignment="1" max="32767" attributes="0"/>
+                          <Component id="btnCancelar" alignment="1" pref="140" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jlResultado" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtPesoNacer" linkSize="3" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtEstaturaNacer" linkSize="3" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
-                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtPC" alignment="0" min="-2" pref="72" max="-2" attributes="0"/>
-                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace pref="36" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnGuardar" max="32767" attributes="0"/>
+                          <Component id="txtEstaturaNacer" pref="140" max="32767" attributes="0"/>
+                          <Component id="txtTiempoGestacion" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtCedula" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Component id="txtCedula" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="dchFechaNacimiento" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="txtPesoNacer" linkSize="4" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="txtEstaturaNacer" linkSize="4" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="txtPC" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jlResultado" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+              <Component id="dchFechaNacimiento" min="-2" pref="57" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cbCesarea" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtTiempoGestacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtPesoNacer" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtEstaturaNacer" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnCancelar" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnGuardar" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="txtPC" max="32767" attributes="0"/>
+                  <Component id="txtTiempoGestacion" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cbCesarea" min="-2" pref="32" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnGuardar" linkSize="2" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+                  <Component id="btnCancelar" linkSize="2" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="20" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="horizontalAlignment" type="int" value="4"/>
-        <Property name="text" type="java.lang.String" value="Cedula: "/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtCedula">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Cedula">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="1" green="1" red="1" type="rgb"/>
         </Property>
@@ -153,33 +113,25 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="cbCesarea">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Cesarea"/>
-      </Properties>
-    </Component>
     <Component class="com.toedter.calendar.JDateChooser" name="dchFechaNacimiento">
       <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Fecha Nacimiento">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="1" green="1" red="1" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Ubuntu" size="18" style="1"/>
         </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Fecha de Nacimiento"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnGuardar">
@@ -223,19 +175,19 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Peso Kg"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtPesoNacer">
       <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Peso Kilogramos">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="1" green="1" red="1" type="rgb"/>
         </Property>
@@ -246,20 +198,20 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
       </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel5">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Talla Cm"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtEstaturaNacer">
       <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Talla CM">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="1" green="1" red="1" type="rgb"/>
         </Property>
@@ -271,41 +223,19 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jlResultado">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="MC"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel8">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Tiempo Gestacion"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="18" style="1"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="PC"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JFormattedTextField" name="txtPC">
       <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Perimetro Cefalico">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="1" green="1" red="1" type="rgb"/>
         </Property>
@@ -323,6 +253,33 @@
           <SpinnerModel initial="4.0" maximum="12.0" minimum="3.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Tiempo de gestacion del infante al nacer."/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Tiempo Gestaci&#xf3;n">
+              <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                  <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                </MatteColorBorder>
+              </Border>
+            </TitledBorder>
+          </Border>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cbCesarea">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="0" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Cesarea-&gt;"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+            <MatteColorBorder bottom="1" left="0" right="0" top="0">
+              <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+            </MatteColorBorder>
+          </Border>
+        </Property>
+        <Property name="horizontalTextPosition" type="int" value="2"/>
       </Properties>
     </Component>
   </SubComponents>

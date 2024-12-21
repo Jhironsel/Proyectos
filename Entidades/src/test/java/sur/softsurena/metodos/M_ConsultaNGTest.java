@@ -3,7 +3,6 @@ package sur.softsurena.metodos;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
@@ -69,11 +68,11 @@ public class M_ConsultaNGTest {
                           esta crea el paciente y el control de la consulta.
                           """
     )
-    public void testAgregarConsulta() {
-        paciente.testAgregarEntidad();
+    public void testInsert() {
+        paciente.testInsert();
         controlConsulta.testAgregarControlConsulta();
         
-        Resultado result = M_Consulta.agregarConsulta(
+        Resultado result = M_Consulta.insert(
                 Consulta
                         .builder()
                         .paciente(
@@ -157,6 +156,6 @@ public class M_ConsultaNGTest {
         
         
         controlConsulta.testBorrarControlConsulta();
-        paciente.testEliminarEntidad();
+        paciente.testDelete();
     }
 }

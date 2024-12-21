@@ -1,7 +1,6 @@
 package sur.softsurena.metodos;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
@@ -17,13 +16,12 @@ import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_CONSULTAR_LA_CEDULA_DEL_PACIENTE;
-import static sur.softsurena.metodos.M_Paciente.ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_INSERTAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_MODIFICAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_MODIFICADO_CORRECTAMENTE;
-import static sur.softsurena.metodos.M_Paciente.getListEntidad;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -70,10 +68,10 @@ public class M_PacienteNGTest {
                           Test que realiza el ingreso de un paciente al sistema.
                           """
     )
-    public void testAgregarEntidad() {
+    public void testInsert() {
         persona.testInsert();
 
-        Resultado result = M_Paciente.agregarEntidad(generarPaciente());
+        Resultado result = M_Paciente.insert(generarPaciente());
 
         assertEquals(
                 result,
@@ -97,8 +95,8 @@ public class M_PacienteNGTest {
             description = "",
             priority = 1
     )
-    public void testModificarEntidad() {
-        Resultado result = M_Paciente.modificarEntidad(generarPaciente());
+    public void testUpdate() {
+        Resultado result = M_Paciente.update(generarPaciente());
 
         assertEquals(
                 result,
@@ -112,38 +110,21 @@ public class M_PacienteNGTest {
         );
     }
 
-    @Test(
-            enabled = true,
-            description = "",
-            priority = 2
-    )
-    public void testGetEntidad() {
-        Paciente result = M_Paciente.getEntidad(
-                M_PersonaNGTest.persona().getId_persona()
-        );
-
-        assertNotNull(
-                result,
-                ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Test que verifica que la tabla de paciente contiene 
-                          registros en el sistema.
-                          """
-    )
-    public void testGetListEntidad() {
-        List<Paciente> result = getListEntidad();
-        assertFalse(
-                result.isEmpty(),
-                "Se encuentra registros en la lista de paciente."
-        );
-    }
-
+//    @Test(
+//            enabled = true,
+//            priority = 2,
+//            description = """
+//                          Test que verifica que la tabla de paciente contiene 
+//                          registros en el sistema.
+//                          """
+//    )
+//    public void testGetListEntidad() {
+//        List<Paciente> result = getListEntidad();
+//        assertFalse(
+//                result.isEmpty(),
+//                "Se encuentra registros en la lista de paciente."
+//        );
+//    }
     @Test(
             enabled = true,
             description = """
@@ -176,67 +157,66 @@ public class M_PacienteNGTest {
         );
     }
 
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 2
-    )
-    public void testGetPacienteActivo_boolean() {
-        boolean estado = false;
-        ResultSet expResult = null;
-        ResultSet result = M_Paciente.getPacienteActivo(estado);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 2
-    )
-    public void testGetPacienteActivo_3args() {
-        String filtro = "";
-        String fecha = "";
-        int idControlConsulta = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Paciente.getPacienteActivo(filtro, fecha, idControlConsulta);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 2
-    )
-    public void testGetPacienteActivo2() {
-        String filtro = "";
-        String fecha = "";
-        int idControlConsulta = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Paciente.getPacienteActivo2(filtro, fecha, idControlConsulta);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 2
-    )
-    public void testGetPacienteActivo3() {
-        String filtro = "";
-        String fecha = "";
-        int idControlConsulta = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Paciente.getPacienteActivo3(filtro, fecha, idControlConsulta);
-        assertEquals(result, expResult);
-    }
-
+//    @Test(
+//            enabled = false,
+//            description = "",
+//            priority = 2
+//    )
+//    public void testGetPacienteActivo_boolean() {
+//        boolean estado = false;
+//        ResultSet expResult = null;
+//        ResultSet result = M_Paciente.getPacienteActivo(estado);
+//        assertEquals(result, expResult);
+//    }
+//
+//    @Test(
+//            enabled = false,
+//            description = "",
+//            priority = 2
+//    )
+//    public void testGetPacienteActivo_3args() {
+//        String filtro = "";
+//        String fecha = "";
+//        int idControlConsulta = 0;
+//        ResultSet expResult = null;
+//        ResultSet result = M_Paciente.getPacienteActivo(filtro, fecha, idControlConsulta);
+//        assertEquals(result, expResult);
+//    }
+//
+//    @Test(
+//            enabled = false,
+//            description = "",
+//            priority = 2
+//    )
+//    public void testGetPacienteActivo2() {
+//        String filtro = "";
+//        String fecha = "";
+//        int idControlConsulta = 0;
+//        ResultSet expResult = null;
+//        ResultSet result = M_Paciente.getPacienteActivo2(filtro, fecha, idControlConsulta);
+//        assertEquals(result, expResult);
+//    }
+//
+//    @Test(
+//            enabled = false,
+//            description = "",
+//            priority = 2
+//    )
+//    public void testGetPacienteActivo3() {
+//        String filtro = "";
+//        String fecha = "";
+//        int idControlConsulta = 0;
+//        ResultSet expResult = null;
+//        ResultSet result = M_Paciente.getPacienteActivo3(filtro, fecha, idControlConsulta);
+//        assertEquals(result, expResult);
+//    }
     @Test(
             enabled = true,
             description = "Test que permite eliminar un paciente ya creado.",
             priority = 3
     )
-    public void testEliminarEntidad() {
-        Resultado result = M_Paciente.eliminarEntidad(
+    public void testDelete() {
+        Resultado result = M_Paciente.delete(
                 M_PersonaNGTest.persona().getId_persona()
         );
 
@@ -273,5 +253,78 @@ public class M_PacienteNGTest {
                 .cesarea(Boolean.FALSE)
                 .tiempoGestacion(8)
                 .build();
+    }
+
+    @Test
+    public void testGetList() {
+
+        List result = M_Paciente.getList(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
+        
+        assertFalse(
+                result.isEmpty(),
+                "La lista de paciente esta vacia."
+        );
+    }
+
+    @Test
+    public void testSqlGetList() {
+        String expResult = """
+                           SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
+                               FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
+                               PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
+                               CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
+                           FROM GET_PACIENTES
+                           """;
+
+        assertEquals(
+                M_Paciente.sqlGetList(
+                        FiltroBusqueda
+                                .builder()
+                                .build()
+                ),
+                expResult.strip().trim()
+        );
+
+        expResult = """
+                    SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
+                        FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
+                        PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
+                        CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
+                    FROM GET_PACIENTES
+                    WHERE ESTADO
+                    """;
+
+        assertEquals(
+                M_Paciente.sqlGetList(
+                        FiltroBusqueda
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                expResult.strip().trim()
+        );
+
+        expResult = """
+                    SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
+                        FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
+                        PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
+                        CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
+                    FROM GET_PACIENTES
+                    WHERE ESTADO IS FALSE
+                    """;
+
+        assertEquals(
+                M_Paciente.sqlGetList(
+                        FiltroBusqueda
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                expResult.strip().trim()
+        );
     }
 }

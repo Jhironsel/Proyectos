@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Imagen;
@@ -36,7 +37,9 @@ public class M_Producto implements IProducto {
      * @return Devuelve un conjunto de datos de la tabla de los productos del
      * sistema.
      */
-    public synchronized static List<Producto> getProductos(FiltroBusqueda filtro) {
+    public synchronized static List<Producto> getProductos(
+            @NonNull FiltroBusqueda filtro
+    ) {
         List<Producto> listaProducto = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(

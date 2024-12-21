@@ -28,7 +28,7 @@ public class M_TiposSangres {
      *
      * @return
      */
-    public synchronized static List<TipoSangre> getTipoSangre() {
+    public synchronized static List<TipoSangre> getList() {
         List<TipoSangre> tiposSangresList = new ArrayList<>();
         final String sql
                 = "SELECT ID, DESCRIPCION "

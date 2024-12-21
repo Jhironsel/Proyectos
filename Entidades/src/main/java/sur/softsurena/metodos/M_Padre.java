@@ -28,20 +28,20 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Padre {
 
     /**
-     * TODO Devolver una lista.
+     * Metodo que nos devuelve los padres registrados en el sistemas.
      *
      * @param filtro
      *
      * @return
      */
-    public synchronized static List<Padre> getPadres(
+    public synchronized static List<Padre> getList(
             @NonNull FiltroBusqueda filtro
     ) {
 
         List<Padre> listaPadre = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetPadres(filtro),
+                sqlGetList(filtro),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
@@ -106,7 +106,12 @@ public class M_Padre {
         return listaPadre;
     }
 
-    protected static String sqlGetPadres(FiltroBusqueda filtro) {
+    /**
+     * 
+     * @param filtro
+     * @return 
+     */
+    protected static String sqlGetList(FiltroBusqueda filtro) {
         Boolean criterio = Objects.isNull(filtro.getCriterioBusqueda());
         Boolean estado = Objects.isNull(filtro.getEstado());
         Boolean id = Objects.isNull(filtro.getId());
@@ -133,7 +138,7 @@ public class M_Padre {
      * @param padre
      * @return
      */
-    public static Resultado agregarPadreMadre(Padre padre) {
+    public static Resultado insert(Padre padre) {
         final String sql
                 = "SELECT O_ID FROM SP_I_PADRE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -151,9 +156,11 @@ public class M_Padre {
 
             ResultSet rs = ps.executeQuery();
 
-            rs.next();
+            int id = -1;
+            if(rs.next()){
+                id = rs.getInt(1);
+            }
 
-            int id = rs.getInt(1);
 
             return Resultado
                     .builder()
@@ -188,7 +195,7 @@ public class M_Padre {
      * @param p
      * @return
      */
-    public synchronized static Resultado modificarPadre(Padre p) {
+    public synchronized static Resultado update(Padre p) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_PADRE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -239,7 +246,7 @@ public class M_Padre {
      *
      * @return
      */
-    public synchronized static Resultado borrarPadre(int id) {
+    public synchronized static Resultado delete(int id) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_PERSONA_PADRE (?)";
 

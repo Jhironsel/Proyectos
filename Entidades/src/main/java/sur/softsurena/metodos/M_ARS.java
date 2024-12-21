@@ -23,8 +23,9 @@ public class M_ARS {
      * @param filtro
      * @return retorna una lista completa de los seguros sociales del sistema.
      */
-    public synchronized static List<ARS> getARS(@NonNull FiltroBusqueda filtro) {
-
+    public synchronized static List<ARS> select(
+            @NonNull FiltroBusqueda filtro
+    ) {
         List<ARS> arsList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -80,7 +81,7 @@ public class M_ARS {
      *
      * @return
      */
-    public synchronized static Resultado agregarARS(ARS ars) {
+    public synchronized static Resultado insert(ARS ars) {
         final String sql
                 = """
                   SELECT O_ID 
@@ -134,7 +135,7 @@ public class M_ARS {
      * @param ars
      * @return
      */
-    public synchronized static Resultado modificarSeguro(ARS ars) {
+    public synchronized static Resultado update(ARS ars) {
         String sql = "EXECUTE PROCEDURE SP_U_ARS (?, ?, ?, ?);";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -181,7 +182,7 @@ public class M_ARS {
      * @param idARS
      * @return
      */
-    public synchronized static Resultado borrarSeguro(Integer idARS) {
+    public synchronized static Resultado delete(Integer idARS) {
         final String sql = "EXECUTE PROCEDURE SP_D_ARS(?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(

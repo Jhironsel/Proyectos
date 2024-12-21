@@ -58,7 +58,7 @@ public class M_TiposSangresNGTest {
     )
     public void testGetTipoSangre() {
         assertFalse(
-                M_TiposSangres.getTipoSangre().isEmpty(), 
+                M_TiposSangres.getList().isEmpty(), 
                 "La lista de tipo de sangre no carga correctamente."
         );
     }

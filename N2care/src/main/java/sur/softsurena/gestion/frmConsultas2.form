@@ -188,7 +188,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jspPadre" max="32767" attributes="0"/>
-          <Component id="jScrollPane6" max="32767" attributes="0"/>
+          <Component id="jScrollPane6" pref="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -1239,7 +1239,7 @@
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Doctor&gt;"/>
                       </AuxValues>
                     </Component>
                   </SubComponents>
@@ -1318,7 +1318,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbMedicamentosActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Medicamentos&gt;"/>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Medicamento&gt;"/>
                   </AuxValues>
                 </Component>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -1540,10 +1540,12 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel4" min="-2" pref="148" max="-2" attributes="0"/>
-                                  <Component id="dcConsulta" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jLabel4" min="-2" pref="148" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="dcConsulta" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -1557,10 +1559,10 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnMensajes" min="-2" pref="140" max="-2" attributes="0"/>
-                              <EmptySpace pref="331" max="32767" attributes="0"/>
-                              <Component id="btnTerminarConsulta" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace min="-2" pref="429" max="-2" attributes="0"/>
+                      <Component id="btnTerminarConsulta" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>

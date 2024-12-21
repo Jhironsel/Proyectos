@@ -24,7 +24,7 @@ public class M_Consulta {
      * @param consulta
      * @return
      */
-    public static synchronized Resultado agregarConsulta(Consulta consulta) {
+    public static synchronized Resultado insert(Consulta consulta) {
         final String sql
                 = "SELECT O_ID FROM SP_I_CONSULTA(?, ?, ?, ?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -70,7 +70,8 @@ public class M_Consulta {
             = "Consulta agregada correctamente";
 
     /**
-     * Consulta al sistema sobre las consultas registradas. 
+     * Consulta al sistema sobre las consultas registradas.
+     *
      * @param fecha
      * @return
      */
@@ -89,38 +90,37 @@ public class M_Consulta {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setDate(1, fecha);
-            
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    consultaList.add(
-                            Consulta
-                                    .builder()
-                                    .id(rs.getInt("ID"))
-                                    .paciente(
-                                            Paciente
-                                                    .builder()
-                                                    .persona(
-                                                            Persona
-                                                                    .builder()
-                                                                    .id_persona(
-                                                                            rs.getInt("ID_PACIENTE")
-                                                                    )
-                                                                    .build()
-                                                    )
-                                                    .build()
-                                    )
-                                    .controlConsulta(
-                                            Control_Consulta
-                                                    .builder()
-                                                    .id(rs.getInt("ID_CONTROL_CONSULTA"))
-                                                    .build()
-                                    )
-                                    .linea(rs.getInt("LINEA"))
-                                    .build()
-                    );
-                }
-            }
 
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                consultaList.add(
+                        Consulta
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .paciente(
+                                        Paciente
+                                                .builder()
+                                                .persona(
+                                                        Persona
+                                                                .builder()
+                                                                .id_persona(
+                                                                        rs.getInt("ID_PACIENTE")
+                                                                )
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .controlConsulta(
+                                        Control_Consulta
+                                                .builder()
+                                                .id(rs.getInt("ID_CONTROL_CONSULTA"))
+                                                .build()
+                                )
+                                .linea(rs.getInt("LINEA"))
+                                .build()
+                );
+            }
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -150,24 +150,24 @@ public class M_Consulta {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             return false;
         }
     }
-    
+
     /**
-     * 
+     *
      * @param idConsulta
-     * @return 
+     * @return
      */
-    public static synchronized Resultado eliminarConsulta(Integer idConsulta){
+    public static synchronized Resultado eliminarConsulta(Integer idConsulta) {
         final String sql = """
                            EXECUTE PROCEDURE SP_D_CONSULTA (?);
                            """;
-        
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -175,16 +175,16 @@ public class M_Consulta {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, idConsulta);
-            
+
             ps.execute();
-            
+
             return Resultado
                     .builder()
                     .mensaje(CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-            
+
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -193,14 +193,14 @@ public class M_Consulta {
             );
         }
         return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
+                .builder()
+                .mensaje(ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
-    public static final String CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST 
+    public static final String CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST
             = "Consulta eliminada correctamente del sistema.";
-    public static final String ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA 
+    public static final String ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA
             = "Error al eliminar la consulta del sistema.";
 }

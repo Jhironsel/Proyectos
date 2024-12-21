@@ -4,10 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static sur.softsurena.datos.delete.DeleteMetodos.borrarAntecedente;
-import static sur.softsurena.datos.insert.InsertMetodos.agregarAntecedente;
-import static sur.softsurena.datos.select.SelectMetodos.*;
-import sur.softsurena.entidades.Antecedentes;
 
 public class frmPacientesAntecedentes extends javax.swing.JDialog {
     private final int idPaciente;

@@ -3,43 +3,38 @@ package sur.softsurena.metodos;
 import java.awt.Image;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Objects;
 import javax.swing.ImageIcon;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
 public class Imagenes {
 
     private String ruta = "";
-    private URL url;
 
-    public Imagenes(String archivoExtension) {
-        Objects.nonNull(archivoExtension);
-        
+    public Imagenes(@NonNull String archivoExtension) {
+
         if (archivoExtension.isBlank()) {
             archivoExtension = "NoImageTransp 96 x 96.png";
         }
-        
-        this.ruta = "/sur/softsurena/imagenes/" + archivoExtension;
+
+        ruta = "/sur/softsurena/imagenes/".concat(archivoExtension);
     }
 
-    private Imagenes() {}
+    private Imagenes(){}
 
     public ImageIcon getIcono() {
-        url = getClass().getResource(ruta);
-        return new ImageIcon(url);
+        return new ImageIcon(getClass().getResource(ruta));
     }
-    
+
     public ImageIcon getIcono(int ancho, int alto) {
-        url = getClass().getResource(ruta);
-        
-        Image scaledInstance = new ImageIcon(url)
-                .getImage()
-                .getScaledInstance(
-                        ancho, 
-                        alto, 
-                        Image.SCALE_DEFAULT
-                );
+        Image scaledInstance = new ImageIcon(
+                getClass().getResource(ruta)
+        ).getImage().getScaledInstance(
+                ancho,
+                alto,
+                Image.SCALE_DEFAULT
+        );
         
         return new ImageIcon(scaledInstance);
     }
@@ -70,7 +65,6 @@ public class Imagenes {
 //        Background background = new Background(backgroundImage);
 //        anchorPane.setBackground(background);
 //    }
-
     private InputStream dame(String ruta) {
         return getClass().getResourceAsStream(ruta);
     }

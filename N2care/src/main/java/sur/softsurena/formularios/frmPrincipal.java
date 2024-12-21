@@ -13,21 +13,22 @@ import sur.softsurena.control.frmMedicamentos;
 import sur.softsurena.control.frmSeguros;
 import sur.softsurena.gestion.frmConsultas2;
 import sur.softsurena.gestion.frmGestionConsultas;
-import utilidades.DesktopConFondo;
+import sur.softsurena.metodos.Imagenes;
+import sur.softsurena.utilidades.DesktopConFondo;
 
 public final class frmPrincipal extends javax.swing.JFrame {
-    /**
-     * Metodo construtor de la ventana principal en este se resibe la conexion a
-     * la base de datos, tambien tenemos el usuario del sistema y su rol.
-     */
+
+    private static final long serialVersionUID = 1L;
+    
     public frmPrincipal() {
         
         //Inicializamos las variables del formulario
         initComponents();//Inicializamos todos los componente del formulario.
         //Insertamos Informacion del usuario que tenemos activo en la ventana
         //principal
-        txtUsuario.setText("Usuario: " + frmLogin.txtUsuario.getText() + 
-                "\n Rol: " + frmLogin.cbRoles.getSelectedItem().toString());
+//        txtUsuario.setText(
+//                "Usuario: " + frmLogin.txtUsuario.getText() + "\n Rol: "
+//        );
 
         mbMenu.add(relleno);
         mbMenu.add(jpEstado);
@@ -109,23 +110,18 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        dpnEscritorio.setBackground(new java.awt.Color(0, 102, 102));
         dpnEscritorio.setPreferredSize(new java.awt.Dimension(510, 531));
         jScrollPane4.setViewportView(dpnEscritorio);
 
-        mbMenu.setBackground(new java.awt.Color(195, 226, 252));
-        mbMenu.setForeground(new java.awt.Color(1, 1, 1));
         mbMenu.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        jMenu1.setForeground(new java.awt.Color(1, 1, 1));
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Start_Menu_42px.png"))); // NOI18N
+        jMenu1.setIcon(new Imagenes("Windows 8/MenuInicio 42 x 42.png").getIcono());
         jMenu1.setText("Archivos");
         jMenu1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         mnuArchivosPadres.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosPadres.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosPadres.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivosPadres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Family_42px.png"))); // NOI18N
+        mnuArchivosPadres.setIcon(new Imagenes("Windows 8/Family 42 x 42.png").getIcono());
         mnuArchivosPadres.setText("Padres");
         mnuArchivosPadres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,8 +132,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuArchivosPacientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosPacientes.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosPacientes.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivosPacientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Crying_Baby_42px.png"))); // NOI18N
+        mnuArchivosPacientes.setIcon(new Imagenes("Windows 8/CryingBaby 42 x 42.png").getIcono());
         mnuArchivosPacientes.setText("Pacientes");
         mnuArchivosPacientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,8 +143,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuArchivosUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosUsuarios.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosUsuarios.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivosUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Admin_42px_1.png"))); // NOI18N
+        mnuArchivosUsuarios.setIcon(new Imagenes("Windows 8/User 42 x 42.png").getIcono());
         mnuArchivosUsuarios.setText("Usuarios");
         mnuArchivosUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,8 +155,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuArchivosImpresoras.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosImpresoras.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosImpresoras.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivosImpresoras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Print_42px.png"))); // NOI18N
+        mnuArchivosImpresoras.setIcon(new Imagenes("Windows 8/Printer 42 x 42.png").getIcono());
         mnuArchivosImpresoras.setText("Impresoras");
         mnuArchivosImpresoras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,8 +167,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuArchivoCerrarSeccion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivoCerrarSeccion.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivoCerrarSeccion.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivoCerrarSeccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-salida-42.png"))); // NOI18N
+        mnuArchivoCerrarSeccion.setIcon(new Imagenes("Windows 8/Salida 42 x 42.png").getIcono());
         mnuArchivoCerrarSeccion.setText("Cerrar Seccion");
         mnuArchivoCerrarSeccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,8 +179,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuArchivosSalir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosSalir.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosSalir.setForeground(new java.awt.Color(254, 254, 254));
-        mnuArchivosSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8_Shutdown_42px.png"))); // NOI18N
+        mnuArchivosSalir.setIcon(new Imagenes("Windows 8/Salida 42 x 42.png").getIcono());
         mnuArchivosSalir.setText("Salir");
         mnuArchivosSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,15 +190,13 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu1);
 
-        jMenu2.setForeground(new java.awt.Color(1, 1, 1));
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-panel-de-control-42.png"))); // NOI18N
+        jMenu2.setIcon(new Imagenes("Windows 8/PanelControl 42 x 42.png").getIcono());
         jMenu2.setText("Control de...");
         jMenu2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         mnuControlCitas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlCitas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlCitas.setForeground(new java.awt.Color(254, 254, 254));
-        mnuControlCitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-calendario-8-42.png"))); // NOI18N
+        mnuControlCitas.setIcon(new Imagenes("Windows 8/Calendario 42 x 42.png").getIcono());
         mnuControlCitas.setText("Horarios");
         mnuControlCitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,8 +207,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuControlSeguros.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlSeguros.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlSeguros.setForeground(new java.awt.Color(254, 254, 254));
-        mnuControlSeguros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-tarjetas-bancarias-42.png"))); // NOI18N
+        mnuControlSeguros.setIcon(new Imagenes("Windows 8/TarjetasBancarias 42 x 42.png").getIcono());
         mnuControlSeguros.setText("Seguros");
         mnuControlSeguros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,8 +218,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuControlMedicamentos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlMedicamentos.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlMedicamentos.setForeground(new java.awt.Color(254, 254, 254));
-        mnuControlMedicamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-píldora-42.png"))); // NOI18N
+        mnuControlMedicamentos.setIcon(new Imagenes("Windows 8/Pildora 42 x 42.png").getIcono());
         mnuControlMedicamentos.setText("Medicamentos");
         mnuControlMedicamentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,14 +229,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu2);
 
-        jMenu5.setForeground(new java.awt.Color(1, 1, 1));
-        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-boleta-de-calificaciones-32.png"))); // NOI18N
+        jMenu5.setIcon(new Imagenes("Windows 8/BoletaCalificaciones 32 x 32.png").getIcono());
         jMenu5.setText("Gestión...");
         jMenu5.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         mnuGestionConsultas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuGestionConsultas.setForeground(new java.awt.Color(254, 254, 254));
-        mnuGestionConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-calendario-8-42.png"))); // NOI18N
+        mnuGestionConsultas.setIcon(new Imagenes("Windows 8/Calendario 42 x 42.png").getIcono());
         mnuGestionConsultas.setText("Consultas");
         mnuGestionConsultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,8 +244,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenu5.add(mnuGestionConsultas);
 
         mnuConsultas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuConsultas.setForeground(new java.awt.Color(254, 254, 254));
-        mnuConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-caduceo-42.png"))); // NOI18N
         mnuConsultas.setText("Consultas Medicas");
         mnuConsultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,7 +275,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -310,11 +293,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     private void mnuArchivosImpresorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosImpresorasActionPerformed
         
-        new frmImpresoras(this, true).setVisible(true);
+        //TODO 13/12/2024 Testear esta opcion.
+        new frmImpresoras2(this, true).setVisible(true);
     }//GEN-LAST:event_mnuArchivosImpresorasActionPerformed
 
     private void mnuArchivosPadresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPadresActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 frmPadres padres = frmPadres.getPadres();
@@ -337,7 +321,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivosPadresActionPerformed
 
     private void mnuArchivosPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPacientesActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -355,7 +339,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivosPacientesActionPerformed
 
     private void mnuArchivosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosUsuariosActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -374,7 +358,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivosUsuariosActionPerformed
 
     private void mnuArchivoCerrarSeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivoCerrarSeccionActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
 
@@ -391,7 +375,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivoCerrarSeccionActionPerformed
 
     private void mnuControlCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlCitasActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -417,7 +401,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuControlCitasActionPerformed
 
     private void mnuControlSegurosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlSegurosActionPerformed
-        SwingWorker w = new SwingWorker() {
+        SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -440,7 +424,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuControlMedicamentosActionPerformed
 
     private void mnuGestionConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGestionConsultasActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 
@@ -457,7 +441,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuGestionConsultasActionPerformed
 
     private void mnuConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConsultasActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
                 

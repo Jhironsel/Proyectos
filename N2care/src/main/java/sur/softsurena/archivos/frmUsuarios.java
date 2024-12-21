@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -16,6 +17,7 @@ import static sur.softsurena.datos.select.SelectMetodos.*;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.formularios.frmPerfiles;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
+import sur.softsurena.metodos.M_Usuario;
 
 public class frmUsuarios extends javax.swing.JInternalFrame {
 
@@ -1207,16 +1209,18 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             txtSNombre.setText("-");
         }
 
-        Usuario u = Usuario.builder().
-                userName(txtUserName.getText().trim().toUpperCase()).
-                clave(new String(txtClaveRepetir.getPassword()).trim()).
-                administrador(jcbAdministrador.isSelected()).
-                especialidad(txtEspecialidad.getText().trim()).
-                cod_Exequatur(txtExequatur.getText().trim()).
-                pNombre(txtPNombre.getText().trim()).
-                sNombre(txtSNombre.getText().trim()).
-                apellidos(txtApellidos.getText().trim()).
-                estado(cbEstado.isSelected()).build();
+        Usuario u = Usuario
+                .builder()
+                .user_name(txtUserName.getText().trim().toUpperCase())
+                .clave(new String(txtClaveRepetir.getPassword()).trim())
+                .administrador(jcbAdministrador.isSelected())
+                .especialidad(txtEspecialidad.getText().trim())
+                .cod_Exequatur(txtExequatur.getText().trim())
+                .pNombre(txtPNombre.getText().trim())
+                .sNombre(txtSNombre.getText().trim())
+                .apellidos(txtApellidos.getText().trim())
+                .estado(cbEstado.isSelected())
+                .build();
         
         //(String) cbPerfil.getSelectedItem()).trim()
                 
@@ -1224,13 +1228,14 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (nuevo) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    agregarUsuario(u),
+                    M_Usuario.insert(u),
                     "Resultado de la Operacion",
                     JOptionPane.DEFAULT_OPTION);
         } else {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    modificarUsuario(u, rolAnterior),
+                    //TODO 14/12/2024 Esta variable fue eliminada del siguiente metodo, rolAnterior.
+                    M_Usuario.update(u),
                     "Resultado de la Operacion",
                     JOptionPane.DEFAULT_OPTION);
         }
@@ -1269,7 +1274,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (opc == JOptionPane.YES_OPTION) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    borrarUsuario(txtUserName.getText().trim().toUpperCase(), false),
+                    //TODO 14/12/2024 Esta variable fue eliminada del siguiente metodo. false.
+                    M_Usuario.delete(txtUserName.getText().trim().toUpperCase()),
                     "Operacion de eliminacion",
                     JOptionPane.DEFAULT_OPTION);
         }
@@ -1443,7 +1449,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 }
             }
 
-            if (existeUsuario(txtUserName.getText().trim().toUpperCase())) {
+            Usuario usuario1 = M_Usuario.getUsuario(
+                    txtUserName.getText().trim().toUpperCase()
+            );
+            if (!Objects.isNull(usuario1)) {
 
                 int opc = JOptionPane.showInternalConfirmDialog(this,
                         "-Usuario ya esta registrado!!! "
@@ -1454,7 +1463,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                         JOptionPane.INFORMATION_MESSAGE);
 
                 if (opc == JOptionPane.YES_OPTION) {
-                    borrarUsuario(txtUserName.getText().trim().toUpperCase(), true);
+                    //TODO 14/12/2024 Esta variable fue eliminada del siguiente metodo. true.
+                    M_Usuario.delete(txtUserName.getText().trim().toUpperCase());
                 } else {
                     txtUserName.requestFocus();
                     txtUserName.setSelectionStart(0);

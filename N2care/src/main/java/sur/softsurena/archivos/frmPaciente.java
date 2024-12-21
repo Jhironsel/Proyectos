@@ -13,17 +13,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.ARS;
+import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paciente;
+import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.formularios.frmDatosNacimiento;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
+import sur.softsurena.metodos.M_Generales;
+import sur.softsurena.metodos.M_Paciente;
 import static sur.softsurena.metodos.M_Paciente.existePaciente;
+import sur.softsurena.metodos.M_TiposSangres;
+import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import utilidades.frmBuscarCedula;
 import utilidades.frmBuscarCedulaSinDatos;
@@ -70,7 +76,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         cbEstado = new javax.swing.JCheckBox();
         txtCedula = new javax.swing.JFormattedTextField();
         btnValidaCedulaPaciente = new javax.swing.JButton();
-        cbSangre = new javax.swing.JComboBox();
+        cbSangre = new javax.swing.JComboBox<>();
         txtPNombre = new javax.swing.JTextField();
         txtSNombre = new javax.swing.JTextField();
         txtApellidos = new javax.swing.JTextField();
@@ -99,11 +105,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         jpbFoto = new javax.swing.JProgressBar();
         jlAgregarFoto = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        btnPrimero = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
-        btnSiguiente = new javax.swing.JButton();
-        btnUltimo = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -190,12 +191,12 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         jpDetallesLayout.setHorizontalGroup(
             jpDetallesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDetallesLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         jpDetallesLayout.setVerticalGroup(
             jpDetallesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
         );
 
         cbEstadoTabla.setSelected(true);
@@ -213,7 +214,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbEstadoTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, 1038, Short.MAX_VALUE))
+                    .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, 1039, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(
@@ -221,7 +222,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(cbEstadoTabla)
                 .addGap(0, 0, 0)
-                .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -663,62 +664,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Controles"));
 
-        jPanel5.setLayout(new java.awt.GridLayout(1, 4, 4, 0));
-
-        btnPrimero.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnPrimero.setForeground(new java.awt.Color(1, 1, 1));
-        btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Anterior 32 x 32.png"))); // NOI18N
-        btnPrimero.setMnemonic('p');
-        btnPrimero.setText("Primero");
-        btnPrimero.setToolTipText("Va al Primer Registro");
-        btnPrimero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrimeroActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnPrimero);
-
-        btnAnterior.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(1, 1, 1));
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Izquierda 32 x 32.png"))); // NOI18N
-        btnAnterior.setMnemonic('a');
-        btnAnterior.setText("Anterior");
-        btnAnterior.setToolTipText("Va al Anterior Registro");
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnAnterior);
-
-        btnSiguiente.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnSiguiente.setForeground(new java.awt.Color(1, 1, 1));
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Derecha 32 x 32.png"))); // NOI18N
-        btnSiguiente.setMnemonic('s');
-        btnSiguiente.setText("Siguiente");
-        btnSiguiente.setToolTipText("Va al Siguiente Registro");
-        btnSiguiente.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSiguienteActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnSiguiente);
-
-        btnUltimo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnUltimo.setForeground(new java.awt.Color(1, 1, 1));
-        btnUltimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Siguiente 32 x 32.png"))); // NOI18N
-        btnUltimo.setMnemonic('u');
-        btnUltimo.setText("Ultimo");
-        btnUltimo.setToolTipText("Va al Ultimo Registro");
-        btnUltimo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnUltimo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUltimoActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnUltimo);
-
         jPanel6.setLayout(new java.awt.GridLayout(1, 0, 4, 0));
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
@@ -808,13 +753,11 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 1031, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -826,14 +769,14 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -842,36 +785,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnPrimeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeroActionPerformed
-        if (!tblPacientes.isEnabled()) {
-            return;
-        }
-        mostrarRegistro();
-    }//GEN-LAST:event_btnPrimeroActionPerformed
-
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        if (!tblPacientes.isEnabled()) {
-            return;
-        }
-
-        mostrarRegistro();
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
-    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        if (!tblPacientes.isEnabled()) {
-            return;
-        }
-
-        mostrarRegistro();
-    }//GEN-LAST:event_btnSiguienteActionPerformed
-
-    private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
-        if (!tblPacientes.isEnabled()) {
-            return;
-        }
-        mostrarRegistro();
-    }//GEN-LAST:event_btnUltimoActionPerformed
-
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         //Activamos el Flag de registro Nuevo        
         nuevo = true;
@@ -879,7 +792,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (((Categoria) txtCedula.getValue()).getId() == 0) {
+        if (((Generales) txtCedula.getValue()).getId() == 0) {
             JOptionPane.showInternalConfirmDialog(this,
                     "Paciente Generico no se puede modificar!!!",
                     "Validacion de proceso de modificacion",
@@ -993,42 +906,49 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             cedulaPadre = 0;
         }
 
-        String msg;
-        Generales g = Generales.builder().
-                cedula(txtCedula.getValue().toString()).
-                id_tipo_sangre(cbSangre.getSelectedIndex()).build();
-
-        Asegurados a = Asegurados
+        Generales g = Generales
                 .builder()
-                .id_ars(((ARS) cbSeguro.getSelectedItem()).getId())
+                .cedula(txtCedula.getValue().toString())
+                .tipoSangre((TipoSangre) cbSangre.getSelectedItem())
+                .build();
+
+        Asegurado a = Asegurado
+                .builder()
+                .id(((ARS) cbSeguro.getSelectedItem()).getId())
                 .no_nss(txtNoSeguro.getValue().toString())
                 .build();
 
         Paciente p = Paciente
                 .builder()
-                .id_persona(nuevo ? -1 : ((Persona) txtCedula.getValue()).getId_persona())
+                .persona(
+                        Persona
+                                .builder()
+                                .id_persona(
+                                        nuevo
+                                                ? -1
+                                                : ((Generales) txtCedula.getValue()).getPersona().getId_persona()
+                                )
+                                .pnombre(txtPNombre.getText())
+                                .snombre(txtSNombre.getText())
+                                .apellidos(txtApellidos.getText())
+                                .sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f')
+                                .generales(g)
+                                .estado(cbEstado.isSelected())
+                                .build()
+                )
                 .idMadre(cedulaMadre)
                 .idPadre(cedulaPadre)
-                .generales(g)
-                .pNombre(txtPNombre.getText())
-                .sNombre(txtSNombre.getText())
-                .apellidos(txtApellidos.getText())
-                .sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f')
                 .asegurado(a)
-                .estado(cbEstado.isSelected())
                 .build();
 
-        if (nuevo) {
-            msg = agregarPaciente(p);
-        } else {
-            msg = modificarPaciente(p);
-        }
+        Resultado resultado = nuevo ? M_Paciente.insert(p) : M_Paciente.update(p);
 
         JOptionPane.showInternalConfirmDialog(
                 this,
-                msg,
-                "Resultado de la operacion",
-                JOptionPane.DEFAULT_OPTION);
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
 
         //Actualizamos los cambios en la Tabla
         llenarTabla();
@@ -1052,13 +972,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             return;
         }
 
-        int rta = JOptionPane.showConfirmDialog(this,
-                "Los registros no pueden ser eliminado de la base de datos\n"
-                + "Ellos cambian de estado a Inactivo.\n"
-                + "Desea Continuar?",
+        int rta = JOptionPane.showConfirmDialog(
+                this,
+                """
+                Los registros no pueden ser eliminado de la base de datos
+                Ellos cambian de estado a Inactivo.
+                Desea Continuar?
+                """,
                 "Proceso de eliminar paciente",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+                JOptionPane.QUESTION_MESSAGE
+        );
+
         if (rta == JOptionPane.NO_OPTION) {
             return;
         }
@@ -1134,10 +1059,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         frmDatosNacimiento n = new frmDatosNacimiento(null, true);
 
         n.txtCedula.setValue(
-                new Categorias(
-                        ((Categorias) txtCedula.getValue()).getId(),
-                        ((Categorias) txtCedula.getValue()).getDescripcion()
-                )
+                txtCedula.getValue()
         );
         n.setLocationRelativeTo(null);
         n.setVisible(true);
@@ -1168,9 +1090,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private void cbEstadoTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoTablaActionPerformed
 
         if (cbEstadoTabla.isSelected()) {
-            cbEstadoTabla.setText("Padres Activos");
+            cbEstadoTabla.setText("Pacientes Activos");
         } else {
-            cbEstadoTabla.setText("Padres Inactivos");
+            cbEstadoTabla.setText("Pacientes Inactivos");
         }
 
         llenarTabla();
@@ -1304,7 +1226,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAntecedentes;
-    private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarMadre;
@@ -1314,13 +1235,10 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnPrimero;
-    private javax.swing.JButton btnSiguiente;
-    private javax.swing.JButton btnUltimo;
     private javax.swing.JButton btnValidaCedulaPaciente;
     private javax.swing.JCheckBox cbEstado;
     private javax.swing.JCheckBox cbEstadoTabla;
-    private javax.swing.JComboBox cbSangre;
+    private javax.swing.JComboBox<TipoSangre> cbSangre;
     private javax.swing.JComboBox cbSeguro;
     private javax.swing.JComboBox<String> cbSexo;
     private javax.swing.JLabel jLabel1;
@@ -1337,7 +1255,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -1361,6 +1278,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtPNombre;
     private javax.swing.JTextField txtSNombre;
     // End of variables declaration//GEN-END:variables
+
     public synchronized void llenarTabla() {
         String titulos[] = {
             "<html><b>Madre</b></html>",
@@ -1377,46 +1295,48 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         Object registro[] = new Object[10];
         tblPacientes.removeAll();
 
-        ResultSet rs = getPacienteActivo(cbEstadoTabla.isSelected());
+        List<Paciente> listaPaciente = M_Paciente.getList(
+                FiltroBusqueda
+                        .builder()
+                        .estado(cbEstadoTabla.isSelected())
+                        .build()
+        );
+
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-        try {
-            while (rs.next()) {
-                Persona madre = Persona.builder().
-                        id_persona(rs.getInt("IDMADRE")).
-                        pNombre(rs.getString("nombreMadre")).
-                        cedula(rs.getString("CEDULAMADRE")).build();
-                registro[0] = madre;
-                Persona padre = Persona.builder().
-                        id(rs.getInt("IDPADRE")).
-                        nombres(rs.getString("nombrePadre")).
-                        cedula(rs.getString("CEDULAPADRE")).build();
 
-                registro[1] = padre;
-
-                registro[2] = new Categoria(rs.getInt("IDPACIENTE"),
-                        rs.getString("CEDULAPACIENTE").trim());
-                registro[3] = rs.getString("NOMBRES").trim();
-                registro[4] = rs.getString("APELLIDOS").trim();
-                registro[5] = rs.getString("SEXO").trim();
-                registro[6] = rs.getString("IDTIPOSANGRE").trim();
-                registro[7] = rs.getString("IDARS").trim();
-                registro[8] = rs.getString("NONSS").trim();
-                registro[9] = (rs.getBoolean("ESTADO") ? "Activo" : "Inactivo");
-                miTabla.addRow(registro);
-            }
-            tblPacientes.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        } finally {
-            mostrarRegistro();
-            ordenarTabla();
-        }
-        miTabla.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
-
+//        Persona madre = Persona.builder().
+//                id_persona(rs.getInt("IDMADRE")).
+//                pNombre(rs.getString("nombreMadre")).
+//                cedula(rs.getString("CEDULAMADRE")).build();
+//        registro[0] = madre;
+//        Persona padre = Persona.builder().
+//                id(rs.getInt("IDPADRE")).
+//                nombres(rs.getString("nombrePadre")).
+//                cedula(rs.getString("CEDULAPADRE")).build();
+//
+//        registro[1] = padre;
+//                    registro[5] = rs.getString("IDARS").trim();
+//                    registro[6] = rs.getString("NONSS").trim();
+        listaPaciente.stream().forEach(
+                paciente -> {
+                    registro[0] = paciente;
+                    registro[1] = paciente.getPersona().getSexo();
+                    registro[2] = M_Generales.getEntidad(paciente.getPersona().getId_persona());
+                    registro[3] = (paciente.getPersona().getEstado() ? "Activo" : "Inactivo");
                 }
+        );
+
+        miTabla.addRow(registro);
+
+        tblPacientes.setModel(miTabla);
+
+        mostrarRegistro();
+        ordenarTabla();
+
+        //TODO 12/12/2024 Esto creo que se debe ejecutar una vez. 
+        miTabla.addTableModelListener((TableModelEvent e) -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                System.out.println("Intentas actualizar. No es posible.");
             }
         });
     }
@@ -1447,10 +1367,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             txtCedulaPadre.setValue(padre);
 
             txtCedula.setValue(
-                    new Categorias(
-                            ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId(),
-                            ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getDescripcion()
-                    )
+                    tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)
             );
 
             txtPNombre.setText(String.valueOf(tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 3)));
@@ -1548,41 +1465,37 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 tblPacientes.getSelectedRow());
     }
 
-    private void navegador(boolean b) {
+    private void navegador(boolean valor) {
         //Botones Para Deshabilitar:
-        btnPrimero.setEnabled(b);
-        btnAnterior.setEnabled(b);
-        btnSiguiente.setEnabled(b);
-        btnUltimo.setEnabled(b);
-        btnNuevo.setEnabled(b);
-        btnModificar.setEnabled(b);
-        btnBorrar.setEnabled(b);
-        btnBuscar.setEnabled(b);
-        btnAntecedentes.setEnabled(b);
-        btnDatosNacimiento.setEnabled(b);
-        tblPacientes.setEnabled(b);
-        cbEstadoTabla.setEnabled(b);
+        btnNuevo.setEnabled(valor);
+        btnModificar.setEnabled(valor);
+        btnBorrar.setEnabled(valor);
+        btnBuscar.setEnabled(valor);
+        btnAntecedentes.setEnabled(valor);
+        btnDatosNacimiento.setEnabled(valor);
+        tblPacientes.setEnabled(valor);
+        cbEstadoTabla.setEnabled(valor);
 
         //Botones Habilitado
-        btnGuardar.setEnabled(!b);
-        btnCancelar.setEnabled(!b);
-        btnBuscarMadre.setEnabled(!b);
-        btnBuscarPadre.setEnabled(!b);
+        btnGuardar.setEnabled(!valor);
+        btnCancelar.setEnabled(!valor);
+        btnBuscarMadre.setEnabled(!valor);
+        btnBuscarPadre.setEnabled(!valor);
 
-        cbEstado.setEnabled(!b);
-        txtPNombre.setEditable(!b);
-        txtApellidos.setEditable(!b);
-        cbSeguro.setEnabled(!b);
-        txtNoSeguro.setEditable(!b);
-        cbSexo.setEnabled(!b);
-        cbSangre.setEnabled(!b);
+        cbEstado.setEnabled(!valor);
+        txtPNombre.setEditable(!valor);
+        txtApellidos.setEditable(!valor);
+        cbSeguro.setEnabled(!valor);
+        txtNoSeguro.setEditable(!valor);
+        cbSexo.setEnabled(!valor);
+        cbSangre.setEnabled(!valor);
 
         ////
-        txtCedula.setEditable(!b);
+        txtCedula.setEditable(!valor);
 
         if (nuevo) {
             //Caja de Textos
-            txtCedula.setEditable(!b);
+            txtCedula.setEditable(!valor);
             //txt Vaciar
             limpiarCampo();
             txtCedula.grabFocus();
@@ -1592,8 +1505,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }
 
     private synchronized void limpiarCampo() {
-        .jlFoto.setIcon(new ImageIcon(
-                getClass().getResource("/imagenes/nacido180x180.png")));
+        jlFoto.setIcon(new ImageIcon(
+                getClass().getResource("/imagenes/nacido180x180.png"))
+        );
         txtCedula.setValue(null);
         txtPNombre.setText("");
         txtApellidos.setText("");
@@ -1617,17 +1531,15 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }
 
     public synchronized void llenarCombox() {
-        ResultSet obj = getTipoSangre();
+        List<TipoSangre> listaTipoSangre = M_TiposSangres.getList();
         cbSangre.removeAllItems();
-        try {
-            while (obj.next()) {
-                cbSangre.addItem(new Categorias(obj.getShort("ID"), obj.getString("DESCRIPCION").trim()));
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
-        obj = null;
-        obj = getTipoSeguro();
+        
+        listaTipoSangre.stream().forEach(sangre -> {
+            cbSangre.addItem(sangre);
+        });
+        
+
+        M_Ti getTipoSeguro();
         cbSeguro.removeAllItems();
         try {
             while (obj.next()) {

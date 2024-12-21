@@ -6,7 +6,11 @@ import javax.swing.JOptionPane;
  * @author jhironsel
  */
 public class frmHora extends javax.swing.JDialog {
+    
+    private static final long serialVersionUID = 1L;
+    
     protected static boolean aceptar = false;
+    
     public frmHora(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();

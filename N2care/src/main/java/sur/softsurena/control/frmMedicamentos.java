@@ -2,7 +2,6 @@ package sur.softsurena.control;
 
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,19 +23,25 @@ import sur.softsurena.entidades.Proveedor;
 import sur.softsurena.formularios.frmPrincipal;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
 import sur.softsurena.metodos.M_Medicamento;
+import static sur.softsurena.metodos.M_Medicamento.getMedicamento;
 import sur.softsurena.metodos.M_Proveedor;
 import sur.softsurena.utilidades.JComboExp;
 import sur.softsurena.utilidades.Resultado;
 
 public class frmMedicamentos extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private static frmMedicamentos medicamentos;
-    private int cliMedicamento;
-    private int numeroMedicamentos;
+
     private Object resp;
+
     private File fichero;
+
     private final Map<Integer, Image> map;
+
     private ImageIcon img = null;
+
     private JComboExp miCombo;
 
     public frmMedicamentos() {
@@ -64,12 +69,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         jPanel4 = new javax.swing.JPanel();
         jlFoto = new javax.swing.JLabel();
         jpbFoto = new javax.swing.JProgressBar();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        btnPrimero = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
-        btnSiguiente = new javax.swing.JButton();
-        btnUltimo = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -91,11 +90,8 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         btnImagenBuscar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         txtCodigoProveedor = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        txtTelefono = new javax.swing.JFormattedTextField();
         cbProveedores = new javax.swing.JComboBox<>();
         cbEstadoProveedor = new javax.swing.JCheckBox();
-        jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -121,7 +117,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Foto Medicamento"));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Foto Medicamento"));
 
         jlFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-pill-180.png"))); // NOI18N
         jlFoto.setToolTipText("Imagen del medicamento seleccionado");
@@ -132,76 +128,21 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlFoto)
             .addComponent(jpbFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jlFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jlFoto)
-                .addGap(0, 0, 0)
                 .addComponent(jpbFoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Controles"));
-
-        jPanel5.setLayout(new java.awt.GridLayout(1, 4, 4, 0));
-
-        btnPrimero.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnPrimero.setForeground(new java.awt.Color(1, 1, 1));
-        btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Anterior 32 x 32.png"))); // NOI18N
-        btnPrimero.setMnemonic('p');
-        btnPrimero.setText("Primero");
-        btnPrimero.setToolTipText("Va al Primer Registro");
-        btnPrimero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrimeroActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnPrimero);
-
-        btnAnterior.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(1, 1, 1));
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Izquierda 32 x 32.png"))); // NOI18N
-        btnAnterior.setMnemonic('a');
-        btnAnterior.setText("Anterior");
-        btnAnterior.setToolTipText("Va al Anterior Registro");
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnAnterior);
-
-        btnSiguiente.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnSiguiente.setForeground(new java.awt.Color(1, 1, 1));
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Derecha 32 x 32.png"))); // NOI18N
-        btnSiguiente.setMnemonic('s');
-        btnSiguiente.setText("Siguiente");
-        btnSiguiente.setToolTipText("Va al Siguiente Registro");
-        btnSiguiente.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSiguienteActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnSiguiente);
-
-        btnUltimo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnUltimo.setForeground(new java.awt.Color(1, 1, 1));
-        btnUltimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Siguiente 32 x 32.png"))); // NOI18N
-        btnUltimo.setMnemonic('u');
-        btnUltimo.setText("Ultimo");
-        btnUltimo.setToolTipText("Va al Ultimo Registro");
-        btnUltimo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnUltimo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUltimoActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnUltimo);
-
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Controles "));
         jPanel6.setLayout(new java.awt.GridLayout(1, 0, 4, 0));
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
@@ -274,23 +215,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         });
         jPanel6.add(btnBuscar);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
-        );
-
-        jpDetalles.setBorder(javax.swing.BorderFactory.createTitledBorder("Detalles de medicamentos"));
+        jpDetalles.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Detalles de medicamentos"));
 
         tblMedicamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -305,11 +230,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         tblMedicamentos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMedicamentosMouseClicked(evt);
-            }
-        });
-        tblMedicamentos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tblMedicamentosKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tblMedicamentos);
@@ -328,21 +248,27 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         jpDetallesLayout.setHorizontalGroup(
             jpDetallesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
-            .addGroup(jpDetallesLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(cbEstadosMedicamentos))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDetallesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cbEstadosMedicamentos)
+                .addContainerGap())
         );
         jpDetallesLayout.setVerticalGroup(
             jpDetallesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDetallesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbEstadosMedicamentos)
-                .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Medicamento"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
 
         cbEstadoMedicamento.setText("Inactivo");
+        cbEstadoMedicamento.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
+        cbEstadoMedicamento.setBorderPainted(true);
+        cbEstadoMedicamento.setBorderPaintedFlat(true);
         cbEstadoMedicamento.setEnabled(false);
         cbEstadoMedicamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -351,9 +277,11 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         });
 
         txtNombreMedicamentos.setEditable(false);
+        txtNombreMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Nombre"));
 
         btnImagenBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-pill-32_Buscar.png"))); // NOI18N
-        btnImagenBuscar.setText("Imagen");
+        btnImagenBuscar.setText("Buscar Imagen");
+        btnImagenBuscar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
         btnImagenBuscar.setEnabled(false);
         btnImagenBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -368,14 +296,12 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNombreMedicamentos)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(cbEstadoMedicamento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnImagenBuscar))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtNombreMedicamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(btnImagenBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,35 +310,24 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 .addComponent(txtNombreMedicamentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnImagenBuscar)
-                    .addComponent(cbEstadoMedicamento)))
+                    .addComponent(btnImagenBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstadoMedicamento))
+                .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Nombre del Proveedor"));
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnImagenBuscar, cbEstadoMedicamento});
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255))));
 
         txtCodigoProveedor.setEditable(false);
+        txtCodigoProveedor.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Codigo proveedor"));
         txtCodigoProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoProveedorActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Codigo Proveedor");
-
-        txtTelefono.setEditable(false);
-        try {
-            txtTelefono.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###) ###-####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtTelefono.setText("(000) 000-0000");
-        txtTelefono.setToolTipText("Contacto con el proveedor del producto seleccionado");
-        txtTelefono.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTelefonoActionPerformed(evt);
-            }
-        });
-
+        cbProveedores.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Nombre proveedor"));
         cbProveedores.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbProveedoresItemStateChanged(evt);
@@ -433,16 +348,17 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         });
 
         cbEstadoProveedor.setText("Inactivo");
+        cbEstadoProveedor.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
+        cbEstadoProveedor.setBorderPainted(true);
+        cbEstadoProveedor.setBorderPaintedFlat(true);
         cbEstadoProveedor.setEnabled(false);
+        cbEstadoProveedor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cbEstadoProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         cbEstadoProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbEstadoProveedorActionPerformed(evt);
             }
         });
-
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Telefono");
-        jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -450,131 +366,64 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cbProveedores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtCodigoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addComponent(cbEstadoProveedor))
+                        .addComponent(txtCodigoProveedor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbEstadoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(cbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbEstadoProveedor))
+                .addContainerGap()
+                .addComponent(cbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel2))
-                .addGap(0, 0, 0)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCodigoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstadoProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbEstadoProveedor, cbProveedores});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cbProveedores, txtCodigoProveedor});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnPrimeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeroActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblMedicamentos.isEnabled()) {
-            return;
-        }
-        cliMedicamento = 0;
-        mostrarRegistro();
-        btnPrimero.requestFocus();
-    }//GEN-LAST:event_btnPrimeroActionPerformed
-
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblMedicamentos.isEnabled()) {
-            return;
-        }
-        cliMedicamento--;
-        if (cliMedicamento == -1) {
-            cliMedicamento = numeroMedicamentos - 1;
-        }
-        mostrarRegistro();
-        if (evt != null) {
-            btnAnterior.requestFocus();
-        }
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
-    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblMedicamentos.isEnabled()) {
-            return;
-        }
-        cliMedicamento++;
-        if (cliMedicamento == numeroMedicamentos) {
-            cliMedicamento = 0;
-        }
-        mostrarRegistro();
-        if (evt != null) {
-            btnSiguiente.requestFocus();
-        }
-    }//GEN-LAST:event_btnSiguienteActionPerformed
-
-    private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblMedicamentos.isEnabled()) {
-            return;
-        }
-        cliMedicamento = numeroMedicamentos - 1;
-        mostrarRegistro();
-        btnUltimo.requestFocus();
-    }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         if (!isShowing()) {
@@ -621,9 +470,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         }
 
         if (resp.equals("Crear Proveedor")) {
-            txtTelefono.setValue(null);
-            txtTelefono.setEditable(true);
-
             txtCodigoProveedor.setText("");
             txtCodigoProveedor.setEditable(true);
 
@@ -664,7 +510,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         if (resp.equals("Modificar Proveedor")) {
             cbProveedores.setEditable(true);
             cbProveedores.requestFocus();
-            txtTelefono.setEditable(true);
             txtCodigoProveedor.setEditable(true);
             cbEstadoProveedor.setEnabled(true);
             JComboExp.miBoton.setVisible(false);
@@ -690,15 +535,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 JOptionPane.showInternalMessageDialog(this,
                         "Debe digitar el nombre del proveedor");
                 cbProveedores.requestFocus();
-                return;
-            }
-
-            if (txtTelefono.getValue() == null) {
-                JOptionPane.showInternalMessageDialog(this,
-                        "Debe digitar un telefono correctamnte");
-                txtTelefono.setValue(null);
-                txtTelefono.requestFocus();
-                txtTelefono.setEditable(true);
                 return;
             }
 
@@ -731,7 +567,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                  */
                 JOptionPane.showInternalMessageDialog(
                         this,
-                        M_Proveedor.agregarProveedor(
+                        M_Proveedor.insert(
                                 Proveedor
                                         .builder()
                                         .persona(
@@ -757,7 +593,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                  */
                 JOptionPane.showInternalMessageDialog(
                         this,
-                        M_Proveedor.modificarProveedor(
+                        M_Proveedor.update(
                                 Proveedor
                                         .builder()
                                         .persona(
@@ -832,7 +668,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                                 sql
                         ).equals("Foto Insertada")
                         ? "Medicamento Insertado" : "Error al Insertar Medicamento")
-                */
+                 */
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "",
@@ -880,8 +716,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         cbEstadosMedicamentos.setSelected(true);
         cbEstadosMedicamentosActionPerformed(null);
-
-        numeroMedicamentos = numeroMedicamentos(cbEstadosMedicamentos.isSelected());
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -897,7 +731,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         btnImagenBuscar.setEnabled(false);
         JComboExp.miBoton.setVisible(false);
         cbEstadoProveedor.setEnabled(false);
-        txtTelefono.setEditable(false);
         txtCodigoProveedor.setEditable(false);
         cbProveedores.setEditable(false);
 
@@ -911,18 +744,17 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 "Puede buscar Codigo del provedor o Nombre Medicamento",
                 "Buscando en la tabla",
                 JOptionPane.PLAIN_MESSAGE);
-        tblMedicamentos.setRowSelectionInterval(0, 0);
-        for (int i = 0; i < tblMedicamentos.getRowCount(); i++) {
 
+        tblMedicamentos.setRowSelectionInterval(0, 0);
+
+        for (int i = 0; i < tblMedicamentos.getRowCount(); i++) {
             if (tblMedicamentos.getValueAt(i, 2).toString().toLowerCase().
                     contains(preg.toLowerCase()) || tblMedicamentos.
                     getValueAt(i, 1).toString().toLowerCase().contains(
                     preg.toLowerCase())) {
-                cliMedicamento = i;
                 mostrarRegistro();
                 break;
             }
-
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -931,26 +763,14 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             return;
         }
 
-        cliMedicamento = tblMedicamentos.getSelectedRow();
         mostrarRegistro();
     }//GEN-LAST:event_tblMedicamentosMouseClicked
-
-    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-
-        txtCodigoProveedor.requestFocus();
-        if (btnGuardar.isEnabled() && resp.equals("Crear Proveedor")) {
-            txtCodigoProveedor.setEditable(true);
-            txtCodigoProveedor.requestFocus();
-        }
-    }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
 
         llenarCombox();
         llenarTabla(true);
-        numeroMedicamentos = numeroMedicamentos(
-                cbEstadosMedicamentos.isSelected()
-        );
+
         tblMedicamentos.setRowSelectionInterval(0, 0);
         JComboExp.miBoton.setVisible(false);
     }//GEN-LAST:event_formInternalFrameOpened
@@ -977,13 +797,19 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
     private void btnImagenBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagenBuscarActionPerformed
         JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new FileNameExtensionFilter("*.PNG, *.JPEG, *.JPG",
-                "png", "jpeg", "jpg"));
+
+        fc.setFileFilter(
+                new FileNameExtensionFilter(
+                        "*.PNG, *.JPEG, *.JPG",
+                        "png",
+                        "jpeg",
+                        "jpg"
+                )
+        );
+
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
         int seleccion = fc.showDialog(this, "Tomar Imagen");
-
-        fichero = null;
 
         if (seleccion == JFileChooser.CANCEL_OPTION) {
             return;
@@ -991,17 +817,30 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         fichero = fc.getSelectedFile();
 
-        BufferedImage image = null;
+        if (!fichero.isFile()) {
+            System.out.println("No es un archivo.");
+            return;
+        }
+
+        BufferedImage image = new BufferedImage(0, 0, 0);
+
         try {
             image = ImageIO.read(fichero.getAbsoluteFile());
         } catch (IOException ex) {
             //Instalar Logger
         }
-        jlFoto.setIcon(new javax.swing.ImageIcon(image.
-                getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+
+        jlFoto.setIcon(
+                new javax.swing.ImageIcon(
+                        image.getScaledInstance(180, 180, Image.SCALE_SMOOTH)
+                )
+        );
 
         map.remove(
-                ((Proveedor) tblMedicamentos.getValueAt(cliMedicamento, 1)).getPersona().getId_persona()
+                ((Proveedor) tblMedicamentos.getValueAt(
+                        tblMedicamentos.getSelectedRow(),
+                        1
+                )).getPersona().getId_persona()
         );
     }//GEN-LAST:event_btnImagenBuscarActionPerformed
 
@@ -1029,10 +868,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         } else {
             cbEstadosMedicamentos.setText("Inactivos");
         }
-
-        cliMedicamento = numeroMedicamentos = numeroMedicamentos(
-                cbEstadosMedicamentos.isSelected()
-        );
 
         llenarCombox();
         llenarTabla(cbEstadosMedicamentos.isSelected());
@@ -1066,22 +901,10 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         if (!isShowing() | !btnGuardar.isEnabled()) {
             return;
         }
-
-        if (btnGuardar.isEnabled() & resp.equals("Crear Proveedor")) {
-            txtTelefono.requestFocus();
-            txtTelefono.setEditable(true);
-        }
+        
         setDatosComboBox();
     }//GEN-LAST:event_cbProveedoresActionPerformed
 
-    private void tblMedicamentosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblMedicamentosKeyReleased
-        if (evt.getExtendedKeyCode() == KeyEvent.VK_DOWN) {
-            btnSiguienteActionPerformed(null);
-        }
-        if (evt.getExtendedKeyCode() == KeyEvent.VK_UP) {
-            btnAnteriorActionPerformed(null);
-        }
-    }//GEN-LAST:event_tblMedicamentosKeyReleased
     public void centralizar() {
 
         setBounds((dpnEscritorio.getWidth() - this.getWidth()) / 2,
@@ -1093,53 +916,61 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     }
 
     private void mostrarRegistro() {
-        if (tblMedicamentos.getRowCount() == 0) {
+        if (tblMedicamentos.getRowCount() == 0
+                || tblMedicamentos.getSelectedRow() == -1) {
             return;
         }
 
-        tblMedicamentos.setRowSelectionInterval(cliMedicamento, cliMedicamento);
+        txtNombreMedicamentos.setText(
+                tblMedicamentos.getValueAt(
+                        tblMedicamentos.getSelectedRow(),
+                        2
+                ).toString()
+        );
 
-        txtNombreMedicamentos.setText(tblMedicamentos.getValueAt(cliMedicamento, 2).toString());
+//        for (int i = 0; i < cbProveedores.getItemCount(); i++) {
+//            if (
+//                    ((Proveedor) cbProveedores.getItemAt(i)).getCodigo().equals(
+//                    ((Proveedor) tblMedicamentos.getValueAt(tblMedicamentos.getSelectedRow(), 1)).getNombre())) {
+//                cbProveedores.setSelectedIndex(i);
+//                setDatosComboBox();
+//                break;
+//            }
+//        }
+        cbEstadoMedicamento.setSelected(
+                tblMedicamentos.getValueAt(
+                        tblMedicamentos.getSelectedRow(),
+                        3
+                ).toString().equals("Activo"));
 
-        for (int i = 0; i < cbProveedores.getItemCount(); i++) {
-            if (((Proveedores) cbProveedores.getItemAt(i)).getCodigo().equals(
-                    ((Proveedores) tblMedicamentos.getValueAt(cliMedicamento, 1)).getNombre())) {
-                cbProveedores.setSelectedIndex(i);
-                setDatosComboBox();
-                break;
-            }
-        }
-
-        cbEstadoMedicamento.setSelected(tblMedicamentos.getValueAt(cliMedicamento, 3).toString().equals("Activo"));
-
-        SwingWorker<Integer, Integer> w = new SwingWorker() {
+        SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Integer doInBackground() throws Exception {
                 jpbFoto.setVisible(true);
                 frmPrincipal.jpEstado.setVisible(true);
                 dpnEscritorio.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 publish(10);
-                if (!map.containsKey(((Proveedores) tblMedicamentos.getValueAt(
-                        cliMedicamento, 1)).getId())) {
+                if (!map.containsKey(((Proveedor) tblMedicamentos.getValueAt(
+                        tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona())) {
                     publish(12);
 
-                    img = getImagenes("select FOTO "
-                            + "from T_Medicamentos "
-                            + "where idMedicamento = "
-                            + ((Proveedores) tblMedicamentos.getValueAt(cliMedicamento, 1)).getId());
-
+//                    img = getImagenes(
+//                            "select FOTO "
+//                            + "from T_Medicamentos "
+//                            + "where idMedicamento = "
+//                            + ((Proveedor) tblMedicamentos.getValueAt(tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona());
                     publish(37);
 
                     if (img != null) {
                         publish(40);
-                        map.put(((Proveedores) tblMedicamentos.getValueAt(
-                                cliMedicamento, 1)).
-                                getId(), img.getImage());
+                        map.put(((Proveedor) tblMedicamentos.getValueAt(
+                                tblMedicamentos.getSelectedRow(), 1)).getPersona().
+                                getId_persona(), img.getImage());
                         publish(55);
                         jlFoto.setIcon(new ImageIcon(
-                                map.get(((Proveedores) tblMedicamentos.getValueAt(
-                                        cliMedicamento, 1)).
-                                        getId()).
+                                map.get(((Proveedor) tblMedicamentos.getValueAt(
+                                        tblMedicamentos.getSelectedRow(), 1)).getPersona().
+                                        getId_persona()).
                                         getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
                         publish(90);
                     } else {
@@ -1152,9 +983,9 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                     publish(40);
 
                     jlFoto.setIcon(new ImageIcon(
-                            map.get(((Proveedores) tblMedicamentos.getValueAt(
-                                    cliMedicamento, 1)).
-                                    getId()).getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+                            map.get(((Proveedor) tblMedicamentos.getValueAt(
+                                    tblMedicamentos.getSelectedRow(), 1)).getPersona().
+                                    getId_persona()).getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
                     publish(83);
                 }
                 return 100;
@@ -1169,7 +1000,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             }
 
             @Override
-            protected void process(List chunks) {
+            protected void process(List<Object> chunks) {
                 super.process(chunks);
                 jpbFoto.setValue((Integer) chunks.get(0));
                 frmPrincipal.jpbEstado.setValue((Integer) chunks.get(0));
@@ -1179,8 +1010,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     }
 
     private void llenarTabla(boolean estado) {
-
-        cliMedicamento = 0;
         tblMedicamentos.removeAll();
         String titulos[] = {"no.", "Codigo Proveedor", "Nombre Medicamento", "Estado"};
         Object registro[] = new Object[4];
@@ -1188,12 +1017,12 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         ResultSet rs = getMedicamento(estado);
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
         int linea = 1;
-
+//new Proveedor(rs.getInt("idMedicamento"),
+//                        rs.getString("Codigo_Proveedor"));
         try {
             while (rs.next()) {
                 registro[0] = linea;
-                registro[1] = new Proveedores(rs.getInt("idMedicamento"),
-                        rs.getString("Codigo_Proveedor"));
+                registro[1] = Proveedor.builder().build();
                 registro[2] = rs.getString("NombreMedicamento");
                 registro[3] = (rs.getBoolean("Estado") ? "Activo" : "Inactivo");
                 miTabla.addRow(registro);
@@ -1211,11 +1040,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     }
 
     private void navegador(boolean b) {
-
-        btnPrimero.setEnabled(b);
-        btnAnterior.setEnabled(b);
-        btnSiguiente.setEnabled(b);
-        btnUltimo.setEnabled(b);
         btnNuevo.setEnabled(b);
         btnModificar.setEnabled(b);
         btnBuscar.setEnabled(b);
@@ -1226,29 +1050,27 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     }
 
     private void llenarCombox() {
-
         cbProveedores.removeAllItems();
-        ResultSet rs = getProveedor();
-        cbProveedores.addItem(new Proveedores(
-                0,
-                "000000-0",
-                "Seleccione una proveedor",
-                "(000) 000-0000",
-                false));
-        try {
-            while (rs.next()) {
-                cbProveedores.addItem(new Proveedores(
-                        rs.getInt("IDPROVEEDOR"),
-                        rs.getString("CODIGO_PROVEEDOR"),
-                        rs.getString("NOMBRE_PROVEEDOR"),
-                        rs.getString("TELEFONO_PROVEEDOR"),
-                        rs.getBoolean("ESTADO")));
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        } finally {
-//            setDatosComboBox("Vengo de llenar tabla");
-        }
+
+        cbProveedores.addItem(
+                Proveedor
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(-1)
+                                        .pnombre("Ingrese un proveedor!")
+                                        .build()
+                        )
+                        .codigoProveedor("000000-0")
+                        .build()
+        );
+
+        M_Proveedor.select().stream().forEach(
+                proveedor -> {
+                    cbProveedores.addItem(proveedor);
+                }
+        );
     }
 
     private void setDatosComboBox() {
@@ -1256,17 +1078,15 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             return;
         }
 
-        txtTelefono.setValue(
-                ((Proveedores) cbProveedores.getItemAt(
-                        cbProveedores.getSelectedIndex())).getTelefono()
-        );
         txtCodigoProveedor.setText(
-                ((Proveedores) cbProveedores.getItemAt(
-                        cbProveedores.getSelectedIndex())).getCodigo()
+                cbProveedores.getItemAt(
+                        cbProveedores.getSelectedIndex()
+                ).getCodigoProveedor()
         );
         cbEstadoProveedor.setSelected(
-                ((Proveedores) cbProveedores.getItemAt(cbProveedores.
-                        getSelectedIndex())).isEstado()
+                cbProveedores.getItemAt(
+                        cbProveedores.getSelectedIndex()
+                ).getPersona().getEstado()
         );
         if (btnGuardar.isEnabled()) {
             txtNombreMedicamentos.requestFocus();
@@ -1288,27 +1108,19 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     public static javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnImagenBuscar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnPrimero;
-    private javax.swing.JButton btnSiguiente;
-    private javax.swing.JButton btnUltimo;
     private javax.swing.JCheckBox cbEstadoMedicamento;
     private javax.swing.JCheckBox cbEstadoProveedor;
     private javax.swing.JCheckBox cbEstadosMedicamentos;
     public static javax.swing.JComboBox<Proveedor> cbProveedores;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jlFoto;
@@ -1317,6 +1129,5 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     private javax.swing.JTable tblMedicamentos;
     public static javax.swing.JTextField txtCodigoProveedor;
     public static javax.swing.JTextField txtNombreMedicamentos;
-    private javax.swing.JFormattedTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

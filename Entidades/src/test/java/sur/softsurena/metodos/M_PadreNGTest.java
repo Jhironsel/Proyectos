@@ -61,7 +61,7 @@ public class M_PadreNGTest {
     public void testGetPadres() {
 
         assertFalse(
-                M_Padre.getPadres(
+                M_Padre.getList(
                         FiltroBusqueda
                                 .builder()
                                 .build()
@@ -78,7 +78,7 @@ public class M_PadreNGTest {
     public void testAgregarPadreMadre() {
         Padre p = null;
         Resultado expResult = null;
-        Resultado result = M_Padre.agregarPadreMadre(p);
+        Resultado result = M_Padre.insert(p);
         assertEquals(result, expResult);
     }
 
@@ -90,7 +90,7 @@ public class M_PadreNGTest {
     public void testModificarPadre() {
         Padre p = null;
         String expResult = "";
-        Resultado result = M_Padre.modificarPadre(p);
+        Resultado result = M_Padre.update(p);
         assertEquals(result, expResult);
     }
 
@@ -102,7 +102,7 @@ public class M_PadreNGTest {
     public void testBorrarPadre() {
 
         assertEquals(
-                M_Padre.borrarPadre(-1),
+                M_Padre.delete(-1),
                 Resultado
                         .builder()
                         .mensaje(BORRADO_DE_REGISTRO_CORRECTAMENTE)
@@ -209,7 +209,7 @@ public class M_PadreNGTest {
                            FROM GET_PADRES
                            """;
 
-        String result = M_Padre.sqlGetPadres(
+        String result = M_Padre.sqlGetList(
                 FiltroBusqueda
                         .builder()
                         .build()
@@ -226,7 +226,7 @@ public class M_PadreNGTest {
                            WHERE CEDULA LIKE '000-0000000-0'
                            """;
 
-        result = M_Padre.sqlGetPadres(
+        result = M_Padre.sqlGetList(
                 FiltroBusqueda
                         .builder()
                         .criterioBusqueda("000-0000000-0")
@@ -244,7 +244,7 @@ public class M_PadreNGTest {
                            WHERE ESTADO_PERSONA
                            """;
 
-        result = M_Padre.sqlGetPadres(
+        result = M_Padre.sqlGetList(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.TRUE)
@@ -262,7 +262,7 @@ public class M_PadreNGTest {
                            WHERE ESTADO_PERSONA IS FALSE
                            """;
 
-        result = M_Padre.sqlGetPadres(
+        result = M_Padre.sqlGetList(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.FALSE)
@@ -280,7 +280,7 @@ public class M_PadreNGTest {
                            WHERE ID = -1
                            """;
 
-        result = M_Padre.sqlGetPadres(
+        result = M_Padre.sqlGetList(
                 FiltroBusqueda
                         .builder()
                         .id(-1)

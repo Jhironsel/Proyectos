@@ -24,8 +24,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Persona {
 
     /**
-     * Retorna una lista la lista completa del sistema de las personas
-     * registrada.
+     * Retorna una lista completa de las personas registradas en el sistema.
      *
      * @param filtro
      *

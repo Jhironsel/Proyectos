@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.entidades.Usuario;
-import static sur.softsurena.metodos.M_Usuario.agregarUsuario;
+import sur.softsurena.metodos.M_Usuario;
+import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmRegistroUsuarios extends javax.swing.JInternalFrame {
@@ -273,7 +274,14 @@ public class frmRegistroUsuarios extends javax.swing.JInternalFrame {
         //.perfil(getIdPerfiles()[jcbPerfil.getSelectedIndex()])
         //.estado(jcbEstado.getSelectedIndex())
         
-        JOptionPane.showMessageDialog(this, agregarUsuario(miUsuario));
+        Resultado resultado = M_Usuario.insert(miUsuario);
+
+        JOptionPane.showMessageDialog(
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
         cerrar();
     }//GEN-LAST:event_btnAceptarActionPerformed
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -319,8 +327,8 @@ public class frmRegistroUsuarios extends javax.swing.JInternalFrame {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }

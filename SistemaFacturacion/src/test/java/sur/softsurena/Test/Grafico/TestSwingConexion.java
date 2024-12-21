@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import sur.softsurena.utilidades.Utilidades;
 import xy.ui.testing.Tester;
 import xy.ui.testing.editor.TestEditor;
-import xy.ui.testing.util.TestingUtils;
 
 public class TestSwingConexion {
 
@@ -15,20 +14,6 @@ public class TestSwingConexion {
 
     public static void main(String[] args) throws IOException, Exception {
         editTestSwing("testSwing/testConsultaFacturaTemporal.stt", true);
-//        editTestSwing("testSwing/Lento.stt", false);
-        
-        //Deuda
-//        editTestSwing("testSwing/testDeuda.stt", true);
-//        editTestSwing("testSwing/testDeudaInsert.stt", true);
-//        
-//        
-//        editTestSwing("testSwing/testDeudaInsert.stt", true);
-//        editTestSwing("testSwing/testDeudaInsert.stt", true);
-//        editTestSwing("testSwing/testDeudaInsert.stt", true);
-
-//        TestingUtils.assertSuccessfulReplay(
-//                new File("testSwing/testParametros.stt")
-//        );
         
 //        TestingUtils.assertSuccessfulReplay(
 //                new File("testSwing/testInsertUsuario.stt")

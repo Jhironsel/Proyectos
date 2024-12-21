@@ -25,7 +25,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Consulta;
+import sur.softsurena.entidades.D_Motivo_Consulta;
+import sur.softsurena.entidades.Doctor;
+import sur.softsurena.entidades.Guia_Vigilancia_Desarrollo;
 import sur.softsurena.entidades.Medicamento;
+import sur.softsurena.entidades.Metrica;
+import sur.softsurena.entidades.Motivo_Consulta;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.formularios.frmPrincipal;
@@ -35,11 +40,16 @@ import sur.softsurena.graficas.PesoParaEdadChicoChica;
 import sur.softsurena.graficas.PesoParaEstatura;
 import sur.softsurena.graficas.PesoParaLongitud;
 import sur.softsurena.hilos.hiloImpresionFactura;
-import static sur.softsurena.metodos.M_Consulta.getConsulta;
+import sur.softsurena.metodos.M_Consulta;
+import sur.softsurena.metodos.M_D_MotivoConsulta;
 import static sur.softsurena.metodos.M_D_MotivoConsulta.getDetalleMotivo;
+import sur.softsurena.metodos.M_Guia_Vigilancia_Desarrollo;
 import static sur.softsurena.metodos.M_Medicamento.getMedicamentoActivo;
+import sur.softsurena.metodos.M_Metrica;
+import sur.softsurena.metodos.M_Motivo_Consulta;
 import static sur.softsurena.metodos.M_Motivo_Consulta.agregarMotivo;
 import static sur.softsurena.metodos.M_Motivo_Consulta.getMotivo;
+import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import utilidades.frmEliminarMotivo;
 import utilidades.frmFondo;
@@ -56,11 +66,6 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     private int registro;
     private Object[] reg;
     private DefaultTableModel miTablaMedicamento;
-    private final String titulosMedicamentos[] = {
-        "<html><b>Linea</b></html>",
-        "<html><b>Descripción</b></html>",
-        "<html><b>Uso o Docis</b></html>",
-        "<html><b>Cantidad</b></html>"};
 
     public frmConsultas2() {
 
@@ -163,7 +168,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         jspEnfermedades4 = new javax.swing.JScrollPane();
         txtReferimiento = new javax.swing.JTextArea();
         dcReferimiento = new com.toedter.calendar.JDateChooser();
-        cbDoctores = new javax.swing.JComboBox();
+        cbDoctores = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jcbIncluirReceta = new javax.swing.JCheckBox();
@@ -1075,9 +1080,10 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                                 .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dcConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(dcConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
@@ -1087,9 +1093,9 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                                 .addComponent(txtNoArs)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
-                            .addComponent(btnTerminarConsulta)))
+                            .addComponent(btnMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(429, 429, 429)
+                    .addComponent(btnTerminarConsulta)
                     .addContainerGap())
             );
             jPanel3Layout.setVerticalGroup(
@@ -1139,7 +1145,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 layout.setHorizontalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jspPadre)
-                    .addComponent(jScrollPane6)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 );
                 layout.setVerticalGroup(
                     layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1257,7 +1263,10 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             //Instalar Logger
         }
 
-        llenarTabla(Utilidades.formatDate(dcConsulta.getDate(), ""), "gestion.frmConsultas2.formInternalFrameOpened()");
+        llenarTabla(
+                Utilidades.formatDate(dcConsulta.getDate(), ""),
+                "gestion.frmConsultas2.formInternalFrameOpened()"
+        );
 
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -1412,26 +1421,22 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         }
 
         for (Component component : jpMotivos.getComponents()) {
-            try {
-                if (((JCheckBox) component).isSelected()) {
-                    agregarDetallleConsulta(
-                            new DetalleMotivoConsulta(
-                                    idConsulta,
-                                    turno,
-                                    Integer.parseUnsignedInt(((JCheckBox) component).getName())
-                            )
-                    );
-                } else {
-                    borrarMotivoConsulta(
-                            new DetalleMotivoConsulta(
-                                    idConsulta,
-                                    turno,
-                                    Integer.parseUnsignedInt(((JCheckBox) component).getName())
-                            )
-                    );
-                }
-            } catch (ClassCastException e) {
-                //Instalar Logger
+
+            if (((JCheckBox) component).isSelected()) {
+                M_D_MotivoConsulta.agregarDetallleConsulta(
+                        D_Motivo_Consulta
+                                .builder()
+                                .id_consulta(-1)
+                                .id_motivo_consulta(0)
+                                .build()
+                );
+            } else {
+                //TODO 13/12/2024 Faltan los atributos aqui.
+                M_Motivo_Consulta.borrarMotivoConsulta(
+                        Motivo_Consulta
+                                .builder()
+                                .build()
+                );
             }
         }
 
@@ -1449,9 +1454,12 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
             //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
             //ese mismo nombre, a su lado se pasa el valor del parametro
-            Map parametros = new HashMap();
-            parametros.clear();
-            parametros.put("idReceta", idReceta);
+            Map<String, Object> parametros = new HashMap<>();
+            
+            parametros.put(
+                    "idReceta", 
+                    idReceta
+            );
 
             File i = new File("n2careReceta.jasper");
 
@@ -1465,22 +1473,25 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
         }
 
-        agregarMetricas(new Metricas(
-                -1,
-                idConsulta,
-                null,
-                peso,
-                estatura,
-                cefalo,
-                txtEnfermedades.getText(),
-                txtHallazgos.getText(),
-                txtID.getText(),
-                txtTx.getText(),
-                txtComplemento.getText(),
-                null,
-                null,
-                null
-        ));
+        M_Metrica.insert(
+                Metrica
+                        .builder()
+                        .consulta(
+                                Consulta
+                                        .builder()
+                                        .id(idConsulta)
+                                        .build()
+                        )
+                        .pesoKG(peso)
+                        .estaturaM(estatura)
+                        .escefalo(cefalo)
+                        .enf_detect(txtEnfermedades.getText())
+                        .hallazgosPositivo(txtHallazgos.getText())
+                        .idDiagnostico(txtID.getText())
+                        .tx(txtTx.getText())
+                        .complemento(txtComplemento.getText())
+                        .build()
+        );
 
         habilitarConsulta(false, true);
         jtPacientes.setEnabled(true);
@@ -1626,9 +1637,9 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         String usoDosis = null;
         int linea = tblReceta.getRowCount() + 1;
 
-        String producto = ((Categorias) jcbMedicamentos.getSelectedItem()).getDescripcion();
+        String producto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getDescripcion();
 
-        int idProducto = ((Categorias) jcbMedicamentos.getSelectedItem()).getId();
+        int idProducto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getId();
 
         reg = new Object[4];
 
@@ -1734,7 +1745,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnAplicarFecha;
     private javax.swing.JButton btnMensajes;
     private javax.swing.JButton btnTerminarConsulta;
-    private javax.swing.JComboBox cbDoctores;
+    private javax.swing.JComboBox<Doctor> cbDoctores;
     private javax.swing.JComboBox<String> cbOpcionGrafica;
     private com.toedter.calendar.JDateChooser dcConsulta;
     private com.toedter.calendar.JDateChooser dcReferimiento;
@@ -1765,7 +1776,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JCheckBox jcbIncluirReceta;
-    private javax.swing.JComboBox<Medicamentos> jcbMedicamentos;
+    private javax.swing.JComboBox<Medicamento> jcbMedicamentos;
     private javax.swing.JComboBox<String> jcbOpcionesVigilanciaDesarrollo;
     private javax.swing.JLabel jlAgregarMotivo;
     private javax.swing.JLabel jlEliminarMotivo;
@@ -1861,7 +1872,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
         Object fila[] = new Object[titulos.length];
 
-        List<Consulta> listaConsulta = getConsulta(Utilidades.javaDateToSqlDate(fecha));
+        List<Consulta> listaConsulta = M_Consulta.getConsulta(Utilidades.javaDateToSqlDate(fecha));
 
         listaConsulta.stream().forEach(
                 dato -> {
@@ -1923,31 +1934,39 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         jtGuiaVigilanciaDesarrollo.removeAll();
         String titulos[] = {"Edad", "Caracteristica del desarrollo a evualar",
             "Registro de fecha"};
-        Object reg2[] = new Object[3];
-        rs = getGuiaDesarrollo(idPaciente, false);
+        
+        Object reg2[] = new Object[titulos.length];
+        
+        //TODO 13/12/2024 Esta lista me parece que no es la que corresponde 
+        //con la tabla.
+        List<Guia_Vigilancia_Desarrollo> lista = M_Guia_Vigilancia_Desarrollo.select(
+                FiltroBusqueda
+                        .builder()
+                        .id(idPaciente)
+                        .estado(false)
+                        .build()
+        );
 
-        DefaultTableModel miTabla = new DefaultTableModel(null, titulos) {
-            Class[] types = new Class[]{
-                Object.class, Object.class, String.class
-            };
+        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
+//        {
+//            @Override
+//            Class<?>[] types = new Class<>[]{
+//                Object.class, Object.class, String.class
+//            };
+//
+//            @Override
+//            public Class<?>[] getColumnClass(int columnIndex) {
+//                return types[columnIndex];
+//            }
+//        };
 
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        };
-
-        try {
-            while (rs.next()) {
-                reg2[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
-                reg2[1] = rs.getString("CARACT_DESARR_EVALUAR");
-                reg2[2] = rs.getString("resultado");
-                miTabla.addRow(reg2);
-            }
-            jtGuiaVigilanciaDesarrollo.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
+        while (rs.next()) {
+            reg2[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
+            reg2[1] = rs.getString("CARACT_DESARR_EVALUAR");
+            reg2[2] = rs.getString("resultado");
+            miTabla.addRow(reg2);
         }
+        jtGuiaVigilanciaDesarrollo.setModel(miTabla);
         ordenarTabla();
     }
 
@@ -2090,12 +2109,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                         .apellidos("Seleccione un doctor")
                         .build()
         );
-
-        try {
-            while (rs.next()) {
-
-//                
-//                        
+        
 //                "<html><b>" + rs.getString("nombreCompleto").trim() + "</b> <br> "
 //                + frmHorario.dia(rs.getString("DIA")) + ": Hora: "
 //                + rs.getString("INICIAL").substring(0, 5) + " hasta "
@@ -2118,10 +2132,6 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 //                        
 //                cbDoctores.addItem(u);
 //                
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
     }
 
     /**
@@ -2143,7 +2153,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         );
 
         medicamentosList.stream().forEach(
-                (medicamento) -> {
+                medicamento -> {
                     jcbMedicamentos.addItem(
                             Medicamento
                                     .builder()
@@ -2158,7 +2168,15 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }
 
     private void nuevaTabla() {
+        String titulosMedicamentos[] = {
+            "<html><b>Linea</b></html>",
+            "<html><b>Descripción</b></html>",
+            "<html><b>Uso o Docis</b></html>",
+            "<html><b>Cantidad</b></html>"
+        };
+
         miTablaMedicamento = new DefaultTableModel(null, titulosMedicamentos);
+
         tblReceta.setModel(miTablaMedicamento);
     }
 }

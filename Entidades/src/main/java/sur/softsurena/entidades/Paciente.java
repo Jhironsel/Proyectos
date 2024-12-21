@@ -19,6 +19,10 @@ public class Paciente{
 
     @Override
     public String toString() {
+        return persona.toString();
+    }
+    
+    public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Paciente{");
         sb.append("persona=").append(persona);
@@ -31,7 +35,5 @@ public class Paciente{
         sb.append('}');
         return sb.toString();
     }
-    
-    
 }
     

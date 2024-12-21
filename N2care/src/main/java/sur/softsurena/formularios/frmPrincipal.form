@@ -87,12 +87,6 @@
     </Container>
     <Menu class="javax.swing.JMenuBar" name="mbMenu">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="fc" green="e2" red="c3" type="rgb"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1" green="1" red="1" type="rgb"/>
-        </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[0, 0]"/>
         </Property>
@@ -100,11 +94,8 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="1" green="1" red="1" type="rgb"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/icons8_Start_Menu_42px.png"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new Imagenes(&quot;Windows 8/MenuInicio 42 x 42.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Archivos"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -120,11 +111,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8_Family_42px.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Family 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Padres"/>
               </Properties>
@@ -140,11 +128,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8_Crying_Baby_42px.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/CryingBaby 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Pacientes"/>
               </Properties>
@@ -160,11 +145,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8_Admin_42px_1.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/User 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Usuarios"/>
               </Properties>
@@ -182,11 +164,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8_Print_42px.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Printer 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Impresoras"/>
               </Properties>
@@ -204,11 +183,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-salida-42.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Salida 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cerrar Seccion"/>
               </Properties>
@@ -226,11 +202,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8_Shutdown_42px.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Salida 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Salir"/>
               </Properties>
@@ -242,11 +215,8 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="1" green="1" red="1" type="rgb"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/icons8-panel-de-control-42.png"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new Imagenes(&quot;Windows 8/PanelControl 42 x 42.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Control de..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -262,11 +232,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-calendario-8-42.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Horarios"/>
               </Properties>
@@ -282,11 +249,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-tarjetas-bancarias-42.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/TarjetasBancarias 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Seguros"/>
               </Properties>
@@ -302,11 +266,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-p&#xed;ldora-42.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Pildora 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Medicamentos"/>
               </Properties>
@@ -318,11 +279,8 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu5">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="1" green="1" red="1" type="rgb"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/icons8-boleta-de-calificaciones-32.png"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new Imagenes(&quot;Windows 8/BoletaCalificaciones 32 x 32.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Gesti&#xf3;n..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -335,11 +293,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-calendario-8-42.png"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Imagenes(&quot;Windows 8/Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Consultas"/>
               </Properties>
@@ -351,12 +306,6 @@
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Ubuntu" size="15" style="1"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/imagenes/icons8-caduceo-42.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Consultas Medicas"/>
               </Properties>
@@ -424,9 +373,6 @@
       <SubComponents>
         <Container class="javax.swing.JDesktopPane" name="dpnEscritorio">
           <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="66" green="66" red="0" type="rgb"/>
-            </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[510, 531]"/>
             </Property>

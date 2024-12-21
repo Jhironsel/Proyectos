@@ -2,20 +2,21 @@ package sur.softsurena.control;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import static sur.softsurena.datos.delete.DeleteMetodos.borrarControlConsulta;
-import static sur.softsurena.datos.select.SelectMetodos.getHorario;
-import static sur.softsurena.datos.select.SelectMetodos.getUsuarioDoctor;
-import sur.softsurena.entidades.Categorias;
+import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.Doctor;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
+import sur.softsurena.metodos.M_Control_Consulta;
 
 public class frmHorario extends javax.swing.JInternalFrame {
 
-    private static ResultSet rs;
+    private static final long serialVersionUID = 1L;
+
     private static frmHorario controlCita;
     private static TableRowSorter<TableModel> modeloOrdenado;
 
@@ -39,7 +40,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        cbDoctores = new javax.swing.JComboBox();
+        cbDoctores = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtConsulta = new JTable(){
@@ -79,7 +80,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtros por doctores"));
 
-        cbDoctores.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione un Doctor" }));
+        cbDoctores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un Doctor" }));
         cbDoctores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbDoctoresActionPerformed(evt);
@@ -232,8 +233,11 @@ public class frmHorario extends javax.swing.JInternalFrame {
             cbDoctores.showPopup();
             return;
         }
-        frmDiasConsultas dc = new frmDiasConsultas(null, true,
-                ((Categorias) cbDoctores.getSelectedItem()).getDescripcion());
+        frmDiasConsultas dc = new frmDiasConsultas(
+                null,
+                true,
+                cbDoctores.getSelectedItem().toString()
+        );
         dc.setLocationRelativeTo(null);
         dc.setVisible(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
@@ -255,8 +259,11 @@ public class frmHorario extends javax.swing.JInternalFrame {
         }
 
         JOptionPane.showInternalMessageDialog(this,
-                borrarControlConsulta(((Categorias) jtConsulta.
-                        getValueAt(jtConsulta.getSelectedRow(), 0)).getId()));
+                borrarControlConsulta(
+                        ((Categorias) jtConsulta.getValueAt(
+                                jtConsulta.getSelectedRow(),
+                                0
+                        )).getId()));
 
         llenarTabla();
     }//GEN-LAST:event_btnBorrarActionPerformed
@@ -287,7 +294,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnNuevo;
-    private static javax.swing.JComboBox cbDoctores;
+    private static javax.swing.JComboBox<Doctor> cbDoctores;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
@@ -314,29 +321,29 @@ public class frmHorario extends javax.swing.JInternalFrame {
             return;
         }
 
-        String idUsuario = ((Categorias) cbDoctores.getSelectedItem()).
+        String idUsuario = ((Doctor) cbDoctores.getSelectedItem()).
                 getDescripcion().trim();
 
         Object registro[] = new Object[4];
 
-        rs = getHorario(idUsuario.trim());
+        M_Control_Consulta.getHorario(idUsuario.trim()).stream().forEach(
+                horario ->{
+                
+                }
+        );
 
-        try {
-            while (rs.next()) {
-                registro[0] = new Categorias(rs.getInt("IDCONTROLCONSULTA"),
-                        dia(rs.getString("DIA")));
-                registro[1] = rs.getInt("CANTIDADPACIENTE");
-                registro[2] = rs.getTime("INICIAL");
-                registro[3] = rs.getTime("FINAL");
+        while (rs.next()) {
+            registro[0] = new Categorias(rs.getInt("IDCONTROLCONSULTA"),
+                    dia(rs.getString("DIA")));
+            registro[1] = rs.getInt("CANTIDADPACIENTE");
+            registro[2] = rs.getTime("INICIAL");
+            registro[3] = rs.getTime("FINAL");
 
-                miTabla.addRow(registro);
-            }
-            modeloOrdenado = new TableRowSorter<TableModel>(miTabla);
-            jtConsulta.setRowSorter(modeloOrdenado);
-            jtConsulta.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
+            miTabla.addRow(registro);
         }
+        modeloOrdenado = new TableRowSorter<TableModel>(miTabla);
+        jtConsulta.setRowSorter(modeloOrdenado);
+        jtConsulta.setModel(miTabla);
     }
 
     public static String dia(String dia) {
@@ -363,11 +370,11 @@ public class frmHorario extends javax.swing.JInternalFrame {
 
     private synchronized void llenarCombox() {
         cbDoctores.removeAllItems();
-        
+
         ResultSet rs = getUsuarioDoctor();
-        
+
         cbDoctores.addItem(new Categorias("Seleccione un Doctor", "N/A"));
-        
+
         try {
             while (rs.next()) {
                 cbDoctores.addItem(

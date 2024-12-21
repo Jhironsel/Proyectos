@@ -17,6 +17,10 @@ public class Consulta {
 
     @Override
     public String toString() {
+        return paciente.toString();
+    }
+
+    public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Consulta{");
         sb.append("id=").append(id);
@@ -29,12 +33,11 @@ public class Consulta {
         sb.append('}');
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        
-    }
     
     public static Consulta getConsultaTest(){
-        return Consulta.builder().build();
+        return Consulta
+                .builder()
+                .id(0)
+                .build();
     }
 }

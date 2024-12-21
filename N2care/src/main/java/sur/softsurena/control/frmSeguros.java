@@ -7,16 +7,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.ARS;
-import static sur.softsurena.entidades.ARS.agregarSeguro;
-import static sur.softsurena.entidades.ARS.borrarSeguro;
-import static sur.softsurena.entidades.ARS.modificarSeguro;
-import sur.softsurena.entidades.Categorias;
-import sur.softsurena.entidades.Resultados;
+import sur.softsurena.metodos.M_ARS;
+import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmSeguros extends javax.swing.JInternalFrame {
 
     private static frmSeguros seguros;
+    private static final long serialVersionUID = 1L;
     private boolean nuevo;
 
     public frmSeguros() {
@@ -280,7 +279,7 @@ public class frmSeguros extends javax.swing.JInternalFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         if ((int) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 1) != 0) {
             JOptionPane.showInternalMessageDialog(this,
                     "No se puede eliminar este registro!");
@@ -305,17 +304,16 @@ public class frmSeguros extends javax.swing.JInternalFrame {
         if (resp == JOptionPane.NO_OPTION) {
             return;
         }
-        
-        Resultados r = borrarSeguro(((ARS) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 0)).getId());
-        
-        int icono = r.getMensaje().equals(ARS.BORRADO_CORRECTAMENTE) ? 
-                JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+
+        Resultado resultado = M_ARS.delete(((ARS) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 0)).getId());
+
 
         JOptionPane.showInternalMessageDialog(
-                null,
-                r.getMensaje(),
-                "Proceso de eliminación de seguro.",
-                icono);
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
 
         llenarTabla();
         btnCancelarActionPerformed(null);
@@ -352,18 +350,27 @@ public class frmSeguros extends javax.swing.JInternalFrame {
                     JOptionPane.YES_NO_OPTION);
         }
 
-        ARS ars = ARS.builder().
-                    id(((ARS) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 0)).getId()).
-                    descripcion(txtNombre.getText()).
-                    covertura(new BigDecimal(txtCovertura.getValue().toString())).
-                    estado(chbEstado.isSelected()).build();
+        ARS ars
+                = ARS
+                        .builder()
+                        .id(
+                                jtConsulta.getSelectedRow() == -1 ?
+                                        -1:
+                                ((ARS) jtConsulta.getValueAt(
+                                        jtConsulta.getSelectedRow(),
+                                        0
+                                )).getId()
+                        )
+                        .descripcion(txtNombre.getText())
+                        .covertura(new BigDecimal(txtCovertura.getValue().toString()))
+                        .estado(chbEstado.isSelected())
+                        .build();
         if (nuevo) {
-            agregarSeguro(ars);
+            M_ARS.insert(ars);
         } else {
-            modificarSeguro(ars);
+            M_ARS.update(ars);
         }
-        
-        
+
         llenarTabla();
         btnCancelarActionPerformed(null);
         jtConsultaKeyReleased(null);
@@ -422,11 +429,15 @@ public class frmSeguros extends javax.swing.JInternalFrame {
 
     private void llenarTabla() {
         jtConsulta.removeAll();
-        
+
         String titulos[] = {"Descripcion", "Cantidad", "Porciento Covertura",
             "Estado"};
-        
-        List<ARS> arsList = ARS.getARS();
+
+        List<ARS> arsList = M_ARS.select(
+                FiltroBusqueda
+                        .builder()
+                        .build()
+        );
 
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 

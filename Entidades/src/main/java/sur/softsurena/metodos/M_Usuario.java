@@ -50,7 +50,7 @@ public class M_Usuario {
             return false;
         }
     }
-
+//------------------------------------------------------------------------------
     /**
      * Metodo utilizado para modificar los usuarios del sistema con el rol
      * doctor, el cual permite agregar al registro su Exequatur y
@@ -60,7 +60,7 @@ public class M_Usuario {
      * @param usuario Un objeto de la clase Usuario.
      * @return Devuelve un mensaje que indica si la actualizacion fue exitosa.
      */
-    public static synchronized Resultado agregarUsuario(Usuario usuario) {
+    public static synchronized Resultado insert(Usuario usuario) {
         final String sql
                 = "EXECUTE PROCEDURE SP_I_USUARIO(?,?,?,?,?,?,?,?,?)";
 
@@ -117,15 +117,15 @@ public class M_Usuario {
             = "Usuario agregado correctamente.";
     public static final String ERROR_AL_AGREGAR__USUARIO
             = "Error al agregar Usuario...";
-    
-    
-        /**
+//------------------------------------------------------------------------------
+
+    /**
      * Metodo para modificar a los usuarios en el sistema.
      *
      * @param usuario
      * @return
      */
-    public static synchronized Resultado modificarUsuario(Usuario usuario) {
+    public static synchronized Resultado update(Usuario usuario) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_USUARIO (?,?,?,?,?,?,?,?,?";
         try (CallableStatement cs = getCnn().prepareCall(sql,
@@ -182,7 +182,7 @@ public class M_Usuario {
      * @param loginName
      * @return
      */
-    public synchronized static Resultado borrarUsuario(String loginName) {
+    public synchronized static Resultado delete(String loginName) {
 
         final String sql = "EXECUTE PROCEDURE SP_D_USUARIO(?);";
 
@@ -238,7 +238,7 @@ public class M_Usuario {
      * consulta a la base de datos, que nos devuelve el usuario y el rol de
      * este.<br/>
      *
-     * @return Un objecto de la clase usuario con los datos del usuario del 
+     * @return Un objecto de la clase usuario con los datos del usuario del
      * sistema que ha iniciado sessión actualmente.<br/>
      */
     public synchronized static Usuario getUsuarioActual() {
@@ -302,9 +302,9 @@ public class M_Usuario {
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery();) {
-                
+
                 rs.absolute(1);
-                
+
                 return Usuario
                         .builder()
                         .pnombre(rs.getString("PNOMBRE"))
@@ -318,8 +318,8 @@ public class M_Usuario {
             }
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
         }
+        return null;
     }
 
     /**
@@ -396,41 +396,6 @@ public class M_Usuario {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return null;
-        }
-    }
-
-    /**
-     * Metodo que permite verificar si existe un usuario en el sistema, esto con
-     * el objetivo de permitir a un usuario ser registrado en la base de datos.
-     *
-     * Query que me permite comprobar si un usuario existe en el sistema.
-     *
-     * @param userName Identificador unico de un usuario para ser utilizado como
-     * parte de login de inicio en el sistema.
-     *
-     * Actualizado el dia 09 julio 2022, Nota: se agrega el campo de la clase
-     * Usuario, para que tome el SQL de la consulta.
-     *
-     * @return retorna un valor booleano que nos permite saber si existe "TRUE"
-     * o no "FALSE" un usuario en el sistema.
-     */
-    public synchronized static boolean existeUsuarioByUserName(String userName) {
-
-        final String sql
-                = "SELECT DISTINCT(1) "
-                + "FROM VS_USUARIOS "
-                + "WHERE TRIM(USERNAME) STARTING WITH TRIM(UPPER(?))";
-        try (PreparedStatement ps = getCnn().prepareStatement(sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-            ps.setString(1, userName);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
         }
     }
 }

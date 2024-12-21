@@ -67,8 +67,8 @@ public class M_ARSNGTest {
                           el sistema.
                           """
     )
-    public void testAgregarARS() {
-        Resultado result = M_ARS.agregarARS(
+    public void testInsert() {
+        Resultado result = M_ARS.insert(
                 ARS
                         .builder()
                         .descripcion(
@@ -112,7 +112,7 @@ public class M_ARSNGTest {
                           """
     )
     public void testGetARS() {
-        List result = M_ARS.getARS(
+        List result = M_ARS.select(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.FALSE)
@@ -133,7 +133,7 @@ public class M_ARSNGTest {
             description = "Test para modificar las ars del sistema."
     )
     public void testModificarSeguro() {
-        Resultado result = M_ARS.modificarSeguro(
+        Resultado result = M_ARS.update(
                 ARS
                         .builder()
                         .id(id_ARS)
@@ -165,7 +165,7 @@ public class M_ARSNGTest {
                           """
     )
     public void testGetARS2() {
-        List result2 = M_ARS.getARS(
+        List result2 = M_ARS.select(
                 FiltroBusqueda
                         .builder()
                         .estado(Boolean.TRUE)
@@ -188,7 +188,7 @@ public class M_ARSNGTest {
                           """
     )
     public void testGetARS3() {
-        List result = M_ARS.getARS(
+        List result = M_ARS.select(
                 FiltroBusqueda
                         .builder()
                         .build()
@@ -209,8 +209,8 @@ public class M_ARSNGTest {
                           sistema.
                           """
     )
-    public void testBorrarSeguro() {
-        Resultado result = M_ARS.borrarSeguro(id_ARS);
+    public void testDelete() {
+        Resultado result = M_ARS.delete(id_ARS);
                 
         assertEquals(
                 result, 
@@ -233,7 +233,7 @@ public class M_ARSNGTest {
                           """
     )
     public void testGetARS4() {
-        List result = M_ARS.getARS(
+        List result = M_ARS.select(
                 FiltroBusqueda
                         .builder()
                         .build()

@@ -19,6 +19,7 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
 import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.metodos.M_Consulta;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmGestionConsultas extends javax.swing.JInternalFrame {
@@ -896,15 +897,21 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
         if (!cbAprobadoRechazado.isSelected()) {
             //Los datos los busco de llenarTabla2(...)
-            JOptionPane.showInternalMessageDialog(this,
-                    agregarConsultaVerificada(new Consultas_aprobadas(
-                        ((Categoria) tblGestionPacientes.getValueAt(tblGestionPacientes.getSelectedRow(), 2)).getId(),
-                        txtCodigoVerificacion.getText(),
-                        new BigDecimal(txtCosto.getValue().toString()),
-                        new BigDecimal(txtCovertura.getValue().toString()),
-                    null, null)),
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    agregarConsultaVerificada(
+                            new Consultas_aprobadas(
+                                    ((Categoria) tblGestionPacientes.getValueAt(tblGestionPacientes.getSelectedRow(), 2)).getId(),
+                                    txtCodigoVerificacion.getText(),
+                                    new BigDecimal(txtCosto.getValue().toString()),
+                                    new BigDecimal(txtCovertura.getValue().toString()),
+                                    null, 
+                                    null
+                            )
+                    ),
                     "Proceso de verificación de consultas",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
         btnLimpiarCampoActionPerformed(null);
         llenarTabla2("");
@@ -1014,7 +1021,7 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
                 ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
                 Utilidades.formatDate(dcConsulta.getDate(), ""));
 
-        JOptionPane.showInternalMessageDialog(this, agregarConsulta(((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
+        JOptionPane.showInternalMessageDialog(this, M_Consulta.insert(((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
                         Utilidades.formatDate(dcConsulta.getDate(), ""),
                         turno,
                         ((Categoria) tblRegistrosPacientes.getValueAt(
@@ -1130,15 +1137,26 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtpFormulariosStateChanged
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        Map parametros = new HashMap();
-        parametros.clear();
+        Map<String, Object> parametros = new HashMap<>();
         //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
         //ese mismo nombre, a su lado se pasa el valor del parametro
-        parametros.put("idControlConsulta",
-                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
-        parametros.put("fecha", dcConsulta.getDate());
+        parametros.put(
+                "idControlConsulta",
+                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta()
+        );
+        parametros.put(
+                "fecha", 
+                dcConsulta.getDate()
+        );
+        
         File i = new File("n2careReporte.jasper");
-        new hiloImpresionFactura(true, false, i.getAbsolutePath(), parametros).start();
+        
+        new hiloImpresionFactura(
+                true, 
+                false, 
+                i.getAbsolutePath(), 
+                parametros
+        ).start();
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtCodigoVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVerificacionActionPerformed

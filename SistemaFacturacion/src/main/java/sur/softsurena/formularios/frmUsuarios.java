@@ -7,6 +7,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Role;
+import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Permiso.agregarPermisoAdminRole;
 import static sur.softsurena.metodos.M_Permiso.getPermisosAsignados;
 import static sur.softsurena.metodos.M_Permiso.getPermisosDisponibles;
@@ -20,7 +21,7 @@ import static sur.softsurena.metodos.M_Role.getRoles;
 import static sur.softsurena.metodos.M_Role.modificarRol;
 import static sur.softsurena.metodos.M_Role.quitarRolUsuario;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
-import static sur.softsurena.metodos.M_Usuario.borrarUsuario;
+import sur.softsurena.metodos.M_Usuario;
 import static sur.softsurena.metodos.M_Usuario.getNombresUsuarios;
 import static sur.softsurena.metodos.M_Usuario.getUsuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuarios;
@@ -684,8 +685,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
@@ -763,15 +764,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
 
             Resultado resultado;
-            
+
             resultado = quitarRolesUsuario(usuario);
-            
-            
-            if(resultado.getEstado()){
-                resultado = borrarUsuario(usuario.strip());
+
+            if (resultado.getEstado()) {
+                resultado = M_Usuario.delete(usuario.strip());
             }
-            
-            
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -782,8 +780,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         } else {
             JOptionPane.showInternalMessageDialog(
-                    this, 
-                    "¿Es un formulario nuevo?", 
+                    this,
+                    "¿Es un formulario nuevo?",
                     "",
                     JOptionPane.QUESTION_MESSAGE
             );
@@ -806,10 +804,14 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
 
         if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios) {
-            //            if (!existeUsuarioByUserName(usuario)) {
-//                JOptionPane.showInternalMessageDialog(this, "El Usuario No Existe");
-//                return;
-//            }
+            Usuario usuario1 = M_Usuario.getUsuario(usuario);
+            if (Objects.isNull(usuario1)) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "El Usuario No Existe"
+                );
+                return;
+            }
             //Detalle de Factura
             for (int i = 0; i < tblUsuarios.getRowCount(); i++) {
                 if (tblUsuarios.getValueAt(i, 0).toString().strip().equalsIgnoreCase(usuario.strip())) {
@@ -1165,7 +1167,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     /**
      * Metodo que entraga el listado de los usuarios del sistema.
      *
-     * @return 
+     * @return
      */
     public static JTable llenarTablaUsuarios() {
         tblUsuarios.removeAll();
@@ -1326,7 +1328,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         repararColumnaTable(tblListadoUsuarios);
     }
-    
+
     /**
      *
      * @param userName

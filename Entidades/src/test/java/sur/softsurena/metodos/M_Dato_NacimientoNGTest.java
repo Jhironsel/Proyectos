@@ -11,7 +11,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.AlturaPeso;
-import sur.softsurena.entidades.Dato_Nacimiento;
 
 /**
  *

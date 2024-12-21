@@ -81,7 +81,7 @@ public class M_UsuarioNGTest {
                           """,
             priority = 1
     )
-    public void testAgregarUsuario() {
+    public void testInsert() {
         List<Role> roles = new ArrayList();
         roles.add(
                 Role
@@ -98,7 +98,7 @@ public class M_UsuarioNGTest {
                         .build()
         );
 
-        Resultado result = M_Usuario.agregarUsuario(
+        Resultado result = M_Usuario.insert(
                 Usuario
                         .builder()
                         .user_name("Prueba")
@@ -124,7 +124,7 @@ public class M_UsuarioNGTest {
                 ERROR_AL_AGREGAR__USUARIO
         );
         
-        result = M_Usuario.agregarUsuario(
+        result = M_Usuario.insert(
                 Usuario
                         .builder()
                         .user_name("Jhironsel2")
@@ -160,7 +160,7 @@ public class M_UsuarioNGTest {
                           """,
             priority = 2
     )
-    public void testModificarUsuario() {
+    public void testUpdate() {
         List<Role> roles = new ArrayList();
         roles.add(
                 Role
@@ -177,7 +177,7 @@ public class M_UsuarioNGTest {
                         .build()
         );
         
-        Resultado result = M_Usuario.modificarUsuario(
+        Resultado result = M_Usuario.update(
                 Usuario
                         .builder()
                         .user_name("JHIRONSEL2")
@@ -265,27 +265,14 @@ public class M_UsuarioNGTest {
 //------------------------------------------------------------------------------
     
     @Test(
-            enabled = false,
-            description = "",
-            priority = 0
-    )
-    public void testExisteUsuarioByUserName() {
-        String userName = "";
-        boolean expResult = false;
-        boolean result = M_Usuario.existeUsuarioByUserName(userName);
-        assertEquals(result, expResult);
-    }
-//------------------------------------------------------------------------------
-    
-    @Test(
             enabled = true,
             description = """
                           Metodo que permite eliminar un usuario del sistema.
                           """,
             priority = 3
     )
-    public void testBorrarUsuario() {
-        Resultado result = M_Usuario.borrarUsuario("Prueba");
+    public void testDelete() {
+        Resultado result = M_Usuario.delete("Prueba");
         assertEquals(
                 result, 
                 Resultado
@@ -296,7 +283,7 @@ public class M_UsuarioNGTest {
                     .build(), 
                 ERROR_AL_BORRAR_USUARIO+" Prueba."
         );
-        result = M_Usuario.borrarUsuario("Jhironsel2");
+        result = M_Usuario.delete("Jhironsel2");
         assertEquals(
                 result, 
                 Resultado

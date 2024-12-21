@@ -66,8 +66,8 @@ public class M_AntecedentesNGTest {
             priority = 0
     )
     public void testAgregarAntecedente() {
-        paciente.testAgregarEntidad();
-        consulta.testAgregarConsulta();
+        paciente.testInsert();
+        consulta.testInsert();
 
         Resultado result = agregarAntecedente(
                 Antecedente
@@ -166,6 +166,6 @@ public class M_AntecedentesNGTest {
                 ERROR_AL_BORRAR_PACIENTE
         );
         consulta.testEliminarConsulta();
-        paciente.testEliminarEntidad();
+        paciente.testDelete();
     }
 }

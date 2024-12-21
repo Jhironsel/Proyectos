@@ -24,7 +24,6 @@ public class Persona {
     private final String rol;
     private final Generales generales;
 
-        
     @Override
     public String toString() {
         StringBuilder nombre = new StringBuilder();
@@ -32,13 +31,13 @@ public class Persona {
         nombre
                 .append(pnombre)
                 .append(" ")
-                .append((snombre.isBlank() ? "" : snombre))
-                .append((snombre.isBlank() ? "" : " "))
+                .append(Objects.isNull(snombre) ? "" : snombre)
+                .append(Objects.isNull(snombre) ? "" : " ")
                 .append(apellidos);
-        
+
         return nombre.toString();
     }
-    
+
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Persona{");
@@ -90,7 +89,7 @@ public class Persona {
             return false;
         }
         final Persona other = (Persona) obj;
-        
+
         if (!Objects.equals(this.pnombre, other.pnombre)) {
             return false;
         }
@@ -100,7 +99,7 @@ public class Persona {
         if (!Objects.equals(this.apellidos, other.apellidos)) {
             return false;
         }
-        
+
         if (!Objects.equals(this.id_persona, other.id_persona)) {
             return false;
         }

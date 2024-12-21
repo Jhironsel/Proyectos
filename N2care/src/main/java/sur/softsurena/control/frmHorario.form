@@ -122,7 +122,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbDoctoresActionPerformed"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Doctor&gt;"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
                   </AuxValues>
                 </Component>

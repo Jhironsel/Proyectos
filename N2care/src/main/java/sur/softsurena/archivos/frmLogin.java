@@ -15,7 +15,9 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmLogin extends javax.swing.JFrame {
 
-    private SwingWorker swinWorker;
+    private static final long serialVersionUID = 1L;
+
+    private SwingWorker<Object, Object> swinWorker;
 
     public frmLogin() {
         initComponents();
@@ -107,7 +109,7 @@ public class frmLogin extends javax.swing.JFrame {
         jpLogin.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 260, 10));
 
         btnMostrarLogin.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnMostrarLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Derecha 32 x 32.png"))); // NOI18N
+        btnMostrarLogin.setIcon(new Imagenes("Flecha Derecha 32 x 32.png").getIcono());
         btnMostrarLogin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnMostrarLoginMouseClicked(evt);
@@ -123,7 +125,7 @@ public class frmLogin extends javax.swing.JFrame {
         getContentPane().add(jpLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(-380, 20, 430, 190));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel4.setIcon(new Imagenes("/sur/softsurena/imagenes/Fondo 800 x 600.jpg").getIcono());
+        jLabel4.setIcon(new Imagenes("Fondo 800 x 600.jpg").getIcono());
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-130, -200, 800, 570));
 
         pack();
@@ -134,9 +136,11 @@ public class frmLogin extends javax.swing.JFrame {
             try {
                 Conexion.getCnn().close();
             } catch (SQLException ex) {
-                LOG.getLogger(
-                        frmLogin.class.getName()
-                ).log(Level.SEVERE, "Error al cerrar la conexion.", ex);
+                LOG.log(
+                        Level.SEVERE,
+                        "Error al cerrar la conexion.",
+                        ex
+                );
             }
         }
 
@@ -146,16 +150,18 @@ public class frmLogin extends javax.swing.JFrame {
     private void btnMostrarLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMostrarLoginMouseClicked
         if (jpLogin.getX() == -380) {//Rev. 02-08-2018
             AnimationClass.jPanelMove("Right", -380, 0, 100, 20, jpLogin);
-            btnMostrarLogin.setIcon(new javax.swing.ImageIcon(
-                    getClass().getResource(
-                            "/imagenes/Flecha Izquierda 32 x 32.png")));
+            btnMostrarLogin.setIcon(
+                    new Imagenes("Flecha Izquierda 32 x 32.png")
+                            .getIcono()
+            );
             txtUsuario.setEditable(true);
             txtClave.setEditable(true);
         } else {
             AnimationClass.jPanelMove("Left", 0, -380, 100, 20, jpLogin);
-            btnMostrarLogin.setIcon(new javax.swing.ImageIcon(
-                    getClass().getResource(
-                            "/imagenes/Flecha Derecha 32 x 32.png")));
+            btnMostrarLogin.setIcon(
+                    new Imagenes("Flecha Derecha 32 x 32.png")
+                            .getIcono()
+            );
             txtUsuario.setEditable(false);
             txtClave.setEditable(false);
         }
@@ -163,7 +169,7 @@ public class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMostrarLoginMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        swinWorker = new SwingWorker() {
+        swinWorker = new SwingWorker<>(){
             @Override
             protected Object doInBackground() throws Exception {
                 /*Empezamos validando los dos campos si estan vacios*/
@@ -188,9 +194,12 @@ public class frmLogin extends javax.swing.JFrame {
                         "3050"
                 );
                 
-                if (Conexion.getCnn() != null) {
+                if (Conexion.verificar().getEstado()) {
                     txtClave.setText("");
-                    new frmPrincipal().setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    var principal = new frmPrincipal();
+                    principal.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    principal.setLocationRelativeTo(null);
+                    principal.setVisible(rootPaneCheckingEnabled);
                     dispose();
                 } else {
 
@@ -232,7 +241,7 @@ public class frmLogin extends javax.swing.JFrame {
             //Instalar Logger
         }
 
-        frmLogin miUsuario = new frmLogin();//Rev. 02-08-2018
+        frmLogin miUsuario = new frmLogin();
         miUsuario.setVisible(true);
         miUsuario.setLocationRelativeTo(null);
     }

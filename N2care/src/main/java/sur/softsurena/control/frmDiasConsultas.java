@@ -1,11 +1,11 @@
 package sur.softsurena.control;
 
 import java.sql.Time;
-import static sur.softsurena.datos.insert.InsertMetodos.controlConsulta;
 import sur.softsurena.entidades.Control_Consulta;
 
-
 public class frmDiasConsultas extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     protected String idUsuario;
 
@@ -195,19 +195,26 @@ public class frmDiasConsultas extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void diasConsultas(String dia) {
+        
         frmHora hora = new frmHora(this, true);
         hora.setLocationRelativeTo(null);
         hora.setVisible(true);
+        
         if (frmHora.aceptar) {
-            controlConsulta(new Control_Consulta(
-                    -1,
-                    idUsuario, 
-                    Integer.parseInt(frmHora.jsCantPaciente.getValue().toString()), 
-                    dia,
-                    new Time(frmHora.jInicio.getDateWithTime(null).getTime()), 
-                    new Time(frmHora.jFinal.getDateWithTime(null).getTime()), 
-                    true));
+            controlConsulta(
+                    Control_Consulta.builder().build()
+            );
             
+            
+//new Control_Consulta(
+//                            -1,
+//                            idUsuario,
+//                            Integer.parseInt(frmHora.jsCantPaciente.getValue().toString()),
+//                            dia,
+//                            new Time(frmHora.jInicio.getDateWithTime(null).getTime()),
+//                            new Time(frmHora.jFinal.getDateWithTime(null).getTime()),
+//                            true
+//                    )
             frmHorario.llenarTabla();
         }
     }

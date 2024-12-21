@@ -10,10 +10,8 @@ import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
 import static sur.softsurena.metodos.M_Role.comprobandoRolesDisponibles;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
-import static sur.softsurena.metodos.M_Usuario.agregarUsuario;
-import static sur.softsurena.metodos.M_Usuario.existeUsuarioByUserName;
+import sur.softsurena.metodos.M_Usuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuario;
-import static sur.softsurena.metodos.M_Usuario.modificarUsuario;
 import sur.softsurena.utilidades.PalabrasReservadasFirebird;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -671,7 +669,8 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
 //-----------------------------------------------------------------------------8
-        if (existeUsuarioByUserName(txtUserName.getText().strip()) && nuevo) {
+        Usuario usuario = M_Usuario.getUsuario(txtUserName.getText().strip());
+        if (!Objects.isNull(usuario) && nuevo) {
             int respuesta = JOptionPane.showConfirmDialog(
                     this,
                     "Usuario ya existe. \n\nDesea recuperar el usuario?",
@@ -748,7 +747,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
 //----------------------------------------------------------------------------12
-        Usuario usuario = Usuario
+        usuario = Usuario
                 .builder()
                 .user_name(txtUserName.getText())
                 .pnombre(txtPNombre.getText())
@@ -763,7 +762,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 .build();
 
 //----------------------------------------------------------------------------13
-        Resultado resultado = (nuevo ? agregarUsuario(usuario) : modificarUsuario(usuario));
+        Resultado resultado = (nuevo ? M_Usuario.insert(usuario) : M_Usuario.update(usuario));
 
 //----------------------------------------------------------------------------14
         JOptionPane.showMessageDialog(

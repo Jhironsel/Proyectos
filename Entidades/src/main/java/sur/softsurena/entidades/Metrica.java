@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Metrica {
 
-    private final int id;
-    private final int idConsulta;
+    private final Integer id;
+    private final Consulta consulta;
     private final Timestamp fecha;
     private final BigDecimal pesoKG;
     private final BigDecimal estaturaM;
@@ -28,6 +28,30 @@ public class Metrica {
 
     @Override
     public String toString() {
-        return "Metricas{" + "id=" + id + ", idConsulta=" + idConsulta + ", fecha=" + fecha + '}';
+        return id.toString();
     }
+    
+    public String getJSON() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Metrica{");
+        sb.append("id=").append(id);
+        sb.append(", consulta=").append(consulta);
+        sb.append(", fecha=").append(fecha);
+        sb.append(", pesoKG=").append(pesoKG);
+        sb.append(", estaturaM=").append(estaturaM);
+        sb.append(", escefalo=").append(escefalo);
+        sb.append(", enf_detect=").append(enf_detect);
+        sb.append(", hallazgosPositivo=").append(hallazgosPositivo);
+        sb.append(", idDiagnostico=").append(idDiagnostico);
+        sb.append(", tx=").append(tx);
+        sb.append(", complemento=").append(complemento);
+        sb.append(", imagen=").append(imagen);
+        sb.append(", imagenPath=").append(imagenPath);
+        sb.append(", usuario=").append(usuario);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    
+    
 }

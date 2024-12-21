@@ -184,13 +184,13 @@
         <Component class="javax.swing.JLabel" name="btnMostrarLogin">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="4"/>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/Flecha Derecha 32 x 32.png"/>
-            </Property>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnMostrarLoginMouseClicked"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnMostrarLogin.setIcon(new Imagenes(&quot;Flecha Derecha 32 x 32.png&quot;).getIcono());"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="390" y="0" width="40" height="190"/>
@@ -219,7 +219,7 @@
           <Font name="Tahoma" size="24" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new Imagenes(&quot;/sur/softsurena/imagenes/Fondo 800 x 600.jpg&quot;).getIcono()" type="code"/>
+          <Connection code="new Imagenes(&quot;Fondo 800 x 600.jpg&quot;).getIcono()" type="code"/>
         </Property>
       </Properties>
       <Constraints>
