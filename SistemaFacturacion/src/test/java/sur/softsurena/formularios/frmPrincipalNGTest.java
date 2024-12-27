@@ -90,13 +90,13 @@ public class frmPrincipalNGTest {
         frmClientes cliente = frmClientes.getInstance();
 
         assertTrue(
-                cliente.getBtnNuevoCliente().isEnabled(),
+                frmClientes.getBtnNuevoCliente().isEnabled(),
                 "El boton de nuevo cliente esta deshabilitado."
         );
 
         //----------------------------------------------------------------------
-        cliente.getBtnNuevoCliente().requestFocus();
-        cliente.getBtnNuevoCliente().doClick();
+        frmClientes.getBtnNuevoCliente().requestFocus();
+        frmClientes.getBtnNuevoCliente().doClick();
 
         //----------------------------------------------------------------------
         cliente.getTxtCedula().requestFocus();
@@ -126,7 +126,7 @@ public class frmPrincipalNGTest {
 
             cliente.getTxtApellidos().setText("Diaz Almonte");
 
-            cliente.getJcbPersona().setSelectedIndex(1);
+            frmClientes.getJcbPersona().setSelectedIndex(1);
 
             cliente.getDchFechaNacimiento().setDate(
                     Utilidades.stringToDate(
@@ -135,9 +135,9 @@ public class frmPrincipalNGTest {
                     )
             );
 
-            cliente.getJcbEstadoCivil().setSelectedIndex(2);
+            frmClientes.getJcbEstadoCivil().setSelectedIndex(2);
 
-            cliente.getJcbSexo().setSelectedIndex(1);
+            frmClientes.getJcbSexo().setSelectedIndex(1);
         }
         //----------------------------------------------------------------------
         cliente.getJtpGeneralesDireccionContactos().requestFocus();
@@ -146,7 +146,7 @@ public class frmPrincipalNGTest {
         );
 
         do {
-            cliente.getJcbProvincias().requestFocus();
+            frmClientes.getJcbProvincias().requestFocus();
             teclasMagicas();
         } while (cliente.getJcbMunicipios().getItemCount() == 0);
         cliente.getJcbMunicipios().requestFocus();
@@ -162,7 +162,7 @@ public class frmPrincipalNGTest {
 
         //----------------------------------------------------------------------
         do {
-            cliente.getJcbProvincias().requestFocus();
+            frmClientes.getJcbProvincias().requestFocus();
             teclasMagicas();
         } while (cliente.getJcbMunicipios().getItemCount() == 0);
         cliente.getJcbMunicipios().requestFocus();
@@ -186,7 +186,6 @@ public class frmPrincipalNGTest {
         cliente.getBtnAgregarDirecciones().doClick();
 
         while (timer.isRunning()) {
-            continue;
         }
 
         //----------------------------------------------------------------------
@@ -219,7 +218,6 @@ public class frmPrincipalNGTest {
         cliente.getBtnAgregarTelefonoMovil().doClick();
 
         while (timer.isRunning()) {
-            continue;
         }
 
         //----------------------------------------------------------------------
@@ -256,7 +254,6 @@ public class frmPrincipalNGTest {
         //----------------------------------------------------------------------
 
         while (timer.isRunning()) {
-            continue;
         }
 
         JOptionPane.showMessageDialog(principal, "Espera");
@@ -356,7 +353,7 @@ public class frmPrincipalNGTest {
             enabled = true,
             priority = 9,
             description = """
-                          Validacion que se realizar para obtener una ventana 
+                          Validacion que se realizar para obtener una ventana
                           centralizada.
                           """
     )

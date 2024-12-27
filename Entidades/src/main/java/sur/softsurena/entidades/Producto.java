@@ -25,8 +25,7 @@ public class Producto{
     private final String nota;
     private final Boolean estado;
     
-    private final String userName;
-    private final String rol;
+    private final Paginas pagina;
     
     @Override
     public String toString() {

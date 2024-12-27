@@ -7,9 +7,9 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Producto;
-import static sur.softsurena.metodos.M_Producto.getProductos;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.metodos.M_Producto;
 import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 
 public class frmEntradaProducto extends javax.swing.JDialog {
@@ -380,12 +380,17 @@ public class frmEntradaProducto extends javax.swing.JDialog {
             return;
         }
 
-        List<Producto> productos = getProductos(
-                FiltroBusqueda
+        List<Producto> productos = M_Producto.select(
+                Producto
                         .builder()
-                        .criterioBusqueda(
-                                txtCodigoProducto.getText().strip()
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion(txtCodigoProducto.getText().strip())
+                                        .build()
                         )
+                        .codigo(txtCodigoProducto.getText().strip())
+                        .descripcion(txtCodigoProducto.getText().strip())
                         .build()
         );
 

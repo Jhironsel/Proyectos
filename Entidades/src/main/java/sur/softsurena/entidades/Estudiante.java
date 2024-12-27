@@ -6,14 +6,24 @@ import sur.softsurena.abstracta.Persona;
 
 @Getter
 @SuperBuilder
-public class Estudiante extends Persona {
+public class Estudiante {
 
+    private final Persona persona;
     private final String matricula;
-    private final Integer jcb_parentesco;
-
+    
     @Override
     public String toString() {
-        return super.toString();
+        return persona.toString();
     }
 
+    public String getJSON() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Estudiante{");
+        sb.append("persona=").append(persona);
+        sb.append(", matricula=").append(matricula);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    
 }

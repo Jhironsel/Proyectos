@@ -21,7 +21,6 @@ import static sur.softsurena.metodos.M_Paciente.ERROR_AL_MODIFICAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_MODIFICADO_CORRECTAMENTE;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -85,7 +84,7 @@ public class M_PacienteNGTest {
         );
 
         assertTrue(
-                M_PersonaNGTest.persona().getId_persona() > 0,
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona() > 0,
                 ERROR_AL_INSERTAR_PACIENTE
         );
     }
@@ -136,7 +135,7 @@ public class M_PacienteNGTest {
     public void testGetSexoPaciente() {
         assertTrue(
                 M_Paciente.getSexoPaciente(
-                        M_PersonaNGTest.persona().getId_persona()
+                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
                 ).equals("M"),
                 ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
         );
@@ -217,7 +216,7 @@ public class M_PacienteNGTest {
     )
     public void testDelete() {
         Resultado result = M_Paciente.delete(
-                M_PersonaNGTest.persona().getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
 
         assertEquals(
@@ -229,7 +228,7 @@ public class M_PacienteNGTest {
                         .estado(Boolean.TRUE)
                         .build(),
                 ERROR_AL_BORRAR_PACIENTE.formatted(
-                        M_PersonaNGTest.persona().getId_persona()
+                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
                 )
         );
 
@@ -243,7 +242,7 @@ public class M_PacienteNGTest {
                         Persona
                                 .builder()
                                 .id_persona(
-                                        M_PersonaNGTest.persona().getId_persona()
+                                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
                                 )
                                 .build()
                 )
@@ -259,11 +258,16 @@ public class M_PacienteNGTest {
     public void testGetList() {
 
         List result = M_Paciente.getList(
-                FiltroBusqueda
+                Paciente
                         .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .build()
+                        )
                         .build()
         );
-        
+
         assertFalse(
                 result.isEmpty(),
                 "La lista de paciente esta vacia."
@@ -282,8 +286,13 @@ public class M_PacienteNGTest {
 
         assertEquals(
                 M_Paciente.sqlGetList(
-                        FiltroBusqueda
+                        Paciente
                                 .builder()
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .build()
                 ),
                 expResult.strip().trim()
@@ -300,9 +309,14 @@ public class M_PacienteNGTest {
 
         assertEquals(
                 M_Paciente.sqlGetList(
-                        FiltroBusqueda
+                        Paciente
                                 .builder()
-                                .estado(Boolean.TRUE)
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .estado(Boolean.TRUE)
+                                                .build()
+                                )
                                 .build()
                 ),
                 expResult.strip().trim()
@@ -319,9 +333,14 @@ public class M_PacienteNGTest {
 
         assertEquals(
                 M_Paciente.sqlGetList(
-                        FiltroBusqueda
+                        Paciente
                                 .builder()
-                                .estado(Boolean.FALSE)
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .estado(Boolean.FALSE)
+                                                .build()
+                                )
                                 .build()
                 ),
                 expResult.strip().trim()

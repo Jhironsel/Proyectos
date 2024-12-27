@@ -1,6 +1,7 @@
 package sur.softsurena.formularios;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -139,64 +140,65 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
                 });
     }
 
-    //TODO Metodo de JasperReport
+    //TODO 26/12/2025 compilar el reporte en JasperReport.
     private void reporte(String fecha) {
-        try {
-            JasperReport masterReporte
-                    = (JasperReport) JRLoader.loadObjectFromFile(
-                            "Reportes/MovimientoES.jasper"
-                    );
-
-            Map<String, Object> parametros = new HashMap<>();
-            parametros.put("fecha", fecha);
-
-            JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros);
-
-            JRViewer jviewer = new JRViewer(jp);
-
-            jpReporte.removeAll();
-            jpReporte.setLayout(new BorderLayout());
-            jpReporte.add(jviewer, BorderLayout.CENTER);
-            jviewer.setVisible(true);
-            jpReporte.repaint();
-            jpReporte.revalidate();
-        } catch (JRException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al crear reporte de moviemientos de entrada y salida.",
-                    ex
-            );
-        }
+//        try {
+//            JasperReport masterReporte
+//                    = (JasperReport) JRLoader.loadObjectFromFile(
+//                            new File("Reportes/MovimientoES.jasper").getPath()
+//                    );
+//
+//            Map<String, Object> parametros = new HashMap<>();
+//            parametros.put("fecha", fecha);
+//
+//            JasperPrint jp = JasperFillManager.fillReport(masterReporte, parametros);
+//
+//            JRViewer jviewer = new JRViewer(jp);
+//
+//            jpReporte.removeAll();
+//            jpReporte.setLayout(new BorderLayout());
+//            jpReporte.add(jviewer, BorderLayout.CENTER);
+//            jviewer.setVisible(true);
+//            jpReporte.repaint();
+//            jpReporte.revalidate();
+//        } catch (JRException ex) {
+//            LOG.log(
+//                    Level.SEVERE,
+//                    "Error al crear reporte de moviemientos de entrada y salida.",
+//                    ex
+//            );
+//        }
     }
 
+    //TODO 26/12/2025 Descomentar este codigo. FIX
     private void llenarTabla() {
-        try {
-            String titulos[] = {"Fecha", "Operacion", "Usuario"};
-            jtFechas.removeAll();
-            miTabla = new DefaultTableModel(null, titulos);
-
-//            "SELECT r.FECHAENTRADA, IIF(r.OP = '+', 'Entrada', 'Salida') as operacion, r.IDUSUARIO "
-//                  + "FROM TABLA_ENTRADAS_PRUDUCTOS r "
-//                  + "WHERE EXTRACT(MONTH FROM r.FECHAENTRADA) = " + mes + " "
-//                  + "and EXTRACT(YEAR FROM r.FECHAENTRADA) = " + year + " "
-//                  + "GROUP BY r.FECHAENTRADA,  r.OP, r.IDUSUARIO"
-            ResultSet rs = null;
-
-            SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
-            while (rs.next()) {
-                registro[0] = formatoDeFecha.format(rs.getDate("FECHAENTRADA"));
-                registro[1] = rs.getString("operacion");
-                registro[2] = rs.getString("IDUSUARIO");
-                miTabla.addRow(registro);
-            }
-            jtFechas.setModel(miTabla);
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al consultar la tabla Entradas_Productos.",
-                    ex
-            );
-        }
+//        try {
+//            String titulos[] = {"Fecha", "Operacion", "Usuario"};
+//            jtFechas.removeAll();
+//            miTabla = new DefaultTableModel(null, titulos);
+//
+////            "SELECT r.FECHAENTRADA, IIF(r.OP = '+', 'Entrada', 'Salida') as operacion, r.IDUSUARIO "
+////                  + "FROM TABLA_ENTRADAS_PRUDUCTOS r "
+////                  + "WHERE EXTRACT(MONTH FROM r.FECHAENTRADA) = " + mes + " "
+////                  + "and EXTRACT(YEAR FROM r.FECHAENTRADA) = " + year + " "
+////                  + "GROUP BY r.FECHAENTRADA,  r.OP, r.IDUSUARIO"
+//            ResultSet rs = null;
+//
+//            SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
+//            while (rs.next()) {
+//                registro[0] = formatoDeFecha.format(rs.getDate("FECHAENTRADA"));
+//                registro[1] = rs.getString("operacion");
+//                registro[2] = rs.getString("IDUSUARIO");
+//                miTabla.addRow(registro);
+//            }
+//            jtFechas.setModel(miTabla);
+//        } catch (SQLException ex) {
+//            LOG.log(
+//                    Level.SEVERE,
+//                    "Error al consultar la tabla Entradas_Productos.",
+//                    ex
+//            );
+//        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JCalendar jCalendar1;

@@ -818,7 +818,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         fichero = fc.getSelectedFile();
 
         if (!fichero.isFile()) {
-            System.out.println("No es un archivo.");
             return;
         }
 

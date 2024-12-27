@@ -14,9 +14,7 @@ import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
-import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -384,15 +382,21 @@ public class frmCobrosClientes extends javax.swing.JDialog {
                                         .pnombre("Seleccione un Cliente...")
                                         .snombre("")
                                         .apellidos("")
+                                        .estado(false)
                                         .build()
                         )
                         .build()
         );
 
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        M_Cliente.select(
+                Cliente
                         .builder()
-                        .estado(true)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(true)
+                                        .build()
+                        )
                         .build()
         ).stream().forEach(
                 cliente -> cmbCliente.addItem(cliente)

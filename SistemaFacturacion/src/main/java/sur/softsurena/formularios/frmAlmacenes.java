@@ -7,10 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.metodos.M_Almacen;
-import static sur.softsurena.metodos.M_Almacen.agregarAlmacen;
-import static sur.softsurena.metodos.M_Almacen.getAlmacenesList;
 import static sur.softsurena.metodos.M_Privilegio.privilegio;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
 import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
@@ -405,11 +402,11 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         //Se agrega el panel de manteniento y se muestra.
         cambioBoton(true);
         
-        M_Almacen.getAlmacenesList(
-                FiltroBusqueda
+        M_Almacen.select(
+                Almacen
                         .builder()
                         .id(idAlmacen())
-                        .criterioBusqueda("")
+                        .nombre("")
                         .build()
         ).stream().forEach(
                 almacen -> {
@@ -443,7 +440,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         }
 
         //Para eliminar un registro de un cliente obtenemos el ID y su estado
-        Resultado resultado = M_Almacen.eliminarAlmacen(idAlmacen());
+        Resultado resultado = M_Almacen.delete(idAlmacen());
 
         JOptionPane.showInternalMessageDialog(
                 this,
@@ -467,10 +464,10 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         }
 
         llenarTabla(
-                FiltroBusqueda
+                Almacen
                         .builder()
                         .id(-1)
-                        .criterioBusqueda(resp)
+                        .nombre(resp)
                         .build()
         );
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -533,9 +530,9 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
         Resultado resultado;
         if (v_nuevo) {
-            resultado = agregarAlmacen(almacen);
+            resultado = M_Almacen.insert(almacen);
         } else {
-            resultado = M_Almacen.actualizarAlmacen(almacen);
+            resultado = M_Almacen.update(almacen);
         }
 
         JOptionPane.showInternalMessageDialog(
@@ -555,10 +552,10 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         llenarTabla(
-                FiltroBusqueda
+                Almacen
                         .builder()
                         .id(-1)
-                        .criterioBusqueda("")
+                        .nombre("")
                         .build()
         );
     }//GEN-LAST:event_formInternalFrameOpened
@@ -702,16 +699,12 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     /**
      * Metodo encargado de llenar el sistema de los almacenes registrados.
      *
-     * @param filtro
+     * @param almacen
      * @return
      */
-    public synchronized static JTable llenarTabla(FiltroBusqueda filtro) {
+    public synchronized static JTable llenarTabla(Almacen almacen) {
 
         final String titulos[] = {"Nombre", "Ubicacion", "Estado"};
-
-        if (filtro.getCriterioBusqueda().equalsIgnoreCase("evento")) {
-            //criterioBusqueda = frmClientes.criterioBusqueda;
-        }
 
         DefaultTableModel dtm = new DefaultTableModel(null, titulos) {
             @Override
@@ -730,11 +723,13 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         };
 
         Object registro[] = new Object[titulos.length];
-        getAlmacenesList(filtro).stream().forEach(
-                almacen -> {
-                    registro[0] = almacen;
-                    registro[1] = almacen.getUbicacion();
-                    registro[2] = almacen.getEstado();
+        M_Almacen.select(
+                almacen
+        ).stream().forEach(
+                almacenF -> {
+                    registro[0] = almacenF;
+                    registro[1] = almacenF.getUbicacion();
+                    registro[2] = almacenF.getEstado();
                     dtm.addRow(registro);
                 }
         );

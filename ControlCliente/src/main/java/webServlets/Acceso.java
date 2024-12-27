@@ -15,10 +15,8 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.ContactoEmail;
 import sur.softsurena.metodos.M_Cliente;
-import static sur.softsurena.metodos.M_Cliente.borrarCliente;
 import sur.softsurena.metodos.M_ContactoEmail;
 import sur.softsurena.metodos.M_Persona;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
@@ -29,29 +27,34 @@ public class Acceso extends HttpServlet {
     private static List<Cliente> clientes;
 
     /**
-     * 
+     *
      * @param req
      * @param resp
      * @throws ServletException
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        
+
         String accion = req.getParameter("accion");
-        
+
         if (!Objects.isNull(accion)) {
             if (accion.equalsIgnoreCase("editar")) {
                 req.setAttribute(
                         "cliente",
-                        M_Cliente.getPersonasClientes(
-                                FiltroBusqueda
+                        M_Cliente.select(
+                                Cliente
                                         .builder()
-                                        .id(
-                                                Integer.valueOf(
-                                                        req.getParameter("idCliente")
-                                                )
+                                        .persona(
+                                                Persona
+                                                        .builder()
+                                                        .id_persona(
+                                                                Integer.valueOf(
+                                                                        req.getParameter("idCliente")
+                                                                )
+                                                        )
+                                                        .build()
                                         )
                                         .build()
                         )
@@ -64,19 +67,19 @@ public class Acceso extends HttpServlet {
             }
 
             if (accion.equalsIgnoreCase("eliminar")) {
-                borrarCliente(Integer.parseInt(req.getParameter("idCliente")));
+                M_Cliente.delete(Integer.parseInt(req.getParameter("idCliente")));
             }
-            
+
         }
         accionDefauld(req, resp);
     }
 
     /**
-     * 
+     *
      * @param req
      * @param resp
      * @throws ServletException
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -119,7 +122,7 @@ public class Acceso extends HttpServlet {
                                 .build()
                 );
 
-                M_Cliente.agregarClienteById(resultado.getId());
+                M_Cliente.insertById(resultado.getId());
 
                 accionDefauld(req, resp);
                 return;
@@ -188,23 +191,28 @@ public class Acceso extends HttpServlet {
     }
 
     /**
-     * Metodo que consulta a la base de datos y trae los clientes activos en el 
+     * Metodo que consulta a la base de datos y trae los clientes activos en el
      * sistema.
-     * 
+     *
      * @param req
-     * 
+     *
      * @param resp
-     * 
+     *
      * @throws ServletException
-     * 
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private void accionDefauld(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        clientes = M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        clientes = M_Cliente.select(
+                Cliente
                         .builder()
-                        .estado(Boolean.TRUE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .build()
         );
 

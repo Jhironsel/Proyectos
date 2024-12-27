@@ -19,7 +19,6 @@ import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.entidades.Turno;
 import static sur.softsurena.metodos.M_D_Factura.agregarDetalleFactura;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -29,7 +28,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_M_Factura {
     
-    public synchronized static int getIDFacturaNueva(int idTurno) {
+    public synchronized static Integer getIDFacturaNueva(int idTurno) {
         final String sql = """
                            SELECT ID_FACTURA
                            FROM ADMIN_GET_ID_FACTURA_NUEVA (?)
@@ -46,8 +45,6 @@ public class M_M_Factura {
             ResultSet rs = ps.executeQuery();
             
             if(rs.next()){
-                
-                
                 return rs.getInt("ID_FACTURA");
             }
             
@@ -194,17 +191,17 @@ public class M_M_Factura {
     /**
      * Para obtener las facturas temporales del sistema.
      *
-     * @param filtro
+     * @param factura
      * @return
      */
     public synchronized static List<Factura> getFacturaEstado(
-            @NonNull FiltroBusqueda filtro
+            @NonNull Factura factura
     ) {
 
         List<Factura> facturaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlFacturaEstado(filtro),
+                sqlFacturaEstado(factura),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -276,7 +273,7 @@ public class M_M_Factura {
         return facturaList;
     }
 
-    protected static String sqlFacturaEstado(FiltroBusqueda filtro) {
+    protected static String sqlFacturaEstado(Factura factura) {
         return """
                  SELECT
                     ID,
@@ -295,9 +292,9 @@ public class M_M_Factura {
                  FROM GET_M_FACTURAS
                  %s
                   """.formatted(
-                          (Objects.isNull(filtro.getEstadoFactura()) ? 
+                          (Objects.isNull(factura.getM_factura().getEstadoFactura()) ? 
                                   ";":
-                                  "WHERE ESTADO_FACTURA = '%c';".formatted(filtro.getEstadoFactura()))
+                                  "WHERE ESTADO_FACTURA = '%c';".formatted(factura.getM_factura().getEstadoFactura()))
                   );
     }
     

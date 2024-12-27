@@ -20,13 +20,11 @@ import xy.ui.testing.util.TestingUtils;
 public class frmProductosNGTest {
 
     public frmProductosNGTest() {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.<init>()");
     }
 //------------------------------------------------------------------------------
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.setUpClass()");
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -43,20 +41,17 @@ public class frmProductosNGTest {
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.tearDownClass()");
         Conexion.getCnn().close();
     }
 //------------------------------------------------------------------------------
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.setUpMethod()");
     }
 //------------------------------------------------------------------------------
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.tearDownMethod()");
     }
 //------------------------------------------------------------------------------
 
@@ -70,7 +65,6 @@ public class frmProductosNGTest {
                           """
     )
     public void testGetInstance() {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testGetInstance()");
         assertNotNull(
                 frmProductos.getInstance(new frmPrincipal()),
                 "Error al instanciar frmProductos."
@@ -85,7 +79,6 @@ public class frmProductosNGTest {
                           """
     )
     public void testLlenarTablaProductos() {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testLlenarTablaProductos()");
         String criterioBusqueda = "";
         JTable tabla = frmProductos.llenarTablaProductos(criterioBusqueda);
 
@@ -110,7 +103,6 @@ public class frmProductosNGTest {
                           """
     )
     public void testInsertProducto() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testInsertProducto()");
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testInsertProducto.stt")
@@ -125,7 +117,6 @@ public class frmProductosNGTest {
                           """
     )
     public void testUpdateProducto() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testUpdateProducto()");
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testUpdateProducto.stt")
@@ -140,7 +131,6 @@ public class frmProductosNGTest {
                           """
     )
     public void testDeleteProducto() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmProductosNGTest.testDeleteProducto()");
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testDeleteProducto.stt")

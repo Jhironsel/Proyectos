@@ -9,14 +9,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Generales;
+import sur.softsurena.entidades.Paginas;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_NO_PUEDE_SER_BORRADO;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE__AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.ERROR_AL_INSERTAR__CLIENTE;
-import static sur.softsurena.metodos.M_Cliente.agregarClienteById;
-import static sur.softsurena.metodos.M_Cliente.borrarCliente;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -26,11 +27,7 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_ClienteNGTest {
 
-    private final M_PersonaNGTest persona;
-
-    public M_ClienteNGTest() {
-        persona = new M_PersonaNGTest();
-    }
+    public M_ClienteNGTest() {}
 
     @BeforeClass
     public void setUpClass() throws Exception {
@@ -66,10 +63,10 @@ public class M_ClienteNGTest {
             description = ""
     )
     public void testAgregarClienteById() {
-        persona.testInsert();
+        M_PersonaNGTest.testInsert();
 
-        Resultado result = agregarClienteById(
-                M_PersonaNGTest.persona().getId_persona()
+        Resultado result = M_Cliente.insertById(
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
 
         assertEquals(
@@ -93,8 +90,8 @@ public class M_ClienteNGTest {
                           """
     )
     public void testBorrarCliente() {
-        Resultado result = borrarCliente(
-                M_PersonaNGTest.persona().getId_persona()
+        Resultado result = M_Cliente.delete(
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
 
         assertEquals(
@@ -108,7 +105,7 @@ public class M_ClienteNGTest {
                 CLIENTE_NO_PUEDE_SER_BORRADO
         );
 
-        persona.testDelete();
+        M_PersonaNGTest.testDelete();
     }
 
     @Test(
@@ -121,8 +118,8 @@ public class M_ClienteNGTest {
     public void testGetPersonasClientes() {
         List expResult = null;
         
-        List result = M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        List result = M_Cliente.select(
+                Cliente
                         .builder()
                         .build()
         );
@@ -146,13 +143,18 @@ public class M_ClienteNGTest {
                         SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                         FECHA_INGRESO, ESTADO
                     FROM GET_PERSONA_CLIENTES
-                    WHERE ID = 32  
+                    WHERE ID = 0
                     """;
 
-        String result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        String result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .id(Integer.SIZE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(0)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -163,13 +165,18 @@ public class M_ClienteNGTest {
                                SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                                FECHA_INGRESO, ESTADO
                            FROM GET_PERSONA_CLIENTES
-                           WHERE ID = 32 AND ESTADO IS FALSE
+                           WHERE ID = 0 AND ESTADO IS FALSE
                            """;
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .id(Integer.SIZE)
-                        .estado(Boolean.FALSE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(0)
+                                        .estado(Boolean.FALSE)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -181,14 +188,19 @@ public class M_ClienteNGTest {
                         SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                         FECHA_INGRESO, ESTADO
                     FROM GET_PERSONA_CLIENTES
-                    WHERE ID = 32 AND ESTADO
+                    WHERE ID = 0 AND ESTADO
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .id(Integer.SIZE)
-                        .estado(Boolean.TRUE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(0)
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -202,9 +214,14 @@ public class M_ClienteNGTest {
                     FROM GET_PERSONA_CLIENTES
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -218,10 +235,19 @@ public class M_ClienteNGTest {
                     FROM GET_PERSONA_CLIENTES
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .filas(Boolean.FALSE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .pagina(
+                                                Paginas
+                                                        .builder()
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -236,12 +262,21 @@ public class M_ClienteNGTest {
                     ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .pagina(
+                                                Paginas
+                                                        .builder()
+                                                        .nPaginaNro(1)
+                                                        .nCantidadFilas(20)
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -256,13 +291,22 @@ public class M_ClienteNGTest {
                     WHERE ESTADO ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .estado(Boolean.TRUE)
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(Boolean.TRUE)
+                                        .pagina(
+                                                Paginas
+                                                        .builder()
+                                                        .nPaginaNro(1)
+                                                        .nCantidadFilas(20)
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -274,16 +318,29 @@ public class M_ClienteNGTest {
                         SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                         FECHA_INGRESO, ESTADO
                     FROM GET_PERSONA_CLIENTES
-                    WHERE CEDULA LIKE '00' 
-                    OR PNOMBRE LIKE '00'
-                    OR SNOMBRE LIKE '00'
-                    OR APELLIDOS LIKE '00'
+                    WHERE CEDULA STARTING WITH '00' 
+                    OR PNOMBRE STARTING WITH '00'
+                    OR SNOMBRE STARTING WITH '00'
+                    OR APELLIDOS STARTING WITH '00'
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .criterioBusqueda("00")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula("00")
+                                                        .build()
+                                        )
+                                        .pnombre("00")
+                                        .snombre("00")
+                                        .apellidos("00")
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -294,17 +351,30 @@ public class M_ClienteNGTest {
                         SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                         FECHA_INGRESO, ESTADO
                     FROM GET_PERSONA_CLIENTES
-                    WHERE ESTADO AND CEDULA LIKE '00' 
-                    OR PNOMBRE LIKE '00'
-                    OR SNOMBRE LIKE '00'
-                    OR APELLIDOS LIKE '00'
+                    WHERE ESTADO AND CEDULA STARTING WITH '00' 
+                    OR PNOMBRE STARTING WITH '00'
+                    OR SNOMBRE STARTING WITH '00'
+                    OR APELLIDOS STARTING WITH '00'
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .estado(Boolean.TRUE)
-                        .criterioBusqueda("00")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula("00")
+                                                        .build()
+                                        )
+                                        .pnombre("00")
+                                        .snombre("00")
+                                        .apellidos("00")
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());
@@ -316,17 +386,30 @@ public class M_ClienteNGTest {
                         SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
                         FECHA_INGRESO, ESTADO
                     FROM GET_PERSONA_CLIENTES
-                    WHERE ESTADO IS FALSE AND CEDULA LIKE '00' 
-                    OR PNOMBRE LIKE '00'
-                    OR SNOMBRE LIKE '00'
-                    OR APELLIDOS LIKE '00'
+                    WHERE ESTADO IS FALSE AND CEDULA STARTING WITH '00' 
+                    OR PNOMBRE STARTING WITH '00'
+                    OR SNOMBRE STARTING WITH '00'
+                    OR APELLIDOS STARTING WITH '00'
                     """;
 
-        result = M_Cliente.sqlPersonaClientes(
-                FiltroBusqueda
+        result = M_Cliente.sqlSelect(
+                Cliente
                         .builder()
-                        .estado(Boolean.FALSE)
-                        .criterioBusqueda("00")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula("00")
+                                                        .build()
+                                        )
+                                        .pnombre("00")
+                                        .snombre("00")
+                                        .apellidos("00")
+                                        .estado(Boolean.FALSE)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.strip().trim(), expResult.strip().trim());

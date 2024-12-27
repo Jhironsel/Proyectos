@@ -15,7 +15,6 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.interfaces.IProducto;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -33,17 +32,17 @@ public class M_Producto implements IProducto {
      *
      * Fecha de Actualización el 19/05/2022.
      *
-     * @param filtro
+     * @param producto
      * @return Devuelve un conjunto de datos de la tabla de los productos del
      * sistema.
      */
-    public synchronized static List<Producto> getProductos(
-            @NonNull FiltroBusqueda filtro
+    public synchronized static List<Producto> select(
+            @NonNull Producto producto
     ) {
         List<Producto> listaProducto = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlProductos(filtro),
+                sqlProductos(producto),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -91,17 +90,23 @@ public class M_Producto implements IProducto {
     public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS_CON_L
             = "Error al consultar la base de datos con la vista GET_PRODUCTOS del sistema.";
 
-    protected static String sqlProductos(FiltroBusqueda filtro) {
-        Boolean f_id = Objects.isNull(filtro.getId());
-        Boolean f_estado = Objects.isNull(filtro.getEstado());
-        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
+    protected static String sqlProductos(Producto producto) {
+        Boolean f_id = Objects.isNull(producto.getId());
+        Boolean f_estado = Objects.isNull(producto.getEstado());
+
+        Boolean f_codigo = Objects.isNull(producto.getCodigo());
+        Boolean f_descripcion = Objects.isNull(producto.getDescripcion());
+        Boolean f_descripcionCategoria = Objects.isNull(producto.getCategoria());
+
+        Boolean f_criterio = f_codigo && f_descripcion && f_descripcionCategoria;
+
         Boolean f_where = (f_id && f_estado && f_criterio);
-        Boolean f_row = Objects.isNull(filtro.getFilas());
+        Boolean f_row = Objects.isNull(producto.getPagina());
 
         String r1 = (f_where ? "" : "WHERE ");
-        String r2 = (f_id ? "" : "ID = %d ".formatted(filtro.getId()));
+        String r2 = (f_id ? "" : "ID = %d ".formatted(producto.getId()));
         String r3 = (f_id ? "" : (f_estado ? "" : "AND "));
-        String r4 = (f_estado ? "" : filtro.getEstado() ? "ESTADO " : "ESTADO IS FALSE ");
+        String r4 = (f_estado ? "" : producto.getEstado() ? "ESTADO " : "ESTADO IS FALSE ");
         String r5 = (f_criterio ? "" : """
                                        %sTRIM(CODIGO) STARTING WITH TRIM('%s') OR
                                                               TRIM(CODIGO) CONTAINING TRIM('%s') OR
@@ -113,16 +118,15 @@ public class M_Producto implements IProducto {
                                                                              WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('%s'))
                                                               ) 
                                        """.formatted(
-                                               f_id && f_estado ? "":"OR ",
-                                               filtro.getCriterioBusqueda(),
-                                               filtro.getCriterioBusqueda(),
-                                               filtro.getCriterioBusqueda(),
-                                               filtro.getCriterioBusqueda(),
-                                               filtro.getCriterioBusqueda()
-                                       )
-                );
+                f_id && f_estado ? "" : "OR ",
+                producto.getCodigo(),
+                producto.getCodigo(),
+                producto.getDescripcion(),
+                producto.getDescripcion(),
+                producto.getCategoria().getDescripcion()
+        ));
 
-        return """
+        final String sql = """
                 SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, 
                 NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, 
                 ESTADO 
@@ -131,17 +135,16 @@ public class M_Producto implements IProducto {
                 """.strip().trim().formatted(r1, r2, r3, r4, r5).strip().trim()
                 .concat("\nORDER BY ID").strip().trim()
                 .concat(
-                        f_row ? "" : (
-                                filtro.getFilas() ? 
-                                        "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
-                                                .formatted(
-                                                        filtro.getNPaginaNro(),
-                                                        filtro.getNCantidadFilas(),
-                                                        filtro.getNPaginaNro(),
-                                                        filtro.getNCantidadFilas()
-                                                ) : 
-                                        ""
-                                )).strip().trim();
+                        f_row ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                        .formatted(
+                                                producto.getPagina().getNPaginaNro(),
+                                                producto.getPagina().getNCantidadFilas(),
+                                                producto.getPagina().getNPaginaNro(),
+                                                producto.getPagina().getNCantidadFilas()
+                                        )
+                ).strip().trim();
+
+        return sql;
     }
 
 //------------------------------------------------------------------------------
@@ -149,26 +152,21 @@ public class M_Producto implements IProducto {
      * Permite obtener los productos del sistema por una categoria identificada
      * por su ID y su estado definido por el sistema.
      *
-     * TODO 27/11/2024 pasarle un filtro a este metodo.
+     * TODO 25/12/2024 Mejorar creacion de sql, crear el metodo 
+     * sqlSelect(categoria).
      * 
-     * @param idCategoria Categoria que se necesita consultar.
-     * 
-     * @param estado el estado por la categoria del producto.
+     * @param categoria
      * 
      * @return
      */
-    public synchronized static List<Producto> getProductosByCategoria(
-            int idCategoria, Boolean estado
+    public synchronized static List<Producto> selectByCategoria(
+            @NonNull Categoria categoria
     ) {
         final String sql
                 = "SELECT ID, DESCRIPCION, IMAGEN_PRODUCTO "
                 + "FROM GET_PRODUCTOS "
-                + "WHERE ID_CATEGORIA = ? " + (
-                Objects.isNull(estado) ? ";" : (    estado ? 
-                                                    " AND ESTADO;" : 
-                                                    " AND ESTADO IS FALSE;"
-                                                )
-                );
+                + "WHERE ID_CATEGORIA = ? " + (Objects.isNull(categoria.getEstado()) ? ";" : (
+                categoria.getEstado() ? " AND ESTADO;" : " AND ESTADO IS FALSE;"));
 
         List<Producto> productosList = new ArrayList<>();
 
@@ -178,7 +176,7 @@ public class M_Producto implements IProducto {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, idCategoria);
+            ps.setInt(1, categoria.getId_categoria());
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -207,54 +205,6 @@ public class M_Producto implements IProducto {
         return productosList;
     }
 
-//------------------------------------------------------------------------------
-    /**
-     * Metodo utilizado para eliminar los productos del sistema, este solo
-     * necesita de su ID o codigo de barra para localizarlo en la vista de
-     * V_PRODUCTOS.
-     *
-     * @param ID Identificador o codigo del Producto en la vista de V_PRODUCTOS.
-     *
-     *
-     * @return Devuelve un mensaje que indica como resultado de la acción.
-     */
-    public synchronized static Resultado borrarProductoPorID(Integer ID) {
-        final String sql
-                = "EXECUTE PROCEDURE SP_D_PRODUCTO(?)";
-        try (CallableStatement cs = getCnn().prepareCall(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-            cs.setInt(1, ID);
-
-            cs.execute();
-
-            return Resultado
-                    .builder()
-                    .mensaje(PRODUCTO__BORRADO__CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR,
-                    ex
-            );
-            return Resultado
-                    .builder()
-                    .mensaje(OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
-        }
-    }
-    public static final String OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
-            = "Ocurrio un error al intentar borrar el Producto...";
-
-    public static final String PRODUCTO__BORRADO__CORRECTAMENTE
-            = "Producto Borrado Correctamente.";
 
 //------------------------------------------------------------------------------
     /**
@@ -268,7 +218,7 @@ public class M_Producto implements IProducto {
      * @return Devuelve un mensaje que notifica si el producto fue agregado
      * correctamente o no.
      */
-    public synchronized static Resultado agregarProducto(Producto producto) {
+    public synchronized static Resultado insert(Producto producto) {
         final String sql
                 = "SELECT O_ID FROM SP_I_PRODUCTO(?,?,?,?,?,?)";
 
@@ -331,7 +281,7 @@ public class M_Producto implements IProducto {
      *
      * @return
      */
-    public synchronized static Resultado modificarProducto(Producto p) {
+    public synchronized static Resultado update(Producto p) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_PRODUCTO (?, ?, ?, ?, ?, ?, ?)";
         try (CallableStatement ps = getCnn().prepareCall(
@@ -361,13 +311,13 @@ public class M_Producto implements IProducto {
                     ERROR_AL__MODIFICAR__PRODUCTO,
                     ex
             );
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL__MODIFICAR__PRODUCTO)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
         }
+        return Resultado
+                .builder()
+                .mensaje(ERROR_AL__MODIFICAR__PRODUCTO)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
 
     }
     public static final String ERROR_AL__MODIFICAR__PRODUCTO
@@ -459,6 +409,55 @@ public class M_Producto implements IProducto {
             return false;
         }
     }
+    
+    //------------------------------------------------------------------------------
+    /**
+     * Metodo utilizado para eliminar los productos del sistema, este solo
+     * necesita de su ID o codigo de barra para localizarlo en la vista de
+     * V_PRODUCTOS.
+     *
+     * @param ID Identificador o codigo del Producto en la vista de V_PRODUCTOS.
+     *
+     *
+     * @return Devuelve un mensaje que indica como resultado de la acción.
+     */
+    public synchronized static Resultado deleteByID(Integer ID) {
+        final String sql
+                = "EXECUTE PROCEDURE SP_D_PRODUCTO(?)";
+        try (CallableStatement cs = getCnn().prepareCall(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+            cs.setInt(1, ID);
+
+            cs.execute();
+
+            return Resultado
+                    .builder()
+                    .mensaje(PRODUCTO__BORRADO__CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR,
+                    ex
+            );
+            return Resultado
+                    .builder()
+                    .mensaje(OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+    }
+    public static final String OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
+            = "Ocurrio un error al intentar borrar el Producto...";
+
+    public static final String PRODUCTO__BORRADO__CORRECTAMENTE
+            = "Producto Borrado Correctamente.";
 
 //------------------------------------------------------------------------------
     public static String generarProducto() {
@@ -470,6 +469,7 @@ public class M_Producto implements IProducto {
         int num4 = (int) (Math.random() * 10);
 
         telefonoMovil.
+
                 append("Producto de prueba ").
                 append(num1).
                 append(num2).

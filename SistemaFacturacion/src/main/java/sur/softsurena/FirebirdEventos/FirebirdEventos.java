@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
+import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaClientes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
@@ -12,7 +13,6 @@ import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
 import sur.softsurena.formularios.frmDeudas;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
 import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {
@@ -113,10 +113,10 @@ public class FirebirdEventos extends FBEventManager {
                         new Object[]{event.getEventName(), event.getEventCount()}
                 );
                 frmAlmacenes.llenarTabla(
-                        FiltroBusqueda
+                        Almacen
                                 .builder()
                                 .id(-1)
-                                .criterioBusqueda("")
+                                .nombre("")
                                 .build()
                 );
             });
@@ -130,4 +130,5 @@ public class FirebirdEventos extends FBEventManager {
         }
         return true;
     }
+    
 }

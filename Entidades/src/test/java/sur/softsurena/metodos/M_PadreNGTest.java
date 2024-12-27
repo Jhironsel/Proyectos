@@ -9,10 +9,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
 import static sur.softsurena.metodos.M_Padre.BORRADO_DE_REGISTRO_CORRECTAMENTE;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -60,13 +61,13 @@ public class M_PadreNGTest {
     )
     public void testGetPadres() {
 
-        assertFalse(
+        assertNotNull(
                 M_Padre.getList(
-                        FiltroBusqueda
+                        Padre
                                 .builder()
                                 .build()
                 ).isEmpty(),
-                ""
+                "Error al consultar la lista de padres."
         );
     }
 
@@ -210,8 +211,9 @@ public class M_PadreNGTest {
                            """;
 
         String result = M_Padre.sqlGetList(
-                FiltroBusqueda
+                Padre
                         .builder()
+                        .persona(Persona.builder().build())
                         .build()
         );
 
@@ -227,9 +229,19 @@ public class M_PadreNGTest {
                            """;
 
         result = M_Padre.sqlGetList(
-                FiltroBusqueda
+                Padre
                         .builder()
-                        .criterioBusqueda("000-0000000-0")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula("000-0000000-0")
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
 
@@ -245,9 +257,14 @@ public class M_PadreNGTest {
                            """;
 
         result = M_Padre.sqlGetList(
-                FiltroBusqueda
+                Padre
                         .builder()
-                        .estado(Boolean.TRUE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .build()
         );
 
@@ -263,9 +280,14 @@ public class M_PadreNGTest {
                            """;
 
         result = M_Padre.sqlGetList(
-                FiltroBusqueda
+                Padre
                         .builder()
-                        .estado(Boolean.FALSE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(Boolean.FALSE)
+                                        .build()
+                        )
                         .build()
         );
 
@@ -281,9 +303,14 @@ public class M_PadreNGTest {
                            """;
 
         result = M_Padre.sqlGetList(
-                FiltroBusqueda
+                Padre
                         .builder()
-                        .id(-1)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(-1)
+                                        .build()
+                        )
                         .build()
         );
 

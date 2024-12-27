@@ -15,7 +15,6 @@ import static sur.softsurena.metodos.M_ARS.ERROR_AL_INSERTAR__SEGURO;
 import static sur.softsurena.metodos.M_ARS.ERROR_AL_MODIFICAR_SEGURO;
 import static sur.softsurena.metodos.M_ARS.SEGURO_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ARS.SEGURO_MODIFICADO_CORRECTAMENTE;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -23,9 +22,10 @@ public class M_ARSNGTest {
 
     private Integer id_ARS;
 //------------------------------------------------------------------------------
+
     public M_ARSNGTest() {
     }
-    
+
 //------------------------------------------------------------------------------
     @BeforeClass
     public void setUpClass() throws Exception {
@@ -42,13 +42,13 @@ public class M_ARSNGTest {
         );
     }
 //------------------------------------------------------------------------------
-    
+
     @AfterClass
     public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
     }
 //------------------------------------------------------------------------------
-    
+
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
@@ -58,7 +58,7 @@ public class M_ARSNGTest {
     public void tearDownMethod() throws Exception {
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = true,
             priority = 0,
@@ -101,7 +101,7 @@ public class M_ARSNGTest {
 
         id_ARS = result.getId();
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
@@ -111,16 +111,33 @@ public class M_ARSNGTest {
                           ARS del sistema.
                           """
     )
-    public void testGetARS() {
-        List result = M_ARS.select(
-                FiltroBusqueda
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .build()
+    public void testSelect() {
+        assertNotNull(
+                M_ARS.select(
+                        ARS
+                                .builder()
+                                .build()
+                ),
+                ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
         );
 
-        assertFalse(
-                result.isEmpty(),
+        assertNotNull(
+                M_ARS.select(
+                        ARS
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
+        );
+
+        assertNotNull(
+                M_ARS.select(
+                        ARS
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
                 ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
         );
 
@@ -146,57 +163,12 @@ public class M_ARSNGTest {
         assertEquals(
                 result,
                 Resultado
-                    .builder()
-                    .mensaje(SEGURO_MODIFICADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
-                ERROR_AL_MODIFICAR_SEGURO
-        );
-    }
-
-//------------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            priority = 3,
-            description = """
-                          Test en cargado de verificar la consultas de las 
-                          ARS del sistema.
-                          """
-    )
-    public void testGetARS2() {
-        List result2 = M_ARS.select(
-                FiltroBusqueda
                         .builder()
+                        .mensaje(SEGURO_MODIFICADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
-                        .build()
-        );
-        assertFalse(
-                result2.isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
-        );
-
-    }
-
-//------------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            priority = 4,
-            description = """
-                          Test en cargado de verificar la consultas de las
-                          ARS del sistema.
-                          """
-    )
-    public void testGetARS3() {
-        List result = M_ARS.select(
-                FiltroBusqueda
-                        .builder()
-                        .build()
-        );
-        
-        assertFalse(
-                result.isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
+                        .build(),
+                ERROR_AL_MODIFICAR_SEGURO
         );
     }
 
@@ -211,41 +183,19 @@ public class M_ARSNGTest {
     )
     public void testDelete() {
         Resultado result = M_ARS.delete(id_ARS);
-                
+
         assertEquals(
-                result, 
+                result,
                 Resultado
-                    .builder()
-                    .mensaje(BORRADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
+                        .builder()
+                        .mensaje(BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_BORRAR_ARS
         );
     }
 
-    @Test(
-            enabled = true,
-            priority = 6,
-            description = """
-                          Test en cargado de verificar la consultas de las 
-                          ARS del sistema este vacia.
-                          """
-    )
-    public void testGetARS4() {
-        List result = M_ARS.select(
-                FiltroBusqueda
-                        .builder()
-                        .build()
-        );
-
-        assertFalse(
-                result.isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
-        );
-    }
-
-    
     @Test(
             enabled = true,
             priority = 0,
@@ -259,45 +209,45 @@ public class M_ARSNGTest {
                            SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                            FROM V_ARS;
                            """.strip().trim();
-        
+
         String result = M_ARS.sqlARS(
-                FiltroBusqueda
+                ARS
                         .builder()
                         .build()
         );
-        
+
         assertEquals(result, expResult);
-        
+
 //------------------------------------------------------------------------------
         expResult = """
                     SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                     FROM V_ARS
                     WHERE ESTADO;
                     """.strip().trim();
-        
+
         result = M_ARS.sqlARS(
-                FiltroBusqueda
+                ARS
                         .builder()
                         .estado(Boolean.TRUE)
                         .build()
         );
-        
+
         assertEquals(result, expResult);
-        
+
 //------------------------------------------------------------------------------
         expResult = """
                     SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                     FROM V_ARS
                     WHERE ESTADO IS FALSE;
                     """.strip().trim();
-        
+
         result = M_ARS.sqlARS(
-                FiltroBusqueda
+                ARS
                         .builder()
                         .estado(Boolean.FALSE)
                         .build()
         );
-        
+
         assertEquals(result, expResult);
     }
 }

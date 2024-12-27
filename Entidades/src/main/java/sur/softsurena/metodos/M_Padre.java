@@ -17,7 +17,6 @@ import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.entidades.TipoSangre;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -30,18 +29,18 @@ public class M_Padre {
     /**
      * Metodo que nos devuelve los padres registrados en el sistemas.
      *
-     * @param filtro
+     * @param padre
      *
      * @return
      */
     public synchronized static List<Padre> getList(
-            @NonNull FiltroBusqueda filtro
+            @NonNull Padre padre
     ) {
 
         List<Padre> listaPadre = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetList(filtro),
+                sqlGetList(padre),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
@@ -62,20 +61,20 @@ public class M_Padre {
                                                 .sexo(rs.getString("SEXO").charAt(0))
                                                 .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
                                                 .estado(rs.getBoolean("ESTADO_PERSONA"))
-                                                .build()
-                                )
-                                .tipoSangre(
-                                        TipoSangre
-                                                .builder()
-                                                .id(rs.getInt("ID_TIPO_SANGREE"))
-                                                .build()
-                                )
-                                .generales(
-                                        Generales
-                                                .builder()
-                                                .cedula(rs.getString("CEDULA"))
-                                                .estado_civil(
-                                                        rs.getString("ESTADO_CIVIL").charAt(0)
+                                                .generales(
+                                                        Generales
+                                                                .builder()
+                                                                .cedula(rs.getString("CEDULA"))
+                                                                .estado_civil(
+                                                                        rs.getString("ESTADO_CIVIL").charAt(0)
+                                                                )
+                                                                .tipoSangre(
+                                                                        TipoSangre
+                                                                                .builder()
+                                                                                .id(rs.getInt("ID_TIPO_SANGREE"))
+                                                                                .build()
+                                                                )
+                                                                .build()
                                                 )
                                                 .build()
                                 )
@@ -107,14 +106,14 @@ public class M_Padre {
     }
 
     /**
-     * 
-     * @param filtro
-     * @return 
+     *
+     * @param padre
+     * @return
      */
-    protected static String sqlGetList(FiltroBusqueda filtro) {
-        Boolean criterio = Objects.isNull(filtro.getCriterioBusqueda());
-        Boolean estado = Objects.isNull(filtro.getEstado());
-        Boolean id = Objects.isNull(filtro.getId());
+    protected static String sqlGetList(Padre padre) {
+        Boolean criterio = Objects.isNull(padre.getPersona().getGenerales());
+        Boolean estado = Objects.isNull(padre.getPersona().getEstado());
+        Boolean id = Objects.isNull(padre.getPersona().getId_persona());
         Boolean where = criterio && estado && id;
         return """
                SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
@@ -125,9 +124,9 @@ public class M_Padre {
                %s%s%s%s
                 """.trim().strip().formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d ".formatted(filtro.getId()),
-                criterio ? "" : ("CEDULA LIKE '%s' ".formatted(filtro.getCriterioBusqueda())),
-                estado ? "" : (filtro.getEstado() ? "ESTADO_PERSONA " : "ESTADO_PERSONA IS FALSE")
+                id ? "" : "ID = %d ".formatted(padre.getPersona().getId_persona()),
+                criterio ? "" : ("CEDULA LIKE '%s' ".formatted(padre.getPersona().getGenerales())),
+                estado ? "" : (padre.getPersona().getEstado() ? "ESTADO_PERSONA " : "ESTADO_PERSONA IS FALSE")
         ).trim().strip();
     }
 //------------------------------------------------------------------------------
@@ -157,10 +156,9 @@ public class M_Padre {
             ResultSet rs = ps.executeQuery();
 
             int id = -1;
-            if(rs.next()){
+            if (rs.next()) {
                 id = rs.getInt(1);
             }
-
 
             return Resultado
                     .builder()

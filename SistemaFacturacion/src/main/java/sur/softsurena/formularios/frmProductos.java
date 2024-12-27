@@ -19,11 +19,11 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Imagen;
+import sur.softsurena.entidades.Paginas;
 import sur.softsurena.interfaces.IProducto;
 import sur.softsurena.metodos.M_Categoria;
 import sur.softsurena.metodos.M_Privilegio;
 import sur.softsurena.metodos.M_Producto;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -947,7 +947,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 return;
             }
 
-            Resultado resultados = M_Producto.borrarProductoPorID(id);
+            Resultado resultados = M_Producto.deleteByID(id);
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1153,8 +1153,8 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
             Resultado resultados
                     = (v_nuevo
-                            ? M_Producto.agregarProducto(producto)
-                            : M_Producto.modificarProducto(producto));
+                            ? M_Producto.insert(producto)
+                            : M_Producto.update(producto));
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1549,20 +1549,31 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         //Modelo que se pasará a la tablas de productos.
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-        M_Producto.getProductos(
-                FiltroBusqueda
+        M_Producto.select(
+                Producto
                         .builder()
-                        .criterioBusqueda(criterioBusqueda)
-                        .filas(Boolean.TRUE)
-                        .nCantidadFilas(
-                                Integer.parseInt(
-                                        jsCantidadFilas.getValue().toString()
-                                )
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nCantidadFilas(
+                                                Integer.valueOf(
+                                                        jsCantidadFilas.getValue().toString()
+                                                )
+                                        )
+                                        .nPaginaNro(
+                                                Integer.valueOf(
+                                                        jsPaginaNro.getValue().toString()
+                                                )
+                                        )
+                                        .build()
                         )
-                        .nPaginaNro(
-                                Integer.parseInt(
-                                        jsPaginaNro.getValue().toString()
-                                )
+                        .codigo(criterioBusqueda)
+                        .descripcion(criterioBusqueda)
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion(criterioBusqueda)
+                                        .build()
                         )
                         .build()
         ).stream().forEach(producto -> {
@@ -1604,13 +1615,12 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         int id = ((Producto) tblProducto.getValueAt(v_fila, 2)).getId();
 
-        Producto producto = M_Producto.getProductos(
-                FiltroBusqueda
+        Producto producto = M_Producto.select(
+                Producto
                         .builder()
                         .id(id)
-                        .criterioBusqueda("^")
                         .build()
-        ).get(0);
+        ).getFirst();
 
         txtCodigoBarra.setText(producto.getCodigo());
 

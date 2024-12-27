@@ -16,8 +16,6 @@ import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_MODIFICADO_CORREC
 import static sur.softsurena.metodos.M_Antecedente.BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_BORRAR_PACIENTE;
 import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_MODIFICAR_ANTECEDENTE;
-import static sur.softsurena.metodos.M_Antecedente.agregarAntecedente;
-import static sur.softsurena.metodos.M_Antecedente.modificarAntecedente;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -69,7 +67,7 @@ public class M_AntecedentesNGTest {
         paciente.testInsert();
         consulta.testInsert();
 
-        Resultado result = agregarAntecedente(
+        Resultado result = M_Antecedente.insert(
                 Antecedente
                         .builder()
                         .id_consulta(consulta.getIdConsulta())
@@ -93,7 +91,7 @@ public class M_AntecedentesNGTest {
     )
     public void testModificarAntecedente() {
         assertEquals(
-                modificarAntecedente(
+                M_Antecedente.update(
                         Antecedente
                                 .builder()
                                 .id(id_antecedente)
@@ -117,20 +115,20 @@ public class M_AntecedentesNGTest {
     )
     public void testGetAntecedentes() {
         int idPadre = 0;
-        List<Antecedente> result = M_Antecedente.getAntecedentes(
+        List<Antecedente> result = M_Antecedente.select(
                 Antecedente
                         .builder()
                         .id(idPadre)
                         .build()
         );
-        
+
         assertTrue(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La tabla de antecedentes contiene informacion."
         );
 
         //Consultado el registro
-        List<Antecedente> lista = M_Antecedente.getAntecedentes(
+        List<Antecedente> lista = M_Antecedente.select(
                 Antecedente
                         .builder()
                         .id(id_antecedente)
@@ -151,7 +149,7 @@ public class M_AntecedentesNGTest {
     )
     public void testBorrarAntecedente() {
         assertEquals(
-                M_Antecedente.borrarAntecedente(
+                M_Antecedente.delete(
                         Antecedente
                                 .builder()
                                 .id(id_antecedente)

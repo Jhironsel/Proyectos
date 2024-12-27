@@ -26,17 +26,38 @@ public class M_Role {
      * @return Devuelve una lista de roles del sistema que tiene un usuario en
      * el sistema.
      */
-    public synchronized static List<Role> comprobandoRolesDisponibles(
-            String userName, boolean disponible
+    public synchronized static List<Role> selectDisponibles(
+            String userName, 
+            boolean disponible
     ) {
-        final String sql
-                = """
-                    SELECT r.ROL, r.DESCRIPCION, a.ADMINISTRACION
-                    FROM GET_ROLES r
-                    LEFT JOIN GET_ROL a ON r.ROL = a.ROL AND 
-                                           TRIM(a.USER_NAME) LIKE TRIM(UPPER(?))
-                    WHERE a.USER_NAME IS %s NULL;
-                """.formatted((disponible ? "NOT" : ""));
+        String sql = "";
+        if(disponible){
+            sql = """
+                  SELECT 
+                       TRIM(b.RDB$ROLE_NAME) ROL, 
+                       TRIM(COALESCE(b.RDB$DESCRIPTION, '')) DESCRIPCION,
+                       a.RDB$GRANT_OPTION ADMINISTRACION
+                  FROM RDB$USER_PRIVILEGES a
+                  INNER JOIN RDB$ROLES b ON a.RDB$RELATION_NAME = b.RDB$ROLE_NAME AND 
+                                           TRIM(a.RDB$PRIVILEGE) = 'M' AND 
+                                           a.RDB$USER = ? AND 
+                                           b.RDB$ROLE_NAME NOT STARTING WITH 'RRR_' AND 
+                                           a.RDB$GRANTOR IS NOT NULL
+                  """;
+        }else{
+            sql = """
+                  SELECT 
+                        TRIM(b.RDB$ROLE_NAME) ROL,
+                        TRIM(COALESCE(b.RDB$DESCRIPTION, '')) DESCRIPCION,
+                        a.RDB$GRANT_OPTION ADMINISTRACION
+                   FROM RDB$USER_PRIVILEGES a
+                   RIGHT JOIN RDB$ROLES b ON a.RDB$RELATION_NAME = b.RDB$ROLE_NAME AND 
+                                            TRIM(a.RDB$PRIVILEGE) = 'M' AND 
+                                            a.RDB$USER = ? AND 
+                                            a.RDB$GRANTOR IS NOT NULL
+                   WHERE a.RDB$RELATION_NAME IS NULL  AND b.RDB$ROLE_NAME NOT STARTING WITH 'RRR_'
+                  """;
+        }
 
         List<Role> roles = new ArrayList<>();
 
@@ -263,7 +284,7 @@ public class M_Role {
                     .build();
         }
 
-        String sql = "EXECUTE PROCEDURE " + procedimiento + " (?,?,?)";
+        String sql = "EXECUTE PROCEDURE ".concat(procedimiento).concat(" (?,?,?)");
 
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,

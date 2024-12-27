@@ -1,14 +1,16 @@
 package sur.softsurena.formularios;
 
+import com.mxrck.autocompleter.tests.Person;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Cliente;
-import sur.softsurena.utilidades.FiltroBusqueda;
 
 /**
- * 
+ *
  * @author jhironsel
  */
 @Getter
@@ -158,11 +160,11 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCriterioKeyReleased
 
     /**
-     * Permite obtener la lista de clietne que cumplan con el criterio de 
+     * Permite obtener la lista de clietne que cumplan con el criterio de
      * busqueda, dichos criterios seran la cedula, nombres o apellidos.
-     * 
+     *
      * TODO 24/11/2024 Analizar este metodo si esta funcionado.
-     * 
+     *
      */
     private void llenarTabla() {
         String titulos[] = {"Lista de Clientes"};
@@ -170,10 +172,22 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
 
         Object registro[] = new Object[1];
 
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        M_Cliente.select(
+                Cliente
                         .builder()
-                        .criterioBusqueda(txtCriterio.getText().strip())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula(txtCriterio.getText().strip())
+                                                        .build()
+                                        )
+                                        .pnombre(txtCriterio.getText().strip())
+                                        .snombre(txtCriterio.getText().strip())
+                                        .apellidos(txtCriterio.getText().strip())
+                                        .build())
                         .build()
         ).stream().forEach(
                 clienteR -> {

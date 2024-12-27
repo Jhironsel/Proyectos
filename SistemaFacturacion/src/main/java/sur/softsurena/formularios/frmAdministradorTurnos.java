@@ -3,12 +3,10 @@ package sur.softsurena.formularios;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.entidades.Turno;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Cajero.getCajeros;
 import sur.softsurena.metodos.M_Turno;
-import static sur.softsurena.metodos.M_Turno.cerrarTurno;
-import static sur.softsurena.metodos.M_Turno.habilitarTurno;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -296,10 +294,10 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
                 userSelected, 0)).getUser_name();
 
         //Verificamos si el usuario tiene turno abierto
-        if (!M_Turno.getTurnos(
-                FiltroBusqueda
+        if (!M_Turno.select(
+                Turno
                         .builder()
-                        .criterioBusqueda(userName)
+                        .turno_usuario(userName)
                         .build()
         ).isEmpty()) {
             JOptionPane.showInternalMessageDialog(
@@ -311,7 +309,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
             return;
         }
 
-        Resultado resultado = habilitarTurno(userName);
+        Resultado resultado = M_Turno.insert(userName);
 
         //Si el usuario no tiene turno abierto, procedemos habilitar turno.
         JOptionPane.showInternalMessageDialog(
@@ -340,11 +338,11 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         String userName = tblTurnosActivos.getValueAt(rowSelected, 1).toString();
 
         //TODO 24/11/2024 Validar que esta condicional funciona.
-        if (M_Turno.getTurnos(
-                FiltroBusqueda
+        if (M_Turno.select(
+                Turno
                         .builder()
                         .estado(true)
-                        .criterioBusqueda(userName)
+                        .turno_usuario(userName)
                         .build()).isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -355,24 +353,18 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
             return;
         }
 
-//        setIdTurno(idTurnoActivo(userName));
-        if (cerrarTurno(idTurno)) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Turno Cerrado",
-                    "",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Problema para cerrar Turno",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
+        Resultado resultado = M_Turno.update(idTurno);
 
-        imprimirReporte(idTurno);
+        JOptionPane.showInternalMessageDialog(
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
+
+        if (resultado.getEstado()) {
+            imprimirReporte(idTurno);
+        }
     }//GEN-LAST:event_btnCerrarTurnoActionPerformed
 
     private void btnActualizarCajerosDisponiblesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCajerosDisponiblesActionPerformed
@@ -405,8 +397,8 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
         Object[] rowData2 = new Object[columnas2.length];
 
-        M_Turno.getTurnos(
-                FiltroBusqueda
+        M_Turno.select(
+                Turno
                         .builder()
                         .estado(true)
                         .build()
@@ -506,13 +498,14 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
 
         var rowData2 = new Object[columnas2.length];
-        
+
         //TODO 25/11/2024 No se realmente que estado debe llevar.
-        M_Turno.getTurnos(FiltroBusqueda
-                .builder()
-                .criterioBusqueda(userName)
-                .estado(Boolean.TRUE)
-                .build()
+        M_Turno.select(
+                Turno
+                        .builder()
+                        .turno_usuario(userName)
+                        .estado(Boolean.TRUE)
+                        .build()
         ).stream().forEach(
                 turnos -> {
                     rowData2[0] = turnos.getId();

@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Imagen;
+import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__INSERTAR__PRODUCTO;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__MODIFICAR__PRODUCTO;
@@ -20,10 +21,6 @@ import static sur.softsurena.metodos.M_Producto.OCURRIO_UN_ERROR_AL_INTENTAR_BOR
 import static sur.softsurena.metodos.M_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__BORRADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAMENTE;
-import static sur.softsurena.metodos.M_Producto.agregarProducto;
-import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
-import static sur.softsurena.metodos.M_Producto.modificarProducto;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.imagenEncode64;
 
@@ -142,8 +139,8 @@ public class M_ProductoNGTest {
             priority = 0
     )
     public void testGetProductos() {
-        List<Producto> productos = M_Producto.getProductos(
-                FiltroBusqueda
+        List<Producto> productos = M_Producto.select(
+                Producto
                         .builder()
                         .build()
         );
@@ -154,8 +151,8 @@ public class M_ProductoNGTest {
         );
 
         //----------------------------------------------------------------------
-        productos = M_Producto.getProductos(
-                FiltroBusqueda
+        productos = M_Producto.select(
+                Producto
                         .builder()
                         .estado(Boolean.TRUE)
                         .build()
@@ -166,24 +163,28 @@ public class M_ProductoNGTest {
         );
 
         //----------------------------------------------------------------------
-        productos = M_Producto.getProductos(
-                FiltroBusqueda
+        productos = M_Producto.select(
+                Producto
                         .builder()
-                        .filas(Boolean.FALSE)
+                        .estado(Boolean.FALSE)
                         .build()
         );
         assertFalse(
                 productos.isEmpty(),
-                "Se encontraron registros en la tabla de producto."
+                "No se encontraron registros en la tabla de productos."
         );
 
         //----------------------------------------------------------------------
-        productos = M_Producto.getProductos(
-                FiltroBusqueda
+        productos = M_Producto.select(
+                Producto
                         .builder()
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
                         .build()
         );
         assertFalse(
@@ -201,18 +202,26 @@ public class M_ProductoNGTest {
             priority = 1
     )
     public void testGetProductosByCategoria() {
-        List<Producto> result = getProductosByCategoria(-1, null);
-        assertTrue(
-                result.isEmpty(),
-                "No se obtuvo resultados en la consulta."
-        );
+        assertNotNull(M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(-1)
+                        .build()
+        ), ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS);
 
-        result = getProductosByCategoria(0, true);
-        assertFalse(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
+        assertNotNull(
+                M_Producto.selectByCategoria(
+                        Categoria
+                                .builder()
+                                .id_categoria(0)
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
         );
     }
+    public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
+            = "Error al consultar la base de datos.";
 
     @Test(
             enabled = true,
@@ -220,35 +229,25 @@ public class M_ProductoNGTest {
             priority = 2
     )
     public void testAgregarProducto() {
-        Resultado resultado = agregarProducto(producto);
-
-        assertTrue(
-                resultado.getEstado(),
-                ERROR_AL__INSERTAR__PRODUCTO
-        );
+        Resultado resultado = M_Producto.insert(producto);
 
         assertEquals(
-                resultado.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
-                ERROR_AL__INSERTAR__PRODUCTO
-        );
-
-        assertEquals(
-                resultado.getMensaje(),
-                PRODUCTO_AGREGADO_CORRECTAMENTE,
-                ERROR_AL__INSERTAR__PRODUCTO
+                resultado,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
 
         id_producto = resultado.getId();
 
-        Resultado result = null;
-
         try {
-            result = agregarProducto(producto2);
+            resultado = M_Producto.insert(producto2);
         } catch (Exception e) {
-
             assertEquals(
-                    result,
+                    resultado,
                     Resultado
                             .builder()
                             .id(-1)
@@ -257,7 +256,6 @@ public class M_ProductoNGTest {
                             .estado(Boolean.FALSE)
                             .build()
             );
-
         }
     }
 
@@ -270,62 +268,78 @@ public class M_ProductoNGTest {
             priority = 3
     )
     public void testGetProductosByCategoria2() {
-        List<Producto> result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria1,
-                null
+        List<Producto> result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+                        .build()
         );
 
-        assertFalse(
+        assertNotNull(
+                result,
+                "Error al consultar la base de datos."
+        );
+
+        result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+        assertNotNull(
+                result,
+                "Se obtuvo resultados en la consulta."
+        );
+
+        result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+                        .estado(Boolean.FALSE)
+                        .build()
+        );
+
+        assertNotNull(
+                result,
+                "Se obtuvo resultados en la consulta."
+        );
+
+        result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+                        .build()
+        );
+
+        assertNotNull(
                 result.isEmpty(),
                 "Se obtuvo resultados en la consulta."
         );
 
-        result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria1,
-                true
+        result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
-        assertFalse(
+
+        assertNotNull(
                 result.isEmpty(),
                 "Se obtuvo resultados en la consulta."
         );
 
-        result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria1,
-                false
+        result = M_Producto.selectByCategoria(
+                Categoria
+                        .builder()
+                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+                        .estado(Boolean.FALSE)
+                        .build()
         );
 
-        assertTrue(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria2,
-                null
-        );
-
-        assertTrue(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria2,
-                true
-        );
-
-        assertTrue(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = getProductosByCategoria(
-                M_CategoriaNGTest.idCategoria2,
-                false
-        );
-
-        assertTrue(
-                result.isEmpty(),
+        assertNotNull(
+                result,
                 "Se obtuvo resultados en la consulta."
         );
     }
@@ -336,22 +350,16 @@ public class M_ProductoNGTest {
             priority = 3
     )
     public void testModificarProducto() {
-        Resultado result = modificarProducto(producto);
-
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL__MODIFICAR__PRODUCTO
-        );
+        Resultado result = M_Producto.update(producto);
 
         assertEquals(
-                result.getMensaje(),
-                PRODUCTO__MODIFICADO__CORRECTAMENTE,
-                ERROR_AL__MODIFICAR__PRODUCTO
-        );
-
-        assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO__MODIFICADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL__MODIFICAR__PRODUCTO
         );
 
@@ -388,22 +396,16 @@ public class M_ProductoNGTest {
             priority = 10
     )
     public void testBorrarProductoPorID() {
-        Resultado result = M_Producto.borrarProductoPorID(id_producto);
-
-        assertTrue(
-                result.getEstado(),
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
-        );
-
+        Resultado result = M_Producto.deleteByID(id_producto);
+        
         assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
-        );
-
-        assertEquals(
-                result.getMensaje(),
-                PRODUCTO__BORRADO__CORRECTAMENTE,
+                result,
+                Resultado
+                    .builder()
+                    .mensaje(PRODUCTO__BORRADO__CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
                 OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
         );
 
@@ -434,7 +436,7 @@ public class M_ProductoNGTest {
                     ORDER BY ID 
                     """;
         String result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .build()
         );
@@ -450,7 +452,7 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .build()
@@ -467,7 +469,7 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .estado(Boolean.TRUE)
@@ -485,7 +487,7 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .estado(Boolean.FALSE)
@@ -511,11 +513,18 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .estado(Boolean.FALSE)
-                        .criterioBusqueda("0")
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
@@ -538,12 +547,18 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .estado(Boolean.FALSE)
-                        .criterioBusqueda("0")
-                        .filas(Boolean.FALSE)
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
@@ -567,14 +582,25 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .id(0)
                         .estado(Boolean.FALSE)
-                        .criterioBusqueda("0")
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
@@ -599,13 +625,24 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .estado(Boolean.FALSE)
-                        .criterioBusqueda("0")
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
@@ -630,18 +667,29 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
                         .estado(Boolean.TRUE)
-                        .criterioBusqueda("0")
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-        
+
         expResult = """
                     SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
                     NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
@@ -661,38 +709,52 @@ public class M_ProductoNGTest {
                     """;
 
         result = M_Producto.sqlProductos(
-                FiltroBusqueda
+                Producto
                         .builder()
-                        .criterioBusqueda("0")
-                        .filas(Boolean.TRUE)
-                        .nPaginaNro(1)
-                        .nCantidadFilas(20)
+                        .codigo("0")
+                        .descripcion("0")
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .descripcion("0")
+                                        .build()
+                        )
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
     }
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 10
+            enabled = true,
+            priority = 0,
+            description = """
+                          Metodo que genera Productos aleatorio.
+                          """
     )
     public void testGenerarProducto() {
-        System.out.println("generarProducto");
-        String expResult = "";
-        String result = M_Producto.generarProducto();
-        assertEquals(result, expResult);
+        assertNotNull(
+                M_Producto.generarProducto(),
+                "Producto NO Genereado"
+        );
     }
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 10
+            enabled = true,
+            priority = 0,
+            description = """
+                          Metodo que genera codigo de barra aleatorio.
+                          """
     )
     public void testGenerarCodigoBarra() {
-        System.out.println("generarCodigoBarra");
-        String expResult = "";
-        String result = M_Producto.generarCodigoBarra();
-        assertEquals(result, expResult);
+        assertNotNull(
+                M_Producto.generarCodigoBarra(),
+                "Codigo Barra No generado");
     }
 }

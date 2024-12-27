@@ -4,8 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.entidades.Antecedente;
+import sur.softsurena.metodos.M_Antecedente;
 
 public class frmPacientesAntecedentes extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     private final int idPaciente;
     
     public frmPacientesAntecedentes(java.awt.Frame parent, boolean modal, int idPadre) {
@@ -211,7 +215,10 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         if(ant == null || ant.isEmpty()){
             return;
         }
-        JOptionPane.showMessageDialog(this, agregarAntecedente(idPaciente, ant));
+        JOptionPane.showMessageDialog(
+                this, 
+                agregarAntecedente(idPaciente, ant)
+        );
         llenarTabla();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -293,10 +300,16 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         jtPadres.removeAll();
         try {
             ResultSet rs = getAntecedentes(idPaciente);
+            
+            M_Antecedente.select(antecedente);
+            
             DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
             while (rs.next()) {
-                registro[0] = new Antecedentes(rs.getInt("idAntecedente"), 
-                        rs.getString("DESCRIPCION"));
+                registro[0] = Antecedente
+                        .builder()
+                        .id(rs.getInt("idAntecedente"))
+                        .descripcion(rs.getString("DESCRIPCION"))
+                        .build();
                 miTabla.addRow(registro);
             }
             jtPadres.setModel(miTabla);

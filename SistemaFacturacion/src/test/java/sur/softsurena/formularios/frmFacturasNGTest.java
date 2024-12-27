@@ -16,27 +16,22 @@ import org.testng.annotations.Test;
 public class frmFacturasNGTest {
 
     public frmFacturasNGTest() {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.setUpClass()");
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.tearDownClass()");
     }
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.setUpMethod()");
     }
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.tearDownMethod()");
     }
 
     @Test(
@@ -46,7 +41,6 @@ public class frmFacturasNGTest {
                           """
     )
     public void testGetIdCliente() {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.testGetIdCliente()");
         frmFacturas instance = null;
         Integer expResult = null;
         Integer result = instance.getIdCliente();
@@ -60,7 +54,6 @@ public class frmFacturasNGTest {
                           """
     )
     public void testSetIdCliente() {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.testSetIdCliente()");
         Integer idCliente = null;
         frmFacturas instance = null;
         instance.setIdCliente(idCliente);
@@ -73,7 +66,6 @@ public class frmFacturasNGTest {
                           """
     )
     public void testGetInstance() {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.testGetInstance()");
         frmFacturas expResult = null;
         frmFacturas result = frmFacturas.getInstance();
         assertEquals(result, expResult);
@@ -86,7 +78,6 @@ public class frmFacturasNGTest {
                           """
     )
     public void testActionPerformed() {
-        System.out.println("sur.softsurena.formularios.frmFacturasNGTest.testActionPerformed()");
         ActionEvent actionEvent = null;
         frmFacturas instance = null;
         instance.actionPerformed(actionEvent);

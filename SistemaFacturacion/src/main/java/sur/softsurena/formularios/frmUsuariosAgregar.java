@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
-import static sur.softsurena.metodos.M_Role.comprobandoRolesDisponibles;
+import sur.softsurena.metodos.M_Role;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuario;
@@ -880,7 +880,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 //getRoles().stream().toArray(Role[]::new)
-                comprobandoRolesDisponibles(
+                M_Role.selectDisponibles(
                         nuevo ? "SYSDBA" : txtUserName.getText().strip(),
                         nuevo
                 ).toArray(),
@@ -1052,7 +1052,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
         tblRoles.removeAll();
 
-        comprobandoRolesDisponibles(usuario.getUser_name(), true).stream().forEach(
+        M_Role.selectDisponibles(usuario.getUser_name(), true).stream().forEach(
                 rol -> {
                     registro2[0] = rol;
                     registro2[1] = rol.getOpcionPermiso() == 2;

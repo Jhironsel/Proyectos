@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Precio {
     private final Integer id;
-    private final Producto Producto;
+    private final Producto producto;
     private final TipoPrecio tipoPrecio;
     private final TipoImpuesto tipoImpusto;
     private final BigDecimal precio;

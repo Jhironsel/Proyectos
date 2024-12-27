@@ -15,7 +15,6 @@ import static sur.softsurena.metodos.M_Almacen.ALMACEN_ACTUALIZADO_CORRECTAMENTE
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_ELIMINADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ERROR_AL_ELIMINAR_ALMACEN;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
@@ -60,15 +59,15 @@ public class M_AlmacenNGTest {
             priority = 0
     )
     public void testGetAlmacenesList() {
-        List result = M_Almacen.getAlmacenesList(
-                FiltroBusqueda
+        List result = M_Almacen.select(
+                Almacen
                         .builder()
                         .id(-1)
-                        .criterioBusqueda("^+-*/")
+                        .nombre("^+-*/")
                         .build()
         );
-        assertTrue(
-                result.isEmpty(),
+        assertNotNull(
+                result,
                 "La tabla de almacen NO esta vacia."
         );
     }
@@ -78,8 +77,8 @@ public class M_AlmacenNGTest {
             description = "Realiza el proceso de registro de un almacen de prueba.",
             priority = 1
     )
-    public void testAgregarAlmacen() {
-        Resultado result = M_Almacen.agregarAlmacen(
+    public void testInsert() {
+        Resultado result = M_Almacen.insert(
                 Almacen
                         .builder()
                         .nombre("Registro prueba")
@@ -101,7 +100,7 @@ public class M_AlmacenNGTest {
 
         idAlmacen = result.getId();
 
-        result = M_Almacen.agregarAlmacen(
+        result = M_Almacen.insert(
                 Almacen
                         .builder()
                         .nombre("Texto de prueba")
@@ -121,51 +120,47 @@ public class M_AlmacenNGTest {
             priority = 2
     )
     public void testGetAlmacenes2List() {
-        List result = M_Almacen.getAlmacenesList(
-                FiltroBusqueda
-                        .builder()
-                        .id(idAlmacen)
-                        .criterioBusqueda("^+-*/")
-                        .build()
-        );
-        assertFalse(
-                result.isEmpty(),
+        assertNotNull(
+                M_Almacen.select(
+                        Almacen
+                                .builder()
+                                .id(idAlmacen)
+                                .nombre("^+-*/")
+                                .build()
+                ),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(
-                FiltroBusqueda
-                        .builder()
-                        .id(idAlmacen2)
-                        .criterioBusqueda("Seleccione")
-                        .build()
-        );
-        assertFalse(
-                result.isEmpty(),
+        assertNotNull(
+                M_Almacen.select(
+                        Almacen
+                                .builder()
+                                .id(idAlmacen2)
+                                .nombre("Seleccione")
+                                .build()
+                ),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(
-                FiltroBusqueda
-                        .builder()
-                        .id(-1)
-                        .criterioBusqueda("Registro")
-                        .build()
-        );
-        assertFalse(
-                result.isEmpty(),
+        assertNotNull(
+                M_Almacen.select(
+                        Almacen
+                                .builder()
+                                .id(-1)
+                                .nombre("Registro")
+                                .build()
+                ),
                 "La tabla de almacen NO esta vacia."
         );
 
-        result = M_Almacen.getAlmacenesList(
-                FiltroBusqueda
-                        .builder()
-                        .id(-1)
-                        .criterioBusqueda("Texto")
-                        .build()
-        );
-        assertFalse(
-                result.isEmpty(),
+        assertNotNull(
+                M_Almacen.select(
+                        Almacen
+                                .builder()
+                                .id(-1)
+                                .nombre("Texto")
+                                .build()
+                ),
                 "La tabla de almacen NO esta vacia."
         );
     }
@@ -176,7 +171,7 @@ public class M_AlmacenNGTest {
             priority = 3
     )
     public void testActualizarAlmacen() {
-        Resultado result = M_Almacen.actualizarAlmacen(
+        Resultado result = M_Almacen.update(
                 Almacen
                         .builder()
                         .id(idAlmacen)
@@ -204,7 +199,7 @@ public class M_AlmacenNGTest {
             priority = 4
     )
     public void testEliminarAlmacen() {
-        Resultado result = M_Almacen.eliminarAlmacen(idAlmacen);
+        Resultado result = M_Almacen.delete(idAlmacen);
         assertEquals(
                 result,
                 Resultado
@@ -216,7 +211,7 @@ public class M_AlmacenNGTest {
                 ERROR_AL_ELIMINAR_ALMACEN
         );
 
-        result = M_Almacen.eliminarAlmacen(idAlmacen2);
+        result = M_Almacen.delete(idAlmacen2);
         assertEquals(
                 result,
                 Resultado

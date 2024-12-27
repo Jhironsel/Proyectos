@@ -10,10 +10,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Factura;
+import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_M_Factura;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
-import sur.softsurena.utilidades.FiltroBusqueda;
 
 public final class frmBuscarTemporal extends java.awt.Dialog {
 
@@ -253,9 +253,14 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         miTabla = new DefaultTableModel(null, titulos);
 
         List<Factura> temporalesList = M_M_Factura.getFacturaEstado(
-                FiltroBusqueda
+                Factura
                         .builder()
-                        .estadoFactura('t')
+                        .m_factura(
+                                M_Factura
+                                        .builder()
+                                        .estadoFactura('t')
+                                        .build()
+                        )
                         .build()
         );
 

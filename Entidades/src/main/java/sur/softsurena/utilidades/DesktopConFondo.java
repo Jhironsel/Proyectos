@@ -32,12 +32,8 @@ public class DesktopConFondo extends JDesktopPane {
         try {
             super.paint(g);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Reinicie la Aplicacion " + e.getLocalizedMessage(),
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            System.out.println("Reinicie la Aplicacion " + e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 }

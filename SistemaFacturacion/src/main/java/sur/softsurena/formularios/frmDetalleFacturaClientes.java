@@ -3,7 +3,6 @@ package sur.softsurena.formularios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
@@ -12,11 +11,12 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -421,12 +421,24 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
 
         miTabla = new DefaultTableModel(null, titulos);
 
-        //TODO Trabajos
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda.
-                        builder().
-                        criterioBusqueda(txtCriterio.getText().strip()).
-                        build()
+        M_Cliente.select(
+                Cliente
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula(txtCriterio.getText().strip())
+                                                        .build()
+                                        )
+                                        .pnombre(txtCriterio.getText().strip())
+                                        .snombre(txtCriterio.getText().strip())
+                                        .apellidos(txtCriterio.getText().strip())
+                                        .build()
+                        )
+                        .build()
         ).stream().forEach(
                 cliente -> {
                     registro[0] = cliente;

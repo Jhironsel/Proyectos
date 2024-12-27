@@ -15,7 +15,6 @@ import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.entidades.Generales;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -31,15 +30,17 @@ public class M_Deuda {
      * Cuya consulta está unida por las tablas de V_DEUDAS, V_PERSONAS,
      * V_GENERALES.
      *
-     * @param filtro
+     * @param deuda
      *
      * @return
      */
-    public static synchronized List<Deuda> getDeudas(@NonNull FiltroBusqueda filtro) {
+    public static synchronized List<Deuda> select(
+            @NonNull Deuda deuda
+    ) {
         List<Deuda> deudasList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetDeudas(filtro),
+                sqlGetDeudas(deuda),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -89,9 +90,9 @@ public class M_Deuda {
         return deudasList;
     }
 
-    protected static String sqlGetDeudas(FiltroBusqueda filtro) {
-        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
-        Boolean f_id = Objects.isNull(filtro.getId());
+    protected static String sqlGetDeudas(Deuda deuda) {
+        Boolean f_criterio = Objects.isNull(deuda.getCliente().getPersona().getGenerales());
+        Boolean f_id = Objects.isNull(deuda.getId_deuda());
         boolean f_where = f_criterio && f_id;
         return """
                SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
@@ -100,8 +101,13 @@ public class M_Deuda {
                %s%s%s
                """.formatted(
                 f_where ? "" : "WHERE ",
-                f_criterio ? "" : "CEDULA LIKE '%s' ".formatted(filtro.getCriterioBusqueda()),
-                f_id ? "" : "ID = %d ".formatted(filtro.getId())
+                f_criterio ? "" : "CEDULA LIKE '%s' ".formatted(
+                        deuda
+                                .getCliente()
+                                .getPersona()
+                                .getGenerales()
+                ),
+                f_id ? "" : "ID = %d ".formatted(deuda.getId_deuda())
         ).trim().strip();
     }
 //------------------------------------------------------------------------------
@@ -114,7 +120,9 @@ public class M_Deuda {
      *
      * @return
      */
-    public synchronized static Resultado insertDeudas(@NonNull Deuda miDeuda) {
+    public synchronized static Resultado insert(
+            @NonNull Deuda miDeuda
+    ) {
         final String sql = """
                            SELECT O_ID
                            FROM SP_I_M_DEUDAS (?,?,?);
@@ -166,7 +174,9 @@ public class M_Deuda {
      * @param deuda
      * @return
      */
-    public synchronized static Resultado modificarDeuda(Deuda deuda) {
+    public synchronized static Resultado update(
+            @NonNull Deuda deuda
+    ) {
         final String sql = "EXECUTE PROCEDURE SP_U_DEUDA(?,?,?)";
 
         try (CallableStatement ps = getCnn().prepareCall(
@@ -183,7 +193,45 @@ public class M_Deuda {
 
             return Resultado
                     .builder()
-                    .mensaje("Esperacion realizada correctamente.")
+                    .mensaje("Operación realizada correctamente.!!!")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        } catch (SQLException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            return Resultado
+                    .builder()
+                    .mensaje("Error a ejecutar Operacion")
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+    }
+    
+    /**
+     * Este procedimiento permite modificar el estado de una deuda.
+     *
+     * @param deuda
+     * @return
+     */
+    public synchronized static Resultado delete(
+            @NonNull Deuda deuda
+    ) {
+        final String sql = "EXECUTE PROCEDURE SP_D_M_DEUDAS(?)";
+
+        try (CallableStatement ps = getCnn().prepareCall(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
+        )) {
+            ps.setInt(1, deuda.getId_deuda());
+
+            ps.executeUpdate();
+
+            return Resultado
+                    .builder()
+                    .mensaje("Operación realizada correctamente.!!!")
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();

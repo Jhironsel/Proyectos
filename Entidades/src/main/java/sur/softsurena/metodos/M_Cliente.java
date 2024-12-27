@@ -15,7 +15,6 @@ import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -33,7 +32,7 @@ public class M_Cliente {
      *
      * @return Un objecto de la clase
      */
-    public synchronized static Resultado agregarClienteById(int id) {
+    public synchronized static Resultado insertById(int id) {
         try (CallableStatement cs = getCnn().prepareCall(
                 "EXECUTE PROCEDURE SP_I_PERSONA_CLIENTE(?)",
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -80,7 +79,7 @@ public class M_Cliente {
      * @param idCliente
      * @return
      */
-    public synchronized static Resultado borrarCliente(int idCliente) {
+    public synchronized static Resultado delete(int idCliente) {
         final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_CLIENTE (?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -122,16 +121,16 @@ public class M_Cliente {
     /**
      * Metodo que permite obtener los cliente del sistema.
      *
+     * @param cliente contiene los elemento de la consulta.
      *
-     * @param filtro
      * @return
      */
-    public synchronized static List<Cliente> getPersonasClientes(
-            @NonNull FiltroBusqueda filtro
+    public synchronized static List<Cliente> select(
+            @NonNull Cliente cliente
     ) {
         List<Cliente> clientes = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlPersonaClientes(filtro),
+                sqlSelect(cliente),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -190,61 +189,77 @@ public class M_Cliente {
     public static final String ERROR_AL_CONSULTA_LA_VISTA_GET_PERSONA_CL
             = "Error al consulta la vista GET_PERSONA_CLIENTES";
 
+//------------------------------------------------------------------------------
     /**
      *
-     * @param filtro
+     * @param cliente
+     *
      * @return
      */
-    protected static String sqlPersonaClientes(
-            FiltroBusqueda filtro
+    protected static String sqlSelect(
+            Cliente cliente
     ) {
-        Boolean f_id = Objects.isNull(filtro.getId());
-        Boolean f_estado = Objects.isNull(filtro.getEstado());
-        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
+        Boolean f_id = Objects.isNull(cliente.getPersona().getId_persona());
+        Boolean f_estado = Objects.isNull(cliente.getPersona().getEstado());
 
-        Boolean f_where = (f_id && f_estado && f_criterio);
+        Boolean f_cedula = Objects.isNull(cliente.getPersona().getGenerales());
+        Boolean f_pnombre = Objects.isNull(cliente.getPersona());
+        Boolean f_snombre = Objects.isNull(cliente.getPersona());
+        Boolean f_apellidos = Objects.isNull(cliente.getPersona());
 
-        Boolean f_fila = Objects.isNull(filtro.getFilas());
+        Boolean f_criterio = f_cedula || f_pnombre || f_snombre || f_apellidos;
+
+        Boolean f_where = (f_id && f_estado && f_cedula);
 
         String s_where = (f_where ? "" : "WHERE ");
-        String s_id = (f_id ? "" : "ID = %d ".formatted(filtro.getId()));
+        String s_id = (f_id ? "" : "ID = %d ".formatted(
+                cliente.getPersona().getId_persona()
+        ));
         String s_and = (f_id ? "" : (f_estado ? "" : "AND "));
 
         String s_estado = (f_estado
-                ? "" : (filtro.getEstado() ? "ESTADO " : "ESTADO IS FALSE "));
+                ? "" : (cliente.getPersona().getEstado() ? "ESTADO " : "ESTADO IS FALSE "));
 
         String s_and2 = (f_estado || f_criterio ? "" : "AND ");
 
         String s_criterio = (f_criterio ? "" : """
-                                               CEDULA LIKE '%s' 
-                                               OR PNOMBRE LIKE '%s'
-                                               OR SNOMBRE LIKE '%s'
-                                               OR APELLIDOS LIKE '%s' 
+                                               CEDULA STARTING WITH '%s' 
+                                               OR PNOMBRE STARTING WITH '%s'
+                                               OR SNOMBRE STARTING WITH '%s'
+                                               OR APELLIDOS STARTING WITH '%s' 
                                                """.formatted(
-                filtro.getCriterioBusqueda(),
-                filtro.getCriterioBusqueda(),
-                filtro.getCriterioBusqueda(),
-                filtro.getCriterioBusqueda()
+                cliente.getPersona().getGenerales().getCedula(),
+                cliente.getPersona().getPnombre(),
+                cliente.getPersona().getSnombre(),
+                cliente.getPersona().getApellidos()
         ));
 
-        String s_fila = (f_fila
-                ? "" : (filtro.getFilas()
-                ? "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
-                        .formatted(
-                                filtro.getNPaginaNro(),
-                                filtro.getNCantidadFilas(),
-                                filtro.getNPaginaNro(),
-                                filtro.getNCantidadFilas()
-                        )
-                : ""));
+        Boolean nPaginasNro;
+        Boolean nCantidadFilas;
+        Boolean f_fila = Boolean.TRUE;
 
-        return """
-               SELECT 
-                   ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, 
-                   SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL, 
-                   FECHA_INGRESO, ESTADO
-               FROM GET_PERSONA_CLIENTES
-               """.concat(s_where)
+        if (Objects.nonNull(cliente.getPersona().getPagina())) {
+            nPaginasNro = Objects.nonNull(cliente.getPersona().getPagina().getNPaginaNro());
+            nCantidadFilas = Objects.nonNull(cliente.getPersona().getPagina().getNCantidadFilas());
+            f_fila = !nPaginasNro && !nCantidadFilas;
+        }
+
+        String s_fila = (f_fila
+                ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                        .formatted(
+                                cliente.getPersona().getPagina().getNPaginaNro(),
+                                cliente.getPersona().getPagina().getNCantidadFilas(),
+                                cliente.getPersona().getPagina().getNPaginaNro(),
+                                cliente.getPersona().getPagina().getNCantidadFilas()
+                        ));
+
+        var sql = """
+                  SELECT 
+                      ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, 
+                      SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL, 
+                      FECHA_INGRESO, ESTADO
+                  FROM GET_PERSONA_CLIENTES
+                  """.concat(s_where)
                 .concat(s_id)
                 .concat(s_and)
                 .concat(s_estado)
@@ -253,5 +268,6 @@ public class M_Cliente {
                 .concat(s_fila)
                 .strip()
                 .trim();
+        return sql;
     }
 }

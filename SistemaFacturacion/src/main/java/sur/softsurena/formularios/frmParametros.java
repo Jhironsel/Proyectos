@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
@@ -18,6 +17,8 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmParametros extends javax.swing.JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private final Properties propiedades;
     private File filePropertie = null;
 
@@ -26,14 +27,12 @@ public class frmParametros extends javax.swing.JFrame {
         propiedades = new Properties();
         
         try {
-            filePropertie = new File(getClass().getResource("/sur/softsurena/properties/propiedades.properties").toURI());
+            filePropertie = new File("properties/propiedades.properties");
             propiedades.load(new FileReader(filePropertie));
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, "Archivo no encotrado", ex);
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error de entrada o salida del archivo propiedades.", ex);
-        } catch (URISyntaxException ex) {
-            LOG.getLogger(frmParametros.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         cargarParamentos("todo");

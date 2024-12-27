@@ -3,6 +3,7 @@ package sur.softsurena.formularios;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -13,12 +14,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
+import sur.softsurena.entidades.Generales;
+import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Deuda;
-import static sur.softsurena.metodos.M_Deuda.insertDeudas;
-import static sur.softsurena.metodos.M_Deuda.modificarDeuda;
+import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -32,15 +35,27 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private static int cliAct = 0;
-    private boolean nuevo;
+    private static boolean nuevo;
     private static DefaultTableModel miTabla;
     private static DefaultTableCellRenderer tcr;
+    private static Deuda deuda;
 
     public static frmDeudas getInstance() {
         return NewSingletonHolder.INSTANCE;
     }
-    private static Deuda deuda;
+
+    private BigDecimal txtMontoField() {
+        try {
+            txtMonto.commitEdit();
+        } catch (ParseException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return new BigDecimal(txtMonto.getValue().toString());
+    }
 
     private static class NewSingletonHolder {
 
@@ -154,11 +169,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 return types [columnIndex];
             }
         });
-        tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblClientesMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblClientes);
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Filtros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 12))); // NOI18N
@@ -259,21 +269,31 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         jpListaDeuda.setLayout(jpListaDeudaLayout);
         jpListaDeudaLayout.setHorizontalGroup(
             jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(jpListaDeudaLayout.createSequentialGroup()
-                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jpListaDeudaLayout.createSequentialGroup()
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
+
+        jpListaDeudaLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jPanel7, jPanel9});
+
         jpListaDeudaLayout.setVerticalGroup(
             jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpListaDeudaLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
+
+        jpListaDeudaLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPanel7, jPanel9});
 
         jtpPrincipal.addTab("Listado", jpListaDeuda);
 
@@ -295,6 +315,11 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         txtCedula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCedulaActionPerformed(evt);
+            }
+        });
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyPressed(evt);
             }
         });
 
@@ -436,16 +461,16 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         jpRegistroDeudaLayout.setHorizontalGroup(
             jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addContainerGap(58, Short.MAX_VALUE)
                 .addComponent(rSPanelMaterialGradient1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jpRegistroDeudaLayout.setVerticalGroup(
             jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
+                .addContainerGap(32, Short.MAX_VALUE)
                 .addComponent(rSPanelMaterialGradient1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Registro de Deuda", jpRegistroDeuda);
@@ -531,16 +556,18 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jtpPrincipal)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jtpPrincipal)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -560,9 +587,22 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
         mostrarRegistro(
-                FiltroBusqueda
+                Cliente
                         .builder()
-                        .criterioBusqueda(txtCedula.getText())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula(txtCedula.getText())
+                                                        .build()
+                                        )
+                                        .pnombre("")
+                                        .snombre("")
+                                        .apellidos("")
+                                        .build()
+                        )
                         .build()
         );
     }//GEN-LAST:event_txtCedulaActionPerformed
@@ -581,19 +621,17 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
     private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
 
-        if (!txtMonto.isEditValid()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Ingrese un monto valido",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
+        try {
+            txtMonto.commitEdit();
+        } catch (ParseException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
             );
-            return;
         }
 
-        var monto = new BigDecimal(txtMonto.getValue().toString());
-
-        if (monto.compareTo(BigDecimal.ZERO) <= 0) {
+        if (txtMontoField().compareTo(BigDecimal.ZERO) <= 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Solo valores mayores que cero.",
@@ -616,14 +654,21 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         }
 
         mostrarRegistro(
-                FiltroBusqueda
+                Cliente
                         .builder()
-                        .criterioBusqueda(
-                                miBusqueda
-                                        .getCliente()
-                                        .getPersona()
-                                        .getGenerales()
-                                        .getCedula()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                miBusqueda
+                                                        .getCliente()
+                                                        .getPersona()
+                                                        .getGenerales()
+                                        )
+                                        .pnombre("")
+                                        .snombre("")
+                                        .apellidos("")
+                                        .build()
                         )
                         .build()
         );
@@ -631,21 +676,18 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
     /**
      * Metodo encargado de mostrar la informacion del deudor en el
-     * mantenimiento.
-     *
+     * mantenimiento. Cedula de ejemplo: 425-0243748-0 121-0127731-2
      */
-    private void mostrarRegistro(FiltroBusqueda filtro) {
-        var listaClientes = M_Deuda.getDeudas(
-                filtro
-        );
+    private void mostrarRegistro(Cliente cliente) {
+        var listaClientes = M_Cliente.select(cliente);
 
         //Si la lista no esta vacia entonces.
         if (!listaClientes.isEmpty()) {
             //Obtenemos el primer registro de la consulta.
-            deuda = listaClientes.getFirst();
+            Cliente clienteF = listaClientes.getFirst();
 
             //No puede ser el cliente generico del sistema.
-            if (deuda.getCliente().getPersona().getId_persona() <= 0) {
+            if (clienteF.getPersona().getId_persona() <= 0) {
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "Cliente generico no puede crear deuda.",
@@ -656,12 +698,25 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 return;
             }
 
-            txtCedula.setValue(deuda.getCliente().getPersona().getGenerales().getCedula());
-            txtPNombre.setText(deuda.getCliente().getPersona().getPnombre());
-            txtSNombre.setText(deuda.getCliente().getPersona().getSnombre());
-            txtApellidos.setText(deuda.getCliente().getPersona().getApellidos());
+            txtCedula.setValue(clienteF.getPersona().getGenerales().getCedula());
+            txtPNombre.setText(clienteF.getPersona().getPnombre());
+            txtSNombre.setText(clienteF.getPersona().getSnombre());
+            txtApellidos.setText(clienteF.getPersona().getApellidos());
 
+            //Si no es nuevo. Es Modificando.
             if (!nuevo) {
+                deuda = M_Deuda.select(
+                        Deuda
+                                .builder()
+                                .id_deuda(
+                                        ((Deuda) tblClientes.getValueAt(
+                                                tblClientes.getSelectedRow(),
+                                                0
+                                        )).getId_deuda()//Columna idDeuda.
+                                )
+                                .build()
+                ).getFirst();
+
                 txtMonto.setValue(deuda.getMonto());
                 txtConcepto.setText(deuda.getConcepto());
             }
@@ -684,15 +739,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             }
         }
     }
-
-    private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
-        if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocus();
-            return;
-        }
-        cliAct = tblClientes.getSelectedRow();
-//        mostrarRegistro();
-    }//GEN-LAST:event_tblClientesMouseClicked
 
     private void cbTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosActionPerformed
         llenarTabla();
@@ -763,14 +809,27 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
+        try {
+            txtMonto.commitEdit();
+        } catch (ParseException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+
         frmPagosDeudas miPagos = new frmPagosDeudas(
                 null,
                 true,
-                Utilidades.objectToInt(tblClientes.getValueAt(cliAct, 0)),
+                ((Deuda) tblClientes.getValueAt(
+                        tblClientes.getSelectedRow(),
+                        0
+                )).getId_deuda(),
                 txtCedula.getText().trim(),
                 txtPNombre,
                 txtApellidos,
-                txtMonto.getValue()
+                txtMontoField()
         );
         miPagos.setLocationRelativeTo(null);
         miPagos.setVisible(true);
@@ -778,9 +837,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
     /**
      * Metodo que permite abonar a una deuda.
-     * 
+     *
      * TODO Analizar y Descomentar.
-     * 
+     *
      * @param evt No utilizado por el momento.
      */
     private void btnAbonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbonarActionPerformed
@@ -796,10 +855,10 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 //        modificarDeuda(
 //                        tblClientes.getValueAt(cliAct, 0)),
 //                "a");
-        modificarDeuda(
+        M_Deuda.update(
                 Deuda.builder().build()
         );
-        
+
         JOptionPane.showInternalMessageDialog(
                 this,
                 "",
@@ -810,7 +869,14 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         llenarTabla();
 
         mostrarRegistro(
-                FiltroBusqueda.builder().build()
+                Cliente
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .build()
+                        )
+                        .build()
         );
     }//GEN-LAST:event_btnAbonarActionPerformed
 
@@ -903,8 +969,10 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGetTotalActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        nuevo(false);
         nuevo = true;
+
+        nuevo(false);
+
         txtCedula.requestFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -941,19 +1009,33 @@ public class frmDeudas extends javax.swing.JInternalFrame {
 
         //Mostrar el registro.
         mostrarRegistro(
-                FiltroBusqueda
+                Cliente
                         .builder()
-                        .id(
-                                ((Deuda) tblClientes.getValueAt(
-                                        tblClientes.getSelectedRow(),
-                                        0
-                                )).getId_deuda()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .generales(
+                                                Generales
+                                                        .builder()
+                                                        .cedula(
+                                                                tblClientes.getValueAt(
+                                                                        tblClientes.getSelectedRow(),
+                                                                        1
+                                                                ).toString()//Columna cedula seleccionada.
+                                                        )
+                                                        .build()
+                                        )
+                                        .pnombre("")
+                                        .snombre("")
+                                        .apellidos("")
+                                        .build()
                         )
                         .build()
         );
 
-        nuevo(false);
         nuevo = false;
+
+        nuevo(false);
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
@@ -974,9 +1056,17 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        double monto = Utilidades.controlDouble(txtMonto.getValue());
+        try {
+            txtMonto.commitEdit();
+        } catch (ParseException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
 
-        if (monto <= 0) {
+        if (txtMontoField().compareTo(BigDecimal.ZERO) <= 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Ingrese una cantidad mayor que cero",
@@ -1015,12 +1105,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         //Creamos el Objeto Cliente y los agregamos a Datos
         Deuda miDeuda = Deuda
                 .builder()
-                .id_deuda(deuda.getId_deuda())
+                .id_deuda(nuevo ? null : deuda.getId_deuda())
                 .cliente(
                         deuda.getCliente()
                 )
                 .concepto(txtConcepto.getText())
-                .monto(new BigDecimal(txtMonto.getValue().toString()))
+                .monto(txtMontoField())
                 .build();
 
 //                new Deudas(idCliente, getIdUsuario(),
@@ -1067,22 +1157,19 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        Resultado rs = Resultado
-                .builder()
-                .mensaje("Error al %s registro del sistema.".formatted(accion))
-                .icono(JOptionPane.ERROR_MESSAGE)
-                .build();
+        Resultado resultado;
+
         if (nuevo) {
-            rs = insertDeudas(miDeuda);
+            resultado = M_Deuda.insert(miDeuda);
         } else {
-            rs = modificarDeuda(miDeuda);
+            resultado = M_Deuda.update(miDeuda);
         }
 
         JOptionPane.showInternalMessageDialog(
                 this,
-                rs.getMensaje(),
+                resultado.getMensaje(),
                 "",
-                rs.getIcono()
+                resultado.getIcono()
         );
 
         llenarTabla();
@@ -1090,8 +1177,10 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        nuevo(true);
         nuevo = false;
+
+        nuevo(true);
+
 //        mostrarRegistro();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -1129,7 +1218,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        cliAct = 0;
         //Actualizamos los cambios en la Tabla
         llenarTabla();
 //        mostrarRegistro();
@@ -1164,15 +1252,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         int num = tblClientes.getRowCount();
         for (int i = 0; i < num; i++) {
             if (tblClientes.getValueAt(i, 1).toString().contains(cliente)) {
-                cliAct = i;
                 break;
             }
             if (tblClientes.getValueAt(i, 2).toString().contains(cliente.toUpperCase())) {
-                cliAct = i;
                 break;
             }
             if (tblClientes.getValueAt(i, 3).toString().contains(cliente.toUpperCase())) {
-                cliAct = i;
                 break;
             }
         }
@@ -1191,6 +1276,31 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
+    private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
+        /**
+         * El objectivo del siguiente codigo es generar una cedula valida para
+         * fines de pruebas del sistema.
+         */
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        txtCedula.setText(
+                                M_Generales.generarCedula()
+                        );
+                        
+                        if (Utilidades.validarCampo(txtCedula)) {
+                            System.out.println("Cedula OK.");
+                        } else {
+                            System.out.println("Cedula no cumple.");
+                        }
+
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_txtCedulaKeyPressed
+
     private void nuevo(Boolean valor) {
         if (!valor) {
             jtpPrincipal.addTab("Mantenimiento", jpRegistroDeuda);
@@ -1207,18 +1317,20 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         btnBuscar.setEnabled(valor);
         tblClientes.setEnabled(valor);
 
-        btnGetCliente.setEnabled(!valor);
-
         btnGuardar.setEnabled(!valor);
         btnCancelar.setEnabled(!valor);
 
         if (nuevo) {
             txtPNombre.setText("");
+            txtSNombre.setText("");
             txtMonto.setValue(0);
             txtConcepto.setText("");
             limpiarCedula();
         }
+
         txtCedula.setEditable(!nuevo);
+
+        btnGetCliente.setEnabled(nuevo);
     }
 
     public static void llenarTabla() {
@@ -1229,9 +1341,15 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         Object registro[] = new Object[titulos.length];
         miTabla = new DefaultTableModel(null, titulos);
 
-        M_Deuda.getDeudas(
-                FiltroBusqueda
+        M_Deuda.select(
+                Deuda
                         .builder()
+                        .cliente(
+                                Cliente
+                                        .builder()
+                                        .persona(Persona.builder().build())
+                                        .build()
+                        )
                         .build()
         ).stream().forEach(
                 deudaR -> {
@@ -1248,8 +1366,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         tblClientes.setModel(miTabla);
 
         if (miTabla.getRowCount() != 0) {//La tabla esta llena
-            cliAct = 0;
-            tblClientes.setRowSelectionInterval(cliAct, cliAct);
+            tblClientes.setRowSelectionInterval(0, 0);
         }
 
         tcr.setHorizontalAlignment(SwingConstants.RIGHT);//Monto
@@ -1279,59 +1396,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             if (i == 5) {
                 miTableColumn.setPreferredWidth(10);
             }
-        }
-//        mostrarRegistro();
-    }
-
-    private String estados() {
-        if (cbInicial.isSelected()) {
-            return "where r.estado like 'i'";
-        }
-        if (cbPagada.isSelected()) {
-            return "where r.estado like 'p'";
-        }
-        if (cbAbonada.isSelected()) {
-            return "where r.estado like 'a'";
-        }
-        if (cbNula.isSelected()) {
-            return "where r.estado like 'n'";
-        }
-        return "";
-    }
-
-    private void direccion(String direccion) {
-        if (!tblClientes.isEnabled()) {
-            txtCedula.requestFocus();
-            return;
-        }
-
-        if (tblClientes.getRowCount() == 0) {
-            return;
-        }
-
-        switch (direccion) {
-            case "a":
-                cliAct = 0;
-//                mostrarRegistro();
-                break;
-            case "b":
-                cliAct--;
-                if (cliAct == -1) {
-//                    cliAct = getDatos().numeroDeudas(estados()) - 1;
-                }
-//                mostrarRegistro();
-                break;
-            case "c":
-                cliAct++;
-//                if (cliAct == numeroDeudas(estados())) {
-//                    cliAct = 0;
-//                }
-//                mostrarRegistro();
-                break;
-            case "d":
-//                cliAct = getDatos().numeroDeudas(estados()) - 1;
-//                mostrarRegistro();
-                break;
         }
     }
 

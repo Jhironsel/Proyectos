@@ -2,9 +2,9 @@ package sur.softsurena.formularios;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.metodos.M_Cliente;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmReporteFacturas extends javax.swing.JInternalFrame {
@@ -153,10 +153,15 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         //Cargamos Clientes
         cmbCliente.removeAllItems();
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        M_Cliente.select(
+                Cliente
                         .builder()
-                        .estado(true)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(true)
+                                        .build()
+                        )
                         .build()
         ).stream().forEach(cliente -> {
             cmbCliente.addItem(cliente);
@@ -186,12 +191,12 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
         //TODO 02/12/2024 Trabajo aqui.
         String sql = """
                      SELECT factura.idFactura, factura.idCliente, (nombres||' '||apellidos) AS nombreFull,
-                        fecha, idLinea, idProducto, (select descripcion 
-                                                    from productos 
-                                                    where idProducto like detalleFactura.idProducto) as descripcion, 
-                        precio, cantidad, precio * cantidad AS Valor 
-                     FROM factura 
-                     INNER JOIN cliente ON factura.idCliente = cliente.idCliente 
+                            fecha, idLinea, idProducto, (select descripcion
+                                                            from productos
+                                                            where idProducto like detalleFactura.idProducto) as descripcion,
+                            precio, cantidad, precio * cantidad AS Valor
+                     FROM factura
+                     INNER JOIN cliente ON factura.idCliente = cliente.idCliente
                      INNER JOIN detalleFactura ON factura.idFactura = detalleFactura.idFactura;
                      """;
 

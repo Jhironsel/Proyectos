@@ -48,7 +48,8 @@ public class frmImpresoras2 extends JDialog {
         Process process = null;
         if (System.getProperty("os.name").equalsIgnoreCase("Linux")) {
             try {
-                process = Runtime.getRuntime().exec("lpoptions -d " + printerName);
+                String[] comandos = {"lpoptions -d ".concat(printerName)};
+                process = Runtime.getRuntime().exec(comandos);
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, ex.getMessage(), ex);
                 return;

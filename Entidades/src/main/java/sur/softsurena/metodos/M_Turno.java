@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Turno;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -21,16 +20,21 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Turno {
+
     /**
-     * TODO 24/11/2024 Trata de agregar NonNull al parametro del metodo.
-     * @param filtro
+     * Metodo que permite consultar los turnos en el sistema.
+     *
+     * @param turno
+     *
      * @return
      */
-    public static List<Turno> getTurnos(@NonNull FiltroBusqueda filtro) {
+    public static List<Turno> select(
+            @NonNull Turno turno
+    ) {
         List<Turno> turnosList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetTurnos(filtro),
+                sqlSelect(turno),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -54,38 +58,40 @@ public class M_Turno {
                 }
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
         }
         return turnosList;
     }
-    
-    protected static String sqlGetTurnos(FiltroBusqueda filtro){
-        Boolean f_criterio = Objects.isNull(filtro.getCriterioBusqueda());
-        
+
+    protected static String sqlSelect(Turno turno) {
+        Boolean f_criterio = Objects.isNull(turno.getTurno_usuario());
+
         return """
                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
                FROM V_TURNOS 
                WHERE %s%s
                """.formatted(
-                       (filtro.getEstado() ? "ESTADO ":"ESTADO IS FALSE "),
-                       f_criterio ? 
-                                "" : 
-                                "AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('%s'));"
-                                        .formatted(filtro.getCriterioBusqueda())
-               );
+                (turno.getEstado() ? "ESTADO " : "ESTADO IS FALSE "),
+                f_criterio
+                        ? ""
+                        : "AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('%s'));"
+                                .formatted(turno.getTurno_usuario())
+        );
     }
-    
+
 //------------------------------------------------------------------------------
-    
     /**
      * Metodo que nos permite habilitar a los cajeros al modulo de facturacion.
-     * 
+     *
      * @param idUsuario
      * @return
      */
-    public synchronized static Resultado habilitarTurno(String idUsuario) {
+    public synchronized static Resultado insert(String idUsuario) {
         final String sql = "EXECUTE PROCEDURE ADMIN_HABILITAR_TURNO(?)";
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
@@ -113,9 +119,9 @@ public class M_Turno {
                     .build();
         }
     }
-    public static final String ERROR_AL_HABILITAR_EL_TURNO 
+    public static final String ERROR_AL_HABILITAR_EL_TURNO
             = "Error al habilitar el turno";
-    public static final String TURNO_HABILITADO_CORRECTAMENTE 
+    public static final String TURNO_HABILITADO_CORRECTAMENTE
             = "Turno habilitado correctamente.";
 
     /**
@@ -125,7 +131,7 @@ public class M_Turno {
      * @param idTurno
      * @return
      */
-    public synchronized static boolean cerrarTurno(Integer idTurno) {
+    public synchronized static Resultado update(Integer idTurno) {
         final String sql = "EXECUTE PROCEDURE ADMIN_CERRAR_TURNO(?)";
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
@@ -133,11 +139,33 @@ public class M_Turno {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
+
             cs.setInt(1, idTurno);
-            return cs.execute();
+            
+            cs.executeUpdate();
+            
+            return Resultado
+                    .builder()
+                    .mensaje(TURNO_CERRADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
         }
+        return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_CERRAR_EL__TURNO)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
     }
+    public static final String ERROR_AL_CERRAR_EL__TURNO 
+            = "Error al cerrar el Turno.!!!";
+    public static final String TURNO_CERRADO_CORRECTAMENTE 
+            = "Turno cerrado correctamente.!!!";
 }

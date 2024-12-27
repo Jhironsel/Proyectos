@@ -50,23 +50,6 @@ public class M_RoleNGTest {
     public void tearDownMethod() throws Exception {
     }
 
-//    @Test(
-//            enabled = true,
-//            priority = 0,
-//            description = """
-//                          Permite verificar los roles del sistema del usuario 
-//                          sysdba.
-//                          """
-//    )
-//    public void testComprobandoRol() {
-//        List result = M_Role.comprobandoRol("sysdba");
-//        
-//        assertFalse(
-//                result.isEmpty(), 
-//                ERROR_AL_CONSULTAR_LA_VISTA_GET_ROL_DEL_S
-//        );
-//    }
-
     @Test(
             enabled = true,
             priority = 0,
@@ -75,20 +58,16 @@ public class M_RoleNGTest {
                           activos y disponibles.
                           """
     )
-    public void testComprobandoRolesDisponibles() {
+    public void testSelectDisponibles() {
         final String userName = "sysdba";
         
-        List result = M_Role.comprobandoRolesDisponibles(userName, true);
-        
-        assertFalse(
-                result.isEmpty(), 
+        assertNotNull(
+                M_Role.selectDisponibles(userName, true),
                 ERROR_AL_CONSULTAR_LOS_ROLES_DEL_SISTEMA
         );
         
-        result = M_Role.comprobandoRolesDisponibles(userName, false);
-        
-        assertTrue(
-                result.isEmpty(), 
+        assertNotNull(
+                M_Role.selectDisponibles(userName, false), 
                 ERROR_AL_CONSULTAR_LOS_ROLES_DEL_SISTEMA
         );
     }

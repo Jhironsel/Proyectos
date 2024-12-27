@@ -56,10 +56,10 @@ public class M_EstudianteNGTest {
             priority = 0,
             description = ""
     )
-    public void testAgregarEstudiante() {
+    public void testInsert() {
         Estudiante e = null;
         Resultado expResult = null;
-        Resultado result = M_Estudiante.agregarEntidad(e);
+        Resultado result = M_Estudiante.insert(e);
         assertEquals(result, expResult);
     }
 
@@ -80,22 +80,10 @@ public class M_EstudianteNGTest {
             priority = 0,
             description = ""
     )
-    public void testModificarEstudiante() {
+    public void testUpdate() {
         Estudiante e = null;
         String expResult = "";
-        Resultado result = M_Estudiante.modificarEstudiante(e);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testInscribirEstudiante() {
-        Inscripcion i = null;
-        String expResult = "";
-        String result = M_Estudiante.inscribirEstudiante(i);
+        Resultado result = M_Estudiante.update(e);
         assertEquals(result, expResult);
     }
 

@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Guia_Vigilancia_Desarrollo;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -18,9 +16,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_Guia_Vigilancia_Desarrollo {
 
-    public static synchronized List<Guia_Vigilancia_Desarrollo> select(
-            @NonNull FiltroBusqueda filtro
-    ) {
+    public static synchronized List<Guia_Vigilancia_Desarrollo> select() {
         final String sql = """
                            SELECT ID, EDAD, CARACT_DESARR_EVALUAR
                            FROM T_GUIA_VIGILANCIA_DESARROLLO

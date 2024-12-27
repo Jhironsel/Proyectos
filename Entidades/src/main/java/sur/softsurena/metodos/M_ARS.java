@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.ARS;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -20,16 +19,16 @@ public class M_ARS {
     /**
      * Metodo que nos permite obtener una lista de Seguros Sociales del sistema.
      *
-     * @param filtro
+     * @param ars
      * @return retorna una lista completa de los seguros sociales del sistema.
      */
     public synchronized static List<ARS> select(
-            @NonNull FiltroBusqueda filtro
+            @NonNull ARS ars
     ) {
         List<ARS> arsList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlARS(filtro),
+                sqlARS(ars),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -60,14 +59,14 @@ public class M_ARS {
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
             = "Error al consultar la vista V_ARS del sistema.";
 
-    protected static String sqlARS(FiltroBusqueda filtro) {
+    protected static String sqlARS(ARS ars) {
 
         return """
                SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
                FROM V_ARS
                %s
                """.formatted(
-                Objects.isNull(filtro.getEstado()) ? "" : filtro.getEstado()
+                Objects.isNull(ars.getEstado()) ? "" : ars.getEstado()
                 ? "WHERE ESTADO" : "WHERE ESTADO IS FALSE"
         ).strip().trim().concat(";");
     }

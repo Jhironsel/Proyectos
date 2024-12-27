@@ -134,7 +134,7 @@ public class M_GeneralesNGTest {
                                         .builder()
                                         .id_persona(
                                                 M_PersonaNGTest
-                                                        .persona()
+                                                        .persona(Boolean.FALSE)
                                                         .getId_persona()
                                         )
                                         .build()
@@ -172,7 +172,7 @@ public class M_GeneralesNGTest {
     )
     public void testGetEntidad() {
         Generales result = M_Generales.getEntidad(
-                M_PersonaNGTest.persona().getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
 
         assertNotNull(
@@ -195,7 +195,7 @@ public class M_GeneralesNGTest {
 
         assertEquals(
                 result.getPersona().getId_persona(),
-                M_PersonaNGTest.persona().getId_persona(),
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona(),
                 "Los identificadores no son iguales."
         );
     }
@@ -214,7 +214,7 @@ public class M_GeneralesNGTest {
                                         .builder()
                                         .id_persona(
                                                 M_PersonaNGTest
-                                                        .persona()
+                                                        .persona(Boolean.FALSE)
                                                         .getId_persona()
                                         )
                                         .build()
@@ -249,7 +249,7 @@ public class M_GeneralesNGTest {
     )
     public void testBorrarEntidad() {
         Resultado result = M_Generales.borrarEntidad(
-                M_PersonaNGTest.persona().getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
         
         assertEquals(

@@ -12,9 +12,9 @@ import static sur.softsurena.metodos.M_Permiso.agregarPermisoAdminRole;
 import static sur.softsurena.metodos.M_Permiso.getPermisosAsignados;
 import static sur.softsurena.metodos.M_Permiso.getPermisosDisponibles;
 import static sur.softsurena.metodos.M_Permiso.quitarPermisoAdminRole;
+import sur.softsurena.metodos.M_Role;
 import static sur.softsurena.metodos.M_Role.asignarRol;
 import static sur.softsurena.metodos.M_Role.asignarRolUsuario;
-import static sur.softsurena.metodos.M_Role.comprobandoRolesDisponibles;
 import static sur.softsurena.metodos.M_Role.createRole;
 import static sur.softsurena.metodos.M_Role.dropRole;
 import static sur.softsurena.metodos.M_Role.getRoles;
@@ -1344,7 +1344,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         };
 
-        comprobandoRolesDisponibles(userName, false).stream().forEach(
+        M_Role.selectDisponibles(userName, false).stream().forEach(
                 rol -> {
                     registro[0] = rol;
                     miTabla.addRow(registro);
@@ -1366,7 +1366,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         };
 
-        comprobandoRolesDisponibles(userName, true).stream().forEach(
+        M_Role.selectDisponibles(userName, true).stream().forEach(
                 rol -> {
                     registro2[0] = rol;
                     registro2[1] = rol.getOpcionPermiso() != 0;

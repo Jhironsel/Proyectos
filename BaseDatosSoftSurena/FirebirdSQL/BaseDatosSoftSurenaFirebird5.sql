@@ -61,6 +61,8 @@ CREATE SEQUENCE GEN_GENERALES_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_MOVIES_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_M_DEUDAS_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_M_FACTURAS_ID START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE GEN_M_RECETAS_ID START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE GEN_PRECIOS_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_RECCOUNT_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_RELACION_PADRE_ESTUDIANTE_ID START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE GEN_RELACION_PADRE_PACIENTE_ID START WITH 1 INCREMENT BY 1;
@@ -1172,11 +1174,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SP_I_D_RECETA (
-    ID_RECETA TYPE OF COLUMN V_D_RECETAS.ID_RECETA,
-    LINEA TYPE OF COLUMN V_D_RECETAS.LINEA,
-    ID_MEDICAMENTO TYPE OF COLUMN V_D_RECETAS.ID_MEDICAMENTO,
-    CANTIDAD TYPE OF COLUMN V_D_RECETAS.CANTIDAD,
-    D_DOSIS TYPE OF COLUMN V_D_RECETAS.D_DOSIS )
+    ID_RECETA TYPE OF COLUMN D_RECETAS.ID_RECETA,
+    LINEA TYPE OF COLUMN D_RECETAS.LINEA,
+    ID_MEDICAMENTO TYPE OF COLUMN D_RECETAS.ID_MEDICAMENTO,
+    ID_PRECIO TYPE OF COLUMN D_RECETAS.ID_PRECIO,
+    CANTIDAD TYPE OF COLUMN D_RECETAS.CANTIDAD,
+    D_DOSIS TYPE OF COLUMN D_RECETAS.D_DOSIS )
+RETURNS (
+    ID TYPE OF COLUMN D_RECETAS.ID )
 SQL SECURITY DEFINER
 AS 
 BEGIN SUSPEND; 
@@ -1188,16 +1193,6 @@ CREATE PROCEDURE SP_I_ENTRADA_PRODUCTO (
     ID_PROVEEDOR TYPE OF COLUMN V_M_ENTRADA_PRODUCTOS.ID_PROVEEDOR,
     ID_ALMACEN TYPE OF COLUMN V_M_ENTRADA_PRODUCTOS.ID_ALMACEN,
     COD_FACTURA TYPE OF COLUMN V_M_ENTRADA_PRODUCTOS.COD_FACTURA )
-SQL SECURITY DEFINER
-AS 
-BEGIN SUSPEND; 
-END^
-SET TERM ; ^
-
-SET TERM ^ ;
-CREATE PROCEDURE SP_I_ESTUDIANTE (
-    ID_ESTUDIANTE TYPE OF COLUMN PERSONAS_ESTUDIANTES.ID,
-    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
 SQL SECURITY DEFINER
 AS 
 BEGIN SUSPEND; 
@@ -1267,6 +1262,17 @@ END^
 SET TERM ; ^
 
 SET TERM ^ ;
+CREATE PROCEDURE SP_I_M_RECETA (
+    ID_CONSULTA TYPE OF COLUMN M_RECETAS.ID_CONSULTA )
+RETURNS (
+    ID TYPE OF COLUMN M_RECETAS.ID )
+SQL SECURITY DEFINER
+AS 
+BEGIN SUSPEND; 
+END^
+SET TERM ; ^
+
+SET TERM ^ ;
 CREATE PROCEDURE SP_I_PERSONA (
     PERSONA TYPE OF COLUMN PERSONAS.PERSONA,
     PNOMBRE TYPE OF COLUMN PERSONAS.PNOMBRE,
@@ -1286,6 +1292,16 @@ SET TERM ; ^
 SET TERM ^ ;
 CREATE PROCEDURE SP_I_PERSONA_CLIENTE (
     ID TYPE OF COLUMN PERSONAS_CLIENTES.ID )
+SQL SECURITY DEFINER
+AS 
+BEGIN SUSPEND; 
+END^
+SET TERM ; ^
+
+SET TERM ^ ;
+CREATE PROCEDURE SP_I_PERSONA_ESTUDIANTE (
+    ID_ESTUDIANTE TYPE OF COLUMN PERSONAS_ESTUDIANTES.ID,
+    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
 SQL SECURITY DEFINER
 AS 
 BEGIN SUSPEND; 
@@ -1318,7 +1334,6 @@ SET TERM ; ^
 
 SET TERM ^ ;
 CREATE PROCEDURE SP_I_PRECIOS (
-    ID TYPE OF COLUMN V_PRECIOS.ID,
     ID_PRODUCTO TYPE OF COLUMN V_PRECIOS.ID_PRODUCTO,
     ID_TIPO_PRECIO TYPE OF COLUMN V_PRECIOS.ID_TIPO_PRECIO,
     ID_TIPO_IMPUESTO TYPE OF COLUMN V_PRECIOS.ID_TIPO_IMPUESTO,
@@ -1328,6 +1343,8 @@ CREATE PROCEDURE SP_I_PRECIOS (
     FECHA_FIN TYPE OF COLUMN V_PRECIOS.FECHA_FIN,
     DESCUENTO TYPE OF COLUMN V_PRECIOS.DESCUENTO,
     COSTO_ENVIO TYPE OF COLUMN V_PRECIOS.COSTO_ENVIO )
+RETURNS (
+    ID TYPE OF COLUMN V_PRECIOS.ID )
 SQL SECURITY DEFINER
 AS 
 BEGIN SUSPEND; 
@@ -1739,6 +1756,16 @@ END^
 SET TERM ; ^
 
 SET TERM ^ ;
+CREATE PROCEDURE SP_U_PERSONA_ESTUDIANTE (
+    ID TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.ID,
+    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
+SQL SECURITY DEFINER
+AS 
+BEGIN SUSPEND; 
+END^
+SET TERM ; ^
+
+SET TERM ^ ;
 CREATE PROCEDURE SP_U_PERSONA_PACIENTE (
     ID TYPE OF COLUMN PERSONAS_PACIENTES.ID,
     PESO_NACIMIENTO_KG TYPE OF COLUMN PERSONAS_PACIENTES_ATR.PESO_NACIMIENTO_KG,
@@ -1756,6 +1783,24 @@ SET TERM ^ ;
 CREATE PROCEDURE SP_U_PERSONA_PROVEEDOR (
     ID TYPE OF COLUMN PERSONAS_PROVEEDORES_ATR.ID,
     CODIGO TYPE OF COLUMN PERSONAS_PROVEEDORES_ATR.CODIGO )
+SQL SECURITY DEFINER
+AS 
+BEGIN SUSPEND; 
+END^
+SET TERM ; ^
+
+SET TERM ^ ;
+CREATE PROCEDURE SP_U_PRECIO (
+    ID TYPE OF COLUMN PRECIOS.ID,
+    ID_PRODUCTO TYPE OF COLUMN PRECIOS.ID_PRODUCTO,
+    ID_TIPO_PRECIO TYPE OF COLUMN PRECIOS.ID_TIPO_PRECIO,
+    ID_TIPO_IMPUESTO TYPE OF COLUMN PRECIOS.ID_TIPO_IMPUESTO,
+    PRECIO TYPE OF COLUMN PRECIOS.PRECIO,
+    MONEDA TYPE OF COLUMN PRECIOS.MONEDA,
+    FECHA_INICIO TYPE OF COLUMN PRECIOS.FECHA_INICIO,
+    FECHA_FIN TYPE OF COLUMN PRECIOS.FECHA_FIN,
+    DESCUENTO TYPE OF COLUMN PRECIOS.DESCUENTO,
+    COSTO_ENVIO TYPE OF COLUMN PRECIOS.COSTO_ENVIO )
 SQL SECURITY DEFINER
 AS 
 BEGIN SUSPEND; 
@@ -2824,7 +2869,7 @@ SELECT
      COALESCE(r.DESCRIPCION, '')
 FROM VS_PRIVILEGIO p
 LEFT JOIN GET_ROLES r ON TRIM(r.ROL) STARTING WITH TRIM(p.NOMBRE_RELACION)
-WHERE p.ABRV_PRIVILEGIO = 'M' AND p.NOMBRE_RELACION NOT STARTING WITH 'RRR_';
+WHERE p.ABRV_PRIVILEGIO = 'M' AND p.NOMBRE_RELACION NOT STARTING WITH 'RRR_' AND p.GRANTOR <> '';
 CREATE VIEW GET_ROLES (ROL, PROPIETARIO, DESCRIPCION)
 AS /*
 
@@ -3210,13 +3255,15 @@ SELECT
     ID_CONSULTA, 
     ID_MOTIVO_CONSULTA
 FROM D_MOTIVO_CONSULTA;
-CREATE VIEW V_D_RECETAS (ID_RECETA, LINEA, ID_MEDICAMENTO, CANTIDAD, D_DOSIS)
+CREATE VIEW V_D_RECETAS (ID, ID_RECETA, LINEA, ID_MEDICAMENTO, ID_PRECIO, CANTIDAD, D_DOSIS)
 AS /*
 */
 SELECT 
+    ID,
      ID_RECETA, 
      LINEA, 
      ID_MEDICAMENTO, 
+     ID_PRECIO,
      CANTIDAD, 
      D_DOSIS
 FROM D_RECETAS;
@@ -3755,6 +3802,8 @@ CREATE EXCEPTION E_DELETE_GENERICO
 'Registro generico no puede ser eliminado.';
 CREATE EXCEPTION E_DESCUENTO_INCORRECTO
 'Tipo de descuento es incorrecto.';
+CREATE EXCEPTION E_DEUDA_ACTIVDA
+'La deuda se encuentra activa por un estado diferente de inicial.';
 CREATE EXCEPTION E_DEUDA_NO_ENCONTRADA
 'Deuda no encontrada...!';
 CREATE EXCEPTION E_DIRECCION_EN_USO
@@ -3819,6 +3868,8 @@ CREATE EXCEPTION E_TELEFONO_INACTIVO
 'Telefono inactivo del cliente';
 CREATE EXCEPTION E_TURNO_CERRADO
 'Este turno ya se encuentra cerrado';
+CREATE EXCEPTION E_TURNO_NO_EXISTE
+'No se encuentran registros en la base de datos de turno consultado.';
 CREATE EXCEPTION E_USUARIO_INACTIVO
 'Usuario Inactivo';
 CREATE EXCEPTION E_USUARIO_NO_AUTORIZADO
@@ -4363,6 +4414,24 @@ END
 ^
 SET TERM ; ^
 SET TERM ^ ;
+CREATE TRIGGER M_RECETAS_BI FOR M_RECETAS ACTIVE
+BEFORE INSERT POSITION 0
+
+AS
+DECLARE VARIABLE tmp DECIMAL(18,0);
+BEGIN
+  IF (NEW.ID IS NULL) THEN
+    NEW.ID = GEN_ID(GEN_M_RECETAS_ID, 1);
+  ELSE
+  BEGIN
+    tmp = GEN_ID(GEN_M_RECETAS_ID, 0);
+    if (tmp < new.ID) then
+      tmp = GEN_ID(GEN_M_RECETAS_ID, new.ID-tmp);
+  END
+END
+^
+SET TERM ; ^
+SET TERM ^ ;
 CREATE TRIGGER PERSONAS_BI FOR PERSONAS ACTIVE
 BEFORE INSERT POSITION 0
 
@@ -4377,6 +4446,24 @@ BEGIN
         if (tmp < new.ID) then
             tmp = GEN_ID(SEQ_PERSONAS_ID, new.ID-tmp);
     END
+END
+^
+SET TERM ; ^
+SET TERM ^ ;
+CREATE TRIGGER PRECIOS_BI FOR PRECIOS ACTIVE
+BEFORE INSERT POSITION 0
+
+AS
+DECLARE VARIABLE tmp DECIMAL(18,0);
+BEGIN
+  IF (NEW.ID IS NULL) THEN
+    NEW.ID = GEN_ID(GEN_PRECIOS_ID, 1);
+  ELSE
+  BEGIN
+    tmp = GEN_ID(GEN_PRECIOS_ID, 0);
+    if (tmp < new.ID) then
+      tmp = GEN_ID(GEN_PRECIOS_ID, new.ID-tmp);
+  END
 END
 ^
 SET TERM ; ^
@@ -4938,8 +5025,13 @@ U(Union Libre)
 X(Desconocido)
 
 ';
-COMMENT ON DOMAIN D_ESTADO_C_I_P_A_N_T IS 'Estado si es Deuda Inicial (i), Pagada (p), Abonada (a), Nulada (n), Temporal (t), Credito (c).
-
+COMMENT ON DOMAIN D_ESTADO_C_I_P_A_N_T IS 'Los Estados de una Deuda 
+Credito (c)
+Inicial (i)
+Pagada (p)
+Abonada (a)
+Nulada (n)
+Temporal (t)
 Se propone un estado de factura cerrada, la cual no puede ser tocada nuevamente.
 ';
 COMMENT ON DOMAIN D_MEDIDA IS 'Este dominio puede representar valores de medidas, peso, valores.';
@@ -5392,6 +5484,13 @@ SQL SECURITY DEFINER
 
 AS
 BEGIN
+    --Verificamos que el turno no este cerrado.
+    IF((SELECT 1 FROM V_TURNOS t WHERE t.ID = :ID_TURNO) IS NULL)THEN BEGIN
+        ID_FACTURA = -1;
+        SUSPEND;
+        EXCEPTION E_TURNO_NO_EXISTE;
+    END
+        
     --Verificamos que el turno no este cerrado.
     IF((SELECT 1 FROM V_TURNOS t WHERE t.ID = :ID_TURNO AND t.ESTADO IS FALSE) = 1)THEN
         EXCEPTION E_TURNO_CERRADO;
@@ -6525,12 +6624,11 @@ DECLARE VARIABLE v_estado TYPE OF COLUMN M_DEUDAS.ESTADO;
 BEGIN
     v_estado = (SELECT ESTADO FROM V_M_DEUDAS WHERE ID = :ID);
     
+    IF(v_estado <> 'i')THEN 
+        EXCEPTION E_DEUDA_ACTIVDA;
+    
     DELETE FROM V_M_DEUDAS WHERE ID = :ID;
     
-    IF(:V_ESTADO IS NOT NULL)THEN BEGIN
-        EXECUTE PROCEDURE SYS_RECCOUNT_ESTADO('D', 'M_DEUDAS', :v_estado);
-        EXECUTE PROCEDURE SYS_RECCOUNT('D', 'M_DEUDAS');
-    END
 END
 ^
 SET TERM ; ^
@@ -7464,11 +7562,14 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SP_I_D_RECETA (
-    ID_RECETA TYPE OF COLUMN V_D_RECETAS.ID_RECETA,
-    LINEA TYPE OF COLUMN V_D_RECETAS.LINEA,
-    ID_MEDICAMENTO TYPE OF COLUMN V_D_RECETAS.ID_MEDICAMENTO,
-    CANTIDAD TYPE OF COLUMN V_D_RECETAS.CANTIDAD,
-    D_DOSIS TYPE OF COLUMN V_D_RECETAS.D_DOSIS )
+    ID_RECETA TYPE OF COLUMN D_RECETAS.ID_RECETA,
+    LINEA TYPE OF COLUMN D_RECETAS.LINEA,
+    ID_MEDICAMENTO TYPE OF COLUMN D_RECETAS.ID_MEDICAMENTO,
+    ID_PRECIO TYPE OF COLUMN D_RECETAS.ID_PRECIO,
+    CANTIDAD TYPE OF COLUMN D_RECETAS.CANTIDAD,
+    D_DOSIS TYPE OF COLUMN D_RECETAS.D_DOSIS )
+RETURNS (
+    ID TYPE OF COLUMN D_RECETAS.ID )
 SQL SECURITY DEFINER
 
 AS
@@ -7478,8 +7579,12 @@ BEGIN
           Debe Validarse si ID_MEDICAMENTO tiene estado activo,
           que tenga existencia, Cosas asi que me vienen a la cabeza.
      */
-     INSERT INTO V_D_RECETAS(ID_RECETA, LINEA, ID_MEDICAMENTO, CANTIDAD, D_DOSIS)
-     VALUES (:ID_RECETA, :LINEA, :ID_MEDICAMENTO, :CANTIDAD, :D_DOSIS);
+     INSERT INTO V_D_RECETAS(ID, ID_RECETA, LINEA, ID_MEDICAMENTO, ID_PRECIO, CANTIDAD, D_DOSIS)
+     VALUES (NULL, :ID_RECETA, :LINEA, :ID_MEDICAMENTO, :ID_PRECIO, :CANTIDAD, :D_DOSIS)
+     RETURNING ID 
+     INTO ID;
+     
+     SUSPEND;
 END
 ^
 SET TERM ; ^
@@ -7497,29 +7602,6 @@ BEGIN
     --TODO Validaciones antes de registrar.
     INSERT INTO V_M_ENTRADA_PRODUCTOS (ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA)
     VALUES (NULL, :ID_PROVEEDOR, :ID_ALMACEN, :COD_FACTURA);
-END
-^
-SET TERM ; ^
-
-
-SET TERM ^ ;
-ALTER PROCEDURE SP_I_ESTUDIANTE (
-    ID_ESTUDIANTE TYPE OF COLUMN PERSONAS_ESTUDIANTES.ID,
-    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
-SQL SECURITY DEFINER
-
-AS
-BEGIN 
-     
-     INSERT INTO V_PERSONAS_ESTUDIANTES (ID)
-     VALUES (:ID_ESTUDIANTE);
-     
-     INSERT INTO V_PERSONAS_ESTUDIANTES_ATR (ID, MATRICULA)
-     VALUES ( :ID_ESTUDIANTE, :MATRICULA );
-     
-     /*Guardamos cantidad total de los registros en padres*/
-     EXECUTE PROCEDURE SYS_RECCOUNT('I', 'PERSONAS_ESTUDIANTES');
-     
 END
 ^
 SET TERM ; ^
@@ -7703,6 +7785,27 @@ SET TERM ; ^
 
 
 SET TERM ^ ;
+ALTER PROCEDURE SP_I_M_RECETA (
+    ID_CONSULTA TYPE OF COLUMN M_RECETAS.ID_CONSULTA )
+RETURNS (
+    ID TYPE OF COLUMN M_RECETAS.ID )
+SQL SECURITY DEFINER
+
+AS
+BEGIN
+    /*
+        TODO 25/12/2024 Crear validaciones al campo de id_Consulta.
+    */
+    INSERT INTO V_M_RECETAS (ID, ID_CONSULTA)
+    VALUES (NULL, :ID_CONSULTA)
+    RETURNING ID
+    INTO ID;
+END
+^
+SET TERM ; ^
+
+
+SET TERM ^ ;
 ALTER PROCEDURE SP_I_PERSONA (
     PERSONA TYPE OF COLUMN PERSONAS.PERSONA,
     PNOMBRE TYPE OF COLUMN PERSONAS.PNOMBRE,
@@ -7749,6 +7852,31 @@ BEGIN
      
      --Guardamos cantidad de registros por estado
      EXECUTE PROCEDURE SYS_RECCOUNT('I', 'PERSONAS_CLIENTES');
+     
+     POST_EVENT 'EVENT_CLIENTE';
+END
+^
+SET TERM ; ^
+
+
+SET TERM ^ ;
+ALTER PROCEDURE SP_I_PERSONA_ESTUDIANTE (
+    ID_ESTUDIANTE TYPE OF COLUMN PERSONAS_ESTUDIANTES.ID,
+    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
+SQL SECURITY DEFINER
+
+AS
+BEGIN 
+     
+     INSERT INTO V_PERSONAS_ESTUDIANTES (ID)
+     VALUES (:ID_ESTUDIANTE);
+     
+     INSERT INTO V_PERSONAS_ESTUDIANTES_ATR (ID, MATRICULA)
+     VALUES ( :ID_ESTUDIANTE, :MATRICULA );
+     
+     /*Guardamos cantidad total de los registros en padres*/
+     EXECUTE PROCEDURE SYS_RECCOUNT('I', 'PERSONAS_ESTUDIANTES');
+     
 END
 ^
 SET TERM ; ^
@@ -7807,7 +7935,6 @@ SET TERM ; ^
 
 SET TERM ^ ;
 ALTER PROCEDURE SP_I_PRECIOS (
-    ID TYPE OF COLUMN V_PRECIOS.ID,
     ID_PRODUCTO TYPE OF COLUMN V_PRECIOS.ID_PRODUCTO,
     ID_TIPO_PRECIO TYPE OF COLUMN V_PRECIOS.ID_TIPO_PRECIO,
     ID_TIPO_IMPUESTO TYPE OF COLUMN V_PRECIOS.ID_TIPO_IMPUESTO,
@@ -7817,6 +7944,8 @@ ALTER PROCEDURE SP_I_PRECIOS (
     FECHA_FIN TYPE OF COLUMN V_PRECIOS.FECHA_FIN,
     DESCUENTO TYPE OF COLUMN V_PRECIOS.DESCUENTO,
     COSTO_ENVIO TYPE OF COLUMN V_PRECIOS.COSTO_ENVIO )
+RETURNS (
+    ID TYPE OF COLUMN V_PRECIOS.ID )
 SQL SECURITY DEFINER
 
 AS
@@ -7829,8 +7958,11 @@ BEGIN
     INSERT INTO PRECIOS (ID, ID_PRODUCTO, ID_TIPO_PRECIO, ID_TIPO_IMPUESTO, 
             PRECIO, MONEDA, FECHA_INICIO, FECHA_FIN, DESCUENTO, COSTO_ENVIO)
     VALUES (:ID, :ID_PRODUCTO, :ID_TIPO_PRECIO, :ID_TIPO_IMPUESTO, 
-            :PRECIO, :MONEDA, :FECHA_INICIO, :FECHA_FIN, :DESCUENTO, :COSTO_ENVIO);
+            :PRECIO, :MONEDA, :FECHA_INICIO, :FECHA_FIN, :DESCUENTO, :COSTO_ENVIO)
+    RETURNING ID
+    INTO :ID;
 
+    SUSPEND;
 END
 ^
 SET TERM ; ^
@@ -8933,6 +9065,25 @@ SET TERM ; ^
 
 
 SET TERM ^ ;
+ALTER PROCEDURE SP_U_PERSONA_ESTUDIANTE (
+    ID TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.ID,
+    MATRICULA TYPE OF COLUMN PERSONAS_ESTUDIANTES_ATR.MATRICULA )
+SQL SECURITY DEFINER
+
+AS
+BEGIN
+
+    UPDATE V_PERSONAS_ESTUDIANTES_ATR
+    SET 
+        MATRICULA  = :MATRICULA
+    WHERE
+        ID      = :ID;
+END
+^
+SET TERM ; ^
+
+
+SET TERM ^ ;
 ALTER PROCEDURE SP_U_PERSONA_PACIENTE (
     ID TYPE OF COLUMN PERSONAS_PACIENTES.ID,
     PESO_NACIMIENTO_KG TYPE OF COLUMN PERSONAS_PACIENTES_ATR.PESO_NACIMIENTO_KG,
@@ -8976,6 +9127,50 @@ BEGIN
     WHERE
         ID      = :ID;
         
+END
+^
+SET TERM ; ^
+
+
+SET TERM ^ ;
+ALTER PROCEDURE SP_U_PRECIO (
+    ID TYPE OF COLUMN PRECIOS.ID,
+    ID_PRODUCTO TYPE OF COLUMN PRECIOS.ID_PRODUCTO,
+    ID_TIPO_PRECIO TYPE OF COLUMN PRECIOS.ID_TIPO_PRECIO,
+    ID_TIPO_IMPUESTO TYPE OF COLUMN PRECIOS.ID_TIPO_IMPUESTO,
+    PRECIO TYPE OF COLUMN PRECIOS.PRECIO,
+    MONEDA TYPE OF COLUMN PRECIOS.MONEDA,
+    FECHA_INICIO TYPE OF COLUMN PRECIOS.FECHA_INICIO,
+    FECHA_FIN TYPE OF COLUMN PRECIOS.FECHA_FIN,
+    DESCUENTO TYPE OF COLUMN PRECIOS.DESCUENTO,
+    COSTO_ENVIO TYPE OF COLUMN PRECIOS.COSTO_ENVIO )
+SQL SECURITY DEFINER
+
+AS
+DECLARE VARIABLE V_ESTADO TYPE OF COLUMN ALMACENES.ESTADO;
+BEGIN 
+    --TODO hacer las validaciones antes de actualizar o cambiar algun valor. 
+     
+     --V_ESTADO = (SELECT ESTADO FROM V_CONSULTAS WHERE ID = :ID);
+     
+    UPDATE V_PRECIOS a
+    SET 
+        a.ID_PRODUCTO       = :ID_PRODUCTO, 
+        a.ID_TIPO_PRECIO    = :ID_TIPO_PRECIO, 
+        a.ID_TIPO_IMPUESTO  = :ID_TIPO_IMPUESTO, 
+        a.PRECIO            = :PRECIO, 
+        a.MONEDA            = :MONEDA, 
+        a.FECHA_INICIO      = :FECHA_INICIO, 
+        a.FECHA_FIN         = :FECHA_FIN, 
+        a.DESCUENTO         = :DESCUENTO, 
+        a.COSTO_ENVIO       = :COSTO_ENVIO
+    WHERE
+        a.ID = :ID;
+          
+    /*IF(V_ESTADO != :ESTADO)THEN BEGIN
+		EXECUTE PROCEDURE SYS_RECCOUNT_ESTADO('D', 'CONSULTAS', :V_ESTADO);
+		EXECUTE PROCEDURE SYS_RECCOUNT_ESTADO('I', 'CONSULTAS', :ESTADO);
+    END*/
 END
 ^
 SET TERM ; ^
@@ -10472,12 +10667,6 @@ GRANT EXECUTE
  ON PROCEDURE SP_I_ENTRADA_PRODUCTO TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
- ON PROCEDURE SP_I_ESTUDIANTE TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
-
-GRANT EXECUTE
- ON PROCEDURE SP_I_ESTUDIANTE TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
-
-GRANT EXECUTE
  ON PROCEDURE SP_I_GENERAL TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
@@ -10499,6 +10688,12 @@ GRANT EXECUTE
  ON PROCEDURE SP_I_M_FACTURA TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
+ ON PROCEDURE SP_I_M_RECETA TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_I_M_RECETA TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
  ON PROCEDURE SP_I_PERSONA TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
@@ -10509,6 +10704,12 @@ GRANT EXECUTE
 
 GRANT EXECUTE
  ON PROCEDURE SP_I_PERSONA_CLIENTE TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_I_PERSONA_ESTUDIANTE TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_I_PERSONA_ESTUDIANTE TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
  ON PROCEDURE SP_I_PERSONA_PACIENTE TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
@@ -10697,6 +10898,12 @@ GRANT EXECUTE
  ON PROCEDURE SP_U_PERSONA TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
+ ON PROCEDURE SP_U_PERSONA_ESTUDIANTE TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_U_PERSONA_ESTUDIANTE TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
  ON PROCEDURE SP_U_PERSONA_PACIENTE TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
@@ -10707,6 +10914,12 @@ GRANT EXECUTE
 
 GRANT EXECUTE
  ON PROCEDURE SP_U_PERSONA_PROVEEDOR TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_U_PRECIO TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
+GRANT EXECUTE
+ ON PROCEDURE SP_U_PRECIO TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 
 GRANT EXECUTE
  ON PROCEDURE SP_U_PRODUCTO TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;

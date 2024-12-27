@@ -16,7 +16,6 @@ import static sur.softsurena.metodos.M_Persona.ERROR_AL_REGISTRAR_PERSONA_AL_SIS
 import static sur.softsurena.metodos.M_Persona.PERSONA_ACTUALIZADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Persona.REGISTRO_DE_PERSONA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Persona.REGISTRO_DE_PERSONA_ELIMINADO_CORRECTAMEN;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
@@ -70,10 +69,10 @@ public class M_PersonaNGTest {
                           y obtener su ID en la variable idPersona.
                           """
     )
-    public void testInsert() {
+    public static void testInsert() {
 
         Resultado result = M_Persona.insert(
-                persona()
+                persona(true)
         );
 
         assertEquals(
@@ -105,10 +104,10 @@ public class M_PersonaNGTest {
                           previamente insertado.
                           """
     )
-    public void testUpdate() {
+    public static void testUpdate() {
 
         Resultado result = M_Persona.update(
-                persona()
+                persona(false)
         );
 
         assertEquals(
@@ -132,11 +131,11 @@ public class M_PersonaNGTest {
                           datos del sistema.
                           """
     )
-    public void testGetList() {
-        Persona result = M_Persona.getList(
-                FiltroBusqueda
+    public static void testGetList() {
+        Persona result = M_Persona.select(
+                Persona
                         .builder()
-                        .id(idPersona)
+                        .id_persona(idPersona)
                         .build()
         ).getFirst();
         assertNotNull(
@@ -144,10 +143,10 @@ public class M_PersonaNGTest {
                 "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
         );
 
-        result = M_Persona.getList(
-                FiltroBusqueda
+        result = M_Persona.select(
+                Persona
                         .builder()
-                        .id(0)
+                        .id_persona(0)
                         .build()
         ).getFirst();
 
@@ -166,7 +165,7 @@ public class M_PersonaNGTest {
                           la tabla de Persona.
                           """
     )
-    public void testDelete() {
+    public static void testDelete() {
 
         Resultado result = M_Persona.delete(idPersona);
 
@@ -182,7 +181,7 @@ public class M_PersonaNGTest {
         );
     }
 
-    public static Persona persona() {
+    public static Persona persona(Boolean estado) {
         return Persona
                 .builder()
                 .id_persona(idPersona)
@@ -196,7 +195,7 @@ public class M_PersonaNGTest {
                                 stringToDate("23.06.2017", "dd.MM.yyyy")
                         )
                 )
-                .estado(Boolean.FALSE)
+                .estado(estado)
                 .build();
     }
 
@@ -222,7 +221,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlList(
-                        FiltroBusqueda
+                        Persona
                                 .builder()
                                 .build()
                 ),
@@ -249,9 +248,9 @@ public class M_PersonaNGTest {
         
         assertEquals(
                 M_Persona.sqlList(
-                        FiltroBusqueda
+                        Persona
                                 .builder()
-                                .id(-1)
+                                .id_persona(-1)
                                 .build()
                 ),
                 expResult.strip().trim()

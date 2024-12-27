@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Estudiante;
 import static sur.softsurena.metodos.M_Padre.validarPadreMadre;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -431,14 +432,14 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
                     "Error Validacion", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         if (txtCedula.getText().length() != 11) {
             JOptionPane.showMessageDialog(this,
                     "Cedula Incorrecta, Digite 11 Numeros...!",
                     "Error Validacion", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         if (!validarPadreMadre(txtCedula.getText().trim())) {
             JOptionPane.showMessageDialog(this,
                     "Padre no encontrado!!!",
@@ -448,10 +449,9 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
             btnInscribir.setEnabled(false);
             return;
         }
-        
+
         //TODO Crear este metodo.
         //rs = getPadreMadres(txtCedula.getText().trim());
-        
         try {
             rs.next();
             if (rs.getString("Estado").equals("0")) {
@@ -512,61 +512,65 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Fecha en Blanco");
             return;
         }
-        if(cbTanda.getSelectedIndex() == -1){
+        if (cbTanda.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione una Tanda...");
             return;
         }
         //int mes = dchFecha.getCalendar().get(Calendar.MONTH) + 1;
         //mes+"/"+ dchFecha.getCalendar().get(Calendar.DAY_OF_MONTH)+"/"+ dchFecha.getCalendar().get(Calendar.YEAR)
-        Estudiante miEstudiante 
+        Estudiante miEstudiante
                 = Estudiante
                         .builder()
-                        .pnombre(txtPNombre.getText().strip())
-                        .apellidos(txtApellidos.getText().strip())
-                        //.Tanda(idTanda[cbTanda.getSelectedIndex()])
-                        .fecha_nacimiento(new java.sql.Date(dchFecha.getDate().getTime()))
-                        .estado(Boolean.TRUE)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .pnombre(txtPNombre.getText().strip())
+                                        .apellidos(txtApellidos.getText().strip())
+                                        //.Tanda(idTanda[cbTanda.getSelectedIndex()])
+                                        .fecha_nacimiento(new java.sql.Date(dchFecha.getDate().getTime()))
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .build();
-        
+
         //String dime = agregarEstudiante(miEstudiante);
-        
 //        String dime = insertarEstudiante(miEstudiante);
         String dime = "";
-        
+
         JOptionPane.showMessageDialog(this, dime);
 
         if (dime.equals("Estudiante Agregado Correctamente")) {
-            
+
             frmPrincipal miFrm = new frmPrincipal();
-            
+
             JDImprimir miJD = new JDImprimir(miFrm, true);
-            
+
             Calendar c1 = Calendar.getInstance();
             String di = Integer.toString(c1.get(Calendar.DATE));
-            String me = Integer.toString(c1.get(Calendar.MONTH)+1);
+            String me = Integer.toString(c1.get(Calendar.MONTH) + 1);
             String an = Integer.toString(c1.get(Calendar.YEAR));
-            
+
             //35 Columnas
             //Integer Matricula = getMaxMatricula();
             Integer Matricula = 0;
-            
+
             miJD.txtArea.setText("<p align=center> Bienvenido a Sophia Estudio</p>"
-                    + "<p align=right> Fecha de Ingreso:<b>" + di + "/" + me + "/" + an+"</b></p>"
-                    + "<p align=justify>"+(jcbSexo.getSelectedItem().toString().equals("F") ? "Sra. " : "Sr. ")
-                    + "<b>" +txtApellidosPadres.getText().trim()+", "
-                    + " " + txtPNombrePadre.getText().trim()+"</b>"
+                    + "<p align=right> Fecha de Ingreso:<b>" + di + "/" + me + "/" + an + "</b></p>"
+                    + "<p align=justify>" + (jcbSexo.getSelectedItem().toString().equals("F") ? "Sra. " : "Sr. ")
+                    + "<b>" + txtApellidosPadres.getText().trim() + ", "
+                    + " " + txtPNombrePadre.getText().trim() + "</b>"
                     + " en nuestro Sistema tenemos registrado el niño/a "
-                    + "<b>" +txtPNombre.getText().trim()
+                    + "<b>" + txtPNombre.getText().trim()
                     + " "
-                    + txtApellidos.getText().trim()+"</b>"
+                    + txtApellidos.getText().trim() + "</b>"
                     + ", Dicho alumno/a cuenta con una "
-                    +"Matricula para facilitar el pago mensual la cual debe "
-                    +"ser proporcionada al momento de pagar la mensualidad: "
-                    + "<b>" +Matricula+".</b></p>"
+                    + "Matricula para facilitar el pago mensual la cual debe "
+                    + "ser proporcionada al momento de pagar la mensualidad: "
+                    + "<b>" + Matricula + ".</b></p>"
                     + "<p align=justify>Dicho pagos se realizaran los dias corresponidiente al inicio de la primera clase."
                     + " Los dias que el niño/a recibira clase sera: <b>"
-                    + cbTanda.getSelectedItem().toString()+".</b></p>"
-            );            
+                    + cbTanda.getSelectedItem().toString() + ".</b></p>"
+            );
             miJD.setVisible(true);
             miJD.setLocationRelativeTo(null);
             cerrar();
@@ -575,7 +579,7 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnInscribirActionPerformed
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         cbTanda.removeAllItems();
-        if (dchFecha.getDate() == null){
+        if (dchFecha.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Fecha de nacimiento Vacia... Selecionar Fecha!!!");
             return;
         }
@@ -583,11 +587,10 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
             Calendar c = Calendar.getInstance();
             edad = c.get(Calendar.YEAR) - dchFecha.getCalendar().get(Calendar.YEAR);
             edad2 = "" + edad;
-            
+
 //            rs = getTandas(edad2);
-            
             int i = 0;
-            
+
             while (rs.next()) {
                 idTanda[i] = rs.getInt(1);
                 cbTanda.addItem(rs.getObject(2));
@@ -609,8 +612,8 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
         frmPrincipal miPrincipal = new frmPrincipal();
         miPrincipal.dpnEscritorio.getDesktopManager().closeFrame(this);
     }
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAplicarPadre;
     private javax.swing.JButton btnCancelar;

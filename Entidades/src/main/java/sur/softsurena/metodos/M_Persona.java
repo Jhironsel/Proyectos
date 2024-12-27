@@ -13,7 +13,6 @@ import lombok.Cleanup;
 import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -26,19 +25,19 @@ public class M_Persona {
     /**
      * Retorna una lista completa de las personas registradas en el sistema.
      *
-     * @param filtro
+     * @param persona
      *
      * @return devuelve una lista de persona en el sistema completa.
      *
      * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
      */
-    public static List<Persona> getList(
-            @NonNull FiltroBusqueda filtro
+    public static List<Persona> select(
+            @NonNull Persona persona
     ) {
         List<Persona> personaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlList(filtro),
+                sqlList(persona),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -78,10 +77,10 @@ public class M_Persona {
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
             = "Error al consultar la vista V_PERSONAS del sistema.";
 
-    protected static String sqlList(FiltroBusqueda filtro) {
-        Boolean id = Objects.isNull(filtro.getId());
+    protected static String sqlList(Persona persona) {
+        Boolean id = Objects.isNull(persona.getId_persona());
         Boolean where = id;
-        
+
         return """
                SELECT 
                    ID, 
@@ -99,9 +98,9 @@ public class M_Persona {
                FROM V_PERSONAS
                %s%s
                """.strip().trim().formatted(
-                       where ? "":"WHERE ",
-                       id ? "": "ID = %d ".formatted(filtro.getId())
-               ).strip().trim();
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(persona.getId_persona())
+        ).strip().trim();
     }
 //------------------------------------------------------------------------------
 

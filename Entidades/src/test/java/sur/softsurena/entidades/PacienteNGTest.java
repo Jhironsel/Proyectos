@@ -18,11 +18,11 @@ public class PacienteNGTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public void setUpClass() throws Exception {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public void tearDownClass() throws Exception {
     }
 
     @BeforeMethod

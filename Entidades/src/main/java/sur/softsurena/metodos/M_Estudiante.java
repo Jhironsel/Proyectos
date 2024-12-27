@@ -4,7 +4,6 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
@@ -31,20 +30,22 @@ public class M_Estudiante{
      * @return Retorna un mensaje que indica si el estudiantes ha sido
      * registrado si o no.
      */
-    public synchronized static Resultado agregarEntidad(
+    public synchronized static Resultado insert(
             Estudiante estudiante
     ) {
-        final String sql
-                = """
-                  EXECUTE PROCEDURE SP_I_ESTUDIANTE (?, ?);
-                  """;
+        Resultado resultado = M_Persona.insert(estudiante.getPersona());
+        
+        if(!resultado.getEstado()){
+            return resultado;
+        }
+        
         try (CallableStatement cs = getCnn().prepareCall(
-                sql,
+                "EXECUTE PROCEDURE SP_I_PERSONA_ESTUDIANTE(?,?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            cs.setInt(1, estudiante.getId_persona());
+            cs.setInt(1, estudiante.getPersona().getId_persona());
             cs.setString(2, estudiante.getMatricula());
 
             cs.execute();
@@ -130,26 +131,23 @@ public class M_Estudiante{
      * @param estudiante
      * @return
      */
-    public synchronized static Resultado modificarEstudiante(
+    public synchronized static Resultado update(
             Estudiante estudiante
     ) {
-        final String sql
-                = "EXECUTE PROCEDURE SP_UPDATE_ESTUDIANTE(?,?,?,?,?,?,?,?,?,?,?)";
+        Resultado resultado = M_Persona.update(estudiante.getPersona());
+        
+        if(!resultado.getEstado()){
+            return resultado;
+        }
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                "EXECUTE PROCEDURE SP_U_PERSONA_ESTUDIANTE (?, ?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, estudiante.getId_persona());
-            ps.setInt(5, estudiante.getJcb_parentesco());
-            ps.setString(6, estudiante.getPnombre());
-            ps.setString(7, estudiante.getSnombre());
-            ps.setString(8, estudiante.getApellidos());
-            ps.setString(9, "" + estudiante.getSexo());
-            ps.setDate(10, estudiante.getFecha_nacimiento());
-            ps.setBoolean(11, estudiante.getEstado());
+            ps.setInt(1, estudiante.getPersona().getId_persona());
+            ps.setString(2, estudiante.getMatricula());
 
             ps.executeUpdate();
             return Resultado
@@ -179,7 +177,7 @@ public class M_Estudiante{
      * @param inscripcion
      * @return 
      */
-    public synchronized static String inscribirEstudiante(
+    public synchronized static String insert(
             Inscripcion inscripcion
     ) {
 
@@ -303,54 +301,5 @@ public class M_Estudiante{
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * 
-     * @param objecto
-     * @return 
-     */
-    public Resultado modificarEntidad(Estudiante objecto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * 
-     * @return 
-     */
-    public List<Estudiante> getListEntidad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    //--------------------------------------------------------------------------
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public Estudiante getEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public Resultado eliminarEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * 
-     * @param id
-     * @return 
-     */
-    public Resultado borrarEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

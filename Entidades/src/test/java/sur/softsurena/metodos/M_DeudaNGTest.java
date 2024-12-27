@@ -1,7 +1,7 @@
 package sur.softsurena.metodos;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -9,9 +9,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -20,6 +22,8 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 public class M_DeudaNGTest {
+
+    private Integer idDeuda;
 
     public M_DeudaNGTest() {
     }
@@ -51,60 +55,104 @@ public class M_DeudaNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 0,
+            priority = 1,
             description = """
                           Por el momento la tabla de deudas contiene registros.
                           """
     )
-    public void testGetDeudas() {
-        assertFalse(
-                M_Deuda.getDeudas(
-                        FiltroBusqueda
+    public void testSelect() {
+        assertNotNull(
+                M_Deuda.select(
+                        Deuda
                                 .builder()
+                                .cliente(
+                                        Cliente
+                                                .builder()
+                                                .persona(
+                                                        Persona.builder().build()
+                                                )
+                                                .build()
+                                )
                                 .build()
-                ).isEmpty(),
+                ),
                 "La tabla de deuda esta vacia."
         );
     }
-    
 //------------------------------------------------------------------------------
+
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testModificarDeuda() {
-        
-        Resultado expResult = null;
-        Resultado result = M_Deuda.modificarDeuda(
-                Deuda
-                        .builder()
-                        .id_deuda(0)
-                        .concepto("")
-                        .monto(BigDecimal.ONE)
-                        .build()
-        );
-        assertEquals(result, expResult);
-    }
-//------------------------------------------------------------------------------
-    //TODO 28/11/2024 terminar esta prueba en el sistema.
-    @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 2,
             description = """
+                          Prueba que realiza una insersion a la tabla de deuda.
                           """
     )
-    public void testInsertDeudas() {
-        Deuda miDeuda = null;
-        boolean expResult = false;
-        Resultado result = M_Deuda.insertDeudas(miDeuda);
-        assertEquals(result, expResult);
+    public void testInsert() {
+        M_PersonaNGTest.testInsert();
+
+        Resultado result = M_Deuda.insert(
+                Deuda
+                        .builder()
+                        .cliente(
+                                Cliente
+                                        .builder()
+                                        .persona(
+                                                M_PersonaNGTest.persona(true)
+                                        )
+                                        .build()
+                        )
+                        .concepto("Sistema de prueba de deuda en registros.")
+                        .monto(
+                                BigDecimal.valueOf(2300.55)
+                        )
+                        .build()
+        );
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje("Registro de deuda exitoso.")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                "Falla de prueba de Insercion de deuda."
+        );
+
+        idDeuda = result.getId();
+    }
+
+//------------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 3,
+            description = ""
+    )
+    public void testUpdate() {
+
+        assertEquals(
+                M_Deuda.update(
+                        Deuda
+                                .builder()
+                                .id_deuda(idDeuda)
+                                .concepto("Ha sido modificado el registro de la prueba de deuda.")
+                                .monto(BigDecimal.valueOf(23000.55))
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje("Operación realizada correctamente.!!!")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                "Falla de prueba de actualizacion de deuda."
+        );
     }
 //------------------------------------------------------------------------------
+
     @Test(
             enabled = true,
             priority = 0,
@@ -118,8 +166,18 @@ public class M_DeudaNGTest {
                            FROM GET_DEUDAS
                            """;
         String result = M_Deuda.sqlGetDeudas(
-                FiltroBusqueda
+                Deuda
                         .builder()
+                        .cliente(
+                                Cliente
+                                        .builder()
+                                        .persona(
+                                                Persona
+                                                        .builder()
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result, expResult.trim().strip());
@@ -131,9 +189,19 @@ public class M_DeudaNGTest {
                     WHERE ID = 0
                     """;
         result = M_Deuda.sqlGetDeudas(
-                FiltroBusqueda
+                Deuda
                         .builder()
-                        .id(0)
+                        .cliente(
+                                Cliente
+                                        .builder()
+                                        .persona(
+                                                Persona
+                                                        .builder()
+                                                        .build()
+                                        )
+                                        .build()
+                        )
+                        .id_deuda(0)
                         .build()
         );
         assertEquals(result, expResult.trim().strip());
@@ -145,13 +213,51 @@ public class M_DeudaNGTest {
                     WHERE CEDULA LIKE '012'
                     """;
         result = M_Deuda.sqlGetDeudas(
-                FiltroBusqueda
+                Deuda
                         .builder()
-                        .criterioBusqueda("012")
+                        .cliente(
+                                Cliente
+                                        .builder()
+                                        .persona(
+                                                Persona
+                                                        .builder()
+                                                        .generales(
+                                                                Generales
+                                                                        .builder()
+                                                                        .cedula("012")
+                                                                        .build())
+                                                        .build()
+                                        )
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result, expResult.trim().strip());
-        //----------------------------------------------------------------------
+    }
+
+//------------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 4,
+            description = """
+                          """
+    )
+    public void testDelete() {
+
+        assertEquals(
+                M_Deuda.delete(
+                        Deuda
+                                .builder()
+                                .id_deuda(idDeuda)
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje("Operación realizada correctamente.!!!")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
     }
 
 }

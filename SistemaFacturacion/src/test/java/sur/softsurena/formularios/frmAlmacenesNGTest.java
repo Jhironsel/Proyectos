@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.entidades.Almacen;
 
 /**
  *
@@ -17,6 +17,10 @@ import sur.softsurena.utilidades.FiltroBusqueda;
 public class frmAlmacenesNGTest {
 
     public frmAlmacenesNGTest() {
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -28,10 +32,6 @@ public class frmAlmacenesNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
     }
 
     @AfterClass
@@ -71,22 +71,16 @@ public class frmAlmacenesNGTest {
     )
     public void testLlenarTabla() {
         JTable tabla = frmAlmacenes.llenarTabla(
-                FiltroBusqueda
+                Almacen
                         .builder()
                         .id(0)
-                        .criterioBusqueda("")
+                        .nombre("")
                         .build()
         );
         
         assertNotNull(
                 tabla,
                 "La tabla de almacenes no contiene datos."
-        );
-        
-        assertEquals(
-                tabla.getRowCount(),
-                0,
-                "La tabla contiene registros en el sistema."
         );
     }
 

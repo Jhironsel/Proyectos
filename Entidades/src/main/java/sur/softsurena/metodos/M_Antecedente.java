@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Antecedente;
 import sur.softsurena.utilidades.Resultado;
@@ -15,52 +17,72 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Antecedente {
 
     /**
-     * Permite eliminar un antecedente registrado previamente del sistema.
+     * Es una tabla utilizada para almacenar los antecedentes de
+     * los pacientes del sistema, dicho antecedente describe la condicion de los
+     * paciente en el momento de la consulta.
      *
-     * @param antecedente contiene el identificador de la consulta a borrar.
-     * 
-     * @return
+     * @param antecedente objecto que contiene identificador de la consulta, 
+     * que tiene registros de historico de los antecedentes.
+     *
+     * @return Se obtiene una lista de todos los antecendentes de los registros
+     * del paciente.
      */
-    public synchronized static Resultado borrarAntecedente(
-            Antecedente antecedente
+    public synchronized static List<Antecedente> select(
+            @NonNull Antecedente antecedente
     ) {
-        final String sql
-                = "EXECUTE PROCEDURE SP_D_ANTECEDENTE(?);";
+        
+
+        List<Antecedente> lista = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(antecedente),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, antecedente.getId());
 
-            ps.execute();
+            try (ResultSet rs = ps.executeQuery();) {
+                while (rs.next()) {
+                    lista.add(
+                            Antecedente
+                                    .builder()
+                                    .id(rs.getInt("ID"))
+                                    .id_consulta(rs.getInt("ID_Consulta"))
+                                    .descripcion(rs.getString("Descripcion"))
+                                    .build()
+                    );
+                }
+            }
 
-            return Resultado
-                    .builder()
-                    .mensaje(BORRADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build();
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ERROR_AL_BORRAR_PACIENTE,
+                    "Error al consultar la vista V_ANTECEDENTES del sistema.",
                     ex
             );
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_BORRAR_PACIENTE)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
         }
+        return lista;
     }
-    public static final String BORRADO_CORRECTAMENTE
-            = "Antecendente borrado correctamente";
-    public static final String ERROR_AL_BORRAR_PACIENTE
-            = "Error al borrar paciente...";
+    
+    protected static String sqlSelect(Antecedente antecedente) {
+        Boolean id = Objects.isNull(antecedente.getId());
+        Boolean id_consulta = Objects.isNull(antecedente.getId_consulta());
+        Boolean where = id && id_consulta;
+        Boolean and = id || id_consulta;
+        final String sql = """
+                           SELECT ID, ID_CONSULTA, DESCRIPCION 
+                           FROM V_ANTECEDENTES
+                           %s%s%s%s
+                           """.formatted(
+                                   where ? "":"WHERE ",
+                                   id ? "":"ID = %d ".formatted(antecedente.getId()),
+                                   and ? "":"AND ",
+                                   id_consulta ? "":"ID_CONSULTA = %d ".formatted(antecedente.getId_consulta())
+                           );
+        return sql.trim().strip();
+    }
+    
+//------------------------------------------------------------------------------
 
     /**
      * Metodo que permite agregar los antecendentes de los pacientes del
@@ -76,8 +98,8 @@ public class M_Antecedente {
      * @return retorna una cadena o mensaje con la accion realizada por el
      * sistema.
      */
-    public synchronized static Resultado agregarAntecedente(
-            Antecedente antecedente
+    public synchronized static Resultado insert(
+            @NonNull Antecedente antecedente
     ) {
         final String sql
                 = "SELECT O_ID FROM SP_I_ANTECEDENTE (?, ?);";
@@ -130,8 +152,8 @@ public class M_Antecedente {
      * 
      * @return
      */
-    public static synchronized Resultado modificarAntecedente(
-            Antecedente antecedente
+    public static synchronized Resultado update(
+            @NonNull Antecedente antecedente
     ) {
         final String sql = "EXECUTE PROCEDURE SP_U_ANTECEDENTE(?, ?);";
 
@@ -170,58 +192,52 @@ public class M_Antecedente {
             = "Antecedente modificado correctamente";
     public static final String ERROR_AL_MODIFICAR_ANTECEDENTE
             = "Error al modificar el antecendete...";
-
+    
     /**
-     * Es una tabla utilizada para almacenar los antecedentes de
-     * los pacientes del sistema, dicho antecedente describe la condicion de los
-     * paciente en el momento de la consulta.
+     * Permite eliminar un antecedente registrado previamente del sistema.
      *
-     * @param antecedente objecto que contiene identificador de la consulta, 
-     * que tiene registros de historico de los antecedentes.
-     *
-     * @return Se obtiene una lista de todos los antecendentes de los registros
-     * del paciente.
+     * @param antecedente contiene el identificador de la consulta a borrar.
+     * 
+     * @return
      */
-    public synchronized static List<Antecedente> getAntecedentes(
-            Antecedente antecedente
+    public synchronized static Resultado delete(
+            @NonNull Antecedente antecedente
     ) {
         final String sql
-                = "SELECT ID, ID_CONSULTA, DESCRIPCION "
-                + "FROM V_ANTECEDENTES "
-                + "WHERE ID = ?;";
-
-        List<Antecedente> lista = new ArrayList<>();
+                = "EXECUTE PROCEDURE SP_D_ANTECEDENTE(?);";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
+                ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-
             ps.setInt(1, antecedente.getId());
 
-            try (ResultSet rs = ps.executeQuery();) {
+            ps.execute();
 
-                while (rs.next()) {
-                    lista.add(
-                            Antecedente
-                                    .builder()
-                                    .id(rs.getInt("ID"))
-                                    .id_consulta(rs.getInt("ID_Consulta"))
-                                    .descripcion(rs.getString("Descripcion"))
-                                    .build()
-                    );
-                }
-            }
-
+            return Resultado
+                    .builder()
+                    .mensaje(BORRADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    "Error al consultar la vista V_ANTECEDENTES del sistema.",
+                    ERROR_AL_BORRAR_PACIENTE,
                     ex
             );
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_BORRAR_PACIENTE)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
-        return lista;
     }
+    public static final String BORRADO_CORRECTAMENTE
+            = "Antecendente borrado correctamente";
+    public static final String ERROR_AL_BORRAR_PACIENTE
+            = "Error al borrar paciente...";
 }

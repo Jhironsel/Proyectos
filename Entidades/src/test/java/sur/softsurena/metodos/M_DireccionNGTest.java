@@ -77,7 +77,7 @@ public class M_DireccionNGTest {
         Resultado result = agregarDireccion(
                 Direccion
                         .builder()
-                        .id_persona(M_PersonaNGTest.persona().getId_persona())
+                        .id_persona(M_PersonaNGTest.persona(Boolean.FALSE).getId_persona())
                         .provincia(
                                 Provincia
                                         .builder()
@@ -148,7 +148,7 @@ public class M_DireccionNGTest {
                 Direccion
                         .builder()
                         .id(id_direccion)
-                        .id_persona(M_PersonaNGTest.persona().getId_persona())
+                        .id_persona(M_PersonaNGTest.persona(Boolean.FALSE).getId_persona())
                         .provincia(
                                 Provincia
                                         .builder()

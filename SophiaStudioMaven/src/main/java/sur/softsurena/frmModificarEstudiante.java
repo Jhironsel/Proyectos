@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Estudiante;
-import static sur.softsurena.metodos.M_Estudiante.modificarEstudiante;
+import sur.softsurena.metodos.M_Estudiante;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmModificarEstudiante extends javax.swing.JInternalFrame {
@@ -330,19 +331,19 @@ public class frmModificarEstudiante extends javax.swing.JInternalFrame {
                 jlNombrePadre.setText(rs.getString("NombrePadre"));
 
                 jcbTandaEstudiante.addItem(rs.getString("dias"));
-                
+
                 estado(rs.getBoolean("ESTADO"));
 
                 tanda = rs.getInt("Id_Tanda");
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             JOptionPane.showMessageDialog(
-                    this, 
+                    this,
                     "Estudiante no Encontrado, Contactar SoftSureña!!!"
             );
         }
@@ -359,21 +360,29 @@ public class frmModificarEstudiante extends javax.swing.JInternalFrame {
         Estudiante estudiante
                 = Estudiante
                         .builder()
-                        .id_persona(0)
-                        .pnombre(txtNombreEstudiante.getText())
-                        .snombre("")
-                        .apellidos(txtApellidosEstudiantes.getText())
-                        .sexo('F')
-                        .fecha_nacimiento(
-                                new java.sql.Date(
-                                        dchFechaNacimientoEstudiante
-                                                .getCalendar().getTimeInMillis()
-                                )
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(0)
+                                        .pnombre(txtNombreEstudiante.getText())
+                                        .snombre("")
+                                        .apellidos(txtApellidosEstudiantes.getText())
+                                        .sexo('F')
+                                        .fecha_nacimiento(
+                                                new java.sql.Date(
+                                                        dchFechaNacimientoEstudiante
+                                                                .getCalendar().getTimeInMillis()
+                                                )
+                                        )
+                                        .estado(jcbEstado.isSelected())
+                                        .build()
                         )
-                        .estado(jcbEstado.isSelected())
                         .build();
 
-        JOptionPane.showMessageDialog(this, modificarEstudiante(estudiante));
+        JOptionPane.showMessageDialog(
+                this,
+                M_Estudiante.update(estudiante)
+        );
         cerrar();
     }//GEN-LAST:event_btnGuardarActionPerformed
     private void cerrar() {
@@ -402,8 +411,8 @@ public class frmModificarEstudiante extends javax.swing.JInternalFrame {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
@@ -419,11 +428,11 @@ public class frmModificarEstudiante extends javax.swing.JInternalFrame {
         jcbTandaEstudiante.removeAllItems();
         dchFechaNacimientoEstudiante.setDate(null);
     }//GEN-LAST:event_formInternalFrameOpened
-    private void estado(boolean valor){
+    private void estado(boolean valor) {
         jcbEstado.setSelected(valor);
         jcbEstado.setText(valor ? "Activo" : "Inactivo");
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConsultar;

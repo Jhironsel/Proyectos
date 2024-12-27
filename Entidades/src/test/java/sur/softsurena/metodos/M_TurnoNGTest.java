@@ -1,8 +1,8 @@
 package sur.softsurena.metodos;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import lombok.Getter;
-import lombok.NonNull;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -10,7 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.entidades.Turno;
+import static sur.softsurena.metodos.M_Turno.TURNO_CERRADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -61,7 +62,7 @@ public class M_TurnoNGTest {
     public void testHabilitarTurno() {
         String idUsuario = "";
         Resultado expResult = null;
-        Resultado result = M_Turno.habilitarTurno(idUsuario);
+        Resultado result = M_Turno.insert(idUsuario);
         assertEquals(result, expResult);
     }
 
@@ -70,11 +71,18 @@ public class M_TurnoNGTest {
             priority = 0,
             description = ""
     )
-    public void testCerrarTurno() {
+    public void testUpdate() {
         Integer idTurno = null;
-        boolean expResult = false;
-        boolean result = M_Turno.cerrarTurno(idTurno);
-        assertEquals(result, expResult);
+        
+        assertEquals(
+                M_Turno.update(idTurno), 
+                Resultado
+                    .builder()
+                    .mensaje(TURNO_CERRADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build()
+        );
     }
 
     @Test(
@@ -84,10 +92,8 @@ public class M_TurnoNGTest {
     )
     public void testGetTurnos() {
         List expResult = null;
-        List result = M_Turno.getTurnos(
-                FiltroBusqueda
-                .builder()
-                .build()
+        List result = M_Turno.select(
+                Turno.builder().build()
         );
         assertEquals(result, expResult);
     }
@@ -104,8 +110,8 @@ public class M_TurnoNGTest {
                            FROM V_TURNOS 
                            WHERE ESTADO
                            """;
-        String result = M_Turno.sqlGetTurnos(
-                FiltroBusqueda
+        String result = M_Turno.sqlSelect(
+                Turno
                         .builder()
                         .estado(Boolean.TRUE)
                         .build()
@@ -119,8 +125,8 @@ public class M_TurnoNGTest {
                            FROM V_TURNOS 
                            WHERE ESTADO IS FALSE
                            """;
-        result = M_Turno.sqlGetTurnos(
-                FiltroBusqueda
+        result = M_Turno.sqlSelect(
+                Turno
                         .builder()
                         .estado(Boolean.FALSE)
                         .build()
@@ -134,11 +140,11 @@ public class M_TurnoNGTest {
                            FROM V_TURNOS 
                            WHERE ESTADO AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('JHIRONSEL'));
                            """;
-        result = M_Turno.sqlGetTurnos(
-                FiltroBusqueda
+        result = M_Turno.sqlSelect(
+                Turno
                         .builder()
                         .estado(Boolean.TRUE)
-                        .criterioBusqueda("JHIRONSEL")
+                        .turno_usuario("JHIRONSEL")
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.trim().strip());
@@ -150,11 +156,11 @@ public class M_TurnoNGTest {
                            FROM V_TURNOS 
                            WHERE ESTADO IS FALSE AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('JHIRONSEL'));
                            """;
-        result = M_Turno.sqlGetTurnos(
-                FiltroBusqueda
+        result = M_Turno.sqlSelect(
+                Turno
                         .builder()
                         .estado(Boolean.FALSE)
-                        .criterioBusqueda("JHIRONSEL")
+                        .turno_usuario("JHIRONSEL")
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.trim().strip());

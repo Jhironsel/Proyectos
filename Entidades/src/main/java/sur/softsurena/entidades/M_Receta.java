@@ -1,16 +1,14 @@
 package sur.softsurena.entidades;
 
-import sur.softsurena.abstracta.Persona;
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Antecedente {
+public class M_Receta {
 
     private final Integer id;
-    private final Integer id_consulta;
-    private final String descripcion;
-    
-
+    private final Consulta consulta;
+    private final Timestamp fecha;
 }

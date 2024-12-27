@@ -47,14 +47,12 @@ import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.metodos.M_Categoria.getCategoriaActivas;
 import static sur.softsurena.metodos.M_Categoria.getCategorias;
 import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_M_Factura;
 import sur.softsurena.metodos.M_Precio;
 import sur.softsurena.metodos.M_Producto;
-import static sur.softsurena.metodos.M_Producto.getProductos;
-import static sur.softsurena.metodos.M_Producto.getProductosByCategoria;
 import sur.softsurena.metodos.M_Turno;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -91,7 +89,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }
 
     private void setPropiedad() {
-        File file = new File("target/classes/sur/softsurena/properties/proFacturas.prop");
+        File file = new File("properties/proFacturas.prop");
         try (InputStream is = new FileInputStream(file);) {
             getPropiedad().load(is);
         } catch (FileNotFoundException ex) {
@@ -758,10 +756,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        turno = M_Turno.getTurnos(
-                FiltroBusqueda
+        turno = M_Turno.select(
+                Turno
                         .builder()
-                        .criterioBusqueda(
+                        .turno_usuario(
                                 getUsuarioActual().getUser_name()
                         )
                         .estado(true)
@@ -770,7 +768,13 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         txtTurno.setText("Turno: " + turno.getId());
         //TODO 24/11/2024 Obtener los valores de los siguiente componente.
 //        jlAlmacen.setText("Almacen: " + turno.getAlmacen().getNombre());
-//        txtIdFactura.setText(turno.getFactura().getId().toString());
+
+        txtIdFactura.setText(
+                M_M_Factura.getIDFacturaNueva(
+                        turno.getId()
+                ).toString()
+        );
+
         txtCriterio.requestFocus();
     }//GEN-LAST:event_formInternalFrameActivated
 
@@ -824,8 +828,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (cbCriterio.getSelectedIndex() == 1
                 || cbCriterio.getSelectedIndex() == 2) {
 
-            List<Producto> listaProductos = getProductos(
-                    FiltroBusqueda
+            List<Producto> listaProductos = M_Producto.select(
+                    Producto
                             .builder()
                             .build()
             );
@@ -1041,10 +1045,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         getClientesCombo();
-//        txtIdFactura.setText("" + getNumFac(getIdUsuario(), getTurno()));
         repararRegistro();
         totales();
-
         formInternalFrameDeiconified(evt);
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -1290,8 +1292,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 new String[]{
-                    "<html><big>Credito</big></html>", 
-                    "<html><big>Externa</big></html", 
+                    "<html><big>Credito</big></html>",
+                    "<html><big>Externa</big></html",
                     "<html><big>Cancelar</big></html"
                 },
                 0
@@ -1494,7 +1496,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                }
 //            }
 //        }
-//        txtIdFactura.setText("" + getNumFac(getIdUsuario(), getTurno()));
+        txtIdFactura.setText(
+                M_M_Factura.getIDFacturaNueva(
+                        turno.getId()
+                ).toString()
+        );
+
 //----------------------------------------------------------------------------
         Map<String, Integer> parametros = new HashMap<>();
 
@@ -1576,11 +1583,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             getPropiedad().store(
                     new FileWriter(
                             new File(
-                                    getClass().getResource("/sur/softsurena/properties/frmFacturaPropiedades.properties").toURI()
+                                    "properties/frmFacturaPropiedades.properties"
                             )
                     ),
                     "Valor que permite obtener las categorias.");
-        } catch (IOException | URISyntaxException ex) {
+        } catch (IOException ex) {
             LOG.log(
                     Level.SEVERE,
                     "Error al cargar la URI de archivo properties frmFacturaPropiedades.properties",
@@ -1655,12 +1662,17 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             String idProducto = btn.getToolTipText();
 
-            Precio precio = M_Precio.getEntity(
-                    FiltroBusqueda
+            Precio precio = M_Precio.select(
+                    Precio
                             .builder()
-                            .id(Integer.valueOf(idProducto))
+                            .producto(
+                                    Producto
+                                            .builder()
+                                            .id(Integer.valueOf(idProducto))
+                                            .build()
+                            )
                             .build()
-            );
+            ).getFirst();
 
 //            facturas.add(
 //                    tblDetalle.getRowCount(),
@@ -1674,12 +1686,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                    )
 //                    null
 //            );//Cantidad
-            
-            if(Objects.isNull(precio.getPrecio())){
+            if (Objects.isNull(precio.getPrecio())) {
                 JOptionPane.showInternalMessageDialog(
-                        this, 
-                        "Producto no cuenta con precio registrados", 
-                        "", 
+                        this,
+                        "Producto no cuenta con precio registrados",
+                        "",
                         JOptionPane.ERROR_MESSAGE
                 );
                 return;
@@ -1717,9 +1728,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jpProductos.repaint();
             jpProductos.setLayout(new FlowLayout());
 
-            getProductosByCategoria(
-                    idCategoria,
-                    cbTodosProductos.isSelected()).stream().forEach(
+            M_Producto.selectByCategoria(
+                    Categoria
+                            .builder()
+                            .id_categoria(idCategoria)
+                            .build()
+            ).stream().forEach(
                     producto -> {
 
                         boton = new JButton(producto.getDescripcion());
@@ -1894,18 +1908,21 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         cmbClientes.removeAllItems();
         cmbClientes.repaint();
 
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        M_Cliente.select(
+                Cliente
                         .builder()
-                        .estado(true)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(true)
+                                        .build()
+                        )
                         .build()
         ).stream().forEach(
                 cliente -> {
                     cmbClientes.addItem(cliente.getPersona());
                 }
         );
-
-        
 
         if (cmbClientes.getItemCount() > 0) {
             cmbClientes.setSelectedIndex(0);

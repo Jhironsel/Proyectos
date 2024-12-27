@@ -13,9 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Deuda;
 import sur.softsurena.hilos.hiloImpresionFactura;
-import static sur.softsurena.metodos.M_Deuda.getDeudas;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.metodos.M_Deuda;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -357,8 +357,8 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                         .build()
         );
 
-        getDeudas(
-                FiltroBusqueda
+        M_Deuda.select(
+                Deuda
                         .builder()
                         .build()
         ).stream().forEach(

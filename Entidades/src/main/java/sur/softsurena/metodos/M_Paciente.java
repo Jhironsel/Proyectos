@@ -12,7 +12,6 @@ import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Paciente;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -275,16 +274,16 @@ public class M_Paciente {
     /**
      * TODO 14/11/2024 Pasar el parametros de filtro de busquedas.
      *
-     * @param filtro
+     * @param paciente
      * @return
      */
     public static List<Paciente> getList(
-            @NonNull FiltroBusqueda filtro
+            @NonNull Paciente paciente
     ) {
         
         List<Paciente> pacienteList = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetList(filtro),
+                sqlGetList(paciente),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -330,8 +329,8 @@ public class M_Paciente {
         return pacienteList;
     }
     
-    protected static String sqlGetList(FiltroBusqueda filtro) {
-        Boolean estado = Objects.isNull(filtro.getEstado());
+    protected static String sqlGetList(Paciente paciente) {
+        Boolean estado = Objects.isNull(paciente.getPersona().getEstado());
         Boolean where = estado;
         
         return """
@@ -343,7 +342,7 @@ public class M_Paciente {
                %s%s
                """.strip().trim().formatted(
                        where ? "":"WHERE ",
-                       estado ? "":(filtro.getEstado() ? "ESTADO ":"ESTADO IS FALSE ")
+                       estado ? "":(paciente.getPersona().getEstado() ? "ESTADO ":"ESTADO IS FALSE ")
                ).strip().trim();
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES

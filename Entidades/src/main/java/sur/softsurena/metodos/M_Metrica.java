@@ -13,7 +13,6 @@ import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.Metrica;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -29,18 +28,18 @@ public class M_Metrica {
 
     /**
      * 
-     * @param filtro
-     *
+     * @param metrica
+     * 
      * @return
      */
     public synchronized static List<Metrica> select(
-            @NonNull FiltroBusqueda filtro
+            @NonNull Metrica metrica
     ) {
 
         List<Metrica> lista = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(filtro),
+                sqlSelect(metrica),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
@@ -88,8 +87,8 @@ public class M_Metrica {
         return lista;
     }
 
-    protected static String sqlSelect(FiltroBusqueda filtro) {
-        Boolean id = Objects.isNull(filtro.getId());
+    protected static String sqlSelect(Metrica metrica) {
+        Boolean id = Objects.isNull(metrica.getId());
         Boolean where = id;
         return """
                SELECT ID, ID_CONSULTA, FECHA, PESOKG, ESTATURAMETRO, ESCEFALO,
@@ -99,7 +98,7 @@ public class M_Metrica {
                %s%s
                """.trim().strip().formatted(
                 where ? "" : "WHERE ",
-                       id ? "":"ID_CONSULTA = %d ".formatted(filtro.getId())
+                       id ? "":"ID_CONSULTA = %d ".formatted(metrica.getId())
         ).trim().strip();
     }
 

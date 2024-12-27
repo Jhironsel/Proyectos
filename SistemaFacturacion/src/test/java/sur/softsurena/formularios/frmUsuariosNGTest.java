@@ -54,7 +54,7 @@ public class frmUsuariosNGTest {
             enabled = true,
             priority = 0,
             description = """
-                          Test que se encarga de hacer la instalacia del 
+                          Test que se encarga de hacer la instalacia del
                           formulario.
                           """
     )

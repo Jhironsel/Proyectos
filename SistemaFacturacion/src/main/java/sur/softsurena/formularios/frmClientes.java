@@ -22,6 +22,7 @@ import sur.softsurena.entidades.Distrito_municipal;
 import sur.softsurena.entidades.EstadoCivil;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Municipio;
+import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Provincia;
 import sur.softsurena.entidades.Sexo;
@@ -41,7 +42,6 @@ import sur.softsurena.metodos.M_Privilegio;
 import sur.softsurena.metodos.M_Provincia;
 import sur.softsurena.metodos.M_Sexo;
 import sur.softsurena.metodos.M_TipoPersona;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -1342,7 +1342,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //Mandamos a borrar el cliente y obtenemos el resultado de la operacion
         //y almacenamos en una variable.
-        Resultado resultados = M_Cliente.borrarCliente(
+        Resultado resultados = M_Cliente.delete(
                 ((Generales) tblClientes.getValueAt(
                         tblClientes.getSelectedRow(),
                         0
@@ -1669,7 +1669,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         if (v_nuevo && resultados.getEstado()) {
             mensajeResultado(
-                    M_Cliente.agregarClienteById(idCliente),
+                    M_Cliente.insertById(idCliente),
                     false
             );
 
@@ -1798,9 +1798,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                         txtCedula.setText(
                                 M_Generales.generarCedula()
                         );
-                        boolean cedula = Utilidades.validarCampo(txtCedula);
 
-                        if (cedula) {
+                        if (Utilidades.validarCampo(txtCedula)) {
                             System.out.println("Cedula OK.");
                         } else {
                             System.out.println("Cedula no cumple.");
@@ -2313,10 +2312,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             idCliente = cedula.getPersona().getId_persona();
 
             if (v_nuevo) {
-                if (idCliente > 0 && !M_Persona.getList(
-                        FiltroBusqueda
+                if (idCliente > 0 && !M_Persona.select(
+                        Persona
                                 .builder()
-                                .id(idCliente)
+                                .id_persona(idCliente)
                                 .build()
                 ).getFirst().getEstado()) {
                     int resp = JOptionPane.showInternalConfirmDialog(
@@ -2341,7 +2340,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                      * devuelve falso, es por ello se valida la negacion de
                      * false, para obtener true.
                      */
-                    Resultado resultado = M_Cliente.agregarClienteById(idCliente);
+                    Resultado resultado = M_Cliente.insertById(idCliente);
 
                     //!resultado.getEstado();
                     JOptionPane.showInternalMessageDialog(
@@ -2351,13 +2350,31 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                             resultado.getIcono()
                     );
                 } else {
+                    int respuesta = JOptionPane.showInternalConfirmDialog(
+                            this,
+                            """
+                            Este usuario esta registrado y activo.
+                            Desea activar usuario?
+                            """,
+                            "Id Cliente: ".concat(idCliente.toString()),
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+
+                    if (respuesta == JOptionPane.NO_OPTION) {
+                        return;
+                    }
+
+                    Resultado resultado = M_Cliente.insertById(idCliente);
+
                     JOptionPane.showInternalMessageDialog(
                             this,
-                            "Este usuario esta registrado y activo.",
-                            "Id Cliente: ".concat(idCliente.toString()),
-                            JOptionPane.INFORMATION_MESSAGE,
-                            null
+                            resultado.getMensaje(),
+                            "",
+                            resultado.getIcono()
                     );
+
+                    btnCancelarActionPerformed(evt);
                 }
             }
         }
@@ -3039,10 +3056,15 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
      * TODO 24/11/2024 Comprobar que este metodo traer consigo una persona.
      */
     private void mostrarRegistro() {
-        List<Cliente> lista = M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        List<Cliente> lista = M_Cliente.select(
+                Cliente
                         .builder()
-                        .id(idCliente)
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .id_persona(idCliente)
+                                        .build()
+                        )
                         .build()
         );
 
@@ -3130,12 +3152,17 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
         //TODO 23/11/2024 TESTE he puesto el filtro, pero hay que ver que parametros 
         //lleva.
-        M_Cliente.getPersonasClientes(
-                FiltroBusqueda
+        M_Cliente.select(
+                Cliente
                         .builder()
-                        .filas(Boolean.TRUE)
-                        .nCantidadFilas((int) jsCantidadFilas.getValue())
-                        .nPaginaNro((int) jsPaginaNro.getValue())
+                        .persona(Persona.builder().build())
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nCantidadFilas((int) jsCantidadFilas.getValue())
+                                        .nPaginaNro((int) jsPaginaNro.getValue())
+                                        .build()
+                        )
                         .build()
         ).stream().forEach(
                 cliente -> {

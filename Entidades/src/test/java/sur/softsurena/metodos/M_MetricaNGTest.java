@@ -10,7 +10,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Metrica;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -69,7 +68,7 @@ public class M_MetricaNGTest {
 
         assertEquals(
                 M_Metrica.sqlSelect(
-                        FiltroBusqueda
+                        Metrica
                                 .builder()
                                 .build()
                 ),
@@ -86,7 +85,7 @@ public class M_MetricaNGTest {
 
         assertEquals(
                 M_Metrica.sqlSelect(
-                        FiltroBusqueda
+                        Metrica
                                 .builder()
                                 .id(-1)
                                 .build()
@@ -105,7 +104,7 @@ public class M_MetricaNGTest {
 
         assertNotNull(
                 M_Metrica.sqlSelect(
-                        FiltroBusqueda
+                        Metrica
                                 .builder()
                                 .build()
                 ),

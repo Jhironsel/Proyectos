@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
@@ -28,6 +27,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Role;
+import sur.softsurena.entidades.Turno;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.hilos.hiloIp;
 import sur.softsurena.hilos.hiloRestaurar;
@@ -41,7 +41,6 @@ import sur.softsurena.metodos.M_Role;
 import sur.softsurena.metodos.M_Turno;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.DesktopConFondo;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -1189,10 +1188,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuOpcionesSalirActionPerformed
 
     private void mnuMovimientosNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosNuevaFacturaActionPerformed
-        if (M_Turno.getTurnos(
-                FiltroBusqueda
+        if (M_Turno.select(
+                Turno
                         .builder()
-                        .criterioBusqueda(usuario.getUser_name())
+                        .turno_usuario(usuario.getUser_name())
                         .estado(true)
                         .build()
         ).isEmpty()) {
@@ -1332,8 +1331,8 @@ public final class frmPrincipal extends javax.swing.JFrame {
             };
             Object[] rowData2 = new Object[columnas2.length];
 
-            M_Turno.getTurnos(
-                    FiltroBusqueda
+            M_Turno.select(
+                    Turno
                             .builder()
                             .estado(true)
                             .build()
@@ -1676,7 +1675,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         );
 
         //Se carga los roles del usuario en el comboBox.
-        M_Role.comprobandoRolesDisponibles(
+        M_Role.selectDisponibles(
                 usuario.getUser_name().strip(),
                 true
         ).stream().forEach(

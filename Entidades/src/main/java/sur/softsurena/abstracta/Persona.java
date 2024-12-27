@@ -5,6 +5,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import sur.softsurena.entidades.Generales;
+import sur.softsurena.entidades.Paginas;
 
 @Getter
 @SuperBuilder
@@ -23,6 +24,7 @@ public class Persona {
     private final String user_name;
     private final String rol;
     private final Generales generales;
+    private final Paginas pagina;
 
     @Override
     public String toString() {

@@ -16,7 +16,6 @@ import static sur.softsurena.metodos.M_M_Factura.ERROR_AL_INSERTAR_FACTURA_AL_SI
 import static sur.softsurena.metodos.M_M_Factura.FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM;
 import static sur.softsurena.metodos.M_M_Factura.FACTURA__BORRADA__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_M_Factura.OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__FA;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -24,10 +23,10 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 public class M_M_FacturaNGTest {
-    
+
     private int id_factura = -1;
     private Factura factura;
-    
+
     public M_M_FacturaNGTest() {
         factura = Factura
                 .builder()
@@ -35,7 +34,7 @@ public class M_M_FacturaNGTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -50,7 +49,7 @@ public class M_M_FacturaNGTest {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
     }
 
@@ -72,7 +71,7 @@ public class M_M_FacturaNGTest {
                           """
     )
     public void testAgregarFacturaNombre() {
-        
+
         Resultado result = M_M_Factura.agregarFacturaNombre(
                 Factura
                         .builder()
@@ -88,18 +87,18 @@ public class M_M_FacturaNGTest {
         assertEquals(
                 result,
                 Resultado
-                    .builder()
-                    .mensaje(FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
+                        .builder()
+                        .mensaje(FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA
         );
 
-        
         id_factura = result.getId();
-        
+
     }
+
     //--------------------------------------------------------------------------
     @Test(
             enabled = false,
@@ -109,15 +108,15 @@ public class M_M_FacturaNGTest {
                           """
     )
     public void testModificarFactura() {
-        
+
         assertEquals(
-                M_M_Factura.modificarFactura(factura), 
+                M_M_Factura.modificarFactura(factura),
                 Resultado
-                    .builder()
-                    .mensaje("Factura modificada correctamente.")
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build()
+                        .builder()
+                        .mensaje("Factura modificada correctamente.")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
     }
 
@@ -128,13 +127,18 @@ public class M_M_FacturaNGTest {
     )
     public void testGetFacturaEstado() {
         List result = M_M_Factura.getFacturaEstado(
-                FiltroBusqueda
+                Factura
                         .builder()
-                        .estadoFactura('t')
+                        .m_factura(
+                                M_Factura
+                                        .builder()
+                                        .estadoFactura('t')
+                                        .build()
+                        )
                         .build()
         );
         assertTrue(
-                result.isEmpty(), 
+                result.isEmpty(),
                 "La lista de facturas temporales se encuentra con registros."
         );
     }
@@ -148,17 +152,19 @@ public class M_M_FacturaNGTest {
                           """
     )
     public void testBorrarFactura() {
-        if(id_factura < 0) return;
+        if (id_factura < 0) {
+            return;
+        }
         Resultado result = M_M_Factura.borrarFactura(id_factura);
 
         assertEquals(
                 result,
                 Resultado
-                    .builder()
-                    .mensaje(FACTURA__BORRADA__CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
+                        .builder()
+                        .mensaje(FACTURA__BORRADA__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__FA
         );
 
@@ -194,12 +200,15 @@ public class M_M_FacturaNGTest {
                            ;
                            """;
         String result = M_M_Factura.sqlFacturaEstado(
-                FiltroBusqueda
+                Factura
                         .builder()
+                        .m_factura(
+                                M_Factura.builder().build()
+                        )
                         .build()
         );
         assertEquals(result, expResult);
-        
+
         expResult = """
                     SELECT
                        ID,
@@ -219,13 +228,18 @@ public class M_M_FacturaNGTest {
                     WHERE ESTADO_FACTURA = 't';
                     """;
         result = M_M_Factura.sqlFacturaEstado(
-                FiltroBusqueda
+                Factura
                         .builder()
-                        .estadoFactura('t')
+                        .m_factura(
+                                M_Factura
+                                        .builder()
+                                        .estadoFactura('t')
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result, expResult);
-        
+
         expResult = """
                     SELECT
                        ID,
@@ -245,9 +259,14 @@ public class M_M_FacturaNGTest {
                     WHERE ESTADO_FACTURA = 'i';
                     """;
         result = M_M_Factura.sqlFacturaEstado(
-                FiltroBusqueda
+                Factura
                         .builder()
-                        .estadoFactura('i')
+                        .m_factura(
+                                M_Factura
+                                        .builder()
+                                        .estadoFactura('i')
+                                        .build()
+                        )
                         .build()
         );
         assertEquals(result, expResult);

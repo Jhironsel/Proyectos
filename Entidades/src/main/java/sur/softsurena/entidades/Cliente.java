@@ -17,6 +17,8 @@ public class Cliente {
     private final Integer cantidadFactura;
     private final Date fechaUltimaCompra;
     private final BigDecimal saldo;
+    
+    private final Paginas pagina;
 
     @Override
     public String toString() {
@@ -60,23 +62,18 @@ public class Cliente {
         final Cliente other = (Cliente) obj;
         
         if (!Objects.equals(this.persona, other.persona)) {
-            System.out.println("No son iguales en persona.");
             return false;
         }
         if (!Objects.equals(this.totalFacturado, other.totalFacturado)) {
-            System.out.println("No son iguales en totalFacturado.");
             return false;
         }
         if (!Objects.equals(this.totalDeuda, other.totalDeuda)) {
-            System.out.println("No son iguales en TotalDeuda.");
             return false;
         }
         if (!Objects.equals(this.cantidadFactura, other.cantidadFactura)) {
-            System.out.println("No son iguales en CantidadFactura.");
             return false;
         }
         if (!Objects.equals(this.fechaUltimaCompra, other.fechaUltimaCompra)) {
-            System.out.println("No son iguales en UltimaCompra.");
             return false;
         }
         return Objects.equals(this.saldo, other.saldo);
