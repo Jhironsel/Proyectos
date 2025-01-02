@@ -1,34 +1,37 @@
 package sur.softsurena.metodos;
 
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
-import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Consulta.CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST;
 import static sur.softsurena.metodos.M_Consulta.ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA;
 import sur.softsurena.utilidades.Resultado;
 
-@Getter
+/**
+ * 
+ * @author jhironsel
+ */
 public class M_ConsultaNGTest {
+    
+    private static Integer idConsulta;
 
-    private final M_PacienteNGTest paciente;
-    private final M_Control_ConsultaNGTest controlConsulta;
-    private int idConsulta;
-
+    public static Integer getIdConsulta() {
+        return idConsulta;
+    }
+    
     public M_ConsultaNGTest() {
-        paciente = new M_PacienteNGTest();
-        controlConsulta = new M_Control_ConsultaNGTest();
     }
 
     @BeforeClass
@@ -68,20 +71,20 @@ public class M_ConsultaNGTest {
                           esta crea el paciente y el control de la consulta.
                           """
     )
-    public void testInsert() {
-        paciente.testInsert();
-        controlConsulta.testInsert();
+    public static void testInsert() {
+        M_PacienteNGTest.testInsert();
+        M_Control_ConsultaNGTest.testInsert();
         
         Resultado result = M_Consulta.insert(
                 Consulta
                         .builder()
                         .paciente(
-                                paciente.generarPaciente()
+                                M_PacienteNGTest.generarPaciente()
                         )
                         .controlConsulta(
                                 Control_Consulta
                                         .builder()
-                                        .id(controlConsulta.getIdControlConsulta())
+                                        .id(M_Control_ConsultaNGTest.controlConsulta().getId())
                                         .build()
                         )
                         .linea(0)
@@ -111,26 +114,96 @@ public class M_ConsultaNGTest {
 
     @Test(
             enabled = false,
-            description = "",
-            priority = 0
+            priority = 5,
+            description = """
+                          
+                          """
     )
-    public void testGetConsulta() {
-        String fecha = "";
-        ResultSet expResult = null;
-        List<Consulta> result = M_Consulta.getConsulta(new Date(0));
+    public static void testSelect() {
+        Consulta consulta = null;
+        List expResult = null;
+        List result = M_Consulta.select(consulta);
         assertEquals(result, expResult);
     }
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 0
+            enabled = true,
+            priority = 0,
+            description = """
+                          
+                          """
     )
-    public void testGetControlConsulta() {
-        String fecha = "";
-        boolean expResult = false;
-        boolean result = M_Consulta.getControlConsulta(fecha);
-        assertEquals(result, expResult);
+    public static void testSqlSelect() {
+        assertEquals(
+                M_Consulta.sqlSelect(
+                        Consulta.builder().build()
+                ),
+                """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                """.trim().strip()
+        );
+        
+        assertEquals(
+                M_Consulta.sqlSelect(
+                        Consulta
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                WHERE ID = -1
+                """.trim().strip()
+        );
+        
+        assertEquals(
+                M_Consulta.sqlSelect(
+                        Consulta
+                                .builder()
+                                .controlConsulta(
+                                        Control_Consulta
+                                                .builder()
+                                                .id(-1)
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                WHERE ID_CONTROL_CONSULTA = -1
+                """.trim().strip()
+        );
+        
+        assertEquals(
+                M_Consulta.sqlSelect(
+                        Consulta
+                                .builder()
+                                .paciente(
+                                        Paciente
+                                                .builder()
+                                                .persona(
+                                                        Persona
+                                                                .builder()
+                                                                .id_persona(-1)
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                WHERE ID_PACIENTE = -1
+                """.trim().strip()
+        );
     }
 
     @Test(
@@ -142,9 +215,9 @@ public class M_ConsultaNGTest {
                           el paciente creado recientemente.
                           """
     )
-    public void testEliminarConsulta() {
+    public static void testDelete() {
         assertEquals(
-                M_Consulta.eliminarConsulta(idConsulta), 
+                M_Consulta.delete(idConsulta), 
                 Resultado
                         .builder()
                         .mensaje(CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST)
@@ -155,7 +228,7 @@ public class M_ConsultaNGTest {
         );
         
         
-        controlConsulta.testDelete();
-        paciente.testDelete();
+        M_PacienteNGTest.testDelete();
+        M_Control_ConsultaNGTest.testDelete();
     }
 }

@@ -8,16 +8,20 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Control_Consulta {
 
-    private final int id;
+    private final Integer id;
     private final String user_name;
-    private final int cantidad;
+    private final Integer cantidad;
     private final String dia;
     private final Time inicial;
     private final Time finall;
     private final Boolean estado;
-
+    
     @Override
     public String toString() {
+        return user_name;
+    }
+
+    public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Control_Consulta{");
         sb.append("id=").append(id);

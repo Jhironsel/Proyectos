@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.conexion.Conexion;
@@ -7,9 +8,11 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmAutorizacion extends javax.swing.JDialog {
 
-    private static boolean aceptar = false;
     private static final long serialVersionUID = 1L;
-    
+    private static boolean aceptar = false;
+    private static Frame parent;
+    private static boolean modal;
+
     public boolean isAceptado() {
         return aceptar;
     }
@@ -25,7 +28,21 @@ public class frmAutorizacion extends javax.swing.JDialog {
         this.aceptar = Conexion.verificar().getEstado();
     }
 
-    public frmAutorizacion(java.awt.Frame parent, boolean modal) {
+    public static frmAutorizacion getInstance(Frame parent, boolean modal) {
+        frmAutorizacion.parent = parent;
+        frmAutorizacion.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmAutorizacion INSTANCE = new frmAutorizacion(
+                frmAutorizacion.parent, 
+                frmAutorizacion.modal
+        );
+    }
+
+    private frmAutorizacion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

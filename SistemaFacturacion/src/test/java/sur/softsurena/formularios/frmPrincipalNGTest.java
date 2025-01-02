@@ -337,17 +337,6 @@ public class frmPrincipalNGTest {
         abrirFormulario(frmGestorGastos.getInstance());
     }
 
-    @Test(
-            enabled = false,
-            priority = 9,
-            description = """
-                          """
-    )
-    public void testGetFechaReporte() {
-        frmFechaReporte expResult = null;
-        frmFechaReporte result = frmPrincipal.getFechaReporte();
-        assertEquals(result, expResult);
-    }
 
     @Test(
             enabled = true,

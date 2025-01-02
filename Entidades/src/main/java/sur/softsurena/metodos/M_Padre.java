@@ -120,7 +120,7 @@ public class M_Padre {
                     FECHA_NACIMIENTO, ESTADO_PERSONA,
                     ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                     NO_NSS, ESTADO_SEGURO
-               FROM GET_PADRES
+               FROM GET_PERSONAS_PADRES
                %s%s%s%s
                 """.trim().strip().formatted(
                 where ? "" : "WHERE ",
@@ -348,7 +348,7 @@ public class M_Padre {
      */
     public synchronized static ResultSet getPadresActivoID(int idPadre) {
         final String sql = "SELECT NOMBRES, APELLIDOS, ARS, NONSS "
-                + "FROM GET_PADRES "
+                + "FROM GET_PERSONAS_PADRES "
                 + "WHERE IDPADRE = ?";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -376,7 +376,7 @@ public class M_Padre {
      */
     public synchronized static ResultSet getPadresActivo(String cedula, String sexo) {
         final String sql = "SELECT IDPADRE, CEDULA, NOMBRES, APELLIDOS "
-                + "FROM GET_PADRES "
+                + "FROM GET_PERSONAS_PADRES "
                 + "WHERE ESTADO AND CEDULA STARTING WITH ? AND SEXO LIKE ?;";
 
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
@@ -406,7 +406,7 @@ public class M_Padre {
                 + "IDTIPOSANGRE, TIPOSANGRE, IDARS, ARS, NONSS, "
                 + "TELEFONO, MOVIL, CORREO, DIRECCION, CIUDAD, FECHANACIMIENTO, "
                 + "ESTADO "
-                + "FROM GET_PADRES "
+                + "FROM GET_PERSONAS_PADRES "
                 + "WHERE ESTADO IS ? and idPadre != 0";
 
         try (PreparedStatement ps = getCnn().prepareStatement(

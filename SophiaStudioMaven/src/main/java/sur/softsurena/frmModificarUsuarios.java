@@ -2,6 +2,7 @@ package sur.softsurena;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.utilidades.Opcion;
 
@@ -265,11 +266,16 @@ public class frmModificarUsuarios extends javax.swing.JInternalFrame {
         Usuario miUsuario = 
                 Usuario
                         .builder()
-                        .user_name(txtNombre.getText())
-                        .pnombre(txtNombre.getText())
-                        .apellidos(txtApellidos.getText())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .user_name(txtNombre.getText())
+                                        .pnombre(txtNombre.getText())
+                                        .apellidos(txtApellidos.getText())
+                                        .estado(jcbEstado.isSelected())
+                                        .build()
+                        )
                         .clave(txtClave.getText())
-                        .estado(jcbEstado.isSelected())
                         .build();        
         //JOptionPane.showMessageDialog(this, misFb.modificarUsuario(miUsuario));
         cerrar();

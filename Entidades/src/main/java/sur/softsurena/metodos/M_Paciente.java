@@ -272,18 +272,17 @@ public class M_Paciente {
 
     //--------------------------------------------------------------------------
     /**
-     * TODO 14/11/2024 Pasar el parametros de filtro de busquedas.
      *
      * @param paciente
      * @return
      */
-    public static List<Paciente> getList(
+    public static List<Paciente> select(
             @NonNull Paciente paciente
     ) {
         
         List<Paciente> pacienteList = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlGetList(paciente),
+                sqlSelect(paciente),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -329,7 +328,7 @@ public class M_Paciente {
         return pacienteList;
     }
     
-    protected static String sqlGetList(Paciente paciente) {
+    protected static String sqlSelect(Paciente paciente) {
         Boolean estado = Objects.isNull(paciente.getPersona().getEstado());
         Boolean where = estado;
         
@@ -399,15 +398,8 @@ public class M_Paciente {
                     .build();
         }
     }
-
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_AL_INSERTAR_PACIENTE
             = "Error al insertar paciente.";
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String PACIENTE_AGREGADO_CORRECTAMENTE
             = "Paciente agregado correctamente.";
 
@@ -458,14 +450,8 @@ public class M_Paciente {
                     .build();
         }
     }
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String PACIENTE_MODIFICADO_CORRECTAMENTE
             = "Paciente modificado correctamente";
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_AL_MODIFICAR_PACIENTE
             = "Error al modificar cliente...";
 
@@ -473,10 +459,10 @@ public class M_Paciente {
     /**
      * Metodos que permiten borrar registros de la base de datos.
      *
-     * @param idPaciente
+     * @param paciente
      * @return
      */
-    public static Resultado delete(Integer idPaciente) {
+    public static Resultado delete(Paciente paciente) {
         final String sql = """
                            EXECUTE PROCEDURE SP_D_PERSONA_PACIENTE(?)
                            """;
@@ -486,7 +472,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, idPaciente);
+            ps.setInt(1, paciente.getPersona().getId_persona());
 
             ps.execute();
 
@@ -500,25 +486,23 @@ public class M_Paciente {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ERROR_AL_BORRAR_PACIENTE.formatted(idPaciente),
+                    ERROR_AL_BORRAR_PACIENTE.formatted(
+                            paciente.getPersona().getId_persona()
+                    ),
                     ex
             );
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_BORRAR_PACIENTE.formatted(idPaciente))
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
         }
+        return Resultado
+                .builder()
+                .mensaje(ERROR_AL_BORRAR_PACIENTE.formatted(
+                        paciente.getPersona().getId_persona())
+                )
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String ERROR_AL_BORRAR_PACIENTE
             = "Error al borrar paciente. \n[Codigo = %s]";
-    /**
-     * Variable utilizada para mostrar mensaje.
-     */
     public static final String PACIENTE_BORRADO_CORRECTAMENTE
             = "Paciente borrado correctamente.";
 }

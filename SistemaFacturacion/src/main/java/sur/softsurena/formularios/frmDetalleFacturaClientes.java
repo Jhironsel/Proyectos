@@ -27,8 +27,16 @@ public class frmDetalleFacturaClientes extends javax.swing.JInternalFrame {
     private DefaultTableModel miTabla, miTabla2, miTabla3;
     private TableColumn miTableColumn = null;
     private final DefaultTableCellRenderer tcr;
+    
+    public static frmDetalleFacturaClientes getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+        private static final frmDetalleFacturaClientes INSTANCE = new frmDetalleFacturaClientes();
+    }
 
-    public frmDetalleFacturaClientes() {
+    private frmDetalleFacturaClientes() {
         initComponents();
         tcr = new DefaultTableCellHeaderRenderer();
     }

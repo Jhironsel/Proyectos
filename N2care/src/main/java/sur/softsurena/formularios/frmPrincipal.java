@@ -332,10 +332,11 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 paciente.llenarTabla();
                 paciente.centralizar();
                 paciente.setMaximum(true);
-                return null;
+                return paciente;
             }
         };
         w.execute();
+        w.run();
     }//GEN-LAST:event_mnuArchivosPacientesActionPerformed
 
     private void mnuArchivosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosUsuariosActionPerformed

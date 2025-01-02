@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Resultado;
@@ -267,8 +268,13 @@ public class frmRegistroUsuarios extends javax.swing.JInternalFrame {
         Usuario miUsuario
                 = Usuario
                         .builder()
-                        .pnombre(txtNombre.getText())
-                        .apellidos(txtApellidos.getText())
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .pnombre(txtNombre.getText())
+                                        .apellidos(txtApellidos.getText())
+                                        .build()
+                        )
                         .clave(txtClave.getText())
                         .build();
         //.perfil(getIdPerfiles()[jcbPerfil.getSelectedIndex()])

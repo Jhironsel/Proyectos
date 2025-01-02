@@ -498,7 +498,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put(
                 "nombreCajero", 
-                getUsuarioActual().getUser_name()
+                getUsuarioActual().getPersona().getUser_name()
         );
         parametros.put(
                 "idFactura", 
@@ -544,7 +544,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnPagarActionPerformed
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        frmBusquedaCliente miBusqueda = new frmBusquedaCliente(null, true);
+        frmBusquedaCliente miBusqueda = frmBusquedaCliente.getInstance(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
         

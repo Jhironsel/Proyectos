@@ -11,18 +11,19 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Antecedente;
+import sur.softsurena.entidades.Consulta;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Antecedente {
 
     /**
-     * Es una tabla utilizada para almacenar los antecedentes de
-     * los pacientes del sistema, dicho antecedente describe la condicion de los
-     * paciente en el momento de la consulta.
+     * Es una tabla utilizada para almacenar los antecedentes de los pacientes
+     * del sistema, dicho antecedente describe la condicion de los paciente en
+     * el momento de la consulta.
      *
-     * @param antecedente objecto que contiene identificador de la consulta, 
-     * que tiene registros de historico de los antecedentes.
+     * @param antecedente objecto que contiene identificador de la consulta, que
+     * tiene registros de historico de los antecedentes.
      *
      * @return Se obtiene una lista de todos los antecendentes de los registros
      * del paciente.
@@ -30,7 +31,6 @@ public class M_Antecedente {
     public synchronized static List<Antecedente> select(
             @NonNull Antecedente antecedente
     ) {
-        
 
         List<Antecedente> lista = new ArrayList<>();
 
@@ -47,7 +47,14 @@ public class M_Antecedente {
                             Antecedente
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .id_consulta(rs.getInt("ID_Consulta"))
+                                    .consulta(
+                                            M_Consulta.select(
+                                                    Consulta
+                                                            .builder()
+                                                            .id(rs.getInt("ID_CONSULTA"))
+                                                            .build()
+                                            ).getFirst()
+                                    )
                                     .descripcion(rs.getString("Descripcion"))
                                     .build()
                     );
@@ -63,10 +70,10 @@ public class M_Antecedente {
         }
         return lista;
     }
-    
+
     protected static String sqlSelect(Antecedente antecedente) {
         Boolean id = Objects.isNull(antecedente.getId());
-        Boolean id_consulta = Objects.isNull(antecedente.getId_consulta());
+        Boolean id_consulta = Objects.isNull(antecedente.getConsulta());
         Boolean where = id && id_consulta;
         Boolean and = id || id_consulta;
         final String sql = """
@@ -74,16 +81,15 @@ public class M_Antecedente {
                            FROM V_ANTECEDENTES
                            %s%s%s%s
                            """.formatted(
-                                   where ? "":"WHERE ",
-                                   id ? "":"ID = %d ".formatted(antecedente.getId()),
-                                   and ? "":"AND ",
-                                   id_consulta ? "":"ID_CONSULTA = %d ".formatted(antecedente.getId_consulta())
-                           );
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(antecedente.getId()),
+                and ? "" : "AND ",
+                id_consulta ? "" : "ID_CONSULTA = %d ".formatted(antecedente.getConsulta().getId())
+        );
         return sql.trim().strip();
     }
-    
-//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
     /**
      * Metodo que permite agregar los antecendentes de los pacientes del
      * sistema.
@@ -91,7 +97,7 @@ public class M_Antecedente {
      * Los antecedentes son aquellos que el paciente a tenido antes de la
      * consulta programada.
      *
-     * @param antecedente objeto que contiene el identificador de la consulta de 
+     * @param antecedente objeto que contiene el identificador de la consulta de
      * dicha consulta, tambien una pequeña descripcion del antecendete que el
      * paciente padeció antes de la consulta.
      *
@@ -109,7 +115,7 @@ public class M_Antecedente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, antecedente.getId_consulta());
+            ps.setInt(1, antecedente.getConsulta().getId());
             ps.setString(2, antecedente.getDescripcion());
 
             ResultSet rs = ps.executeQuery();
@@ -147,9 +153,9 @@ public class M_Antecedente {
      * Metodo que permite actualizar los antecendente de un paciente. Se utiliza
      * el identificador del antecedente para ser actualizado.
      *
-     * @param antecedente objecto que contiene el identificador del registro y 
-     * la descripcion del antecedente del paciente. 
-     * 
+     * @param antecedente objecto que contiene el identificador del registro y
+     * la descripcion del antecedente del paciente.
+     *
      * @return
      */
     public static synchronized Resultado update(
@@ -192,19 +198,19 @@ public class M_Antecedente {
             = "Antecedente modificado correctamente";
     public static final String ERROR_AL_MODIFICAR_ANTECEDENTE
             = "Error al modificar el antecendete...";
-    
+
     /**
      * Permite eliminar un antecedente registrado previamente del sistema.
      *
      * @param antecedente contiene el identificador de la consulta a borrar.
-     * 
+     *
      * @return
      */
     public synchronized static Resultado delete(
             @NonNull Antecedente antecedente
     ) {
         final String sql
-                = "EXECUTE PROCEDURE SP_D_ANTECEDENTE(?);";
+                = "EXECUTE PROCEDURE SP_D_ANTECEDENTE(?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

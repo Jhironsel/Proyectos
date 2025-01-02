@@ -116,7 +116,7 @@ public class M_Generales {
      * @param id
      * @return
      */
-    public static Generales getEntidad(Integer id) {
+    public static Generales selectByID(Integer id) {
         final String sql = """
                            SELECT 
                                 ID, 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
@@ -749,14 +750,19 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 //----------------------------------------------------------------------------12
         usuario = Usuario
                 .builder()
-                .user_name(txtUserName.getText())
-                .pnombre(txtPNombre.getText())
-                .snombre(txtSNombre.getText())
-                .apellidos(txtApellidos.getText())
+                .persona(
+                        Persona
+                                .builder()
+                                .user_name(txtUserName.getText())
+                                .pnombre(txtPNombre.getText())
+                                .snombre(txtSNombre.getText())
+                                .apellidos(txtApellidos.getText())
+                                .estado(cbEstado.isSelected())
+                                .build()
+                )
                 .descripcion(txtDescripcion.getText())
                 .clave(clave1)
                 .tags(etiquetas)
-                .estado(cbEstado.isSelected())
                 .administrador(cbAdministrador.isSelected())
                 .roles(rolesList)
                 .build();
@@ -1006,14 +1012,14 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void cargarUsuario(Usuario usuario) {
-        txtUserName.setText(usuario.getUser_name());
+        txtUserName.setText(usuario.getPersona().getUser_name());
         txtUserName.setEditable(false);
 
-        txtPNombre.setText(usuario.getPnombre());
-        txtSNombre.setText(usuario.getSnombre());
-        txtApellidos.setText(usuario.getApellidos());
+        txtPNombre.setText(usuario.getPersona().getPnombre());
+        txtSNombre.setText(usuario.getPersona().getSnombre());
+        txtApellidos.setText(usuario.getPersona().getApellidos());
 
-        cbEstado.setSelected(usuario.getEstado());
+        cbEstado.setSelected(usuario.getPersona().getEstado());
         cbEstadoActionPerformed(null);
 
         cbAdministrador.setSelected(usuario.getAdministrador());
@@ -1029,7 +1035,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
         tblEtiquetas.removeAll();
 
-        getEtiquetasUsuario(usuario.getUser_name()).stream().forEach(
+        getEtiquetasUsuario(usuario.getPersona().getUser_name()).stream().forEach(
                 etiqueta -> {
                     registro[0] = etiqueta.getPropiedad();
                     registro[1] = etiqueta.getValor();
@@ -1052,7 +1058,9 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
         tblRoles.removeAll();
 
-        M_Role.selectDisponibles(usuario.getUser_name(), true).stream().forEach(
+        M_Role.selectDisponibles(
+                usuario.getPersona().getUser_name(), true
+        ).stream().forEach(
                 rol -> {
                     registro2[0] = rol;
                     registro2[1] = rol.getOpcionPermiso() == 2;

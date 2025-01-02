@@ -43,7 +43,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         private static final frmUsuarios INSTANCE = new frmUsuarios();
     }
 
-    public frmUsuarios() {
+    private frmUsuarios() {
         initComponents();
     }
 
@@ -1195,11 +1195,11 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         getUsuarios().stream().forEach(
                 usuario -> {
                     registro[0] = usuario;
-                    registro[1] = usuario.getPnombre();
-                    registro[2] = usuario.getSnombre();
-                    registro[3] = usuario.getApellidos();
+                    registro[1] = usuario.getPersona().getPnombre();
+                    registro[2] = usuario.getPersona().getSnombre();
+                    registro[3] = usuario.getPersona().getApellidos();
                     registro[4] = usuario.getAdministrador();
-                    registro[5] = usuario.getEstado();
+                    registro[5] = usuario.getPersona().getEstado();
                     miTabla.addRow(registro);
                 }
         );
@@ -1319,7 +1319,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         getNombresUsuarios().stream().forEach(
                 usuario -> {
-                    registro[0] = usuario.getUser_name().strip();
+                    registro[0] = usuario.getPersona().getUser_name().strip();
                     miTabla.addRow(registro);
                 }
         );

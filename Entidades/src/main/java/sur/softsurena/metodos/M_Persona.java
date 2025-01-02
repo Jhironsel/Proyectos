@@ -184,7 +184,7 @@ public class M_Persona {
      */
     public static Resultado update(Persona persona) {
         final String sql = """
-                           EXECUTE PROCEDURE SP_U_PERSONA (?, ?, ?, ?, ?, ?, ?, ?);
+                           EXECUTE PROCEDURE SP_U_PERSONA(?,?,?,?,?,?,?,?)
                            """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -253,7 +253,7 @@ public class M_Persona {
         )) {
             cs.setInt(1, id);
 
-            cs.execute();
+            cs.executeUpdate();
 
             return Resultado
                     .builder()

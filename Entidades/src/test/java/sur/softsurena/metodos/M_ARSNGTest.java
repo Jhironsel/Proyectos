@@ -1,7 +1,6 @@
 package sur.softsurena.metodos;
 
 import java.math.BigDecimal;
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -20,7 +19,7 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_ARSNGTest {
 
-    private Integer id_ARS;
+    private static Integer id_ARS;
 //------------------------------------------------------------------------------
 
     public M_ARSNGTest() {
@@ -67,7 +66,7 @@ public class M_ARSNGTest {
                           el sistema.
                           """
     )
-    public void testInsert() {
+    public static void testInsert() {
         Resultado result = M_ARS.insert(
                 ARS
                         .builder()
@@ -111,7 +110,7 @@ public class M_ARSNGTest {
                           ARS del sistema.
                           """
     )
-    public void testSelect() {
+    public static void testSelect() {
         assertNotNull(
                 M_ARS.select(
                         ARS
@@ -149,7 +148,7 @@ public class M_ARSNGTest {
             priority = 2,
             description = "Test para modificar las ars del sistema."
     )
-    public void testModificarSeguro() {
+    public static void testUpdate() {
         Resultado result = M_ARS.update(
                 ARS
                         .builder()
@@ -181,8 +180,13 @@ public class M_ARSNGTest {
                           sistema.
                           """
     )
-    public void testDelete() {
-        Resultado result = M_ARS.delete(id_ARS);
+    public static void testDelete() {
+        Resultado result = M_ARS.delete(
+                ARS
+                        .builder()
+                        .id(id_ARS)
+                        .build()
+        );
 
         assertEquals(
                 result,

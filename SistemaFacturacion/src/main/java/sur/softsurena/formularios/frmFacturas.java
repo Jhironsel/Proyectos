@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -760,7 +759,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 Turno
                         .builder()
                         .turno_usuario(
-                                getUsuarioActual().getUser_name()
+                                getUsuarioActual().getPersona().getUser_name()
                         )
                         .estado(true)
                         .build()
@@ -1265,7 +1264,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         );
 
         if (resp == 0) {
-            frmAutorizacion miAut = new frmAutorizacion(null, true);
+            frmAutorizacion miAut = frmAutorizacion.getInstance(null, true);
             miAut.setLocationRelativeTo(null);
             miAut.setVisible(true);
 
@@ -1394,7 +1393,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             if (resp == JOptionPane.NO_OPTION) {
                 return;
             } else {
-                frmAutorizacion miAut = new frmAutorizacion(null, true);
+                frmAutorizacion miAut = frmAutorizacion.getInstance(null, true);
                 miAut.setLocationRelativeTo(null);
                 miAut.setVisible(true);
                 if (!miAut.isAceptado()) {
@@ -1542,7 +1541,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }//GEN-LAST:event_btnLimpiarF12ActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        frmBusquedaCliente miBusqueda = new frmBusquedaCliente(null, true);
+        frmBusquedaCliente miBusqueda = frmBusquedaCliente.getInstance(
+                null, 
+                true
+        );
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
 

@@ -1,7 +1,8 @@
 package sur.softsurena.metodos;
 
 import java.util.Calendar;
-import java.util.List;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -27,7 +28,7 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_Control_ConsultaNGTest {
 
-    private int idControlConsulta;
+    private static Integer idControlConsulta;
 
     public M_Control_ConsultaNGTest() {
     }
@@ -62,13 +63,85 @@ public class M_Control_ConsultaNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
+            priority = 1,
             description = """
                           Te permite registrar un control de consulta en el 
                           sistema.
                           """
     )
-    public void testInsert() {
+    public void testSelect() {
+        assertNotNull(
+                M_Control_Consulta.select(
+                Control_Consulta
+                        .builder()
+                        .build()
+        ), "Error al consultar los controles de consulta."
+                
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSqlSelect() {
+        
+        assertEquals(
+                M_Control_Consulta.sqlSelect(
+                        Control_Consulta
+                        .builder()
+                        .build()
+                ), 
+                """
+                SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
+                      ESTADO
+                FROM V_CONTROL_CONSULTA
+                """.trim().strip()
+        );
+        
+        assertEquals(
+                M_Control_Consulta.sqlSelect(
+                        Control_Consulta
+                        .builder()
+                                .id(-1)
+                        .build()
+                ), 
+                """
+                SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
+                      ESTADO
+                FROM V_CONTROL_CONSULTA
+                WHERE ID = -1
+                """.trim().strip()
+        );
+        
+        assertEquals(
+                M_Control_Consulta.sqlSelect(
+                        Control_Consulta
+                        .builder()
+                                .user_name("Jhironsel")
+                        .build()
+                ), 
+                """
+                SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
+                      ESTADO
+                FROM V_CONTROL_CONSULTA
+                WHERE USER_NAME STARTING WITH 'Jhironsel' 
+                """.trim().strip()
+        );
+    }
+//------------------------------------------------------------------------------
+    
+    @Test(
+            enabled = true,
+            priority = 2,
+            description = """
+                          Te permite registrar un control de consulta en el 
+                          sistema.
+                          """
+    )
+    public static void testInsert() {
 
         Resultado result = M_Control_Consulta.insert(
                 controlConsulta()
@@ -85,13 +158,18 @@ public class M_Control_ConsultaNGTest {
                 ERROR_AL_AGREGAR__CONTROL__CONSULTA_AL_SIST
         );
 
+        
+        assertTrue(
+                result.getId() > 0,
+                ERROR_AL_AGREGAR__CONTROL__CONSULTA_AL_SIST
+        );
 
         idControlConsulta = result.getId();
     }
 
     @Test(
             enabled = true,
-            priority = 1,
+            priority = 3,
             description = ""
     )
     public void testUpdate() {
@@ -114,47 +192,10 @@ public class M_Control_ConsultaNGTest {
 
     @Test(
             enabled = true,
-            priority = 2,
-            description = """
-                          Metodo que permite obtener el listado de todas las
-                          consultas registradas en el sistema. 
-                          """
-    )
-    public void testGetFechaDoctores() {
-        String dia = "";
-        
-        
-        List<Control_Consulta> listaControlConsulta = M_Control_Consulta.getFechaDoctores(dia);
-        
-        assertFalse(
-                listaControlConsulta.isEmpty(), 
-                "La lista de control de consulta esta vacia."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Consulta la base de datos por los horarios de un 
-                          usuario en especifico. 
-                          """
-    )
-    public void testGetHorario() {
-        String idUsuario = "";
-        List<Control_Consulta> lista = M_Control_Consulta.getHorario(idUsuario);
-        assertTrue(
-                lista.isEmpty(), 
-                "Listado de doctores con consulta lleno. "
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 5,
+            priority = 4,
             description = "Prueba que elimina una consulta del sistema."
     )
-    public void testDelete() {
+    public static void testDelete() {
         Resultado result = M_Control_Consulta.delete(
                 idControlConsulta
         );
@@ -171,19 +212,40 @@ public class M_Control_ConsultaNGTest {
         );
     }
 
-    private Control_Consulta controlConsulta() {
+    public static Control_Consulta controlConsulta() {
         Calendar horaInicial = Calendar.getInstance();
+        
         horaInicial.set(
-                Calendar.HOUR_OF_DAY,
-                11
+                Calendar.MINUTE,
+                -2
         );
-
+        
+        horaInicial.set(
+                Calendar.SECOND,
+                0
+        );
+        
+        horaInicial.set(
+                Calendar.MILLISECOND,
+                0
+        );
+        
         Calendar horaFinal = Calendar.getInstance();
         horaFinal.set(
-                Calendar.HOUR_OF_DAY,
-                13
+                Calendar.MINUTE,
+                10
         );
-
+        
+        horaFinal.set(
+                Calendar.SECOND,
+                10
+        );
+        
+        horaFinal.set(
+                Calendar.MILLISECOND,
+                0
+        );
+        
         return Control_Consulta
                 .builder()
                 .id(idControlConsulta)
@@ -203,5 +265,4 @@ public class M_Control_ConsultaNGTest {
                 .estado(Boolean.TRUE)
                 .build();
     }
-
 }

@@ -48,7 +48,6 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public final class frmPrincipal extends javax.swing.JFrame {
 
     //Formularios Modales
-    private static frmFechaReporte fechaReporte;
     private static Usuario usuario;
     private static final long serialVersionUID = 1L;
 
@@ -895,7 +894,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         if (mnuOpcionesSalir.isEnabled()) {
             mnuOpcionesCambioUsuarioActionPerformed(null);
         } else {
-            frmAutorizacion miAut = new frmAutorizacion(null, true);
+            frmAutorizacion miAut = frmAutorizacion.getInstance(null, true);
             miAut.setLocationRelativeTo(null);
             miAut.setVisible(true);
             if (miAut.isAceptado()) {
@@ -1191,7 +1190,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         if (M_Turno.select(
                 Turno
                         .builder()
-                        .turno_usuario(usuario.getUser_name())
+                        .turno_usuario(usuario.getPersona().getUser_name())
                         .estado(true)
                         .build()
         ).isEmpty()) {
@@ -1213,16 +1212,16 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     private void mnuMovimientosInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosInventarioActionPerformed
 
-        fechaReporte = new frmFechaReporte(this, true);
+        frmFechaReporte reporte = frmFechaReporte.getInstance(this, true);
 
-        fechaReporte.setLocationRelativeTo(null);
-        fechaReporte.setVisible(true);
+        reporte.setLocationRelativeTo(null);
+        reporte.setVisible(true);
 
-        if (fechaReporte.getFecha() == null) {
+        if (reporte.getFecha() == null) {
             return;
         }
 
-        imprimirReporte(fechaReporte.getFecha());
+        imprimirReporte(reporte.getFecha());
     }//GEN-LAST:event_mnuMovimientosInventarioActionPerformed
 
     private void mnuMovimientosAbrirTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosAbrirTurnoActionPerformed
@@ -1234,7 +1233,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuMovimientosDeudasActionPerformed
 
     private void mnuAyudaAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAyudaAcercaDeActionPerformed
-        frmAcercaDe acerca = new frmAcercaDe(null, true);
+        frmAcercaDe acerca = frmAcercaDe.getInstance(null, true);
         acerca.setLocationRelativeTo(this);
         acerca.setVisible(true);
     }//GEN-LAST:event_mnuAyudaAcercaDeActionPerformed
@@ -1272,7 +1271,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         usuario = M_Usuario.getUsuarioActual();
 
-        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
+        cbRoles.setToolTipText("Rol actual: " + usuario.getPersona().getRol());
     }//GEN-LAST:event_cbRolesPopupMenuWillBecomeInvisible
 
     //TODO Metodo de JasperReport
@@ -1382,9 +1381,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         System.gc();
     }
 
-    public static frmFechaReporte getFechaReporte() {
-        return fechaReporte;
-    }
 
     /**
      * Metodo que permite centralizar las ventanas que son internas.
@@ -1658,11 +1654,11 @@ public final class frmPrincipal extends javax.swing.JFrame {
         //Hacemos la consulta a la base de datos, para saber cual es el usuario
         //y el rol del usuario conectado a la base de datos.
 
-        jlUser.setText(usuario.getUser_name());
+        jlUser.setText(usuario.getPersona().getUser_name());
 
         //Proceso para cargar los roles del usuario al sistema.
         cbRoles.removeAllItems();
-        cbRoles.setToolTipText("Rol actual: " + usuario.getRol());
+        cbRoles.setToolTipText("Rol actual: " + usuario.getPersona().getRol());
 
         cbRoles.addItem(
                 Role
@@ -1676,7 +1672,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         //Se carga los roles del usuario en el comboBox.
         M_Role.selectDisponibles(
-                usuario.getUser_name().strip(),
+                usuario.getPersona().getUser_name().strip(),
                 true
         ).stream().forEach(
                 rolItem -> {
@@ -1686,7 +1682,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         //Se busca cual es el rol actual del usuario y se selecciona.
         for (int i = 0; i < cbRoles.getItemCount(); i++) {
-            if (cbRoles.getItemAt(i).toString().strip().equalsIgnoreCase(usuario.getRol())) {
+            if (cbRoles.getItemAt(i).toString().strip().equalsIgnoreCase(
+                    usuario.getPersona().getRol()
+            )) {
                 cbRoles.setSelectedIndex(i);
                 break;
             }

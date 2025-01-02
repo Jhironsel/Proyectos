@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import sur.softsurena.utilidades.Utilidades;
@@ -8,6 +9,8 @@ public class frmFechaReporte extends java.awt.Dialog {
 
     private static final long serialVersionUID = 1L;
     private static Date fecha;
+    private static Frame parent1;
+    private static boolean modal1;
     
     public Date getFecha() {
         return fecha;
@@ -17,11 +20,26 @@ public class frmFechaReporte extends java.awt.Dialog {
         frmFechaReporte.fecha = fecha;
     }
 
-    public frmFechaReporte(java.awt.Frame parent, boolean modal) {
+    public static frmFechaReporte getInstance(Frame parent, boolean modal) {
+        parent1 = parent;
+        modal1 = modal;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+        private static final frmFechaReporte INSTANCE = new frmFechaReporte(
+                frmFechaReporte.parent1, 
+                frmFechaReporte.modal1
+        );
+    }
+    
+    private frmFechaReporte(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.agregarOyente();
+        agregarOyente();
     }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

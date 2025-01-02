@@ -26,10 +26,7 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_PacienteNGTest {
 
-    private final M_PersonaNGTest persona;
-
     public M_PacienteNGTest() {
-        persona = new M_PersonaNGTest();
     }
 
     @BeforeClass
@@ -67,8 +64,8 @@ public class M_PacienteNGTest {
                           Test que realiza el ingreso de un paciente al sistema.
                           """
     )
-    public void testInsert() {
-        persona.testInsert();
+    public static void testInsert() {
+        M_PersonaNGTest.testInsert();
 
         Resultado result = M_Paciente.insert(generarPaciente());
 
@@ -94,7 +91,7 @@ public class M_PacienteNGTest {
             description = "",
             priority = 1
     )
-    public void testUpdate() {
+    public static void testUpdate() {
         Resultado result = M_Paciente.update(generarPaciente());
 
         assertEquals(
@@ -156,67 +153,17 @@ public class M_PacienteNGTest {
         );
     }
 
-//    @Test(
-//            enabled = false,
-//            description = "",
-//            priority = 2
-//    )
-//    public void testGetPacienteActivo_boolean() {
-//        boolean estado = false;
-//        ResultSet expResult = null;
-//        ResultSet result = M_Paciente.getPacienteActivo(estado);
-//        assertEquals(result, expResult);
-//    }
-//
-//    @Test(
-//            enabled = false,
-//            description = "",
-//            priority = 2
-//    )
-//    public void testGetPacienteActivo_3args() {
-//        String filtro = "";
-//        String fecha = "";
-//        int idControlConsulta = 0;
-//        ResultSet expResult = null;
-//        ResultSet result = M_Paciente.getPacienteActivo(filtro, fecha, idControlConsulta);
-//        assertEquals(result, expResult);
-//    }
-//
-//    @Test(
-//            enabled = false,
-//            description = "",
-//            priority = 2
-//    )
-//    public void testGetPacienteActivo2() {
-//        String filtro = "";
-//        String fecha = "";
-//        int idControlConsulta = 0;
-//        ResultSet expResult = null;
-//        ResultSet result = M_Paciente.getPacienteActivo2(filtro, fecha, idControlConsulta);
-//        assertEquals(result, expResult);
-//    }
-//
-//    @Test(
-//            enabled = false,
-//            description = "",
-//            priority = 2
-//    )
-//    public void testGetPacienteActivo3() {
-//        String filtro = "";
-//        String fecha = "";
-//        int idControlConsulta = 0;
-//        ResultSet expResult = null;
-//        ResultSet result = M_Paciente.getPacienteActivo3(filtro, fecha, idControlConsulta);
-//        assertEquals(result, expResult);
-//    }
     @Test(
             enabled = true,
             description = "Test que permite eliminar un paciente ya creado.",
             priority = 3
     )
-    public void testDelete() {
+    public static void testDelete() {
         Resultado result = M_Paciente.delete(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                Paciente
+                        .builder()
+                        .persona(M_PersonaNGTest.persona(Boolean.FALSE))
+                        .build()
         );
 
         assertEquals(
@@ -232,10 +179,10 @@ public class M_PacienteNGTest {
                 )
         );
 
-        persona.testDelete();
+        M_PersonaNGTest.testDelete();
     }
 
-    public synchronized Paciente generarPaciente() {
+    public static Paciente generarPaciente() {
         return Paciente
                 .builder()
                 .persona(
@@ -255,9 +202,9 @@ public class M_PacienteNGTest {
     }
 
     @Test
-    public void testGetList() {
+    public static void testSelect() {
 
-        List result = M_Paciente.getList(
+        List result = M_Paciente.select(
                 Paciente
                         .builder()
                         .persona(
@@ -275,7 +222,7 @@ public class M_PacienteNGTest {
     }
 
     @Test
-    public void testSqlGetList() {
+    public void testSqlSelect() {
         String expResult = """
                            SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
                                FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
@@ -285,7 +232,7 @@ public class M_PacienteNGTest {
                            """;
 
         assertEquals(
-                M_Paciente.sqlGetList(
+                M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
                                 .persona(
@@ -308,7 +255,7 @@ public class M_PacienteNGTest {
                     """;
 
         assertEquals(
-                M_Paciente.sqlGetList(
+                M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
                                 .persona(
@@ -332,7 +279,7 @@ public class M_PacienteNGTest {
                     """;
 
         assertEquals(
-                M_Paciente.sqlGetList(
+                M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
                                 .persona(

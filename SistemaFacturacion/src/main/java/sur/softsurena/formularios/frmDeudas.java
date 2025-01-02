@@ -645,7 +645,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtMontoActionPerformed
 
     private void btnGetClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetClienteActionPerformed
-        frmBusquedaCliente miBusqueda = new frmBusquedaCliente(null, true);
+        frmBusquedaCliente miBusqueda = frmBusquedaCliente.getInstance(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
 
@@ -770,7 +770,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        frmAutorizacion miAut = new frmAutorizacion(null, true);
+        frmAutorizacion miAut = frmAutorizacion.getInstance(null, true);
         miAut.setLocationRelativeTo(null);
         miAut.setVisible(true);
 
@@ -889,7 +889,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        frmAutorizacion miAut = new frmAutorizacion(null, true);
+        frmAutorizacion miAut = frmAutorizacion.getInstance(null, true);
         miAut.setLocationRelativeTo(null);
         miAut.setVisible(true);
 

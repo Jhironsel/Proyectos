@@ -178,10 +178,10 @@ public class M_ARS {
     /**
      * Trata de eliminar un registro de la tabla ARS, la cual debe tener una
      *
-     * @param idARS
+     * @param ars
      * @return
      */
-    public synchronized static Resultado delete(Integer idARS) {
+    public synchronized static Resultado delete(ARS ars) {
         final String sql = "EXECUTE PROCEDURE SP_D_ARS(?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -190,7 +190,7 @@ public class M_ARS {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            ps.setInt(1, idARS);
+            ps.setInt(1, ars.getId());
 
             ps.execute();
 
@@ -208,7 +208,7 @@ public class M_ARS {
                                     " \nError al ejecutar SP_D_ARS(?) en el sistema, con el ID "
                             )
                             .concat(
-                                    idARS.toString()
+                                    ars.getId().toString()
                             ),
                     ex
             );

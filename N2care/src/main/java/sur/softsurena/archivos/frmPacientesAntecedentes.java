@@ -1,20 +1,45 @@
 package sur.softsurena.archivos;
 
+import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Antecedente;
 import sur.softsurena.metodos.M_Antecedente;
+import sur.softsurena.utilidades.Resultado;
 
 public class frmPacientesAntecedentes extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
     private final int idPaciente;
-    
-    public frmPacientesAntecedentes(java.awt.Frame parent, boolean modal, int idPadre) {
+    private static Frame parent;
+    private static boolean modal;
+    private static int idPadre;
+
+    public static frmPacientesAntecedentes getInstance(
+            Frame parent, boolean modal, int idPadre
+    ) {
+        frmPacientesAntecedentes.parent = parent;
+        frmPacientesAntecedentes.modal = modal;
+        frmPacientesAntecedentes.idPadre = idPadre;
+
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmPacientesAntecedentes INSTANCE
+                = new frmPacientesAntecedentes(
+                        frmPacientesAntecedentes.parent,
+                        frmPacientesAntecedentes.modal,
+                        frmPacientesAntecedentes.idPadre
+                );
+    }
+
+    private frmPacientesAntecedentes(Frame parent, boolean modal, int idPadre) {
         super(parent, modal);
-        
+
         initComponents();
         this.idPaciente = idPadre;
     }
@@ -209,21 +234,29 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        
-        String ant = JOptionPane.showInputDialog(this, "Inserte un antecedente", 
+
+        String ant = JOptionPane.showInputDialog(this, "Inserte un antecedente",
                 "Ingreso de antecedentes", JOptionPane.QUESTION_MESSAGE);
-        if(ant == null || ant.isEmpty()){
+        if (ant == null || ant.isEmpty()) {
             return;
         }
+        Resultado resultado = M_Antecedente.insert(
+                Antecedente
+                        .builder()
+                        .descripcion(ant)
+                        .build()
+        );
         JOptionPane.showMessageDialog(
-                this, 
-                agregarAntecedente(idPaciente, ant)
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
         );
         llenarTabla();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        
+
         if (jtPadres.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this,
                     "Debe seleccionar un antecedente!");
@@ -237,7 +270,7 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         if (ant == null || ant.isEmpty()) {
             return;
         }
-        
+
 //        JOptionPane.showMessageDialog(this, 
 //                getDatos("Modificar antecedente del paciente").modificarAntecedentePaciente(
 //                        ((Antecedente)jtPadres.getValueAt(
@@ -247,15 +280,22 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        
+
         if (jtPadres.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this,
                     "Debe seleccionar un antecedente!");
             return;
         }
-        JOptionPane.showMessageDialog(this, 
-                borrarAntecedente(((Antecedentes)jtPadres.getValueAt(
-                                jtPadres.getSelectedRow(), 0)).getIdAntecedente()));
+        
+        M_Antecedente.delete(
+                ((Antecedentes) jtPadres.getValueAt(
+                        jtPadres.getSelectedRow(), 0)).getIdAntecedente()
+        );
+        
+        JOptionPane.showMessageDialog(
+                this,
+                
+                );
         llenarTabla();
     }//GEN-LAST:event_btnBorrarActionPerformed
 
@@ -294,15 +334,15 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     public synchronized void llenarTabla() {
-        
+
         String titulos[] = {"Descripcion del Antecedente"};
         Object registro[] = new Object[1];
         jtPadres.removeAll();
         try {
             ResultSet rs = getAntecedentes(idPaciente);
-            
+
             M_Antecedente.select(antecedente);
-            
+
             DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
             while (rs.next()) {
                 registro[0] = Antecedente

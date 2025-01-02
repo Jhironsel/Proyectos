@@ -30,11 +30,12 @@ public class M_TiposSangres {
      */
     public synchronized static List<TipoSangre> getList() {
         List<TipoSangre> tiposSangresList = new ArrayList<>();
-        final String sql
-                = "SELECT ID, DESCRIPCION "
-                + "FROM V_T_TIPOS_SANGRE "
-                + "WHERE ID >= 0 "
-                + "ORDER BY 1";
+        final String sql = """
+                           SELECT ID, DESCRIPCION 
+                           FROM V_T_TIPOS_SANGRE
+                           WHERE ID >= 0 
+                           ORDER BY 1
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -48,11 +49,14 @@ public class M_TiposSangres {
                                     descripcion(rs.getString("DESCRIPCION")).build()
                     );
                 }
-                return tiposSangresList;
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
+            LOG.log(
+                    Level.SEVERE, 
+                    ex.getMessage(), 
+                    ex
+            );
         }
+        return tiposSangresList;
     }
 }

@@ -1,20 +1,49 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.metodos.M_BaseDeDatos.GET_GUID;
 import static sur.softsurena.metodos.M_BaseDeDatos.setLicencia;
+import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmRegistros extends javax.swing.JDialog {
 
-    public frmRegistros(java.awt.Frame parent, boolean modal) {
+    private static final long serialVersionUID = 1L;
+    private static Frame parent;
+    private static boolean modal;
+    
+    public static frmRegistros getInstance(Frame parent, boolean modal) {
+        frmRegistros.parent = parent;
+        frmRegistros.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmRegistros INSTANCE = new frmRegistros(frmRegistros.parent, frmRegistros.modal);
+    }
+
+    private frmRegistros(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        ((JTextField) dchFecha.getDateEditor()).setBorder(
+                javax.swing.BorderFactory.createTitledBorder(
+                        javax.swing.BorderFactory.createMatteBorder(
+                                0, 
+                                0, 
+                                1,
+                                0, 
+                                new java.awt.Color(0, 0, 255)
+                        ), 
+                        "Fecha expiración"
+                )
+        );
         setLocationRelativeTo(null);
         frmParametros p = new frmParametros();
         String dominio = "localhost", puerto = "3050";
@@ -56,16 +85,12 @@ public class frmRegistros extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txtIdMaquina = new javax.swing.JTextField();
         txtClave = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
         dchFecha = new com.toedter.calendar.JDateChooser();
-        jLabel5 = new javax.swing.JLabel();
         btnCancelar1 = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnAceptar = new RSMaterialComponent.RSButtonMaterialIconOne();
         txtUsuario = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -76,11 +101,10 @@ public class frmRegistros extends javax.swing.JDialog {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Registros del sistema en PC");
 
-        jLabel2.setText("Identificador de la Maquina:");
-
         txtIdMaquina.setEditable(false);
+        txtIdMaquina.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Identificador del sistema"));
 
-        jLabel3.setText("Clave: ");
+        txtClave.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Clave"));
 
         dchFecha.setForeground(new java.awt.Color(1, 1, 1));
         dchFecha.setAutoscrolls(true);
@@ -90,8 +114,6 @@ public class frmRegistros extends javax.swing.JDialog {
         dchFecha.setMinimumSize(new java.awt.Dimension(0, 0));
         dchFecha.setPreferredSize(new java.awt.Dimension(0, 25));
         dchFecha.setVerifyInputWhenFocusTarget(false);
-
-        jLabel5.setText("Fecha de Expiración: ");
 
         btnCancelar1.setBackground(new java.awt.Color(204, 0, 51));
         btnCancelar1.setText("Cancelar");
@@ -116,12 +138,17 @@ public class frmRegistros extends javax.swing.JDialog {
             }
         });
 
-        jLabel7.setText("Usuario: ");
+        txtUsuario.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Usuario"));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 255));
         jLabel4.setText("Obtenen usuario de registro...");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,18 +161,11 @@ public class frmRegistros extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtIdMaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtClave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtClave)
                             .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -154,32 +174,20 @@ public class frmRegistros extends javax.swing.JDialog {
                             .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel3, jLabel7, txtClave});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtIdMaquina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(56, 56, 56)
                         .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dchFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -188,8 +196,6 @@ public class frmRegistros extends javax.swing.JDialog {
                     .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel3, jLabel5, jLabel7});
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {dchFecha, txtClave, txtUsuario});
 
@@ -247,7 +253,9 @@ public class frmRegistros extends javax.swing.JDialog {
 
         if (Conexion.verificar().getEstado()) {
             if (setLicencia(
-                    new Date(dchFecha.getDate().getTime()),
+                    new Date(
+                            dchFecha.getDate().getTime()
+                    ),
                     txtIdMaquina.getText().trim()
             )) {
                 JOptionPane.showMessageDialog(
@@ -262,22 +270,27 @@ public class frmRegistros extends javax.swing.JDialog {
         try {
             Conexion.getCnn().close();
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error al cerrar conexion.", ex);
+            LOG.log(
+                    Level.SEVERE, 
+                    "Error al cerrar conexion.", 
+                    ex
+            );
         }
 
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        Utilidades.abrirURL("https://wa.me/message/KGWBJYPYA3SNK1");
+        Utilidades.abrirURL("https://wa.me/18292972015");
+    }//GEN-LAST:event_jLabel4MouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar1;
     public com.toedter.calendar.JDateChooser dchFecha;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     public javax.swing.JPasswordField txtClave;
     public javax.swing.JTextField txtIdMaquina;
     private javax.swing.JTextField txtUsuario;

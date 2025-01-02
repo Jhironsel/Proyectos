@@ -1776,7 +1776,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
     private void btnHistorialClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialClientesActionPerformed
         if (v_miDetalle == null) {
-            v_miDetalle = new frmDetalleFacturaClientes();
+            v_miDetalle = frmDetalleFacturaClientes.getInstance();
         }
 
         frmPrincipal.abrirFormulario(v_miDetalle);
@@ -3107,7 +3107,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
 
         //-----GENERALES--------------------------------------------------------
-        Generales general = M_Generales.getEntidad(idCliente);
+        Generales general = M_Generales.selectByID(idCliente);
 
         txtCedula.setValue(general);
 

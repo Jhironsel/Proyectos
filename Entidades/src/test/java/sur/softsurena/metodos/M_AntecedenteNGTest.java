@@ -1,13 +1,21 @@
 package sur.softsurena.metodos;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Antecedente;
+import sur.softsurena.entidades.Consulta;
+import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_AGREGADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_MODIFICADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Antecedente.BORRADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_BORRAR_PACIENTE;
+import static sur.softsurena.metodos.M_Antecedente.ERROR_AL_MODIFICAR_ANTECEDENTE;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -16,26 +24,43 @@ import sur.softsurena.utilidades.Resultado;
  */
 public class M_AntecedenteNGTest {
 
+    private Integer id_antecedente;
+    
     public M_AntecedenteNGTest() {
     }
 //------------------------------------------------------------------------------
+
     @BeforeClass
     public void setUpClass() throws Exception {
+        Conexion.getInstance(
+                "sysdba",
+                "1",
+                "SoftSurena.db",
+                "localhost",
+                "3050"
+        );
+        assertTrue(
+                Conexion.verificar().getEstado(),
+                "Error al conectarse..."
+        );
     }
 //------------------------------------------------------------------------------
+
     @AfterClass
     public void tearDownClass() throws Exception {
+        Conexion.getCnn().close();
     }
 //------------------------------------------------------------------------------
+
     @BeforeMethod
     public void setUpMethod() throws Exception {
     }
 //------------------------------------------------------------------------------
+
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-    
-//------------------------------------------------------------------------------    
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 0,
@@ -82,7 +107,12 @@ public class M_AntecedenteNGTest {
                 M_Antecedente.sqlSelect(
                         Antecedente
                                 .builder()
-                                .id_consulta(-1)
+                                .consulta(
+                                        Consulta
+                                                .builder()
+                                                .id(-1)
+                                                .build()
+                                )
                                 .build()
                 ),
                 expResult.trim().strip()
@@ -99,7 +129,12 @@ public class M_AntecedenteNGTest {
                         Antecedente
                                 .builder()
                                 .id(-1)
-                                .id_consulta(-1)
+                                .consulta(
+                                        Consulta
+                                                .builder()
+                                                .id(-1)
+                                                .build()
+                                )
                                 .build()
                 ),
                 expResult.trim().strip()
@@ -107,59 +142,130 @@ public class M_AntecedenteNGTest {
     }
 //------------------------------------------------------------------------------
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 1,
             description = """
                           """
     )
     public void testSelect() {
-        List expResult = null;
-        List result = M_Antecedente.select(
+        int idPadre = -1;
+        List<Antecedente> result = M_Antecedente.select(
                 Antecedente
                         .builder()
+                        .id(idPadre)
                         .build()
         );
-        assertEquals(result, expResult);
+
+        assertTrue(
+                result.isEmpty(),
+                "La tabla de antecedentes contiene informacion."
+        );
+
+        //Consultado el registro
+        List<Antecedente> lista = M_Antecedente.select(
+                Antecedente
+                        .builder()
+                        .id(id_antecedente)
+                        .build()
+        );
+
+        assertNotNull(
+                lista,
+                "La tabla de antecedentes NO contiene informacion."
+        );
+    }
+
+//------------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 2,
+            description = """
+                          Agrega un antecedente de un paciente al sistema.
+                          """
+    )
+    public void testInsert() {
+        M_ConsultaNGTest.testInsert();
+
+        Resultado result = M_Antecedente.insert(
+                Antecedente
+                        .builder()
+                        .consulta(
+                                Consulta
+                                        .builder()
+                                        .id(M_ConsultaNGTest.getIdConsulta())
+                                        .build()
+                        )
+                        .descripcion("Prueba de antecendetes")
+                        .build()
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(ANTECEDENTE_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                "No puede ser agregado el registro."
+        );
+        
+        assertTrue(
+                result.getId() > 0,
+                result.getMensaje()
+                );
+
+        id_antecedente = result.getId();
+    }
+    
+//------------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            description = "",
+            priority = 3
+    )
+    public void testUpdate() {
+        assertEquals(
+                M_Antecedente.update(
+                        Antecedente
+                                .builder()
+                                .id(id_antecedente)
+                                .descripcion("Actualizado")
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(ANTECEDENTE_MODIFICADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_MODIFICAR_ANTECEDENTE
+        );
     }
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testInsert() {
-        Antecedente antecedente = null;
-        Resultado expResult = null;
-        Resultado result = M_Antecedente.insert(antecedente);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testUpdate() {
-        Antecedente antecedente = null;
-        Resultado expResult = null;
-        Resultado result = M_Antecedente.update(antecedente);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 4,
             description = """
                           """
     )
     public void testDelete() {
-        Antecedente antecedente = null;
-        Resultado expResult = null;
-        Resultado result = M_Antecedente.delete(antecedente);
-        assertEquals(result, expResult);
+        assertEquals(
+                M_Antecedente.delete(
+                        Antecedente
+                                .builder()
+                                .id(id_antecedente)
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_BORRAR_PACIENTE
+        );
+        M_ConsultaNGTest.testDelete();
     }
-
 }

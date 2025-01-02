@@ -1,6 +1,6 @@
 package sur.softsurena.formularios;
 
-import com.mxrck.autocompleter.tests.Person;
+import java.awt.Frame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
@@ -19,10 +19,25 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
-
     private transient Cliente cliente;
+    
+    private static Frame parent;
+    private static boolean modal;
+    public static frmBusquedaCliente getInstance(Frame parent, boolean modal) {
+        frmBusquedaCliente.parent = parent;
+        frmBusquedaCliente.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+        private static final frmBusquedaCliente INSTANCE = 
+                new frmBusquedaCliente(
+                        frmBusquedaCliente.parent, 
+                        frmBusquedaCliente.modal
+                );
+    }
 
-    public frmBusquedaCliente(java.awt.Frame parent, boolean modal) {
+    private frmBusquedaCliente(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

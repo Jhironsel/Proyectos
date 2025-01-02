@@ -7,8 +7,9 @@ import sur.softsurena.abstracta.Persona;
 
 @Getter
 @SuperBuilder
-public class Usuario extends Persona {
+public class Usuario {
 
+    private final Persona persona;
     private final String clave;
     private final String descripcion;
     private final Boolean administrador;
@@ -18,7 +19,7 @@ public class Usuario extends Persona {
 
     @Override
     public String toString() {
-        return super.getUser_name().strip();
+        return persona.toString();
     }
 
 }

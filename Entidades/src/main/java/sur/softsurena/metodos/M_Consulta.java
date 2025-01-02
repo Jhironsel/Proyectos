@@ -1,11 +1,11 @@
 package sur.softsurena.metodos;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.abstracta.Persona;
@@ -72,25 +72,19 @@ public class M_Consulta {
     /**
      * Consulta al sistema sobre las consultas registradas.
      *
-     * @param fecha
+     * @param consulta
      * @return
      */
-    public synchronized static List<Consulta> getConsulta(Date fecha) {
-        final String sql = """
-                           SELECT ID, ID_PACIENTE, ID_CONTROL_CONSULTA, LINEA
-                           FROM V_CONSULTAS  
-                           WHERE FECHA = ? AND ESTADO;
-                           """;
+    public synchronized static List<Consulta> select(Consulta consulta) {
         List<Consulta> consultaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(consulta),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setDate(1, fecha);
-
+            
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -117,7 +111,9 @@ public class M_Consulta {
                                                 .id(rs.getInt("ID_CONTROL_CONSULTA"))
                                                 .build()
                                 )
+                                .fecha(rs.getDate("FECHA"))
                                 .linea(rs.getInt("LINEA"))
+                                .estado(rs.getBoolean("ESTADO"))
                                 .build()
                 );
             }
@@ -131,39 +127,33 @@ public class M_Consulta {
         return consultaList;
     }
 
-    /**
-     *
-     * @param fecha
-     * @return
-     */
-    public static synchronized boolean getControlConsulta(String fecha) {
-        final String sql = "SELECT (1) FROM V_CONTROLCONSULTA WHERE fecha = ?";
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setString(1, fecha);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return false;
-        }
+    protected static String sqlSelect(Consulta consulta) {
+        Boolean id = Objects.isNull(consulta.getId());
+        Boolean id_controlConsulta = Objects.isNull(consulta.getControlConsulta());
+        Boolean id_Paciente = Objects.isNull(consulta.getPaciente());
+        
+        Boolean where = !id || !id_controlConsulta || !id_Paciente;
+        
+        return  """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                %s%s%s%s
+                """.formatted(
+                        where ? "WHERE ":"",
+                        id ? "":"ID = %d ".formatted(consulta.getId()),
+                        id_controlConsulta ? "":"ID_CONTROL_CONSULTA = %d ".formatted(
+                                consulta.getControlConsulta().getId()
+                        ),
+                        id_Paciente ? "":"ID_PACIENTE = %d ".formatted(consulta.getPaciente().getPersona().getId_persona())
+                ).trim().strip();
     }
-
     /**
      *
      * @param idConsulta
      * @return
      */
-    public static synchronized Resultado eliminarConsulta(Integer idConsulta) {
+    public static synchronized Resultado delete(Integer idConsulta) {
         final String sql = """
                            EXECUTE PROCEDURE SP_D_CONSULTA (?);
                            """;
@@ -203,4 +193,5 @@ public class M_Consulta {
             = "Consulta eliminada correctamente del sistema.";
     public static final String ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA
             = "Error al eliminar la consulta del sistema.";
+
 }

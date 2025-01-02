@@ -13,6 +13,15 @@ public class Proveedor {
 
     @Override
     public String toString() {
-        return super.toString();
+        return persona.toString();
+    }
+
+    public String getJSON() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Proveedor{");
+        sb.append("persona=").append(persona);
+        sb.append(", codigoProveedor=").append(codigoProveedor);
+        sb.append('}');
+        return sb.toString();
     }
 }

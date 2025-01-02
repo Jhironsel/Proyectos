@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cajero;
+import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -39,14 +41,27 @@ public class M_Cajero {
 
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
-                    cajerosList.add(Cajero.builder().
-                            user_name(rs.getString("USER_NAME")).
-                            rol(rs.getString("ROL")).
-                            pnombre(rs.getString("PNOMBRE")).
-                            snombre(rs.getString("SNOMBRE")).
-                            apellidos(rs.getString("APELLIDOS")).
-                            estado(rs.getBoolean("ESTADO")).
-                            descripcion(rs.getString("DESCRIPCION")).build());
+                    cajerosList.add(
+                            Cajero
+                                    .builder()
+                                    .usuario(
+                                            Usuario
+                                                    .builder()
+                                                    .persona(
+                                                            Persona
+                                                                    .builder()
+                                                                    .user_name(rs.getString("USER_NAME"))
+                                                                    .rol(rs.getString("ROL"))
+                                                                    .pnombre(rs.getString("PNOMBRE"))
+                                                                    .snombre(rs.getString("SNOMBRE"))
+                                                                    .apellidos(rs.getString("APELLIDOS"))
+                                                                    .estado(rs.getBoolean("ESTADO"))
+                                                                    .build()
+                                                    )
+                                                    .descripcion(rs.getString("DESCRIPCION"))
+                                                    .build()
+                                    )
+                                    .build());
                 }
             }
         } catch (SQLException ex) {

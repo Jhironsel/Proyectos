@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Role.asignarRolUsuario;
@@ -47,10 +48,11 @@ public class M_Usuario {
             return true;
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
         }
+        return false;
     }
 //------------------------------------------------------------------------------
+
     /**
      * Metodo utilizado para modificar los usuarios del sistema con el rol
      * doctor, el cual permite agregar al registro su Exequatur y
@@ -70,12 +72,12 @@ public class M_Usuario {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT
         )) {
-            cs.setString(1, usuario.getUser_name());
+            cs.setString(1, usuario.getPersona().getUser_name());
             cs.setString(2, usuario.getClave());
-            cs.setString(3, usuario.getPnombre());
-            cs.setString(4, usuario.getSnombre());
-            cs.setString(5, usuario.getApellidos());
-            cs.setBoolean(6, usuario.getEstado());
+            cs.setString(3, usuario.getPersona().getPnombre());
+            cs.setString(4, usuario.getPersona().getSnombre());
+            cs.setString(5, usuario.getPersona().getApellidos());
+            cs.setBoolean(6, usuario.getPersona().getEstado());
             cs.setBoolean(7, usuario.getAdministrador());
             cs.setString(8, usuario.getDescripcion());
             cs.setString(9, usuario.getTags());
@@ -100,7 +102,7 @@ public class M_Usuario {
                 role -> {
                     asignarRolUsuario(
                             role.getRoleName(),
-                            usuario.getUser_name(),
+                            usuario.getPersona().getUser_name(),
                             role.isConAdmin()
                     );
                 }
@@ -132,12 +134,12 @@ public class M_Usuario {
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
-            cs.setString(1, usuario.getUser_name());
+            cs.setString(1, usuario.getPersona().getUser_name());
             cs.setString(2, usuario.getClave());
-            cs.setString(3, usuario.getPnombre());
-            cs.setString(4, usuario.getSnombre());
-            cs.setString(5, usuario.getApellidos());
-            cs.setBoolean(6, usuario.getEstado());
+            cs.setString(3, usuario.getPersona().getPnombre());
+            cs.setString(4, usuario.getPersona().getSnombre());
+            cs.setString(5, usuario.getPersona().getApellidos());
+            cs.setBoolean(6, usuario.getPersona().getEstado());
             cs.setBoolean(7, usuario.getAdministrador());
             cs.setString(8, usuario.getDescripcion());
             cs.setString(9, usuario.getTags());
@@ -155,7 +157,7 @@ public class M_Usuario {
                 role -> {
                     asignarRolUsuario(
                             role.getRoleName(),
-                            usuario.getUser_name(),
+                            usuario.getPersona().getUser_name(),
                             role.isConAdmin()
                     );
                 }
@@ -260,8 +262,13 @@ public class M_Usuario {
                 rs.next();
                 return Usuario
                         .builder()
-                        .user_name(rs.getString("USUARIO"))
-                        .rol(rs.getString("ROLE"))
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .user_name(rs.getString("USUARIO"))
+                                        .rol(rs.getString("ROLE"))
+                                        .build()
+                        )
                         .build();
             }
         } catch (SQLException ex) {
@@ -310,13 +317,18 @@ public class M_Usuario {
 
                 return Usuario
                         .builder()
-                        .pnombre(rs.getString("PNOMBRE"))
-                        .snombre(rs.getString("SNOMBRE"))
-                        .apellidos(rs.getString("APELLIDOS"))
-                        .estado(rs.getBoolean("ESTADO"))
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .pnombre(rs.getString("PNOMBRE"))
+                                        .snombre(rs.getString("SNOMBRE"))
+                                        .apellidos(rs.getString("APELLIDOS"))
+                                        .estado(rs.getBoolean("ESTADO"))
+                                        .user_name(userName)
+                                        .build()
+                        )
                         .administrador(rs.getBoolean("ADMINISTRADOR"))
                         .descripcion(rs.getString("DESCRIPCION"))
-                        .user_name(userName)
                         .build();
             }
         } catch (SQLException ex) {
@@ -350,12 +362,17 @@ public class M_Usuario {
                 while (rs.next()) {
                     usuarios.add(Usuario
                             .builder()
-                            .pnombre(rs.getString("PNOMBRE"))
-                            .snombre(rs.getString("SNOMBRE"))
-                            .apellidos(rs.getString("APELLIDOS"))
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .pnombre(rs.getString("PNOMBRE"))
+                                            .snombre(rs.getString("SNOMBRE"))
+                                            .apellidos(rs.getString("APELLIDOS"))
+                                            .estado(rs.getBoolean("ESTADO"))
+                                            .user_name(rs.getString("USERNAME"))
+                                            .build()
+                            )
                             .administrador(rs.getBoolean("ADMINISTRADOR"))
-                            .estado(rs.getBoolean("ESTADO"))
-                            .user_name(rs.getString("USERNAME"))
                             .descripcion(rs.getString("DESCRIPCION"))
                             .build()
                     );
@@ -390,7 +407,12 @@ public class M_Usuario {
                 while (rs.next()) {
                     u = Usuario
                             .builder()
-                            .user_name(rs.getString("USERNAME"))
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .user_name(rs.getString("USERNAME"))
+                                            .build()
+                            )
                             .build();
                     usuarios.add(u);
                 }

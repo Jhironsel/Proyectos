@@ -140,7 +140,7 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
                 });
     }
 
-    //TODO 26/12/2025 compilar el reporte en JasperReport.
+    //TODO 26/12/2024 compilar el reporte en JasperReport.
     private void reporte(String fecha) {
 //        try {
 //            JasperReport masterReporte
@@ -170,7 +170,7 @@ public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
 //        }
     }
 
-    //TODO 26/12/2025 Descomentar este codigo. FIX
+    //TODO 26/12/2024 Descomentar este codigo. FIX
     private void llenarTabla() {
 //        try {
 //            String titulos[] = {"Fecha", "Operacion", "Usuario"};

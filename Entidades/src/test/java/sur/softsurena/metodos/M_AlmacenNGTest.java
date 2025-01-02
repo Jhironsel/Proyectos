@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -20,9 +19,13 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_AlmacenNGTest {
 
-    private int idAlmacen, idAlmacen2;
+    private static int idAlmacen, idAlmacen2;
 
     public M_AlmacenNGTest() {
+    }
+
+    @BeforeClass
+    public void setUpClass() throws Exception {
         Conexion.getInstance(
                 "sysdba",
                 "1",
@@ -34,10 +37,6 @@ public class M_AlmacenNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
     }
 
     @AfterClass
@@ -55,29 +54,10 @@ public class M_AlmacenNGTest {
 
     @Test(
             enabled = true,
-            description = "Permite verificar si las tabla estan vacia.",
-            priority = 0
-    )
-    public void testGetAlmacenesList() {
-        List result = M_Almacen.select(
-                Almacen
-                        .builder()
-                        .id(-1)
-                        .nombre("^+-*/")
-                        .build()
-        );
-        assertNotNull(
-                result,
-                "La tabla de almacen NO esta vacia."
-        );
-    }
-
-    @Test(
-            enabled = true,
             description = "Realiza el proceso de registro de un almacen de prueba.",
             priority = 1
     )
-    public void testInsert() {
+    public static void testInsert() {
         Resultado result = M_Almacen.insert(
                 Almacen
                         .builder()
@@ -97,8 +77,14 @@ public class M_AlmacenNGTest {
                         .build(),
                 M_Almacen.ERROR_AL_INSERTAR__ALMACEN
         );
+        
+        assertTrue(
+                result.getId() > 0,
+                "Error al insertar almacen."
+        );
 
         idAlmacen = result.getId();
+//------------------------------------------------------------------------------
 
         result = M_Almacen.insert(
                 Almacen
@@ -109,8 +95,22 @@ public class M_AlmacenNGTest {
                         .build()
         );
 
-        assertNotNull(result, "Error al registrar almacen 2 al sistema.");
+        assertEquals(
+                result, 
+                Resultado
+                        .builder()
+                        .mensaje(ALMACEN_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                M_Almacen.ERROR_AL_INSERTAR__ALMACEN
+        );
 
+        assertTrue(
+                result.getId() > 0,
+                "Error al insertar almacen2."
+        );
+        
         idAlmacen2 = result.getId();
     }
 
@@ -119,7 +119,18 @@ public class M_AlmacenNGTest {
             description = "Permite verificar si las tabla estan vacia.",
             priority = 2
     )
-    public void testGetAlmacenes2List() {
+    public static void testSelect() {
+        assertNotNull(
+                M_Almacen.select(
+                        Almacen
+                                .builder()
+                                .id(-1)
+                                .nombre("^+-*/")
+                                .build()
+                ),
+                "La tabla de almacen NO esta vacia."
+        );
+        
         assertNotNull(
                 M_Almacen.select(
                         Almacen
@@ -170,7 +181,7 @@ public class M_AlmacenNGTest {
             description = "Prueba que actualiza el registro de los almacenes del sistema.",
             priority = 3
     )
-    public void testActualizarAlmacen() {
+    public static void testUpdate() {
         Resultado result = M_Almacen.update(
                 Almacen
                         .builder()
@@ -198,7 +209,7 @@ public class M_AlmacenNGTest {
             description = "Prueba que elimina el registro de los almacenes del sistema.",
             priority = 4
     )
-    public void testEliminarAlmacen() {
+    public static void testDelete() {
         Resultado result = M_Almacen.delete(idAlmacen);
         assertEquals(
                 result,

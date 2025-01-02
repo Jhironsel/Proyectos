@@ -21,13 +21,17 @@ import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
+ * Es la clase encargada de gestionar las operaciones de las personas en el
+ * sistema.
+ *
+ * Ya sea: Clientes. Proveedores. Padres. Estudiantes. Pacientes.
  *
  * @author jhironsel
  */
 @Getter
 public class M_PersonaNGTest {
 
-    private static int idPersona;
+    private static Integer idPersona;
 
     public M_PersonaNGTest() {
     }
@@ -131,7 +135,7 @@ public class M_PersonaNGTest {
                           datos del sistema.
                           """
     )
-    public static void testGetList() {
+    public static void testSelect() {
         Persona result = M_Persona.select(
                 Persona
                         .builder()
@@ -245,7 +249,7 @@ public class M_PersonaNGTest {
                     FROM V_PERSONAS
                     WHERE ID = -1
                     """;
-        
+
         assertEquals(
                 M_Persona.sqlList(
                         Persona

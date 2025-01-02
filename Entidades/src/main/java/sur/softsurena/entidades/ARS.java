@@ -16,6 +16,10 @@ public class ARS {
 
     @Override
     public String toString() {
+        return descripcion;
+    }
+    
+    public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("ARS{");
         sb.append("id=").append(id);
@@ -26,8 +30,6 @@ public class ARS {
         sb.append('}');
         return sb.toString();
     }
-    
-    
 
     @Override
     public int hashCode() {

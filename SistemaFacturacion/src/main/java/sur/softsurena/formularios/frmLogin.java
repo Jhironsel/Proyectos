@@ -443,7 +443,7 @@ public final class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void registro() {
-        frmRegistros miRegistros = new frmRegistros(this, true);
+        frmRegistros miRegistros = frmRegistros.getInstance(this, true);
         miRegistros.setVisible(true);
 
         if (miRegistros.txtIdMaquina.getText().equalsIgnoreCase("cancelado")) {

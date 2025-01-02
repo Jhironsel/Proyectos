@@ -207,7 +207,7 @@ public class M_PadreNGTest {
                                 FECHA_NACIMIENTO, ESTADO_PERSONA,
                                 ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                                 NO_NSS, ESTADO_SEGURO
-                           FROM GET_PADRES
+                           FROM GET_PERSONAS_PADRES
                            """;
 
         String result = M_Padre.sqlGetList(
@@ -224,7 +224,7 @@ public class M_PadreNGTest {
                                 FECHA_NACIMIENTO, ESTADO_PERSONA,
                                 ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                                 NO_NSS, ESTADO_SEGURO
-                           FROM GET_PADRES
+                           FROM GET_PERSONAS_PADRES
                            WHERE CEDULA LIKE '000-0000000-0'
                            """;
 
@@ -252,7 +252,7 @@ public class M_PadreNGTest {
                                 FECHA_NACIMIENTO, ESTADO_PERSONA,
                                 ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                                 NO_NSS, ESTADO_SEGURO
-                           FROM GET_PADRES
+                           FROM GET_PERSONAS_PADRES
                            WHERE ESTADO_PERSONA
                            """;
 
@@ -275,7 +275,7 @@ public class M_PadreNGTest {
                                 FECHA_NACIMIENTO, ESTADO_PERSONA,
                                 ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                                 NO_NSS, ESTADO_SEGURO
-                           FROM GET_PADRES
+                           FROM GET_PERSONAS_PADRES
                            WHERE ESTADO_PERSONA IS FALSE
                            """;
 
@@ -298,7 +298,7 @@ public class M_PadreNGTest {
                                 FECHA_NACIMIENTO, ESTADO_PERSONA,
                                 ID_TIPO_SANGREE, CEDULA, ESTADO_CIVIL, ID_ARS,
                                 NO_NSS, ESTADO_SEGURO
-                           FROM GET_PADRES
+                           FROM GET_PERSONAS_PADRES
                            WHERE ID = -1
                            """;
 

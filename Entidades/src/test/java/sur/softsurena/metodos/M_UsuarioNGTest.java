@@ -10,6 +10,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
@@ -42,7 +43,7 @@ public class M_UsuarioNGTest {
         );
     }
 //------------------------------------------------------------------------------
-    
+
     @AfterClass
     public void tearDownClass() throws Exception {
         Conexion.getCnn().close();
@@ -55,9 +56,8 @@ public class M_UsuarioNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
-    
+
 //------------------------------------------------------------------------------
-    
     @Test(
             enabled = true,
             description = "",
@@ -73,7 +73,7 @@ public class M_UsuarioNGTest {
         );
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = true,
             description = """
@@ -98,16 +98,22 @@ public class M_UsuarioNGTest {
                         .build()
         );
 
+//------------------------------------------------------------------------------
         Resultado result = M_Usuario.insert(
                 Usuario
                         .builder()
-                        .user_name("Prueba")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .user_name("Prueba")
+                                        .pnombre("PNombre")
+                                        //.snombre("")
+                                        .apellidos("Apellidos")
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .clave("1")
-                        .pnombre("PNombre")
-                        //.snombre("")
-                        .apellidos("Apellidos")
                         .administrador(Boolean.FALSE)
-                        .estado(Boolean.TRUE)
                         .descripcion("Es un usuario de prueba.")
                         .tags("PRUEBA='Una prueba del sistema', Otra='4352.4', ultima='234'")
                         .roles(roles)
@@ -123,17 +129,23 @@ public class M_UsuarioNGTest {
                         .build(),
                 ERROR_AL_AGREGAR__USUARIO
         );
-        
+
+//------------------------------------------------------------------------------
         result = M_Usuario.insert(
                 Usuario
                         .builder()
-                        .user_name("Jhironsel2")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .user_name("Jhironsel2")
+                                        .pnombre("Jhironsel")
+                                        .snombre(null)
+                                        .apellidos("Diaz Almonte")
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .clave("1")
-                        .pnombre("Jhironsel")
-                        .snombre(null)
-                        .apellidos("Diaz Almonte")
                         .administrador(Boolean.FALSE)
-                        .estado(Boolean.TRUE)
                         .descripcion("Es un usuario de prueba para el sistema.")
                         .tags("PRUEBA='Una prueba del sistema', Otra='4352.4', ultima='234'")
                         .roles(roles)
@@ -151,7 +163,7 @@ public class M_UsuarioNGTest {
         );
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = true,
             description = """
@@ -176,36 +188,41 @@ public class M_UsuarioNGTest {
                         .conAdmin(false)
                         .build()
         );
-        
+
         Resultado result = M_Usuario.update(
                 Usuario
                         .builder()
-                        .user_name("JHIRONSEL2")
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .user_name("JHIRONSEL2")
+                                        .pnombre("Jhironsel")
+                                        .snombre("Jhadiel")
+                                        .apellidos("Diaz Almonte")
+                                        .estado(Boolean.TRUE)
+                                        .build()
+                        )
                         .clave("1")
-                        .pnombre("Jhironsel")
-                        .snombre("Jhadiel")
-                        .apellidos("Diaz Almonte")
                         .administrador(Boolean.TRUE)
-                        .estado(Boolean.TRUE)
                         .descripcion("Es un usuario de prueba para el sistema.")
                         .tags("DROP PRUEBA, Otra='432.4', ultima='100'")
                         .roles(roles)
                         .build()
         );
-        
+
         assertEquals(
-                result, 
+                result,
                 Resultado
-                .builder()
-                .mensaje(USUARIO_MODIFICADO_CORRECTAMENTE)
-                .estado(Boolean.TRUE)
-                .icono(JOptionPane.INFORMATION_MESSAGE)
-                .build(),
+                        .builder()
+                        .mensaje(USUARIO_MODIFICADO_CORRECTAMENTE)
+                        .estado(Boolean.TRUE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .build(),
                 ERROR_AL_MODIFICAR_USUARIO
         );
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = true,
             description = """
@@ -217,14 +234,25 @@ public class M_UsuarioNGTest {
     public void testGetUsuarioActual() {
         Usuario expResult = Usuario
                 .builder()
-                .user_name("SYSDBA")
-                .rol("ADMINISTRADOR")
+                .persona(
+                        Persona
+                                .builder()
+                                .user_name("SYSDBA")
+                                .rol("ADMINISTRADOR")
+                                .build()
+                )
                 .build();
         Usuario result = M_Usuario.getUsuarioActual();
-        
-        assertEquals(result.getUser_name(), expResult.getUser_name());
-        
-        assertEquals(result.getRol(), expResult.getRol());
+
+        assertEquals(
+                result.getPersona().getUser_name(), 
+                expResult.getPersona().getUser_name()
+        );
+
+        assertEquals(
+                result.getPersona().getRol(), 
+                expResult.getPersona().getRol()
+        );
     }
 
     @Test(
@@ -239,7 +267,7 @@ public class M_UsuarioNGTest {
         assertEquals(result, expResult);
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = false,
             description = "",
@@ -251,7 +279,7 @@ public class M_UsuarioNGTest {
         assertEquals(result, expResult);
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = false,
             description = "",
@@ -263,7 +291,7 @@ public class M_UsuarioNGTest {
         assertEquals(result, expResult);
     }
 //------------------------------------------------------------------------------
-    
+
     @Test(
             enabled = true,
             description = """
@@ -274,25 +302,25 @@ public class M_UsuarioNGTest {
     public void testDelete() {
         Resultado result = M_Usuario.delete("Prueba");
         assertEquals(
-                result, 
+                result,
                 Resultado
-                    .builder()
-                    .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(), 
-                ERROR_AL_BORRAR_USUARIO+" Prueba."
+                        .builder()
+                        .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_BORRAR_USUARIO + " Prueba."
         );
         result = M_Usuario.delete("Jhironsel2");
         assertEquals(
-                result, 
+                result,
                 Resultado
-                    .builder()
-                    .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(), 
-                ERROR_AL_BORRAR_USUARIO+" Jhironsel2."
+                        .builder()
+                        .mensaje(USUARIO_BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_BORRAR_USUARIO + " Jhironsel2."
         );
     }
 }

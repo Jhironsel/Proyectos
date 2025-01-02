@@ -18,7 +18,7 @@ public class frmAcercaDeNGTest {
     private frmAcercaDe acercaDe;
 
     public frmAcercaDeNGTest() {
-        acercaDe = new frmAcercaDe(null, false);
+        acercaDe = frmAcercaDe.getInstance(null, false);
     }
 
     @BeforeClass

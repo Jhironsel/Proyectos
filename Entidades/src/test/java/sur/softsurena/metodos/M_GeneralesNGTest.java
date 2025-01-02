@@ -171,7 +171,7 @@ public class M_GeneralesNGTest {
                           """
     )
     public void testGetEntidad() {
-        Generales result = M_Generales.getEntidad(
+        Generales result = M_Generales.selectByID(
                 M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
         );
 

@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -33,14 +34,16 @@ public class frmDetalleFacturaClientesNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
                           """
     )
     public void testTablaClientes() {
-        frmDetalleFacturaClientes instance = new frmDetalleFacturaClientes();
-        instance.tablaClientes();
+        Assert.assertNotNull(
+                frmDetalleFacturaClientes.getInstance(),
+                "No puede ser instanaciada la clase frmDetalleFacturaClientes."
+        );
     }
 
 }
