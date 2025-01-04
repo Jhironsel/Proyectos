@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.utilidades.Resultado;
@@ -49,7 +50,7 @@ public class M_Categoria {
      * @return Retorna un mensaje que permite saber si la categoria fue agregada
      * o no.
      */
-    public synchronized static Resultado agregarCategoria(Categoria categoria) {
+    public synchronized static Resultado insert(Categoria categoria) {
         final String sql
                 = "SELECT V_ID FROM SP_I_CATEGORIA(?, ?, ?)";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -104,7 +105,7 @@ public class M_Categoria {
      * @return Retorna un valor de tipo String que indica si la operación se
      * realizo con exito si o no.
      */
-    public synchronized static Resultado modificarCategoria(Categoria categoria) {
+    public synchronized static Resultado update(Categoria categoria) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_CATEGORIA (?,?,?,?)";
 
@@ -152,7 +153,7 @@ public class M_Categoria {
      *
      * @return Devuelve un mensaje de la acción realizada.
      */
-    public static Resultado borrarCategoria(int idCategoria) {
+    public static Resultado delete(int idCategoria) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_CATEGORIA(?)";
 
@@ -198,29 +199,18 @@ public class M_Categoria {
      * Esta consulta nos trae todas las categorias registrada en el sistema.
      * Incluyendo los campos de la imagen y estado.
      *
-     * @param estado Bandera que permite obtener un los estados de las
-     * categorias del sistema.
-     *
-     * @param foto Bandera que permite indicar al metodo si incluye foto de las
-     * categorias.
+     * @param categoria
      *
      * @return Devuelve un conjunto de datos de la tabla Categoria del sistema,
      * donde contiene todos los campos de la tabla.
      */
-    public synchronized static List<Categoria> getCategorias(Boolean estado, boolean foto) {
+    public synchronized static List<Categoria> select(
+            @NonNull Categoria categoria
+    ) {
         List<Categoria> categorias = new ArrayList<>();
-        final String sql = """
-                           SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO%s
-                           FROM VS_CATEGORIAS
-                           WHERE ID >= 0 %s
-                           ORDER BY 1;
-                           """.formatted(
-                (foto ? ", IMAGEN_TEXTO" : ""),
-                (Objects.isNull(estado) ? "" : estado ? "AND ESTADO " : "AND ESTADO IS FALSE ")
-        );
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(categoria),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT); ResultSet rs = ps.executeQuery()) {
@@ -232,7 +222,7 @@ public class M_Categoria {
                                 .descripcion(rs.getString("DESCRIPCION"))
                                 .fecha_creacion(rs.getDate("FECHA_CREACION"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                .image_texto(foto ? rs.getString("IMAGEN_TEXTO") : "")
+                                .image_texto(rs.getString("IMAGEN_TEXTO"))
                                 .build()
                 );
             }
@@ -246,49 +236,24 @@ public class M_Categoria {
         return categorias;
     }
 
-    /**
-     * Metodo que nos permite tener el conjunto de datos de las categorias que
-     * estan activas y con un producto que está activo y enlazado a una
-     * categoria.
-     *
-     * @return Retorna un listado de datos de tipo List.
-     */
-    public synchronized static List<Categoria> getCategoriaActivas() {
-        final String sql
-                = """
-                  SELECT ID, DESCRIPCION, IMAGEN_TEXTO 
-                  FROM GET_CATEGORIA_ACTIVAS 
-                  WHERE ID > 0;
-                  """;
-        List<Categoria> categoriasList = new ArrayList<>();
+    protected static String sqlSelect(Categoria categoria) {
+        Boolean b_id = Objects.isNull(categoria.getId_categoria());
+        Boolean b_estado = Objects.isNull(categoria.getEstado());
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    categoriasList.add(
-                            Categoria
-                                    .builder()
-                                    .id_categoria(rs.getInt("ID"))
-                                    .descripcion(rs.getString("DESCRIPCION"))
-                                    .image_texto(rs.getString("IMAGEN_TEXTO"))
-                                    .build()
-                    );
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return categoriasList;
+        Boolean b_where = b_id && b_estado;
+
+        return """
+               SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, IMAGEN_TEXTO
+               FROM VS_CATEGORIAS
+               %s%s%s
+               ORDER BY 1;
+               """.formatted(
+                b_where ? "" : "WHERE ",
+                b_id ? "" : "ID = %d ".formatted(categoria.getId_categoria()),
+                b_estado ? "" : categoria.getEstado() ? "AND ESTADO " : "AND ESTADO IS FALSE "
+        );
     }
+
 
     /**
      * Metodo que permite investigar si existe una descripcion de una categoria.
@@ -300,7 +265,7 @@ public class M_Categoria {
      * @return Retorna un valor boolean indicando si existe o no la descripcion
      * de la categoria que se le pretende dar.
      */
-    public synchronized static Boolean existeCategoria(String descripcion) {
+    public synchronized static Boolean exist(String descripcion) {
         final String sql
                 = "SELECT (1) FROM VS_CATEGORIAS WHERE DESCRIPCION LIKE ?";
 

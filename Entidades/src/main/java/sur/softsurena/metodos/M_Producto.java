@@ -14,7 +14,6 @@ import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Producto;
-import sur.softsurena.interfaces.IProducto;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -22,7 +21,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  *
  * @author jhironsel
  */
-public class M_Producto implements IProducto {
+public class M_Producto {
 
     /**
      * Metodo que permite recuperar las propiedades de los productos del
@@ -96,11 +95,18 @@ public class M_Producto implements IProducto {
 
         Boolean f_codigo = Objects.isNull(producto.getCodigo());
         Boolean f_descripcion = Objects.isNull(producto.getDescripcion());
-        Boolean f_descripcionCategoria = Objects.isNull(producto.getCategoria());
+        Boolean f_categoria = Objects.isNull(producto.getCategoria());
 
-        Boolean f_criterio = f_codigo && f_descripcion && f_descripcionCategoria;
+        Integer f_idCategoria = null;
+        String f_categoriaDescripcion = null;
+        if (!f_categoria) {
+            f_idCategoria = producto.getCategoria().getId_categoria();
+            f_categoriaDescripcion = producto.getCategoria().getDescripcion();
+        }
 
-        Boolean f_where = (f_id && f_estado && f_criterio);
+        Boolean f_criterio = f_codigo && f_descripcion && f_categoria || Objects.isNull(f_categoriaDescripcion);
+
+        Boolean f_where = (f_id && f_estado && f_criterio && Objects.isNull(f_idCategoria));
         Boolean f_row = Objects.isNull(producto.getPagina());
 
         String r1 = (f_where ? "" : "WHERE ");
@@ -123,16 +129,22 @@ public class M_Producto implements IProducto {
                 producto.getCodigo(),
                 producto.getDescripcion(),
                 producto.getDescripcion(),
-                producto.getCategoria().getDescripcion()
+                f_categoriaDescripcion
         ));
+        String r6 = Objects.isNull(f_idCategoria) ? 
+                "":
+                "%sID_CATEGORIA = %d ".formatted(
+                        f_estado ? "":"AND ",
+                        f_idCategoria
+                ).trim().strip();
 
         final String sql = """
                 SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, 
                 NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, 
                 ESTADO 
                 FROM GET_PRODUCTOS
-                %S%S%S%S%S
-                """.strip().trim().formatted(r1, r2, r3, r4, r5).strip().trim()
+                %S%S%S%S%S%S
+                """.strip().trim().formatted(r1, r2, r3, r4, r5, r6).strip().trim()
                 .concat("\nORDER BY ID").strip().trim()
                 .concat(
                         f_row ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
@@ -152,59 +164,58 @@ public class M_Producto implements IProducto {
      * Permite obtener los productos del sistema por una categoria identificada
      * por su ID y su estado definido por el sistema.
      *
-     * TODO 25/12/2024 Mejorar creacion de sql, crear el metodo 
-     * sqlSelect(categoria).
-     * 
+     * TODO 03/01/2025 Se esta utilizando select de esta clase por este metodo 
+     * selectByCategoria. Vigilar si el metodo select resulta fatible en cuanto 
+     * a velocidad de consulta.
+     *
      * @param categoria
-     * 
+     *
      * @return
      */
-    public synchronized static List<Producto> selectByCategoria(
-            @NonNull Categoria categoria
-    ) {
-        final String sql
-                = "SELECT ID, DESCRIPCION, IMAGEN_PRODUCTO "
-                + "FROM GET_PRODUCTOS "
-                + "WHERE ID_CATEGORIA = ? " + (Objects.isNull(categoria.getEstado()) ? ";" : (
-                categoria.getEstado() ? " AND ESTADO;" : " AND ESTADO IS FALSE;"));
-
-        List<Producto> productosList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, categoria.getId_categoria());
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                productosList.add(
-                        Producto
-                                .builder()
-                                .id(rs.getInt("ID"))
-                                .descripcion(rs.getString("DESCRIPCION"))
-                                .imagen(
-                                        Imagen
-                                                .builder()
-                                                .imagen64(rs.getString("IMAGEN_PRODUCTO"))
-                                                .build()
-                                )
-                                .build()
-                );
-            }
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al consultar la vista GET_PRODUCTOS del sistema.",
-                    ex
-            );
-        }
-        return productosList;
-    }
-
+//    public synchronized static List<Producto> selectByCategoria(
+//            @NonNull Categoria categoria
+//    ) {
+//        final String sql
+//                = "SELECT ID, DESCRIPCION, IMAGEN_PRODUCTO "
+//                + "FROM GET_PRODUCTOS "
+//                + "WHERE ID_CATEGORIA = ? " + (Objects.isNull(categoria.getEstado()) ? ";" : (categoria.getEstado() ? " AND ESTADO;" : " AND ESTADO IS FALSE;"));
+//
+//        List<Producto> productosList = new ArrayList<>();
+//
+//        try (PreparedStatement ps = getCnn().prepareStatement(
+//                sql,
+//                ResultSet.TYPE_FORWARD_ONLY,
+//                ResultSet.CONCUR_READ_ONLY,
+//                ResultSet.HOLD_CURSORS_OVER_COMMIT
+//        )) {
+//            ps.setInt(1, categoria.getId_categoria());
+//
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                productosList.add(
+//                        Producto
+//                                .builder()
+//                                .id(rs.getInt("ID"))
+//                                .descripcion(rs.getString("DESCRIPCION"))
+//                                .imagen(
+//                                        Imagen
+//                                                .builder()
+//                                                .imagen64(rs.getString("IMAGEN_PRODUCTO"))
+//                                                .build()
+//                                )
+//                                .build()
+//                );
+//            }
+//
+//        } catch (SQLException ex) {
+//            LOG.log(
+//                    Level.SEVERE,
+//                    "Error al consultar la vista GET_PRODUCTOS del sistema.",
+//                    ex
+//            );
+//        }
+//        return productosList;
+//    }
 
 //------------------------------------------------------------------------------
     /**
@@ -409,7 +420,7 @@ public class M_Producto implements IProducto {
             return false;
         }
     }
-    
+
     //------------------------------------------------------------------------------
     /**
      * Metodo utilizado para eliminar los productos del sistema, este solo
@@ -469,7 +480,6 @@ public class M_Producto implements IProducto {
         int num4 = (int) (Math.random() * 10);
 
         telefonoMovil.
-
                 append("Producto de prueba ").
                 append(num1).
                 append(num2).

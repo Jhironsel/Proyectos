@@ -19,7 +19,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return persona.toString();
+        return persona.getUser_name();
     }
 
 }

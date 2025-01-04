@@ -31,22 +31,15 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
         btnBuscarAlumnos = new javax.swing.JButton();
         btnRecibo = new javax.swing.JButton();
         btnDeuda = new javax.swing.JButton();
-        btnDeuda1 = new javax.swing.JButton();
+        btnImagenReporte = new javax.swing.JButton();
         txtBuscarAlumnos = new javax.swing.JTextField();
         txtBuscarAlumnosAgrupados = new javax.swing.JTextField();
         txtRecibo = new javax.swing.JTextField();
         txtDeuda = new javax.swing.JTextField();
-        txtDeuda1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        txtImagenReporte = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         txtMensualidadAlumno = new javax.swing.JTextField();
         txtPagoInscripcion = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -129,143 +122,98 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
             }
         });
 
-        btnDeuda1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnDeuda1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Buscar32x32.png"))); // NOI18N
-        btnDeuda1.setText("Buscar...");
-        btnDeuda1.addActionListener(new java.awt.event.ActionListener() {
+        btnImagenReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnImagenReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Buscar32x32.png"))); // NOI18N
+        btnImagenReporte.setText("Buscar...");
+        btnImagenReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeuda1ActionPerformed(evt);
+                btnImagenReporteActionPerformed(evt);
             }
         });
 
         txtBuscarAlumnos.setEditable(false);
         txtBuscarAlumnos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtBuscarAlumnos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Reportes de alumnos"));
 
         txtBuscarAlumnosAgrupados.setEditable(false);
         txtBuscarAlumnosAgrupados.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtBuscarAlumnosAgrupados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Reportes de Alumnos Agrupados "));
 
         txtRecibo.setEditable(false);
         txtRecibo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtRecibo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Recibo"));
 
         txtDeuda.setEditable(false);
         txtDeuda.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtDeuda.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Deuda"));
 
-        txtDeuda1.setEditable(false);
-        txtDeuda1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Reportes de Alumnos");
-
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Reportes de Alumnos Agrupados ");
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel5.setText("Recibo ");
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel6.setText("Deuda");
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel7.setText("Imagen del Reporte");
+        txtImagenReporte.setEditable(false);
+        txtImagenReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtImagenReporte.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Imagen del reporte"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtBuscarAlumnos, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtBuscarAlumnos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                             .addComponent(txtBuscarAlumnosAgrupados, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnBuscarAlumnos)
                             .addComponent(btnBuscarAlumnosAgrupados, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtRecibo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRecibo))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtDeuda)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeuda))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 683, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(txtRecibo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRecibo))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtDeuda1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeuda1))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 683, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(txtDeuda)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeuda))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtImagenReporte)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnImagenReporte)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscarAlumnos)
+                    .addComponent(txtBuscarAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBuscarAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarAlumnos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txtBuscarAlumnosAgrupados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarAlumnosAgrupados))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRecibo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRecibo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDeuda, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeuda))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDeuda1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeuda1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtImagenReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImagenReporte))
+                .addContainerGap())
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnBuscarAlumnosAgrupados, txtBuscarAlumnosAgrupados});
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnBuscarAlumnos, txtBuscarAlumnos});
 
         jTabbedPane1.addTab("Reportes", new javax.swing.ImageIcon(getClass().getResource("/Images/Reportes.png")), jPanel1); // NOI18N
 
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel3.setText("Mensualidad General: ");
-
         txtMensualidadAlumno.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtMensualidadAlumno.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Mensualidad general"));
         txtMensualidadAlumno.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtMensualidadAlumnoKeyTyped(evt);
@@ -273,14 +221,12 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
         });
 
         txtPagoInscripcion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPagoInscripcion.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Pago de Inscripcion"));
         txtPagoInscripcion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPagoInscripcionKeyTyped(evt);
             }
         });
-
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel4.setText("Pago de Inscripcion: ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -289,26 +235,18 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPagoInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMensualidadAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(344, Short.MAX_VALUE))
+                    .addComponent(txtMensualidadAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPagoInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtMensualidadAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtPagoInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(300, Short.MAX_VALUE))
+                .addComponent(txtMensualidadAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPagoInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Otros", new javax.swing.ImageIcon(getClass().getResource("/Images/Movimiento 72 x 72.png")), jPanel2); // NOI18N
@@ -320,7 +258,7 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCancelar)
@@ -332,7 +270,7 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
@@ -447,32 +385,25 @@ public class frmUbicacionReportes extends javax.swing.JInternalFrame {
         txtDeuda.setText(buscar());
     }//GEN-LAST:event_btnDeudaActionPerformed
 
-    private void btnDeuda1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeuda1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDeuda1ActionPerformed
+    private void btnImagenReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImagenReporteActionPerformed
+        txtImagenReporte.setText(buscar());
+    }//GEN-LAST:event_btnImagenReporteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarAlumnos;
     private javax.swing.JButton btnBuscarAlumnosAgrupados;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnDeuda;
-    private javax.swing.JButton btnDeuda1;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnImagenReporte;
     private javax.swing.JButton btnRecibo;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField txtBuscarAlumnos;
     private javax.swing.JTextField txtBuscarAlumnosAgrupados;
     private javax.swing.JTextField txtDeuda;
-    private javax.swing.JTextField txtDeuda1;
+    private javax.swing.JTextField txtImagenReporte;
     private javax.swing.JTextField txtMensualidadAlumno;
     private javax.swing.JTextField txtPagoInscripcion;
     private javax.swing.JTextField txtRecibo;

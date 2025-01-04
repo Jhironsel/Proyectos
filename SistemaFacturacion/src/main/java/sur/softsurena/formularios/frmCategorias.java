@@ -16,7 +16,7 @@ import sur.softsurena.utilidades.Utilidades;
 
 /**
  * Clase que nos permite mostrar las categorias del sistema.
- * 
+ *
  * @author jhironsel
  */
 public class frmCategorias extends javax.swing.JDialog {
@@ -225,7 +225,7 @@ public class frmCategorias extends javax.swing.JDialog {
             return;
         }
 
-        Resultado resultados = M_Categoria.borrarCategoria(idCategoria);
+        Resultado resultados = M_Categoria.delete(idCategoria);
 
         JOptionPane.showMessageDialog(
                 this,
@@ -253,7 +253,7 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         nuevo = false;
-        
+
         Categoria categoria = (Categoria) cbCategoria.getSelectedItem();
 
         idCategoria = categoria.getId_categoria();
@@ -265,13 +265,13 @@ public class frmCategorias extends javax.swing.JDialog {
         frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
                 principal, nombreCategoria, estado, false
         );
-        
+
         miCategoria.setLocationRelativeTo(null);
         miCategoria.setVisible(true);
 
         if (miCategoria.getAceptar()) {
             if (!nombreCategoria.equals(miCategoria.txtCategoria.getText())) {
-                if (M_Categoria.existeCategoria(
+                if (M_Categoria.exist(
                         miCategoria.txtCategoria.getText()
                 )) {
                     JOptionPane.showMessageDialog(
@@ -329,7 +329,7 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         //Consultamos la base de datos para saber si ese nombre de categoria existe.
-        if (M_Categoria.existeCategoria(nombreCategoria.toUpperCase())) {
+        if (M_Categoria.exist(nombreCategoria.toUpperCase())) {
             JOptionPane.showMessageDialog(
                     this,
                     "Este nombre de Categoria ya existe en el sistema.",
@@ -367,9 +367,7 @@ public class frmCategorias extends javax.swing.JDialog {
     private void cbCategoriaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbCategoriaPopupMenuWillBecomeInvisible
         String fechaCreacion;
         try {
-            fechaCreacion = (
-                    (Categoria) cbCategoria.getSelectedItem()
-                    ).getFecha_creacion().toString();
+            fechaCreacion = ((Categoria) cbCategoria.getSelectedItem()).getFecha_creacion().toString();
         } catch (java.lang.NullPointerException e) {
             fechaCreacion = "01.01.2000";
         }
@@ -410,9 +408,9 @@ public class frmCategorias extends javax.swing.JDialog {
                 .estado(estado)
                 .build();
         if (nuevo) {
-            resultado = M_Categoria.agregarCategoria(categoria);
+            resultado = M_Categoria.insert(categoria);
         } else {
-            resultado = M_Categoria.modificarCategoria(categoria);
+            resultado = M_Categoria.update(categoria);
         }
 
         JOptionPane.showMessageDialog(
@@ -427,14 +425,14 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         if (respuestaFileChooser == JFileChooser.APPROVE_OPTION) {
-            
+
             Utilidades.copyFileUsingFileChannels(
-                    imagenCategoria, 
+                    imagenCategoria,
                     new File("imagenCategoria/".concat(imagenCategoria.getName()))
             );
-            
+
             ImageIcon imagen = new ImageIcon(imagenCategoria.getPath());
-            
+
             Icon icon = new ImageIcon(
                     imagen.getImage().getScaledInstance(
                             72,
@@ -467,18 +465,24 @@ public class frmCategorias extends javax.swing.JDialog {
                         .build()
         );
 
-        M_Categoria.getCategorias(null, true).stream().forEach(categoria -> {
-            cbCategoria.addItem(
-                    Categoria
-                            .builder()
-                            .id_categoria(categoria.getId_categoria())
-                            .descripcion(categoria.getDescripcion())
-                            .image_texto(categoria.getImage_texto())
-                            .fecha_creacion(categoria.getFecha_creacion())
-                            .estado(categoria.getEstado())
-                            .build()
-            );
-        });
+        M_Categoria.select(
+                Categoria
+                        .builder()
+                        .build()
+        ).stream().forEach(
+                categoria -> {
+                    cbCategoria.addItem(
+                            Categoria
+                                    .builder()
+                                    .id_categoria(categoria.getId_categoria())
+                                    .descripcion(categoria.getDescripcion())
+                                    .image_texto(categoria.getImage_texto())
+                                    .fecha_creacion(categoria.getFecha_creacion())
+                                    .estado(categoria.getEstado())
+                                    .build()
+                    );
+                }
+        );
 
         if (cbCategoria.getItemCount() > 0) {
             cbCategoria.setSelectedIndex(0);
@@ -491,7 +495,7 @@ public class frmCategorias extends javax.swing.JDialog {
 
         //Preparamos el tipo de extension que se van a filtrar en el JFileChooser.
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Imagenes","jpg", "png", "PNG", "JPG"
+                "Imagenes", "jpg", "png", "PNG", "JPG"
         );
 
         //Colocamos el filtro a jFileChooser.

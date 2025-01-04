@@ -25,6 +25,6 @@ public class Precio {
 
     @Override
     public String toString() {
-        return precio.toString();
+        return "Tipo precio: ".concat(tipoPrecio.getNombre()).concat(", Precio: ".concat(precio.toString()));
     }
 }

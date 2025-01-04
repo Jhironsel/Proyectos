@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/CajerosMaven/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/CajerosMaven/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ControlCliente/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ControlCliente/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Entidades/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Entidades/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Imagenes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Imagenes/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JHBingo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JHBingo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JPA_Firebird/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SistemaFacturacion/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SistemaFacturacion/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SophiaStudioMaven/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SophiaStudioMaven/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/TelegramBoot/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

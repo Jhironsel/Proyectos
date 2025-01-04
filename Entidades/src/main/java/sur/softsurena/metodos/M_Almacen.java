@@ -3,8 +3,10 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
@@ -86,7 +88,7 @@ public class M_Almacen {
             @NonNull Almacen almacen
     ) {
         final String sql
-                = "SELECT O_ID FROM SP_I_ALMACEN(?, ?, ?)";
+                = "SELECT O_ID FROM SP_I_ALMACEN(?,?,?,?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -94,9 +96,15 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setString(1, almacen.getNombre());
-            ps.setString(2, almacen.getUbicacion());
-            ps.setBoolean(3, almacen.getEstado());
+            if(Objects.isNull(almacen.getId())){
+                ps.setNull(1, Types.INTEGER);
+            }else{
+                int valor = almacen.getId();
+                ps.setInt(1, valor);
+            }
+            ps.setString(2, almacen.getNombre());
+            ps.setString(3, almacen.getUbicacion());
+            ps.setBoolean(4, almacen.getEstado());
 
             try (ResultSet rs = ps.executeQuery();) {
 

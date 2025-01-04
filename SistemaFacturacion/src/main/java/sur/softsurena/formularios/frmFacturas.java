@@ -1,21 +1,9 @@
 package sur.softsurena.formularios;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +11,9 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+import javax.swing.*;
+import javax.swing.table.*;
+import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Cliente;
@@ -43,19 +25,11 @@ import sur.softsurena.entidades.Turno;
 import static sur.softsurena.formularios.frmPrincipal.mnuMovimientosNuevaFactura;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.Imagenes;
-import static sur.softsurena.metodos.M_Categoria.getCategoriaActivas;
-import static sur.softsurena.metodos.M_Categoria.getCategorias;
-import sur.softsurena.metodos.M_Cliente;
-import sur.softsurena.metodos.M_M_Factura;
-import sur.softsurena.metodos.M_Precio;
-import sur.softsurena.metodos.M_Producto;
-import sur.softsurena.metodos.M_Turno;
+import static sur.softsurena.metodos.M_Categoria.*;
+import sur.softsurena.metodos.*;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
-import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
-import sur.softsurena.utilidades.Resultado;
-import sur.softsurena.utilidades.Utilidades;
-import static sur.softsurena.utilidades.Utilidades.LOG;
-import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
+import sur.softsurena.utilidades.*;
+import static sur.softsurena.utilidades.Utilidades.*;
 
 public final class frmFacturas extends javax.swing.JInternalFrame implements ActionListener {
 
@@ -69,11 +43,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private static Factura factura;
 
-    private final String titulos[] = {"Cantidad", "Descripcion", "Montos"};
+    private final static String titulos[]
+            = {"Descripcion", "Precio", "Cantidad", "Montos"};
 
     private DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
 
-    private final static Object[] registro = new Object[3];
+    private final static Object[] registro = new Object[titulos.length];
 
     private final Properties propiedad;
 
@@ -199,10 +174,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             }
         };
         jPanel3 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        txtTotalCantidad = new javax.swing.JFormattedTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtPrecio = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
         txtTotalValor = new javax.swing.JFormattedTextField();
         jPanel10 = new javax.swing.JPanel();
@@ -211,7 +182,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         txtCriterio = new javax.swing.JTextField();
         cbCriterio = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
         jpProductos = new javax.swing.JPanel();
 
         jMenu3.setText("File");
@@ -287,6 +257,11 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameOpened(evt);
+            }
+        });
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
             }
         });
 
@@ -408,13 +383,16 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones de busqueda"));
         jPanel6.setAutoscrolls(true);
         jPanel6.setMinimumSize(new java.awt.Dimension(0, 54));
-        jPanel6.setLayout(new java.awt.GridLayout(2, 0));
+        jPanel6.setLayout(new java.awt.GridLayout(2, 0, 10, 10));
 
         cbTodos.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         cbTodos.setText("Todas las Categorias");
-        cbTodos.setBorder(null);
+        cbTodos.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
+        cbTodos.setBorderPainted(true);
+        cbTodos.setBorderPaintedFlat(true);
         cbTodos.setFocusPainted(false);
         cbTodos.setFocusable(false);
+        cbTodos.setMaximumSize(new java.awt.Dimension(50, 21));
         cbTodos.setMinimumSize(new java.awt.Dimension(0, 16));
         cbTodos.setPreferredSize(new java.awt.Dimension(0, 16));
         cbTodos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -426,7 +404,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         cbTodosProductos.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         cbTodosProductos.setText("Todos los Productos");
-        cbTodosProductos.setBorder(null);
+        cbTodosProductos.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
+        cbTodosProductos.setBorderPainted(true);
+        cbTodosProductos.setBorderPaintedFlat(true);
         cbTodosProductos.setFocusPainted(false);
         cbTodosProductos.setFocusable(false);
         cbTodosProductos.setMinimumSize(new java.awt.Dimension(0, 16));
@@ -441,7 +421,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         cbPrevista.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         cbPrevista.setSelected(true);
         cbPrevista.setText("Prevista");
-        cbPrevista.setBorder(null);
+        cbPrevista.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
+        cbPrevista.setBorderPainted(true);
+        cbPrevista.setBorderPaintedFlat(true);
         cbPrevista.setMinimumSize(new java.awt.Dimension(0, 16));
         cbPrevista.setPreferredSize(new java.awt.Dimension(0, 16));
         jPanel6.add(cbPrevista);
@@ -452,7 +434,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -569,40 +551,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             }
         ));
         tblDetalle.getTableHeader().setReorderingAllowed(false);
-        tblDetalle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblDetalleMouseClicked(evt);
-            }
-        });
         jScrollPane5.setViewportView(tblDetalle);
 
-        jPanel3.setLayout(new java.awt.GridLayout(3, 2, 2, 6));
-
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel5.setText("Cantidad:");
-        jPanel3.add(jLabel5);
-
-        txtTotalCantidad.setEditable(false);
-        txtTotalCantidad.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        txtTotalCantidad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        txtTotalCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtTotalCantidad.setToolTipText("Total Neto de la factura actual");
-        txtTotalCantidad.setFont(new java.awt.Font("Ubuntu", 1, 20)); // NOI18N
-        jPanel3.add(txtTotalCantidad);
-
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel7.setText("Precio:");
-        jPanel3.add(jLabel7);
-
-        txtPrecio.setEditable(false);
-        txtPrecio.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        txtPrecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
-        txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPrecio.setToolTipText("Precio del articulo seleccionado");
-        txtPrecio.setFont(new java.awt.Font("Ubuntu", 1, 20)); // NOI18N
-        jPanel3.add(txtPrecio);
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2, 2, 6));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -624,7 +575,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpFacturasLayout.createSequentialGroup()
                 .addGroup(jpFacturasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
                     .addComponent(jpCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
@@ -634,7 +585,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addContainerGap()
                 .addComponent(jpCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -687,32 +638,29 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jpBusqueda.add(jLabel4);
 
         jpProductos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Productos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
-        flowLayout1.setAlignOnBaseline(true);
-        jpProductos.setLayout(flowLayout1);
-        jScrollPane4.setViewportView(jpProductos);
+        jpProductos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEADING));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane4)
-                    .addComponent(jpBusqueda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
-                    .addComponent(jpCategoria, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                    .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jpCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jpCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jpBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -721,18 +669,21 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jpFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpFacturas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jpFacturas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jScrollPane3.setViewportView(jPanel8);
@@ -741,15 +692,18 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1071, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
         );
 
         pack();
@@ -795,31 +749,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      * @param evt No se esta utilizado en el sistema.
      */
     private void txtCriterioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCriterioActionPerformed
-        if (txtCriterio.getText().trim().equals(",")) {
-            cbCriterio.setSelectedIndex(1);
-            txtCriterio.setText("");
-            return;
-        }
-
-//-----------------------------------------------------------------------------1
-        if (txtCriterio.getText().trim().equals(".")) {
-            cbCriterio.setSelectedIndex(2);
-            txtCriterio.setText("");
-            return;
-        }
-
-//-----------------------------------------------------------------------------2
-        if (txtCriterio.getText().trim().equals("-")) {
-            cbCriterio.setSelectedIndex(3);
-            txtCriterio.setText("");
-            return;
-        }
-
-//-----------------------------------------------------------------------------3
-        if (cbCriterio.getSelectedIndex() == 0) {
-            jpProductos.removeAll();
-            jpProductos.repaint();
-            jpProductos.setLayout(new FlowLayout());
+//BEGIN
+        if (opcionesCriterio()) {
             return;
         }
 
@@ -889,8 +820,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                         boton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
                         boton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                         boton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-                        int ancho = 170, alto = 100;
 
+                        int ancho = 170, alto = 100;
                         boton.setPreferredSize(new java.awt.Dimension(ancho, alto));
                         boton.setMinimumSize(new java.awt.Dimension(ancho, alto));
                         boton.setMaximumSize(new java.awt.Dimension(ancho, alto));
@@ -963,6 +894,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 );
             }
         }
+//FIN
     }//GEN-LAST:event_txtCriterioActionPerformed
 
     /**
@@ -1020,26 +952,17 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                         )
                 )
         );
-
-        jpProductos.setMaximumSize(new java.awt.Dimension(350, 1500));
-
-        jpProductos.setMinimumSize(new java.awt.Dimension(350, 1500));
-
-        jpProductos.setPreferredSize(new java.awt.Dimension(350, 1500));
-
         java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
-
-        flowLayout1.setAlignOnBaseline(true);
-
         jpProductos.setLayout(flowLayout1);
+        jpProductos.setMaximumSize(new java.awt.Dimension(350, 1500));
+        jpProductos.setMinimumSize(new java.awt.Dimension(350, 1500));
+        jpProductos.setPreferredSize(new java.awt.Dimension(350, 1500));
+        jpProductos.removeAll();
+        jpProductos.repaint();
+        jpProductos.validate();
 
-        jScrollPane4.setViewportView(jpProductos);
 
-        actionPerformed(evt);
     }//GEN-LAST:event_cbTodosProductosActionPerformed
-    private void tblDetalleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDetalleMouseClicked
-        precio();
-    }//GEN-LAST:event_tblDetalleMouseClicked
 
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
@@ -1136,6 +1059,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
         }
 
+        //TODO 02/01/2025 trabajar en la siguiente variable.
         frmPonerTemporal miTemporal = new frmPonerTemporal(
                 null,
                 true
@@ -1206,7 +1130,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
                     registro[0] = rs.getDouble("cantidad");
                     registro[1] = rs.getString("descripcion");
-                    registro[2] = Utilidades.priceWithDecimal(
+                    registro[2] = rs.getDouble("precio");
+                    registro[3] = Utilidades.priceWithDecimal(
                             rs.getDouble("precio") * rs.getDouble("cantidad"));
 
                     miTabla.addRow(registro);
@@ -1221,9 +1146,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                         ex
                 );
             }
-
-            //TODO 25/11/2024 Precio porque acaba de ser creada
-            precio();
 
             sql = "SELECT r.IDCLIENTE, nombreCliente "
                     + "FROM FACTURA r "
@@ -1350,7 +1272,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      * @param evt No utilizado en este metodo.
      */
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        //TODO 20/12/2024 Debe de obtenerse este numero de factura en el sistema.
         Integer idFactura = Integer.valueOf(txtIdFactura.getText());
 //-----------------------------------------------------------------------------1
 
@@ -1363,18 +1284,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             );
             cmbClientes.requestFocus();
             cmbClientes.showPopup();
-            return;
-        }
-//-----------------------------------------------------------------------------2
-
-        if (Utilidades.controlDouble(txtTotalCantidad.getValue()) == 0.0) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe Ingresar Detalle de la Factura...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtCriterio.requestFocus();
             return;
         }
 //-----------------------------------------------------------------------------3
@@ -1542,7 +1451,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         frmBusquedaCliente miBusqueda = frmBusquedaCliente.getInstance(
-                null, 
+                null,
                 true
         );
         miBusqueda.setLocationRelativeTo(null);
@@ -1607,6 +1516,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             categoriaR();
     }//GEN-LAST:event_jpCategoriaMouseClicked
 
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+        System.out.println("Estoy aqui...");
+    }//GEN-LAST:event_formPropertyChange
+
     /**
      * Es el metodo Sobre escrito que me permite hacer varias acciones en el.
      *
@@ -1627,14 +1540,21 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
      *
      */
     @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent == null) {
-            return;
-        }
+    public void actionPerformed(
+            @NonNull ActionEvent actionEvent
+    ) {
 //-----------------------------------------------------------------------------1
         try {
             btn = (JButton) actionEvent.getSource();
         } catch (Exception eb) {
+            LOG.log(
+                    Level.SEVERE,
+                    """
+                    Error al obtener informacion del producto.
+                    No pulso' un boton.
+                    """,
+                    eb
+            );
             return;
         }
 //-----------------------------------------------------------------------------2
@@ -1643,39 +1563,36 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
          * facturar. 
          */
         if (btn.getMnemonic() == 80) { //Para cuando btn en su Mnemonic es P
-            /*
-             * El siguiente bucle permite obtener la cantidad del producto a
-             * facturar.
-             *
-             * Si la cantidadPro es nula se devuelve. Si la cantidadPro es
-             * diferente de nulo, entonces se guarda este String en la variable
-             * cantidad, parseandola, la cual es de tipo Double.
-             *
-             * Si introduce una cantidad valida el ciclo se rompe.
-             *
-             * la variable cantidad es la cantidad ingresada por el usuario de 
-             * un producto.
-             *
-             */
             Resultado validarCantidad = validarCantidad();
             if (validarCantidad.getEstado()) {
                 return;
             }
 
-            String idProducto = btn.getToolTipText();
-
-            Precio precio = M_Precio.select(
+            List<Precio> listaPrecio = M_Precio.select(
                     Precio
                             .builder()
                             .producto(
                                     Producto
                                             .builder()
-                                            .id(Integer.valueOf(idProducto))
+                                            .id(
+                                                    Integer.valueOf(
+                                                            btn.getToolTipText()
+                                                    )
+                                            )
                                             .build()
                             )
                             .build()
-            ).getFirst();
+            );
 
+            if (listaPrecio.isEmpty()) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Producto no cuenta con precio registrados",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 //            facturas.add(
 //                    tblDetalle.getRowCount(),
 //                    new Factura(
@@ -1688,20 +1605,36 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 //                    )
 //                    null
 //            );//Cantidad
-            if (Objects.isNull(precio.getPrecio())) {
+
+            Precio precio;
+            if (listaPrecio.size() > 1) {
+                precio = (Precio) JOptionPane.showInternalInputDialog(
+                        this,
+                        "Cual es el precio del articulo.!!!",
+                        "",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        listaPrecio.toArray(),
+                        listaPrecio.get(0)
+                );
+            } else {
+                precio = listaPrecio.getFirst();
+            }
+
+            if (Objects.isNull(precio)) {
                 JOptionPane.showInternalMessageDialog(
                         this,
-                        "Producto no cuenta con precio registrados",
+                        "Seleccione un precio para el articulo.!!!",
                         "",
                         JOptionPane.ERROR_MESSAGE
                 );
                 return;
             }
-            txtPrecio.setValue(precio.getPrecio());
 
-            registro[0] = validarCantidad.getCantidadDecimal();
-            registro[1] = btn.getText();
-            registro[2] = Utilidades.priceWithDecimal(
+            registro[0] = btn.getText();
+            registro[1] = precio.getPrecio().doubleValue();
+            registro[2] = validarCantidad.getCantidadDecimal();
+            registro[3] = Utilidades.priceWithDecimal(
                     precio.getPrecio().doubleValue() * validarCantidad.getCantidadDecimal()
             );
 
@@ -1730,10 +1663,15 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             jpProductos.repaint();
             jpProductos.setLayout(new FlowLayout());
 
-            M_Producto.selectByCategoria(
-                    Categoria
+            M_Producto.select(
+                    Producto
                             .builder()
-                            .id_categoria(idCategoria)
+                            .categoria(
+                                    Categoria
+                                            .builder()
+                                            .id_categoria(idCategoria)
+                                            .build()
+                            )
                             .build()
             ).stream().forEach(
                     producto -> {
@@ -1743,7 +1681,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
                         boton.setMnemonic('P');
 
-                        ImageIcon imagen = null;
+                        ImageIcon imagen;
 
                         if (Objects.isNull(producto.getImagen().getImagen64())) {
                             imagen = new ImageIcon("sur/softsurena/imagenes/NoImageTransp 96 x 96.png");
@@ -1792,15 +1730,18 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         miTabla = new DefaultTableModel(null, titulos);
         tblDetalle.setModel(miTabla);
         TableColumn miTableColumn;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblDetalle.getColumnModel().getColumn(i);
             if (i == 0) {
-                miTableColumn.setPreferredWidth(80); // la tercera columna sera la mas grande
+                miTableColumn.setPreferredWidth(100); // la tercera columna sera la mas grande
             }
             if (i == 1) {
-                miTableColumn.setPreferredWidth(200); // la tercera columna sera la mas grande
+                miTableColumn.setPreferredWidth(40); // la tercera columna sera la mas grande
             }
             if (i == 2) {
+                miTableColumn.setPreferredWidth(40); // la tercera columna sera la mas grande
+            }
+            if (i == 3) {
                 miTableColumn.setPreferredWidth(15); // la tercera columna sera la mas grande
             }
         }
@@ -1841,11 +1782,12 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         List<Categoria> categoriasList;
 
         //TODO No se está obteniendo todas las categorias.
-        if (cbTodos.isSelected()) {
-            categoriasList = getCategorias(null, true);
-        } else {
-            categoriasList = getCategoriaActivas();
-        }
+        categoriasList = M_Categoria.select(
+                Categoria
+                        .builder()
+                        .estado(cbTodos.isSelected() ? null : Boolean.TRUE)
+                        .build()
+        );
 
         categoriasList.stream().forEach(
                 categoria -> {
@@ -1933,21 +1875,16 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     private void totales() {
         int num = tblDetalle.getRowCount();
-        double sumCan = 0;
         double sumVal = 0;
 
         if (num != 0) {
             for (int i = 0; i < num; i++) {
-                sumCan += Utilidades.objectToDouble(tblDetalle.getValueAt(i, 0));
-                sumVal += Utilidades.objectToDouble(tblDetalle.getValueAt(i, 2));
+                sumVal += Utilidades.objectToDouble(tblDetalle.getValueAt(i, 3));
             }
         } else {
-            txtTotalCantidad.setValue(0);
             txtTotalValor.setValue(0);
-            txtPrecio.setValue(0);
             return;
         }
-        txtTotalCantidad.setValue(sumCan);
         txtTotalValor.setValue(sumVal);
     }
 
@@ -1955,20 +1892,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         mnuMovimientosNuevaFactura.doClick();
         nombreCliente = "";
         factura.getD_factura().clear();
-    }
-
-    private void precio() {
-        int cell;
-        try {
-            cell = tblDetalle.getSelectedRow();
-        } catch (Exception e) {
-            cell = -1;
-        }
-        if (cell == -1) {
-            txtPrecio.setValue(0.0);
-            return;
-        }
-        txtPrecio.setValue(factura.getD_factura().get(cell).getPrecio());
     }
 
 
@@ -1988,9 +1911,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private javax.swing.JCheckBox cbTodosProductos;
     private javax.swing.JComboBox<Persona> cmbClientes;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
@@ -2003,7 +1924,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private rojeru_san.rslabel.RSLabelAnimated jlAlmacen;
     private javax.swing.JLabel jlFacturaNo;
@@ -2019,11 +1939,49 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     public javax.swing.JTable tblDetalle;
     public javax.swing.JTextField txtCriterio;
     private javax.swing.JTextField txtIdFactura;
-    private javax.swing.JFormattedTextField txtPrecio;
-    private javax.swing.JFormattedTextField txtTotalCantidad;
     private javax.swing.JFormattedTextField txtTotalValor;
     private javax.swing.JTextField txtTurno;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Metodo que vigila el campo criterio del formulario. Si txtCriterio es
+     * igual a , entonces el jComBox Criterio cambia a la posicion 1.
+     *
+     * Si txtCriterio es igual a . entonces el jComBox Criterio cambia a la
+     * posicion 2.
+     *
+     * Si txtCriterio es igual a - entonces el jComBox Criterio cambia a la
+     * posicion 3.
+     *
+     * En los tres caso devuelve true. En caso contario devuelve False.
+     *
+     * @return
+     */
+    private boolean opcionesCriterio() {
+        if (txtCriterio.getText().trim().equals(",")) {
+            cbCriterio.setSelectedIndex(1);
+            return true;
+        }
+//-----------------------------------------------------------------------------1
+        if (txtCriterio.getText().trim().equals(".")) {
+            cbCriterio.setSelectedIndex(2);
+            return true;
+        }
+//-----------------------------------------------------------------------------2
+        if (txtCriterio.getText().trim().equals("-")) {
+            cbCriterio.setSelectedIndex(3);
+            return true;
+        }
+//-----------------------------------------------------------------------------3
+        if (cbCriterio.getSelectedIndex() == 0) {
+            jpProductos.removeAll();
+            jpProductos.repaint();
+            jpProductos.setLayout(new FlowLayout());
+            return true;
+        }
+        txtCriterio.setText("");
+        return false;
+    }
 
     /**
      * Este metodo nos permite validar las cantidades registradas al sistema,

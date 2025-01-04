@@ -111,8 +111,10 @@ public class M_Role {
      * @return
      */
     public synchronized static List<Role> getRoles() {
-        final String sql
-                = "SELECT ROL, PROPIETARIO, DESCRIPCION FROM GET_ROLES";
+        final String sql = """
+                           SELECT ROL, PROPIETARIO, DESCRIPCION 
+                           FROM GET_ROLES
+                           """;
 
         List<Role> rolesList = new ArrayList<>();
 

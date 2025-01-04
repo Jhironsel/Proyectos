@@ -55,6 +55,7 @@ public class M_Precio {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+                int idPrecio = rs.getInt("ID_TIPO_PRECIO");
                 lista.add(
                         Precio
                                 .builder()
@@ -66,10 +67,9 @@ public class M_Precio {
                                                 .build()
                                 )
                                 .tipoPrecio(
-                                        TipoPrecio
-                                                .builder()
-                                                .id(rs.getInt("ID_TIPO_PRECIO"))
-                                                .build()
+                                        M_TipoPrecio.getTipoPrecios().stream().filter(
+                                                precioID -> precioID.getId() == idPrecio
+                                        ).findFirst().get()
                                 )
                                 .tipoImpusto(
                                         TipoImpuesto

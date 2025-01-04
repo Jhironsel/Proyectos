@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="JPA_Firebird" />
+        <module name="SistemaFacturacion" />
+        <module name="Entidades" />
+        <module name="TelegramBoot" />
+        <module name="ControlCliente" />
+        <module name="JHBingo" />
+        <module name="SophiaStudioMaven" />
+        <module name="CajerosMaven" />
+        <module name="Imagenes" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="JPA_Firebird" options="-parameters" />
+      <module name="SistemaFacturacion" options="-Xlint" />
+      <module name="TelegramBoot" options="-parameters" />
+    </option>
+  </component>
+</project>

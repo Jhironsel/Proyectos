@@ -1300,11 +1300,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
             );
         }
     }
-
-    //TODO analizar este lineas comentadas. 
-    //Funciones que estan en el panel de la Ventana Principal
+    
     /**
-     *
+     * Este metodo consulta la tabla de turnos, y devuelve aquellos turnos que 
+     * estan activos en el sistema.
+     * 
+     * Solo es llamado desde el constructor.
      */
     private void panelUsuario() {
         jsEstatus.setVisible(false);

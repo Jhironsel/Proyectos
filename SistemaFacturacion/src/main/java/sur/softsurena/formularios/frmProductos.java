@@ -1707,9 +1707,11 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     /**
      * Metodo utilizado para actualizar el jComboBox de categorias del sistema.
      *
-     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
-     * btnModificarActionPerformed 3) btnAdmCategoriasActionPerformed 4)
-     * formInternalFrameOpened
+     * Este metodo es llamado desde: 
+     * 1) btnNuevoActionPerformed 
+     * 2) btnModificarActionPerformed 
+     * 3) btnAdmCategoriasActionPerformed 
+     * 4) formInternalFrameOpened
      */
     private static void updateCategoria() {
         //Elimina registros previos.
@@ -1725,7 +1727,12 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         .build()
         );
 
-        M_Categoria.getCategorias(true, false).stream().forEach(
+        M_Categoria.select(
+                Categoria
+                        .builder()
+                        .estado(Boolean.TRUE)
+                        .build()
+        ).stream().forEach(
                 categoria -> {
                     cbCategoria.addItem(
                             Categoria
@@ -1743,9 +1750,10 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * Metodo que permite colocar una imagen en el jlImagenProducto, la cual
      * debe pasarsele por parametros un String con el path de la imagen.
      *
-     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
-     * cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 3)
-     * btnAgregarFotoActionPerformed
+     * Este metodo es llamado desde: 
+     * 1) btnNuevoActionPerformed 
+     * 2) cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 
+     * 3) btnAgregarFotoActionPerformed
      *
      * @param file representa la ruta de la imagen en el sistema.
      */

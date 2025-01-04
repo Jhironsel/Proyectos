@@ -120,6 +120,7 @@
     <EventHandler event="internalFrameDeiconified" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameDeiconified"/>
     <EventHandler event="internalFrameIconified" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameIconified"/>
     <EventHandler event="internalFrameOpened" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameOpened"/>
+    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="formPropertyChange"/>
   </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -136,8 +137,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jScrollPane3" pref="1071" max="32767" attributes="0"/>
           <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane3" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -145,7 +150,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="544" max="32767" attributes="0"/>
+              <Component id="jScrollPane3" pref="557" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -158,7 +163,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jPanel5" pref="0" max="32767" attributes="0"/>
+                  <Component id="jPanel5" pref="680" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel6" min="-2" pref="381" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -348,7 +353,9 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="0"/>
+            <Property name="horizontalGap" type="int" value="10"/>
             <Property name="rows" type="int" value="2"/>
+            <Property name="verticalGap" type="int" value="10"/>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JCheckBox" name="cbTodos">
@@ -358,10 +365,19 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Todas las Categorias"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
+                  <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                    <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                      <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                    </MatteColorBorder>
+                  </Border>
                 </Property>
+                <Property name="borderPainted" type="boolean" value="true"/>
+                <Property name="borderPaintedFlat" type="boolean" value="true"/>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
+                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[50, 21]"/>
+                </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 16]"/>
                 </Property>
@@ -380,8 +396,14 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Todos los Productos"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
+                  <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                    <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                      <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                    </MatteColorBorder>
+                  </Border>
                 </Property>
+                <Property name="borderPainted" type="boolean" value="true"/>
+                <Property name="borderPaintedFlat" type="boolean" value="true"/>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -403,8 +425,14 @@
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Prevista"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
+                  <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                    <MatteColorBorder bottom="1" left="0" right="0" top="0">
+                      <Color PropertyName="color" blue="ff" green="0" red="0" type="rgb"/>
+                    </MatteColorBorder>
+                  </Border>
                 </Property>
+                <Property name="borderPainted" type="boolean" value="true"/>
+                <Property name="borderPaintedFlat" type="boolean" value="true"/>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[0, 16]"/>
                 </Property>
@@ -436,21 +464,24 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jpFacturas" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel10" max="32767" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel10" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jpFacturas" alignment="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jpFacturas" max="32767" attributes="0"/>
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel10" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -464,7 +495,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jScrollPane5" pref="467" max="32767" attributes="0"/>
+                              <Component id="jScrollPane5" pref="461" max="32767" attributes="0"/>
                               <Component id="jpCliente" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -474,11 +505,11 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jpCliente" min="-2" pref="112" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane5" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane5" pref="388" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -771,9 +802,6 @@
                           <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblDetalleMouseClicked"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JTable(){&#xa;@Override&#xa;public boolean isCellEditable(int rowIndex, int colIndex) { &#xa;return false; //Las celdas no son editables. &#xa;}&#xa;};"/>
                         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -786,64 +814,10 @@
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                     <Property name="columns" type="int" value="2"/>
                     <Property name="horizontalGap" type="int" value="2"/>
-                    <Property name="rows" type="int" value="3"/>
+                    <Property name="rows" type="int" value="1"/>
                     <Property name="verticalGap" type="int" value="6"/>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="jLabel5">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Arial" size="14" style="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="4"/>
-                        <Property name="text" type="java.lang.String" value="Cantidad:"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtTotalCantidad">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                            <LineBorder roundedCorners="true"/>
-                          </Border>
-                        </Property>
-                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                          <Format format="#0.00" subtype="-1" type="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="4"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Total Neto de la factura actual"/>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Ubuntu" size="20" style="1"/>
-                        </Property>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel7">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Arial" size="14" style="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="4"/>
-                        <Property name="text" type="java.lang.String" value="Precio:"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JFormattedTextField" name="txtPrecio">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                            <LineBorder roundedCorners="true"/>
-                          </Border>
-                        </Property>
-                        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                          <Format format="&#xa4;#,##0.00" subtype="-1" type="4"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="4"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Precio del articulo seleccionado"/>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Ubuntu" size="20" style="1"/>
-                        </Property>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JLabel" name="jLabel6">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -881,26 +855,26 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jScrollPane4" max="32767" attributes="0"/>
-                              <Component id="jpBusqueda" alignment="0" pref="596" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jpBusqueda" pref="580" max="32767" attributes="0"/>
+                              <Component id="jpProductos" alignment="0" max="32767" attributes="0"/>
                               <Component id="jpCategoria" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                          <Component id="jpCategoria" min="-2" pref="123" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jpBusqueda" min="-2" pref="78" max="-2" attributes="0"/>
+                          <Component id="jpCategoria" min="-2" pref="128" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" pref="320" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="jpBusqueda" min="-2" pref="80" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jpProductos" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1072,66 +1046,20 @@
                     </CodeStatement>
                   </LayoutCode>
                 </Container>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+                <Container class="javax.swing.JPanel" name="jpProductos">
+                  <Properties>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                        <TitledBorder title="Productos">
+                          <Font PropertyName="font" name="Ubuntu" size="14" style="0"/>
+                        </TitledBorder>
+                      </Border>
+                    </Property>
+                  </Properties>
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jpProductos">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                            <TitledBorder title="Productos">
-                              <Font PropertyName="font" name="Ubuntu" size="14" style="0"/>
-                            </TitledBorder>
-                          </Border>
-                        </Property>
-                      </Properties>
-                      <LayoutCode>
-                        <CodeStatement>
-                          <CodeExpression id="14_flowLayout1">
-                            <CodeVariable name="flowLayout1" type="4096" declaredType="java.awt.FlowLayout"/>
-                            <ExpressionOrigin>
-                              <ExpressionProvider type="CodeConstructor">
-                                <CodeConstructor class="java.awt.FlowLayout" parameterTypes=""/>
-                              </ExpressionProvider>
-                            </ExpressionOrigin>
-                          </CodeExpression>
-                          <StatementProvider type="CodeExpression">
-                            <CodeExpression id="14_flowLayout1"/>
-                          </StatementProvider>
-                        </CodeStatement>
-                        <CodeStatement>
-                          <CodeExpression id="14_flowLayout1"/>
-                          <StatementProvider type="CodeMethod">
-                            <CodeMethod name="setAlignOnBaseline" class="java.awt.FlowLayout" parameterTypes="boolean"/>
-                          </StatementProvider>
-                          <Parameters>
-                            <CodeExpression id="15">
-                              <ExpressionOrigin>
-                                <Value type="boolean" value="true"/>
-                              </ExpressionOrigin>
-                            </CodeExpression>
-                          </Parameters>
-                        </CodeStatement>
-                        <CodeStatement>
-                          <CodeExpression id="16_jpProductos">
-                            <CodeVariable name="jpProductos" type="8194" declaredType="javax.swing.JPanel"/>
-                            <ExpressionOrigin>
-                              <ExpressionProvider type="ComponentRef">
-                                <ComponentRef name="jpProductos"/>
-                              </ExpressionProvider>
-                            </ExpressionOrigin>
-                          </CodeExpression>
-                          <StatementProvider type="CodeMethod">
-                            <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
-                          </StatementProvider>
-                          <Parameters>
-                            <CodeExpression id="14_flowLayout1"/>
-                          </Parameters>
-                        </CodeStatement>
-                      </LayoutCode>
-                    </Container>
-                  </SubComponents>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                    <Property name="alignment" type="int" value="3"/>
+                  </Layout>
                 </Container>
               </SubComponents>
             </Container>

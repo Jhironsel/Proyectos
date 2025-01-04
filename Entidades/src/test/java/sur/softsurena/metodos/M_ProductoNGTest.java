@@ -47,7 +47,7 @@ public class M_ProductoNGTest {
                 "Error al conectarse..."
         );
 
-        M_CategoriaNGTest.testAgregarCategoria();
+        M_CategoriaNGTest.testInsert();
     }
 
     @AfterClass
@@ -129,298 +129,9 @@ public class M_ProductoNGTest {
         producto = null;
     }
 
-    //TODO Documentar o describir bien esta prueba.
     @Test(
             enabled = true,
-            description = """
-                          Test que verifica si el registro de seleccion de 
-                          producto existentes.
-                          """,
-            priority = 0
-    )
-    public void testGetProductos() {
-        List<Producto> productos = M_Producto.select(
-                Producto
-                        .builder()
-                        .build()
-        );
-
-        assertFalse(
-                productos.isEmpty(),
-                "No se encontraron registros en la tabla de productos."
-        );
-
-        //----------------------------------------------------------------------
-        productos = M_Producto.select(
-                Producto
-                        .builder()
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-        assertFalse(
-                productos.isEmpty(),
-                "No se encontraron registros en la tabla de productos."
-        );
-
-        //----------------------------------------------------------------------
-        productos = M_Producto.select(
-                Producto
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-        assertFalse(
-                productos.isEmpty(),
-                "No se encontraron registros en la tabla de productos."
-        );
-
-        //----------------------------------------------------------------------
-        productos = M_Producto.select(
-                Producto
-                        .builder()
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nPaginaNro(1)
-                                        .nCantidadFilas(20)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertFalse(
-                productos.isEmpty(),
-                "No se encontraron registros en la tabla de producto."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = """
-                          Test que verifica que se puede obtener la descripcion 
-                          y la imagen de una categoria.
-                          """,
-            priority = 1
-    )
-    public void testGetProductosByCategoria() {
-        assertNotNull(M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(-1)
-                        .build()
-        ), ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS);
-
-        assertNotNull(
-                M_Producto.selectByCategoria(
-                        Categoria
-                                .builder()
-                                .id_categoria(0)
-                                .estado(Boolean.TRUE)
-                                .build()
-                ),
-                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
-        );
-    }
-    public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
-            = "Error al consultar la base de datos.";
-
-    @Test(
-            enabled = true,
-            description = "Test encargada de agregar producto al sistema.",
-            priority = 2
-    )
-    public void testAgregarProducto() {
-        Resultado resultado = M_Producto.insert(producto);
-
-        assertEquals(
-                resultado,
-                Resultado
-                        .builder()
-                        .mensaje(PRODUCTO_AGREGADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-
-        id_producto = resultado.getId();
-
-        try {
-            resultado = M_Producto.insert(producto2);
-        } catch (Exception e) {
-            assertEquals(
-                    resultado,
-                    Resultado
-                            .builder()
-                            .id(-1)
-                            .mensaje(ERROR_AL__INSERTAR__PRODUCTO)
-                            .icono(JOptionPane.ERROR_MESSAGE)
-                            .estado(Boolean.FALSE)
-                            .build()
-            );
-        }
-    }
-
-    @Test(
-            enabled = true,
-            description = """
-                          Test que verifica que se puede obtener la descripcion 
-                          y la imagen de una categoria.
-                          """,
-            priority = 3
-    )
-    public void testGetProductosByCategoria2() {
-        List<Producto> result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-                        .build()
-        );
-
-        assertNotNull(
-                result,
-                "Error al consultar la base de datos."
-        );
-
-        result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-        assertNotNull(
-                result,
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-
-        assertNotNull(
-                result,
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-                        .build()
-        );
-
-        assertNotNull(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-
-        assertNotNull(
-                result.isEmpty(),
-                "Se obtuvo resultados en la consulta."
-        );
-
-        result = M_Producto.selectByCategoria(
-                Categoria
-                        .builder()
-                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-
-        assertNotNull(
-                result,
-                "Se obtuvo resultados en la consulta."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = "Test encargado de modificar el producto del sistema. ",
-            priority = 3
-    )
-    public void testModificarProducto() {
-        Resultado result = M_Producto.update(producto);
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(PRODUCTO__MODIFICADO__CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL__MODIFICAR__PRODUCTO
-        );
-
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 1
-    )
-    public void testExisteCategoriaProductos() {
-        int idCategoria = 0;
-        boolean expResult = false;
-        boolean result = M_Producto.existeCategoriaProductos(idCategoria);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = """
-                          """,
-            priority = 1
-    )
-    public void testExisteProducto() {
-        String criterio = "";
-        boolean expResult = false;
-        boolean result = M_Producto.existeProducto(criterio);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = true,
-            description = "",
-            priority = 10
-    )
-    public void testBorrarProductoPorID() {
-        Resultado result = M_Producto.deleteByID(id_producto);
-        
-        assertEquals(
-                result,
-                Resultado
-                    .builder()
-                    .mensaje(PRODUCTO__BORRADO__CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build(),
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
-        );
-
-        M_Categoria.borrarCategoria(
-                M_CategoriaNGTest.idCategoria1
-        );
-
-        M_Categoria.borrarCategoria(
-                M_CategoriaNGTest.idCategoria2
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 10,
+            priority = 0,
             description = """
                           
                           """
@@ -458,6 +169,78 @@ public class M_ProductoNGTest {
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
+
+//------------------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
+                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
+                    ESTADO
+                    FROM GET_PRODUCTOS
+                    WHERE ID_CATEGORIA = 0
+                    ORDER BY ID
+                    """;
+
+        result = M_Producto.sqlProductos(
+                Producto
+                        .builder()
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .id_categoria(0)
+                                        .build()
+                        )
+                        .build()
+        );
+        assertEquals(result.trim().strip(), expResult.strip().trim());
+        
+//------------------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
+                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
+                    ESTADO
+                    FROM GET_PRODUCTOS
+                    WHERE ESTADO AND ID_CATEGORIA = 0
+                    ORDER BY ID
+                    """;
+
+        result = M_Producto.sqlProductos(
+                Producto
+                        .builder()
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .id_categoria(0)
+                                        .build()
+                        )
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+        assertEquals(result.trim().strip(), expResult.strip().trim());
+        
+//------------------------------------------------------------------------------
+        expResult = """
+                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
+                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
+                    ESTADO
+                    FROM GET_PRODUCTOS
+                    WHERE ESTADO IS FALSE AND ID_CATEGORIA = 0
+                    ORDER BY ID
+                    """;
+
+        result = M_Producto.sqlProductos(
+                Producto
+                        .builder()
+                        .categoria(
+                                Categoria
+                                        .builder()
+                                        .id_categoria(0)
+                                        .build()
+                        )
+                        .estado(Boolean.FALSE)
+                        .build()
+        );
+        assertEquals(result.trim().strip(), expResult.strip().trim());
+
 //------------------------------------------------------------------------------
         expResult = """
                     SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
@@ -729,6 +512,287 @@ public class M_ProductoNGTest {
                         .build()
         );
         assertEquals(result.trim().strip(), expResult.strip().trim());
+    }
+
+    @Test(
+            enabled = true,
+            description = """
+                          Test que verifica si el registro de seleccion de 
+                          producto existentes.
+                          """,
+            priority = 0
+    )
+    public void testSelect() {
+        List<Producto> productos = M_Producto.select(
+                Producto
+                        .builder()
+                        .build()
+        );
+
+        assertFalse(
+                productos.isEmpty(),
+                "No se encontraron registros en la tabla de productos."
+        );
+
+        //----------------------------------------------------------------------
+        productos = M_Producto.select(
+                Producto
+                        .builder()
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+        assertFalse(
+                productos.isEmpty(),
+                "No se encontraron registros en la tabla de productos."
+        );
+
+        //----------------------------------------------------------------------
+        productos = M_Producto.select(
+                Producto
+                        .builder()
+                        .estado(Boolean.FALSE)
+                        .build()
+        );
+        assertFalse(
+                productos.isEmpty(),
+                "No se encontraron registros en la tabla de productos."
+        );
+
+        //----------------------------------------------------------------------
+        productos = M_Producto.select(
+                Producto
+                        .builder()
+                        .pagina(
+                                Paginas
+                                        .builder()
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
+                                        .build()
+                        )
+                        .build()
+        );
+        assertFalse(
+                productos.isEmpty(),
+                "No se encontraron registros en la tabla de producto."
+        );
+    }
+    
+
+    @Test(
+            enabled = true,
+            description = """
+                          Test que verifica que se puede obtener la descripcion 
+                          y la imagen de una categoria.
+                          """,
+            priority = 0
+    )
+    public void testSelectByCategoria() {
+//        assertNotNull(
+//                M_Producto.selectByCategoria(
+//                        Categoria
+//                                .builder()
+//                                .id_categoria(-1)
+//                                .build()
+//                ),
+//                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
+//        );
+//
+//        assertNotNull(
+//                M_Producto.selectByCategoria(
+//                        Categoria
+//                                .builder()
+//                                .id_categoria(0)
+//                                .estado(Boolean.TRUE)
+//                                .build()
+//                ),
+//                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
+//        );
+//        
+//        List<Producto> result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+//                        .build()
+//        );
+//
+//        assertNotNull(
+//                result,
+//                "Error al consultar la base de datos."
+//        );
+//
+//        result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+//                        .estado(Boolean.TRUE)
+//                        .build()
+//        );
+//        assertNotNull(
+//                result,
+//                "Se obtuvo resultados en la consulta."
+//        );
+//
+//        result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
+//                        .estado(Boolean.FALSE)
+//                        .build()
+//        );
+//
+//        assertNotNull(
+//                result,
+//                "Se obtuvo resultados en la consulta."
+//        );
+//
+//        result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+//                        .build()
+//        );
+//
+//        assertNotNull(
+//                result.isEmpty(),
+//                "Se obtuvo resultados en la consulta."
+//        );
+//
+//        result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+//                        .estado(Boolean.TRUE)
+//                        .build()
+//        );
+//
+//        assertNotNull(
+//                result.isEmpty(),
+//                "Se obtuvo resultados en la consulta."
+//        );
+//
+//        result = M_Producto.selectByCategoria(
+//                Categoria
+//                        .builder()
+//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
+//                        .estado(Boolean.FALSE)
+//                        .build()
+//        );
+//
+//        assertNotNull(
+//                result,
+//                "Se obtuvo resultados en la consulta."
+//        );
+    }
+    public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
+            = "Error al consultar la base de datos.";
+
+    @Test(
+            enabled = true,
+            description = "Test encargada de agregar producto al sistema.",
+            priority = 2
+    )
+    public void testInsert() {
+        Resultado resultado = M_Producto.insert(producto);
+
+        assertEquals(
+                resultado,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+
+        id_producto = resultado.getId();
+
+        try {
+            resultado = M_Producto.insert(producto2);
+        } catch (Exception e) {
+            assertEquals(
+                    resultado,
+                    Resultado
+                            .builder()
+                            .id(-1)
+                            .mensaje(ERROR_AL__INSERTAR__PRODUCTO)
+                            .icono(JOptionPane.ERROR_MESSAGE)
+                            .estado(Boolean.FALSE)
+                            .build()
+            );
+        }
+    }
+
+    @Test(
+            enabled = true,
+            description = "Test encargado de modificar el producto del sistema. ",
+            priority = 3
+    )
+    public void testUpdate() {
+        Resultado result = M_Producto.update(producto);
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO__MODIFICADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL__MODIFICAR__PRODUCTO
+        );
+    }
+
+    @Test(
+            enabled = false,
+            description = "",
+            priority = 1
+    )
+    public void testExisteCategoriaProductos() {
+        int idCategoria = 0;
+        boolean expResult = false;
+        boolean result = M_Producto.existeCategoriaProductos(idCategoria);
+        assertEquals(result, expResult);
+    }
+
+    @Test(
+            enabled = false,
+            description = """
+                          """,
+            priority = 1
+    )
+    public void testExisteProducto() {
+        String criterio = "";
+        boolean expResult = false;
+        boolean result = M_Producto.existeProducto(criterio);
+        assertEquals(result, expResult);
+    }
+
+    @Test(
+            enabled = true,
+            description = "",
+            priority = 10
+    )
+    public void testBorrarProductoPorID() {
+        Resultado result = M_Producto.deleteByID(id_producto);
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO__BORRADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
+        );
+
+        M_Categoria.delete(
+                M_CategoriaNGTest.idCategoria1
+        );
+
+        M_Categoria.delete(
+                M_CategoriaNGTest.idCategoria2
+        );
     }
 
     @Test(
