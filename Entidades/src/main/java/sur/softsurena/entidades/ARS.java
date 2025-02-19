@@ -12,7 +12,7 @@ public class ARS {
     private final String descripcion;
     private final BigDecimal covertura;
     private final Boolean estado;
-    private final Integer cantidad_registro;
+    private final Integer cantidadRegistro;
 
     @Override
     public String toString() {
@@ -26,7 +26,7 @@ public class ARS {
         sb.append(", descripcion=").append(descripcion);
         sb.append(", covertura=").append(covertura);
         sb.append(", estado=").append(estado);
-        sb.append(", cantidad_registro=").append(cantidad_registro);
+        sb.append(", cantidad_registro=").append(cantidadRegistro);
         sb.append('}');
         return sb.toString();
     }
@@ -38,7 +38,7 @@ public class ARS {
         hash = 29 * hash + Objects.hashCode(this.descripcion);
         hash = 29 * hash + Objects.hashCode(this.covertura);
         hash = 29 * hash + Objects.hashCode(this.estado);
-        hash = 29 * hash + Objects.hashCode(this.cantidad_registro);
+        hash = 29 * hash + Objects.hashCode(this.cantidadRegistro);
         return hash;
     }
 
@@ -66,7 +66,7 @@ public class ARS {
         if (!Objects.equals(this.estado, other.estado)) {
             return false;
         }
-        return Objects.equals(this.cantidad_registro, other.cantidad_registro);
+        return Objects.equals(this.cantidadRegistro, other.cantidadRegistro);
     }
     
     

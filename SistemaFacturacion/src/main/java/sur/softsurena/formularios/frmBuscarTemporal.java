@@ -9,7 +9,6 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_M_Factura;
@@ -136,7 +135,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
                     .addComponent(btnImprimirCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -186,19 +185,19 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (tblDetalle.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(
-                this,
-                "Debe selecionar una Factura...",
-                "",
-                JOptionPane.ERROR_MESSAGE
+                    this,
+                    "Debe selecionar una Factura...",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
         setAceptar(true);
         setFactura(
-            tblDetalle.getValueAt(
-                tblDetalle.getSelectedRow(),
-                0
-            ).toString()
+                tblDetalle.getValueAt(
+                        tblDetalle.getSelectedRow(),
+                        0
+                ).toString()
         );
         dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -212,10 +211,10 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         //Debe haber una factura selecciona
         if (tblDetalle.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(
-                this,
-                "No ha seleccionado Factura",
-                "",
-                JOptionPane.ERROR_MESSAGE
+                    this,
+                    "No ha seleccionado Factura",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
             );
             return;
         }
@@ -225,19 +224,19 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         Map<String, Object> parametros = new HashMap<>();
 
         parametros.put("idFactura", Integer.valueOf(
-            miTabla.getValueAt(
-                tblDetalle.getSelectedRow(), 0
-            ).toString()));
+                miTabla.getValueAt(
+                        tblDetalle.getSelectedRow(), 0
+                ).toString()));
 
-            hiloImpresionFactura miFactura
-            = new hiloImpresionFactura(
-                true, //Mostrar Reporte
-                false, //No se requiere copia del documento
-                "/Reportes/factura.jasper",
-                parametros,
-                frmPrincipal.jPanelImpresion,
-                frmPrincipal.jprImpresion);
-            miFactura.start();
+        hiloImpresionFactura miFactura
+                = new hiloImpresionFactura(
+                        true, //Mostrar Reporte
+                        false, //No se requiere copia del documento
+                        "/Reportes/factura.jasper",
+                        parametros,
+                        frmPrincipal.jPanelImpresion,
+                        frmPrincipal.jprImpresion);
+        miFactura.start();
     }//GEN-LAST:event_btnImprimirCuentaActionPerformed
     /**
      * Metodo utilizado para llenar las tablas de las facturas que existen en
@@ -247,20 +246,15 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
      *
      */
     private void llenarTabla() {
-        String titulos[] = {"N° Factura", "Nombre Cliente", "Fecha/Hora",
-            "Cajero"};
-        int columnWidth[] = {10,50,20,20};
+        String titulos[] = {
+            "N° Factura", "Nombre Cliente", "Fecha/Hora", "Cajero"
+        };
         miTabla = new DefaultTableModel(null, titulos);
 
-        List<Factura> temporalesList = M_M_Factura.getFacturaEstado(
-                Factura
+        List<M_Factura> temporalesList = M_M_Factura.select(
+                M_Factura
                         .builder()
-                        .m_factura(
-                                M_Factura
-                                        .builder()
-                                        .estadoFactura('t')
-                                        .build()
-                        )
+                        .estadoFactura('t')
                         .build()
         );
 
@@ -270,14 +264,16 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
                 temporal -> {
                     registro[0] = temporal.getId();
 
-                    if (temporal.getM_factura().getCliente().getPersona().getId_persona() == 0) {
-                        registro[1] = temporal.getM_factura().getNombreTemporal();
+                    if (temporal.getIdCliente() == 0) {
+                        registro[1] = temporal.getNombreTemporal();
                     } else {
-                        registro[1] = temporal.getM_factura().getCliente();
+                        //TODO 10/01/2025 Traer el nombre de la persona.
+                        registro[1] = temporal.getIdCliente();
                     }
 
-                    registro[2] = temporal.getM_factura().getFechaHora();
-                    registro[3] = temporal.getM_factura().getUserName();
+                    registro[2] = temporal.getFechaHora();
+                    //TODO 10/01/2025 Traer el nombre del cajero de la tabla de turno.
+                    registro[3] = temporal.getIdTurno();
 
                     miTabla.addRow(registro);//Se van insertando los registros.
 
@@ -291,6 +287,7 @@ public final class frmBuscarTemporal extends java.awt.Dialog {
         tblDetalle.getColumnModel().getColumn(0).setCellRenderer(tcr);
 
         //Ordenando las columnas
+        int columnWidth[] = {10, 50, 20, 20};
         TableColumn miTableColumn;
         for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblDetalle.getColumnModel().getColumn(i);

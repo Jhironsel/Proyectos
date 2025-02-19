@@ -64,10 +64,10 @@ public class M_PrivilegioNGTest {
                                 .privilegio(
                                         Privilegio.PRIVILEGIO_SELECT
                                 )
-                                .nombre_relacion("GET_PRODUCTOS")
+                                .nombre_relacion("V_PRODUCTOS")
                                 .build()
         );
-        assertTrue(result, "No se tiene acceso a GET_PRODUCTOS");
+        assertTrue(result, "No se tiene acceso a V_PRODUCTOS");
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -75,10 +75,10 @@ public class M_PrivilegioNGTest {
                         .privilegio(
                                 Privilegio.PRIVILEGIO_SELECT
                         )
-                        .nombre_relacion("GET_TURNOS")
+                        .nombre_relacion("V_TURNOS")
                         .build()
         );
-        assertTrue(result, "No se tiene acceso a GET_TURNOS");
+        assertTrue(result, "No se tiene acceso a V_TURNOS");
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -86,21 +86,10 @@ public class M_PrivilegioNGTest {
                         .privilegio(
                                 Privilegio.PRIVILEGIO_SELECT
                         )
-                        .nombre_relacion("GET_PERSONA_CLIENTES")
+                        .nombre_relacion("V_PERSONAS_CLIENTES")
                         .build()
         );
-        assertTrue(result, "No se tiene acceso a GET_PERSONA_CLIENTES");
-        //----------------------------------------------------------------------
-        result = M_Privilegio.privilegio(
-                Privilegio
-                        .builder()
-                        .privilegio(
-                                Privilegio.PRIVILEGIO_SELECT
-                        )
-                        .nombre_relacion("GET_CATEGORIA_ACTIVAS")
-                        .build()
-        );
-        assertTrue(result, "No se tiene acceso a GET_CATEGORIA_ACTIVAS");
+        assertTrue(result, "No se tiene acceso a V_PERSONAS_CLIENTES");
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio

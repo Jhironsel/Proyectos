@@ -1,6 +1,7 @@
 package sur.softsurena.formularios;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -8,14 +9,41 @@ import javax.swing.SwingUtilities;
 public class frmCalculoEfectivo extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
+    
+    private static Frame parent;
+    private static boolean modal;
+    private static double total;
+    private static boolean credito;
 
     private int resp;
 
     public int getResp() {
         return resp;
     }
+    
+    public static frmCalculoEfectivo getInstance(
+            Frame parent, boolean modal, double total, boolean credito
+    ) {
+        frmCalculoEfectivo.parent = parent;
+        frmCalculoEfectivo.modal = modal;
+        frmCalculoEfectivo.total = total;
+        frmCalculoEfectivo.credito = credito;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmCalculoEfectivo(
+        private static final frmCalculoEfectivo INSTANCE 
+                = new frmCalculoEfectivo(
+                frmCalculoEfectivo.parent,
+                        frmCalculoEfectivo.modal,
+                        frmCalculoEfectivo.total,
+                        frmCalculoEfectivo.credito
+                );
+    }
+
+    private frmCalculoEfectivo(
             java.awt.Frame parent, 
             boolean modal, 
             double total,

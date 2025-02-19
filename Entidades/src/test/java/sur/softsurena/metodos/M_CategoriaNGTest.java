@@ -1,7 +1,7 @@
 package sur.softsurena.metodos;
 
-import java.io.File;
 import java.util.List;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
 import static sur.softsurena.metodos.M_Categoria.OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA;
+import static sur.softsurena.metodos.M_Categoria.SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.generarCodigoBarra;
 import sur.softsurena.utilidades.Resultado;
 
@@ -22,8 +23,8 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_CategoriaNGTest {
 
-    public static int idCategoria1, idCategoria2;
-    public static String descripcion1, descripcion2;
+    public static int idCategoria;
+    public static String descripcion;
 
     public M_CategoriaNGTest() {
     }
@@ -66,32 +67,27 @@ public class M_CategoriaNGTest {
                 Categoria
                         .builder()
                         .descripcion(generarCodigoBarra())
-                        .pathImage(new File("Imagenes/ImagenPrueba.png"))
                         .estado(Boolean.TRUE)
                         .build()
         );
 
-        assertTrue(
-                result.getEstado(),
-                "Problemas en el registro de la categoria."
-        );
-        idCategoria1 = result.getId();
-
-        result = M_Categoria.insert(
-                Categoria
+        assertEquals(
+                result,
+                Resultado
                         .builder()
-                        .descripcion(generarCodigoBarra())
-                        .pathImage(null)
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-
-        assertTrue(
-                result.getEstado(),
+                        .mensaje(M_Categoria.CATEGORIA_AGREGADA_CON_EXITO)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 "Problemas en el registro de la categoria."
         );
-
-        idCategoria2 = result.getId();
+        
+        assertTrue(
+                result.getId() > 0,
+                "Identificador de la categoria es menor que cero!!!"
+                );
+        
+        idCategoria = result.getId();
     }
 
     @Test(
@@ -100,34 +96,22 @@ public class M_CategoriaNGTest {
             priority = 1
     )
     public void testUpdate() {
-        descripcion1 = generarCodigoBarra();
-        Resultado result = M_Categoria.update(
-                Categoria
+        descripcion = generarCodigoBarra();
+        assertEquals(
+                M_Categoria.update(
+                        Categoria
+                                .builder()
+                                .id_categoria(idCategoria)
+                                .descripcion(descripcion)
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                Resultado
                         .builder()
-                        .id_categoria(idCategoria1)
-                        .descripcion(descripcion1)
-                        .pathImage(null)
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-        assertTrue(
-                result.getEstado(),
-                "No pudo ser modificado el registro de las categorias."
-        );
-
-        descripcion2 = generarCodigoBarra();
-        result = M_Categoria.update(
-                Categoria
-                        .builder()
-                        .id_categoria(idCategoria2)
-                        .descripcion(descripcion2)
-                        .pathImage(new File("Imagenes/ImagenPrueba.png"))
+                        .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build()
-        );
-        assertTrue(
-                result.getEstado(),
-                "No pudo ser modificado el registro de las categorias."
         );
     }
 
@@ -137,12 +121,65 @@ public class M_CategoriaNGTest {
             priority = 2
     )
     public void testSqlSelect() {
-        Categoria categoria = null;
-        String expResult = "";
-        String result = M_Categoria.sqlSelect(categoria);
-        assertEquals(result, expResult);
+        assertEquals(
+                M_Categoria.sqlSelect(
+                        Categoria
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                FROM V_CATEGORIAS
+                ORDER BY 1;
+                """.trim().strip()
+        );
+
+        assertEquals(
+                M_Categoria.sqlSelect(
+                        Categoria
+                                .builder()
+                                .id_categoria(0)
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                FROM V_CATEGORIAS
+                WHERE ID = 0 
+                ORDER BY 1;
+                """.trim().strip()
+        );
+
+        assertEquals(
+                M_Categoria.sqlSelect(
+                        Categoria
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                FROM V_CATEGORIAS
+                WHERE ESTADO
+                ORDER BY 1;
+                """.trim().strip()
+        );
+
+        assertEquals(
+                M_Categoria.sqlSelect(
+                        Categoria
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                FROM V_CATEGORIAS
+                WHERE ESTADO IS FALSE
+                ORDER BY 1;
+                """.trim().strip()
+        );
     }
-    
+
     @Test(
             enabled = true,
             description = "Pruebas de consultas a las categorias con o sin fotos.",
@@ -180,13 +217,7 @@ public class M_CategoriaNGTest {
     )
     public static void testExist() {
 
-        Boolean result = M_Categoria.exist(descripcion1);
-        assertTrue(
-                result,
-                "No existe registros de pruebas en la consulta."
-        );
-
-        result = M_Categoria.exist(descripcion2);
+        Boolean result = M_Categoria.exist(descripcion);
         assertTrue(
                 result,
                 "No existe registros de pruebas en la consulta."
@@ -199,16 +230,10 @@ public class M_CategoriaNGTest {
             priority = 5
     )
     public static void testDelete() {
-        Resultado result = M_Categoria.delete(idCategoria1);
+        Resultado result = M_Categoria.delete(idCategoria);
         assertTrue(
                 result.getEstado(),
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA.formatted(idCategoria1)
-        );
-
-        result = M_Categoria.delete(idCategoria2);
-        assertTrue(
-                result.getEstado(),
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA.formatted(idCategoria2)
+                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA.formatted(idCategoria)
         );
     }
 }

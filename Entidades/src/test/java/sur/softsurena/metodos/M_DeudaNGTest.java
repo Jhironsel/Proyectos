@@ -9,11 +9,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
-import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -56,6 +53,55 @@ public class M_DeudaNGTest {
     public void tearDownMethod() throws Exception {
     }
 
+    
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSqlGetDeudas() {
+        assertEquals(
+                M_Deuda.sqlGetDeudas(
+                        Deuda
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
+                FROM V_M_DEUDAS
+                """.trim().strip()
+        );
+        //----------------------------------------------------------------------
+        assertEquals(
+                M_Deuda.sqlGetDeudas(
+                        Deuda
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                """
+                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
+                    FROM V_M_DEUDAS
+                    WHERE ID = 0
+                    """.trim().strip()
+        );
+        //----------------------------------------------------------------------
+        assertEquals(
+                M_Deuda.sqlGetDeudas(
+                        Deuda
+                                .builder()
+                                .idCliente(0)
+                                .build()
+                ),
+                """
+                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
+                    FROM V_M_DEUDAS
+                    WHERE ID_CLIENTE = 0
+                    """.trim().strip()
+        );
+    }
+    
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
@@ -69,14 +115,24 @@ public class M_DeudaNGTest {
                 M_Deuda.select(
                         Deuda
                                 .builder()
-                                .cliente(
-                                        Cliente
-                                                .builder()
-                                                .persona(
-                                                        Persona.builder().build()
-                                                )
-                                                .build()
-                                )
+                                .build()
+                ),
+                "La tabla de deuda esta vacia."
+        );
+        assertNotNull(
+                M_Deuda.select(
+                        Deuda
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                "La tabla de deuda esta vacia."
+        );
+        assertNotNull(
+                M_Deuda.select(
+                        Deuda
+                                .builder()
+                                .idCliente(0)
                                 .build()
                 ),
                 "La tabla de deuda esta vacia."
@@ -97,14 +153,7 @@ public class M_DeudaNGTest {
         Resultado result = M_Deuda.insert(
                 Deuda
                         .builder()
-                        .cliente(
-                                Cliente
-                                        .builder()
-                                        .persona(
-                                                M_PersonaNGTest.persona(true)
-                                        )
-                                        .build()
-                        )
+                        .idCliente(M_PersonaNGTest.persona(true).getIdPersona())
                         .concepto("Sistema de prueba de deuda en registros.")
                         .monto(
                                 BigDecimal.valueOf(2300.55)
@@ -133,15 +182,14 @@ public class M_DeudaNGTest {
     )
     public void testUpdate() {
 
-        assertEquals(
-                M_Deuda.update(
-                        Deuda
-                                .builder()
-                                .id_deuda(idDeuda)
-                                .concepto("Ha sido modificado el registro de la prueba de deuda.")
-                                .monto(BigDecimal.valueOf(23000.55))
-                                .build()
-                ),
+        assertEquals(M_Deuda.update(
+                Deuda
+                        .builder()
+                        .id(idDeuda)
+                        .concepto("Ha sido modificado el registro de la prueba de deuda.")
+                        .monto(BigDecimal.valueOf(23000.55))
+                        .build()
+        ),
                 Resultado
                         .builder()
                         .mensaje("Operación realizada correctamente.!!!")
@@ -153,88 +201,6 @@ public class M_DeudaNGTest {
     }
 //------------------------------------------------------------------------------
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testSqlGetDeudas() {
-        String expResult = """
-                           SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
-                           ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
-                           FROM GET_DEUDAS
-                           """;
-        String result = M_Deuda.sqlGetDeudas(
-                Deuda
-                        .builder()
-                        .cliente(
-                                Cliente
-                                        .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result, expResult.trim().strip());
-        //----------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
-                    ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
-                    FROM GET_DEUDAS
-                    WHERE ID = 0
-                    """;
-        result = M_Deuda.sqlGetDeudas(
-                Deuda
-                        .builder()
-                        .cliente(
-                                Cliente
-                                        .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .id_deuda(0)
-                        .build()
-        );
-        assertEquals(result, expResult.trim().strip());
-        //----------------------------------------------------------------------        
-        expResult = """
-                    SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
-                    ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
-                    FROM GET_DEUDAS
-                    WHERE CEDULA LIKE '012'
-                    """;
-        result = M_Deuda.sqlGetDeudas(
-                Deuda
-                        .builder()
-                        .cliente(
-                                Cliente
-                                        .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .generales(
-                                                                Generales
-                                                                        .builder()
-                                                                        .cedula("012")
-                                                                        .build())
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result, expResult.trim().strip());
-    }
-
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
@@ -244,13 +210,12 @@ public class M_DeudaNGTest {
     )
     public void testDelete() {
 
-        assertEquals(
-                M_Deuda.delete(
-                        Deuda
-                                .builder()
-                                .id_deuda(idDeuda)
-                                .build()
-                ),
+        assertEquals(M_Deuda.delete(
+                Deuda
+                        .builder()
+                        .id(idDeuda)
+                        .build()
+        ),
                 Resultado
                         .builder()
                         .mensaje("Operación realizada correctamente.!!!")

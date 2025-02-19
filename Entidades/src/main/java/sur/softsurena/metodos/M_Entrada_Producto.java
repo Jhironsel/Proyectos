@@ -34,7 +34,7 @@ public class M_Entrada_Producto {
                 sql, 
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, eProducto.getIdProveedor());
             ps.setString(2, eProducto.getCod_factura());
@@ -92,7 +92,7 @@ public class M_Entrada_Producto {
                 sql, 
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.executeUpdate();
             return true;

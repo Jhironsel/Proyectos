@@ -10,11 +10,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
-import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Cliente;
-import sur.softsurena.entidades.Deuda;
-import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -34,10 +30,10 @@ public class M_Deuda {
      *
      * @return
      */
-    public static synchronized List<Deuda> select(
-            @NonNull Deuda deuda
+    public static synchronized List<sur.softsurena.entidades.Deuda> select(
+            @NonNull sur.softsurena.entidades.Deuda deuda
     ) {
-        List<Deuda> deudasList = new ArrayList<>();
+        List<sur.softsurena.entidades.Deuda> deudasList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlGetDeudas(deuda),
@@ -47,30 +43,10 @@ public class M_Deuda {
         )) {
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
-                    deudasList.add(
-                            Deuda
+                    deudasList.add(sur.softsurena.entidades.Deuda
                                     .builder()
-                                    .id_deuda(rs.getInt("ID"))
-                                    .cliente(
-                                            Cliente
-                                                    .builder()
-                                                    .persona(
-                                                            Persona
-                                                                    .builder()
-                                                                    .id_persona(rs.getInt("ID_CLIENTE"))
-                                                                    .pnombre(rs.getString("P_NOMBRE"))
-                                                                    .snombre(rs.getString("S_NOMBRE"))
-                                                                    .apellidos(rs.getString("APELLIDOS"))
-                                                                    .generales(
-                                                                            Generales
-                                                                                    .builder()
-                                                                                    .cedula(rs.getString("CEDULA"))
-                                                                                    .build()
-                                                                    )
-                                                                    .build()
-                                                    )
-                                                    .build()
-                                    )
+                                    .id(rs.getInt("ID"))
+                                    .idCliente(rs.getInt("ID_CLIENTE"))
                                     .concepto(rs.getString("CONCEPTO"))
                                     .monto(rs.getBigDecimal("MONTO"))
                                     .fecha(rs.getDate("FECHA"))
@@ -90,24 +66,19 @@ public class M_Deuda {
         return deudasList;
     }
 
-    protected static String sqlGetDeudas(Deuda deuda) {
-        Boolean f_criterio = Objects.isNull(deuda.getCliente().getPersona().getGenerales());
-        Boolean f_id = Objects.isNull(deuda.getId_deuda());
-        boolean f_where = f_criterio && f_id;
+    protected static String sqlGetDeudas(sur.softsurena.entidades.Deuda deuda) {
+        Boolean id = Objects.isNull(deuda.getId());
+        Boolean idCliente = Objects.isNull(deuda.getIdCliente());
+        boolean where = idCliente && id;
+        
         return """
-               SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA,
-               ESTADO, P_NOMBRE, S_NOMBRE, APELLIDOS, CEDULA
-               FROM GET_DEUDAS
+               SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
+               FROM V_M_DEUDAS
                %s%s%s
                """.formatted(
-                f_where ? "" : "WHERE ",
-                f_criterio ? "" : "CEDULA LIKE '%s' ".formatted(
-                        deuda
-                                .getCliente()
-                                .getPersona()
-                                .getGenerales()
-                ),
-                f_id ? "" : "ID = %d ".formatted(deuda.getId_deuda())
+                where ? "" : "WHERE ",
+                idCliente ? "" : "ID_CLIENTE = %d ".formatted(deuda.getIdCliente()),
+                id ? "" : "ID = %d ".formatted(deuda.getId())
         ).trim().strip();
     }
 //------------------------------------------------------------------------------
@@ -116,12 +87,12 @@ public class M_Deuda {
      * Este metodo permite registrar las deudas en el sistema. Solo pide por el
      * momento id del cliente, el concepto de la deuda y el monto de la deuda.
      *
-     * @param miDeuda
+     * @param deuda
      *
      * @return
      */
     public synchronized static Resultado insert(
-            @NonNull Deuda miDeuda
+            @NonNull sur.softsurena.entidades.Deuda deuda
     ) {
         final String sql = """
                            SELECT O_ID
@@ -131,12 +102,12 @@ public class M_Deuda {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, miDeuda.getCliente().getPersona().getId_persona());
-            ps.setString(2, miDeuda.getConcepto());
-            ps.setBigDecimal(3, miDeuda.getMonto());
+            ps.setInt(1, deuda.getIdCliente());
+            ps.setString(2, deuda.getConcepto());
+            ps.setBigDecimal(3, deuda.getMonto());
 
             ResultSet rs = ps.executeQuery();
 
@@ -175,7 +146,7 @@ public class M_Deuda {
      * @return
      */
     public synchronized static Resultado update(
-            @NonNull Deuda deuda
+            @NonNull sur.softsurena.entidades.Deuda deuda
     ) {
         final String sql = "EXECUTE PROCEDURE SP_U_DEUDA(?,?,?)";
 
@@ -183,9 +154,9 @@ public class M_Deuda {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, deuda.getId_deuda());
+            ps.setInt(1, deuda.getId());
             ps.setString(2, deuda.getConcepto());
             ps.setBigDecimal(3, deuda.getMonto());
 
@@ -215,7 +186,7 @@ public class M_Deuda {
      * @return
      */
     public synchronized static Resultado delete(
-            @NonNull Deuda deuda
+            @NonNull sur.softsurena.entidades.Deuda deuda
     ) {
         final String sql = "EXECUTE PROCEDURE SP_D_M_DEUDAS(?)";
 
@@ -223,9 +194,9 @@ public class M_Deuda {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, deuda.getId_deuda());
+            ps.setInt(1, deuda.getId());
 
             ps.executeUpdate();
 
@@ -260,7 +231,7 @@ public class M_Deuda {
 //                sql,
 //                ResultSet.TYPE_FORWARD_ONLY,
 //                ResultSet.CONCUR_READ_ONLY,
-//                ResultSet.CLOSE_CURSORS_AT_COMMIT
+//                ResultSet.HOLD_CURSORS_OVER_COMMIT
 //        )) {
 //            cs.setInt(1, idDeuda);
 //            cs.setInt(2, idTurno);

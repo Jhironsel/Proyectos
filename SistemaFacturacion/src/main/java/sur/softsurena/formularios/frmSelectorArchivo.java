@@ -1,11 +1,40 @@
 package sur.softsurena.formularios;
+
+import java.awt.Frame;
+import javax.swing.JFileChooser;
+
+/**
+ * 
+ * @author jhironsel
+ */
 public class frmSelectorArchivo extends javax.swing.JDialog {
-    private String archivo = "";    
+
+    private static final long serialVersionUID = 1L;
+    private String archivo = "";
+    
+    private static Frame parent;
+    private static boolean modal;
     
     public String getArchivo(){
         return archivo;
     }
-    public frmSelectorArchivo(java.awt.Frame parent, boolean modal) {
+    
+    public static frmSelectorArchivo getInstance(Frame parent, boolean modal) {
+        frmSelectorArchivo.parent = parent;
+        frmSelectorArchivo.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmSelectorArchivo INSTANCE = 
+                new frmSelectorArchivo(
+                        frmSelectorArchivo.parent, 
+                        frmSelectorArchivo.modal
+                );
+    }
+    
+    private frmSelectorArchivo(Frame parent, boolean modal) {
         super(parent, modal);
         
         initComponents();
@@ -44,7 +73,7 @@ public class frmSelectorArchivo extends javax.swing.JDialog {
 
     private void fchSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fchSelectorActionPerformed
         String comando = evt.getActionCommand();        
-        if(comando.equals(fchSelector.APPROVE_SELECTION)){
+        if(comando.equals(JFileChooser.APPROVE_SELECTION)){
             archivo = fchSelector.getSelectedFile().toString();
         } 
         dispose();

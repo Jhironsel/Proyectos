@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,7 +13,6 @@ import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
 import sur.softsurena.metodos.M_Role;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
-import static sur.softsurena.metodos.M_Usuario.getUsuario;
 import sur.softsurena.utilidades.PalabrasReservadasFirebird;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -25,9 +25,48 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
 
     private static boolean nuevo;//Si el suario es nuevo o no
+    
+    private static Frame parent;
+    private static boolean modal;
+    private static Usuario usuario;
 
+    public static frmUsuariosAgregar getInstance(
+            Frame parent, boolean modal
+    ) {
+        frmUsuariosAgregar.parent = parent;
+        frmUsuariosAgregar.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    public static frmUsuariosAgregar getInstance(
+            Frame parent, boolean modal, Usuario usuario
+    ) {
+        frmUsuariosAgregar.parent = parent;
+        frmUsuariosAgregar.modal = modal;
+        frmUsuariosAgregar.usuario = usuario;
+        return NewSingletonHolder2.INSTANCE2;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmUsuariosAgregar INSTANCE = 
+                new frmUsuariosAgregar(
+                        frmUsuariosAgregar.parent, frmUsuariosAgregar.modal
+                );
+    }
+    
+    private static class NewSingletonHolder2 {
+
+        private static final frmUsuariosAgregar INSTANCE2 = 
+                new frmUsuariosAgregar(
+                        frmUsuariosAgregar.parent, 
+                        frmUsuariosAgregar.modal, 
+                        frmUsuariosAgregar.usuario
+                );
+    }
+    
     /*Este constructor es utilizado para agregar nuevos usuarios*/
-    public frmUsuariosAgregar(java.awt.Frame parent, boolean modal) {
+    private frmUsuariosAgregar(Frame parent, boolean modal) {
         super(parent, modal);
         nuevo = true;
         initComponents();
@@ -35,7 +74,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
     /*Este constructor es utilizado para cuando se vá a modificar un usuario,
     en el se inicianlizan todos los campos de formulario*/
-    public frmUsuariosAgregar(java.awt.Frame parent, boolean modal, Usuario usuario) {
+    private frmUsuariosAgregar(java.awt.Frame parent, boolean modal, Usuario usuario) {
         super(parent, modal);
         nuevo = false;
         initComponents();
@@ -681,7 +720,9 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             );
 
             if (respuesta == JOptionPane.YES_OPTION) {
-                cargarUsuario(getUsuario(txtUserName.getText().strip()));
+                cargarUsuario(
+                        M_Usuario.getUsuario(txtUserName.getText().strip())
+                );
                 nuevo = false;
                 txtClave1.setText("");
                 txtClave2.setText("");

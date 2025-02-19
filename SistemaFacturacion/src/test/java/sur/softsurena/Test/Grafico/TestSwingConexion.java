@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import sur.softsurena.utilidades.Utilidades;
 import xy.ui.testing.Tester;
 import xy.ui.testing.editor.TestEditor;
-import xy.ui.testing.util.TestingUtils;
 
 public class TestSwingConexion {
 
@@ -14,7 +13,7 @@ public class TestSwingConexion {
     }
 
     public static void main(String[] args) throws IOException, Exception {
-        editTestSwing("testSwing/testInsertCliente.stt", false);
+        editTestSwing("testSwing/testInsertProducto.stt", false);
         
 //        TestingUtils.assertSuccessfulReplay(
 //                new File("testSwing/testParametros.stt")
@@ -28,9 +27,7 @@ public class TestSwingConexion {
         try {
             tester.loadFromFile(new File(ruta));
         } catch (IOException ex) {
-            Utilidades.LOG.getLogger(
-                    TestSwingConexion.class.getName()
-            ).log(
+            Utilidades.LOG.log(
                     Level.SEVERE,
                     "Error al cargar este documento de prueba.",
                     ex

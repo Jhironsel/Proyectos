@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.metodos.M_Producto;
@@ -11,12 +12,29 @@ public class frmBusquedaProducto extends javax.swing.JDialog {
 
     private DefaultTableModel miTabla;
     private String respuesta = "";
+    
+    private static Frame parent;
+    private static boolean modal;
 
     public String getRespuesta() {
         return respuesta;
     }
+    
+    public static frmBusquedaProducto getInstance(Frame parent, boolean modal) {
+        frmBusquedaProducto.parent = parent;
+        frmBusquedaProducto.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmBusquedaProducto(java.awt.Frame parent, boolean modal) {
+        private static final frmBusquedaProducto INSTANCE = new frmBusquedaProducto(
+                frmBusquedaProducto.parent,
+                frmBusquedaProducto.modal
+        );
+    }
+
+    private frmBusquedaProducto(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

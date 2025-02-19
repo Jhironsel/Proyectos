@@ -4,6 +4,11 @@ import javax.swing.JFrame;
 
 public class frmCategoriasAdmin extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
+    
+    private static JFrame parent;
+    private static String categoria;
+    private static Boolean estado;
+    private static boolean nuevo;
 
     private Boolean aceptar;
     
@@ -15,7 +20,31 @@ public class frmCategoriasAdmin extends javax.swing.JDialog {
         this.aceptar = aceptar;
     }
     
-    public frmCategoriasAdmin(JFrame principal, String categoria, Boolean estado, boolean nuevo) {
+    public static frmCategoriasAdmin getInstance(
+            JFrame principal, String categoria, Boolean estado, boolean nuevo
+    ) {
+        frmCategoriasAdmin.parent = principal;
+        frmCategoriasAdmin.categoria = categoria;
+        frmCategoriasAdmin.estado = estado;
+        frmCategoriasAdmin.nuevo = nuevo;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmCategoriasAdmin INSTANCE 
+                = new frmCategoriasAdmin(
+                        frmCategoriasAdmin.parent,
+                        frmCategoriasAdmin.categoria,
+                        frmCategoriasAdmin.estado,
+                        frmCategoriasAdmin.nuevo
+                );
+    }
+    
+    private frmCategoriasAdmin(
+            JFrame principal, String categoria, Boolean estado, boolean nuevo
+    ) {
         super(principal, (nuevo ? "Agregando categoria" : "Modificando categoria"), true);
         initComponents();
         txtCategoria.setText(categoria);

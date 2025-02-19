@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Carton_Bingo {
 
-    private final int id;
-    private final int carton_hash;
+    private final Integer id;
+    private final Integer carton_hash;
     private final Date fecha_creacion;
     private final List<Integer> matriz_obj;
     private final Boolean estado;

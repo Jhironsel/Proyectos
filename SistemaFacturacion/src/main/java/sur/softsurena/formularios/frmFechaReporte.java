@@ -39,18 +39,15 @@ public class frmFechaReporte extends java.awt.Dialog {
         initComponents();
         agregarOyente();
     }
-    
+    @SuppressWarnings("serial")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        defaultDateSelectionModel1 = new org.jdesktop.swingx.calendar.DefaultDateSelectionModel();
         jPanel1 = new javax.swing.JPanel();
         jFecha = new javax.swing.JLabel();
         btnGrabar = new newscomponents.RSButtonGradientIcon_new();
         jcFecha = new com.toedter.calendar.JCalendar();
         btnCancelar = new newscomponents.RSButtonGradientIcon_new();
-
-        defaultDateSelectionModel1.setAdjusting(true);
 
         setMinimumSize(new java.awt.Dimension(508, 389));
         setResizable(false);
@@ -90,7 +87,7 @@ public class frmFechaReporte extends java.awt.Dialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                    .addComponent(jcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,7 +153,6 @@ public class frmFechaReporte extends java.awt.Dialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private newscomponents.RSButtonGradientIcon_new btnCancelar;
     private newscomponents.RSButtonGradientIcon_new btnGrabar;
-    private org.jdesktop.swingx.calendar.DefaultDateSelectionModel defaultDateSelectionModel1;
     private javax.swing.JLabel jFecha;
     private javax.swing.JPanel jPanel1;
     public static com.toedter.calendar.JCalendar jcFecha;

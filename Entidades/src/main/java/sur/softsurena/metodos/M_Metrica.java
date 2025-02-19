@@ -42,7 +42,7 @@ public class M_Metrica {
                 sqlSelect(metrica),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
             ResultSet rs = ps.executeQuery();
@@ -121,7 +121,7 @@ public class M_Metrica {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, metrica.getConsulta().getId());
             ps.setBigDecimal(2, metrica.getPesoKG());
@@ -180,7 +180,7 @@ public class M_Metrica {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, metrica.getId());
             ps.setBigDecimal(2, metrica.getPesoKG());
@@ -230,7 +230,7 @@ public class M_Metrica {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, metrica.getId());
 
@@ -267,7 +267,7 @@ public class M_Metrica {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, metrica.getConsulta().getId());
 

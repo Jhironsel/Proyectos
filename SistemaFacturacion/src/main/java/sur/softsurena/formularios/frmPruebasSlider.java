@@ -2,7 +2,18 @@ package sur.softsurena.formularios;
 
 public class frmPruebasSlider extends javax.swing.JPanel {
 
-    public frmPruebasSlider() {
+    private static final long serialVersionUID = 1L;
+
+    public static frmPruebasSlider getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmPruebasSlider INSTANCE = new frmPruebasSlider();
+    }
+    
+    private frmPruebasSlider() {
         initComponents();
     }
 

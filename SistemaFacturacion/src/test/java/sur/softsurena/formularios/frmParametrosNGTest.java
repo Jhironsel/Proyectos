@@ -42,7 +42,7 @@ public class frmParametrosNGTest {
     )
     public void testCargarParamentos() {
         String zona = "";
-        frmParametros instance = new frmParametros();
+        frmParametros instance = frmParametros.getInstance();
         Servidor expResult = null;
         Servidor result = instance.cargarParamentos(zona);
         assertEquals(result, expResult);

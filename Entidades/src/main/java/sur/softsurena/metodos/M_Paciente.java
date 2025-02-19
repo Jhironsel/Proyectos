@@ -297,7 +297,7 @@ public class M_Paciente {
                                 .persona(
                                         Persona
                                                 .builder()
-                                                .id_persona(rs.getInt("ID"))
+                                                .idPersona(rs.getInt("ID"))
                                                 .pnombre(rs.getString("PNOMBRE"))
                                                 .snombre(rs.getString("SNOMBRE"))
                                                 .apellidos(rs.getString("APELLIDOS"))
@@ -367,9 +367,9 @@ public class M_Paciente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getPersona().getId_persona());
+            ps.setInt(1, paciente.getPersona().getIdPersona());
             ps.setBigDecimal(2, paciente.getPesoNacimiento());
             ps.setBigDecimal(3, paciente.getAltura());
             ps.setBigDecimal(4, paciente.getPerimetroCefalico());
@@ -419,9 +419,9 @@ public class M_Paciente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getPersona().getId_persona());
+            ps.setInt(1, paciente.getPersona().getIdPersona());
             ps.setBigDecimal(2, paciente.getPesoNacimiento());
             ps.setBigDecimal(3, paciente.getAltura());
             ps.setBigDecimal(4, paciente.getPerimetroCefalico());
@@ -470,9 +470,9 @@ public class M_Paciente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getPersona().getId_persona());
+            ps.setInt(1, paciente.getPersona().getIdPersona());
 
             ps.execute();
 
@@ -487,7 +487,7 @@ public class M_Paciente {
             LOG.log(
                     Level.SEVERE,
                     ERROR_AL_BORRAR_PACIENTE.formatted(
-                            paciente.getPersona().getId_persona()
+                            paciente.getPersona().getIdPersona()
                     ),
                     ex
             );
@@ -495,7 +495,7 @@ public class M_Paciente {
         return Resultado
                 .builder()
                 .mensaje(ERROR_AL_BORRAR_PACIENTE.formatted(
-                        paciente.getPersona().getId_persona())
+                        paciente.getPersona().getIdPersona())
                 )
                 .icono(JOptionPane.ERROR_MESSAGE)
                 .estado(Boolean.FALSE)

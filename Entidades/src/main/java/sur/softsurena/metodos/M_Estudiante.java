@@ -4,11 +4,14 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
+import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Estudiante;
-import sur.softsurena.entidades.Inscripcion;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -18,6 +21,64 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_Estudiante{
 
+    /**
+     *
+     * @param estudiante
+     * 
+     * @return
+     */
+    public synchronized static List<Estudiante> select(
+            @NonNull Estudiante estudiante
+    ) {
+        
+        List<Estudiante> listaEstudiante = new ArrayList<>();
+        
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sqlSelect(estudiante),
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+        
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                listaEstudiante.add(
+                        Estudiante
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .matricula(rs.getString("MATRICULA"))
+                                .build()
+                );
+            }
+            
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return listaEstudiante;
+    }
+    
+    protected static String sqlSelect(Estudiante estudiante) {
+        Boolean matricula = Objects.isNull(estudiante.getMatricula());
+        return """
+               SELECT ID, MATRICULA
+               FROM V_PERSONAS_ESTUDIANTES_ATR
+               %s
+               """.formatted(
+                       matricula ? 
+                               "":
+                               "WHERE MATRICULA STARTING WITH '%s' "
+                                       .formatted(
+                                               estudiante.getMatricula()
+                                       )
+               ).strip();
+    }
+    
+//------------------------------------------------------------------------------
     /**
      * Metodo que permite agregar un estudiante al sistema de ballet, el cual
      * ejecuta un procedimiento almacenado en la base de datos.
@@ -33,19 +94,13 @@ public class M_Estudiante{
     public synchronized static Resultado insert(
             Estudiante estudiante
     ) {
-        Resultado resultado = M_Persona.insert(estudiante.getPersona());
-        
-        if(!resultado.getEstado()){
-            return resultado;
-        }
-        
         try (CallableStatement cs = getCnn().prepareCall(
                 "EXECUTE PROCEDURE SP_I_PERSONA_ESTUDIANTE(?,?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, estudiante.getPersona().getId_persona());
+            cs.setInt(1, estudiante.getId());
             cs.setString(2, estudiante.getMatricula());
 
             cs.execute();
@@ -76,77 +131,23 @@ public class M_Estudiante{
     public static final String ESTUDIANTE__AGREGADO__CORRECTAMENTE
             = "Estudiante Agregado Correctamente.";
 
-    /**
-     * TODO CREAR VISTA.
-     * TODO Devolver una lista.
-     *
-     * @param matricula
-     * @return
-     */
-    public synchronized static ResultSet getEstudiante(
-            String matricula
-    ) {
-        final String sql
-                = """
-                    SELECT 
-                        e.MATRICULA, e.CEDULA_PADREMADRE, e.NOMBRES, e.APELLIDOS, 
-                        e.FECHANACIMIENTO, e.FECHAINGRESO, e.ESTADO, e.PERIODO_ACTUAL, 
-                        (
-                            SELECT 
-                                TRIM(
-                                    case lunes when 1 then 'Lunes ' else trim('') end || 
-                                    case martes when 1 then 'Martes ' else trim('') end || 
-                                    case miercoles when 1 then 'Miercoles ' else trim('') end || 
-                                    case jueves when 1 then 'Jueves ' else trim('') end || 
-                                    case viernes when 1 then 'Viernes ' else trim('') end || 
-                                    case sabados when 1 then 'Sabados ' else trim('') end || 
-                                    case domingos when 1 then 'Domingos ' else trim('') end
-                                ) ||' De '|| substring(HORA_INICIO FROM 1 for 8) ||' '||' Hasta '||substring(HORA_FINAL FROM 1 for 8) 
-                            FROM Tandas t  
-                            WHERE t.ID_Tanda like e.ID_tanda) as dias, 
-                            (
-                                SELECT p.NOMBRES||' '||p.APELLIDOS 
-                                FROM PADREMADRES p 
-                                WHERE p.DOCUMENTO like e.CEDULA_PADREMADRE
-                            ) as NombrePadre, ID_tanda 
-                  FROM estudiantes e 
-                  WHERE e.MATRICULA = ?
-                  """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(sql)) {
-            ps.setString(1, matricula);
-            return ps.executeQuery();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return null;
-        }
-    }
 
     /**
-     *
+     * Metodo que permite modificar las matriculas de los estudiantes. 
+     * 
      * @param estudiante
      * @return
      */
     public synchronized static Resultado update(
             Estudiante estudiante
     ) {
-        Resultado resultado = M_Persona.update(estudiante.getPersona());
-        
-        if(!resultado.getEstado()){
-            return resultado;
-        }
-
         try (PreparedStatement ps = getCnn().prepareStatement(
                 "EXECUTE PROCEDURE SP_U_PERSONA_ESTUDIANTE (?, ?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, estudiante.getPersona().getId_persona());
+            ps.setInt(1, estudiante.getId());
             ps.setString(2, estudiante.getMatricula());
 
             ps.executeUpdate();
@@ -157,6 +158,12 @@ public class M_Estudiante{
                     .estado(Boolean.TRUE)
                     .build();
         } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+            
             return Resultado
                     .builder()
                     .mensaje(ESTUDIANTE_NO_PUDO_SER__MODIFICADO__CONCTAT)
@@ -171,135 +178,42 @@ public class M_Estudiante{
     public static final String ESTUDIANTE__MODIFICADO__CORRECTAMENTE
             = "Estudiante Modificado Correctamente...!!!";
 
-    //--------------------------------------------------------------------------
     /**
-     * 
-     * @param inscripcion
-     * @return 
-     */
-    public synchronized static String insert(
-            Inscripcion inscripcion
-    ) {
-
-        final String sql = "";
-
-        try (CallableStatement cs = getCnn().prepareCall(sql)) {
-
-            cs.executeUpdate();
-            return ALUMNO__INSCRIPTO;
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return ERROR_AL_INSCRIBIR_ESTUDIANTE;
-        }
-    }
-    public static final String ERROR_AL_INSCRIBIR_ESTUDIANTE = "Error al inscribir estudiante.";
-    public static final String ALUMNO__INSCRIPTO = "Alumno Inscripto...";
-
-    //--------------------------------------------------------------------------
-    /**
-     * TODO CREAR CLASE.
      *
-     * @param idUsuario
-     * @param pago
-     * @param matricula
-     * @param fechaPago
-     */
-    public synchronized static void pPagoMensualidad(
-            String idUsuario, String pago, String matricula, String fechaPago
-    ) {
-
-        final String sql = "EXECUTE PROCEDURE P_PAGO_MENSUALIDAD(" + idUsuario + ","
-                + pago + "," + matricula + ",'" + fechaPago + "')";
-
-        try (CallableStatement cs = getCnn().prepareCall(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
-        )) {
-            cs.execute(sql);
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
-    }
-
-    
-    //--------------------------------------------------------------------------
-    /**
-     * TODO Devolver una lista.
-     *
-     * @param matricula
-     * @param periodo
+     * @param estudiante
      * @return
      */
-    public synchronized static ResultSet getMensualidad(
-            String matricula, String periodo
+    public synchronized static Resultado delete(
+            Estudiante estudiante
     ) {
-        final String sql
-                = "SELECT m.consecutivo, m.fecha_pago, m.Estado, m.monto, m.pagado, m.total,"
-                + " m.fecha_pagado, m.fecha_abono, m.periodo "
-                + "FROM Mensualidad m "
-                + "WHERE matricula = " + matricula + " and PERIODO like '" + periodo + "'";
-
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                "EXECUTE PROCEDURE SP_D_PERSONA_ESTUDIANTE(?);",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            return ps.executeQuery();
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * Metodo utilizado para verificar si un estudiante esta registrado en la BD
-     * con la matricula proporcionada.
-     *
-     * @param matricula Matricula del estudiante.
-     *
-     * @return Devuelve un valor booleando indicando si el estudiante con la
-     * matricula proporcionada está registrado en el sistema.
-     */
-    public synchronized static boolean existeEstudiante(String matricula) {
-        final String sql = "SELECT (1) FROM PERSONAS_ESTUDIANTES_ATR WHERE MATRICULA LIKE '%?'";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(sql);) {
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
-        }
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-     * Metodo utilizado para verificar que un estudiante con el estado activo se
-     * encuentra en el sistema.
-     *
-     * @param matricula Matricula del estudiante.
-     *
-     * @return Devuelve un valor booleando indicando si el estudiante con la
-     * matricula proporcionada está registrado en el sistema y que su estado sea
-     * activo.
-     */
-    public synchronized static boolean estadoEstudiante(String matricula) {
-        final String sql = "SELECT ID, MATRICULA, ESTADO "
-                + "FROM PERSONAS_ESTUDIANTES_ATR "
-                + "WHERE MATRICULA LIKE '%?' AND ESTADO";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(sql);) {
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return false;
+            ps.setInt(1, estudiante.getId());
+            
+             ps.executeUpdate();
+            return Resultado
+                    .builder()
+                    .mensaje("Estudiante borrado correctamente.!!")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        }catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+            
+            return Resultado
+                    .builder()
+                    .mensaje("Error al eliminar el estudiante.")
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
     }
 }

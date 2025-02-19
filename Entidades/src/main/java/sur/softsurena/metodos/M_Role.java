@@ -173,7 +173,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setString(1, i_role);
 
@@ -225,7 +225,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
             cs.setString(1, i_role);
@@ -292,7 +292,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             //Parametros
             cs.setString(1, rol);
@@ -345,7 +345,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setString(1, rol);
             cs.setString(2, usuario);
@@ -395,7 +395,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
             cs.setString(1, rol);
             cs.setString(2, usuario);
@@ -440,7 +440,7 @@ public class M_Role {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
             cs.setString(1, usuario);
 
@@ -483,7 +483,7 @@ public class M_Role {
         try (PreparedStatement cs = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setString(1, rolee);
 
@@ -525,7 +525,7 @@ public class M_Role {
         try (PreparedStatement cs = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
             cs.setString(1, actual);
             cs.setString(2, nuevo);

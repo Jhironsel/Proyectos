@@ -96,6 +96,7 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
+            
             if(Objects.isNull(almacen.getId())){
                 ps.setNull(1, Types.INTEGER);
             }else{
@@ -147,18 +148,18 @@ public class M_Almacen {
     public synchronized static Resultado delete(
             int id
     ) {
-        try (PreparedStatement cs = getCnn().prepareStatement(
+        try (PreparedStatement ps = getCnn().prepareStatement(
                 """
                 EXECUTE PROCEDURE SP_D_ALMACEN(?);
                 """,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            cs.setInt(1, id);
+            ps.setInt(1, id);
 
-            cs.execute();
+            ps.execute();
 
             return Resultado
                     .builder()
@@ -203,7 +204,7 @@ public class M_Almacen {
                 """,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setInt(1, almacen.getId());
             cs.setString(2, almacen.getNombre());

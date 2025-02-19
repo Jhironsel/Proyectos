@@ -37,7 +37,7 @@ public class M_E_S_SYS {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setString(1, Utilidades.imagenEncode64(file));
             cs.setString(2, file.toString());

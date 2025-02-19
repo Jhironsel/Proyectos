@@ -10,8 +10,8 @@ import sur.softsurena.abstracta.Persona;
 public class Asegurado {
 
     private final Integer id;
-    private final ARS ars;
-    private final Persona persona;
+    private final Integer idPersona;
+    private final Integer idArs;
     private final String no_nss;
     private final Boolean estado;
 

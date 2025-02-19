@@ -45,7 +45,7 @@ public class frmRegistros extends javax.swing.JDialog {
                 )
         );
         setLocationRelativeTo(null);
-        frmParametros p = new frmParametros();
+        frmParametros p = frmParametros.getInstance();
         String dominio = "localhost", puerto = "3050";
 
         if (p.cargarParamentos("").getConIpServidor()) {

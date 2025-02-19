@@ -1,11 +1,14 @@
 package sur.softsurena.metodos;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.AlturaPeso;
 import sur.softsurena.entidades.Dato_Nacimiento;
@@ -94,17 +97,24 @@ public class M_Dato_Nacimiento {
 
     /**
      * TODO Devolver una lista.
+     * 
+     * Dicha consulta debe traer la edad en meses y la medida del craneo en CM.
+     * 
      * @param idPaciente
      * @return 
      */
     public synchronized static ResultSet getPCefalico(int idPaciente) {
+        Date fecha_nacimiento = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getFecha_nacimiento();
+        
         final String sql 
-                = "SELECT "
-                + "     OUT_FECHANACIMIENTO, "
-                + "     OUT_FECHACONSULTA, "
-                + "     OUT_DEFERENCIAFECHA, "
-                + "     OUT_PC "
-                + "FROM PRO_PC(?)";
+                = """
+                  
+                  """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,

@@ -18,7 +18,6 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Producto;
-import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Paginas;
 import sur.softsurena.interfaces.IProducto;
 import sur.softsurena.metodos.M_Categoria;
@@ -52,7 +51,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 Privilegio
                         .builder()
                         .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                        .nombre_relacion("GET_PRODUCTOS")
+                        .nombre_relacion("V_PRODUCTOS")
                         .nombre_campo("^")
                         .build()
         )) {
@@ -92,7 +91,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         initComponents();
 
         //Se llena la tabla de producto por primera vez. 
-        llenarTablaProductos(criterioBusqueda);
+        llenarTablaProductos("");
         reOrdenar();
         updateCategoria();
 
@@ -947,7 +946,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 return;
             }
 
-            Resultado resultados = M_Producto.deleteByID(id);
+            Resultado resultados = M_Producto.delete(id);
 
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1077,28 +1076,24 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         2)).getId();
             }
 
+//                    .imagen(
+//                            Imagen
+//                                    .builder()
+//                                    .imagen64(
+//                                            Utilidades
+//                                                    .imagenEncode64(
+//                                                            file.getSelectedFile()
+//                                                    )
+//                                    )
+//                                    .build()
+//                    )
             //Creando el objecto producto.
             Producto producto = Producto
                     .builder()
                     .id(id)
-                    .categoria(Categoria
-                            .builder()
-                            .id_categoria(((Categoria) cbCategoria.getSelectedItem()).getId_categoria())
-                            .build()
-                    )
+                    .idCategoria(((Categoria) cbCategoria.getSelectedItem()).getId_categoria())
                     .codigo(txtCodigoBarra.getText().strip())
                     .descripcion(txtDescripcion.getText().strip())
-                    .imagen(
-                            Imagen
-                                    .builder()
-                                    .imagen64(
-                                            Utilidades
-                                                    .imagenEncode64(
-                                                            file.getSelectedFile()
-                                                    )
-                                    )
-                                    .build()
-                    )
                     .estado(cbActivo.isSelected())
                     .nota(txtNotas.getText().strip())
                     .build();
@@ -1196,7 +1191,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
 
     private void btnAdmCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCategoriasActionPerformed
-        frmCategorias miCategoria = new frmCategorias(
+        frmCategorias miCategoria = frmCategorias.getInstance(
                 principal,
                 true
         );
@@ -1259,7 +1254,8 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             return;
         }
 
-        frmEntradaProducto miEntrada = new frmEntradaProducto(null, true);
+        frmEntradaProducto miEntrada
+                = frmEntradaProducto.getInstance(null, true);
         miEntrada.setLocationRelativeTo(this);
         miEntrada.setVisible(true);
     }//GEN-LAST:event_btnEntradaProductoActionPerformed
@@ -1274,7 +1270,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             );
             return;
         }
-        frmSalidaProducto miSalida = new frmSalidaProducto(null, true);
+        frmSalidaProducto miSalida = frmSalidaProducto.getInstance(null, true);
         miSalida.setLocationRelativeTo(this);
         miSalida.setVisible(true);
     }//GEN-LAST:event_btnSalidaProductoActionPerformed
@@ -1569,26 +1565,27 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                         )
                         .codigo(criterioBusqueda)
                         .descripcion(criterioBusqueda)
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion(criterioBusqueda)
-                                        .build()
-                        )
                         .build()
-        ).stream().forEach(producto -> {
-            registro[0] = producto.getCodigo();
-            registro[1] = Categoria.builder().
-                    id_categoria(producto.getCategoria().getId_categoria()).
-                    descripcion(producto.getCategoria().getDescripcion()).build();
-            registro[2] = Producto.builder().
-                    id(producto.getId()).
-                    descripcion(producto.getDescripcion()).build();
-            registro[3] = producto.getFechaCreacion();
-            registro[4] = producto.getEstado();
-            registro[5] = producto.getNota();
-            miTabla.addRow(registro);
-        });
+        ).stream().forEach(
+                producto -> {
+                    registro[0] = producto.getCodigo();
+                    registro[1] = M_Categoria.select(
+                            Categoria
+                                    .builder()
+                                    .id_categoria(producto.getIdCategoria())
+                                    .build()
+                    ).getLast();
+                    registro[2] = Producto
+                            .builder()
+                            .id(producto.getId())
+                            .descripcion(producto.getDescripcion())
+                            .build();
+                    registro[3] = producto.getFechaCreacion();
+                    registro[4] = producto.getEstado();
+                    registro[5] = producto.getNota();
+                    miTabla.addRow(registro);
+                }
+        );
 
         tblProducto.setModel(miTabla);
 
@@ -1630,17 +1627,17 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
 
         cbActivo.setSelected(producto.getEstado());
 
-        jlImagenProducto.setIcon(
-                Utilidades.imagenDecode64(
-                        producto.getImagen().getImagen64(),
-                        155,
-                        155
-                )
-        );
-
+        //TODO 04/01/2024 Buscar la foto del producto.
+//        jlImagenProducto.setIcon(
+//                Utilidades.imagenDecode64(
+//                        producto.getImagen().getImagen64(),
+//                        155,
+//                        155
+//                )
+//        );
         for (int i = 0; i < cbCategoria.getItemCount(); i++) {
             int idCategoria = cbCategoria.getItemAt(i).getId_categoria();
-            if (idCategoria == producto.getCategoria().getId_categoria()) {
+            if (idCategoria == producto.getIdCategoria()) {
                 cbCategoria.setSelectedIndex(i);
             }
         }
@@ -1707,11 +1704,9 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     /**
      * Metodo utilizado para actualizar el jComboBox de categorias del sistema.
      *
-     * Este metodo es llamado desde: 
-     * 1) btnNuevoActionPerformed 
-     * 2) btnModificarActionPerformed 
-     * 3) btnAdmCategoriasActionPerformed 
-     * 4) formInternalFrameOpened
+     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
+     * btnModificarActionPerformed 3) btnAdmCategoriasActionPerformed 4)
+     * formInternalFrameOpened
      */
     private static void updateCategoria() {
         //Elimina registros previos.
@@ -1750,10 +1745,9 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * Metodo que permite colocar una imagen en el jlImagenProducto, la cual
      * debe pasarsele por parametros un String con el path de la imagen.
      *
-     * Este metodo es llamado desde: 
-     * 1) btnNuevoActionPerformed 
-     * 2) cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 
-     * 3) btnAgregarFotoActionPerformed
+     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
+     * cbCategoriaKeyPressed: solo es utilizado para pruebas del sistema. 3)
+     * btnAgregarFotoActionPerformed
      *
      * @param file representa la ruta de la imagen en el sistema.
      */

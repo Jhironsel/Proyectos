@@ -9,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 public class Antecedente {
 
     private final Integer id;
-    private final Consulta consulta;
+    private final Integer idConsulta;
     private final String descripcion;
-    
-
 }

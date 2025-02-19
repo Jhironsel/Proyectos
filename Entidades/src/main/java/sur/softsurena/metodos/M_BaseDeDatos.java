@@ -97,7 +97,7 @@ public class M_BaseDeDatos {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setDate(1, fecha);
             cs.setString(2, idMaquina);
@@ -165,10 +165,9 @@ public class M_BaseDeDatos {
      * @return Devuelve un String con el identificador de la base de datos.
      */
     public synchronized static String GET_GUID() {
-        final String sql = 
-                """
-                    SELECT DB_GUID FROM GET_GUID
-                """;
+        final String sql = """
+                           SELECT DB_GUID FROM GET_GUID
+                           """;
 
         String id = "";
         

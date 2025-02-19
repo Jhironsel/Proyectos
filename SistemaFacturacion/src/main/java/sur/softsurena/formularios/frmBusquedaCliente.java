@@ -8,6 +8,8 @@ import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_Generales;
+import sur.softsurena.metodos.M_Persona;
 
 /**
  *
@@ -20,19 +22,21 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
 
     private DefaultTableModel miTabla;
     private transient Cliente cliente;
-    
+
     private static Frame parent;
     private static boolean modal;
+
     public static frmBusquedaCliente getInstance(Frame parent, boolean modal) {
         frmBusquedaCliente.parent = parent;
         frmBusquedaCliente.modal = modal;
         return NewSingletonHolder.INSTANCE;
     }
-    
+
     private static class NewSingletonHolder {
-        private static final frmBusquedaCliente INSTANCE = 
-                new frmBusquedaCliente(
-                        frmBusquedaCliente.parent, 
+
+        private static final frmBusquedaCliente INSTANCE
+                = new frmBusquedaCliente(
+                        frmBusquedaCliente.parent,
                         frmBusquedaCliente.modal
                 );
     }
@@ -46,6 +50,7 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTabla = new JTable(){
             @Override
@@ -56,6 +61,10 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
         btnCancelar = new newscomponents.RSButtonGradientIcon_new();
         btnAceptar = new newscomponents.RSButtonGradientIcon_new();
         txtCriterio = new rojeru_san.RSMTextFull();
+        jPanel1 = new javax.swing.JPanel();
+        rbCedula = new javax.swing.JRadioButton();
+        rbNombresApellidos = new javax.swing.JRadioButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda de Clientes");
@@ -112,6 +121,23 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Filtrado por:"));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 8, 10, 0));
+
+        buttonGroup1.add(rbCedula);
+        rbCedula.setSelected(true);
+        rbCedula.setText("Cedula");
+        jPanel1.add(rbCedula);
+
+        buttonGroup1.add(rbNombresApellidos);
+        rbNombresApellidos.setText("Nombres o Apellidos");
+        jPanel1.add(rbNombresApellidos);
+
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("Activos");
+        jCheckBox1.setEnabled(false);
+        jPanel1.add(jCheckBox1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,13 +151,16 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtCriterio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtCriterio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtCriterio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +168,7 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -187,30 +216,62 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
 
         Object registro[] = new Object[1];
 
-        M_Cliente.select(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
+        if (rbCedula.isSelected()) {
+            M_Generales.select(
+                    Generales
+                            .builder()
+                            .cedula(txtCriterio.getText().strip())
+                            .build()
+            ).stream().forEach(
+                    general -> {
+                        M_Cliente.select(
+                                Cliente
                                         .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula(txtCriterio.getText().strip())
-                                                        .build()
-                                        )
-                                        .pnombre(txtCriterio.getText().strip())
-                                        .snombre(txtCriterio.getText().strip())
-                                        .apellidos(txtCriterio.getText().strip())
-                                        .build())
-                        .build()
-        ).stream().forEach(
-                clienteR -> {
-                    registro[0] = clienteR;
+                                        .id(general.getIdPersona())
+                                        .build()
+                        ).stream().forEach(
+                                cliente2 -> {
+                                    M_Persona.select(
+                                            Persona
+                                                    .builder()
+                                                    .idPersona(cliente2.getId())
+                                                    .build()
+                                    ).stream().forEach(
+                                            persona -> {
+                                                registro[0] = persona;
+                                                miTabla.addRow(registro);
+                                            }
+                                    );
+                                }
+                        );
 
-                    miTabla.addRow(registro);
-                }
-        );
+                    }
+            );
+        }
+
+        if (rbNombresApellidos.isSelected()) {
+            M_Cliente.select(
+                    Cliente
+                            .builder()
+                            .build()
+            );
+
+            M_Persona.select(
+                    Persona
+                            .builder()
+                            .idPersona(-1)
+                            .pnombre(txtCriterio.getText().strip())
+                            .snombre(txtCriterio.getText().strip())
+                            .apellidos(txtCriterio.getText().strip())
+                            .build()
+            ).stream().forEach(
+                    persona -> {
+                        registro[0] = persona;
+                        miTabla.addRow(registro);
+                    }
+            );
+
+        }
 
         tblTabla.setModel(miTabla);
     }
@@ -218,7 +279,12 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private newscomponents.RSButtonGradientIcon_new btnAceptar;
     private newscomponents.RSButtonGradientIcon_new btnCancelar;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbCedula;
+    private javax.swing.JRadioButton rbNombresApellidos;
     private javax.swing.JTable tblTabla;
     private rojeru_san.RSMTextFull txtCriterio;
     // End of variables declaration//GEN-END:variables

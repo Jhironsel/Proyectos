@@ -16,12 +16,12 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
 
     private static final long serialVersionUID = 1L;
 
-    private Thread hilo;
+    private static Thread hilo;
     private boolean procesar = false;
-    private Connection cnn = null;
+    private static Connection cnn = null;
 
     public frmRestaurarDatos() {
-        
+
         initComponents();
     }
 
@@ -202,8 +202,8 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        JFileChooser miFile = new JFileChooser(System.getProperty("user.dir") + 
-                "/Data");
+        JFileChooser miFile = new JFileChooser(System.getProperty("user.dir")
+                + "/Data");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Base de Datos",
                 "fdb", "FDB");
         miFile.setFileFilter(filter);
@@ -229,7 +229,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
     private void btnProcederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcederActionPerformed
         if (txtBaseFuente.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Selecione una base de datos",
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -239,7 +239,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
         }
         if (txtUsuario.getText().isEmpty()) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Ingrese el usuario: ",
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -249,7 +249,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
         }
         if (txtClave.getPassword().length == 0) {
             JOptionPane.showInternalMessageDialog(
-                    this, 
+                    this,
                     "Ingrese la clave: ",
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -314,7 +314,7 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
     @Override
     public void run() {
         if (procesar) {
-            
+
 //            getConsulta(
 //                    "SELECT RPAD(COALESCE(p.S_INFORMACION, ''), 30)"
 //                    + "||'\t'||"
@@ -352,16 +352,11 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
 //                    + "FROM SYSTEM_BACKUP_DATOS ('" + txtBaseFuente.getText()
 //                    + "', '" + txtUsuario.getText() + "', '"
 //                    + String.valueOf(txtClave.getPassword()) + "') p;")
-            
             ResultSet rs = null;
             try {
                 while (rs.next()) {
                     txtResultado.append(rs.getString(1).concat("\n"));
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        LOG.log(Level.SEVERE, ex.getMessage(), ex);
-                    }
+                    dormir();
                     txtResultado.setCaretPosition(txtResultado.getDocument().getLength());
                 }
 
@@ -376,5 +371,13 @@ public final class frmRestaurarDatos extends javax.swing.JInternalFrame implemen
         procesar = true;
         hilo = new Thread(this);
         hilo.start();
+    }
+
+    private void dormir() {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+        }
     }
 }

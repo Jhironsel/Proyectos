@@ -63,10 +63,8 @@
                       <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                       <Component id="txtUsuario" linkSize="5" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="txtClave" linkSize="5" min="-2" max="-2" attributes="0"/>
-                      <Component id="dchFecha" linkSize="5" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="txtClave" linkSize="5" min="-2" max="-2" attributes="0"/>
+                  <Component id="dchFecha" linkSize="5" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">

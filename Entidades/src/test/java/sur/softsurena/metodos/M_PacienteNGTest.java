@@ -81,7 +81,7 @@ public class M_PacienteNGTest {
         );
 
         assertTrue(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona() > 0,
+                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona() > 0,
                 ERROR_AL_INSERTAR_PACIENTE
         );
     }
@@ -132,7 +132,7 @@ public class M_PacienteNGTest {
     public void testGetSexoPaciente() {
         assertTrue(
                 M_Paciente.getSexoPaciente(
-                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
                 ).equals("M"),
                 ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
         );
@@ -175,7 +175,7 @@ public class M_PacienteNGTest {
                         .estado(Boolean.TRUE)
                         .build(),
                 ERROR_AL_BORRAR_PACIENTE.formatted(
-                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
                 )
         );
 
@@ -188,8 +188,8 @@ public class M_PacienteNGTest {
                 .persona(
                         Persona
                                 .builder()
-                                .id_persona(
-                                        M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                                .idPersona(
+                                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
                                 )
                                 .build()
                 )

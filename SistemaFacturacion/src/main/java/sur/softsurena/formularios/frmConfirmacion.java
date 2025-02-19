@@ -1,11 +1,32 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
+
 public class frmConfirmacion extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
-    public Boolean aceptar;
+    public boolean aceptar;
     private final String codigo;
+    private static Frame parent;
+    private static boolean modal;
     
-    public frmConfirmacion(java.awt.Frame parent, boolean modal) {
+    public static frmConfirmacion getInstance(Frame parent, boolean modal) {
+        frmConfirmacion.parent = parent;
+        frmConfirmacion.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmConfirmacion INSTANCE = 
+                new frmConfirmacion(
+                        frmConfirmacion.parent,
+                        frmConfirmacion.modal
+                );
+    }
+    
+    private frmConfirmacion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         codigo = "" + ((int) (1000 * Math.random()) + 1000);

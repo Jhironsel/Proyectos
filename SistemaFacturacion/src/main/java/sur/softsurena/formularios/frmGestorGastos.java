@@ -2,6 +2,8 @@ package sur.softsurena.formularios;
 
 public class frmGestorGastos extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+
     public static frmGestorGastos getInstance() {
         return NewSingletonHolder.INSTANCE;
     }

@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -17,9 +18,27 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmSalidaProducto extends javax.swing.JDialog {
 
-    private frmBusquedaProducto miBusqueda;
+    private static final long serialVersionUID = 1L;
 
-    public frmSalidaProducto(java.awt.Frame parent, boolean modal) {
+    private frmBusquedaProducto miBusqueda;
+    private static Frame parent;
+    private static boolean modal;
+
+    public static frmSalidaProducto getInstance(Frame parent, boolean modal) {
+        frmSalidaProducto.parent = parent;
+        frmSalidaProducto.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+        private static final frmSalidaProducto INSTANCE = 
+                new frmSalidaProducto(
+                        frmSalidaProducto.parent, 
+                        frmSalidaProducto.modal
+                );
+    }
+    
+    private frmSalidaProducto(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -301,7 +320,7 @@ public class frmSalidaProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtSalidaFocusGained
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-        miBusqueda = new frmBusquedaProducto(null, true);
+        miBusqueda = frmBusquedaProducto.getInstance(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
 

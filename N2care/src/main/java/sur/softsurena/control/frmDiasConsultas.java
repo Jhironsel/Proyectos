@@ -1,7 +1,7 @@
 package sur.softsurena.control;
 
 import java.sql.Time;
-import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.ControlConsulta;
 
 public class frmDiasConsultas extends javax.swing.JDialog {
 
@@ -201,12 +201,11 @@ public class frmDiasConsultas extends javax.swing.JDialog {
         hora.setVisible(true);
         
         if (frmHora.aceptar) {
-            controlConsulta(
-                    Control_Consulta.builder().build()
+            controlConsulta(ControlConsulta.builder().build()
             );
             
             
-//new Control_Consulta(
+//new ControlConsulta(
 //                            -1,
 //                            idUsuario,
 //                            Integer.parseInt(frmHora.jsCantPaciente.getValue().toString()),

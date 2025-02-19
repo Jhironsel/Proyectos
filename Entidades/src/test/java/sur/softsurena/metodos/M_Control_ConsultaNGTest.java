@@ -12,13 +12,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.Control_Consulta;
-import static sur.softsurena.metodos.M_Control_Consulta.CONSULTA_MODIFICADO_CORRECTAMENTE;
-import static sur.softsurena.metodos.M_Control_Consulta.CONTROL_CONSULTA_AGREGADO_CORRECTAMENTE;
-import static sur.softsurena.metodos.M_Control_Consulta.CONTROL__CONSULTA_BORRADO_CORRECTAMENTE;
-import static sur.softsurena.metodos.M_Control_Consulta.ERROR_AL_AGREGAR__CONTROL__CONSULTA_AL_SIST;
-import static sur.softsurena.metodos.M_Control_Consulta.ERROR_AL_BORRAR_CONTROL_DE_LA_CONSULTA;
-import static sur.softsurena.metodos.M_Control_Consulta.ERROR_AL_MODIFICAR_CONSULTA;
+import sur.softsurena.entidades.ControlConsulta;
+import static sur.softsurena.metodos.M_ControlConsulta.CONSULTA_MODIFICADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_ControlConsulta.CONTROL_CONSULTA_AGREGADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_ControlConsulta.CONTROL__CONSULTA_BORRADO_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_ControlConsulta.ERROR_AL_AGREGAR__CONTROL__CONSULTA_AL_SIST;
+import static sur.softsurena.metodos.M_ControlConsulta.ERROR_AL_BORRAR_CONTROL_DE_LA_CONSULTA;
+import static sur.softsurena.metodos.M_ControlConsulta.ERROR_AL_MODIFICAR_CONSULTA;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -70,9 +70,7 @@ public class M_Control_ConsultaNGTest {
                           """
     )
     public void testSelect() {
-        assertNotNull(
-                M_Control_Consulta.select(
-                Control_Consulta
+        assertNotNull(M_ControlConsulta.select(ControlConsulta
                         .builder()
                         .build()
         ), "Error al consultar los controles de consulta."
@@ -88,9 +86,7 @@ public class M_Control_ConsultaNGTest {
     )
     public void testSqlSelect() {
         
-        assertEquals(
-                M_Control_Consulta.sqlSelect(
-                        Control_Consulta
+        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
                         .builder()
                         .build()
                 ), 
@@ -101,9 +97,7 @@ public class M_Control_ConsultaNGTest {
                 """.trim().strip()
         );
         
-        assertEquals(
-                M_Control_Consulta.sqlSelect(
-                        Control_Consulta
+        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
                         .builder()
                                 .id(-1)
                         .build()
@@ -116,9 +110,7 @@ public class M_Control_ConsultaNGTest {
                 """.trim().strip()
         );
         
-        assertEquals(
-                M_Control_Consulta.sqlSelect(
-                        Control_Consulta
+        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
                         .builder()
                                 .user_name("Jhironsel")
                         .build()
@@ -143,7 +135,7 @@ public class M_Control_ConsultaNGTest {
     )
     public static void testInsert() {
 
-        Resultado result = M_Control_Consulta.insert(
+        Resultado result = M_ControlConsulta.insert(
                 controlConsulta()
         );
 
@@ -174,7 +166,7 @@ public class M_Control_ConsultaNGTest {
     )
     public void testUpdate() {
         
-        Resultado result = M_Control_Consulta.update(
+        Resultado result = M_ControlConsulta.update(
                 controlConsulta()
         );
         
@@ -196,7 +188,7 @@ public class M_Control_ConsultaNGTest {
             description = "Prueba que elimina una consulta del sistema."
     )
     public static void testDelete() {
-        Resultado result = M_Control_Consulta.delete(
+        Resultado result = M_ControlConsulta.delete(
                 idControlConsulta
         );
 
@@ -212,7 +204,7 @@ public class M_Control_ConsultaNGTest {
         );
     }
 
-    public static Control_Consulta controlConsulta() {
+    public static ControlConsulta controlConsulta() {
         Calendar horaInicial = Calendar.getInstance();
         
         horaInicial.set(
@@ -246,7 +238,7 @@ public class M_Control_ConsultaNGTest {
                 0
         );
         
-        return Control_Consulta
+        return ControlConsulta
                 .builder()
                 .id(idControlConsulta)
                 .user_name("SYSDBA")

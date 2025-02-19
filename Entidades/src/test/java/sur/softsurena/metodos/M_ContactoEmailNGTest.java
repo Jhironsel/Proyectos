@@ -74,10 +74,10 @@ public class M_ContactoEmailNGTest {
         Resultado result = M_ContactoEmail.agregarContactosEmail(
                 ContactoEmail
                         .builder()
-                        .id_persona(M_PersonaNGTest.persona(Boolean.FALSE).getId_persona())
+                        .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
-                        .por_defecto(Boolean.TRUE)
+                        .porDefecto(Boolean.TRUE)
                         .build()
         );
 
@@ -112,10 +112,10 @@ public class M_ContactoEmailNGTest {
                 ContactoEmail
                         .builder()
                         .id(idCorreo)
-                        .id_persona(M_PersonaNGTest.persona(Boolean.FALSE).getId_persona())
+                        .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
-                        .por_defecto(Boolean.FALSE)
+                        .porDefecto(Boolean.FALSE)
                         .build()
         );
 
@@ -138,7 +138,7 @@ public class M_ContactoEmailNGTest {
     )
     public void testGetCorreoByID() {
         List result = M_ContactoEmail.getCorreoByID(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
         );
 
         assertFalse(

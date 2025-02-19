@@ -2,6 +2,8 @@ package sur.softsurena.formularios;
 
 public class frmProveedores extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+
     public static frmProveedores getInstance() {
         return NewSingletonHolder.INSTANCE;
     }

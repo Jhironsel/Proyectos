@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,11 +13,26 @@ import sur.softsurena.utilidades.Resultado;
 
 public class frmGasto extends java.awt.Dialog {
 
-    //TODO Iniciarlizar estas variables en el constructor.
-    private int idTurno;
-    private String usuario;
+    private static final long serialVersionUID = 1L;
+    
+    private static Frame parent;
+    private static boolean modal;
 
-    public frmGasto(java.awt.Frame parent, boolean modal) {
+    public static frmGasto getInstance(Frame parent, boolean modal) {
+        frmGasto.parent = parent;
+        frmGasto.modal = modal;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmGasto INSTANCE = new frmGasto(
+                frmGasto.parent, frmGasto.modal
+        );
+    }
+
+    private frmGasto(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -24,12 +40,9 @@ public class frmGasto extends java.awt.Dialog {
         txtMonto.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMonto.setSelectionStart(3);
-                        txtMonto.setSelectionEnd(txtMonto.getText().length());
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    txtMonto.setSelectionStart(3);
+                    txtMonto.setSelectionEnd(txtMonto.getText().length());
                 });
             }
         });
@@ -230,11 +243,11 @@ public class frmGasto extends java.awt.Dialog {
         }
 
         Resultado resultado = agregarGastosPorTurno(Gasto
-                        .builder()
-//                        .id_turno(getIdTurno())
-                        .descripcion(descripcion)
-                        .monto(monto)
-                        .build()
+                .builder()
+                //                        .id_turno(getIdTurno())
+                .descripcion(descripcion)
+                .monto(monto)
+                .build()
         );
 
         JOptionPane.showMessageDialog(
@@ -245,11 +258,10 @@ public class frmGasto extends java.awt.Dialog {
         );
 
         //Constancia de Gasto a imprimir
-        Map parametros = new HashMap();
+        Map<String, Object> parametros = new HashMap<>();
 
 //        parametros.put("idTurno", getIdTurno());
 //        parametros.put("idCajero", getUsuario());
-
         new hiloImpresionFactura(
                 true, //Mostrar Reporte
                 false, //Con Copia

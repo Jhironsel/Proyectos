@@ -1,6 +1,6 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -10,7 +10,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Estudiante;
-import sur.softsurena.entidades.Inscripcion;
+import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__AGREGADO__CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__MODIFICADO__CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -33,7 +34,7 @@ public class M_EstudianteNGTest {
                 "3050"
         );
         assertTrue(
-                Conexion.verificar().getEstado(), 
+                Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
     }
@@ -52,89 +53,151 @@ public class M_EstudianteNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
+            description = """
+                          """
+    )
+    public void testSelect() {
+        assertNotNull(
+                M_Estudiante.select(
+                        Estudiante
+                                .builder()
+                                .build()
+                ),
+                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
+        );
+        assertNotNull(
+                M_Estudiante.select(
+                        Estudiante
+                                .builder()
+                                .matricula("000")
+                                .build()
+                ),
+                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSqlSelect() {
+        assertEquals(
+                M_Estudiante.sqlSelect(
+                        Estudiante
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, MATRICULA
+                FROM V_PERSONAS_ESTUDIANTES_ATR
+                """.strip()
+        );
+        assertEquals(
+                M_Estudiante.sqlSelect(
+                        Estudiante
+                                .builder()
+                                .matricula("00")
+                                .build()
+                ),
+                """
+                SELECT ID, MATRICULA
+                FROM V_PERSONAS_ESTUDIANTES_ATR
+                WHERE MATRICULA STARTING WITH '00'
+                """.strip()
+        );
+    }
+
+//------------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 1,
             description = ""
     )
     public void testInsert() {
-        Estudiante e = null;
-        Resultado expResult = null;
-        Resultado result = M_Estudiante.insert(e);
-        assertEquals(result, expResult);
+        M_PersonaNGTest.testInsert();
+        assertEquals(
+                M_Estudiante.insert(
+                        Estudiante
+                                .builder()
+                                .id(
+                                        M_PersonaNGTest
+                                                .persona(
+                                                        Boolean.TRUE
+                                                )
+                                                .getIdPersona()
+                                )
+                                .matricula("INSERT_PRUEBA")
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(ESTUDIANTE__AGREGADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetEstudiante() {
-        String matricula = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Estudiante.getEstudiante(matricula);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 2,
             description = ""
     )
     public void testUpdate() {
-        Estudiante e = null;
-        String expResult = "";
-        Resultado result = M_Estudiante.update(e);
-        assertEquals(result, expResult);
+        assertEquals(
+                M_Estudiante.update(
+                        Estudiante
+                                .builder()
+                                .id(
+                                        M_PersonaNGTest
+                                                .persona(
+                                                        Boolean.TRUE
+                                                )
+                                                .getIdPersona()
+                                )
+                                .matricula("UPDATE_PRUEBA")
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(ESTUDIANTE__MODIFICADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 3,
             description = ""
     )
-    public void testPPagoMensualidad() {
-        String idUsuario = "";
-        String pago = "";
-        String matricula = "";
-        String fechaPago = "";
-        M_Estudiante.pPagoMensualidad(idUsuario, pago, matricula, fechaPago);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetMensualidad() {
-        String matricula = "";
-        String periodo = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Estudiante.getMensualidad(matricula, periodo);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testExisteEstudiante() {
-        String matricula = "";
-        boolean expResult = false;
-        boolean result = M_Estudiante.existeEstudiante(matricula);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testEstadoEstudiante() {
-        String matricula = "";
-        boolean expResult = false;
-        boolean result = M_Estudiante.estadoEstudiante(matricula);
-        assertEquals(result, expResult);
+    public void testDelete() {
+        assertEquals(
+                M_Estudiante.delete(
+                        Estudiante
+                                .builder()
+                                .id(
+                                        M_PersonaNGTest
+                                                .persona(
+                                                        Boolean.TRUE
+                                                )
+                                                .getIdPersona()
+                                )
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje("Estudiante borrado correctamente.!!")
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+        M_PersonaNGTest.testDelete();
     }
 
 }

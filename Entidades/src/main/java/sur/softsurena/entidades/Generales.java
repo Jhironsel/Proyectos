@@ -10,8 +10,8 @@ import sur.softsurena.abstracta.Persona;
 public class Generales{
     
     private final Integer id;
-    private final Persona persona;
-    private final TipoSangre tipoSangre;
+    private final Integer idPersona;
+    private final Integer idTipoSangre;
     private final String cedula;
     private final Character estado_civil;
 
@@ -24,8 +24,8 @@ public class Generales{
         StringBuilder sb = new StringBuilder();
         sb.append("Generales{");
         sb.append("id=").append(id);
-        sb.append(", persona=").append(persona);
-        sb.append(", tipoSangre=").append(tipoSangre);
+        sb.append(", idPersona=").append(idPersona);
+        sb.append(", idTipoSangre=").append(idTipoSangre);
         sb.append(", cedula=").append(cedula);
         sb.append(", estado_civil=").append(estado_civil);
         sb.append('}');
@@ -36,8 +36,8 @@ public class Generales{
     public int hashCode() {
         int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.id);
-        hash = 59 * hash + Objects.hashCode(this.persona);
-        hash = 59 * hash + Objects.hashCode(this.tipoSangre);
+        hash = 59 * hash + Objects.hashCode(this.idPersona);
+        hash = 59 * hash + Objects.hashCode(this.idTipoSangre);
         hash = 59 * hash + Objects.hashCode(this.cedula);
         hash = 59 * hash + Objects.hashCode(this.estado_civil);
         return hash;
@@ -61,10 +61,10 @@ public class Generales{
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.persona, other.persona)) {
+        if (!Objects.equals(this.idPersona, other.idPersona)) {
             return false;
         }
-        if (!Objects.equals(this.tipoSangre, other.tipoSangre)) {
+        if (!Objects.equals(this.idTipoSangre, other.idTipoSangre)) {
             return false;
         }
         return Objects.equals(this.estado_civil, other.estado_civil);

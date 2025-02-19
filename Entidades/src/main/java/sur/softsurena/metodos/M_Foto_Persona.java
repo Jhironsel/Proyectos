@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
-import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.FotoPersona;
 import sur.softsurena.utilidades.Resultado;
@@ -43,14 +42,7 @@ public class M_Foto_Persona {
                         FotoPersona
                                 .builder()
                                 .id(rs.getInt("ID"))
-                                .persona(
-                                        M_Persona.select(
-                                                Persona
-                                                        .builder()
-                                                        .id_persona(rs.getInt("ID_PERSONA"))
-                                                        .build()
-                                        ).getFirst()
-                                )
+                                .idPersona(rs.getInt("ID_PERSONA"))
                                 .foto(rs.getString("FOTO"))
                                 .fechaHoraCreacion(rs.getTimestamp("FECHA_HORA_CREACION"))
                                 .actual(rs.getBoolean("ACTUAL"))
@@ -69,8 +61,8 @@ public class M_Foto_Persona {
     }
 
     protected static String sqlSelect(FotoPersona fotoPersona) {
-        Boolean id = Objects.isNull(fotoPersona.getId());//false
-        Boolean id_persona = Objects.isNull(fotoPersona.getPersona());//true
+        Boolean id = Objects.isNull(fotoPersona.getId());
+        Boolean id_persona = Objects.isNull(fotoPersona.getIdPersona());
         Boolean where = id && id_persona;
         Boolean and = !id && !id_persona;
         return """
@@ -81,7 +73,7 @@ public class M_Foto_Persona {
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(fotoPersona.getId()),
                 and ? "AND " : "",
-                id_persona ? "" : "ID_PERSONA = %d ".formatted(fotoPersona.getPersona().getId_persona())
+                id_persona ? "" : "ID_PERSONA = %d ".formatted(fotoPersona.getIdPersona())
         ).trim().strip();
     }
     
@@ -100,7 +92,7 @@ public class M_Foto_Persona {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, fotoPersona.getPersona().getId_persona());
+            ps.setInt(1, fotoPersona.getIdPersona());
             ps.setString(2, fotoPersona.getFoto());
             ps.setBoolean(3, fotoPersona.getActual());
             
@@ -147,7 +139,7 @@ public class M_Foto_Persona {
         )) {
             
             cs.setInt(1, fotoPersona.getId());
-            cs.setInt(2, fotoPersona.getPersona().getId_persona());
+            cs.setInt(2, fotoPersona.getIdPersona());
             cs.setString(3, fotoPersona.getFoto());
             cs.setBoolean(4, fotoPersona.getActual());
             
@@ -174,6 +166,7 @@ public class M_Foto_Persona {
     
     public static final String ERROR_AL_ACTUALIZAR_LA_FOTO_DE_LA_PERSONA
             = "Error al actualizar la foto de la persona.";
+    
 //------------------------------------------------------------------------------
     public static Resultado delete(
             @NonNull FotoPersona fotoPersona
@@ -232,7 +225,7 @@ public class M_Foto_Persona {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, fotoPersona.getPersona().getId_persona());
+            cs.setInt(1, fotoPersona.getIdPersona());
             
             cs.executeUpdate();
             

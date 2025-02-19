@@ -73,7 +73,7 @@
         <componentClassName class="null"/>
         <componentName>rbtnNombreServidor</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -84,7 +84,7 @@
         <componentClassName class="null"/>
         <componentName>rbtnNombreServidor</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Selected</propertyName>
@@ -96,7 +96,7 @@
         <componentClassName class="null"/>
         <componentName>txtHost</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -107,7 +107,7 @@
         <componentClassName class="null"/>
         <componentName>txtHost</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -119,7 +119,7 @@
         <componentClassName class="null"/>
         <componentName>chbPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -130,7 +130,7 @@
         <componentClassName class="null"/>
         <componentName>chbPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Selected</propertyName>
@@ -142,7 +142,7 @@
         <componentClassName class="null"/>
         <componentName>txtPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -153,7 +153,7 @@
         <componentClassName class="null"/>
         <componentName>txtPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -165,7 +165,7 @@
         <componentClassName class="null"/>
         <componentName>txtPathBaseDatos</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -176,7 +176,7 @@
         <componentClassName class="null"/>
         <componentName>txtPathBaseDatos</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -188,7 +188,7 @@
         <componentClassName class="null"/>
         <componentName>btnAceptar</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -199,7 +199,7 @@
         <componentClassName class="null"/>
         <componentName>btnAceptar</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <doubleClick>false</doubleClick>

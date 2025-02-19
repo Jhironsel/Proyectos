@@ -5,9 +5,20 @@ import sur.softsurena.swingWorker.Trabajo;
 
 public class frmSplash extends javax.swing.JFrame {
 
-    private final Trabajo miTrabajo;
+    private static final long serialVersionUID = 1L;
 
-    public frmSplash() {
+    private static Trabajo miTrabajo;
+    
+    public static frmSplash getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmSplash INSTANCE = new frmSplash();
+    }
+
+    private frmSplash() {
         initComponents();
         miTrabajo = new Trabajo();
         miTrabajo.execute();

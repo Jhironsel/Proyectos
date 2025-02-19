@@ -1011,7 +1011,7 @@
                                           </Events>
                                           <AuxValues>
                                             <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="@Getter"/>
-                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Distrito_municipal&gt;"/>
+                                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;sur.softsurena.entidades.DistritoMunicipal&gt;"/>
                                           </AuxValues>
                                         </Component>
                                       </SubComponents>

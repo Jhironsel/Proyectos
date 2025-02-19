@@ -3,11 +3,13 @@ package sur.softsurena;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Estudiante;
-import static sur.softsurena.metodos.M_Padre.validarPadreMadre;
+import sur.softsurena.entidades.Generales;
+import sur.softsurena.metodos.M_Generales;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 //import sur.softsurena.entidades.Estudiantes;
 
@@ -235,7 +237,7 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
                     .addComponent(jcbSexo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, " Datos del Estudiante ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
@@ -411,9 +413,9 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,10 +442,20 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
             return;
         }
 
-        if (!validarPadreMadre(txtCedula.getText().trim())) {
-            JOptionPane.showMessageDialog(this,
+        List<Generales> general = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula.getText().trim())
+                        .build()
+        );
+        
+        if (general.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
                     "Padre no encontrado!!!",
-                    "Identificacion Invalida...!", JOptionPane.ERROR_MESSAGE);
+                    "", 
+                    JOptionPane.ERROR_MESSAGE
+            );
             limpiearCampos();
             txtCedula.requestFocus();
             btnInscribir.setEnabled(false);
@@ -521,16 +533,16 @@ public class frmRegistroEstudiante extends javax.swing.JInternalFrame {
         Estudiante miEstudiante
                 = Estudiante
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pnombre(txtPNombre.getText().strip())
-                                        .apellidos(txtApellidos.getText().strip())
-                                        //.Tanda(idTanda[cbTanda.getSelectedIndex()])
-                                        .fecha_nacimiento(new java.sql.Date(dchFecha.getDate().getTime()))
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
+//                        .persona(
+//                                Persona
+//                                        .builder()
+//                                        .pnombre(txtPNombre.getText().strip())
+//                                        .apellidos(txtApellidos.getText().strip())
+//                                        //.Tanda(idTanda[cbTanda.getSelectedIndex()])
+//                                        .fecha_nacimiento(new java.sql.Date(dchFecha.getDate().getTime()))
+//                                        .estado(Boolean.TRUE)
+//                                        .build()
+//                        )
                         .build();
 
         //String dime = agregarEstudiante(miEstudiante);

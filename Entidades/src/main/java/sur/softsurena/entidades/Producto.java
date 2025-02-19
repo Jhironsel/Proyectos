@@ -11,18 +11,12 @@ import lombok.experimental.SuperBuilder;
 public class Producto{
     
     private final Integer id;
-    
-    private final Categoria categoria;
-    
+    private final Integer idCategoria;
     private final String codigo;
     private final String descripcion;
     private final BigDecimal existencia;
-    
-    private final Imagen imagen;
-    
-    private final Date fechaCreacion;
-    
     private final String nota;
+    private final Date fechaCreacion;
     private final Boolean estado;
     
     private final Paginas pagina;

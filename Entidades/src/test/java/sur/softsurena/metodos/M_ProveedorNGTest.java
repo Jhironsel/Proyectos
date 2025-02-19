@@ -75,11 +75,7 @@ public class M_ProveedorNGTest {
         Resultado result = M_Proveedor.insert(
                 Proveedor
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
+                        .id(-1)
                         .codigoProveedor("")
                         .build()
         );

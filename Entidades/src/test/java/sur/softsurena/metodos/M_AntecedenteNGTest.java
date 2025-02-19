@@ -107,12 +107,7 @@ public class M_AntecedenteNGTest {
                 M_Antecedente.sqlSelect(
                         Antecedente
                                 .builder()
-                                .consulta(
-                                        Consulta
-                                                .builder()
-                                                .id(-1)
-                                                .build()
-                                )
+                                .idConsulta(-1)
                                 .build()
                 ),
                 expResult.trim().strip()
@@ -129,12 +124,7 @@ public class M_AntecedenteNGTest {
                         Antecedente
                                 .builder()
                                 .id(-1)
-                                .consulta(
-                                        Consulta
-                                                .builder()
-                                                .id(-1)
-                                                .build()
-                                )
+                                .idConsulta(-1)
                                 .build()
                 ),
                 expResult.trim().strip()
@@ -189,12 +179,7 @@ public class M_AntecedenteNGTest {
         Resultado result = M_Antecedente.insert(
                 Antecedente
                         .builder()
-                        .consulta(
-                                Consulta
-                                        .builder()
-                                        .id(M_ConsultaNGTest.getIdConsulta())
-                                        .build()
-                        )
+                        .idConsulta(M_ConsultaNGTest.getIdConsulta())
                         .descripcion("Prueba de antecendetes")
                         .build()
         );

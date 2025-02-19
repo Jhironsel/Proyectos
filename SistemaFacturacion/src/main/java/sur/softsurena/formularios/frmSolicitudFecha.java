@@ -1,19 +1,36 @@
 package sur.softsurena.formularios;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.Frame;
 import java.util.Date;
 import java.util.Objects;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Utilidades;
-import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmSolicitudFecha extends javax.swing.JDialog {
 
-    public frmSolicitudFecha(java.awt.Frame parent, boolean modal) {
+    private static final long serialVersionUID = 1L;
+    
+    private static Frame parent;
+    private static boolean modal;
+
+    public static frmSolicitudFecha getInstance(Frame parent, boolean modal) {
+        frmSolicitudFecha.parent = parent;
+        frmSolicitudFecha.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmSolicitudFecha INSTANCE = 
+                new frmSolicitudFecha(
+                        frmSolicitudFecha.parent, 
+                        frmSolicitudFecha.modal
+                );
+    }
+    
+    private frmSolicitudFecha(Frame parent, boolean modal) {
         super(parent, modal);
 
         initComponents();

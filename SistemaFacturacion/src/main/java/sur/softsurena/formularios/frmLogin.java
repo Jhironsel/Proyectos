@@ -290,7 +290,7 @@ public final class frmLogin extends javax.swing.JFrame {
             return;
         }//Fin de validaciones de campos
 
-        frmParametros p = new frmParametros();
+        frmParametros p = frmParametros.getInstance();
 
         String dominio = "localhost", puerto = "3050";
 
@@ -412,7 +412,7 @@ public final class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnParametrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParametrosActionPerformed
-        frmParametros miParametros = new frmParametros();
+        frmParametros miParametros = frmParametros.getInstance();
         miParametros.setLocationRelativeTo(null);
         miParametros.setVisible(true);
     }//GEN-LAST:event_btnParametrosActionPerformed
@@ -466,7 +466,8 @@ public final class frmLogin extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException
+        } catch (
+                ClassNotFoundException
                 | InstantiationException
                 | IllegalAccessException
                 | javax.swing.UnsupportedLookAndFeelException ex) {

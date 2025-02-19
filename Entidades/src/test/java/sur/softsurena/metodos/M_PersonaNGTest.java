@@ -96,7 +96,6 @@ public class M_PersonaNGTest {
         );
 
         idPersona = result.getId();
-
     }
 
     //--------------------------------------------------------------------------
@@ -139,7 +138,7 @@ public class M_PersonaNGTest {
         Persona result = M_Persona.select(
                 Persona
                         .builder()
-                        .id_persona(idPersona)
+                        .idPersona(idPersona)
                         .build()
         ).getFirst();
         assertNotNull(
@@ -150,7 +149,7 @@ public class M_PersonaNGTest {
         result = M_Persona.select(
                 Persona
                         .builder()
-                        .id_persona(0)
+                        .idPersona(0)
                         .build()
         ).getFirst();
 
@@ -170,6 +169,11 @@ public class M_PersonaNGTest {
                           """
     )
     public static void testDelete() {
+        
+        assertTrue(
+                idPersona > 0,
+                "Identificador de persona incorrecto, ID = %d ".formatted(idPersona)
+        );
 
         Resultado result = M_Persona.delete(idPersona);
 
@@ -188,7 +192,7 @@ public class M_PersonaNGTest {
     public static Persona persona(Boolean estado) {
         return Persona
                 .builder()
-                .id_persona(idPersona)
+                .idPersona(idPersona)
                 .persona('J')
                 .pnombre("Jhadiel")
                 .snombre("Jhoandry")
@@ -205,59 +209,156 @@ public class M_PersonaNGTest {
 
     @Test
     public void testSqlList() {
-
-        String expResult = """
-                           SELECT 
-                               ID, 
-                               PERSONA, 
-                               PNOMBRE, 
-                               SNOMBRE, 
-                               APELLIDOS, 
-                               SEXO, 
-                               FECHA_NACIMIENTO, 
-                               FECHA_INGRESO,
-                               FECHA_HORA_ULTIMO_UPDATE, 
-                               ESTADO, 
-                               USER_NAME, 
-                               ROL_USUARIO
-                           FROM V_PERSONAS
-                           """;
-
         assertEquals(
-                M_Persona.sqlList(
+                M_Persona.sqlSelect(
                         Persona
                                 .builder()
                                 .build()
                 ),
-                expResult.strip().trim()
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                """.strip().trim()
         );
 
-        expResult = """
-                    SELECT 
-                        ID, 
-                        PERSONA, 
-                        PNOMBRE, 
-                        SNOMBRE, 
-                        APELLIDOS, 
-                        SEXO, 
-                        FECHA_NACIMIENTO, 
-                        FECHA_INGRESO,
-                        FECHA_HORA_ULTIMO_UPDATE, 
-                        ESTADO, 
-                        USER_NAME, 
-                        ROL_USUARIO
-                    FROM V_PERSONAS
-                    WHERE ID = -1
-                    """;
-
         assertEquals(
-                M_Persona.sqlList(
+                M_Persona.sqlSelect(
                         Persona
                                 .builder()
-                                .id_persona(-1)
+                                .idPersona(-1)
                                 .build()
                 ),
-                expResult.strip().trim()
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 AND ESTADO IS true
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 AND ESTADO IS false
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .pnombre("JHIRONSEL")
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 OR PNOMBRE STARTING WITH 'JHIRONSEL'
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .pnombre("JHIRONSEL")
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 OR PNOMBRE STARTING WITH 'JHIRONSEL' AND ESTADO IS true
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .snombre("JHIRONSEL")
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 OR SNOMBRE STARTING WITH 'JHIRONSEL'
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .apellidos("JHIRONSEL")
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 OR APELLIDOS STARTING WITH 'JHIRONSEL'
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(-1)
+                                .apellidos("JHIRONSEL")
+                                .pnombre("JHIRONSEL")
+                                .snombre("JHIRONSEL")
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = -1 OR PNOMBRE STARTING WITH 'JHIRONSEL' OR SNOMBRE STARTING WITH 'JHIRONSEL' OR APELLIDOS STARTING WITH 'JHIRONSEL'
+                """.strip().trim()
         );
     }
 }

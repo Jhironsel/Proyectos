@@ -97,7 +97,7 @@ public class M_Tanda {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, tanda.getId_tanda());
             ps.setDate(2, tanda.getAnno_inicial());

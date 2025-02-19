@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Consulta;
-import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.ControlConsulta;
 import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Consulta.CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST;
 import static sur.softsurena.metodos.M_Consulta.ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA;
@@ -78,20 +78,13 @@ public class M_ConsultaNGTest {
         Resultado result = M_Consulta.insert(
                 Consulta
                         .builder()
-                        .paciente(
-                                M_PacienteNGTest.generarPaciente()
-                        )
-                        .controlConsulta(
-                                Control_Consulta
-                                        .builder()
-                                        .id(M_Control_ConsultaNGTest.controlConsulta().getId())
-                                        .build()
-                        )
+                        .idPaciente(M_PacienteNGTest.generarPaciente().getPersona().getIdPersona())
+                        .idControlConsulta(M_Control_ConsultaNGTest.controlConsulta().getId())
                         .linea(0)
                         .fecha(new Date(Calendar.getInstance().getTimeInMillis()))
                         .build()
         );
-        
+
         assertEquals(
                 result,
                 Resultado
@@ -160,16 +153,9 @@ public class M_ConsultaNGTest {
                 """.trim().strip()
         );
         
-        assertEquals(
-                M_Consulta.sqlSelect(
-                        Consulta
+        assertEquals(M_Consulta.sqlSelect(Consulta
                                 .builder()
-                                .controlConsulta(
-                                        Control_Consulta
-                                                .builder()
-                                                .id(-1)
-                                                .build()
-                                )
+                                .idControlConsulta(-1)
                                 .build()
                 ),
                 """
@@ -184,17 +170,7 @@ public class M_ConsultaNGTest {
                 M_Consulta.sqlSelect(
                         Consulta
                                 .builder()
-                                .paciente(
-                                        Paciente
-                                                .builder()
-                                                .persona(
-                                                        Persona
-                                                                .builder()
-                                                                .id_persona(-1)
-                                                                .build()
-                                                )
-                                                .build()
-                                )
+                                .idPaciente(-1)
                                 .build()
                 ),
                 """

@@ -680,7 +680,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <doubleClick>false</doubleClick>

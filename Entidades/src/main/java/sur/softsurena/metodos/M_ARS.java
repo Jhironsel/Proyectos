@@ -27,34 +27,33 @@ public class M_ARS {
     ) {
         List<ARS> arsList = new ArrayList<>();
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlARS(ars),
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    arsList.add(
-                            ARS
-                                    .builder()
-                                    .id(rs.getInt("ID"))
-                                    .descripcion(rs.getString("DESCRIPCION"))
-                                    .covertura(rs.getBigDecimal("COVERTURA_CONSULTA_PORCIENTO"))
-                                    .estado(rs.getBoolean("ESTADO"))
-                                    .cantidad_registro(rs.getInt("CANTIDAD_REGISTRO"))
-                                    .build()
+        try (
+                PreparedStatement ps = getCnn().prepareStatement(
+                        sqlARS(ars),
+                        ResultSet.TYPE_FORWARD_ONLY,
+                        ResultSet.CONCUR_READ_ONLY,
+                        ResultSet.HOLD_CURSORS_OVER_COMMIT
+                ); ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        arsList.add(
+                                ARS
+                                        .builder()
+                                        .id(rs.getInt("ID"))
+                                        .descripcion(rs.getString("DESCRIPCION"))
+                                        .covertura(rs.getBigDecimal("COVERTURA_CONSULTA_PORCIENTO"))
+                                        .estado(rs.getBoolean("ESTADO"))
+                                        .cantidadRegistro(rs.getInt("CANTIDAD_REGISTRO"))
+                                        .build()
+                        );
+                    }
+                } catch (SQLException ex) {
+                    LOG.log(
+                            Level.SEVERE,
+                            ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL,
+                            ex
                     );
                 }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL,
-                    ex
-            );
-        }
-        return arsList;
+                return arsList;
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_ARS_DEL
             = "Error al consultar la vista V_ARS del sistema.";
@@ -141,7 +140,7 @@ public class M_ARS {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, ars.getId());
             ps.setString(2, ars.getDescripcion());
@@ -188,7 +187,7 @@ public class M_ARS {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, ars.getId());
 

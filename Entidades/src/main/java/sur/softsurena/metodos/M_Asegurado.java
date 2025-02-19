@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -43,7 +41,7 @@ public class M_Asegurado {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             
-            ps.setInt(1, asegurado.getPersona().getId_persona());
+            ps.setInt(1, asegurado.getIdPersona());
             
             ResultSet rs = ps.executeQuery();
             
@@ -52,22 +50,8 @@ public class M_Asegurado {
                         Asegurado
                                 .builder()
                                 .id(rs.getInt("ID"))
-                                .persona(
-                                        M_Persona.select(
-                                                Persona
-                                                        .builder()
-                                                        .id_persona(rs.getInt("ID_PERSONA"))
-                                                        .build()
-                                        ).getFirst()
-                                )
-                                .ars(
-                                        M_ARS.select(
-                                                ARS
-                                                        .builder()
-                                                        .id(rs.getInt("ID_ARS"))
-                                                        .build()
-                                        ).getFirst()
-                                )
+                                .idPersona(rs.getInt("ID_PERSONA"))
+                                .idArs(rs.getInt("ID_ARS"))
                                 .no_nss(rs.getString("NO_NSS"))
                                 .estado(rs.getBoolean("ESTADO"))
                                 .build()
@@ -79,7 +63,7 @@ public class M_Asegurado {
                     Level.SEVERE,
                     "Error en la consulta de Asegurodado con ID_PERSONA = %s"
                             .formatted(
-                                    asegurado.getPersona().getId_persona()
+                                    asegurado.getIdPersona()
                             ),
                     ex
             );
@@ -108,8 +92,8 @@ public class M_Asegurado {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, asegurado.getPersona().getId_persona());
-            ps.setInt(2, asegurado.getArs().getId());
+            ps.setInt(1, asegurado.getIdPersona());
+            ps.setInt(2, asegurado.getIdArs());
             ps.setString(3, asegurado.getNo_nss());
             ps.setBoolean(4, asegurado.getEstado());
 
@@ -126,7 +110,7 @@ public class M_Asegurado {
                     Level.SEVERE,
                     ERROR_AL_REGISTRAR_ASEGURADO_EN_EL_SISTEM
                             .formatted(
-                                    asegurado.getPersona().getId_persona()
+                                    asegurado.getIdPersona()
                             ),
                     ex
             );
@@ -136,7 +120,7 @@ public class M_Asegurado {
                 .mensaje(
                         ERROR_AL_REGISTRAR_ASEGURADO_EN_EL_SISTEM
                                 .formatted(
-                                        asegurado.getPersona().getId_persona()
+                                        asegurado.getIdPersona()
                                 )
                 )
                 .icono(JOptionPane.ERROR_MESSAGE)

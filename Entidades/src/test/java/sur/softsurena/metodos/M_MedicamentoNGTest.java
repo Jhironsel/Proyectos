@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
 import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -50,51 +49,30 @@ public class M_MedicamentoNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
+    
+    @Test(
+            enabled = false,
+            priority = 0,
+            description = ""
+    )
+    public void testSelect() {
+        
+        List<Medicamento> result = M_Medicamento.select();
+        assertNotNull(
+                result, 
+                ""
+        );
+    }
 
     @Test(
             enabled = false,
             priority = 0,
             description = ""
     )
-    public void testModificarMedicamento() {
+    public void testUpdate() {
         Medicamento m = null;
         String expResult = "";
-        Resultado result = M_Medicamento.modificarMedicamento(m);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetMedicamentoActivo() {
-        List expResult = null;
-        List result = M_Medicamento.getMedicamentoActivo();
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetMedicamentoFoto() {
-        String idMedicamento = "";
-        ResultSet expResult = null;
-        ResultSet result = M_Medicamento.getMedicamentoFoto(idMedicamento);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetMedicamento() {
-        boolean estado = false;
-        ResultSet expResult = null;
-        ResultSet result = M_Medicamento.getMedicamento(estado);
+        Resultado result = M_Medicamento.update(m);
         assertEquals(result, expResult);
     }
 

@@ -20,7 +20,7 @@ public class M_Gasto {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setInt(1, gasto.getId_turno());
             cs.setString(2, gasto.getDescripcion());

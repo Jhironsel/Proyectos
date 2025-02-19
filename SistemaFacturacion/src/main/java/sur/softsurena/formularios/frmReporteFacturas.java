@@ -5,14 +5,24 @@ import javax.swing.JTextField;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.Utilidades;
 
 public class frmReporteFacturas extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public frmReporteFacturas() {
+    public static frmReporteFacturas getInstance() {
 
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmReporteFacturas INSTANCE = new frmReporteFacturas();
+    }
+
+    private frmReporteFacturas() {
         initComponents();
 
         JTextField editorFecha = (JTextField) dchFechaInicial.getDateEditor();
@@ -153,23 +163,33 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         //Cargamos Clientes
         cmbCliente.removeAllItems();
+
         M_Cliente.select(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .estado(true)
-                                        .build()
-                        )
                         .build()
-        ).stream().forEach(cliente -> {
-            cmbCliente.addItem(cliente);
-        });
+        ).stream().forEach(
+                cliente -> {
+                    M_Persona.select(
+                            Persona
+                                    .builder()
+                                    .idPersona(cliente.getId())
+                                    .estado(true)
+                                    .build()
+                    ).stream().forEach(
+                            persona -> {
+                                cmbCliente.addItem(persona);
+                            }
+                    );
+
+                }
+        );
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnSeleccionArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionArchivoActionPerformed
-        frmSelectorArchivo miArchivo = new frmSelectorArchivo(null, closable);
+        frmSelectorArchivo miArchivo = frmSelectorArchivo.getInstance(
+                null, closable
+        );
         miArchivo.setLocationRelativeTo(null);
         miArchivo.setVisible(true);
         String archivo = miArchivo.getArchivo();
@@ -212,8 +232,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
         }
 
         String filtro = "WHERE factura.idCliente = '"
-                + ((Cliente) cmbCliente.getSelectedItem()).getPersona().getId_persona() + "'";
-
+                + ((Cliente) cmbCliente.getSelectedItem()).getId() + "'";
 
         //Para Realizar la Consulta por Fecha...
         //Si la fecha es seleccionada.
@@ -259,7 +278,7 @@ public class frmReporteFacturas extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnGenerar;
     private javax.swing.JButton btnSeleccionArchivo;
-    private javax.swing.JComboBox<Cliente> cmbCliente;
+    private javax.swing.JComboBox<Persona> cmbCliente;
     private com.toedter.calendar.JDateChooser dchFechaFinal;
     private com.toedter.calendar.JDateChooser dchFechaInicial;
     private javax.swing.JCheckBox jCheckBox1;
