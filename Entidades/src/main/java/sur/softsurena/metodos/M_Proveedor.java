@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Proveedor;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -27,9 +25,8 @@ public class M_Proveedor {
      */
     public synchronized static List<Proveedor> select() {
         final String sql = """
-                           SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                                ESTADO, CEDULA, CODIGO
-                           FROM GET_PROVEEDORES
+                           SELECT ID
+                           FROM V_PERSONAS_PROVEEDORES
                            """;
         List<Proveedor> lista = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -38,31 +35,44 @@ public class M_Proveedor {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            
             ResultSet rs = ps.executeQuery();
-            
             while(rs.next()){
                 lista.add(
                         Proveedor
                                 .builder()
+                                .id(rs.getInt("ID"))
+                                .build()
+                );
+            }
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE, 
+                    ex.getMessage(), 
+                    ex
+            );
+        }
+        return lista;
+    }
+    
+    public synchronized static List<Proveedor> selectATR() {
+        final String sql = """
+                           SELECT ID, CODIGO
+                           FROM V_PERSONAS_PROVEEDORES_ATR
+                           """;
+        List<Proveedor> lista = new ArrayList<>();
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                lista.add(
+                        Proveedor
+                                .builder()
+                                .id(rs.getInt("ID"))
                                 .codigoProveedor(rs.getString("CODIGO"))
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .persona(rs.getString("PERSONA").charAt(0))
-                                                .pnombre(rs.getString("PNOMBRE"))
-                                                .snombre(rs.getString("SNOMBRE"))
-                                                .apellidos(rs.getString("APELLIDOS"))
-                                                .sexo(rs.getString("SEXO").charAt(0))
-                                                .estado(rs.getBoolean("ESTADO"))
-                                                .generales(
-                                                        Generales
-                                                                .builder()
-                                                                .cedula(rs.getString("CEDULA"))
-                                                                .build()
-                                                )
-                                                .build()
-                                )
                                 .build()
                 );
             }
@@ -86,19 +96,6 @@ public class M_Proveedor {
      */
     public synchronized static Resultado insert(Proveedor proveedor) {
         
-        Resultado resultado = M_Persona.insert(
-                proveedor.getPersona()
-        );
-        
-        if(!resultado.getEstado()){
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_INSERTAR__PROVEEDOR.concat(", En la tabla de personas."))
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
-        }
-        
         final String sql
                 = """
                   EXECUTE PROCEDURE SP_I_PERSONA_PROVEEDOR (?,?)
@@ -108,10 +105,10 @@ public class M_Proveedor {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             
-            ps.setInt(2, resultado.getId());
+            ps.setInt(1, proveedor.getId());
             ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
@@ -151,21 +148,6 @@ public class M_Proveedor {
      */
     public synchronized static Resultado update(Proveedor proveedor) {
         
-        Resultado resultado = M_Persona.update(proveedor.getPersona());
-        
-        if(!resultado.getEstado()){
-            return Resultado
-                    .builder()
-                    .mensaje(
-                            ERROR_AL_MODIFICAR_CONSULTA.concat(
-                                    " Error al actualizar la persona en la tabla de persona."
-                            )
-                    )
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
-        }
-        
         final String sql = """
                            EXECUTE PROCEDURE SP_U_PERSONA_PROVEEDOR(?,?)
                            """;
@@ -173,9 +155,9 @@ public class M_Proveedor {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, proveedor.getPersona().getId_persona());
+            ps.setInt(1, proveedor.getId());
             ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
@@ -224,9 +206,9 @@ public class M_Proveedor {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, proveedor.getPersona().getId_persona());
+            ps.setInt(1, proveedor.getId());
 
             ps.executeUpdate();
             

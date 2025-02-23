@@ -37,9 +37,9 @@ public class M_ContactoEmail {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, contacto.getId_persona());
+            ps.setInt(1, contacto.getIdPersona());
             ps.setString(2, contacto.getEmail());
-            ps.setBoolean(3, contacto.getPor_defecto());
+            ps.setBoolean(3, contacto.getPorDefecto());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -85,12 +85,12 @@ public class M_ContactoEmail {
                 """,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, contacto.getId());
             ps.setString(2, contacto.getEmail());
             ps.setBoolean(3, contacto.getEstado());
-            ps.setBoolean(4, contacto.getPor_defecto());
+            ps.setBoolean(4, contacto.getPorDefecto());
 
             ps.execute();
 
@@ -158,7 +158,7 @@ public class M_ContactoEmail {
                                 .email(rs.getString("EMAIL"))
                                 .fecha(rs.getDate("FECHA"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                .por_defecto(rs.getBoolean("POR_DEFECTO"))
+                                .porDefecto(rs.getBoolean("POR_DEFECTO"))
                                 .build()
                 );
             }

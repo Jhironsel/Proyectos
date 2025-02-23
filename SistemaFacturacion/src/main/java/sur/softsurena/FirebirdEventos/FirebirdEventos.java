@@ -6,7 +6,7 @@ import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
-import static sur.softsurena.formularios.frmClientes.llenarTablaClientes;
+import sur.softsurena.formularios.frmClientes;
 import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
 import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
 import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
@@ -52,7 +52,7 @@ public class FirebirdEventos extends FBEventManager {
                         "Event [{0}] occured {1} time(s)",
                         new Object[]{event.getEventName(), event.getEventCount()}
                 );
-                llenarTablaClientes(-1, "");
+                frmClientes.llenarTablaClientes();
             });
 
             //Eventos de usuario.***********************************************

@@ -8,18 +8,18 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Proveedor {
 
-    private final Persona persona;
+    private final Integer id;
     private final String codigoProveedor;
 
     @Override
     public String toString() {
-        return persona.toString();
+        return id.toString();
     }
 
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Proveedor{");
-        sb.append("persona=").append(persona);
+        sb.append("id=").append(id);
         sb.append(", codigoProveedor=").append(codigoProveedor);
         sb.append('}');
         return sb.toString();

@@ -47,14 +47,7 @@ public class M_Antecedente {
                             Antecedente
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .consulta(
-                                            M_Consulta.select(
-                                                    Consulta
-                                                            .builder()
-                                                            .id(rs.getInt("ID_CONSULTA"))
-                                                            .build()
-                                            ).getFirst()
-                                    )
+                                    .id(rs.getInt("ID_CONSULTA"))
                                     .descripcion(rs.getString("Descripcion"))
                                     .build()
                     );
@@ -73,7 +66,7 @@ public class M_Antecedente {
 
     protected static String sqlSelect(Antecedente antecedente) {
         Boolean id = Objects.isNull(antecedente.getId());
-        Boolean id_consulta = Objects.isNull(antecedente.getConsulta());
+        Boolean id_consulta = Objects.isNull(antecedente.getIdConsulta());
         Boolean where = id && id_consulta;
         Boolean and = id || id_consulta;
         final String sql = """
@@ -84,7 +77,7 @@ public class M_Antecedente {
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(antecedente.getId()),
                 and ? "" : "AND ",
-                id_consulta ? "" : "ID_CONSULTA = %d ".formatted(antecedente.getConsulta().getId())
+                id_consulta ? "" : "ID_CONSULTA = %d ".formatted(antecedente.getIdConsulta())
         );
         return sql.trim().strip();
     }
@@ -115,7 +108,7 @@ public class M_Antecedente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, antecedente.getConsulta().getId());
+            ps.setInt(1, antecedente.getIdConsulta());
             ps.setString(2, antecedente.getDescripcion());
 
             ResultSet rs = ps.executeQuery();
@@ -167,7 +160,7 @@ public class M_Antecedente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, antecedente.getId());
             ps.setString(2, antecedente.getDescripcion());
@@ -216,7 +209,7 @@ public class M_Antecedente {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, antecedente.getId());
 

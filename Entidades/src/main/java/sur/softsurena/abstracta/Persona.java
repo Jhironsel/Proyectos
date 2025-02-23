@@ -11,7 +11,7 @@ import sur.softsurena.entidades.Paginas;
 @SuperBuilder
 public class Persona {
 
-    private final Integer id_persona;
+    private final Integer idPersona;
     private final Character persona;
     private final String pnombre;
     private final String snombre;
@@ -23,7 +23,6 @@ public class Persona {
     private final Boolean estado;
     private final String user_name;
     private final String rol;
-    private final Generales generales;
     private final Paginas pagina;
 
     @Override
@@ -43,7 +42,7 @@ public class Persona {
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Persona{");
-        sb.append("id_persona=").append(id_persona);
+        sb.append("idPersona=").append(idPersona);
         sb.append(", persona=").append(persona);
         sb.append(", pnombre=").append(pnombre);
         sb.append(", snombre=").append(snombre);
@@ -55,7 +54,6 @@ public class Persona {
         sb.append(", estado=").append(estado);
         sb.append(", user_name=").append(user_name);
         sb.append(", rol=").append(rol);
-        sb.append(", generales=").append(generales);
         sb.append('}');
         return sb.toString();
     }
@@ -63,7 +61,7 @@ public class Persona {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id_persona);
+        hash = 47 * hash + Objects.hashCode(this.idPersona);
         hash = 47 * hash + Objects.hashCode(this.persona);
         hash = 47 * hash + Objects.hashCode(this.pnombre);
         hash = 47 * hash + Objects.hashCode(this.snombre);
@@ -75,7 +73,6 @@ public class Persona {
         hash = 47 * hash + Objects.hashCode(this.estado);
         hash = 47 * hash + Objects.hashCode(this.user_name);
         hash = 47 * hash + Objects.hashCode(this.rol);
-        hash = 47 * hash + Objects.hashCode(this.generales);
         return hash;
     }
 
@@ -102,7 +99,7 @@ public class Persona {
             return false;
         }
 
-        if (!Objects.equals(this.id_persona, other.id_persona)) {
+        if (!Objects.equals(this.idPersona, other.idPersona)) {
             return false;
         }
         if (!Objects.equals(this.persona, other.persona)) {
@@ -114,9 +111,6 @@ public class Persona {
         if (!Objects.equals(this.fecha_nacimiento, other.fecha_nacimiento)) {
             return false;
         }
-        if (!Objects.equals(this.estado, other.estado)) {
-            return false;
-        }
-        return Objects.equals(this.generales, other.generales);
+        return Objects.equals(this.estado, other.estado);
     }
 }

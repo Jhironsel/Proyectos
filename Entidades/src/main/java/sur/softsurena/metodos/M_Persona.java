@@ -37,7 +37,7 @@ public class M_Persona {
         List<Persona> personaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlList(persona),
+                sqlSelect(persona),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -49,7 +49,7 @@ public class M_Persona {
                 personaList.add(
                         Persona
                                 .builder()
-                                .id_persona(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
                                 .persona(rs.getString("PERSONA").charAt(0))
                                 .pnombre(rs.getString("PNOMBRE"))
                                 .snombre(rs.getString("SNOMBRE"))
@@ -77,29 +77,27 @@ public class M_Persona {
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
             = "Error al consultar la vista V_PERSONAS del sistema.";
 
-    protected static String sqlList(Persona persona) {
-        Boolean id = Objects.isNull(persona.getId_persona());
-        Boolean where = id;
+    protected static String sqlSelect(Persona persona) {
+        Boolean id = Objects.isNull(persona.getIdPersona());
+        Boolean pNombre = Objects.isNull(persona.getPnombre());
+        Boolean sNombre = Objects.isNull(persona.getSnombre());
+        Boolean apellidos = Objects.isNull(persona.getApellidos());
+        Boolean estado = Objects.isNull(persona.getEstado());
+        Boolean where = id && pNombre && sNombre && apellidos && estado;
 
         return """
-               SELECT 
-                   ID, 
-                   PERSONA, 
-                   PNOMBRE, 
-                   SNOMBRE, 
-                   APELLIDOS, 
-                   SEXO, 
-                   FECHA_NACIMIENTO, 
-                   FECHA_INGRESO,
-                   FECHA_HORA_ULTIMO_UPDATE, 
-                   ESTADO, 
-                   USER_NAME, 
-                   ROL_USUARIO
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                   FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                   ESTADO, USER_NAME, ROL_USUARIO
                FROM V_PERSONAS
-               %s%s
+               %s%s%s%s%s%s
                """.strip().trim().formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d ".formatted(persona.getId_persona())
+                id ? "" : "ID = %d ".formatted(persona.getIdPersona()),
+                pNombre ? "":"OR PNOMBRE STARTING WITH '%s' ".formatted(persona.getPnombre()),
+                sNombre ? "":"OR SNOMBRE STARTING WITH '%s' ".formatted(persona.getSnombre()),
+                apellidos ? "":"OR APELLIDOS STARTING WITH '%s' ".formatted(persona.getApellidos()),
+                estado ? "":"AND ESTADO IS %b ".formatted(persona.getEstado())
         ).strip().trim();
     }
 //------------------------------------------------------------------------------
@@ -191,9 +189,9 @@ public class M_Persona {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, persona.getId_persona());
+            ps.setInt(1, persona.getIdPersona());
             ps.setString(2, persona.getPersona().toString());
             ps.setString(3, persona.getPnombre());
             ps.setString(4, persona.getSnombre());
@@ -249,7 +247,7 @@ public class M_Persona {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setInt(1, id);
 

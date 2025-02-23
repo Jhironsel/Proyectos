@@ -6,12 +6,13 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import sur.softsurena.abstracta.Persona;
+import sur.softsurena.metodos.M_Persona;
 
 @Getter
 @SuperBuilder
 public class Cliente {
     
-    private final Persona persona;
+    private final Integer id;
     private final BigDecimal totalFacturado;
     private final BigDecimal totalDeuda;
     private final Integer cantidadFactura;
@@ -22,12 +23,18 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return persona.toString();
+        
+        return M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(id)
+                        .build()
+        ).getFirst().toString();
     }
     
     public String getJSON() {
         return "Cliente{" + 
-                "persona=" + persona + 
+                "Id=" + id.toString() + 
                 ", totalFacturado=" + totalFacturado + 
                 ", totalDeuda=" + totalDeuda + 
                 ", cantidadFactura=" + cantidadFactura + 
@@ -39,7 +46,7 @@ public class Cliente {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.persona);
+        hash = 59 * hash + Objects.hashCode(this.id);
         hash = 59 * hash + Objects.hashCode(this.totalFacturado);
         hash = 59 * hash + Objects.hashCode(this.totalDeuda);
         hash = 59 * hash + Objects.hashCode(this.cantidadFactura);
@@ -61,7 +68,7 @@ public class Cliente {
         }
         final Cliente other = (Cliente) obj;
         
-        if (!Objects.equals(this.persona, other.persona)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.totalFacturado, other.totalFacturado)) {

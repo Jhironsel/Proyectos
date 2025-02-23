@@ -38,7 +38,7 @@ public class M_Usuario {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setString(1, usuario);
             ps.setString(2, clave);
@@ -70,7 +70,7 @@ public class M_Usuario {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setString(1, usuario.getPersona().getUser_name());
             cs.setString(2, usuario.getClave());
@@ -133,7 +133,7 @@ public class M_Usuario {
         try (CallableStatement cs = getCnn().prepareCall(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             cs.setString(1, usuario.getPersona().getUser_name());
             cs.setString(2, usuario.getClave());
             cs.setString(3, usuario.getPersona().getPnombre());
@@ -307,7 +307,7 @@ public class M_Usuario {
                 sql,
                 ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
             ps.setString(1, userName);
 

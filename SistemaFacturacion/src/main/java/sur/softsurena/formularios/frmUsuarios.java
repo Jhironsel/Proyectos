@@ -607,7 +607,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios
                 || jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
 
-            frmUsuariosAgregar u = new frmUsuariosAgregar(null, true);
+            frmUsuariosAgregar u = frmUsuariosAgregar.getInstance(null, true);
             u.setLocationRelativeTo(null);
             u.setVisible(true);
 
@@ -673,10 +673,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     tblUsuarios.getSelectedRow(), 0).
                     toString().strip();
 
-            frmUsuariosAgregar user = new frmUsuariosAgregar(
+            frmUsuariosAgregar user = frmUsuariosAgregar.getInstance(
                     null,
                     true,
-                    getUsuario(userName)
+                    M_Usuario.getUsuario(userName)
             );
 
             user.setLocationRelativeTo(null);
@@ -749,7 +749,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 return;
             }
 
-            frmConfirmacion c = new frmConfirmacion(null, true);
+            frmConfirmacion c = frmConfirmacion.getInstance(null, true);
             c.setLocationRelativeTo(this);
             c.setVisible(true);
 

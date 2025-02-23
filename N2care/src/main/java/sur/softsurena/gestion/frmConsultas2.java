@@ -27,7 +27,7 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.D_Motivo_Consulta;
 import sur.softsurena.entidades.Doctor;
-import sur.softsurena.entidades.Guia_Vigilancia_Desarrollo;
+import sur.softsurena.entidades.GuiaVigilanciaDesarrollo;
 import sur.softsurena.entidades.Medicamento;
 import sur.softsurena.entidades.Metrica;
 import sur.softsurena.entidades.Motivo_Consulta;
@@ -1939,7 +1939,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         
         //TODO 13/12/2024 Esta lista me parece que no es la que corresponde 
         //con la tabla.
-        List<Guia_Vigilancia_Desarrollo> lista = M_Guia_Vigilancia_Desarrollo.select(
+        List<GuiaVigilanciaDesarrollo> lista = M_Guia_Vigilancia_Desarrollo.select(
                 FiltroBusqueda
                         .builder()
                         .id(idPaciente)

@@ -9,11 +9,11 @@ import lombok.experimental.SuperBuilder;
 public class ContactoEmail {
     
     private final Integer id;
-    private final Integer id_persona;
+    private final Integer idPersona;
     private final String email;
     private final Date fecha;
     private final Boolean estado;
-    private final Boolean por_defecto;
+    private final Boolean porDefecto;
 
     @Override
     public String toString() {

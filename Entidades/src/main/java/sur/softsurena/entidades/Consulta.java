@@ -8,28 +8,26 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Consulta {
     private final Integer id;
-    private final Control_Consulta controlConsulta;
+    private final Integer idControlConsulta;
+    private final Integer idPaciente;
     private final Date fecha;
     private final Integer linea;
-    private final Paciente paciente;
     private final Boolean estado;
-    private final String usuario;
 
     @Override
     public String toString() {
-        return paciente.toString();
+        return id.toString();
     }
 
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Consulta{");
         sb.append("id=").append(id);
-        sb.append(", controlConsulta=").append(controlConsulta);
+        sb.append(", idControlConsulta=").append(idControlConsulta);
+        sb.append(", idPaciente=").append(idPaciente);
         sb.append(", fecha=").append(fecha);
         sb.append(", linea=").append(linea);
-        sb.append(", paciente=").append(paciente);
         sb.append(", estado=").append(estado);
-        sb.append(", usuario=").append(usuario);
         sb.append('}');
         return sb.toString();
     }

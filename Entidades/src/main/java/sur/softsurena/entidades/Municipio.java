@@ -8,9 +8,9 @@ import lombok.experimental.SuperBuilder;
 public class Municipio {
 
 
-    private final int id;
+    private final Integer id;
+    private final Integer idProvincia;
     private final String nombre;
-    private final int idProvincia;
 
     
 

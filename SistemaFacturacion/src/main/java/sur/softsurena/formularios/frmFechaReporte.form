@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.2" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.DialogFormInfo">
-  <NonVisualComponents>
-    <Component class="org.jdesktop.swingx.calendar.DefaultDateSelectionModel" name="defaultDateSelectionModel1">
-      <Properties>
-        <Property name="adjusting" type="boolean" value="true"/>
-      </Properties>
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[508, 389]"/>
@@ -58,7 +51,7 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jcFecha" pref="484" max="32767" attributes="0"/>
+                      <Component id="jcFecha" pref="496" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jFecha" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>

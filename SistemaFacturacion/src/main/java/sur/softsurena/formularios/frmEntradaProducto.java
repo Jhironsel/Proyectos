@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.awt.Image;
 import java.math.BigDecimal;
 import java.util.List;
@@ -7,10 +8,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.metodos.M_Producto;
-import static sur.softsurena.utilidades.Utilidades.imagenDecode64;
 
 public class frmEntradaProducto extends javax.swing.JDialog {
 
@@ -20,17 +19,35 @@ public class frmEntradaProducto extends javax.swing.JDialog {
     private Boolean impuesto = false;
     private final DefaultTableModel miTabla;
     private transient Object registro[];
+    
+    private static Frame parent;
+    private static boolean modal;
+    
+    public static frmEntradaProducto getInstance(Frame parent, boolean modal) {
+        frmEntradaProducto.parent = parent;
+        frmEntradaProducto.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmEntradaProducto(java.awt.Frame parent, boolean modal) {
+        private static final frmEntradaProducto INSTANCE 
+                = new frmEntradaProducto(
+                        frmEntradaProducto.parent, 
+                        frmEntradaProducto.modal
+                );
+    }
+
+    private frmEntradaProducto(Frame parent, boolean modal) {
         super(parent, modal);
-        
+
         initComponents();
-        
+
         String titulos[] = {"Codigo Art.", "Descripcion", "Cantidad", "Costo", "Precio",
             "Impuesto", "%Impuesto"};
-        
+
         registro = new Object[titulos.length];
-        
+
         miTabla = new DefaultTableModel(null, titulos) {
             @Override
             public Class<?> getColumnClass(int column) {
@@ -41,7 +58,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                 }
             }
         };
-        
+
         tbArticulos.setModel(miTabla);
     }
 
@@ -379,16 +396,16 @@ public class frmEntradaProducto extends javax.swing.JDialog {
             btnBuscarProducto.doClick();
             return;
         }
-
+//
+//                        .categoria(
+//                                Categoria
+//                                        .builder()
+//                                        .descripcion(txtCodigoProducto.getText().strip())
+//                                        .build()
+//                        )
         List<Producto> productos = M_Producto.select(
                 Producto
                         .builder()
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion(txtCodigoProducto.getText().strip())
-                                        .build()
-                        )
                         .codigo(txtCodigoProducto.getText().strip())
                         .descripcion(txtCodigoProducto.getText().strip())
                         .build()
@@ -406,14 +423,16 @@ public class frmEntradaProducto extends javax.swing.JDialog {
             return;
         }
 
-        productos.stream().forEach(producto -> {
-            
-            jlImagen.setIcon(imagenDecode64(producto.getImagen().getImagen64(), 72, 72));
-            //imagen.getImage().flush();
-            
-            txtDescripcionProducto.setText(producto.getDescripcion());
-            cbEstado.setSelected(producto.getEstado());
-        });
+        productos.stream().forEach(
+                producto -> {
+
+                    //TODO 04/01/2024 Obtener la imangen del producto desde la tabla FOTO_PRODUCTO.
+                    //jlImagen.setIcon(imagenDecode64(producto.getImagen().getImagen64(), 72, 72));
+                    //imagen.getImage().flush();
+                    txtDescripcionProducto.setText(producto.getDescripcion());
+                    cbEstado.setSelected(producto.getEstado());
+                }
+        );
 
         jlImagen.validate();
         txtEntrada.requestFocus();
@@ -612,7 +631,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                 txtImpuesto.requestFocus();
                 return;
             }
-            
+
             BigDecimal c = new BigDecimal(txtImpuesto.getText());
 
             if (c.compareTo(BigDecimal.ZERO) <= 0) {
@@ -633,7 +652,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
                 .id(-1)
                 .descripcion("")
                 .build();
-        
+
         registro[0] = miBusqueda.getRespuesta();//p
         registro[1] = txtDescripcionProducto.getText();
         registro[2] = entrada;
@@ -697,7 +716,7 @@ public class frmEntradaProducto extends javax.swing.JDialog {
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         quitarImagen();
         limpiar();
-        miBusqueda = new frmBusquedaProducto(null, true);
+        miBusqueda = frmBusquedaProducto.getInstance(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
         if (miBusqueda.getRespuesta() != null) {

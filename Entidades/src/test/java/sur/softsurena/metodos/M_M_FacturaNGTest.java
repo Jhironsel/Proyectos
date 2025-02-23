@@ -9,8 +9,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.D_Factura;
-import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.M_Factura;
 import static sur.softsurena.metodos.M_M_Factura.ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA;
 import static sur.softsurena.metodos.M_M_Factura.FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM;
@@ -25,12 +23,8 @@ import sur.softsurena.utilidades.Resultado;
 public class M_M_FacturaNGTest {
 
     private int id_factura = -1;
-    private Factura factura;
 
     public M_M_FacturaNGTest() {
-        factura = Factura
-                .builder()
-                .build();
     }
 
     @BeforeClass
@@ -61,27 +55,177 @@ public class M_M_FacturaNGTest {
     public void tearDownMethod() throws Exception {
     }
 
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testGetIDFacturaNueva() {
+        int idTurno = 0;
+        assertTrue(
+                M_M_Factura.getIDFacturaNueva(idTurno) > 0,
+                "Se obtuvo una factura menor que cero."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = ""
+    )
+    public void testSelect() {
+        List result = M_M_Factura.select(
+                M_Factura
+                        .builder()
+                        .estadoFactura('t')
+                        .build()
+        );
+        assertNotNull(
+                result,
+                "La lista de facturas temporales se encuentra con registros."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          
+                          """
+    )
+    public void testSqlSelect() {
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura.builder().build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .idCliente(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID_CLIENTE = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .idContactoTel(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID_CONTACTOS_TEL = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .idContactoDir(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID_CONTACTOS_DIRECCIONES = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .idContactoEmail(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID_CONTACTOS_EMAIL = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .idTurno(-1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ID_TURNO = -1
+                """.strip()
+        );
+        assertEquals(
+                M_M_Factura.sqlSelect(
+                        M_Factura
+                                .builder()
+                                .estadoFactura('t')
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     NOMBRE_TEMP
+                FROM V_M_FACTURAS
+                WHERE ESTADO_FACTURA = 't'
+                """.strip()
+        );
+    }
+
     //--------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
                           TODO la lista de detalle es la misma que esta en 
                           M_D_FACTURANGTEST, seria bueno 
                           """
     )
-    public void testAgregarFacturaNombre() {
+    public void testInsert() {
 
-        Resultado result = M_M_Factura.agregarFacturaNombre(
-                Factura
-                        .builder()
-                        .m_factura(
-                                M_Factura.getM_FacturaTest()
-                        )
-                        .d_factura(
-                                D_Factura.getListTest()
-                        )
-                        .build()
+        Resultado result = M_M_Factura.insert(
+                M_Factura.getM_FacturaTest()
         );
 
         assertEquals(
@@ -94,6 +238,11 @@ public class M_M_FacturaNGTest {
                         .build(),
                 ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA
         );
+        
+        assertTrue(
+                result.getId() > 0,
+                "Error en el registro de la factura en el sistema."
+        );
 
         id_factura = result.getId();
 
@@ -101,16 +250,17 @@ public class M_M_FacturaNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = false,
-            priority = 0,
+            enabled = true,
+            priority = 1,
             description = """
                           Prueba para modificar el encabezado de una factura.
                           """
     )
-    public void testModificarFactura() {
-
+    public void testUpdate() {
         assertEquals(
-                M_M_Factura.modificarFactura(factura),
+                M_M_Factura.update(
+                        M_Factura.getM_FacturaTest()
+                ),
                 Resultado
                         .builder()
                         .mensaje("Factura modificada correctamente.")
@@ -120,45 +270,17 @@ public class M_M_FacturaNGTest {
         );
     }
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = ""
-    )
-    public void testGetFacturaEstado() {
-        List result = M_M_Factura.getFacturaEstado(
-                Factura
-                        .builder()
-                        .m_factura(
-                                M_Factura
-                                        .builder()
-                                        .estadoFactura('t')
-                                        .build()
-                        )
-                        .build()
-        );
-        assertTrue(
-                result.isEmpty(),
-                "La lista de facturas temporales se encuentra con registros."
-        );
-    }
-
     //--------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 6,
+            priority = 2,
             description = """
                           Test que permite eliminar una factura del sistema.
                           """
     )
-    public void testBorrarFactura() {
-        if (id_factura < 0) {
-            return;
-        }
-        Resultado result = M_M_Factura.borrarFactura(id_factura);
-
+    public void testDelete() {
         assertEquals(
-                result,
+                M_M_Factura.delete(id_factura),
                 Resultado
                         .builder()
                         .mensaje(FACTURA__BORRADA__CORRECTAMENTE)
@@ -167,122 +289,5 @@ public class M_M_FacturaNGTest {
                         .build(),
                 OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__FA
         );
-
-    }
-
-    /**
-     * Test of sqlGetTemporal method, of class M_M_Factura.
-     */
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          
-                          """
-    )
-    public void testSqlFacturaEstado() {
-        String expResult = """
-                           SELECT
-                              ID,
-                              ID_CLIENTE,
-                              ID_CONTACTOS_TEL,
-                              ID_CONTACTOS_DIRECCIONES,
-                              ID_CONTACTOS_EMAIL,
-                              ID_TURNO,
-                              FECHA_HORA,
-                              ESTADO_FACTURA,
-                              NOMBRE_TEMP,
-                              USER_NAME,
-                              PNOMBRE,
-                              SNOMBRE,
-                              APELLIDOS
-                           FROM GET_M_FACTURAS
-                           ;
-                           """;
-        String result = M_M_Factura.sqlFacturaEstado(
-                Factura
-                        .builder()
-                        .m_factura(
-                                M_Factura.builder().build()
-                        )
-                        .build()
-        );
-        assertEquals(result, expResult);
-
-        expResult = """
-                    SELECT
-                       ID,
-                       ID_CLIENTE,
-                       ID_CONTACTOS_TEL,
-                       ID_CONTACTOS_DIRECCIONES,
-                       ID_CONTACTOS_EMAIL,
-                       ID_TURNO,
-                       FECHA_HORA,
-                       ESTADO_FACTURA,
-                       NOMBRE_TEMP,
-                       USER_NAME,
-                       PNOMBRE,
-                       SNOMBRE,
-                       APELLIDOS
-                    FROM GET_M_FACTURAS
-                    WHERE ESTADO_FACTURA = 't';
-                    """;
-        result = M_M_Factura.sqlFacturaEstado(
-                Factura
-                        .builder()
-                        .m_factura(
-                                M_Factura
-                                        .builder()
-                                        .estadoFactura('t')
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result, expResult);
-
-        expResult = """
-                    SELECT
-                       ID,
-                       ID_CLIENTE,
-                       ID_CONTACTOS_TEL,
-                       ID_CONTACTOS_DIRECCIONES,
-                       ID_CONTACTOS_EMAIL,
-                       ID_TURNO,
-                       FECHA_HORA,
-                       ESTADO_FACTURA,
-                       NOMBRE_TEMP,
-                       USER_NAME,
-                       PNOMBRE,
-                       SNOMBRE,
-                       APELLIDOS
-                    FROM GET_M_FACTURAS
-                    WHERE ESTADO_FACTURA = 'i';
-                    """;
-        result = M_M_Factura.sqlFacturaEstado(
-                Factura
-                        .builder()
-                        .m_factura(
-                                M_Factura
-                                        .builder()
-                                        .estadoFactura('i')
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          
-                          """
-    )
-    public void testGetIDFacturaNueva() {
-        int idTurno = 0;
-        int expResult = 0;
-        int result = M_M_Factura.getIDFacturaNueva(idTurno);
-        assertEquals(result, expResult);
     }
 }

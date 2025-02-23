@@ -3,7 +3,6 @@ package sur.softsurena.formularios;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import lombok.Getter;
 import lombok.NonNull;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -43,8 +43,12 @@ import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.DesktopConFondo;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
-import static sur.softsurena.utilidades.Utilidades.LOG;
 
+/**
+ *
+ * @author jhironsel
+ */
+@Getter
 public final class frmPrincipal extends javax.swing.JFrame {
 
     //Formularios Modales
@@ -143,21 +147,27 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuOpcionesSalir = new javax.swing.JMenuItem();
         mnuMantenimiento = new javax.swing.JMenu();
         mnuMantenimientoClientes = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoProductos = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoProveedores = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoAlmacenes = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoUsuarios = new javax.swing.JMenuItem();
+        jSeparator13 = new javax.swing.JPopupMenu.Separator();
+        mnuMantenimientoAbrirTurno = new javax.swing.JMenuItem();
         mnuSistemas = new javax.swing.JMenu();
         mnuSistemaNomina = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
         mnuSistemaGestorGastos = new javax.swing.JMenuItem();
         mnuMovimientos = new javax.swing.JMenu();
         mnuMovimientosNuevaFactura = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         mnuMovimientosReporteFactura = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         mnuMovimientosInventario = new javax.swing.JMenuItem();
+        jSeparator12 = new javax.swing.JPopupMenu.Separator();
         mnuMovimientosDeudas = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        mnuMovimientosAbrirTurno = new javax.swing.JMenuItem();
         mnuAyuda = new javax.swing.JMenu();
         mnuAyudaAcercaDe = new javax.swing.JMenuItem();
         mnuAyudaAyuda = new javax.swing.JMenuItem();
@@ -699,6 +709,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMantenimiento.add(mnuMantenimientoClientes);
+        mnuMantenimiento.add(jSeparator3);
 
         mnuMantenimientoProductos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         mnuMantenimientoProductos.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -710,6 +721,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMantenimiento.add(mnuMantenimientoProductos);
+        mnuMantenimiento.add(jSeparator6);
 
         mnuMantenimientoProveedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         mnuMantenimientoProveedores.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -721,6 +733,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMantenimiento.add(mnuMantenimientoProveedores);
+        mnuMantenimiento.add(jSeparator7);
 
         mnuMantenimientoAlmacenes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnuMantenimientoAlmacenes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -732,6 +745,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMantenimiento.add(mnuMantenimientoAlmacenes);
+        mnuMantenimiento.add(jSeparator8);
 
         mnuMantenimientoUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
         mnuMantenimientoUsuarios.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -742,6 +756,17 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMantenimiento.add(mnuMantenimientoUsuarios);
+        mnuMantenimiento.add(jSeparator13);
+
+        mnuMantenimientoAbrirTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        mnuMantenimientoAbrirTurno.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
+        mnuMantenimientoAbrirTurno.setText("Turnos ...");
+        mnuMantenimientoAbrirTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuMantenimientoAbrirTurnoActionPerformed(evt);
+            }
+        });
+        mnuMantenimiento.add(mnuMantenimientoAbrirTurno);
 
         jMenuBar.add(mnuMantenimiento);
 
@@ -761,6 +786,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuSistemas.add(mnuSistemaNomina);
+        mnuSistemas.add(jSeparator11);
 
         mnuSistemaGestorGastos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
         mnuSistemaGestorGastos.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -789,7 +815,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMovimientos.add(mnuMovimientosNuevaFactura);
-        mnuMovimientos.add(jSeparator5);
 
         mnuMovimientosReporteFactura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F10, 0));
         mnuMovimientosReporteFactura.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -800,6 +825,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMovimientos.add(mnuMovimientosReporteFactura);
+        mnuMovimientos.add(jSeparator5);
 
         mnuMovimientosInventario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0));
         mnuMovimientosInventario.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -810,6 +836,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMovimientos.add(mnuMovimientosInventario);
+        mnuMovimientos.add(jSeparator12);
 
         mnuMovimientosDeudas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0));
         mnuMovimientosDeudas.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -820,17 +847,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuMovimientos.add(mnuMovimientosDeudas);
-        mnuMovimientos.add(jSeparator4);
-
-        mnuMovimientosAbrirTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
-        mnuMovimientosAbrirTurno.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuMovimientosAbrirTurno.setText("Administrador de turnos ...");
-        mnuMovimientosAbrirTurno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuMovimientosAbrirTurnoActionPerformed(evt);
-            }
-        });
-        mnuMovimientos.add(mnuMovimientosAbrirTurno);
 
         jMenuBar.add(mnuMovimientos);
 
@@ -951,7 +967,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jlGetIPMouseClicked
 
     private void jlMovimientoESMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlMovimientoESMouseClicked
-        abrirFormulario(new frmMovimientoEntradaSalida());
+        abrirFormulario(frmMovimientoEntradaSalida.getInstance());
     }//GEN-LAST:event_jlMovimientoESMouseClicked
 
     private void jlRespaldarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlRespaldarMouseClicked
@@ -1077,7 +1093,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowOpened
     private void jlGraficaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlGraficaMouseClicked
-        abrirFormulario(new frmGraficos());
+        abrirFormulario(frmGraficos.getInstance());
     }//GEN-LAST:event_jlGraficaMouseClicked
 
     private void jlGraficaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlGraficaMouseExited
@@ -1121,7 +1137,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmInventarioActionPerformed
 
     private void jmAbrirTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmAbrirTurnoActionPerformed
-        mnuMovimientosAbrirTurnoActionPerformed(evt);
+        mnuMantenimientoAbrirTurnoActionPerformed(evt);
     }//GEN-LAST:event_jmAbrirTurnoActionPerformed
 
     private void jmDeudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmDeudaActionPerformed
@@ -1129,15 +1145,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmDeudaActionPerformed
 
     private void btnEstablecerEncabezadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerEncabezadoActionPerformed
-        try {
-            abrirFormularioCentralizado(new frmEmpresaDatos());
-        } catch (IOException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    "El formulario de frmEmpresaDatos tiene problemas.", 
-                    ex
-            );
-        }
+        abrirFormularioCentralizado(frmEmpresaDatos.getInstance());
     }//GEN-LAST:event_btnEstablecerEncabezadoActionPerformed
 
     private void btnSeleccionarImpresoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarImpresoraActionPerformed
@@ -1164,7 +1172,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuMantenimientoProductosActionPerformed
 
     private void mnuOpcionesCambioClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpcionesCambioClaveActionPerformed
-        frmCambioClave cambioClave = new frmCambioClave(this, true);
+        frmCambioClave cambioClave = frmCambioClave.getInstance(this, true);
         cambioClave.setLocationRelativeTo(this);
         cambioClave.setVisible(true);
     }//GEN-LAST:event_mnuOpcionesCambioClaveActionPerformed
@@ -1207,7 +1215,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuMovimientosNuevaFacturaActionPerformed
 
     private void mnuMovimientosReporteFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosReporteFacturaActionPerformed
-        abrirFormularioCentralizado(new frmReporteFacturas());
+        abrirFormularioCentralizado(frmReporteFacturas.getInstance());
     }//GEN-LAST:event_mnuMovimientosReporteFacturaActionPerformed
 
     private void mnuMovimientosInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosInventarioActionPerformed
@@ -1224,9 +1232,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
         imprimirReporte(reporte.getFecha());
     }//GEN-LAST:event_mnuMovimientosInventarioActionPerformed
 
-    private void mnuMovimientosAbrirTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosAbrirTurnoActionPerformed
+    private void mnuMantenimientoAbrirTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoAbrirTurnoActionPerformed
         abrirFormulario(frmAdministradorTurnos.getInstance());
-    }//GEN-LAST:event_mnuMovimientosAbrirTurnoActionPerformed
+    }//GEN-LAST:event_mnuMantenimientoAbrirTurnoActionPerformed
 
     private void mnuMovimientosDeudasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMovimientosDeudasActionPerformed
         abrirFormulario(frmDeudas.getInstance());
@@ -1300,11 +1308,11 @@ public final class frmPrincipal extends javax.swing.JFrame {
             );
         }
     }
-    
+
     /**
-     * Este metodo consulta la tabla de turnos, y devuelve aquellos turnos que 
+     * Este metodo consulta la tabla de turnos, y devuelve aquellos turnos que
      * estan activos en el sistema.
-     * 
+     *
      * Solo es llamado desde el constructor.
      */
     private void panelUsuario() {
@@ -1382,7 +1390,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         System.gc();
     }
 
-
     /**
      * Metodo que permite centralizar las ventanas que son internas.
      *
@@ -1432,7 +1439,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuMovimientosNuevaFactura.setIcon(new Imagenes("Factura 32 x 32.png").getIcono());
         mnuMovimientosReporteFactura.setIcon(new Imagenes("Reportar Factura 32 x 32.png").getIcono());
         mnuMovimientosInventario.setIcon(new Imagenes("Inventario 32 x 32.png").getIcono());
-        mnuMovimientosAbrirTurno.setIcon(new Imagenes("Turno 32 x 32.png").getIcono());
+        mnuMantenimientoAbrirTurno.setIcon(new Imagenes("Turno 32 x 32.png").getIcono());
         mnuMovimientosDeudas.setIcon(new Imagenes("Money 32 x 32.png").getIcono());
 
         //Iconos de subMenus
@@ -1484,7 +1491,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PERSONA_CLIENTES")
+                                .nombre_relacion("V_PERSONAS_CLIENTES")
                                 .nombre_campo("^")
                                 .build()
                 )
@@ -1494,7 +1501,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PRODUCTOS")
+                                .nombre_relacion("V_PRODUCTOS")
                                 .nombre_campo("^")
                                 .build()
                 )
@@ -1504,7 +1511,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_PROVEEDORES")
+                                .nombre_relacion("V_PERSONAS_PROVEEDORES")
                                 .nombre_campo("^")
                                 .build()
                 )
@@ -1616,12 +1623,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("GET_DEUDAS")
+                                .nombre_relacion("V_M_DEUDAS")
                                 .nombre_campo("^")
                                 .build()
                 )
         );
-        mnuMovimientosAbrirTurno.setVisible(
+        mnuMantenimientoAbrirTurno.setVisible(
                 M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
@@ -1636,7 +1643,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
                 || mnuMovimientosReporteFactura.isVisible()
                 || mnuMovimientosInventario.isVisible()
                 || mnuMovimientosDeudas.isVisible()
-                || mnuMovimientosAbrirTurno.isVisible()
+                || mnuMantenimientoAbrirTurno.isVisible()
         );
 
         jMenuBar.add(btnOcultarPanel, 0);//Es el primer boton que se encuentra en la barra de menu.
@@ -1711,9 +1718,15 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
+    private javax.swing.JPopupMenu.Separator jSeparator11;
+    private javax.swing.JPopupMenu.Separator jSeparator12;
+    private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel jlGetIP;
     private javax.swing.JLabel jlGrafica;
@@ -1751,13 +1764,13 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuAyudaAcercaDe;
     private javax.swing.JMenuItem mnuAyudaAyuda;
     private javax.swing.JMenu mnuMantenimiento;
+    private javax.swing.JMenuItem mnuMantenimientoAbrirTurno;
     private javax.swing.JMenuItem mnuMantenimientoAlmacenes;
     public static javax.swing.JMenuItem mnuMantenimientoClientes;
     private javax.swing.JMenuItem mnuMantenimientoProductos;
     private javax.swing.JMenuItem mnuMantenimientoProveedores;
     private javax.swing.JMenuItem mnuMantenimientoUsuarios;
     private javax.swing.JMenu mnuMovimientos;
-    private javax.swing.JMenuItem mnuMovimientosAbrirTurno;
     private javax.swing.JMenuItem mnuMovimientosDeudas;
     private javax.swing.JMenuItem mnuMovimientosInventario;
     public static javax.swing.JMenuItem mnuMovimientosNuevaFactura;

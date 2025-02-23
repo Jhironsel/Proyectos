@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package sur.softsurena.formularios;
 
 /**
@@ -10,10 +6,18 @@ package sur.softsurena.formularios;
  */
 public class frmControlPrecio extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form frmControlPrecio
-     */
-    public frmControlPrecio() {
+    private static final long serialVersionUID = 1L;
+
+    public static frmControlPrecio getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmControlPrecio INSTANCE = new frmControlPrecio();
+    }
+    
+    private frmControlPrecio() {
         initComponents();
     }
 

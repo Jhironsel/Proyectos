@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.metodos.M_Almacen;
-import static sur.softsurena.metodos.M_Privilegio.privilegio;
+import sur.softsurena.metodos.M_Privilegio;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
 import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
@@ -30,7 +30,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     private static boolean v_nuevo;
 
     public static frmAlmacenes getInstance() {
-        if (!privilegio(
+        if (!M_Privilegio.privilegio(
                 Privilegio
                         .builder()
                         .privilegio(
@@ -562,7 +562,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         btnNuevo.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -573,7 +573,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         );
 
         btnModificar.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
@@ -584,7 +584,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         );
 
         btnBorrar.setEnabled(
-                privilegio(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)

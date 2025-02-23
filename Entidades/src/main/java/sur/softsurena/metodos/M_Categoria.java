@@ -13,7 +13,6 @@ import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.utilidades.Resultado;
-import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -39,6 +38,77 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Categoria {
 
     /**
+     * Metodo utilizado para obtener todas las categorias del sistema.
+     *
+     * Esta consulta nos trae todas las categorias registrada en el sistema.
+     * Incluyendo los campos de la imagen y estado.
+     *
+     * @param categoria
+     *
+     * @return Devuelve un conjunto de datos de la tabla Categoria del sistema,
+     * donde contiene todos los campos de la tabla.
+     */
+    public synchronized static List<Categoria> select(
+            @NonNull Categoria categoria
+    ) {
+        List<Categoria> categorias = new ArrayList<>();
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sqlSelect(categoria),
+                ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.isClosed()){
+                rs = ps.executeQuery(sqlSelect(categoria));
+            }
+
+            while (rs.next()) {
+                categorias.add(
+                        Categoria
+                                .builder()
+                                .id_categoria(rs.getInt("ID"))
+                                .descripcion(rs.getString("DESCRIPCION"))
+                                .fecha_creacion(rs.getDate("FECHA_CREACION"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .image_texto(rs.getString("IMAGEN_TEXTO"))
+                                .build()
+                );
+            }
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return categorias;
+    }
+
+    //TODO 19/01/2025 Agregar la descripcion al filtro.
+    protected static String sqlSelect(Categoria categoria) {
+        Boolean id = Objects.isNull(categoria.getId_categoria());
+        Boolean estado = Objects.isNull(categoria.getEstado());
+        Boolean descripcion = Objects.isNull(categoria.getDescripcion());
+
+        Boolean where = id && estado && descripcion;
+        Boolean and = id || estado;
+
+        return """
+               SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+               FROM V_CATEGORIAS
+               %s%s%s%s
+               """.formatted(
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(categoria.getId_categoria()),
+                and ? "" : "",
+                estado ? "" : categoria.getEstado() ? "ESTADO " : "ESTADO IS FALSE "
+        ).trim().strip().concat("\nORDER BY 1;");
+    }
+
+    /**
      * Agregar las categorias de los productos a la base de datos en la tabla
      * Categoria.
      *
@@ -51,8 +121,9 @@ public class M_Categoria {
      * o no.
      */
     public synchronized static Resultado insert(Categoria categoria) {
-        final String sql
-                = "SELECT V_ID FROM SP_I_CATEGORIA(?, ?, ?)";
+        final String sql = """
+                           SELECT ID FROM SP_I_CATEGORIA(?,?)
+                           """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -60,39 +131,38 @@ public class M_Categoria {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setString(1, categoria.getDescripcion());
-            ps.setString(2, Utilidades.imagenEncode64(
-                    categoria.getPathImage()
-            )
-            );
-            ps.setBoolean(3, categoria.getEstado());
+            ps.setBoolean(2, categoria.getEstado());
 
             ResultSet rs = ps.executeQuery();
-            rs.next();
-            return Resultado
-                    .builder()
-                    .id(rs.getInt("V_ID"))
-                    .mensaje(CATEGORIA_AGREGADA_CON_EXITO)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build();
+
+            if (rs.next()) {
+                return Resultado
+                        .builder()
+                        .id(rs.getInt("ID"))
+                        .mensaje(CATEGORIA_AGREGADA_CON_EXITO)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build();
+            }
+
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
                     ERROR_AL_INSERTAR_CATEGORIA,
                     ex
             );
-            return Resultado
-                    .builder()
-                    .id(-1)
-                    .mensaje(ERROR_AL_INSERTAR_CATEGORIA)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
         }
+        return Resultado
+                .builder()
+                .id(-1)
+                .mensaje(ERROR_AL_INSERTAR_CATEGORIA)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
-    private static final String CATEGORIA_AGREGADA_CON_EXITO
+    public static final String CATEGORIA_AGREGADA_CON_EXITO
             = "Categoria agregada con exito.";
-    private static final String ERROR_AL_INSERTAR_CATEGORIA
+    public static final String ERROR_AL_INSERTAR_CATEGORIA
             = "Error al insertar categoria.";
 
     /**
@@ -107,24 +177,23 @@ public class M_Categoria {
      */
     public synchronized static Resultado update(Categoria categoria) {
         final String sql
-                = "EXECUTE PROCEDURE SP_U_CATEGORIA (?,?,?,?)";
+                = "EXECUTE PROCEDURE SP_U_CATEGORIA(?,?,?)";
 
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setInt(1, categoria.getId_categoria());
             cs.setString(2, categoria.getDescripcion());
-            cs.setString(3, Utilidades.imagenEncode64(categoria.getPathImage()));
-            cs.setBoolean(4, categoria.getEstado());
+            cs.setBoolean(3, categoria.getEstado());
 
             cs.executeUpdate();
 
             return Resultado
                     .builder()
-                    .mensaje(SE_MODIFICÓ_LA_CATEGORIA_CORRECTAMENTE)
+                    .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
@@ -141,7 +210,7 @@ public class M_Categoria {
     }
     public static final String ERROR_AL_MODIFICAR_LA_CATEGORIA
             = "Error al modificar la categoria.";
-    public static final String SE_MODIFICÓ_LA_CATEGORIA_CORRECTAMENTE
+    public static final String SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE
             = "Se modificó la categoria correctamente.";
 
     /**
@@ -161,7 +230,7 @@ public class M_Categoria {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, idCategoria);
 
@@ -194,68 +263,6 @@ public class M_Categoria {
             = "Ocurrio un error al intentar borrar la Categoria {%s}...";
 
     /**
-     * Metodo utilizado para obtener todas las categorias del sistema.
-     *
-     * Esta consulta nos trae todas las categorias registrada en el sistema.
-     * Incluyendo los campos de la imagen y estado.
-     *
-     * @param categoria
-     *
-     * @return Devuelve un conjunto de datos de la tabla Categoria del sistema,
-     * donde contiene todos los campos de la tabla.
-     */
-    public synchronized static List<Categoria> select(
-            @NonNull Categoria categoria
-    ) {
-        List<Categoria> categorias = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(categoria),
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                categorias.add(
-                        Categoria
-                                .builder()
-                                .id_categoria(rs.getInt("ID"))
-                                .descripcion(rs.getString("DESCRIPCION"))
-                                .fecha_creacion(rs.getDate("FECHA_CREACION"))
-                                .estado(rs.getBoolean("ESTADO"))
-                                .image_texto(rs.getString("IMAGEN_TEXTO"))
-                                .build()
-                );
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return categorias;
-    }
-
-    protected static String sqlSelect(Categoria categoria) {
-        Boolean b_id = Objects.isNull(categoria.getId_categoria());
-        Boolean b_estado = Objects.isNull(categoria.getEstado());
-
-        Boolean b_where = b_id && b_estado;
-
-        return """
-               SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, IMAGEN_TEXTO
-               FROM VS_CATEGORIAS
-               %s%s%s
-               ORDER BY 1;
-               """.formatted(
-                b_where ? "" : "WHERE ",
-                b_id ? "" : "ID = %d ".formatted(categoria.getId_categoria()),
-                b_estado ? "" : categoria.getEstado() ? "AND ESTADO " : "AND ESTADO IS FALSE "
-        );
-    }
-
-
-    /**
      * Metodo que permite investigar si existe una descripcion de una categoria.
      *
      * @param descripcion Es la descripcion que se pretende dar a la categoria
@@ -267,7 +274,7 @@ public class M_Categoria {
      */
     public synchronized static Boolean exist(String descripcion) {
         final String sql
-                = "SELECT (1) FROM VS_CATEGORIAS WHERE DESCRIPCION LIKE ?";
+                = "SELECT (1) FROM V_CATEGORIAS WHERE DESCRIPCION LIKE ?";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

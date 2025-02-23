@@ -24,9 +24,20 @@ import sur.softsurena.utilidades.Utilidades;
 
 public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+    
     private static frmGestionConsultas citas;
 
-    public frmGestionConsultas() {
+    public static frmGestionConsultas getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmGestionConsultas INSTANCE = new frmGestionConsultas();
+    }
+    
+    private frmGestionConsultas() {
         
         initComponents();
 
@@ -897,21 +908,21 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
 
         if (!cbAprobadoRechazado.isSelected()) {
             //Los datos los busco de llenarTabla2(...)
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    agregarConsultaVerificada(
-                            new Consultas_aprobadas(
-                                    ((Categoria) tblGestionPacientes.getValueAt(tblGestionPacientes.getSelectedRow(), 2)).getId(),
-                                    txtCodigoVerificacion.getText(),
-                                    new BigDecimal(txtCosto.getValue().toString()),
-                                    new BigDecimal(txtCovertura.getValue().toString()),
-                                    null, 
-                                    null
-                            )
-                    ),
-                    "Proceso de verificación de consultas",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+//            JOptionPane.showInternalMessageDialog(
+//                    this,
+//                    agregarConsultaVerificada(
+//                            new Consultas_aprobadas(
+//                                    ((Categoria) tblGestionPacientes.getValueAt(tblGestionPacientes.getSelectedRow(), 2)).getId(),
+//                                    txtCodigoVerificacion.getText(),
+//                                    new BigDecimal(txtCosto.getValue().toString()),
+//                                    new BigDecimal(txtCovertura.getValue().toString()),
+//                                    null, 
+//                                    null
+//                            )
+//                    ),
+//                    "Proceso de verificación de consultas",
+//                    JOptionPane.INFORMATION_MESSAGE
+//            );
         }
         btnLimpiarCampoActionPerformed(null);
         llenarTabla2("");
@@ -947,14 +958,17 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
                     + " Codigo Verificación: " + tblGestionPacientes.getValueAt(tblGestionPacientes.getSelectedRow(), 4));
 
             txtCosto.setValue(
-                    Double.parseDouble(tblGestionPacientes.getValueAt(
-                            tblGestionPacientes.getSelectedRow(), 5).toString()));
+                    Double.valueOf(tblGestionPacientes.getValueAt(
+                            tblGestionPacientes.getSelectedRow(), 5).toString())
+            );
             txtCovertura.setValue(
-                    Double.parseDouble(tblGestionPacientes.getValueAt(
-                            tblGestionPacientes.getSelectedRow(), 6).toString()));
+                    Double.valueOf(tblGestionPacientes.getValueAt(
+                            tblGestionPacientes.getSelectedRow(), 6).toString())
+            );
             txtTotal.setValue(
-                    Double.parseDouble(tblGestionPacientes.getValueAt(
-                            tblGestionPacientes.getSelectedRow(), 7).toString()));
+                    Double.valueOf(tblGestionPacientes.getValueAt(
+                            tblGestionPacientes.getSelectedRow(), 7).toString())
+            );
             txtCodigoVerificacion.setText(tblGestionPacientes.getValueAt(
                     tblGestionPacientes.getSelectedRow(), 4).toString());
         } else if (!(cbAprobadoRechazado.isSelected())
@@ -972,8 +986,10 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
                     + (String) tblGestionPacientes.getValueAt(
                             tblGestionPacientes.getSelectedRow(), 6)
             );
-            txtCovertura.setValue(((Categoria) tblGestionPacientes.getValueAt(
-                            tblGestionPacientes.getSelectedRow(), 5)).getCovertura());
+            txtCovertura.setValue(
+                    ((Categoria) tblGestionPacientes.getValueAt(
+                            tblGestionPacientes.getSelectedRow(), 5)).getCovertura()
+            );
             
             txtCosto.setValue(1000.00d);
 

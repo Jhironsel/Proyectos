@@ -167,7 +167,7 @@
                           <Component id="btnAceptar" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                           <Component id="btnCancelar" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="85" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

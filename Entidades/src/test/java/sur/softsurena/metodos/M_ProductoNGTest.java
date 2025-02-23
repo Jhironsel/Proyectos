@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
@@ -11,24 +10,19 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.Categoria;
-import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Producto;
-import static sur.softsurena.metodos.M_Producto.ERROR_AL__INSERTAR__PRODUCTO;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__MODIFICAR__PRODUCTO;
 import static sur.softsurena.metodos.M_Producto.OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__BORRADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
-import static sur.softsurena.utilidades.Utilidades.imagenEncode64;
 
 @Getter
 public class M_ProductoNGTest {
 
     private static Integer id_producto;
-    private static Producto producto, producto2;
 
     public M_ProductoNGTest() {
     }
@@ -46,8 +40,6 @@ public class M_ProductoNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
-
-        M_CategoriaNGTest.testInsert();
     }
 
     @AfterClass
@@ -57,78 +49,13 @@ public class M_ProductoNGTest {
 
     @BeforeMethod
     public void setUpMethod() throws Exception {
-        producto = Producto
-                .builder()
-                .id(id_producto)
-                .categoria(
-                        Categoria
-                                .builder()
-                                .id_categoria(
-                                        M_CategoriaNGTest.idCategoria1
-                                )
-                                .build()
-                )
-                .codigo(
-                        M_ContactoTel.generarTelMovil().substring(8, 16)
-                )
-                .descripcion(
-                        "Descripcion Prueba %s".formatted(
-                                M_ContactoTel.generarTelMovil().substring(8, 16)
-                        )
-                )
-                .imagen(
-                        Imagen
-                                .builder()
-                                .imagen64(
-                                        imagenEncode64(
-                                                new File("Imagenes/ImagenPrueba.png")
-                                        )
-                                )
-                                .build()
-                )
-                .nota("Esta es una prueba del sistema.")
-                .estado(Boolean.TRUE)
-                .build();
-
-        producto2 = Producto
-                .builder()
-                .id(id_producto)
-                .categoria(
-                        Categoria
-                                .builder()
-                                .id_categoria(
-                                        M_CategoriaNGTest.idCategoria2
-                                )
-                                .build()
-                )
-                .codigo(
-                        M_ContactoTel.generarTelMovil().substring(8, 16)
-                )
-                .descripcion(
-                        "Descripcion Prueba %s".formatted(
-                                M_ContactoTel.generarTelMovil().substring(8, 16)
-                        )
-                )
-                .imagen(
-                        Imagen
-                                .builder()
-                                .imagen64(
-                                        imagenEncode64(
-                                                new File("Imagenes/ImagenPrueba.png")
-                                        )
-                                )
-                                .build()
-                )
-                .nota("Esta es una prueba del sistema.")
-                .estado(Boolean.TRUE)
-                .build();
+        
     }
 
     @AfterMethod
     public void tearDownMethod() throws Exception {
-        producto = null;
     }
-
+    
     @Test(
             enabled = true,
             priority = 0,
@@ -137,381 +64,284 @@ public class M_ProductoNGTest {
                           """
     )
     public void testSqlProductos() {
-        String expResult;
-
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, 
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, 
-                    ESTADO 
-                    FROM GET_PRODUCTOS 
-                    ORDER BY ID 
-                    """;
-        String result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                ORDER BY ID 
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID_CATEGORIA = 0
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .id_categoria(0)
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .idCategoria(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID_CATEGORIA = 0
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ESTADO AND ID_CATEGORIA = 0
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .id_categoria(0)
-                                        .build()
-                        )
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ESTADO IS FALSE AND ID_CATEGORIA = 0
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .id_categoria(0)
-                                        .build()
-                        )
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0 AND ESTADO
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .estado(Boolean.TRUE)
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .idCategoria(0)
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ESTADO AND ID_CATEGORIA = 0
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());//aqui
+
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0 AND ESTADO IS FALSE
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .estado(Boolean.FALSE)
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .idCategoria(0)
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ESTADO IS FALSE AND ID_CATEGORIA = 0
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
+
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .estado(Boolean.FALSE)
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .estado(Boolean.FALSE)
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO IS FALSE
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .id(0)
-                        .estado(Boolean.FALSE)
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nPaginaNro(1)
-                                        .nCantidadFilas(20)
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.FALSE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nPaginaNro(1)
-                                        .nCantidadFilas(20)
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.FALSE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
 //------------------------------------------------------------------------------
-
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE ESTADO OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .estado(Boolean.TRUE)
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nPaginaNro(1)
-                                        .nCantidadFilas(20)
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.FALSE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
+//------------------------------------------------------------------------------
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
+                """.strip().trim()
+        );
+//------------------------------------------------------------------------------
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ESTADO OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
+                """.strip().trim()
+        );
 //------------------------------------------------------------------------------
 
-        expResult = """
-                    SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA,
-                    NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO,
-                    ESTADO
-                    FROM GET_PRODUCTOS
-                    WHERE TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                           TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                           TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                           TRIM(DESCRIPCION) CONTAINING TRIM('0') OR
-                                           ID_CATEGORIA IN(
-                                                          SELECT ID
-                                                          FROM VS_CATEGORIAS
-                                                          WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('0'))
-                                           )
-                    ORDER BY ID
-                    ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Producto.sqlProductos(
-                Producto
-                        .builder()
-                        .codigo("0")
-                        .descripcion("0")
-                        .categoria(
-                                Categoria
-                                        .builder()
-                                        .descripcion("0")
-                                        .build()
-                        )
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nPaginaNro(1)
-                                        .nCantidadFilas(20)
-                                        .build()
-                        )
-                        .build()
+        assertEquals(
+                M_Producto.sqlProductos(
+                        Producto
+                                .builder()
+                                .codigo("0")
+                                .descripcion("0")
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ), 
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
+                """.strip().trim()
         );
-        assertEquals(result.trim().strip(), expResult.strip().trim());
     }
 
     @Test(
@@ -576,123 +406,16 @@ public class M_ProductoNGTest {
                 "No se encontraron registros en la tabla de producto."
         );
     }
-    
 
-    @Test(
-            enabled = true,
-            description = """
-                          Test que verifica que se puede obtener la descripcion 
-                          y la imagen de una categoria.
-                          """,
-            priority = 0
-    )
-    public void testSelectByCategoria() {
-//        assertNotNull(
-//                M_Producto.selectByCategoria(
-//                        Categoria
-//                                .builder()
-//                                .id_categoria(-1)
-//                                .build()
-//                ),
-//                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
-//        );
-//
-//        assertNotNull(
-//                M_Producto.selectByCategoria(
-//                        Categoria
-//                                .builder()
-//                                .id_categoria(0)
-//                                .estado(Boolean.TRUE)
-//                                .build()
-//                ),
-//                ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
-//        );
-//        
-//        List<Producto> result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-//                        .build()
-//        );
-//
-//        assertNotNull(
-//                result,
-//                "Error al consultar la base de datos."
-//        );
-//
-//        result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-//                        .estado(Boolean.TRUE)
-//                        .build()
-//        );
-//        assertNotNull(
-//                result,
-//                "Se obtuvo resultados en la consulta."
-//        );
-//
-//        result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria1)
-//                        .estado(Boolean.FALSE)
-//                        .build()
-//        );
-//
-//        assertNotNull(
-//                result,
-//                "Se obtuvo resultados en la consulta."
-//        );
-//
-//        result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-//                        .build()
-//        );
-//
-//        assertNotNull(
-//                result.isEmpty(),
-//                "Se obtuvo resultados en la consulta."
-//        );
-//
-//        result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-//                        .estado(Boolean.TRUE)
-//                        .build()
-//        );
-//
-//        assertNotNull(
-//                result.isEmpty(),
-//                "Se obtuvo resultados en la consulta."
-//        );
-//
-//        result = M_Producto.selectByCategoria(
-//                Categoria
-//                        .builder()
-//                        .id_categoria(M_CategoriaNGTest.idCategoria2)
-//                        .estado(Boolean.FALSE)
-//                        .build()
-//        );
-//
-//        assertNotNull(
-//                result,
-//                "Se obtuvo resultados en la consulta."
-//        );
-    }
-    public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS
-            = "Error al consultar la base de datos.";
 
     @Test(
             enabled = true,
             description = "Test encargada de agregar producto al sistema.",
             priority = 2
     )
-    public void testInsert() {
-        Resultado resultado = M_Producto.insert(producto);
+    public static void testInsert() {
+        M_CategoriaNGTest.testInsert();
+        Resultado resultado = M_Producto.insert(producto(Boolean.TRUE));
 
         assertEquals(
                 resultado,
@@ -705,21 +428,6 @@ public class M_ProductoNGTest {
         );
 
         id_producto = resultado.getId();
-
-        try {
-            resultado = M_Producto.insert(producto2);
-        } catch (Exception e) {
-            assertEquals(
-                    resultado,
-                    Resultado
-                            .builder()
-                            .id(-1)
-                            .mensaje(ERROR_AL__INSERTAR__PRODUCTO)
-                            .icono(JOptionPane.ERROR_MESSAGE)
-                            .estado(Boolean.FALSE)
-                            .build()
-            );
-        }
     }
 
     @Test(
@@ -728,7 +436,7 @@ public class M_ProductoNGTest {
             priority = 3
     )
     public void testUpdate() {
-        Resultado result = M_Producto.update(producto);
+        Resultado result = M_Producto.update(producto(Boolean.TRUE));
 
         assertEquals(
                 result,
@@ -772,8 +480,8 @@ public class M_ProductoNGTest {
             description = "",
             priority = 10
     )
-    public void testBorrarProductoPorID() {
-        Resultado result = M_Producto.deleteByID(id_producto);
+    public static void testDeleteByID() {
+        Resultado result = M_Producto.delete(id_producto);
 
         assertEquals(
                 result,
@@ -787,11 +495,7 @@ public class M_ProductoNGTest {
         );
 
         M_Categoria.delete(
-                M_CategoriaNGTest.idCategoria1
-        );
-
-        M_Categoria.delete(
-                M_CategoriaNGTest.idCategoria2
+                M_CategoriaNGTest.idCategoria
         );
     }
 
@@ -820,5 +524,23 @@ public class M_ProductoNGTest {
         assertNotNull(
                 M_Producto.generarCodigoBarra(),
                 "Codigo Barra No generado");
+    }
+    
+    public synchronized static Producto producto(Boolean estado) {
+        return Producto
+                .builder()
+                .id(id_producto)
+                .idCategoria(M_CategoriaNGTest.idCategoria)
+                .codigo(
+                        M_ContactoTel.generarTelMovil().substring(8, 16)
+                )
+                .descripcion(
+                        "Descripcion Prueba %s".formatted(
+                                M_ContactoTel.generarTelMovil().substring(8, 16)
+                        )
+                )
+                .nota("Esta es una prueba del sistema.")
+                .estado(estado)
+                .build();
     }
 }

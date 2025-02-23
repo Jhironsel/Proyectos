@@ -28,7 +28,7 @@ public class M_Motivo_Consulta {
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
             ps.setInt(1, mc.getId());
 
@@ -57,7 +57,7 @@ public class M_Motivo_Consulta {
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             ps.setString(1, m);
             ps.executeUpdate();
             return true;

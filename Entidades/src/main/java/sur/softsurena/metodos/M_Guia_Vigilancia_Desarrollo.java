@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Guia_Vigilancia_Desarrollo;
+import sur.softsurena.entidades.GuiaVigilanciaDesarrollo;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -16,13 +16,13 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_Guia_Vigilancia_Desarrollo {
 
-    public static synchronized List<Guia_Vigilancia_Desarrollo> select() {
+    public static synchronized List<GuiaVigilanciaDesarrollo> select() {
         final String sql = """
                            SELECT ID, EDAD, CARACT_DESARR_EVALUAR
                            FROM T_GUIA_VIGILANCIA_DESARROLLO
                            """;
 
-        List<Guia_Vigilancia_Desarrollo> lista = new ArrayList<>();
+        List<GuiaVigilanciaDesarrollo> lista = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -33,8 +33,7 @@ public class M_Guia_Vigilancia_Desarrollo {
             ResultSet rs = ps.executeQuery();
             
             while(rs.next()){
-                lista.add(
-                        Guia_Vigilancia_Desarrollo
+                lista.add(GuiaVigilanciaDesarrollo
                                 .builder()
                                 .id(rs.getInt("ID"))
                                 .edad(rs.getInt("EDAD"))

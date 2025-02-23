@@ -126,7 +126,7 @@ public class M_ContactoTelNGTest {
     )
     public void testGetTelefonoByID() {
         List result = M_ContactoTel.getTelefonoByID(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
         );
         
         assertFalse(
@@ -193,10 +193,10 @@ public class M_ContactoTelNGTest {
         return ContactoTel
                 .builder()
                 .id(idContactoTel)
-                .id_persona(M_PersonaNGTest.persona(Boolean.FALSE).getId_persona())
+                .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
                 .telefono(M_ContactoTel.generarTelMovil())
                 .tipo("Telefono")
-                .por_defecto(Boolean.TRUE)
+                .porDefecto(Boolean.TRUE)
                 .estado(Boolean.TRUE)
                 .build();
     }

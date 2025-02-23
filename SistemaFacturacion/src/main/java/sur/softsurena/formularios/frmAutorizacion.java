@@ -25,7 +25,7 @@ public class frmAutorizacion extends javax.swing.JDialog {
                 "localhost",
                 "3050"
         );
-        this.aceptar = Conexion.verificar().getEstado();
+        frmAutorizacion.aceptar = Conexion.verificar().getEstado();
     }
 
     public static frmAutorizacion getInstance(Frame parent, boolean modal) {

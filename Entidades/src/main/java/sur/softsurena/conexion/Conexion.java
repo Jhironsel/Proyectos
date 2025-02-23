@@ -58,7 +58,8 @@ public class Conexion {
                 .append(dominio)
                 .append(p)
                 .append("/")
-                .append(pathBaseDatos);
+                .append(pathBaseDatos)
+                .append("?wireEncryption=chacha64");
 
         return ConexionHolder.INSTANCE;
     }

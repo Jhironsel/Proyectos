@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Estudiante;
 import sur.softsurena.metodos.M_Estudiante;
+import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmModificarEstudiante extends javax.swing.JInternalFrame {
@@ -349,39 +351,29 @@ public class frmModificarEstudiante extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_formInternalFrameActivated
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        Integer mes = dchFechaNacimientoEstudiante.getCalendar().get(Calendar.MONTH) + 1;
-        String mes2;
-        if (mes <= 9) {
-            mes2 = "0" + mes;
-        } else {
-            mes2 = "" + mes;
-        }
-
-        Estudiante estudiante
-                = Estudiante
+        Resultado resultado = M_Persona.update(
+                Persona
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(0)
-                                        .pnombre(txtNombreEstudiante.getText())
-                                        .snombre("")
-                                        .apellidos(txtApellidosEstudiantes.getText())
-                                        .sexo('F')
-                                        .fecha_nacimiento(
-                                                new java.sql.Date(
-                                                        dchFechaNacimientoEstudiante
-                                                                .getCalendar().getTimeInMillis()
-                                                )
-                                        )
-                                        .estado(jcbEstado.isSelected())
-                                        .build()
+                        .idPersona(0)
+                        .pnombre(txtNombreEstudiante.getText())
+                        .snombre("")
+                        .apellidos(txtApellidosEstudiantes.getText())
+                        .sexo('F')
+                        .fecha_nacimiento(
+                                new java.sql.Date(
+                                        dchFechaNacimientoEstudiante
+                                                .getCalendar().getTimeInMillis()
+                                )
                         )
-                        .build();
+                        .estado(jcbEstado.isSelected())
+                        .build()
+        );
 
         JOptionPane.showMessageDialog(
                 this,
-                M_Estudiante.update(estudiante)
+               resultado.getMensaje(),
+               "",
+               resultado.getIcono()
         );
         cerrar();
     }//GEN-LAST:event_btnGuardarActionPerformed

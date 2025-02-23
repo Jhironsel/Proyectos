@@ -21,6 +21,48 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Medicamento {
 
     /**
+     * Metodo que devuelve una lista de medicamento registrado en el sistema.
+     *
+     * @return
+     */
+    public synchronized static List<Medicamento> select() {
+        final String sql = """
+                           SELECT ID, DESCRIPCION 
+                           FROM V_PRODUCTOS 
+                           WHERE estado 
+                           ORDER BY 2
+                           """;
+
+        List<Medicamento> medicamentoList = new ArrayList<>();
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                medicamentoList.add(
+                        Medicamento
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .descripcion(rs.getString("DESCRIPCION"))
+                                .build()
+                );
+            }
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return medicamentoList;
+    }
+//------------------------------------------------------------------------------
+    
+    /**
      * TODO 06/12/2024 este metodo esta pensando en modificar los medicamentos
      * registrados en el sistema.
      *
@@ -28,7 +70,7 @@ public class M_Medicamento {
      *
      * @return
      */
-    public synchronized static Resultado modificarMedicamento(
+    public synchronized static Resultado update(
             @NonNull Medicamento medicamento
     ) {
         final String sql = "";
@@ -37,7 +79,7 @@ public class M_Medicamento {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
             ps.setInt(1, medicamento.getId_proveedor());
@@ -74,97 +116,4 @@ public class M_Medicamento {
             = "Error al modificar Medicamento...";
     public static final String MEDICAMENTO_MODIFICADO_CORRECTAMENTE
             = "Medicamento modificado correctamente";
-//------------------------------------------------------------------------------
-
-    /**
-     * Metodo que devuelve una lista de medicamento registrado en el sistema.
-     *
-     * @return
-     */
-    public synchronized static List<Medicamento> getMedicamentoActivo() {
-        final String sql = """
-                           SELECT ID, DESCRIPCION 
-                           FROM V_PRODUCTOS 
-                           WHERE estado 
-                           ORDER BY 2
-                           """;
-
-        List<Medicamento> medicamentoList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                medicamentoList.add(
-                        Medicamento
-                                .builder()
-                                .id(rs.getInt("ID"))
-                                .descripcion(rs.getString("DESCRIPCION"))
-                                .build()
-                );
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return medicamentoList;
-    }
-
-//------------------------------------------------------------------------------
-    /**
-     *
-     * @param idMedicamento
-     * @return
-     */
-    public synchronized static ResultSet getMedicamentoFoto(String idMedicamento) {
-
-        final String sql
-                = "SELECT FOTO "
-                + "FROM V_MEDICAMENTOS "
-                + "WHERE idMedicamento = ?";
-        try (PreparedStatement ps = getCnn().prepareStatement(sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-            ps.setString(1, idMedicamento);
-            return ps.executeQuery();
-
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-//------------------------------------------------------------------------------
-    /**
-     *
-     * @param estado
-     * @return
-     */
-    public synchronized static ResultSet getMedicamento(boolean estado) {
-        final String sql = "SELECT CODIGO_PROVEEDOR, IDMEDICAMENTO, "
-                + "          NOMBREMEDICAMENTO, ESTADO "
-                + "   FROM GET_MEDICAMENTO"
-                + "   WHERE ESTADO IS ? ORDER BY 1, 3";
-        try (PreparedStatement ps = getCnn().prepareStatement(sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
-            ps.setBoolean(1, estado);
-
-            return ps.executeQuery();
-
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
-    }
 }

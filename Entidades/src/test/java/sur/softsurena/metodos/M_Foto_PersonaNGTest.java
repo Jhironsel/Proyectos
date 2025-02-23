@@ -8,7 +8,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.FotoPersona;
 import sur.softsurena.utilidades.Resultado;
@@ -84,12 +83,7 @@ public class M_Foto_PersonaNGTest {
         Resultado result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(resultado.getId())
-                                        .build()
-                        )
+                        .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("ejemplo.png")
@@ -112,12 +106,7 @@ public class M_Foto_PersonaNGTest {
         result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(resultado.getId())
-                                        .build()
-                        )
+                        .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("ejemplo.png")
@@ -144,12 +133,7 @@ public class M_Foto_PersonaNGTest {
         result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(resultado.getId())
-                                        .build()
-                        )
+                        .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("ejemplo.png")
@@ -183,12 +167,7 @@ public class M_Foto_PersonaNGTest {
                 FotoPersona
                         .builder()
                         .id(idfoto)
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(idPersona2)
-                                        .build()
-                        )
+                        .idPersona(idPersona2)
                         .foto("")
                         .actual(Boolean.TRUE)
                         .build()
@@ -238,12 +217,7 @@ public class M_Foto_PersonaNGTest {
                 M_Foto_Persona.deleteById_persona(
                         FotoPersona
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .id_persona(idPersona)
-                                                .build()
-                                )
+                                .idPersona(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -292,12 +266,7 @@ public class M_Foto_PersonaNGTest {
                 M_Foto_Persona.sqlSelect(
                         FotoPersona
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .id_persona(1)
-                                                .build()
-                                )
+                                .idPersona(1)
                                 .build()
                 ),
                 """
@@ -312,12 +281,7 @@ public class M_Foto_PersonaNGTest {
                         FotoPersona
                                 .builder()
                                 .id(1)
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .id_persona(1)
-                                                .build()
-                                )
+                                .idPersona(1)
                                 .build()
                 ),
                 """

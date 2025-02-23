@@ -13,56 +13,40 @@ import sur.softsurena.abstracta.Persona;
 public class M_Factura {
 
     private final Integer id;
-    private final Cliente cliente;
-    private final ContactoTel contactoTel;
-    private final Direccion direccion;
-    private final ContactoEmail contactoEmail;
-    private final Turno turno;
+    private final Integer idCliente;
+    private final Integer idContactoTel;
+    private final Integer idContactoDir;
+    private final Integer idContactoEmail;
+    private final Integer idTurno;
     private final Timestamp fechaHora;
     private final Character estadoFactura;
     private final String nombreTemporal;
     private final String userName;
+    
+    private final Paginas pagina;
 
     @Override
     public String toString() {
-        return cliente.toString();
+        return id.toString();
     }
 
     public static M_Factura getM_FacturaTest() {
         return M_Factura
                 .builder()
                 .id(0)
-                .contactoTel(
-                        ContactoTel
-                                .builder()
-                                .id(0)
-                                .build()
-                )
-                .contactoEmail(
-                        ContactoEmail
-                                .builder()
-                                .id(0)
-                                .build()
-                )
-                .direccion(
-                        Direccion
-                                .builder()
-                                .id(0)
-                                .build()
-                )
-                .turno(//1
-                        Turno
-                                .builder()
-                                .id(0)
-                                .build()
-                )
+                .idCliente(0)
+                .idContactoTel(0)
+                .idContactoDir(0)
+                .idContactoEmail(0)
+                .idTurno(0)
                 .fechaHora(
                         new Timestamp(
                                 new GregorianCalendar()
                                         .getTimeInMillis()
                         )
                 )
-                .estadoFactura('e')
+                .estadoFactura('n')
+                .nombreTemporal("")
                 .build();
     }
 }

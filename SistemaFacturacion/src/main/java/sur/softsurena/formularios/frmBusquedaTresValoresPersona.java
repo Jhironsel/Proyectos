@@ -1,11 +1,33 @@
 package sur.softsurena.formularios;
 
 import java.awt.Color;
+import java.awt.Frame;
 import sur.softsurena.utilidades.CustomFont;
 
 public class frmBusquedaTresValoresPersona extends javax.swing.JDialog {
 
-    public frmBusquedaTresValoresPersona(java.awt.Frame parent, boolean modal) {
+    private static final long serialVersionUID = 1L;
+    
+    private static Frame parent;
+    private static boolean modal;
+
+    public static frmBusquedaTresValoresPersona getInstance(
+            Frame parent, boolean modal
+    ) {
+        frmBusquedaTresValoresPersona.parent = parent;
+        frmBusquedaTresValoresPersona.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmBusquedaTresValoresPersona INSTANCE = 
+                new frmBusquedaTresValoresPersona(
+                        frmBusquedaTresValoresPersona.parent, 
+                        frmBusquedaTresValoresPersona.modal
+                );
+    }
+    private frmBusquedaTresValoresPersona(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         jPanel2.removeAll();

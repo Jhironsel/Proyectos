@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -9,7 +10,25 @@ import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 
 public class frmCambioClave extends javax.swing.JDialog {
 
-    public frmCambioClave(java.awt.Frame parent, boolean modal) {
+    private static final long serialVersionUID = 1L;
+    private static Frame parent;
+    private static boolean modal;
+
+    public static frmCambioClave getInstance(Frame parent, boolean modal) {
+        frmCambioClave.parent = parent;
+        frmCambioClave.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmCambioClave INSTANCE = new frmCambioClave(
+                frmCambioClave.parent,
+                frmCambioClave.modal
+        );
+    }
+    
+    private frmCambioClave(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         Imagenes icon = new Imagenes("Panel de Control 128 x 128.png");

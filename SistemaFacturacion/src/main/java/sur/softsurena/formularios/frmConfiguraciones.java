@@ -1,8 +1,30 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
+
 public class frmConfiguraciones extends javax.swing.JDialog {
 
-    public frmConfiguraciones(java.awt.Frame parent, boolean modal) {
+    private static final long serialVersionUID = 1L;
+    private static Frame parent;
+    private static boolean modal;
+    
+    public static frmConfiguraciones getInstance(Frame parent, boolean modal) {
+        frmConfiguraciones.parent = parent;
+        frmConfiguraciones.modal = modal;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmConfiguraciones INSTANCE 
+                = new frmConfiguraciones(
+                        frmConfiguraciones.parent, 
+                        frmConfiguraciones.modal
+                );
+    }
+
+    private frmConfiguraciones(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

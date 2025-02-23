@@ -1,6 +1,5 @@
 package sur.softsurena.formularios;
 
-import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -42,7 +41,7 @@ public class frmPonerTemporalNGTest {
                           """
     )
     public void testRepararRegistro2() {
-        frmPonerTemporal instance = new frmPonerTemporal(null, true);
+        frmPonerTemporal instance = frmPonerTemporal.getInstance(null, true);
         instance.repararRegistro2();
     }
     

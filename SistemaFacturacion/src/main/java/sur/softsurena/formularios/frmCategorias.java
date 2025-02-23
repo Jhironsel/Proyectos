@@ -28,13 +28,25 @@ public class frmCategorias extends javax.swing.JDialog {
     private int respuestaFileChooser = JFileChooser.CANCEL_OPTION;
     private String nombreCategoria;
     private File imagenCategoria;
-    private final frmPrincipal principal;
+    private static frmPrincipal principal;
+    private static boolean modal;
 
-    public frmCategorias(frmPrincipal parent, boolean modal) {
+    public static frmCategorias getInstance(frmPrincipal parent, boolean modal) {
+        principal = parent;
+        frmCategorias.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+        private static final frmCategorias INSTANCE = new frmCategorias (
+                principal, modal
+        );
+    }
+    
+    private frmCategorias(frmPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarCombo();
-        principal = parent;
     }
 
     @SuppressWarnings("unchecked")
@@ -262,7 +274,7 @@ public class frmCategorias extends javax.swing.JDialog {
 
         estado = categoria.getEstado();
 
-        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
+        frmCategoriasAdmin miCategoria = frmCategoriasAdmin.getInstance(
                 principal, nombreCategoria, estado, false
         );
 
@@ -314,7 +326,7 @@ public class frmCategorias extends javax.swing.JDialog {
                 )
         );
 
-        frmCategoriasAdmin miCategoria = new frmCategoriasAdmin(
+        frmCategoriasAdmin miCategoria = frmCategoriasAdmin.getInstance(
                 principal, "", false, true
         );
         miCategoria.setVisible(true);
@@ -404,7 +416,6 @@ public class frmCategorias extends javax.swing.JDialog {
                 .builder()
                 .id_categoria(nuevo ? -1 : idCategoria)
                 .descripcion(nombreCategoria.strip())
-                .pathImage(imagenCategoria)
                 .estado(estado)
                 .build();
         if (nuevo) {

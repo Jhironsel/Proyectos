@@ -1,6 +1,7 @@
 package sur.softsurena.formularios;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -9,11 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
-import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
 import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.entidades.Turno;
-import static sur.softsurena.metodos.M_M_Factura.agregarFacturaNombre;
+import sur.softsurena.metodos.M_M_Factura;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Resultado;
 
@@ -24,10 +24,28 @@ public class frmPonerTemporal extends java.awt.Dialog {
     private String nombreCliente, userName;
     private Integer idFactura, idCliente, idTurno;
     private DefaultTableModel miTabla;
-    private Factura facturas;
+    //private Factura facturas;
     private final DefaultTableCellRenderer tcr;
+    
+    private static Frame parent;
+    private static boolean modal;
+    
+    public static frmPonerTemporal getInstance(Frame parent, boolean modal) {
+        frmPonerTemporal.parent = parent;
+        frmPonerTemporal.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmPonerTemporal(java.awt.Frame parent, boolean modal) {
+        private static final frmPonerTemporal INSTANCE = 
+                new frmPonerTemporal(
+                        frmPonerTemporal.parent,
+                        frmPonerTemporal.modal
+                );
+    }
+
+    private frmPonerTemporal(Frame parent, boolean modal) {
         super(parent, modal);
 
         initComponents();
@@ -145,36 +163,18 @@ public class frmPonerTemporal extends java.awt.Dialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        Resultado resultado = agregarFacturaNombre(
-                Factura
-                        .builder()
-                        .id(idFactura)
-                        .m_factura(
-                                M_Factura
-                                        .builder()
-                                        .cliente(
-                                                Cliente
-                                                        .builder()
-                                                        .persona(
-                                                                Persona
-                                                                        .builder()
-                                                                        .id_persona(idCliente)
-                                                                        .build()
-                                                        )
-                                                        .build()
-                                        )
-                                        .turno(
-                                                Turno
-                                                        .builder()
-                                                        .id(idTurno)
-                                                        .build()
-                                        )
-                                        .estadoFactura('t')
-                                        .userName(userName)
-                                        .nombreTemporal(nombreCliente)
-                                        .build()
-                        ).build()
-        );
+        Resultado resultado = 
+                M_M_Factura.insert(
+                        M_Factura
+                                .builder()
+                                .id(idFactura)
+                                .idCliente(idCliente)
+                                .idTurno(idTurno)
+                                .estadoFactura('t')
+                                .userName(userName)
+                                .nombreTemporal(nombreCliente)
+                                .build()
+                );
         
         if (!resultado.getEstado()) {
             JOptionPane.showMessageDialog(
@@ -186,7 +186,7 @@ public class frmPonerTemporal extends java.awt.Dialog {
             return;
         } else {
             
-            for (D_Factura d_factura : facturas.getD_factura()) {
+//            for (D_Factura d_factura : facturas.getD_factura()) {
 //                if (agregarDetalleFactura(f) == -1) {
 //                    borrarFactura(idFactura);
 //                    JOptionPane.showMessageDialog(
@@ -197,7 +197,7 @@ public class frmPonerTemporal extends java.awt.Dialog {
 //                    );
 //                    return;
 //                }
-            }
+//            }
             
         }
         setVisible(false);

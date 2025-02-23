@@ -1,10 +1,22 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.entidades.Sexo;
 import static sur.softsurena.metodos.M_Sexo.getSexoList;
 
 public class frmRegistroSistema extends javax.swing.JFrame {
 
-    public frmRegistroSistema() {
+    private static final long serialVersionUID = 1L;
+    
+    public static frmRegistroSistema getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmRegistroSistema INSTANCE = new frmRegistroSistema();
+    }
+
+    private frmRegistroSistema() {
         initComponents();
 
         jcbSexo.removeAllItems();
@@ -25,7 +37,7 @@ public class frmRegistroSistema extends javax.swing.JFrame {
         txtCedula_F = new javax.swing.JFormattedTextField();
         txtTelefono_F = new javax.swing.JFormattedTextField();
         txtMovil_F = new javax.swing.JFormattedTextField();
-        jcbSexo = new javax.swing.JComboBox();
+        jcbSexo = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         txtNombres1 = new javax.swing.JTextField();
         txtCedula_F1 = new javax.swing.JFormattedTextField();
@@ -260,7 +272,7 @@ public class frmRegistroSistema extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JComboBox jcbSexo;
+    private javax.swing.JComboBox<Sexo> jcbSexo;
     private newscomponents.RSButtonGradientIcon_new rSButtonGradientIcon_new1;
     private newscomponents.RSButtonGradientIcon_new rSButtonGradientIcon_new2;
     private javax.swing.JTextField txtApellidos;

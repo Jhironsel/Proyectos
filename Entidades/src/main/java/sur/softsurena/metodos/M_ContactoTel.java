@@ -33,10 +33,10 @@ public class M_ContactoTel {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, contacto.getId_persona());
+            ps.setInt(1, contacto.getIdPersona());
             ps.setString(2, contacto.getTelefono());
             ps.setString(3, contacto.getTipo());
-            ps.setBoolean(4, contacto.getPor_defecto());
+            ps.setBoolean(4, contacto.getPorDefecto());
 
             @Cleanup
             ResultSet rs = ps.executeQuery();
@@ -56,7 +56,7 @@ public class M_ContactoTel {
                     Level.SEVERE,
                     ERROR_AL_EJECUTAR_EL_SP_I_CONTACTO_TEL_EN
                             .concat(" Id Persona: ")
-                            .concat(contacto.getId_persona().toString())
+                            .concat(contacto.getIdPersona().toString())
                             .concat("\n")
                             .concat(sql),
                     ex
@@ -91,13 +91,13 @@ public class M_ContactoTel {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(      1, contacto.getId());
             ps.setString(   2, contacto.getTelefono());
             ps.setString(   3, contacto.getTipo());
             ps.setBoolean(  4, contacto.getEstado());
-            ps.setBoolean(  5, contacto.getPor_defecto());
+            ps.setBoolean(  5, contacto.getPorDefecto());
             
             ps.execute();
             
@@ -135,7 +135,7 @@ public class M_ContactoTel {
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, id);
             
@@ -197,7 +197,7 @@ public class M_ContactoTel {
                                 .tipo(rs.getString("TIPO"))
                                 .fecha(rs.getDate("FECHA"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                .por_defecto(rs.getBoolean("POR_DEFECTO"))
+                                .porDefecto(rs.getBoolean("POR_DEFECTO"))
                                 .build()
                 );
             }

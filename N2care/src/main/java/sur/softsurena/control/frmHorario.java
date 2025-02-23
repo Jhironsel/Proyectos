@@ -8,10 +8,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import sur.softsurena.entidades.Control_Consulta;
+import sur.softsurena.entidades.ControlConsulta;
 import sur.softsurena.entidades.Doctor;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
-import sur.softsurena.metodos.M_Control_Consulta;
+import sur.softsurena.metodos.M_ControlConsulta;
 
 public class frmHorario extends javax.swing.JInternalFrame {
 
@@ -326,7 +326,7 @@ public class frmHorario extends javax.swing.JInternalFrame {
 
         Object registro[] = new Object[4];
 
-        M_Control_Consulta.getHorario(idUsuario.trim()).stream().forEach(
+        M_ControlConsulta.getHorario(idUsuario.trim()).stream().forEach(
                 horario ->{
                 
                 }

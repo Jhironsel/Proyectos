@@ -2,7 +2,6 @@ package sur.softsurena.entidades;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import javax.swing.ImageIcon;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -13,7 +12,6 @@ public class Metrica {
 
     private final Integer id;
     private final Consulta consulta;
-    private final Timestamp fecha;
     private final BigDecimal pesoKG;
     private final BigDecimal estaturaM;
     private final BigDecimal escefalo;
@@ -36,7 +34,6 @@ public class Metrica {
         sb.append("Metrica{");
         sb.append("id=").append(id);
         sb.append(", consulta=").append(consulta);
-        sb.append(", fecha=").append(fecha);
         sb.append(", pesoKG=").append(pesoKG);
         sb.append(", estaturaM=").append(estaturaM);
         sb.append(", escefalo=").append(escefalo);

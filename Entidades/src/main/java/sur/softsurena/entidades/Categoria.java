@@ -11,11 +11,9 @@ public class Categoria implements Comparable {
     
     private final Integer id_categoria;
     private final String descripcion;
-    private final File pathImage;
-    private final String image_texto;
     private final Date fecha_creacion;
+    private final String image_texto;
     private final Boolean estado;
-    private final String idUsuario;
 
     @Override
     public String toString() {

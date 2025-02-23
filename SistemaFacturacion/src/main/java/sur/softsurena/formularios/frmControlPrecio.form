@@ -8,7 +8,6 @@
     <Property name="title" type="java.lang.String" value="Control de precio de producto"/>
     <Property name="toolTipText" type="java.lang.String" value="Sistema de control de precio."/>
     <Property name="doubleBuffered" type="boolean" value="true"/>
-    <Property name="maximum" type="boolean" value="true"/>
     <Property name="selected" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>

@@ -15,8 +15,17 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
     private static final long serialVersionUID = 1L;
 
     private final File file;
+    
+    public static frmEmpresaDatos getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmEmpresaDatos() throws IOException {
+        private static final frmEmpresaDatos INSTANCE = new frmEmpresaDatos();
+    }
+
+    private frmEmpresaDatos() {
         initComponents();
         file = new File("ArchivosConfiguracion/Empresa.ini");
     }
@@ -232,9 +241,7 @@ public class frmEmpresaDatos extends javax.swing.JInternalFrame {
             try {
                 file.createNewFile();
             } catch (IOException ex) {
-                LOG.getLogger(
-                        frmEmpresaDatos.class.getName()
-                ).log(
+               LOG.log(
                         Level.SEVERE, 
                         "No puede leerse el archivo Empresa.ini", 
                         ex

@@ -11,8 +11,6 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Categoria;
-import sur.softsurena.entidades.Imagen;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -22,7 +20,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Producto {
-
+    
     /**
      * Metodo que permite recuperar las propiedades de los productos del
      * sistema. Devolviendo asi un Listado de productos con todas sus
@@ -54,23 +52,10 @@ public class M_Producto {
                                     .builder()
                                     .id(rs.getInt("ID"))
                                     .descripcion(rs.getString("DESCRIPCION"))
-                                    .categoria(
-                                            Categoria
-                                                    .builder()
-                                                    .id_categoria(rs.getInt("ID_CATEGORIA"))
-                                                    .descripcion(rs.getString("DESC_CATEGORIA"))
-                                                    .image_texto(rs.getString("IMAGEN_CATEGORIA"))
-                                                    .build()
-                                    )
+                                    .idCategoria(rs.getInt("ID_CATEGORIA"))
                                     .codigo(rs.getString("CODIGO"))
                                     .nota(rs.getString("NOTA"))
                                     .fechaCreacion(rs.getDate("FECHA_CREACION"))
-                                    .imagen(
-                                            Imagen
-                                                    .builder()
-                                                    .imagen64(rs.getString("IMAGEN_PRODUCTO"))
-                                                    .build()
-                                    )
                                     .estado(rs.getBoolean("ESTADO"))
                                     .existencia(rs.getBigDecimal("EXISTENCIA"))
                                     .build()
@@ -91,22 +76,14 @@ public class M_Producto {
 
     protected static String sqlProductos(Producto producto) {
         Boolean f_id = Objects.isNull(producto.getId());
-        Boolean f_estado = Objects.isNull(producto.getEstado());
-
+        Boolean f_categoria = Objects.isNull(producto.getIdCategoria());
         Boolean f_codigo = Objects.isNull(producto.getCodigo());
         Boolean f_descripcion = Objects.isNull(producto.getDescripcion());
-        Boolean f_categoria = Objects.isNull(producto.getCategoria());
+        Boolean f_estado = Objects.isNull(producto.getEstado());
 
-        Integer f_idCategoria = null;
-        String f_categoriaDescripcion = null;
-        if (!f_categoria) {
-            f_idCategoria = producto.getCategoria().getId_categoria();
-            f_categoriaDescripcion = producto.getCategoria().getDescripcion();
-        }
+        Boolean f_criterio = f_codigo && f_descripcion;
 
-        Boolean f_criterio = f_codigo && f_descripcion && f_categoria || Objects.isNull(f_categoriaDescripcion);
-
-        Boolean f_where = (f_id && f_estado && f_criterio && Objects.isNull(f_idCategoria));
+        Boolean f_where = (f_id && f_estado && f_criterio && f_categoria);
         Boolean f_row = Objects.isNull(producto.getPagina());
 
         String r1 = (f_where ? "" : "WHERE ");
@@ -117,34 +94,27 @@ public class M_Producto {
                                        %sTRIM(CODIGO) STARTING WITH TRIM('%s') OR
                                                               TRIM(CODIGO) CONTAINING TRIM('%s') OR
                                                               TRIM(DESCRIPCION) STARTING WITH TRIM('%s') OR
-                                                              TRIM(DESCRIPCION) CONTAINING TRIM('%s') OR
-                                                              ID_CATEGORIA IN(
-                                                                             SELECT ID
-                                                                             FROM VS_CATEGORIAS
-                                                                             WHERE UPPER(TRIM(DESCRIPCION)) STARTING WITH UPPER(TRIM('%s'))
-                                                              ) 
+                                                              TRIM(DESCRIPCION) CONTAINING TRIM('%s')
                                        """.formatted(
                 f_id && f_estado ? "" : "OR ",
                 producto.getCodigo(),
                 producto.getCodigo(),
                 producto.getDescripcion(),
-                producto.getDescripcion(),
-                f_categoriaDescripcion
+                producto.getDescripcion()
         ));
-        String r6 = Objects.isNull(f_idCategoria) ? 
+        String r6 = f_categoria ? 
                 "":
                 "%sID_CATEGORIA = %d ".formatted(
                         f_estado ? "":"AND ",
-                        f_idCategoria
+                        producto.getIdCategoria()
                 ).trim().strip();
 
         final String sql = """
-                SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, 
-                NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, 
-                ESTADO 
-                FROM GET_PRODUCTOS
-                %S%S%S%S%S%S
-                """.strip().trim().formatted(r1, r2, r3, r4, r5, r6).strip().trim()
+                           SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION, 
+                            EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                           FROM V_PRODUCTOS
+                           %S%S%S%S%S%S
+                           """.strip().trim().formatted(r1, r2, r3, r4, r5, r6).strip().trim()
                 .concat("\nORDER BY ID").strip().trim()
                 .concat(
                         f_row ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
@@ -161,64 +131,6 @@ public class M_Producto {
 
 //------------------------------------------------------------------------------
     /**
-     * Permite obtener los productos del sistema por una categoria identificada
-     * por su ID y su estado definido por el sistema.
-     *
-     * TODO 03/01/2025 Se esta utilizando select de esta clase por este metodo 
-     * selectByCategoria. Vigilar si el metodo select resulta fatible en cuanto 
-     * a velocidad de consulta.
-     *
-     * @param categoria
-     *
-     * @return
-     */
-//    public synchronized static List<Producto> selectByCategoria(
-//            @NonNull Categoria categoria
-//    ) {
-//        final String sql
-//                = "SELECT ID, DESCRIPCION, IMAGEN_PRODUCTO "
-//                + "FROM GET_PRODUCTOS "
-//                + "WHERE ID_CATEGORIA = ? " + (Objects.isNull(categoria.getEstado()) ? ";" : (categoria.getEstado() ? " AND ESTADO;" : " AND ESTADO IS FALSE;"));
-//
-//        List<Producto> productosList = new ArrayList<>();
-//
-//        try (PreparedStatement ps = getCnn().prepareStatement(
-//                sql,
-//                ResultSet.TYPE_FORWARD_ONLY,
-//                ResultSet.CONCUR_READ_ONLY,
-//                ResultSet.HOLD_CURSORS_OVER_COMMIT
-//        )) {
-//            ps.setInt(1, categoria.getId_categoria());
-//
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                productosList.add(
-//                        Producto
-//                                .builder()
-//                                .id(rs.getInt("ID"))
-//                                .descripcion(rs.getString("DESCRIPCION"))
-//                                .imagen(
-//                                        Imagen
-//                                                .builder()
-//                                                .imagen64(rs.getString("IMAGEN_PRODUCTO"))
-//                                                .build()
-//                                )
-//                                .build()
-//                );
-//            }
-//
-//        } catch (SQLException ex) {
-//            LOG.log(
-//                    Level.SEVERE,
-//                    "Error al consultar la vista GET_PRODUCTOS del sistema.",
-//                    ex
-//            );
-//        }
-//        return productosList;
-//    }
-
-//------------------------------------------------------------------------------
-    /**
      * Agregar producto a la base de datos en la tabla productos.
      *
      * @test agregarProducto() metodo que realiza la prueba unitaria del metodo.
@@ -231,7 +143,7 @@ public class M_Producto {
      */
     public synchronized static Resultado insert(Producto producto) {
         final String sql
-                = "SELECT O_ID FROM SP_I_PRODUCTO(?,?,?,?,?,?)";
+                = "SELECT O_ID FROM SP_I_PRODUCTO(?,?,?,?,?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -239,12 +151,11 @@ public class M_Producto {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, producto.getCategoria().getId_categoria());
+            ps.setInt(1, producto.getIdCategoria());
             ps.setString(2, producto.getCodigo());
             ps.setString(3, producto.getDescripcion());
-            ps.setString(4, producto.getImagen().getImagen64());
-            ps.setString(5, producto.getNota());
-            ps.setBoolean(6, producto.getEstado());
+            ps.setString(4, producto.getNota());
+            ps.setBoolean(5, producto.getEstado());
 
             ResultSet rs = ps.executeQuery();
 
@@ -287,27 +198,26 @@ public class M_Producto {
      *
      * Metodo actualizado el dia 23 de abril, segun la vista productos.
      *
-     * @param p perteneciente a la clase Producto, define los productos del
+     * @param producto contiene los atributos del producto actualizar en el
      * sistema.
      *
      * @return
      */
-    public synchronized static Resultado update(Producto p) {
+    public synchronized static Resultado update(Producto producto) {
         final String sql
-                = "EXECUTE PROCEDURE SP_U_PRODUCTO (?, ?, ?, ?, ?, ?, ?)";
+                = "EXECUTE PROCEDURE SP_U_PRODUCTO(?,?,?,?,?,?)";
         try (CallableStatement ps = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, p.getId());
-            ps.setInt(2, p.getCategoria().getId_categoria());
-            ps.setString(3, p.getCodigo());
-            ps.setString(4, p.getDescripcion());
-            ps.setString(5, p.getImagen().getImagen64());
-            ps.setString(6, p.getNota());
-            ps.setBoolean(7, p.getEstado());
+            ps.setInt(1, producto.getId());
+            ps.setInt(2, producto.getIdCategoria());
+            ps.setString(3, producto.getCodigo());
+            ps.setString(4, producto.getDescripcion());
+            ps.setString(5, producto.getNota());
+            ps.setBoolean(6, producto.getEstado());
 
             ps.executeUpdate();
             return Resultado
@@ -432,14 +342,14 @@ public class M_Producto {
      *
      * @return Devuelve un mensaje que indica como resultado de la acción.
      */
-    public synchronized static Resultado deleteByID(Integer ID) {
+    public synchronized static Resultado delete(Integer ID) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_PRODUCTO(?)";
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT)) {
+                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             cs.setInt(1, ID);
 
             cs.execute();

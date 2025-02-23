@@ -1,8 +1,12 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
+
 public class frmDetalleQuitarEliminar extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
+    private static Frame parent;
+    private static boolean modal;
     
     private int opcion = 3;
 
@@ -15,7 +19,28 @@ public class frmDetalleQuitarEliminar extends javax.swing.JDialog {
     }
     
     
-    public frmDetalleQuitarEliminar(java.awt.Frame parent, boolean modal) {
+    public static frmDetalleQuitarEliminar getInstance(
+            Frame parent, boolean modal
+    ) {
+        frmDetalleQuitarEliminar.parent = parent;
+        frmDetalleQuitarEliminar.modal = modal;
+        
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmDetalleQuitarEliminar INSTANCE
+                = new frmDetalleQuitarEliminar(
+                        frmDetalleQuitarEliminar.parent,
+                        frmDetalleQuitarEliminar.modal
+                );
+    }
+    
+    
+    private frmDetalleQuitarEliminar(
+            Frame parent, boolean modal
+    ) {
         super(parent, modal);
         initComponents();
     }
@@ -89,7 +114,7 @@ public class frmDetalleQuitarEliminar extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -97,6 +122,8 @@ public class frmDetalleQuitarEliminar extends javax.swing.JDialog {
                     .addComponent(jLabel2))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnCancelar, btnEliminar});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

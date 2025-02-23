@@ -1,15 +1,21 @@
 package sur.softsurena.formularios;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Deuda;
+import sur.softsurena.entidades.Generales;
+import sur.softsurena.metodos.M_Deuda;
+import sur.softsurena.metodos.M_Generales;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -20,15 +26,30 @@ public class frmPagosDeudas extends javax.swing.JDialog {
     private DefaultTableModel miTabla;
     private int cliAct;
     private final DefaultTableCellRenderer tcr;
+    private static Frame parent;
+    private static boolean modal;
+    private static Integer idDeuda;
 
-    public frmPagosDeudas(
-            java.awt.Frame parent, 
-            boolean modal, 
-            int idDeuda,
-            String txtIDCliente, 
-            JTextField txtNombres, 
-            JTextField txtApellidos,
-            Object monto
+    public static frmPagosDeudas getInstance(
+            Frame parent, boolean modal, Integer idDeuda
+    ) {
+        frmPagosDeudas.parent = parent;
+        frmPagosDeudas.modal = modal;
+        frmPagosDeudas.idDeuda = idDeuda;
+
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmPagosDeudas INSTANCE = new frmPagosDeudas(
+                frmPagosDeudas.parent, frmPagosDeudas.modal,
+                frmPagosDeudas.idDeuda
+        );
+    }
+
+    private frmPagosDeudas(
+            Frame parent, boolean modal, Integer idDeuda
     ) {
         super(parent, modal);
         initComponents();
@@ -36,22 +57,37 @@ public class frmPagosDeudas extends javax.swing.JDialog {
 
         txtIdDeuda.setText("" + idDeuda);
 
-//        "SELECT SUM(r.MONTO) "
-//                + "FROM TABLA_PAGO_DEUDAS_EXTERNA r WHERE r.IDDEUDA = " + idDeuda
+        Deuda deuda = M_Deuda.select(
+                Deuda
+                        .builder()
+                        .id(idDeuda)
+                        .build()
+        ).getFirst();
+
+        txtMontoPagado.setValue("0.00");
+
+        this.txtCedula.setValue(
+                M_Generales.select(
+                        Generales
+                                .builder()
+                                .idPersona(deuda.getIdCliente())
+                                .build()
+                ).getFirst()
+        );
         
-        ResultSet rs = null;
+        Persona persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(deuda.getIdCliente())
+                        .build()
+        ).getFirst();
+        
+        txtPNombre.setText(persona.getPnombre());
+        txtSNombre.setText(persona.getSnombre());
+        txtApellidos.setText(persona.getApellidos());
 
-        try {
-            rs.next();
-            txtMontoPagado.setValue(rs.getDouble(1));
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-        }
+        txtMonto.setValue(deuda.getMonto());
 
-        this.txtIDCliente.setValue(txtIDCliente);
-        this.txtNombres.setText(txtNombres.getText());
-        this.txtApellidos.setText(txtApellidos.getText());
-        txtMonto.setValue(monto);
         llenarTabla(idDeuda);
     }
 
@@ -69,9 +105,9 @@ public class frmPagosDeudas extends javax.swing.JDialog {
             }
         };
         jLabel2 = new javax.swing.JLabel();
-        txtIDCliente = new javax.swing.JFormattedTextField();
+        txtCedula = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtNombres = new javax.swing.JTextField();
+        txtPNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtApellidos = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -81,6 +117,8 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtIdDeuda = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtSNombre = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -138,18 +176,18 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         jLabel2.setRequestFocusEnabled(false);
         jLabel2.setVerifyInputWhenFocusTarget(false);
 
-        txtIDCliente.setEditable(false);
+        txtCedula.setEditable(false);
         try {
-            txtIDCliente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
+            txtCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txtIDCliente.setToolTipText("Cedula del Cliente");
-        txtIDCliente.setDoubleBuffered(true);
-        txtIDCliente.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
-        txtIDCliente.setFocusTraversalPolicyProvider(true);
-        txtIDCliente.setFont(new java.awt.Font("Ubuntu Mono", 1, 16)); // NOI18N
-        txtIDCliente.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtCedula.setToolTipText("Cedula del Cliente");
+        txtCedula.setDoubleBuffered(true);
+        txtCedula.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtCedula.setFocusTraversalPolicyProvider(true);
+        txtCedula.setFont(new java.awt.Font("Ubuntu Mono", 1, 16)); // NOI18N
+        txtCedula.setPreferredSize(new java.awt.Dimension(52, 21));
 
         jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -159,11 +197,11 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         jLabel3.setRequestFocusEnabled(false);
         jLabel3.setVerifyInputWhenFocusTarget(false);
 
-        txtNombres.setEditable(false);
-        txtNombres.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        txtNombres.setDoubleBuffered(true);
-        txtNombres.setFocusTraversalPolicyProvider(true);
-        txtNombres.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtPNombre.setEditable(false);
+        txtPNombre.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtPNombre.setDoubleBuffered(true);
+        txtPNombre.setFocusTraversalPolicyProvider(true);
+        txtPNombre.setPreferredSize(new java.awt.Dimension(52, 21));
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -247,6 +285,20 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         txtIdDeuda.setFocusTraversalPolicyProvider(true);
         txtIdDeuda.setPreferredSize(new java.awt.Dimension(52, 21));
 
+        jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Nombres:");
+        jLabel6.setFocusable(false);
+        jLabel6.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel6.setRequestFocusEnabled(false);
+        jLabel6.setVerifyInputWhenFocusTarget(false);
+
+        txtSNombre.setEditable(false);
+        txtSNombre.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtSNombre.setDoubleBuffered(true);
+        txtSNombre.setFocusTraversalPolicyProvider(true);
+        txtSNombre.setPreferredSize(new java.awt.Dimension(52, 21));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -264,21 +316,29 @@ public class frmPagosDeudas extends javax.swing.JDialog {
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtApellidos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtIDCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtPNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtIdDeuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtIdDeuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(txtSNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMontoPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -297,17 +357,21 @@ public class frmPagosDeudas extends javax.swing.JDialog {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtIdDeuda, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIDCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
                 .addGap(21, 21, 21)
@@ -343,7 +407,7 @@ public class frmPagosDeudas extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (tblDeudasPagas.getRowCount() == 0) {
             JOptionPane.showMessageDialog(
-                    this, 
+                    this,
                     "No existen pagos",
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -365,20 +429,19 @@ public class frmPagosDeudas extends javax.swing.JDialog {
         String titulos[] = {"Codigo Pago", "Fecha", "Hora", "Monto"};
         Object registro[] = new Object[4];
         try {
-            
+
 //            "SELECT r.CODIGO, r.MONTO, r.FECHA, r.HORA "
 //                    + "FROM TABLA_PAGO_DEUDAS_EXTERNA r "
 //                    + "WHERE r.IDDEUDA = " + idDeuda
-            
             ResultSet rs = null;
 
             miTabla = new DefaultTableModel(null, titulos);
-            int i=1;
+            int i = 1;
             while (rs.next()) {
-                registro[0] = i +") Cod.:"+rs.getString("CODIGO");
+                registro[0] = i + ") Cod.:" + rs.getString("CODIGO");
                 registro[1] = rs.getString("FECHA");
                 registro[2] = rs.getString("HORA");
-                registro[3] = "RD$ "+rs.getString("MONTO");
+                registro[3] = "RD$ " + rs.getString("MONTO");
                 miTabla.addRow(registro);
                 i++;
             }
@@ -407,13 +470,15 @@ public class frmPagosDeudas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblDeudasPagas;
     private javax.swing.JTextField txtApellidos;
-    private javax.swing.JFormattedTextField txtIDCliente;
+    private javax.swing.JFormattedTextField txtCedula;
     private javax.swing.JTextField txtIdDeuda;
     private javax.swing.JFormattedTextField txtMonto;
     private javax.swing.JFormattedTextField txtMontoPagado;
-    private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextField txtPNombre;
+    private javax.swing.JTextField txtSNombre;
     // End of variables declaration//GEN-END:variables
 }

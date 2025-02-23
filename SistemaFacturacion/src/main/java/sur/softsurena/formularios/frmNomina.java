@@ -1,6 +1,8 @@
 package sur.softsurena.formularios;
 
 public class frmNomina extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
     
     public static frmNomina getInstance() {
         return NewSingletonHolder.INSTANCE;
@@ -11,7 +13,7 @@ public class frmNomina extends javax.swing.JInternalFrame {
         private static final frmNomina INSTANCE = new frmNomina();
     }
     
-    public frmNomina() {
+    private frmNomina() {
         initComponents();
     }
 

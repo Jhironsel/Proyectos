@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class Deuda{
-    private final Integer id_deuda;
-    private final Cliente cliente;
+    private final Integer id;
+    private final Integer idCliente;
     private final String concepto;
     private final BigDecimal monto;
     private final Date fecha;
@@ -21,6 +21,6 @@ public class Deuda{
 
     @Override
     public String toString() {
-        return cliente.toString();
+        return id.toString();
     }
 }

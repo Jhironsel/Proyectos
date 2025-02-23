@@ -37,12 +37,10 @@ public class PCefalicoChicoChica {
     private Float SD1;
     private Float SD2;
     private Float SD3;
-    private final int tamanoFigura;
     private final int idPaciente;
 
-    public PCefalicoChicoChica(int idPaciente, int tamanoFigura) {
+    public PCefalicoChicoChica(int idPaciente) {
         sexo = getSexoPaciente(idPaciente);
-        this.tamanoFigura = tamanoFigura;
         this.idPaciente = idPaciente;
     }
 
@@ -122,7 +120,8 @@ public class PCefalicoChicoChica {
 
         TextTitle localTextTitle1 = new TextTitle(
                 "Perímetro Cefálico",
-                new Font("SansSerif", 1, 14));
+                new Font("SansSerif", 1, 14)
+        );
 
         TextTitle localTextTitle2 = new TextTitle(
                 "Nacimiento hasta 3 años, Puntuación Z",

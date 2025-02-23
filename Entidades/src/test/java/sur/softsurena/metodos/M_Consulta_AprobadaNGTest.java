@@ -10,8 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
-import sur.softsurena.entidades.Consulta_Aprobada;
-import static sur.softsurena.metodos.M_Consulta_Aprobada.CONSULTA__APROBADA_CORRECTAMENTE;
+import sur.softsurena.entidades.ConsultaAprobada;
+import static sur.softsurena.metodos.M_ConsultaAprobada.CONSULTA__APROBADA_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -61,8 +61,7 @@ public class M_Consulta_AprobadaNGTest {
     )
     public void testAgregarConsultaVerificada() {
         
-        Resultado result = M_Consulta_Aprobada.agregarConsultaAprovada(
-                Consulta_Aprobada
+        Resultado result = M_ConsultaAprobada.agregarConsultaAprovada(ConsultaAprobada
                         .builder()
                         .codAutorizacion(
                                 M_ContactoTel.generarTelMovil().substring(4, 11)

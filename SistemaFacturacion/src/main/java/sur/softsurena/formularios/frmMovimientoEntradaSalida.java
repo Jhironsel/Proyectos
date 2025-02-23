@@ -1,32 +1,24 @@
 package sur.softsurena.formularios;
 
-import java.awt.BorderLayout;
-import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.swing.JRViewer;
-import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmMovimientoEntradaSalida extends javax.swing.JInternalFrame
         implements Runnable {
 
     private static final long serialVersionUID = 1L;
+    
+    public static frmMovimientoEntradaSalida getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    private final Object registro[] = new Object[3];
-    private DefaultTableModel miTabla;
+        private static final frmMovimientoEntradaSalida INSTANCE
+                = new frmMovimientoEntradaSalida();
+    }
 
-    public frmMovimientoEntradaSalida() {
+    private frmMovimientoEntradaSalida() {
         initComponents();
         agregarOyente();
     }

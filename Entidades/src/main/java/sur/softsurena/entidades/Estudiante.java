@@ -8,18 +8,20 @@ import sur.softsurena.abstracta.Persona;
 @SuperBuilder
 public class Estudiante {
 
-    private final Persona persona;
+    private final Integer id;
     private final String matricula;
+    
+    private final Paginas pagina;
     
     @Override
     public String toString() {
-        return persona.toString();
+        return id.toString();
     }
 
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Estudiante{");
-        sb.append("persona=").append(persona);
+        sb.append("id=").append(id);
         sb.append(", matricula=").append(matricula);
         sb.append('}');
         return sb.toString();

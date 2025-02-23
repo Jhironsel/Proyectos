@@ -24,7 +24,7 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
 @WebServlet("/Acceso")
 public class Acceso extends HttpServlet {
 
-    private static List<Cliente> clientes;
+    private static List<Cliente> clientesList;
 
     /**
      *
@@ -46,15 +46,10 @@ public class Acceso extends HttpServlet {
                         M_Cliente.select(
                                 Cliente
                                         .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .id_persona(
-                                                                Integer.valueOf(
-                                                                        req.getParameter("idCliente")
-                                                                )
-                                                        )
-                                                        .build()
+                                        .id(
+                                                Integer.valueOf(
+                                                        req.getParameter("idCliente")
+                                                )
                                         )
                                         .build()
                         )
@@ -116,9 +111,9 @@ public class Acceso extends HttpServlet {
                 M_ContactoEmail.agregarContactosEmail(
                         ContactoEmail
                                 .builder()
-                                .id_persona(resultado.getId())
+                                .idPersona(resultado.getId())
                                 .email(req.getParameter("txtCorreo"))
-                                .por_defecto(Boolean.TRUE)
+                                .porDefecto(Boolean.TRUE)
                                 .build()
                 );
 
@@ -132,7 +127,7 @@ public class Acceso extends HttpServlet {
                 M_Persona.update(
                         Persona
                                 .builder()
-                                .id_persona(
+                                .idPersona(
                                         Integer.valueOf(
                                                 req.getParameter("idCliente")
                                         )
@@ -204,21 +199,19 @@ public class Acceso extends HttpServlet {
      */
     private void accionDefauld(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        clientes = M_Cliente.select(
+//        Persona
+//                .builder()
+//                .estado(Boolean.TRUE)
+//                .build();
+        clientesList = M_Cliente.select(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
                         .build()
         );
 
         BigDecimal saldoTotal = BigDecimal.ZERO;
 
-        clientes.stream().forEach(
+        clientesList.stream().forEach(
                 cliente -> {
                     //saldoTotal += cliente.getSaldo().doubleValue();
                 }
@@ -226,8 +219,8 @@ public class Acceso extends HttpServlet {
 
         HttpSession sesion = req.getSession();
 
-        sesion.setAttribute("clientes", clientes);
-        sesion.setAttribute("totalClientes", clientes.size());
+        sesion.setAttribute("clientes", clientesList);
+        sesion.setAttribute("totalClientes", clientesList.size());
         sesion.setAttribute("saldoTotal", saldoTotal);
 
         req.getRequestDispatcher("accesoCliente.jsp").forward(req, resp);

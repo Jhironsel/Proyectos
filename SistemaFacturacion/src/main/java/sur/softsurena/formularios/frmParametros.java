@@ -22,7 +22,16 @@ public class frmParametros extends javax.swing.JFrame {
     private final Properties propiedades;
     private File filePropertie = null;
 
-    public frmParametros() {
+    public static frmParametros getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmParametros INSTANCE = new frmParametros();
+    }
+    
+    private frmParametros() {
         initComponents();
         propiedades = new Properties();
         

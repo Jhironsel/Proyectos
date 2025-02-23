@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class Provincia {
-    private final int id;
+    private final Integer id;
     private final String nombre;
     private final String zona;
 

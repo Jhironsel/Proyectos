@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Deuda;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -26,8 +28,24 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
 
     private int idTurno;
     private String nombreCajero;
+    private static Frame parent;
+    private static boolean modal;
+    
+    public static frmCobrosDeudas getInstance(Frame parent, boolean modal) {
+        frmCobrosDeudas.parent = parent;
+        frmCobrosDeudas.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmCobrosDeudas(java.awt.Frame parent, boolean modal) {
+        private static final frmCobrosDeudas INSTANCE = new frmCobrosDeudas(
+                frmCobrosDeudas.parent,
+                frmCobrosDeudas.modal
+        );
+    }
+
+    private frmCobrosDeudas(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         txtMonto.setValue(0.0);
@@ -345,15 +363,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         cmbCliente.addItem(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(-1)
-                                        .pnombre("Seleccione un cliente")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .build()
-                        )
+                        .id(-1)
                         .build()
         );
 
@@ -362,18 +372,18 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                         .builder()
                         .build()
         ).stream().forEach(
-                cliente -> {
+                deuda -> {
                     cmbCliente.addItem(
                             Cliente
                                     .builder()
-                                    .persona(
-                                            Persona
-                                                    .builder()
-                                                    .id_persona(cliente.getCliente().getPersona().getId_persona())
-                                                    .pnombre(cliente.getCliente().getPersona().getPnombre())
-                                                    .snombre(cliente.getCliente().getPersona().getSnombre())
-                                                    .apellidos(cliente.getCliente().getPersona().getApellidos())
-                                                    .build()
+                                    .id(
+                                            M_Persona.select(
+                                                    Persona
+                                                            .builder()
+                                                            .idPersona(deuda.getIdCliente())
+                                                            .estado(Boolean.TRUE)
+                                                            .build()
+                                            ).getFirst().getIdPersona()
                                     )
                                     .build()
                     );
@@ -482,7 +492,8 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
         llenarTabla(
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                ).getPersona().getId_persona());
+                ).getId()
+        );
 
         txtMonto.setValue(0.0);
         txtDeuda.setValue(0.0);
@@ -551,7 +562,7 @@ public class frmCobrosDeudas extends javax.swing.JDialog {
                 "idCliente",
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                ).getPersona().getId_persona());
+                ).getId());
         parametros.put(
                 "nombreCliente",
                 cmbCliente.getItemAt(cmbCliente.getSelectedIndex()).toString()

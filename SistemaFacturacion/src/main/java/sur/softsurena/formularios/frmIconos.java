@@ -9,10 +9,19 @@ public class frmIconos extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private final ExecutorService executorService;
+    private static ExecutorService executorService;
+    
+    public static frmIconos getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
 
-    public frmIconos() {
-        this.executorService = Executors.newSingleThreadExecutor();
+        private static final frmIconos INSTANCE = new frmIconos();
+    }
+
+    private frmIconos() {
+        frmIconos.executorService = Executors.newSingleThreadExecutor();
 
 //        initComponents();
         

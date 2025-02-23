@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -9,10 +8,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.entidades.Provincia;
 
 @Getter
 public class M_ProvinciaNGTest {
-    
+
     public M_ProvinciaNGTest() {
     }
 
@@ -46,12 +46,69 @@ public class M_ProvinciaNGTest {
 
     @Test(
             enabled = true,
-            description = "",
-            priority = 0
+            priority = 0,
+            description = """
+                          """
     )
-    public void testGetProvincias() {
-        List result = M_Provincia.getProvincias();
-        assertNotNull(result, "La tabla de provincia esta vacia.");
+    public void testSqlSelect() {
+        assertEquals(
+                M_Provincia.sqlSelect(
+                        Provincia
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, NOMBRE, ZONA
+                FROM V_T_PROVINCIAS
+                """.strip()
+        );
+        assertEquals(
+                M_Provincia.sqlSelect(
+                        Provincia
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                """
+                SELECT ID, NOMBRE, ZONA
+                FROM V_T_PROVINCIAS
+                WHERE ID = 0
+                """.strip()
+        );
     }
-    
+
+    @Test(
+            enabled = true,
+            priority = 1,
+            description = """
+                          """
+    )
+    public void testSelect() {
+        assertFalse(
+                M_Provincia.select(
+                        Provincia.builder().build()
+                ).isEmpty(),
+                "Lista de provincia vacia."
+        );
+        assertFalse(
+                M_Provincia.select(
+                        Provincia
+                                .builder()
+                                .id(0)
+                                .build()
+                ).isEmpty(),
+                "Registros 0 no encontrado.."
+        );
+        
+        assertEquals(
+                M_Provincia.select(
+                        Provincia
+                                .builder()
+                                .build()
+                ).size(),
+                33,
+                "Registros 0 no encontrado.."
+        );
+    }
+
 }

@@ -27,7 +27,8 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 public class M_ClienteNGTest {
 
-    public M_ClienteNGTest() {}
+    public M_ClienteNGTest() {
+    }
 
     @BeforeClass
     public void setUpClass() throws Exception {
@@ -66,7 +67,7 @@ public class M_ClienteNGTest {
         M_PersonaNGTest.testInsert();
 
         Resultado result = M_Cliente.insertById(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
         );
 
         assertEquals(
@@ -91,7 +92,7 @@ public class M_ClienteNGTest {
     )
     public void testBorrarCliente() {
         Resultado result = M_Cliente.delete(
-                M_PersonaNGTest.persona(Boolean.FALSE).getId_persona()
+                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
         );
 
         assertEquals(
@@ -117,16 +118,15 @@ public class M_ClienteNGTest {
     )
     public void testGetPersonasClientes() {
         List expResult = null;
-        
+
         List result = M_Cliente.select(
                 Cliente
                         .builder()
                         .build()
         );
-        
+
         assertEquals(result, expResult);
     }
-
 
     @Test(
             enabled = true,
@@ -136,282 +136,18 @@ public class M_ClienteNGTest {
                           Base de Datos sobre los cliente del sistema.
                           """
     )
-    public void testSqlPersonaClientes() {
-        String expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE ID = 0
-                    """;
-
-        String result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(0)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
+    public void testSqlSelect() {
+        assertEquals(
+                M_Cliente.sqlSelect(
+                        Cliente
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID
+                FROM V_PERSONAS_CLIENTES
+                """.strip().trim());
 //------------------------------------------------------------------------------
-        expResult = """
-                           SELECT
-                               ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                               SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                               FECHA_INGRESO, ESTADO
-                           FROM GET_PERSONA_CLIENTES
-                           WHERE ID = 0 AND ESTADO IS FALSE
-                           """;
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(0)
-                                        .estado(Boolean.FALSE)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
 
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE ID = 0 AND ESTADO
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(0)
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pagina(
-                                                Paginas
-                                                        .builder()
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pagina(
-                                                Paginas
-                                                        .builder()
-                                                        .nPaginaNro(1)
-                                                        .nCantidadFilas(20)
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE ESTADO ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .estado(Boolean.TRUE)
-                                        .pagina(
-                                                Paginas
-                                                        .builder()
-                                                        .nPaginaNro(1)
-                                                        .nCantidadFilas(20)
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-        
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE CEDULA STARTING WITH '00' 
-                    OR PNOMBRE STARTING WITH '00'
-                    OR SNOMBRE STARTING WITH '00'
-                    OR APELLIDOS STARTING WITH '00'
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula("00")
-                                                        .build()
-                                        )
-                                        .pnombre("00")
-                                        .snombre("00")
-                                        .apellidos("00")
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE ESTADO AND CEDULA STARTING WITH '00' 
-                    OR PNOMBRE STARTING WITH '00'
-                    OR SNOMBRE STARTING WITH '00'
-                    OR APELLIDOS STARTING WITH '00'
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula("00")
-                                                        .build()
-                                        )
-                                        .pnombre("00")
-                                        .snombre("00")
-                                        .apellidos("00")
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
-
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT
-                        ID, CEDULA, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS,
-                        SEXO, FECHA_NACIMIENTO, ESTADO_CIVIL,
-                        FECHA_INGRESO, ESTADO
-                    FROM GET_PERSONA_CLIENTES
-                    WHERE ESTADO IS FALSE AND CEDULA STARTING WITH '00' 
-                    OR PNOMBRE STARTING WITH '00'
-                    OR SNOMBRE STARTING WITH '00'
-                    OR APELLIDOS STARTING WITH '00'
-                    """;
-
-        result = M_Cliente.sqlSelect(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula("00")
-                                                        .build()
-                                        )
-                                        .pnombre("00")
-                                        .snombre("00")
-                                        .apellidos("00")
-                                        .estado(Boolean.FALSE)
-                                        .build()
-                        )
-                        .build()
-        );
-        assertEquals(result.strip().trim(), expResult.strip().trim());
     }
 }

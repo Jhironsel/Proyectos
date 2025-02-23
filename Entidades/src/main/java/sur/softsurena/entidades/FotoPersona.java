@@ -13,9 +13,8 @@ import sur.softsurena.abstracta.Persona;
 @Getter
 public class FotoPersona {
     private final Integer id;
-    private final Persona persona;
+    private final Integer idPersona;
     private final String foto;
     private final Timestamp fechaHoraCreacion;
     private final Boolean actual;
-    
 }

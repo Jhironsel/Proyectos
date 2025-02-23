@@ -107,7 +107,7 @@ public class M_Carton_Bingo implements IEntidad<Carton_Bingo>{
                 sql, 
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.CLOSE_CURSORS_AT_COMMIT
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             getCnn().setAutoCommit(false);
             for (int i = 0; i < cantidad; i++) {

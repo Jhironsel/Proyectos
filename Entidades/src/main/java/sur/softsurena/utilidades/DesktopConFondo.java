@@ -2,9 +2,10 @@ package sur.softsurena.utilidades;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
-import javax.swing.JOptionPane;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class DesktopConFondo extends JDesktopPane {
 
@@ -33,7 +34,7 @@ public class DesktopConFondo extends JDesktopPane {
             super.paint(g);
         } catch (Exception e) {
             System.out.println("Reinicie la Aplicacion " + e.getLocalizedMessage());
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, "Error en la aplicacion.", e);
         }
     }
 }

@@ -8,7 +8,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class Huella {
-    private final int id;
+    private final Integer id;
+    private final Integer idPersona;
     private final String tipoDedo;
     private final File pathImagen;
     private final ImageIcon imagen;

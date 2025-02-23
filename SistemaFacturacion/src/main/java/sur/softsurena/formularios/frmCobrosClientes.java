@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import java.awt.Frame;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +13,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Paginas;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -23,6 +26,8 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
 
     private int idTurno;
+    private static Frame parent;
+    private static boolean modal;
 
     public int getIdTurno() {
         return idTurno;
@@ -32,7 +37,22 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         this.idTurno = idTurno;
     }
 
-    public frmCobrosClientes(java.awt.Frame parent, boolean modal) {
+    public static frmCobrosClientes getInstance(Frame parent, boolean modal) {
+        frmCobrosClientes.parent = parent;
+        frmCobrosClientes.modal = modal;
+        return NewSingletonHolder.INSTANCE;
+    }
+
+    private static class NewSingletonHolder {
+
+        private static final frmCobrosClientes INSTANCE
+                = new frmCobrosClientes(
+                        frmCobrosClientes.parent,
+                        frmCobrosClientes.modal
+                );
+    }
+
+    private frmCobrosClientes(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         txtMonto.setValue(0.0);
@@ -43,14 +63,13 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         txtMonto.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtMonto.setValue(0.0);
-                        txtMonto.setSelectionStart(3);
-                        txtMonto.setSelectionEnd(txtMonto.getText().length());
-                    }
-                });
+                SwingUtilities.invokeLater(
+                        () -> {
+                            txtMonto.setValue(0.0);
+                            txtMonto.setSelectionStart(3);
+                            txtMonto.setSelectionEnd(txtMonto.getText().length());
+                        }
+                );
             }
         });
     }
@@ -372,34 +391,50 @@ public class frmCobrosClientes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cmbCliente.removeAllItems();
-        cmbCliente.addItem(
-                Cliente
-                        .builder()
-                        .persona(
                                 Persona
                                         .builder()
-                                        .id_persona(-1)
+                                        .idPersona(-1)
                                         .pnombre("Seleccione un Cliente...")
                                         .snombre("")
                                         .apellidos("")
                                         .estado(false)
-                                        .build()
-                        )
+                                        .build();
+        cmbCliente.addItem(
+                Cliente
+                        .builder()
+                        .id(-1)
                         .build()
         );
+                                Persona
+                                        .builder()
+                                        .estado(true)
+                                        .build();
 
         M_Cliente.select(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
+                        .pagina(
+                                Paginas
                                         .builder()
-                                        .estado(true)
+                                        .nPaginaNro(1)
+                                        .nCantidadFilas(20)
                                         .build()
                         )
                         .build()
         ).stream().forEach(
-                cliente -> cmbCliente.addItem(cliente)
+                cliente -> {
+                    M_Persona.select(
+                            Persona
+                                    .builder()
+                                    .idPersona(cliente.getId())
+                                    .estado(Boolean.TRUE)
+                                    .build()
+                    ).stream().forEach(
+                            persona -> {
+                                cmbCliente.addItem(cliente);
+                            }
+                    );
+                }
         );
     }//GEN-LAST:event_formWindowOpened
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
@@ -497,33 +532,33 @@ public class frmCobrosClientes extends javax.swing.JDialog {
 
         Map<String, Object> parametros = new HashMap<>();
         parametros.put(
-                "nombreCajero", 
+                "nombreCajero",
                 getUsuarioActual().getPersona().getUser_name()
         );
         parametros.put(
-                "idFactura", 
+                "idFactura",
                 Utilidades.objectToInt(
                         tblFacturas.getValueAt(
-                                tblFacturas.getSelectedRow(), 
+                                tblFacturas.getSelectedRow(),
                                 0
                         )
                 )
         );
         parametros.put("idTurno", "" + getIdTurno());
         parametros.put(
-                "idCliente", 
-                ((Cliente) cmbCliente.getItemAt(
+                "idCliente",
+                cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                )).getPersona().getId_persona()
+                ).getId()
         );
         parametros.put(
-                "nombreCliente", 
-                ((Cliente) cmbCliente.getItemAt(
+                "nombreCliente",
+                cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                )).toString()
+                ).toString()
         );
         parametros.put(
-                "montoFactura", 
+                "montoFactura",
                 Utilidades.objectToDouble(
                         tblFacturas.getValueAt(
                                 tblFacturas.getSelectedRow(), 1
@@ -547,7 +582,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         frmBusquedaCliente miBusqueda = frmBusquedaCliente.getInstance(null, true);
         miBusqueda.setLocationRelativeTo(null);
         miBusqueda.setVisible(true);
-        
+
         Cliente persona = miBusqueda.getCliente();
 
         if (persona == null) {
@@ -660,11 +695,11 @@ public class frmCobrosClientes extends javax.swing.JDialog {
             String titulos[] = {"No° Pago", "Fecha", "Hora", "Monto Pagado"};
 
             DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-            
+
             String sql = "SELECT r.IDPAGODEUDA, r.FECHA, r.HORA, r.MONTOPAGO "
                     + "FROM TABLA_PAGODEUDA r "
                     + "where r.IDFACTURA = " + idFactura + "";
-            
+
             ResultSet rs = null;
             Object registro[] = new Object[4];
             int i = 1;

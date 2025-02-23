@@ -2,7 +2,18 @@ package sur.softsurena.formularios;
 
 public class frmGraficos extends javax.swing.JInternalFrame {
 
-    public frmGraficos() {
+    private static final long serialVersionUID = 1L;
+
+    public static frmGraficos getInstance() {
+        return NewSingletonHolder.INSTANCE;
+    }
+    
+    private static class NewSingletonHolder {
+
+        private static final frmGraficos INSTANCE = new frmGraficos();
+    }
+    
+    private frmGraficos() {
         initComponents();
     }
 

@@ -21,6 +21,7 @@ import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Deuda;
 import sur.softsurena.metodos.M_Generales;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -162,7 +163,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             }
         ) {
             Class<?>[] types = new Class<?>[] {
-                Deuda.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                M_Deuda.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
             public Class<?> getColumnClass(int columnIndex) {
@@ -586,23 +587,29 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             limpiarCedula();
             return;
         }
+
+        Generales general = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula.getText())
+                        .build()
+        ).getFirst();
+
+        Persona persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(general.getIdPersona())
+                        .pnombre("")
+                        .snombre("")
+                        .apellidos("")
+                        .estado(Boolean.TRUE)
+                        .build()
+        ).getFirst();
+
         mostrarRegistro(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula(txtCedula.getText())
-                                                        .build()
-                                        )
-                                        .pnombre("")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .build()
-                        )
+                        .id(persona.getIdPersona())
                         .build()
         );
     }//GEN-LAST:event_txtCedulaActionPerformed
@@ -656,19 +663,10 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         mostrarRegistro(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                miBusqueda
-                                                        .getCliente()
-                                                        .getPersona()
-                                                        .getGenerales()
-                                        )
-                                        .pnombre("")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .build()
+                        .id(
+                                miBusqueda
+                                        .getCliente()
+                                        .getId()
                         )
                         .build()
         );
@@ -678,7 +676,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
      * Metodo encargado de mostrar la informacion del deudor en el
      * mantenimiento. Cedula de ejemplo: 425-0243748-0 121-0127731-2
      */
-    private void mostrarRegistro(Cliente cliente) {
+    private void mostrarRegistro(
+            Cliente cliente
+    ) {
         var listaClientes = M_Cliente.select(cliente);
 
         //Si la lista no esta vacia entonces.
@@ -687,7 +687,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             Cliente clienteF = listaClientes.getFirst();
 
             //No puede ser el cliente generico del sistema.
-            if (clienteF.getPersona().getId_persona() <= 0) {
+            if (clienteF.getId() <= 0) {
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "Cliente generico no puede crear deuda.",
@@ -698,21 +698,33 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 return;
             }
 
-            txtCedula.setValue(clienteF.getPersona().getGenerales().getCedula());
-            txtPNombre.setText(clienteF.getPersona().getPnombre());
-            txtSNombre.setText(clienteF.getPersona().getSnombre());
-            txtApellidos.setText(clienteF.getPersona().getApellidos());
+            txtCedula.setValue(M_Generales.select(
+                    Generales
+                            .builder()
+                            .idPersona(clienteF.getId())
+                            .build()
+            ).getFirst());
+
+            Persona persona = M_Persona.select(
+                    Persona
+                            .builder()
+                            .idPersona(cliente.getId())
+                            .build()
+            ).getFirst();
+
+            txtPNombre.setText(persona.getPnombre());
+            txtSNombre.setText(persona.getSnombre());
+            txtApellidos.setText(persona.getApellidos());
 
             //Si no es nuevo. Es Modificando.
             if (!nuevo) {
                 deuda = M_Deuda.select(
                         Deuda
                                 .builder()
-                                .id_deuda(
-                                        ((Deuda) tblClientes.getValueAt(
-                                                tblClientes.getSelectedRow(),
-                                                0
-                                        )).getId_deuda()//Columna idDeuda.
+                                .id(((Deuda) tblClientes.getValueAt(
+                                        tblClientes.getSelectedRow(),
+                                        0
+                                )).getId()//Columna idDeuda.
                                 )
                                 .build()
                 ).getFirst();
@@ -819,17 +831,13 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             );
         }
 
-        frmPagosDeudas miPagos = new frmPagosDeudas(
+        frmPagosDeudas miPagos = frmPagosDeudas.getInstance(
                 null,
                 true,
                 ((Deuda) tblClientes.getValueAt(
                         tblClientes.getSelectedRow(),
                         0
-                )).getId_deuda(),
-                txtCedula.getText().trim(),
-                txtPNombre,
-                txtApellidos,
-                txtMontoField()
+                )).getId()
         );
         miPagos.setLocationRelativeTo(null);
         miPagos.setVisible(true);
@@ -852,31 +860,27 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-//        modificarDeuda(
-//                        tblClientes.getValueAt(cliAct, 0)),
-//                "a");
-        M_Deuda.update(
-                Deuda.builder().build()
+        Resultado resultado = M_Deuda.update(
+                Deuda
+                        .builder()
+                        .id(
+                                ((Deuda) tblClientes.getValueAt(
+                                        tblClientes.getSelectedRow(),
+                                        0
+                                )).getId()
+                        )
+                        .concepto(txtConcepto.getText())
+                        .monto(
+                                new BigDecimal(txtMonto.getText())
+                        )
+                        .build()
         );
 
         JOptionPane.showInternalMessageDialog(
                 this,
+                resultado.getMensaje(),
                 "",
-                "",
-                -1
-        );
-
-        llenarTabla();
-
-        mostrarRegistro(
-                Cliente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
-                        .build()
+                resultado.getIcono()
         );
     }//GEN-LAST:event_btnAbonarActionPerformed
 
@@ -1007,29 +1011,22 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             return;
         }
 
-        //Mostrar el registro.
+        Generales general = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(
+                                tblClientes.getValueAt(
+                                        tblClientes.getSelectedRow(),
+                                        1
+                                ).toString()//Columna cedula seleccionada.
+                        )
+                        .build()
+        ).getFirst();
+
         mostrarRegistro(
                 Cliente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .generales(
-                                                Generales
-                                                        .builder()
-                                                        .cedula(
-                                                                tblClientes.getValueAt(
-                                                                        tblClientes.getSelectedRow(),
-                                                                        1
-                                                                ).toString()//Columna cedula seleccionada.
-                                                        )
-                                                        .build()
-                                        )
-                                        .pnombre("")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .build()
-                        )
+                        .id(general.getIdPersona())
                         .build()
         );
 
@@ -1105,9 +1102,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         //Creamos el Objeto Cliente y los agregamos a Datos
         Deuda miDeuda = Deuda
                 .builder()
-                .id_deuda(nuevo ? null : deuda.getId_deuda())
-                .cliente(
-                        deuda.getCliente()
+                .id(nuevo ? null : deuda.getId())
+                .idCliente(
+                        deuda.getIdCliente()
                 )
                 .concepto(txtConcepto.getText())
                 .monto(txtMontoField())
@@ -1120,11 +1117,23 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             accion = "inserta";
         }
 
+        Persona persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(deuda.getIdCliente())
+                        .build()
+        ).getFirst();
+        Generales generales = M_Generales.select(
+                Generales
+                        .builder()
+                        .idPersona(deuda.getIdCliente())
+                        .build()
+        ).getFirst();
         int resp = JOptionPane.showInternalConfirmDialog(
                 this,
                 """
                 <html>
-                    <b><big>Se va a %s deuda a: </big></b> <big> %s %s </big><br/>
+                    <b><big>Se va a %s deuda a: </big></b> <big> %s </big><br/>
                     <b><big>Cedula no.: </big></b> <big> %s </big><br/>
                     <b><big>Monto de deuda es: </big></b><big>%s</big><br/>
                     <b><big>Por Concepto de: </big></b><big>%s</big><br/>
@@ -1133,19 +1142,12 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                 </html>
                 """.formatted(
                         accion,
-                        deuda.getCliente().getPersona()
-                                .getPnombre()
-                                .concat(" ")
-                                .concat(
-                                        deuda.getCliente().getPersona()
-                                                .getSnombre()
-                                ).trim().strip(),
-                        deuda.getCliente().getPersona().getApellidos(),
-                        deuda.getCliente().getPersona().getGenerales().getCedula(),
+                        persona.toString(),
+                        generales.toString(),
                         txtMonto.getText(),
-                        txtConcepto.getText()
-                                .concat(" ".repeat(50))
-                                .substring(0, 49).trim().strip(),
+                        txtConcepto.getText().concat(
+                                " ".repeat(50)
+                        ).substring(0, 49).trim().strip(),
                         Utilidades.formatDate(new Date(), "dd-MM-yyyy")
                 ),
                 "",
@@ -1288,7 +1290,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
                         txtCedula.setText(
                                 M_Generales.generarCedula()
                         );
-                        
+
                         if (Utilidades.validarCampo(txtCedula)) {
                             System.out.println("Cedula OK.");
                         } else {
@@ -1333,6 +1335,9 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         btnGetCliente.setEnabled(nuevo);
     }
 
+    /**
+     * 
+     */
     public static void llenarTabla() {
         String titulos[] = {
             "Nombre completo", "Cedula Cliente", "Concepto", "Monto", "Fecha",
@@ -1344,17 +1349,16 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         M_Deuda.select(
                 Deuda
                         .builder()
-                        .cliente(
-                                Cliente
-                                        .builder()
-                                        .persona(Persona.builder().build())
-                                        .build()
-                        )
                         .build()
         ).stream().forEach(
                 deudaR -> {
                     registro[0] = deudaR;
-                    registro[1] = deudaR.getCliente().getPersona().getGenerales();
+                    registro[1] = M_Generales.select(
+                            Generales
+                                    .builder()
+                                    .idPersona(deudaR.getIdCliente())
+                                    .build()
+                    ).getFirst();
                     registro[2] = deudaR.getConcepto();
                     registro[3] = deudaR.getMonto();
                     registro[4] = deudaR.getFecha();
