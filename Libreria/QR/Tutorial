@@ -1,0 +1,23 @@
+Paso 2.Configuración iReport Designer
+
+Abre iReport y ve al menú HERRAMIENTAS -> OPCIONES 
+
+Selecciona la pestaña CLASSPATH
+
+Agrega las librerías “core” y “zxing j2se“, dale clic en aceptar para guardar los cambios.
+Paso 3. Origen de datos
+
+Configura el Datasources y el Report Query (Select * From estudiante)
+
+Paso 4. Diseño del reporte
+
+Añade los fields DNI y Nombre en la banda DETAILS, añade también un componente IMAGE pero déjalo vacío, dale un tamaño de 70×70 pixeles.
+
+Selecciona el componente IMAGE y busca en sus propiedades, la propiedad “Image Expression“, escribe :
+
+com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
+    new com.google.zxing.qrcode.QRCodeWriter().encode(
+            "contenido", com.google.zxing.BarcodeFormat.QR_CODE, 200, 200));
+
+Lo que hacemos es crear el código QR pasando un valor (String), el tipo de código (QR_CODE) y las dimensiones del mismo, a 
+continuación creamos una imagen en memoria con este QR y asignamos a nuestro componente image en el reporte.
