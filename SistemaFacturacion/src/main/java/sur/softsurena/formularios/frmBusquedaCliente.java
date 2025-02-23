@@ -20,19 +20,21 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
 
     private DefaultTableModel miTabla;
     private transient Cliente cliente;
-    
+
     private static Frame parent;
     private static boolean modal;
+
     public static frmBusquedaCliente getInstance(Frame parent, boolean modal) {
         frmBusquedaCliente.parent = parent;
         frmBusquedaCliente.modal = modal;
         return NewSingletonHolder.INSTANCE;
     }
-    
+
     private static class NewSingletonHolder {
-        private static final frmBusquedaCliente INSTANCE = 
-                new frmBusquedaCliente(
-                        frmBusquedaCliente.parent, 
+
+        private static final frmBusquedaCliente INSTANCE
+                = new frmBusquedaCliente(
+                        frmBusquedaCliente.parent,
                         frmBusquedaCliente.modal
                 );
     }
