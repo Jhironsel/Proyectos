@@ -25,3 +25,4 @@
 /SistemaFacturacion/target/
 /SistemaFacturacion/test-reports/
 *.log
+/TelegramBoot/target/
