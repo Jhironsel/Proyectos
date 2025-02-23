@@ -41,30 +41,6 @@
             <version>2</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>com.digitalpersona.onetouch</groupId>
-            <artifactId>dpotapi</artifactId>
-            <version>1.5.0_14</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.digitalpersona.onetouch</groupId>
-            <artifactId>dpotjni</artifactId>
-            <version>1.5.0_14</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.digitalpersona.onetouch.ui.swing</groupId>
-            <artifactId>dpfpverification</artifactId>
-            <version>1.5.0_14</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.digitalpersona.onetouch.ui.swing</groupId>
-            <artifactId>dpfpenrollment</artifactId>
-            <version>1.5.0_14</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
     
     <name>Entidades</name>

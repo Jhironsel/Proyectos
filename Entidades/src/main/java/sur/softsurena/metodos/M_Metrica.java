@@ -58,7 +58,6 @@ public class M_Metrica {
                                                 .id(rs.getInt("ID_CONSULTA"))
                                                 .build()
                                 )
-                                .fecha(rs.getTimestamp("FECHA"))
                                 .pesoKG(rs.getBigDecimal("PESOKG"))
                                 .estaturaM(rs.getBigDecimal("ESTATURAMETRO"))
                                 .escefalo(rs.getBigDecimal("ESCEFALO"))
@@ -91,7 +90,7 @@ public class M_Metrica {
         Boolean id = Objects.isNull(metrica.getId());
         Boolean where = id;
         return """
-               SELECT ID, ID_CONSULTA, FECHA, PESOKG, ESTATURAMETRO, ESCEFALO,
+               SELECT ID, ID_CONSULTA, PESOKG, ESTATURAMETRO, ESCEFALO,
                 ENF_DETECT, HALLAZGOS_POS, ID_DIAG, TX, COMPLEMENTO,
                 IMAGEN_TEXTO, USER_NAME
                FROM V_METRICAS

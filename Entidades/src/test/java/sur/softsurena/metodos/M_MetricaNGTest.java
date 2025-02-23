@@ -60,7 +60,7 @@ public class M_MetricaNGTest {
     )
     public void testSqlSelect() {
         String expResult = """
-                           SELECT ID, ID_CONSULTA, FECHA, PESOKG, ESTATURAMETRO, ESCEFALO,
+                           SELECT ID, ID_CONSULTA, PESOKG, ESTATURAMETRO, ESCEFALO,
                             ENF_DETECT, HALLAZGOS_POS, ID_DIAG, TX, COMPLEMENTO,
                             IMAGEN_TEXTO, USER_NAME
                            FROM V_METRICAS
@@ -76,7 +76,7 @@ public class M_MetricaNGTest {
         );
 
         expResult = """
-                    SELECT ID, ID_CONSULTA, FECHA, PESOKG, ESTATURAMETRO, ESCEFALO,
+                    SELECT ID, ID_CONSULTA, PESOKG, ESTATURAMETRO, ESCEFALO,
                      ENF_DETECT, HALLAZGOS_POS, ID_DIAG, TX, COMPLEMENTO,
                      IMAGEN_TEXTO, USER_NAME
                     FROM V_METRICAS
