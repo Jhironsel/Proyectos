@@ -18,17 +18,14 @@ import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_BORRAR_EL_REGI
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_INSERTAR_DIRECCION;
 import static sur.softsurena.metodos.M_ContactoDireccion.REGISTRO_DE_LA_DIRECCION_BORRADO_CORRECTA;
 import static sur.softsurena.metodos.M_ContactoDireccion.agregarDireccion;
-import static sur.softsurena.metodos.M_ContactoDireccion.getDireccionByID;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
 public class M_ContactoDireccionNGTest {
 
     private int id_direccion;
-    private final M_PersonaNGTest persona;
 
     public M_ContactoDireccionNGTest() {
-        persona = new M_PersonaNGTest();
     }
 
     @BeforeClass
@@ -68,7 +65,7 @@ public class M_ContactoDireccionNGTest {
     )
     public void testAgregarDireccion() {
 
-        persona.testInsert();
+        M_PersonaNGTest.testInsert();
 
         Resultado result = agregarDireccion(ContactoDireccion
                 .builder()
@@ -116,7 +113,7 @@ public class M_ContactoDireccionNGTest {
     )
     public void testGetDireccionByID() {
         int id_persona = 0;
-        List result = getDireccionByID(id_persona);
+        List result = M_ContactoDireccion.selectByID(id_persona);
         assertFalse(
                 result.isEmpty(),
                 "La lista contiene datos"
@@ -183,6 +180,6 @@ public class M_ContactoDireccionNGTest {
                 ERROR_AL_BORRAR_EL_REGISTRO_DE_LA_DIRECCI
         );
 
-        persona.testDelete();
+        M_PersonaNGTest.testDelete();
     }
 }

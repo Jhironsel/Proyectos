@@ -26,3 +26,4 @@
 /SistemaFacturacion/test-reports/
 *.log
 /TelegramBoot/target/
+/target/

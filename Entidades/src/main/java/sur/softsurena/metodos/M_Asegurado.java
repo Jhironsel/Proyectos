@@ -3,6 +3,7 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,21 +31,15 @@ public class M_Asegurado {
         final String sql = """
                            SELECT ID, ID_PERSONA, ID_ARS, NO_NSS, ESTADO
                            FROM V_ASEGURADOS
-                           WHERE ID_PERSONA = ?
-                           """;
+                           WHERE ID_PERSONA = %d
+                           """.formatted(asegurado.getIdPersona());
         List<Asegurado> list = new ArrayList<>();
         
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            
-            ps.setInt(1, asegurado.getIdPersona());
-            
-            ResultSet rs = ps.executeQuery();
-            
+        ); ResultSet rs = ps.executeQuery(sql);) {
             while(rs.next()){
                 list.add(
                         Asegurado
@@ -57,7 +52,6 @@ public class M_Asegurado {
                                 .build()
                 );
             }
-            
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -68,7 +62,6 @@ public class M_Asegurado {
                     ex
             );
         }
-        
         return list;
     }
     

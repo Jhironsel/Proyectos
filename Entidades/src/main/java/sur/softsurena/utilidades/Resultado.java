@@ -1,7 +1,6 @@
 package sur.softsurena.utilidades;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

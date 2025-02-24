@@ -3,6 +3,7 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,35 +38,31 @@ public class M_Almacen {
                         ESTADO 
                     FROM V_ALMACENES 
                     WHERE 
-                        ID = ? OR 
-                        UPPER(NOMBRE) STARTING WITH UPPER(?) OR
-                        UPPER(NOMBRE) CONTAINING UPPER(?);
-                """;
-
+                        ID = %d OR 
+                        UPPER(NOMBRE) STARTING WITH UPPER('%s') OR
+                        UPPER(NOMBRE) CONTAINING UPPER('%s');
+                """.formatted(
+                        almacen.getId(), almacen.getNombre(), almacen.getNombre()
+                );
+        
         List<Almacen> almacenList = new ArrayList<>();
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, almacen.getId());
-            ps.setString(2, almacen.getNombre());
-            ps.setString(3, almacen.getNombre());
+        ); ResultSet rs = ps.executeQuery(sql);) {
 
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    almacenList.add(
-                            Almacen
-                                    .builder()
-                                    .id(rs.getInt("ID"))
-                                    .nombre(rs.getString("NOMBRE"))
-                                    .ubicacion(rs.getString("UBICACION"))
-                                    .estado(rs.getBoolean("ESTADO"))
-                                    .build()
-                    );
-                }
+            while (rs.next()) {
+                almacenList.add(
+                        Almacen
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .nombre(rs.getString("NOMBRE"))
+                                .ubicacion(rs.getString("UBICACION"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .build()
+                );
             }
         } catch (SQLException ex) {
             LOG.log(
@@ -96,10 +93,10 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            
-            if(Objects.isNull(almacen.getId())){
+
+            if (Objects.isNull(almacen.getId())) {
                 ps.setNull(1, Types.INTEGER);
-            }else{
+            } else {
                 int valor = almacen.getId();
                 ps.setInt(1, valor);
             }

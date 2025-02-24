@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -33,15 +34,14 @@ public class M_Cliente {
             @NonNull Cliente cliente
     ) {
         List<Cliente> lista = new ArrayList<>();
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(cliente),
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
             @Cleanup
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery(sqlSelect(cliente));
 
             while (rs.next()) {
                 lista.add(
@@ -98,15 +98,14 @@ public class M_Cliente {
             @NonNull Cliente cliente
     ) {
         List<Cliente> lista = new ArrayList<>();
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(cliente),
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
             @Cleanup
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery(sqlSelect(cliente));
 
             while (rs.next()) {
                 lista.add(

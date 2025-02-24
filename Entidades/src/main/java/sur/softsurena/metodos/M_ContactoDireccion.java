@@ -88,7 +88,7 @@ public class M_ContactoDireccion {
      *
      * @return Retorna un conjunto de datos del tipo resultSet.
      */
-    public synchronized static List<ContactoDireccion> getDireccionByID(Integer idPersona) {
+    public synchronized static List<ContactoDireccion> selectByID(Integer idPersona) {
         final String sql = """
                            SELECT ID, ID_PERSONA, ID_PROVINCIA, ID_MUNICIPIO, 
                                 ID_DISTRITO_MUNICIPAL, ID_CODIGO_POSTAL, 

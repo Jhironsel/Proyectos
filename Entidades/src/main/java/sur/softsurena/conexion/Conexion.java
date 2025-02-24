@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
+import org.hibernate.dialect.lock.LockingStrategyException;
 import sur.softsurena.utilidades.Resultado;
+import sur.softsurena.utilidades.Utilidades;
 
 public class Conexion {
 
@@ -95,6 +98,11 @@ public class Conexion {
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .build();
         } catch (java.sql.SQLInvalidAuthorizationSpecException ex1) {
+            Utilidades.LOG.log(
+                    Level.SEVERE, 
+                    JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI, 
+                    ex1
+            );
             return Resultado
                     .builder()
                     .mensaje(JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI)
@@ -126,7 +134,7 @@ public class Conexion {
             if (mensaje.isBlank()) {
                 mensaje = ex.getMessage();
             }
-
+            Utilidades.LOG.log(Level.SEVERE, mensaje, ex);
             return Resultado
                     .builder()
                     .mensaje(mensaje)

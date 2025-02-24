@@ -3268,7 +3268,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
         registro = new Object[TITULOS_DIRECCION.length];
         limpiarTablaDireccion();
-        M_ContactoDireccion.getDireccionByID(idCliente).stream().forEach(
+        M_ContactoDireccion.selectByID(idCliente).stream().forEach(
                 dir -> {
                     registro[0] = (M_Provincia.select(
                             Provincia

@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,18 +54,13 @@ public class M_Categoria {
     ) {
         List<Categoria> categorias = new ArrayList<>();
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(categoria),
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery(sqlSelect(categoria));
             
-            if(rs.isClosed()){
-                rs = ps.executeQuery(sqlSelect(categoria));
-            }
-
             while (rs.next()) {
                 categorias.add(
                         Categoria

@@ -5,7 +5,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Turno;
 import sur.softsurena.entidades.Usuario;
-import static sur.softsurena.metodos.M_Cajero.getCajeros;
+import sur.softsurena.metodos.M_Cajero;
 import sur.softsurena.metodos.M_Turno;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -377,7 +377,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
         };
         Object[] rowData = new Object[columnas.length];
 
-        getCajeros().stream().forEach(
+        M_Cajero.select().stream().forEach(
                 cajero -> {
                     rowData[0] = cajero;
                     modelo.addRow(rowData);

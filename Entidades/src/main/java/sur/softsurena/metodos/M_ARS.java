@@ -3,6 +3,7 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,12 +29,11 @@ public class M_ARS {
         List<ARS> arsList = new ArrayList<>();
 
         try (
-                PreparedStatement ps = getCnn().prepareStatement(
-                        sqlARS(ars),
+                Statement ps = getCnn().createStatement(
                         ResultSet.TYPE_FORWARD_ONLY,
                         ResultSet.CONCUR_READ_ONLY,
                         ResultSet.HOLD_CURSORS_OVER_COMMIT
-                ); ResultSet rs = ps.executeQuery()) {
+                ); ResultSet rs = ps.executeQuery(sqlARS(ars))) {
                     while (rs.next()) {
                         arsList.add(
                                 ARS

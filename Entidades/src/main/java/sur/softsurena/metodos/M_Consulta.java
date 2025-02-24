@@ -3,20 +3,83 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Consulta;
-import sur.softsurena.entidades.ControlConsulta;
-import sur.softsurena.entidades.Paciente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Consulta {
+    
+    /**
+     * Consulta al sistema sobre las consultas registradas.
+     *
+     * @param consulta
+     * @return
+     */
+    public synchronized static List<Consulta> select(
+            Consulta consulta
+    ) {
+        List<Consulta> consultaList = new ArrayList<>();
+
+        try (Statement ps = getCnn().createStatement(
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+
+            ResultSet rs = ps.executeQuery(sqlSelect(consulta));
+
+            while (rs.next()) {
+                consultaList.add(
+                        Consulta
+                                .builder()
+                                .id(rs.getInt("ID"))
+                                .idPaciente(rs.getInt("ID_PACIENTE"))
+                                .idControlConsulta(rs.getInt("ID_CONTROL_CONSULTA"))
+                                .fecha(rs.getDate("FECHA"))
+                                .linea(rs.getInt("LINEA"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .build()
+                );
+            }
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return consultaList;
+    }
+    
+    protected static String sqlSelect(Consulta consulta) {
+        Boolean id = Objects.isNull(consulta.getId());
+        Boolean id_controlConsulta = Objects.isNull(consulta.getIdControlConsulta());
+        Boolean id_Paciente = Objects.isNull(consulta.getIdPaciente());
+
+        Boolean where = !id || !id_controlConsulta || !id_Paciente;
+
+        return """
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                    ESTADO
+                FROM CONSULTAS
+                %s%s%s%s
+                """.formatted(
+                where ? "WHERE " : "",
+                id ? "" : "ID = %d ".formatted(consulta.getId()),
+                id_controlConsulta ? "" : "ID_CONTROL_CONSULTA = %d ".formatted(
+                                consulta.getIdControlConsulta()
+                        ),
+                id_Paciente ? "" : "ID_PACIENTE = %d ".formatted(
+                        consulta.getIdPaciente())
+        ).trim().strip();
+    }
 
     /**
      * Metodo que permite agregar las consulta de los paciente al sistema.
@@ -68,70 +131,6 @@ public class M_Consulta {
             = "Error al insertar consulta";
     public static final String CONSULTA_AGREGADA_CORRECTAMENTE
             = "Consulta agregada correctamente";
-
-    /**
-     * Consulta al sistema sobre las consultas registradas.
-     *
-     * @param consulta
-     * @return
-     */
-    public synchronized static List<Consulta> select(Consulta consulta) {
-        List<Consulta> consultaList = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(consulta),
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                consultaList.add(
-                        Consulta
-                                .builder()
-                                .id(rs.getInt("ID"))
-                                .idPaciente(rs.getInt("ID_PACIENTE"))
-                                .idControlConsulta(rs.getInt("ID_CONTROL_CONSULTA"))
-                                .fecha(rs.getDate("FECHA"))
-                                .linea(rs.getInt("LINEA"))
-                                .estado(rs.getBoolean("ESTADO"))
-                                .build()
-                );
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return consultaList;
-    }
-
-    protected static String sqlSelect(Consulta consulta) {
-        Boolean id = Objects.isNull(consulta.getId());
-        Boolean id_controlConsulta = Objects.isNull(consulta.getIdControlConsulta());
-        Boolean id_Paciente = Objects.isNull(consulta.getIdPaciente());
-
-        Boolean where = !id || !id_controlConsulta || !id_Paciente;
-
-        return """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
-                    ESTADO
-                FROM CONSULTAS
-                %s%s%s%s
-                """.formatted(
-                where ? "WHERE " : "",
-                id ? "" : "ID = %d ".formatted(consulta.getId()),
-                id_controlConsulta ? "" : "ID_CONTROL_CONSULTA = %d ".formatted(
-                                consulta.getIdControlConsulta()
-                        ),
-                id_Paciente ? "" : "ID_PACIENTE = %d ".formatted(
-                        consulta.getIdPaciente())
-        ).trim().strip();
-    }
 
     /**
      *

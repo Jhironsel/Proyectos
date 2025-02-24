@@ -50,7 +50,7 @@ public class M_CajeroNGTest {
             priority = 0
     )
     public void testGetCajeros() {
-        List result = M_Cajero.getCajeros();
+        List result = M_Cajero.select();
         assertFalse(
                 result.isEmpty(), 
                 "La tabla de cajero NO contiene usuarios"

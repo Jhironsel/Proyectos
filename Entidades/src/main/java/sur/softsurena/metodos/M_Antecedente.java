@@ -3,6 +3,7 @@ package sur.softsurena.metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +12,6 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Antecedente;
-import sur.softsurena.entidades.Consulta;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -34,14 +34,12 @@ public class M_Antecedente {
 
         List<Antecedente> lista = new ArrayList<>();
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(antecedente),
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
+        ); ResultSet rs = ps.executeQuery(sqlSelect(antecedente));) {
 
-            try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
                     lista.add(
                             Antecedente
@@ -52,7 +50,6 @@ public class M_Antecedente {
                                     .build()
                     );
                 }
-            }
 
         } catch (SQLException ex) {
             LOG.log(
