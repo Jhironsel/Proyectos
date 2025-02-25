@@ -85,7 +85,7 @@ public class M_Almacen {
             @NonNull Almacen almacen
     ) {
         final String sql
-                = "SELECT O_ID FROM SP_I_ALMACEN(?,?,?,?)";
+                = "SELECT O_ID FROM SP_I_ALMACEN(?,?,?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -93,16 +93,9 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-
-            if (Objects.isNull(almacen.getId())) {
-                ps.setNull(1, Types.INTEGER);
-            } else {
-                int valor = almacen.getId();
-                ps.setInt(1, valor);
-            }
-            ps.setString(2, almacen.getNombre());
-            ps.setString(3, almacen.getUbicacion());
-            ps.setBoolean(4, almacen.getEstado());
+            ps.setString(1, almacen.getNombre());
+            ps.setString(2, almacen.getUbicacion());
+            ps.setBoolean(3, almacen.getEstado());
 
             try (ResultSet rs = ps.executeQuery();) {
 

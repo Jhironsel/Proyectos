@@ -7,7 +7,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
-import org.hibernate.dialect.lock.LockingStrategyException;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 

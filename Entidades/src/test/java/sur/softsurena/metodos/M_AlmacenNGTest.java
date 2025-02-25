@@ -112,32 +112,6 @@ public class M_AlmacenNGTest {
         );
         
         idAlmacen2 = result.getId();
-        
-        result = M_Almacen.insert(
-                Almacen
-                        .builder()
-                        .id(-1)
-                        .nombre("Valor negativo")
-                        .ubicacion("Debe de describir la ubicacion del almacen.")
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-
-        assertEquals(
-                result, 
-                Resultado
-                        .builder()
-                        .mensaje(ALMACEN_AGREGADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                M_Almacen.ERROR_AL_INSERTAR__ALMACEN
-        );
-
-        assertTrue(
-                result.getId() == -1,
-                "Id no fue -1"
-        );
     }
 
     @Test(

@@ -7,64 +7,27 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="371"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="622"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="softSurena.db"/>
-	<query language="sql"><![CDATA[SELECT ID, ID_CATEGORIA, DESC_CATEGORIA, CODIGO, DESCRIPCION, EXISTENCIA, NOTA, FECHA_CREACION, IMAGEN_CATEGORIA, IMAGEN_PRODUCTO, ESTADO 
-FROM GET_PRODUCTOS]]></query>
-	<field name="ID" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="ID"/>
-		<property name="com.jaspersoft.studio.field.label" value="ID"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="ID_CATEGORIA" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="ID_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.label" value="ID_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="DESC_CATEGORIA" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="DESC_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.label" value="DESC_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="CODIGO" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="CODIGO"/>
-		<property name="com.jaspersoft.studio.field.label" value="CODIGO"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="DESCRIPCION" class="java.lang.String">
+	<query language="sql"><![CDATA[SELECT 
+    p.DESCRIPCION DESCRIPCION_PRODUCTO,
+    c.DESCRIPCION DESCRIPCION_CATEGORIA,
+    p.ESTADO ESTADO
+FROM V_PRODUCTOS p
+INNER JOIN V_CATEGORIAS c ON c.ID = p.ID_CATEGORIA;]]></query>
+	<field name="DESCRIPCION_PRODUCTO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="DESCRIPCION"/>
-		<property name="com.jaspersoft.studio.field.label" value="DESCRIPCION"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
+		<property name="com.jaspersoft.studio.field.label" value="DESCRIPCION_PRODUCTO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="V_PRODUCTOS"/>
 	</field>
-	<field name="EXISTENCIA" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="EXISTENCIA"/>
-		<property name="com.jaspersoft.studio.field.label" value="EXISTENCIA"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="NOTA" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="NOTA"/>
-		<property name="com.jaspersoft.studio.field.label" value="NOTA"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="FECHA_CREACION" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="FECHA_CREACION"/>
-		<property name="com.jaspersoft.studio.field.label" value="FECHA_CREACION"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="IMAGEN_CATEGORIA" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="IMAGEN_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.label" value="IMAGEN_CATEGORIA"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
-	</field>
-	<field name="IMAGEN_PRODUCTO" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="IMAGEN_PRODUCTO"/>
-		<property name="com.jaspersoft.studio.field.label" value="IMAGEN_PRODUCTO"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
+	<field name="DESCRIPCION_CATEGORIA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DESCRIPCION"/>
+		<property name="com.jaspersoft.studio.field.label" value="DESCRIPCION_CATEGORIA"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="V_CATEGORIAS"/>
 	</field>
 	<field name="ESTADO" class="java.lang.Boolean">
 		<property name="com.jaspersoft.studio.field.name" value="ESTADO"/>
 		<property name="com.jaspersoft.studio.field.label" value="ESTADO"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="GET_PRODUCTOS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="V_PRODUCTOS"/>
 	</field>
-	<sortField name="ID"/>
 	<pageHeader height="40" splitType="Stretch">
 		<element kind="staticText" uuid="a7c442ea-fb4d-402b-8681-124f607189e9" x="0" y="0" width="177" height="20" fontName="DejaVu Sans Mono" fontSize="11.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[Listado de Producto]]></text>
@@ -82,34 +45,38 @@ FROM GET_PRODUCTOS]]></query>
 			<expression><![CDATA[new java.util.Date()]]></expression>
 		</element>
 	</pageHeader>
-	<columnHeader height="27" splitType="Stretch">
-		<element kind="line" uuid="a1c6efa1-8af8-4391-9362-af91e6c1a2f4" x="0" y="24" width="178" height="1"/>
-		<element kind="staticText" uuid="c05ba00f-59c2-4cba-8ab0-b98a9be39a35" x="0" y="0" width="177" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" bold="true">
-			<text><![CDATA[DESCRIPCION]]></text>
+	<columnHeader height="36" splitType="Stretch">
+		<element kind="staticText" uuid="5f666ca2-0c05-4c8e-ba2a-0fac29dee1fa" x="0" y="0" width="177" height="10" fontSize="6.0" bold="true">
+			<text><![CDATA[DESCRIPCION_PRODUCTO]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="09f64dae-961d-417d-a0b5-57f7a0dbd2d5"/>
 		</element>
-		<element kind="staticText" uuid="8a05965b-21a6-4b7c-baef-cc7fce1e8244" x="0" y="11" width="70" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" bold="true">
-			<text><![CDATA[PRECIO]]></text>
+		<element kind="staticText" uuid="f5a55b0c-1cde-4f27-88b3-60d2c2623dd1" x="0" y="10" width="177" height="10" fontSize="6.0" bold="true">
+			<text><![CDATA[DESCRIPCION_CATEGORIA]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="39cccc2a-9ae7-43ca-b8b6-1f724b2ab260"/>
 		</element>
-		<element kind="staticText" uuid="24bf4d30-8e20-44c3-9b80-127c6ed41acd" x="70" y="11" width="55" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" bold="true" hTextAlign="Center">
-			<text><![CDATA[EXISTENCIA]]></text>
-		</element>
-		<element kind="staticText" uuid="184bce8e-aa6e-4a60-9475-95128fb72e41" x="125" y="11" width="52" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" bold="true" hTextAlign="Center">
-			<text><![CDATA[Estado]]></text>
+		<element kind="staticText" uuid="75c8da12-ab6b-422f-bc86-29c1bb64336b" x="100" y="20" width="77" height="10" fontSize="6.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[ESTADO]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e979a12-fa64-41ad-861f-f82a8c00a3e2"/>
 		</element>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
-			<element kind="textField" uuid="31fd5386-bbd7-4501-b6ee-fdd5b40cc36f" x="0" y="0" width="177" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" bold="true">
-				<expression><![CDATA[$F{DESCRIPCION}]]></expression>
+		<band height="32" splitType="Stretch">
+			<element kind="textField" uuid="23931719-f6b3-4d07-b07e-e0501f8d8c72" x="0" y="0" width="177" height="10" fontSize="6.0">
+				<expression><![CDATA[$F{DESCRIPCION_PRODUCTO}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="09f64dae-961d-417d-a0b5-57f7a0dbd2d5"/>
 			</element>
-			<element kind="textField" uuid="31c54b33-25b9-4e5e-8407-f2e53fecf8dd" x="125" y="11" width="52" height="11" fontName="DejaVu Sans Mono" fontSize="8.0" hTextAlign="Center">
+			<element kind="textField" uuid="a824d67b-0483-4601-9bc4-ce5afe3e30d3" x="0" y="10" width="177" height="10" fontSize="6.0">
+				<expression><![CDATA[$F{DESCRIPCION_CATEGORIA}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="39cccc2a-9ae7-43ca-b8b6-1f724b2ab260"/>
+			</element>
+			<element kind="textField" uuid="ed89bf4d-51d2-48db-a572-843ef6aa9d03" x="100" y="20" width="77" height="10" fontSize="7.0" hTextAlign="Right">
 				<expression><![CDATA[$F{ESTADO} ? "Activo":"Inactivo"]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e979a12-fa64-41ad-861f-f82a8c00a3e2"/>
 			</element>
-			<element kind="line" uuid="9b4e94b4-c0e5-4067-8375-976f9b04bd4c" x="0" y="24" width="178" height="1"/>
 		</band>
 	</detail>
 	<summary height="33">
-		<element kind="staticText" uuid="05eb0490-1d7c-4df3-9fe7-941884b31f8a" x="0" y="13" width="178" height="20" fontName="DejaVu Sans Mono" hTextAlign="Center">
+		<element kind="staticText" uuid="05eb0490-1d7c-4df3-9fe7-941884b31f8a" x="7" y="6" width="166" height="20" fontName="DejaVu Sans Mono" hTextAlign="Center">
 			<text><![CDATA[Fin]]></text>
 		</element>
 		<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
