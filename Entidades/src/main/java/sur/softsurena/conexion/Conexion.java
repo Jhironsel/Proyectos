@@ -63,6 +63,7 @@ public class Conexion {
                 .append(pathBaseDatos)
                 .append("?wireEncryption=chacha64");
 
+        System.out.println("urlDB = " + urlDB.toString());
         return ConexionHolder.INSTANCE;
     }
 

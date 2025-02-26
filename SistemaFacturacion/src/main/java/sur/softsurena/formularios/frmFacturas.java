@@ -182,6 +182,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jLabel4 = new javax.swing.JLabel();
         jspCategoria = new javax.swing.JScrollPane();
         jpCategoria = new javax.swing.JPanel();
+        jspProductos = new javax.swing.JScrollPane();
         jpProductos = new javax.swing.JPanel();
 
         jMenu3.setText("File");
@@ -634,7 +635,15 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         });
         jspCategoria.setViewportView(jpCategoria);
 
+        jspProductos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jspProductos.setAutoscrolls(true);
+
         jpProductos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Productos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
+        jpProductos.setAutoscrolls(true);
+        jpProductos.setMaximumSize(jspProductos.getMaximumSize());
+        jpProductos.setMinimumSize(jspProductos.getMinimumSize());
+        jpProductos.setPreferredSize(jspProductos.getPreferredSize());
+        jspProductos.setViewportView(jpProductos);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -645,7 +654,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jpBusqueda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
                     .addComponent(jspCategoria)
-                    .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jspProductos))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -656,7 +665,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addComponent(jspProductos)
                 .addContainerGap())
         );
 
@@ -936,34 +945,32 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }//GEN-LAST:event_rbtContadoActionPerformed
 
     private void cbTodosProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosProductosActionPerformed
-        jpProductos = new javax.swing.JPanel();
-
-        jpProductos.setAutoscrolls(true);
-
-        jpProductos.setBackground(new java.awt.Color(255, 102, 51));
-
-        jpProductos.setBorder(
-                javax.swing.BorderFactory.createTitledBorder(
-                        null,
-                        "Productos",
-                        javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
-                        javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                        new java.awt.Font(
-                                "Ubuntu",
-                                0,
-                                14
-                        )
-                )
-        );
-        setLayout();
-        jpProductos.setMaximumSize(new java.awt.Dimension(350, 1500));
-        jpProductos.setMinimumSize(new java.awt.Dimension(350, 1500));
-        jpProductos.setPreferredSize(new java.awt.Dimension(350, 1500));
+//        jpProductos = new javax.swing.JPanel();
+//
+//        jpProductos.setAutoscrolls(true);
+//
+//        jpProductos.setBackground(new java.awt.Color(255, 102, 51));
+//
+//        jpProductos.setBorder(
+//                javax.swing.BorderFactory.createTitledBorder(
+//                        null,
+//                        "Productos",
+//                        javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+//                        javax.swing.border.TitledBorder.DEFAULT_POSITION,
+//                        new java.awt.Font(
+//                                "Ubuntu",
+//                                0,
+//                                14
+//                        )
+//                )
+//        );
+//        setLayout();
+//        jpProductos.setMaximumSize(new java.awt.Dimension(350, 1500));
+//        jpProductos.setMinimumSize(new java.awt.Dimension(350, 1500));
+//        jpProductos.setPreferredSize(new java.awt.Dimension(350, 1500));
         jpProductos.removeAll();
         jpProductos.repaint();
         jpProductos.validate();
-
-
     }//GEN-LAST:event_cbTodosProductosActionPerformed
 
 
@@ -2095,6 +2102,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private static javax.swing.JPanel jpInfoFactura;
     private javax.swing.JPanel jpProductos;
     private javax.swing.JScrollPane jspCategoria;
+    private javax.swing.JScrollPane jspProductos;
     private rojerusan.RSMenuBar rSMenuBar2;
     private javax.swing.JRadioButton rbtContado;
     public javax.swing.JRadioButton rbtCredito;
