@@ -1,5 +1,5 @@
 SET TERM ^ ;
-CREATE PROCEDURE CREATEBD
+ALTER PROCEDURE CREATEBD
 RETURNS (
     OPERACION VARCHAR(64) )
 SQL SECURITY DEFINER
@@ -10326,6 +10326,7 @@ END
 ^
 SET TERM ; ^
 
+
 GRANT EXECUTE
- ON PROCEDURE CREATEBD TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+ ON PROCEDURE CREATEBD TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA;
 
