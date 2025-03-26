@@ -26,7 +26,10 @@ public class frmRegistros extends javax.swing.JDialog {
     
     private static class NewSingletonHolder {
 
-        private static final frmRegistros INSTANCE = new frmRegistros(frmRegistros.parent, frmRegistros.modal);
+        private static final frmRegistros INSTANCE = new frmRegistros(
+                frmRegistros.parent,
+                frmRegistros.modal
+        );
     }
 
     private frmRegistros(java.awt.Frame parent, boolean modal) {
@@ -45,29 +48,20 @@ public class frmRegistros extends javax.swing.JDialog {
                 )
         );
         setLocationRelativeTo(null);
-        frmParametros p = frmParametros.getInstance();
-        String dominio = "localhost", puerto = "3050";
+        frmParametros parametros = frmParametros.getInstance();
+        String dominio, puerto;
+        
+        dominio = parametros.cargarParamentos().getHost();
+        puerto = parametros.cargarParamentos().getPuerto();
 
-        if (p.cargarParamentos("").getConIpServidor()) {
-            dominio = p.cargarParamentos("").getIpServidor1() + "."
-                    + p.cargarParamentos("").getIpServidor2() + "."
-                    + p.cargarParamentos("").getIpServidor3() + "."
-                    + p.cargarParamentos("").getIpServidor4();
-        }
 
-        if (p.cargarParamentos("").getConServidor()) {
-            dominio = p.cargarParamentos("").getUriServidor();
-        }
-
-        if (p.cargarParamentos("").getConPuerto()) {
-            puerto = p.cargarParamentos("").getPuerto();
-        }
         Conexion.getInstance(
-                "GET_GUID",
-                "1",
-                p.cargarParamentos("").getPathBaseDatos(),
+                txtUsuario.getText(),
+                new String(txtClave.getPassword()),
+                parametros.cargarParamentos().getPathBaseDatos(),
                 dominio,
-                puerto);
+                puerto
+        );
 
         Conexion.verificar();
 

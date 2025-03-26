@@ -13,9 +13,10 @@ import sur.softsurena.utilidades.Utilidades;
 public class Conexion {
 
     private static Connection cnn;
-    private static String user, clave;
-    private static StringBuilder urlDB;
+    public static String USER, CLAVE, DOMINIO, PATH_BD;
+    public static Integer PUERTO;
     private static final String PROTOCOLO_FIREBIRD = "jdbc:firebirdsql://";
+    public static StringBuilder URL_DB;
 
     public static Connection getCnn() {
         return cnn;
@@ -31,7 +32,7 @@ public class Conexion {
      *
      * @param user Es el usuario registrado en el sistema.
      * @param clave Clave de acceso del usuario.
-     * @param pathBaseDatos Ruta de acceso hacia la Base de Datos.
+     * @param path_bd Ruta de acceso hacia la Base de Datos.
      * @param dominio Direccion ip o local de la base de datos.
      * @param puerto Puerto utilizado para la conexion de la base de datos.
      *
@@ -41,13 +42,16 @@ public class Conexion {
     public static Conexion getInstance(
             @NonNull String user,
             @NonNull String clave,
-            @NonNull String pathBaseDatos,
+            @NonNull String path_bd,
             @NonNull String dominio,
             @NonNull String puerto
     ) {
 
-        Conexion.user = user;
-        Conexion.clave = clave;
+        Conexion.USER = user;
+        Conexion.CLAVE = clave;
+        Conexion.DOMINIO = dominio;
+        Conexion.PUERTO = Integer.valueOf(puerto);
+        Conexion.PATH_BD = path_bd;
 
         StringBuilder p = new StringBuilder("");
 
@@ -55,20 +59,17 @@ public class Conexion {
             p.append(":").append(puerto);
         }
 
-        urlDB = new StringBuilder();
-        urlDB.append(PROTOCOLO_FIREBIRD)
+        URL_DB = new StringBuilder();
+        URL_DB.append(PROTOCOLO_FIREBIRD)
                 .append(dominio)
                 .append(p)
                 .append("/")
-                .append(pathBaseDatos)
+                .append(path_bd)
                 .append("?wireEncryption=chacha64");
-
-        System.out.println("urlDB = " + urlDB.toString());
         return ConexionHolder.INSTANCE;
     }
 
     private static class ConexionHolder {
-
         private static final Conexion INSTANCE = new Conexion();
     }
 
@@ -85,12 +86,12 @@ public class Conexion {
     public static Resultado verificar() {
 
         final Properties properties = new Properties();
-        properties.setProperty("user", user);
-        properties.setProperty("password", clave);
+        properties.setProperty("user", USER);
+        properties.setProperty("password", CLAVE);
         properties.setProperty("charSet", "UTF8");
 
         try {
-            setCnn(DriverManager.getConnection(urlDB.toString(), properties));
+            setCnn(DriverManager.getConnection(URL_DB.toString(), properties));
             return Resultado
                     .builder()
                     .mensaje("Mensaje")
@@ -143,6 +144,7 @@ public class Conexion {
                     .build();
         }
     }
+    
     public static final String UNABLE_TO_COMPLETE_NETWORK_REQUEST_TO_HOS 
             = "Unable to complete network request to host";
     /**

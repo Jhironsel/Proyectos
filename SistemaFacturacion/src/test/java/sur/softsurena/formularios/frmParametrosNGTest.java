@@ -34,6 +34,7 @@ public class frmParametrosNGTest {
     public void tearDownMethod() throws Exception {
     }
 
+    //TODO 15.03.2025 Este test te espera con ansia.
     @Test(
             enabled = false,
             priority = 0,
@@ -41,10 +42,9 @@ public class frmParametrosNGTest {
                           """
     )
     public void testCargarParamentos() {
-        String zona = "";
         frmParametros instance = frmParametros.getInstance();
         Servidor expResult = null;
-        Servidor result = instance.cargarParamentos(zona);
+        Servidor result = instance.cargarParamentos();
         assertEquals(result, expResult);
     }
 

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
+import org.firebirdsql.gds.impl.GDSType;
+import org.firebirdsql.gds.ng.WireCrypt;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
 import sur.softsurena.formularios.frmClientes;
@@ -16,25 +18,21 @@ import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {
+    
+    public FirebirdEventos() {
+        //super(GDSType.getType("PURE_JAVA"));
+        super();
+    }
 
-    public synchronized boolean registro(String user, String clave,
-            String dominio, String pathBaseDatos, int puerto) {
-        setUser(user);
-        setPassword(clave);
+    public static void main(String[] args) {
+        FirebirdEventos eventos = new FirebirdEventos();
 
-//        setHost(dominio); //Han sido sustituido para futura versiones de JayBird
-        setServerName(dominio);
+        eventos.registro();
+    }
 
-//        setDatabase(pathBaseDatos);
-        setDatabaseName(pathBaseDatos);
-
-//        setPort(puerto);
-        setPortNumber(puerto);
-
+    public synchronized boolean registro() {
+        conectese();
         try {
-            if (!isConnected()) {
-                connect();
-            }
             //Evento para productos.********************************************
             addEventListener("EVENT_PRODUCTO", (DatabaseEvent event) -> {
                 LOG.log(
@@ -94,7 +92,7 @@ public class FirebirdEventos extends FBEventManager {
                 );
                 llenarTablaCorreos(null);
             });
-            
+
             //Evento de Deudas de clientes.*************************************
             addEventListener("EVENT_DEUDA", (DatabaseEvent event) -> {
                 LOG.log(
@@ -104,7 +102,7 @@ public class FirebirdEventos extends FBEventManager {
                 );
                 frmDeudas.llenarTabla();
             });
-            
+
             //Evento de Almacenes del sistema.**********************************
             addEventListener("EVENT_ALMACEN", (DatabaseEvent event) -> {
                 LOG.log(
@@ -123,7 +121,7 @@ public class FirebirdEventos extends FBEventManager {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    "Error en los eventos de Firebird",
+                    ex.getMessage(),
                     ex
             );
             return false;
@@ -131,4 +129,27 @@ public class FirebirdEventos extends FBEventManager {
         return true;
     }
     
+    private void conectese(){
+        setUser("sysdba");
+        setPassword("1");
+        setServerName("localhost");
+        setPortNumber(3050);
+        setDatabaseName("SoftSurena.db");
+        setCharSet("UTF8");
+        setWireCryptAsEnum(WireCrypt.ENABLED);
+        
+        if (!isConnected()) {
+            try {
+                connect();
+            } catch (SQLException ex) {
+                LOG.log(
+                        Level.SEVERE,
+                        ex.getMessage(),
+                        ex
+                );
+                throw new ExceptionInInitializerError("No pudo conectarse.");
+            }
+        }
+    }
+
 }

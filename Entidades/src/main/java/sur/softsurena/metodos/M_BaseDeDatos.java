@@ -62,9 +62,12 @@ public class M_BaseDeDatos {
         )) {
             ResultSet rs = ps.executeQuery();
             
-            rs.next();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
             
-            return rs.getInt(1);
+            
+            return -1;
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -86,7 +89,7 @@ public class M_BaseDeDatos {
      * registro.
      */
     public synchronized static boolean setLicencia(
-            Date fecha, 
+            Date fecha,
             String idMaquina
     ) {
         final String sql = """
@@ -103,17 +106,17 @@ public class M_BaseDeDatos {
             cs.setString(2, idMaquina);
 
             cs.execute();
-            
+
             return true;
-            
+
         } catch (SQLException ex) {
-            
+
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
-            
+
             return false;
         }
     }
@@ -144,7 +147,7 @@ public class M_BaseDeDatos {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getInt("cantidad");
             }
 
@@ -155,13 +158,13 @@ public class M_BaseDeDatos {
                     ex
             );
         }
-        
+
         return 0;
     }
-    
+
     /**
      * Metodo utilizado para obtener el identificador unico de la base de datos.
-     * 
+     *
      * @return Devuelve un String con el identificador de la base de datos.
      */
     public synchronized static String GET_GUID() {
@@ -170,7 +173,7 @@ public class M_BaseDeDatos {
                            """;
 
         String id = "";
-        
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -180,7 +183,7 @@ public class M_BaseDeDatos {
 
             ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 id = rs.getString("DB_GUID");
             }
 
@@ -191,7 +194,7 @@ public class M_BaseDeDatos {
                     ex
             );
         }
-        
+
         return id;
     }
 }

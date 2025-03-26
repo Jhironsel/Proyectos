@@ -4,9 +4,11 @@ import RSMaterialComponent.RSButtonMaterialIconOne;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -290,29 +292,18 @@ public final class frmLogin extends javax.swing.JFrame {
             return;
         }//Fin de validaciones de campos
 
-        frmParametros p = frmParametros.getInstance();
+        frmParametros parametros = frmParametros.getInstance();
 
-        String dominio = "localhost", puerto = "3050";
+        String dominio , puerto;
 
-        if (p.cargarParamentos("").getConIpServidor()) {
-            dominio = p.cargarParamentos("").getIpServidor1() + "."
-                    + p.cargarParamentos("").getIpServidor2() + "."
-                    + p.cargarParamentos("").getIpServidor3() + "."
-                    + p.cargarParamentos("").getIpServidor4();
-        }
+        dominio = parametros.cargarParamentos().getHost();
 
-        if (p.cargarParamentos("").getConServidor()) {
-            dominio = p.cargarParamentos("").getUriServidor();
-        }
-
-        if (p.cargarParamentos("").getConPuerto()) {
-            puerto = p.cargarParamentos("").getPuerto();
-        }
+        puerto = parametros.cargarParamentos().getPuerto();
 
         Conexion.getInstance(
                 txtUsuario.getText(),
                 new String(txtClave.getPassword()),
-                p.cargarParamentos("").getPathBaseDatos(),
+                parametros.cargarParamentos().getPathBaseDatos(),
                 dominio,
                 puerto);
 
@@ -345,22 +336,16 @@ public final class frmLogin extends javax.swing.JFrame {
             txtUsuario.requestFocus();
             return;
         }
+        
+        FirebirdEventos firebirdEvetos = new FirebirdEventos();
 
-        FirebirdEventos f = new FirebirdEventos();
-
-        if (!f.registro(
-                txtUsuario.getText(),
-                new String(txtClave.getPassword()),
-                dominio,
-                p.cargarParamentos("").getPathBaseDatos(),
-                Integer.parseInt(puerto))) {
+        if (!firebirdEvetos.registro()) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Error a registrar los eventos...",
+                    "Eventos no han sido registrado, deberá siempre actualizar las tablas.",
                     "",
-                    JOptionPane.ERROR_MESSAGE
+                    JOptionPane.WARNING_MESSAGE
             );
-            return;
         }
 
         //Comprobación de los dias restante de la licencia.
@@ -466,8 +451,7 @@ public final class frmLogin extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (
-                ClassNotFoundException
+        } catch (ClassNotFoundException
                 | InstantiationException
                 | IllegalAccessException
                 | javax.swing.UnsupportedLookAndFeelException ex) {

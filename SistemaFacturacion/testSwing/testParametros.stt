@@ -71,29 +71,6 @@
     <xy.ui.testing.action.component.FocusAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>rbtnNombreServidor</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <eventType>FOCUS_GAIN</eventType>
-    </xy.ui.testing.action.component.FocusAction>
-    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>javax.swing.JRadioButton</componentClassName>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>rbtnNombreServidor</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <propertyName>Selected</propertyName>
-      <propertyValueExpected>true</propertyValueExpected>
-      <regularExpressionExpected>false</regularExpressionExpected>
-    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-    <xy.ui.testing.action.component.FocusAction>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
         <componentName>txtHost</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
@@ -112,29 +89,6 @@
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
       <propertyValueExpected>localhost</propertyValueExpected>
-      <regularExpressionExpected>false</regularExpressionExpected>
-    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-    <xy.ui.testing.action.component.FocusAction>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>chbPuerto</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <eventType>FOCUS_GAIN</eventType>
-    </xy.ui.testing.action.component.FocusAction>
-    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>javax.swing.JCheckBox</componentClassName>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>chbPuerto</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <propertyName>Selected</propertyName>
-      <propertyValueExpected>true</propertyValueExpected>
       <regularExpressionExpected>false</regularExpressionExpected>
     </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
     <xy.ui.testing.action.component.FocusAction>
