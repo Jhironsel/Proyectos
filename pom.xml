@@ -91,7 +91,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
@@ -104,13 +104,13 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-fonts</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
         
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-pdf</artifactId>
-            <version>7.0.1</version>
+            <version>7.0.2</version>
         </dependency>
         
         <!--Dependencia para uso de Codificacion y Deco- en base64-->
@@ -193,11 +193,11 @@
         </dependency>
         
         
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-vfs2</artifactId>
             <version>2.10.0</version>
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>com.github.librepdf</groupId>
@@ -237,7 +237,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>3.4.3</version>
+            <version>3.4.4</version>
             <type>jar</type>
         </dependency>
         
