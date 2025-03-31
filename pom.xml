@@ -22,6 +22,7 @@
         <module>CajerosMaven</module>
         <module>JPA_Firebird</module>
         <!--<module>n2care</module>-->
+        <module>Proxy</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

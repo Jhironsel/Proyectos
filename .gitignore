@@ -27,3 +27,4 @@
 *.log
 /TelegramBoot/target/
 /target/
+/Proxy/target/
