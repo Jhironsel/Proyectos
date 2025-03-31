@@ -27,7 +27,8 @@ public class M_Carton_BingoNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "RRR_SOFTSURENA"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

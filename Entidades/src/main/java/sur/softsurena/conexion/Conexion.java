@@ -85,6 +85,7 @@ public class Conexion {
     public static void setInstanceNull(){
         Conexion.ConexionHolder.INSTANCE = null;
     }
+    
     private Conexion() {}
     
     /**
@@ -100,6 +101,7 @@ public class Conexion {
         properties.setProperty("user", Conexion.USER);
         properties.setProperty("password", Conexion.CLAVE);
         properties.setProperty("charSet", "UTF8");
+        
         if(Objects.nonNull(Conexion.ROLE)){
             properties.setProperty("roleName", Conexion.ROLE);
         }

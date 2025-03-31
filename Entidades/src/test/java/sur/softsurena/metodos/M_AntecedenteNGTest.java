@@ -10,7 +10,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Antecedente;
-import sur.softsurena.entidades.Consulta;
 import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_MODIFICADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.BORRADO_CORRECTAMENTE;
@@ -37,7 +36,8 @@ public class M_AntecedenteNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "RRR_SOFTSURENA"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

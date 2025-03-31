@@ -40,7 +40,8 @@ public class M_Control_ConsultaNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "RRR_SOFTSURENA"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

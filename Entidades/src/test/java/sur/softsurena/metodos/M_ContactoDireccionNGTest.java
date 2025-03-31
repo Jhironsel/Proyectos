@@ -35,7 +35,8 @@ public class M_ContactoDireccionNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "RRR_SOFTSURENA"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

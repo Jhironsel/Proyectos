@@ -28,12 +28,14 @@ public class M_ARSNGTest {
 //------------------------------------------------------------------------------
     @BeforeClass
     public void setUpClass() throws Exception {
+        
         Conexion.getInstance(
                 "sysdba",
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "RRR_SOFTSURENA"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),
