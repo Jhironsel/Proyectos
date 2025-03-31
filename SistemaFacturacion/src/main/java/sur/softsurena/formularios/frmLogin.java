@@ -294,33 +294,27 @@ public final class frmLogin extends javax.swing.JFrame {
 
         frmParametros parametros = frmParametros.getInstance();
 
-        String dominio , puerto;
-
-        dominio = parametros.cargarParamentos().getHost();
-
-        puerto = parametros.cargarParamentos().getPuerto();
-
         Conexion.getInstance(
                 txtUsuario.getText(),
                 new String(txtClave.getPassword()),
                 parametros.cargarParamentos().getPathBaseDatos(),
-                dominio,
-                puerto);
+                parametros.cargarParamentos().getHost(),
+                parametros.cargarParamentos().getPuerto()
+        );
 
         Resultado resultado = Conexion.verificar();
 
         if (!resultado.getEstado()) {
-            if (resultado.getMensaje().equals(Conexion.E_FECHA_VENCIMIENTO)) {
-                int num = JOptionPane.showConfirmDialog(
-                        this,
-                        "Este equipo no esta Autorizado! \nDesea Registrar?",
-                        "",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
-                if (num == JOptionPane.YES_OPTION) {
-                    registro();
-                }
+            int num = JOptionPane.showConfirmDialog(
+                    this,
+                    "Este equipo no esta Autorizado! \nDesea Registrar?",
+                    "",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+            if (num == JOptionPane.YES_OPTION) {
+                registro();
+                Conexion.setInstanceNull();
                 return;
             }
 
@@ -336,8 +330,10 @@ public final class frmLogin extends javax.swing.JFrame {
             txtUsuario.requestFocus();
             return;
         }
-        
+
         FirebirdEventos firebirdEvetos = new FirebirdEventos();
+        
+        firebirdEvetos.conectese(txtUsuario.getText(), new String(txtClave.getPassword()));
 
         if (!firebirdEvetos.registro()) {
             JOptionPane.showMessageDialog(
@@ -435,7 +431,6 @@ public final class frmLogin extends javax.swing.JFrame {
             return;
         }
 
-        //TODO Que hacer aqui cuando se termina de registrar.
         miRegistros.dispose();
 
     }

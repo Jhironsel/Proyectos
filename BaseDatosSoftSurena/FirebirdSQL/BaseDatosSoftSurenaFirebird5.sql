@@ -3,6 +3,7 @@
 /********************* ROLES **********************/
 
 CREATE ROLE CAJERO;
+CREATE ROLE CLIENTE;
 CREATE ROLE DOCTOR;
 CREATE ROLE GERENTE;
 CREATE ROLE PADRE;
@@ -13,6 +14,13 @@ CREATE ROLE VENDEDOR;
 /********************* UDFS ***********************/
 
 /********************* FUNCTIONS ***********************/
+
+SET TERM ^ ;
+CREATE FUNCTION F_CONEXION
+RETURNS D_BOOLEAN_T
+SQL SECURITY DEFINER
+as BEGIN END^
+SET TERM ; ^
 
 SET TERM ^ ;
 CREATE FUNCTION F_OBJECTOS (
@@ -1824,7 +1832,7 @@ CREATE PROCEDURE SP_U_METRICA (
     TX TYPE OF COLUMN METRICAS.TX,
     COMPLEMENTO TYPE OF COLUMN METRICAS.COMPLEMENTO,
     IMAGEN_TEXTO TYPE OF COLUMN METRICAS.IMAGEN_TEXTO )
-SQL SECURITY INVOKER
+SQL SECURITY DEFINER
 AS 
 BEGIN
 END^
@@ -2987,16 +2995,13 @@ WHERE RDB$RELATION_NAME NOT STARTING WITH 'RDB$' AND
      RDB$RELATION_NAME NOT STARTING WITH 'MON$'
 /**
 RDB$RELATION_TYPE - SMALLINT: The type of the relation object being described:
-
 0 - system or user-defined table 
 1 - view 
 2 - external table 
 3 - monitoring table 
 4 - connection-level GTT (PRESERVE ROWS) 
 5 - transaction-level GTT (DELETE ROWS)
-
 RDB$SQL_SECURITY - BOOLEAN: The SQL SECURITY mode (DEFINER or INVOKER):
-
 NULL - initial default (INVOKER) 
 FALSE - INVOKER 
 TRUE - DEFINER
@@ -4868,56 +4873,13 @@ SET TERM ; ^
 /******************** DB TRIGGERS ********************/
 
 SET TERM ^ ;
-CREATE TRIGGER SYSTEM_SHAREWARE ACTIVE
-ON CONNECT POSITION 0
+CREATE TRIGGER AUTOROLE ACTIVE
+ON CONNECT POSITION 1
 
-AS
-     DECLARE VARIABLE comando D_VARCHAR_1024;
-     DECLARE VARIABLE entrada D_BOOLEAN_T;
-     DECLARE VARIABLE c_Fchi D_FECHA;
-     DECLARE VARIABLE c_Fcha D_FECHA;
-     DECLARE VARIABLE c_Fchv D_FECHA;
-     DECLARE VARIABLE v_valor TYPE OF COLUMN VS_USUARIOS_TAGS.VALOR;
+AS 
+DECLARE VARIABLE v_valor TYPE OF COLUMN VS_USUARIOS_TAGS.VALOR;
 BEGIN
-    IF(CURRENT_ROLE <> 'RRR_SOFTSURENA' AND TRIM(CURRENT_USER) <> 'GET_GUID')THEN
-    BEGIN
-
-        --Armamos nuestro select que sera ejecutado en el servidor.
-        comando = 'SELECT FCHI, FCHA, FCHV FROM SP_V_E_S_SYS(?);';
-
-        --Bandera utilizada para validar que existe registro.
-        entrada = TRUE;
-
-        --ON EXTERNAL DATA SOURCE 'inet4://40.233.25.79:3050/registros.db' 
-        
-        FOR EXECUTE STATEMENT (comando) ((select RDB$GET_CONTEXT('SYSTEM', 'DB_GUID') from RDB$DATABASE))
-        ON EXTERNAL DATA SOURCE 'registros.db' AS
-        USER     'REGISTRADOR'
-        PASSWORD '123uasd'
-        INTO
-        :c_Fchi, c_Fcha, c_Fchv
-        DO BEGIN
-            --Si la fecha inicial es 
-            IF(CURRENT_DATE < c_Fchi)THEN
-                EXCEPTION E_FECHA_INICIAL_INCORRECTA;
-
-            IF(CURRENT_DATE < c_Fcha)THEN
-                EXCEPTION E_FECHA_ACTUAL_INCORRECTA;
-
-            IF(CURRENT_DATE > c_Fchv)THEN
-                EXCEPTION E_FECHA_VENCIMIENTO;
-
-            UPDATE V_T_E_S_SYS SET 
-                FCHI = :c_Fchi,
-                FCHA = :c_Fcha,
-                FCHV = :c_Fchv;
-                
-            entrada = FALSE;
-        END
-        
-        IF(entrada) THEN
-            EXCEPTION E_EQUIPO_NO_REGISTRADO;
-            
+    IF(CURRENT_ROLE <> 'RRR_SOFTSURENA')THEN BEGIN
         --Consultar si el usuario contiene el atributo de auto_role en el sistema.
         FOR SELECT u.VALOR
         FROM VS_USUARIOS_TAGS u 
@@ -4931,7 +4893,57 @@ BEGIN
                 EXCEPTION E_ROL_NO_ENCONTRADO;
             EXECUTE STATEMENT 'SET ROLE ' || :v_valor;
         END
-        
+    END
+END
+^
+SET TERM ; ^
+SET TERM ^ ;
+CREATE TRIGGER SYSTEM_SHAREWARE ACTIVE
+ON CONNECT POSITION 2
+
+AS
+DECLARE VARIABLE entrada D_BOOLEAN_T;
+BEGIN    
+    IF(CURRENT_ROLE <> 'RRR_SOFTSURENA')THEN
+    BEGIN
+        entrada = (SELECT F_CONEXION () FROM RDB$DATABASE);
+                
+        IF(entrada) THEN
+            EXCEPTION E_EQUIPO_NO_REGISTRADO;
+    END
+END
+^
+SET TERM ; ^
+SET TERM ^ ;
+CREATE TRIGGER SYSTEM_SHAREWARE2 INACTIVE
+ON TRANSACTION START POSITION 0
+
+AS
+DECLARE VARIABLE entrada D_BOOLEAN_T;
+BEGIN    
+    IF(CURRENT_ROLE <> 'RRR_SOFTSURENA')THEN
+    BEGIN
+        entrada = (SELECT F_CONEXION () FROM RDB$DATABASE);
+                
+        IF(entrada) THEN
+            EXCEPTION E_EQUIPO_NO_REGISTRADO;
+    END
+END
+^
+SET TERM ; ^
+SET TERM ^ ;
+CREATE TRIGGER SYSTEM_SHAREWARE3 INACTIVE
+ON TRANSACTION COMMIT POSITION 0
+
+AS
+DECLARE VARIABLE entrada D_BOOLEAN_T;
+BEGIN    
+    IF(CURRENT_ROLE <> 'RRR_SOFTSURENA')THEN
+    BEGIN
+        entrada = (SELECT F_CONEXION () FROM RDB$DATABASE);
+                
+        IF(entrada) THEN
+            EXCEPTION E_EQUIPO_NO_REGISTRADO;
     END
 END
 ^
@@ -4956,7 +4968,7 @@ body {
 
 <h1>Rol Cajero</h1>
 
-<p>El Rol de cajero permiso al usuario acceder al modulo de facturacción.</p>
+<p>El Rol de cajero permiso al usuario acceder al modulo de facturacci�n.</p>
 
 
 </body>
@@ -4964,6 +4976,58 @@ body {
 
 ';
 COMMENT ON ROLE RRR_SOFTSURENA IS 'Es un rol que puede ser usado para hacer ajuste importante del sistema.';
+SET TERM ^ ;
+ALTER FUNCTION F_CONEXION
+RETURNS D_BOOLEAN_T
+SQL SECURITY DEFINER
+
+AS
+DECLARE VARIABLE comando D_VARCHAR_1024;
+DECLARE VARIABLE c_Fchi D_FECHA;
+DECLARE VARIABLE c_Fcha D_FECHA;
+DECLARE VARIABLE c_Fchv D_FECHA;
+DECLARE VARIABLE uuid D_VARCHAR_70;
+DECLARE VARIABLE entrada D_BOOLEAN_T;
+BEGIN
+    --Armamos nuestro select que sera ejecutado en el servidor.
+    comando = 'SELECT FCHI, FCHA, FCHV FROM SP_V_E_S_SYS(?);';
+    
+    --Bandera utilizada para validar que existe registro.
+    entrada = TRUE;
+    
+    uuid = (select RDB$GET_CONTEXT('SYSTEM', 'DB_GUID') from RDB$DATABASE);
+    
+    --ON EXTERNAL DATA SOURCE 'inet4://40.233.25.79:3050/registros.db'
+    FOR EXECUTE STATEMENT (:comando) (:uuid)
+    ON EXTERNAL 'inet4://40.233.25.79:3050//home/ubuntu/BaseDatos/registros.fdb'
+    AS USER 'registrador'
+    PASSWORD '123uasd'
+    INTO
+    :c_Fchi, c_Fcha, c_Fchv
+    DO BEGIN
+        
+        IF(CURRENT_DATE < c_Fchi)THEN
+            EXCEPTION E_FECHA_INICIAL_INCORRECTA;
+            
+        IF(CURRENT_DATE < c_Fcha)THEN
+            EXCEPTION E_FECHA_ACTUAL_INCORRECTA;
+            
+        IF(CURRENT_DATE > c_Fchv)THEN
+            EXCEPTION E_FECHA_VENCIMIENTO;
+        
+        UPDATE V_T_E_S_SYS SET 
+            FCHI = :c_Fchi,
+            FCHA = :c_Fcha,
+            FCHV = :c_Fchv;
+            
+        entrada = FALSE;
+    END
+    RETURN entrada;
+END
+^
+SET TERM ; ^
+
+
 COMMENT ON FUNCTION F_OBJECTOS IS 'Permite decodificar los identificadores numericos de los campos RDB$OBJECT_TYPE en la tabla RDB$USER_PRIVILEGES';
 SET TERM ^ ;
 ALTER FUNCTION F_OBJECTOS (
@@ -5178,10 +5242,14 @@ SET TERM ; ^
 
 COMMENT ON PROCEDURE ACTUALIZAR_TABLA_PIVOT IS 'Este procedimiento en Firebird parece estar diseñado para actualizar una tabla pivot en función de los datos de una vista y algunas otras columnas especificadas. Aquí está el desglose de lo que hace:
 
-1. **Declaración de Variables**: Comienza declarando varias variables que se utilizarán en el procedimiento.
+1. **Declaración de Variables**: Comienza declarando varias variables que se 
+    utilizarán en el procedimiento.
 
-2. **Construcción de Consulta SELECT**: El procedimiento construye una consulta SELECT dinámica utilizando los parámetros de entrada, 
-	como `TCVISTA`, `TCPRIMERACOLUMNACABECERA`, `TCOTRASCOLUMNASCABECERA`, `TCCOLUMNADATOS`, y `TCVALORESDATOS`. La consulta se construye para agrupar datos en función de las columnas especificadas.
+2. **Construcción de Consulta SELECT**: El procedimiento construye una consulta 
+    SELECT dinámica utilizando los parámetros de entrada, como `TCVISTA`, 
+`TCPRIMERACOLUMNACABECERA`, `TCOTRASCOLUMNASCABECERA`, `TCCOLUMNADATOS`, y 
+`TCVALORESDATOS`. La consulta se construye para agrupar datos en función de las 
+columnas especificadas.
 
 3. **Ejecución de la Consulta SELECT**: Luego, se ejecuta la consulta SELECT construida y los resultados se almacenan en las variables `lcInto1`, `lcInto2`, y `lcInto3`.
 
@@ -8447,6 +8515,7 @@ SQL SECURITY DEFINER
 
 AS
 BEGIN
+    --TODO
     --Esta tabla es llama Vista Tabla Entrada y Salida de Sistema.
     --Tengo la constante 1 temporalmente en este insert.
     --Luego veo que hago con ella...
@@ -9353,7 +9422,7 @@ ALTER PROCEDURE SP_U_METRICA (
     TX TYPE OF COLUMN METRICAS.TX,
     COMPLEMENTO TYPE OF COLUMN METRICAS.COMPLEMENTO,
     IMAGEN_TEXTO TYPE OF COLUMN METRICAS.IMAGEN_TEXTO )
-SQL SECURITY INVOKER
+SQL SECURITY DEFINER
 
 AS
 BEGIN
@@ -10329,7 +10398,7 @@ COMMENT ON COLUMN PRECIOS.FECHA_FIN IS 'Fecha de caducidad del precio en el sist
 COMMENT ON COLUMN PRECIOS.DESCUENTO IS 'Si dicho producto esta recibiendo algun descuento en el momento.';
 COMMENT ON COLUMN PRECIOS.COSTO_ENVIO IS 'Se registra un coste de envio del producto en el sistema.';
 ALTER TABLE PRECIOS ADD CONSTRAINT FK_PRECIOS_0
-  FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTOS (ID);
+  FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTOS (ID) ON UPDATE CASCADE ON DELETE NO ACTION;
 ALTER TABLE PRECIOS ADD CONSTRAINT FK_PRECIOS_1
   FOREIGN KEY (ID_TIPO_PRECIO) REFERENCES T_TIPOS_PRECIO (ID);
 ALTER TABLE PRECIOS ADD CONSTRAINT FK_PRECIOS_2
@@ -10506,6 +10575,9 @@ GRANT SECRETARIA TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT VENDEDOR TO JHADIEL GRANTED BY SYSDBA;
 GRANT VENDEDOR TO RDB$ADMIN WITH ADMIN OPTION GRANTED BY SYSDBA;
 GRANT VENDEDOR TO SYSDBA WITH ADMIN OPTION GRANTED BY SYSDBA;
+GRANT EXECUTE
+ ON FUNCTION F_CONEXION TO  SYSDBA WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
+
 GRANT EXECUTE
  ON FUNCTION F_OBJECTOS TO ROLE RDB$ADMIN WITH GRANT OPTION GRANTED BY SYSDBA                                                                                                                                                                                                                                                      ;
 

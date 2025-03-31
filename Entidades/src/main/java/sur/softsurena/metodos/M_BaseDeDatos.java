@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -84,16 +86,22 @@ public class M_BaseDeDatos {
      * @param fecha Fecha que tendra la licencia del sistema.
      *
      * @param idMaquina Identificador del equipo unico, UUID.
+     * @param nombreEmpresa nombre de la empresa que requiere licencia.
+     * @param telefono telefono que la empresa.
+     * @param direccion direccion de la empresa.
      *
      * @return Devuelve un valor booleano que indica si tuvo exito el proceso de
      * registro.
      */
-    public synchronized static boolean setLicencia(
+    public synchronized static Resultado setLicencia(
             Date fecha,
-            String idMaquina
+            String idMaquina,
+            String nombreEmpresa,
+            String telefono,
+            String direccion
     ) {
         final String sql = """
-                           EXECUTE PROCEDURE SYSTEM_SET_LICENCIA(?,?)
+                           EXECUTE PROCEDURE SYSTEM_SET_LICENCIA(?,?,?,?,?)
                            """;
 
         try (CallableStatement cs = getCnn().prepareCall(
@@ -104,10 +112,18 @@ public class M_BaseDeDatos {
         )) {
             cs.setDate(1, fecha);
             cs.setString(2, idMaquina);
+            cs.setString(3, nombreEmpresa);
+            cs.setString(4, telefono);
+            cs.setString(5, direccion);
 
             cs.execute();
 
-            return true;
+            return Resultado
+                    .builder()
+                    .mensaje("Maquina registrada correctamente.!!!")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
 
         } catch (SQLException ex) {
 
@@ -117,7 +133,12 @@ public class M_BaseDeDatos {
                     ex
             );
 
-            return false;
+            return Resultado
+                    .builder()
+                    .mensaje("Error al registrar Maquina.!!!")
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
     }
 

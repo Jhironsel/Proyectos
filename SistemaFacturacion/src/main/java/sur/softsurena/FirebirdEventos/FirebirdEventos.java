@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
-import org.firebirdsql.gds.impl.GDSType;
 import org.firebirdsql.gds.ng.WireCrypt;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
@@ -13,11 +12,14 @@ import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
 import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
 import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
 import sur.softsurena.formularios.frmDeudas;
+import sur.softsurena.formularios.frmParametros;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
 import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {
+    
+    private static String USUARIO, CLAVE;
     
     public FirebirdEventos() {
         //super(GDSType.getType("PURE_JAVA"));
@@ -26,12 +28,17 @@ public class FirebirdEventos extends FBEventManager {
 
     public static void main(String[] args) {
         FirebirdEventos eventos = new FirebirdEventos();
-
+        
+        FirebirdEventos.USUARIO = "sysdba";
+        FirebirdEventos.CLAVE = "1";
+        
         eventos.registro();
     }
 
     public synchronized boolean registro() {
-        conectese();
+        
+        conectese(FirebirdEventos.USUARIO, FirebirdEventos.CLAVE);
+        
         try {
             //Evento para productos.********************************************
             addEventListener("EVENT_PRODUCTO", (DatabaseEvent event) -> {
@@ -129,12 +136,16 @@ public class FirebirdEventos extends FBEventManager {
         return true;
     }
     
-    private void conectese(){
-        setUser("sysdba");
-        setPassword("1");
-        setServerName("localhost");
-        setPortNumber(3050);
-        setDatabaseName("SoftSurena.db");
+    public void conectese(String usuario, String clave){
+        FirebirdEventos.USUARIO = usuario;
+        FirebirdEventos.CLAVE = clave;
+        
+        frmParametros parametros = frmParametros.getInstance();
+        
+        setUser(usuario);
+        setPassword(clave);
+        setServerName(parametros.cargarParamentos().getHost());
+        setDatabaseName(parametros.cargarParamentos().getPathBaseDatos());
         setCharSet("UTF8");
         setWireCryptAsEnum(WireCrypt.ENABLED);
         

@@ -3,6 +3,7 @@ package sur.softsurena.conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
@@ -13,10 +14,9 @@ import sur.softsurena.utilidades.Utilidades;
 public class Conexion {
 
     private static Connection cnn;
-    public static String USER, CLAVE, DOMINIO, PATH_BD;
-    public static Integer PUERTO;
+    private static String USER, CLAVE, ROLE;
     private static final String PROTOCOLO_FIREBIRD = "jdbc:firebirdsql://";
-    public static StringBuilder URL_DB;
+    private static StringBuilder URL_DB;
 
     public static Connection getCnn() {
         return cnn;
@@ -46,12 +46,8 @@ public class Conexion {
             @NonNull String dominio,
             @NonNull String puerto
     ) {
-
         Conexion.USER = user;
         Conexion.CLAVE = clave;
-        Conexion.DOMINIO = dominio;
-        Conexion.PUERTO = Integer.valueOf(puerto);
-        Conexion.PATH_BD = path_bd;
 
         StringBuilder p = new StringBuilder("");
 
@@ -69,13 +65,28 @@ public class Conexion {
         return ConexionHolder.INSTANCE;
     }
 
+    public static Conexion getInstance(
+            @NonNull String user,
+            @NonNull String clave,
+            @NonNull String path_bd,
+            @NonNull String dominio,
+            @NonNull String puerto,
+            @NonNull String role
+    ) {
+        Conexion.ROLE = role;
+        return getInstance(user, clave, path_bd, dominio, puerto);
+    }
+
+    //--------------------------------------------------------------------------
     private static class ConexionHolder {
-        private static final Conexion INSTANCE = new Conexion();
+        private static Conexion INSTANCE = new Conexion();
     }
-
-    private Conexion() {
+    
+    public static void setInstanceNull(){
+        Conexion.ConexionHolder.INSTANCE = null;
     }
-
+    private Conexion() {}
+    
     /**
      * Metodo que permite a los usuarios del sistema validar si estan
      * debidamente Loggeado,
@@ -86,9 +97,12 @@ public class Conexion {
     public static Resultado verificar() {
 
         final Properties properties = new Properties();
-        properties.setProperty("user", USER);
-        properties.setProperty("password", CLAVE);
+        properties.setProperty("user", Conexion.USER);
+        properties.setProperty("password", Conexion.CLAVE);
         properties.setProperty("charSet", "UTF8");
+        if(Objects.nonNull(Conexion.ROLE)){
+            properties.setProperty("roleName", Conexion.ROLE);
+        }
 
         try {
             setCnn(DriverManager.getConnection(URL_DB.toString(), properties));
@@ -100,8 +114,8 @@ public class Conexion {
                     .build();
         } catch (java.sql.SQLInvalidAuthorizationSpecException ex1) {
             Utilidades.LOG.log(
-                    Level.SEVERE, 
-                    JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI, 
+                    Level.SEVERE,
+                    JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI,
                     ex1
             );
             return Resultado
@@ -112,6 +126,7 @@ public class Conexion {
                     .build();
         } catch (SQLException ex) {
             String mensaje = "";
+
             if (ex.getMessage().contains(E_FECHA_INICIAL_INCORRECTA)) {
                 mensaje = E_FECHA_INICIAL_INCORRECTA;
             }
@@ -135,7 +150,9 @@ public class Conexion {
             if (mensaje.isBlank()) {
                 mensaje = ex.getMessage();
             }
+
             Utilidades.LOG.log(Level.SEVERE, mensaje, ex);
+
             return Resultado
                     .builder()
                     .mensaje(mensaje)
@@ -144,8 +161,8 @@ public class Conexion {
                     .build();
         }
     }
-    
-    public static final String UNABLE_TO_COMPLETE_NETWORK_REQUEST_TO_HOS 
+
+    public static final String UNABLE_TO_COMPLETE_NETWORK_REQUEST_TO_HOS
             = "Unable to complete network request to host";
     /**
      * Driver de firebird (Jaybird) no se encuentra en la carpecta /lib del
@@ -173,7 +190,7 @@ public class Conexion {
     /**
      * La fecha del producto ha caducado.
      */
-    public static final String E_FECHA_VENCIMIENTO 
+    public static final String E_FECHA_VENCIMIENTO
             = "E_FECHA_VENCIMIENTO";
 
     /**

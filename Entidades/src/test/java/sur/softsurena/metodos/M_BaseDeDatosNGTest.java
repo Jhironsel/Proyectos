@@ -118,7 +118,13 @@ public class M_BaseDeDatosNGTest {
         Date fecha = new Date(new GregorianCalendar().getTimeInMillis());
         String idMaquina = "Registro de prueba";
         assertTrue(
-                M_BaseDeDatos.setLicencia(fecha, idMaquina), 
+                M_BaseDeDatos.setLicencia(
+                        fecha, 
+                        idMaquina, 
+                        "Prueba", 
+                        "+1(829) 299-5555", 
+                        "Haciendo prueba."
+                ).getEstado(), 
                 "El registro de la licencia no fue insertado."
         );
         Conexion.getCnn().close();
