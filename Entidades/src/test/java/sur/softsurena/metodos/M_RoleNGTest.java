@@ -28,7 +28,8 @@ public class M_RoleNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
 
         assertTrue(

@@ -35,7 +35,6 @@ public class M_BaseDeDatos {
             rs1.next();
 
             return rs1.getString(1);
-
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -67,8 +66,6 @@ public class M_BaseDeDatos {
             if(rs.next()){
                 return rs.getInt(1);
             }
-            
-            
             return -1;
         } catch (SQLException ex) {
             LOG.log(
@@ -124,7 +121,6 @@ public class M_BaseDeDatos {
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-
         } catch (SQLException ex) {
 
             LOG.log(
@@ -153,10 +149,10 @@ public class M_BaseDeDatos {
      */
     public synchronized static int cantidadRegistros(String tabla) {
         final String sql = """
-            SELECT COALESCE(cantidad, 0) as cantidad 
-            FROM V_RECCOUNT 
-            WHERE tabla = ?;
-        """;
+                           SELECT COALESCE(cantidad, 0) as cantidad
+                           FROM V_RECCOUNT
+                           WHERE tabla = ?;
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -171,7 +167,6 @@ public class M_BaseDeDatos {
             if (rs.next()) {
                 return rs.getInt("cantidad");
             }
-
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -207,7 +202,6 @@ public class M_BaseDeDatos {
             if (rs.next()) {
                 id = rs.getString("DB_GUID");
             }
-
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,

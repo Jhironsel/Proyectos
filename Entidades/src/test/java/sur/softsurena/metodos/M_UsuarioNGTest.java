@@ -35,7 +35,8 @@ public class M_UsuarioNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

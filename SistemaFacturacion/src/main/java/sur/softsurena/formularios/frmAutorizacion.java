@@ -23,7 +23,8 @@ public class frmAutorizacion extends javax.swing.JDialog {
                 String.valueOf(txtPass.getPassword()),
                 "",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
         frmAutorizacion.aceptar = Conexion.verificar().getEstado();
     }

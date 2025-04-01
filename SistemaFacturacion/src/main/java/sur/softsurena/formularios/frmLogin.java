@@ -4,11 +4,9 @@ import RSMaterialComponent.RSButtonMaterialIconOne;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -299,7 +297,8 @@ public final class frmLogin extends javax.swing.JFrame {
                 new String(txtClave.getPassword()),
                 parametros.cargarParamentos().getPathBaseDatos(),
                 parametros.cargarParamentos().getHost(),
-                parametros.cargarParamentos().getPuerto()
+                parametros.cargarParamentos().getPuerto(),
+                "NONE"
         );
 
         Resultado resultado = Conexion.verificar();

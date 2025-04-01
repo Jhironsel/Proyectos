@@ -174,7 +174,8 @@ public class Acceso extends HttpServlet {
                 clave,
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
 
         if (Conexion.verificar().getEstado()) {

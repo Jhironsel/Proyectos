@@ -109,15 +109,20 @@ public class M_BaseDeDatosNGTest {
                 "Registrador",
                 "123uasd",
                 "registros.db",
-                "localhost",
-                "3050"
+                "40.233.25.79",
+                "3050",
+                "NONE"
         );
+        
         assertTrue(
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+        
         Date fecha = new Date(new GregorianCalendar().getTimeInMillis());
+        
         String idMaquina = "Registro de prueba";
+        
         assertTrue(
                 M_BaseDeDatos.setLicencia(
                         fecha, 
@@ -128,6 +133,7 @@ public class M_BaseDeDatosNGTest {
                 ).getEstado(), 
                 "El registro de la licencia no fue insertado."
         );
+        
         Conexion.getCnn().close();
     }
 

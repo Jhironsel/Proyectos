@@ -27,14 +27,15 @@ public class Conexion {
     }
 
     /**
-     * Unico Metodo que permite obtener una instancia de la clase Conexión. La
-     * cual requeire de los siguientes parametros de entrada.
+     * Unico Metodo que permite obtener una instancia de la clase Conexión.La
+ cual requeire de los siguientes parametros de entrada.
      *
      * @param user Es el usuario registrado en el sistema.
      * @param clave Clave de acceso del usuario.
      * @param path_bd Ruta de acceso hacia la Base de Datos.
      * @param dominio Direccion ip o local de la base de datos.
      * @param puerto Puerto utilizado para la conexion de la base de datos.
+     * @param role el role tiene los privilegios necesarios para el usuario.
      *
      * @return Devuelve una instancia de la clase conexion. La cual inicializa
      * las variables para la conexion a la base de datos.
@@ -44,11 +45,13 @@ public class Conexion {
             @NonNull String clave,
             @NonNull String path_bd,
             @NonNull String dominio,
-            @NonNull String puerto
+            @NonNull String puerto,
+            @NonNull String role
     ) {
         Conexion.USER = user;
         Conexion.CLAVE = clave;
-
+        Conexion.ROLE = role;
+        
         StringBuilder p = new StringBuilder("");
 
         if (!puerto.isBlank()) {
@@ -63,18 +66,6 @@ public class Conexion {
                 .append(path_bd)
                 .append("?wireEncryption=chacha64");
         return ConexionHolder.INSTANCE;
-    }
-
-    public static Conexion getInstance(
-            @NonNull String user,
-            @NonNull String clave,
-            @NonNull String path_bd,
-            @NonNull String dominio,
-            @NonNull String puerto,
-            @NonNull String role
-    ) {
-        Conexion.ROLE = role;
-        return getInstance(user, clave, path_bd, dominio, puerto);
     }
 
     //--------------------------------------------------------------------------

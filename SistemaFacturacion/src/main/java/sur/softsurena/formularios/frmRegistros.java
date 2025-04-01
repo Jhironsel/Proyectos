@@ -313,7 +313,8 @@ public class frmRegistros extends javax.swing.JDialog {
                 new String(txtClaveRemoto.getPassword()),
                 "registros.db",
                 dominio,
-                puerto
+                puerto,
+                "NONE"
         );
 
         if (!Conexion.verificar().getEstado()) {

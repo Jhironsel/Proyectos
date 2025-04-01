@@ -32,7 +32,8 @@ public class M_DeudaNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

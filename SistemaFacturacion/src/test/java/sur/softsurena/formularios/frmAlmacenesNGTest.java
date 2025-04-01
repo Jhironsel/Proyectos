@@ -26,7 +26,8 @@ public class frmAlmacenesNGTest {
                 "1",
                 "SoftSurena.db",
                 "localhost",
-                "3050"
+                "3050",
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),
