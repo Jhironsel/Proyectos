@@ -31,7 +31,7 @@ public class ParametrosConexion {
          propiedades = new Properties();
 
         try {
-            filePropertie = new File("properties/propiedades.properties");
+            filePropertie = new File("../properties/propiedades.properties");
             propiedades.load(new FileReader(filePropertie));
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, "Archivo no encotrado", ex);
@@ -61,7 +61,11 @@ public class ParametrosConexion {
                     "Parametros del Servidor actual"
             );
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Error al leer la propiedades del archivo.", ex);
+            LOG.log(
+                    Level.SEVERE, 
+                    "Error al leer la propiedades del archivo.", 
+                    ex
+            );
         }
     }
 }
