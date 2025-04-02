@@ -32,7 +32,7 @@ public class M_AlmacenNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

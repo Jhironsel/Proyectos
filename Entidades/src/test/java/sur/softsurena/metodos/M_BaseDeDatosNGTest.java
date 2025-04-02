@@ -20,6 +20,8 @@ import sur.softsurena.conexion.Conexion;
 @Getter
 public class M_BaseDeDatosNGTest {
 
+    private String GUID;
+
     public M_BaseDeDatosNGTest() {
     }
 
@@ -37,6 +39,7 @@ public class M_BaseDeDatosNGTest {
                 Conexion.verificar().getEstado(),
                 "Error al conectarse..."
         );
+        GUID = M_BaseDeDatos.GET_GUID();
     }
 
     @AfterClass
@@ -111,7 +114,7 @@ public class M_BaseDeDatosNGTest {
                 "registros.db",
                 "40.233.25.79",
                 "3050",
-                "NONE"
+                "R_REGISTRADOR"
         );
         
         assertTrue(
@@ -121,12 +124,10 @@ public class M_BaseDeDatosNGTest {
         
         Date fecha = new Date(new GregorianCalendar().getTimeInMillis());
         
-        String idMaquina = "Registro de prueba";
-        
         assertTrue(
                 M_BaseDeDatos.setLicencia(
                         fecha, 
-                        idMaquina, 
+                        GUID, 
                         "Prueba", 
                         "+1(829) 299-5555", 
                         "Haciendo prueba."

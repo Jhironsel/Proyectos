@@ -34,7 +34,7 @@ public class frmParametros extends javax.swing.JFrame {
         propiedades = new Properties();
 
         try {
-            filePropertie = new File("properties/propiedades.properties");
+            filePropertie = new File("../properties/propiedades.properties");
             propiedades.load(new FileReader(filePropertie));
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, "Archivo no encotrado", ex);

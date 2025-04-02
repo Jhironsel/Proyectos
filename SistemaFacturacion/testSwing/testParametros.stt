@@ -134,7 +134,7 @@
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
-      <propertyValueExpected>SoftSurena.db</propertyValueExpected>
+      <propertyValueExpected>softsurena.db</propertyValueExpected>
       <regularExpressionExpected>false</regularExpressionExpected>
     </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
     <xy.ui.testing.action.component.FocusAction>

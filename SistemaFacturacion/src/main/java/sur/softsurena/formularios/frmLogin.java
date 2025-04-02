@@ -330,19 +330,6 @@ public final class frmLogin extends javax.swing.JFrame {
             return;
         }
 
-        FirebirdEventos firebirdEvetos = new FirebirdEventos();
-        
-        firebirdEvetos.conectese(txtUsuario.getText(), new String(txtClave.getPassword()));
-
-        if (!firebirdEvetos.registro()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Eventos no han sido registrado, deberá siempre actualizar las tablas.",
-                    "",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        }
-
         //Comprobación de los dias restante de la licencia.
         int dia = periodoMaquina();
         if (dia < 1) {
@@ -360,6 +347,7 @@ public final class frmLogin extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
             );
+            
             if (resp == JOptionPane.OK_OPTION) {
                 registro();
             }
@@ -370,6 +358,23 @@ public final class frmLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(
                     this,
                     "Tiempo de version de prueba se acaba en " + dia + " dias.",
+                    "",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+        
+        
+        FirebirdEventos firebirdEvetos = new FirebirdEventos();
+        
+        firebirdEvetos.conectese(
+                txtUsuario.getText(), 
+                new String(txtClave.getPassword())
+        );
+
+        if (!firebirdEvetos.registro()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Eventos no han sido registrado, deberá siempre actualizar las tablas.",
                     "",
                     JOptionPane.WARNING_MESSAGE
             );

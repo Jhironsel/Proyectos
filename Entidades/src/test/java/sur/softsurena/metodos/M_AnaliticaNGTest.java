@@ -22,7 +22,7 @@ public class M_AnaliticaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "NONE"
         );
         
         assertTrue(

@@ -24,7 +24,7 @@ public class M_CajeroNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

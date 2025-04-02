@@ -35,7 +35,7 @@ public class M_ARSNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "NONE"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),
