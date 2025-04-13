@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Deuda;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -30,10 +31,10 @@ public class M_Deuda {
      *
      * @return
      */
-    public static synchronized List<sur.softsurena.entidades.Deuda> select(
-            @NonNull sur.softsurena.entidades.Deuda deuda
+    public static synchronized List<Deuda> select(
+            @NonNull Deuda deuda
     ) {
-        List<sur.softsurena.entidades.Deuda> deudasList = new ArrayList<>();
+        List<Deuda> deudasList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlGetDeudas(deuda),
@@ -43,7 +44,8 @@ public class M_Deuda {
         )) {
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
-                    deudasList.add(sur.softsurena.entidades.Deuda
+                    deudasList.add(
+                            Deuda
                                     .builder()
                                     .id(rs.getInt("ID"))
                                     .idCliente(rs.getInt("ID_CLIENTE"))
@@ -66,7 +68,7 @@ public class M_Deuda {
         return deudasList;
     }
 
-    protected static String sqlGetDeudas(sur.softsurena.entidades.Deuda deuda) {
+    protected static String sqlGetDeudas(Deuda deuda) {
         Boolean id = Objects.isNull(deuda.getId());
         Boolean idCliente = Objects.isNull(deuda.getIdCliente());
         boolean where = idCliente && id;
@@ -92,7 +94,7 @@ public class M_Deuda {
      * @return
      */
     public synchronized static Resultado insert(
-            @NonNull sur.softsurena.entidades.Deuda deuda
+            @NonNull Deuda deuda
     ) {
         final String sql = """
                            SELECT O_ID
@@ -146,7 +148,7 @@ public class M_Deuda {
      * @return
      */
     public synchronized static Resultado update(
-            @NonNull sur.softsurena.entidades.Deuda deuda
+            @NonNull Deuda deuda
     ) {
         final String sql = "EXECUTE PROCEDURE SP_U_DEUDA(?,?,?)";
 
@@ -186,7 +188,7 @@ public class M_Deuda {
      * @return
      */
     public synchronized static Resultado delete(
-            @NonNull sur.softsurena.entidades.Deuda deuda
+            @NonNull Deuda deuda
     ) {
         final String sql = "EXECUTE PROCEDURE SP_D_M_DEUDAS(?)";
 

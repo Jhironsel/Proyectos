@@ -35,7 +35,7 @@ public class M_ContactoTelNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),
@@ -154,7 +154,7 @@ public class M_ContactoTelNGTest {
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build(),
-                M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN_
+                M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN
         );
         persona.testDelete();
     }

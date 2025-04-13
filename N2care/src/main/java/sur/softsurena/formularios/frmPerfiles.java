@@ -4,6 +4,8 @@ import javax.swing.JOptionPane;
 
 public class frmPerfiles extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private int pestana = 0;
 
     public frmPerfiles(java.awt.Frame parent, boolean modal, String usuario) {
@@ -249,10 +251,12 @@ public class frmPerfiles extends javax.swing.JDialog {
                 cbActualizar.isSelected()+", "+
                 cbBorrar.isSelected()+", '"+
                 ((String)jlPerfiles.getSelectedValue())+"', '"+ "FALTA AGREGAR EL TEXTO');";
-        JOptionPane.showMessageDialog(this, 
-                ejecutarSQL(sql), 
-                "Proceso de insersion de permisos", 
-                JOptionPane.DEFAULT_OPTION);
+//        JOptionPane.showMessageDialog(
+//                this, 
+//                ejecutarSQL(sql), 
+//                "Proceso de insersion de permisos", 
+//                JOptionPane.DEFAULT_OPTION
+//        );
         
         cbConsultar.setEnabled(false);
         cbActualizar.setEnabled(false);

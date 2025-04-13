@@ -498,7 +498,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jpCliente" min="-2" pref="112" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane5" max="32767" attributes="0"/>
+                      <Component id="jScrollPane5" pref="291" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -847,9 +847,9 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jpBusqueda" alignment="1" pref="588" max="32767" attributes="0"/>
+                          <Component id="jpBusqueda" alignment="1" max="32767" attributes="0"/>
                           <Component id="jspCategoria" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jspProductos" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jspProductos" alignment="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -863,7 +863,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jpBusqueda" min="-2" pref="75" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jspProductos" max="32767" attributes="0"/>
+                      <Component id="jspProductos" pref="0" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1017,6 +1017,9 @@
               </LayoutCode>
             </Container>
             <Container class="javax.swing.JScrollPane" name="jspCategoria">
+              <Properties>
+                <Property name="verticalScrollBarPolicy" type="int" value="21"/>
+              </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
@@ -1045,6 +1048,18 @@
             <Container class="javax.swing.JScrollPane" name="jspProductos">
               <Properties>
                 <Property name="horizontalScrollBarPolicy" type="int" value="31"/>
+                <Property name="verticalScrollBarPolicy" type="int" value="22"/>
+                <Property name="autoscrolls" type="boolean" value="true"/>
+                <Property name="doubleBuffered" type="boolean" value="true"/>
+                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 0]"/>
+                </Property>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 0]"/>
+                </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 1000]"/>
+                </Property>
               </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
@@ -1058,133 +1073,54 @@
                         </TitledBorder>
                       </Border>
                     </Property>
-                    <Property name="autoscrolls" type="boolean" value="true"/>
-                    <Property name="focusCycleRoot" type="boolean" value="true"/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[0, 1000]"/>
+                    </Property>
                   </Properties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-                  <SubComponents>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal1">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal1ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal2">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal2ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal3">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal3ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal4">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal4ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal5">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal5ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="newscomponents.RSButtonGradientIcon_new" name="btnPonerTemporal6">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Getion&lt;br&gt;Temporal F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;&lt;center&gt;Temporal&lt;br&gt;F5&lt;/center&gt;&lt;/html&gt;"/>
-                        <Property name="gradiente" type="newscomponents.RSButtonGradientIcon_new$Gradiente" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HORIZONTAL"/>
-                        </Property>
-                        <Property name="horizontalTextPosition" type="int" value="0"/>
-                        <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                          <Value id="HOURGLASS_FULL"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="btnTemporal" noResource="true"/>
-                        <Property name="round" type="int" value="30"/>
-                        <Property name="sizeIcon" type="float" value="40.0"/>
-                        <Property name="verticalTextPosition" type="int" value="3"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPonerTemporal6ActionPerformed"/>
-                      </Events>
-                    </Component>
-                  </SubComponents>
+                  <LayoutCode>
+                    <CodeStatement>
+                      <CodeExpression id="14_flowLayout1">
+                        <CodeVariable name="flowLayout1" type="4096" declaredType="java.awt.FlowLayout"/>
+                        <ExpressionOrigin>
+                          <ExpressionProvider type="CodeConstructor">
+                            <CodeConstructor class="java.awt.FlowLayout" parameterTypes=""/>
+                          </ExpressionProvider>
+                        </ExpressionOrigin>
+                      </CodeExpression>
+                      <StatementProvider type="CodeExpression">
+                        <CodeExpression id="14_flowLayout1"/>
+                      </StatementProvider>
+                    </CodeStatement>
+                    <CodeStatement>
+                      <CodeExpression id="14_flowLayout1"/>
+                      <StatementProvider type="CodeMethod">
+                        <CodeMethod name="setAlignOnBaseline" class="java.awt.FlowLayout" parameterTypes="boolean"/>
+                      </StatementProvider>
+                      <Parameters>
+                        <CodeExpression id="15">
+                          <ExpressionOrigin>
+                            <Value type="boolean" value="true"/>
+                          </ExpressionOrigin>
+                        </CodeExpression>
+                      </Parameters>
+                    </CodeStatement>
+                    <CodeStatement>
+                      <CodeExpression id="16_jpProductos">
+                        <CodeVariable name="jpProductos" type="8194" declaredType="javax.swing.JPanel"/>
+                        <ExpressionOrigin>
+                          <ExpressionProvider type="ComponentRef">
+                            <ComponentRef name="jpProductos"/>
+                          </ExpressionProvider>
+                        </ExpressionOrigin>
+                      </CodeExpression>
+                      <StatementProvider type="CodeMethod">
+                        <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                      </StatementProvider>
+                      <Parameters>
+                        <CodeExpression id="14_flowLayout1"/>
+                      </Parameters>
+                    </CodeStatement>
+                  </LayoutCode>
                 </Container>
               </SubComponents>
             </Container>

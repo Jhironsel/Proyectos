@@ -2,7 +2,6 @@ package sur.softsurena.metodos;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
 import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -39,7 +38,7 @@ public class M_ConsultaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "NONE"
         );
 
         assertTrue(
@@ -76,7 +75,7 @@ public class M_ConsultaNGTest {
         Resultado result = M_Consulta.insert(
                 Consulta
                         .builder()
-                        .idPaciente(M_PacienteNGTest.generarPaciente().getPersona().getIdPersona())
+                        .idPaciente(M_PacienteNGTest.generarPaciente().getId())
                         .idControlConsulta(M_Control_ConsultaNGTest.controlConsulta().getId())
                         .linea(0)
                         .fecha(new Date(Calendar.getInstance().getTimeInMillis()))
@@ -104,24 +103,97 @@ public class M_ConsultaNGTest {
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
+            priority = 6,
+            description = """
+                          Test que permite eliminar una consulta ya programada.
+                          Tambien, elimina el control de la consulta creada y 
+                          el paciente creado recientemente.
+                          """
+    )
+    public void testUpdate() {
+        assertEquals(
+                M_Consulta.update(
+                        Consulta
+                                .builder()
+                                .id(idConsulta)
+                                .idPaciente(
+                                        M_PacienteNGTest
+                                                .generarPaciente()
+                                                .getId()
+                                )
+                                .idControlConsulta(
+                                        M_Control_ConsultaNGTest
+                                                .controlConsulta()
+                                                .getId()
+                                )
+                                .fecha(new Date(Calendar.getInstance().getTimeInMillis()))
+                                .linea(0)
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                Resultado
+                    .builder()
+                    .mensaje("Consulta actualizada correctamente.!!!")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
+                "Error al actualizar la consulta.!!!"
+        );
+    }
+
+    @Test(
+            enabled = true,
             priority = 5,
             description = """
                           
                           """
     )
     public static void testSelect() {
-        Consulta consulta = null;
-        List expResult = null;
-        List result = M_Consulta.select(consulta);
-        assertEquals(result, expResult);
+        assertNotNull(
+                M_Consulta.select(
+                        Consulta
+                                .builder()
+                                .build()
+                ),
+                ""
+        );
+        
+        assertNotNull(
+                M_Consulta.select(
+                        Consulta
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                ""
+        );
+        
+        assertNotNull(
+                M_Consulta.select(
+                        Consulta
+                                .builder()
+                                .idControlConsulta(-1)
+                                .build()
+                ),
+                ""
+        );
+        
+        assertNotNull(
+                M_Consulta.select(
+                        Consulta
+                                .builder()
+                                .idPaciente(-1)
+                                .build()
+                ),
+                ""
+        );
     }
 
     @Test(
             enabled = true,
             priority = 0,
             description = """
-                          
                           """
     )
     public static void testSqlSelect() {
@@ -132,8 +204,8 @@ public class M_ConsultaNGTest {
                 """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
                     ESTADO
-                FROM CONSULTAS
-                """.trim().strip()
+                FROM V_CONSULTAS
+                """.strip()
         );
         
         assertEquals(
@@ -146,9 +218,9 @@ public class M_ConsultaNGTest {
                 """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
                     ESTADO
-                FROM CONSULTAS
+                FROM V_CONSULTAS
                 WHERE ID = -1
-                """.trim().strip()
+                """.strip()
         );
         
         assertEquals(M_Consulta.sqlSelect(Consulta
@@ -159,9 +231,9 @@ public class M_ConsultaNGTest {
                 """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
                     ESTADO
-                FROM CONSULTAS
+                FROM V_CONSULTAS
                 WHERE ID_CONTROL_CONSULTA = -1
-                """.trim().strip()
+                """.strip()
         );
         
         assertEquals(
@@ -174,9 +246,9 @@ public class M_ConsultaNGTest {
                 """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
                     ESTADO
-                FROM CONSULTAS
+                FROM V_CONSULTAS
                 WHERE ID_PACIENTE = -1
-                """.trim().strip()
+                """.strip()
         );
     }
 
@@ -191,7 +263,7 @@ public class M_ConsultaNGTest {
     )
     public static void testDelete() {
         assertEquals(
-                M_Consulta.delete(idConsulta), 
+                M_Consulta.delete(idConsulta),
                 Resultado
                         .builder()
                         .mensaje(CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST)
@@ -204,5 +276,6 @@ public class M_ConsultaNGTest {
         
         M_PacienteNGTest.testDelete();
         M_Control_ConsultaNGTest.testDelete();
+        M_PersonaNGTest.testDelete();
     }
 }

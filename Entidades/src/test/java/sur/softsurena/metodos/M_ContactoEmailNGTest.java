@@ -42,7 +42,7 @@ public class M_ContactoEmailNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

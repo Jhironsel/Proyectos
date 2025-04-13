@@ -69,9 +69,8 @@ public class frmAdministradorTurnosNGTest {
                           """
     )
     public void testCrearReporte() {
-        String userName = "sysdba";
         
-        JTable result = frmAdministradorTurnos.crearReporte(userName);
+        JTable result = frmAdministradorTurnos.crearReporte("sysdba");
         
         assertNotNull(
                 result,

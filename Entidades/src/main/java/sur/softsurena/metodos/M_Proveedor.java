@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
@@ -17,11 +18,10 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Proveedor {
-    
     /**
      * Consulta a la base de datos sobre los proveedores del sistema.
-     * 
-     * @return 
+     *
+     * @return
      */
     public synchronized static List<Proveedor> select() {
         final String sql = """
@@ -36,7 +36,7 @@ public class M_Proveedor {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 lista.add(
                         Proveedor
                                 .builder()
@@ -46,28 +46,25 @@ public class M_Proveedor {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
         return lista;
     }
-    
-    public synchronized static List<Proveedor> selectATR() {
-        final String sql = """
-                           SELECT ID, CODIGO
-                           FROM V_PERSONAS_PROVEEDORES_ATR
-                           """;
+
+    public synchronized static List<Proveedor> selectATR(Proveedor proveedor) {
+
         List<Proveedor> lista = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlProveedor(proveedor),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 lista.add(
                         Proveedor
                                 .builder()
@@ -78,24 +75,40 @@ public class M_Proveedor {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
         return lista;
     }
+
+    public static String sqlProveedor(Proveedor proveedor) {
+        boolean id = Objects.isNull(proveedor.getId());
+        boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
+        boolean where = id && codigo;
+        final String sql = """
+                           SELECT ID, CODIGO
+                           FROM V_PERSONAS_PROVEEDORES_ATR
+                           %s%s%s
+                           """.formatted(
+                                   where ? "":"WHERE ", 
+                                   id ? "":"ID = %d ".formatted(proveedor.getId()),
+                                   codigo ? "":"CODIGO STARTING WITH '%s' ".formatted(proveedor.getCodigoProveedor())
+                           );
+        return sql.strip();
+    }
 //------------------------------------------------------------------------------
-    
+
     /**
      * Inserta un registro completo de un proveedor en el sistema.
-     * 
+     *
      * @param proveedor
-     * 
-     * @return 
+     *
+     * @return
      */
     public synchronized static Resultado insert(Proveedor proveedor) {
-        
+
         final String sql
                 = """
                   EXECUTE PROCEDURE SP_I_PERSONA_PROVEEDOR (?,?)
@@ -107,12 +120,12 @@ public class M_Proveedor {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            
+
             ps.setInt(1, proveedor.getId());
             ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
-            
+
             return Resultado
                     .builder()
                     .mensaje(PROVEEDOR_AGREGADO_CORRECTAMENTE)
@@ -120,8 +133,8 @@ public class M_Proveedor {
                     .estado(Boolean.TRUE)
                     .build();
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, 
-                    ERROR_AL_INSERTAR__PROVEEDOR, 
+            LOG.log(Level.SEVERE,
+                    ERROR_AL_INSERTAR__PROVEEDOR,
                     ex
             );
             return Resultado
@@ -132,22 +145,22 @@ public class M_Proveedor {
                     .build();
         }
     }
-    private static final String ERROR_AL_INSERTAR__PROVEEDOR 
+    private static final String ERROR_AL_INSERTAR__PROVEEDOR
             = "⛔ Error al insertar Proveedor...";
-    private static final String PROVEEDOR_AGREGADO_CORRECTAMENTE 
+    private static final String PROVEEDOR_AGREGADO_CORRECTAMENTE
             = "🆗 Proveedor agregado correctamente.";
-    
+
 //------------------------------------------------------------------------------
     /**
      * Metodo que permite la actualizacion de los proveedores del sistema de
      * factura.
      *
      * @param proveedor
-     * 
+     *
      * @return
      */
     public synchronized static Resultado update(Proveedor proveedor) {
-        
+
         final String sql = """
                            EXECUTE PROCEDURE SP_U_PERSONA_PROVEEDOR(?,?)
                            """;
@@ -161,44 +174,44 @@ public class M_Proveedor {
             ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
-            
+
             return Resultado
                     .builder()
                     .mensaje(CONSULTA_MODIFICADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-            
+
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ERROR_AL_MODIFICAR_CONSULTA, 
+                    Level.SEVERE,
+                    ERROR_AL_MODIFICAR_CONSULTA,
                     ex
             );
         }
         return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_MODIFICAR_CONSULTA)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
+                .builder()
+                .mensaje(ERROR_AL_MODIFICAR_CONSULTA)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
-    public static final String ERROR_AL_MODIFICAR_CONSULTA 
+    public static final String ERROR_AL_MODIFICAR_CONSULTA
             = "⛔ Error al modificar proveedor...";
-    public static final String CONSULTA_MODIFICADO_CORRECTAMENTE 
+    public static final String CONSULTA_MODIFICADO_CORRECTAMENTE
             = "🆗 Proveedor modificado correctamente";
-    
+
 //------------------------------------------------------------------------------
     /**
      * Metodo que permite la actualizacion de los proveedores del sistema de
      * factura.
      *
      * @param proveedor
-     * 
+     *
      * @return
      */
     public synchronized static Resultado delete(Proveedor proveedor) {
-        
+
         final String sql = """
                            EXECUTE PROCEDURE SP_D_PERSONA_PROOVEDOR(?)
                            """;
@@ -211,30 +224,30 @@ public class M_Proveedor {
             ps.setInt(1, proveedor.getId());
 
             ps.executeUpdate();
-            
+
             return Resultado
                     .builder()
                     .mensaje(CONSULTA_ELIMINADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-            
+
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
         return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_ELIMINAR_CONSULTA)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
+                .builder()
+                .mensaje(ERROR_AL_ELIMINAR_CONSULTA)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
-    public static final String ERROR_AL_ELIMINAR_CONSULTA 
+    public static final String ERROR_AL_ELIMINAR_CONSULTA
             = "⛔ Error al eliminar proveedor...";
-    public static final String CONSULTA_ELIMINADO_CORRECTAMENTE 
+    public static final String CONSULTA_ELIMINADO_CORRECTAMENTE
             = "🆗 Proveedor eliminado correctamente";
 }

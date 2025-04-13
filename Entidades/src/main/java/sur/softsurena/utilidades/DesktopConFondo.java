@@ -24,11 +24,9 @@ public class DesktopConFondo extends JDesktopPane {
     @Override
     public void paint(Graphics g) {
         if (imagen != null) {
-            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-            setOpaque(false);
-        } else {
-            setOpaque(true);
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), null);
         }
+        setOpaque(false);
 
         try {
             super.paint(g);

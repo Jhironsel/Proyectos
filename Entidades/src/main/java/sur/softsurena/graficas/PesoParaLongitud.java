@@ -23,8 +23,9 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getLongitudPeso;
-import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PesoParaLongitud {
@@ -37,12 +38,15 @@ public class PesoParaLongitud {
     private Float SD1;
     private Float SD2;
     private Float SD3;
-    private final int tamanoFigura;
     private final int idPaciente;
 
-    public PesoParaLongitud(int idPaciente, int tamanoFigura) {
-        sexo = getSexoPaciente(idPaciente);
-        this.tamanoFigura = tamanoFigura;
+    public PesoParaLongitud(int idPaciente) {
+        sexo = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getSexo().toString();
         this.idPaciente = idPaciente;
     }
 
@@ -53,7 +57,7 @@ public class PesoParaLongitud {
                     new InputStreamReader(XYSeriesCollection.class.
                             getClassLoader().getResourceAsStream(
                                     "datos/PesoParaLongitud.txt")));
-            String str = localBufferedReader.readLine();
+            
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, true);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, true);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, true);
@@ -62,6 +66,8 @@ public class PesoParaLongitud {
             XYSeries localXYSeries6 = new XYSeries("SD2", true, true);
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
+            
+            String str = localBufferedReader.readLine();
 
             for (str = localBufferedReader.readLine();
                     str != null;

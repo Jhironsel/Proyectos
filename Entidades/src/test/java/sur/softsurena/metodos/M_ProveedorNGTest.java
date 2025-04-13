@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -19,6 +20,8 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 public class M_ProveedorNGTest {
+
+    private int idPersona;
 
     public M_ProveedorNGTest() {
     }
@@ -52,6 +55,7 @@ public class M_ProveedorNGTest {
     public void tearDownMethod() throws Exception {
     }
 //------------------------------------------------------------------------------
+
     @Test(
             enabled = true,
             priority = 1,
@@ -60,29 +64,49 @@ public class M_ProveedorNGTest {
     )
     public void testSelect() {
         assertNotNull(
-                M_Proveedor.select(), 
+                M_Proveedor.select(),
                 "Error a consultar la lista de proveedores."
         );
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 2,
-            description = ""
+            description = """
+                          
+                          """
     )
     public void testInsert() {
-        String expResult = "";
+        Resultado persona = M_Persona.insert(
+                Persona
+                        .builder()
+                        .pnombre("Proveedor Prueba")
+                        .snombre("")
+                        .apellidos("Test del sistema")
+                        .persona('F')
+                        .sexo('m')
+                        .fecha_nacimiento(new Date(0))
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+
+        idPersona = persona.getId();
+
         Resultado result = M_Proveedor.insert(
                 Proveedor
                         .builder()
-                        .id(-1)
-                        .codigoProveedor("")
+                        .id(idPersona)
+                        .codigoProveedor(M_ContactoTel.generarTelMovil())
                         .build()
         );
-        assertEquals(result, expResult);
+
+        assertTrue(
+                result.getEstado(),
+                ""
+        );
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = false,
@@ -95,7 +119,7 @@ public class M_ProveedorNGTest {
         Resultado result = M_Proveedor.update(p);
         assertEquals(result, expResult);
     }
-    
+
 //------------------------------------------------------------------------------
     /**
      * Test of delete method, of class M_Proveedor.
@@ -107,10 +131,86 @@ public class M_ProveedorNGTest {
                           """
     )
     public void testDelete() {
-        Proveedor proveedor = null;
-        Resultado expResult = null;
-        Resultado result = M_Proveedor.delete(proveedor);
-        assertEquals(result, expResult);
+        assertTrue(
+                M_Proveedor.delete(
+                        Proveedor
+                                .builder()
+                                .id(idPersona)
+                                .build()
+                ).getEstado(),
+                "Error al eliminar el proveedor."
+        );
+
+        assertTrue(
+                M_Persona.delete(idPersona).getEstado(),
+                "Error al eliminar la persona."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSelectATR() {
+        assertNotNull(
+                M_Proveedor.selectATR(
+                        Proveedor
+                                .builder()
+                                .build()
+                ),
+                "Error al consultar los proveedores."
+        );
+
+        assertNotNull(
+                M_Proveedor.selectATR(
+                        Proveedor
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                "Error al consultar los proveedores."
+        );
+
+        assertNotNull(
+                M_Proveedor.selectATR(
+                        Proveedor
+                                .builder()
+                                .codigoProveedor("000-0000")
+                                .build()
+                ),
+                "Error al consultar los proveedores."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSqlProveedor() {
+        assertEquals(
+                M_Proveedor.sqlProveedor(Proveedor.builder().build()),
+                """
+                SELECT ID, CODIGO
+                FROM V_PERSONAS_PROVEEDORES_ATR"""
+        );
+        assertEquals(
+                M_Proveedor.sqlProveedor(Proveedor.builder().id(-1).build()),
+                """
+                SELECT ID, CODIGO
+                FROM V_PERSONAS_PROVEEDORES_ATR
+                WHERE ID = -1"""
+        );
+        assertEquals(
+                M_Proveedor.sqlProveedor(Proveedor.builder().codigoProveedor("000-0000").build()),
+                """
+                SELECT ID, CODIGO
+                FROM V_PERSONAS_PROVEEDORES_ATR
+                WHERE CODIGO STARTING WITH '000-0000'"""
+        );
     }
 
 }

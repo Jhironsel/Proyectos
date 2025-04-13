@@ -70,6 +70,40 @@ public class M_PersonaNGTest {
             enabled = true,
             priority = 0,
             description = """
+                          Test que permite obtener un registro de la base de 
+                          datos del sistema.
+                          """
+    )
+    public static void testSelect() {
+        Persona result = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPersona)
+                        .build()
+        ).getFirst();
+        assertNotNull(
+                result,
+                "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
+        );
+
+        result = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(0)
+                        .build()
+        ).getFirst();
+
+        assertNotNull(
+                result,
+                "Registros de CLIENTE GENERICO NO ENCONTRADO."
+        );
+    }
+
+    //--------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
                           Prueba que permite insertar una persona al sistema.
                           y obtener su ID en la variable idPersona.
                           """
@@ -123,40 +157,6 @@ public class M_PersonaNGTest {
                         .estado(Boolean.TRUE)
                         .build(),
                 ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA
-        );
-    }
-
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Test que permite obtener un registro de la base de 
-                          datos del sistema.
-                          """
-    )
-    public static void testSelect() {
-        Persona result = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(idPersona)
-                        .build()
-        ).getFirst();
-        assertNotNull(
-                result,
-                "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
-        );
-
-        result = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(0)
-                        .build()
-        ).getFirst();
-
-        assertNotNull(
-                result,
-                "Registros de CLIENTE GENERICO NO ENCONTRADO."
         );
     }
 

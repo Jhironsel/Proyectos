@@ -191,7 +191,8 @@ public class frmLogin extends javax.swing.JFrame {
                         new String(txtClave.getPassword()),
                         "SoftSurena.db",
                         "localhost",
-                        "3050"
+                        "3050",
+                        "NONE"
                 );
                 
                 if (Conexion.verificar().getEstado()) {
@@ -237,8 +238,12 @@ public class frmLogin extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException
                 | ClassNotFoundException
                 | InstantiationException
-                | IllegalAccessException e) {
-            //Instalar Logger
+                | IllegalAccessException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al colocar la el look and feel.!",
+                    ex
+            );
         }
 
         frmLogin miUsuario = new frmLogin();

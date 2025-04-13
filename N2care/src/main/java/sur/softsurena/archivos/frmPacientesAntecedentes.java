@@ -5,8 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Antecedente;
+import sur.softsurena.entidades.Asegurado;
+import sur.softsurena.entidades.Consulta;
+import sur.softsurena.entidades.Paciente;
+import sur.softsurena.metodos.M_ARS;
 import sur.softsurena.metodos.M_Antecedente;
+import sur.softsurena.metodos.M_Asegurado;
+import sur.softsurena.metodos.M_Consulta;
 import sur.softsurena.utilidades.Resultado;
 
 public class frmPacientesAntecedentes extends javax.swing.JDialog {
@@ -51,8 +58,6 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNombres = new javax.swing.JTextField();
-        txtApellidos = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         txtSeguro = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtNoSeguro = new javax.swing.JTextField();
@@ -80,13 +85,9 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         jLabel1.setText("Antecedentes de Paciente");
         jLabel1.setOpaque(true);
 
-        jLabel2.setText("Nombre: ");
+        jLabel2.setText("Nombres y Apellidos: ");
 
         txtNombres.setEditable(false);
-
-        txtApellidos.setEditable(false);
-
-        jLabel3.setText("Apellidos: ");
 
         txtSeguro.setEditable(false);
 
@@ -121,7 +122,6 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Documento nuevo 32 x 32.png"))); // NOI18N
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
@@ -137,7 +137,6 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
 
         btnModificar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(1, 1, 1));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Editar Documento 32 x 32.png"))); // NOI18N
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
@@ -150,7 +149,6 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
 
         btnBorrar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Borrar 32 x 32.png"))); // NOI18N
         btnBorrar.setMnemonic('b');
         btnBorrar.setText("Borrar");
         btnBorrar.setToolTipText("Borrar Registro Actual");
@@ -165,7 +163,7 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,55 +178,53 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jLabel2)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                            .addComponent(txtApellidos))
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0)
+                                .addComponent(jLabel2))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNoSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 0, 0))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtSeguro, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNoSeguro, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
+                            .addComponent(txtNombres))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
                     .addComponent(txtNoSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel4, txtNombres, txtSeguro});
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel3, jLabel5, txtApellidos, txtNoSeguro});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel5, txtNoSeguro});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -286,30 +282,47 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
                     "Debe seleccionar un antecedente!");
             return;
         }
-        
-        M_Antecedente.delete(
-                ((Antecedentes) jtPadres.getValueAt(
-                        jtPadres.getSelectedRow(), 0)).getIdAntecedente()
+
+        Resultado resultado = M_Antecedente.delete(
+                ((Antecedente) jtPadres.getValueAt(
+                        jtPadres.getSelectedRow(),
+                        0
+                ))
         );
-        
+
         JOptionPane.showMessageDialog(
                 this,
-                
-                );
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
         llenarTabla();
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        ResultSet rs = getPacienteActivoID(idPaciente);
-        try {
-            rs.next();
-            txtNombres.setText(rs.getString("NOMBRES"));
-            txtApellidos.setText(rs.getString("APELLIDOS"));
-            txtSeguro.setText(rs.getString("IDARS"));
-            txtNoSeguro.setText(rs.getString("NONSS"));
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        Paciente paciente = Paciente
+                .builder()
+                .id(idPaciente)
+                .build();
+
+        Asegurado asegurado = M_Asegurado.select(
+                Asegurado
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst();
+
+        ARS ars = M_ARS.select(
+                ARS
+                        .builder()
+                        .id(asegurado.getIdArs())
+                        .build()
+        ).getFirst();
+
+        txtNombres.setText(paciente.toString());
+        txtSeguro.setText(ars.getDescripcion());
+        txtNoSeguro.setText(asegurado.getNo_nss());
+
         llenarTabla();
     }//GEN-LAST:event_formWindowOpened
 
@@ -320,14 +333,12 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtPadres;
-    private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtNoSeguro;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtSeguro;
@@ -338,23 +349,29 @@ public class frmPacientesAntecedentes extends javax.swing.JDialog {
         String titulos[] = {"Descripcion del Antecedente"};
         Object registro[] = new Object[1];
         jtPadres.removeAll();
-        try {
-            ResultSet rs = getAntecedentes(idPaciente);
 
-            M_Antecedente.select(antecedente);
-
-            DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-            while (rs.next()) {
-                registro[0] = Antecedente
+        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
+        
+        M_Consulta.select(
+                Consulta
                         .builder()
-                        .id(rs.getInt("idAntecedente"))
-                        .descripcion(rs.getString("DESCRIPCION"))
-                        .build();
-                miTabla.addRow(registro);
-            }
-            jtPadres.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+                        .idPaciente(idPaciente)
+                        .build()
+        ).stream().forEach(
+                consulta -> {
+                    M_Antecedente.select(
+                            Antecedente
+                                    .builder()
+                                    .idConsulta(consulta.getId())
+                                    .build()
+                    ).stream().forEach(
+                            antecedente -> {
+                                registro[0] = antecedente;
+                                miTabla.addRow(registro);
+                            }
+                    );
+                }
+        );
+        jtPadres.setModel(miTabla);
     }
 }

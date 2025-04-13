@@ -126,15 +126,15 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         jsCantidadFilas = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jsPaginaNro = new javax.swing.JSpinner();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tblProducto = new RSMaterialComponent.RSTableMetro(){
+        btnActualizarLista = new newscomponents.RSButtonGradientIcon_new();
+        btnControlPrecio = new newscomponents.RSButtonGradientIcon_new();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblProducto = new RSMaterialComponent.RSTableMetro() {
             @Override
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Las celdas no son editables.
             }
         };
-        btnActualizarLista = new newscomponents.RSButtonGradientIcon_new();
-        btnControlPrecio = new newscomponents.RSButtonGradientIcon_new();
         jpMantenimiento = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -166,7 +166,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Productos");
+        setTitle("Productos 05.04.2025");
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Navegacion", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 12))); // NOI18N
         jScrollPane3.setToolTipText("");
@@ -279,27 +279,6 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             }
         });
 
-        jScrollPane5.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true)));
-
-        tblProducto.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblProducto.setName("tblProducto"); // NOI18N
-        tblProducto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblProductoKeyPressed(evt);
-            }
-        });
-        jScrollPane5.setViewportView(tblProducto);
-
         btnActualizarLista.setText("Actualizar lista");
         btnActualizarLista.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
         btnActualizarLista.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.UPDATE);
@@ -319,28 +298,49 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             }
         });
 
+        tblProducto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblProducto.setName("tblProducto"); // NOI18N
+        tblProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblProductoKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblProducto);
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                        .addGap(0, 345, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
-                        .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addGap(4, 4, 4)
-                        .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5))
+                        .addContainerGap()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                                .addGap(0, 345, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addGap(5, 5, 5)
+                                .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addGap(4, 4, 4)
+                                .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel10Layout.createSequentialGroup()
+                                .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
@@ -356,7 +356,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                     .addComponent(jLabel2)
                     .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -588,7 +588,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         );
         jpESProductosLayout.setVerticalGroup(
             jpESProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
 
         jtpPrincipal.addTab("E/S Productos", jpESProductos);
@@ -601,7 +601,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         );
         jpESHistorialLayout.setVerticalGroup(
             jpESHistorialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
 
         jtpPrincipal.addTab("E/S Historial", jpESHistorial);
@@ -629,7 +629,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(619, Short.MAX_VALUE))
+                .addContainerGap(639, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Control de precio", jpESHistorial1);
@@ -962,8 +962,6 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         } else if (jtpPrincipal.getSelectedComponent() == jpESHistorial) {
 
         }
-
-
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     /**
@@ -1408,13 +1406,10 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int num1 = (int) (Math.random() * tblProducto.getRowCount());
-
                         if (num1 == 0) {
                             num1 = 1;
                         }
-
                         tblProducto.setRowSelectionInterval(num1, num1);
-
                     }
                 }
             }
@@ -1523,17 +1518,16 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      */
     public static JTable llenarTablaProductos(String criterioBusqueda) {
 
-        if (Objects.isNull(criterioBusqueda)) {
+        if (Objects.isNull(criterioBusqueda) || 
+                criterioBusqueda.equalsIgnoreCase("evento")) {
             criterioBusqueda = "";
         }
 
-        if (criterioBusqueda.equalsIgnoreCase("evento")) {
-            criterioBusqueda = frmProductos.criterioBusqueda;
-        }
-
         // Array de String que dan nombre a las columnas de la tabla.
-        String titulos[] = {"Codigo Producto", "Categoria", "Descripcion",
-            "Fecha creación", "Estado", "Nota"};
+        String titulos[] = {
+            "Codigo Producto", "Categoria", "Descripcion", "Fecha creación", 
+            "Estado", "Nota"
+        };
 
         //Limpiamos todos los registro de la tabla. 
         tblProducto.removeAll();
@@ -1583,6 +1577,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
                     registro[3] = producto.getFechaCreacion();
                     registro[4] = producto.getEstado();
                     registro[5] = producto.getNota();
+                    
                     miTabla.addRow(registro);
                 }
         );
@@ -1648,8 +1643,10 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
      * Metodo utilizado para modicar el ancho de cada columna del modulo
      * producto.
      *
-     * Este metodo es llamado desde: 1) btnBorrarActionPerformed 2)
-     * btnBuscarProductoActionPerformed 3) formInternalFrameOpened
+     * Este metodo es llamado desde: 
+     * 1) btnBorrarActionPerformed 
+     * 2) btnBuscarProductoActionPerformed 
+     * 3) formInternalFrameOpened
      */
     private static void reOrdenar() {
         if (tblProducto.getRowCount() <= 0) {
@@ -1657,45 +1654,14 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
         }
 
         TableColumn miTableColumn;
+        int[] preAncho = {150, 300, 500, 200, 100, 300};
+        int[] maxAncho = {200, 400, 800, 300, 100, 800};
+        int[] minAncho = {120, 200, 100, 100, 100, 100};
         for (int i = 0; i < tblProducto.getColumnCount(); i++) {
-
             miTableColumn = tblProducto.getColumnModel().getColumn(i);
-
-            if (i == 0) {//Codigo Producto
-                miTableColumn.setPreferredWidth(150);
-                miTableColumn.setMaxWidth(200);
-                miTableColumn.setMinWidth(120);
-            }
-
-            if (i == 1) {//Categoria
-                miTableColumn.setPreferredWidth(300);
-                miTableColumn.setMaxWidth(400);
-                miTableColumn.setMinWidth(200);
-            }
-
-            if (i == 2) {//Descripcion 
-                miTableColumn.setPreferredWidth(500);
-                miTableColumn.setMaxWidth(800);
-                miTableColumn.setMinWidth(100);
-            }
-
-            if (i == 3) {//Fecha de vecimiento
-                miTableColumn.setPreferredWidth(200);
-                miTableColumn.setMaxWidth(300);
-                miTableColumn.setMinWidth(100);
-            }
-
-            if (i == 4) {//Estado del producto
-                miTableColumn.setPreferredWidth(100);
-                miTableColumn.setMaxWidth(100);
-                miTableColumn.setMinWidth(100);
-            }
-
-            if (i == 5) {//Nota del producto.
-                miTableColumn.setPreferredWidth(300);
-                miTableColumn.setMaxWidth(800);
-                miTableColumn.setMinWidth(100);
-            }
+            miTableColumn.setPreferredWidth(preAncho[i]);
+            miTableColumn.setMaxWidth(maxAncho[i]);
+            miTableColumn.setMinWidth(minAncho[i]);
         }
 
         tblProducto.setRowSelectionInterval(0, 0);
@@ -1792,10 +1758,10 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel jlImagenProducto;
     private RSMaterialComponent.RSLabelIcon jlOpcionesMostrar;
     private javax.swing.JPanel jpESHistorial;
@@ -1807,7 +1773,7 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
     private static javax.swing.JSpinner jsCantidadFilas;
     private static javax.swing.JSpinner jsPaginaNro;
     private static javax.swing.JTabbedPane jtpPrincipal;
-    public static RSMaterialComponent.RSTableMetro tblProducto;
+    public static javax.swing.JTable tblProducto;
     private javax.swing.JTextField txtCodigoBarra;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextArea txtNotas;

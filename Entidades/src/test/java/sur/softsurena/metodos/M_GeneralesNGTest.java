@@ -131,12 +131,15 @@ public class M_GeneralesNGTest {
     public void testSelect() {
         assertNotNull(
                 M_Generales.select(
-                        Generales.builder().build()
+                        Generales
+                                .builder()
+                                .build()
                 ), 
                 """
                 Error al realizar la consulta a generales.
                 """
         );
+        
         assertNotNull(
                 M_Generales.select(
                         Generales
@@ -148,6 +151,20 @@ public class M_GeneralesNGTest {
                 Error al realizar la consulta a generales.
                 """
         );
+        
+        assertEquals(
+                M_Generales.select(
+                        Generales
+                                .builder()
+                                .cedula("999-9999999-9")
+                                .build()
+                ).getFirst().getCedula(),
+                "000-0000000-0",
+                """
+                Error al realizar la consulta a generales. 99
+                """
+        );
+        
         assertNotNull(
                 M_Generales.select(
                         Generales
@@ -159,6 +176,7 @@ public class M_GeneralesNGTest {
                 Error al realizar la consulta a generales.
                 """
         );
+        
         assertNotNull(
                 M_Generales.select(
                         Generales

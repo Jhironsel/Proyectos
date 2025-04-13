@@ -18,9 +18,9 @@ import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {
-    
+
     private static String USUARIO, CLAVE;
-    
+
     public FirebirdEventos() {
         //super(GDSType.getType("PURE_JAVA"));
         super();
@@ -28,17 +28,44 @@ public class FirebirdEventos extends FBEventManager {
 
     public static void main(String[] args) {
         FirebirdEventos eventos = new FirebirdEventos();
-        
+
         FirebirdEventos.USUARIO = "sysdba";
         FirebirdEventos.CLAVE = "1";
-        
+
         eventos.registro();
     }
 
     public synchronized boolean registro() {
-        
+
         conectese(FirebirdEventos.USUARIO, FirebirdEventos.CLAVE);
+
+        /*
+        if (evt.isControlDown()) {
+            if (evt.isAltDown()) {
+                if (evt.isShiftDown()) {
+                    if (evt.isAltGraphDown()) {
+                        int num1 = (int) (Math.random() * tblProducto.getRowCount());
+
+                        if (num1 == 0) {
+                            num1 = 1;
+                        }
+
+                        tblProducto.setRowSelectionInterval(num1, num1);
+
+                    }
+                }
+            }
+        }
         
+        new RSMaterialComponent.RSTableMetro(){
+            @Override
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Las celdas no son editables.
+            }
+        }
+        tblProducto
+        public static
+         */
         try {
             //Evento para productos.********************************************
             addEventListener("EVENT_PRODUCTO", (DatabaseEvent event) -> {
@@ -135,20 +162,20 @@ public class FirebirdEventos extends FBEventManager {
         }
         return true;
     }
-    
-    public void conectese(String usuario, String clave){
+
+    public void conectese(String usuario, String clave) {
         FirebirdEventos.USUARIO = usuario;
         FirebirdEventos.CLAVE = clave;
-        
+
         frmParametros parametros = frmParametros.getInstance();
-        
+
         setUser(usuario);
         setPassword(clave);
         setServerName(parametros.cargarParamentos().getHost());
         setDatabaseName(parametros.cargarParamentos().getPathBaseDatos());
         setCharSet("UTF8");
         setWireCryptAsEnum(WireCrypt.ENABLED);
-        
+
         if (!isConnected()) {
             try {
                 connect();

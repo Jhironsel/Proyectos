@@ -23,7 +23,6 @@ import static sur.softsurena.metodos.M_Role.quitarRolUsuario;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
 import static sur.softsurena.metodos.M_Usuario.getNombresUsuarios;
-import static sur.softsurena.metodos.M_Usuario.getUsuario;
 import static sur.softsurena.metodos.M_Usuario.getUsuarios;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Resultado;
@@ -1234,9 +1233,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 }
         );
 
-        DefaultTableCellRenderer tcr = new DefaultTableCellHeaderRenderer() {
-
-        };
+        DefaultTableCellRenderer tcr = new DefaultTableCellHeaderRenderer();
         tcr.setHorizontalAlignment(SwingConstants.LEFT);
 
         tblRoles.getColumnModel().getColumn(0).setCellRenderer(tcr);

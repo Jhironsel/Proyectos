@@ -5,11 +5,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -23,7 +19,7 @@ import sur.softsurena.entidades.Proveedor;
 import sur.softsurena.formularios.frmPrincipal;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
 import sur.softsurena.metodos.M_Medicamento;
-import static sur.softsurena.metodos.M_Medicamento.getMedicamento;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.metodos.M_Proveedor;
 import sur.softsurena.utilidades.JComboExp;
 import sur.softsurena.utilidades.Resultado;
@@ -38,8 +34,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
     private File fichero;
 
-    private final Map<Integer, Image> map;
-
     private ImageIcon img = null;
 
     private JComboExp miCombo;
@@ -47,7 +41,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     public frmMedicamentos() {
 
         initComponents();
-        this.map = new HashMap<>();
         jpbFoto.setVisible(false);
 
         miCombo = new JComboExp();
@@ -72,9 +65,9 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
         jpDetalles = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMedicamentos = new JTable(){
@@ -119,7 +112,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Foto Medicamento"));
 
-        jlFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-pill-180.png"))); // NOI18N
         jlFoto.setToolTipText("Imagen del medicamento seleccionado");
 
         jpbFoto.setStringPainted(true);
@@ -147,7 +139,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Documento nuevo 32 x 32.png"))); // NOI18N
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
@@ -163,7 +154,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         btnModificar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(1, 1, 1));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Editar Documento 32 x 32.png"))); // NOI18N
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
@@ -174,9 +164,20 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         });
         jPanel6.add(btnModificar);
 
+        btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
+        btnBuscar.setMnemonic('r');
+        btnBuscar.setText("Buscar");
+        btnBuscar.setToolTipText("Buscar el Registro");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnBuscar);
+
         btnGuardar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Guardar 32 x 32.png"))); // NOI18N
         btnGuardar.setMnemonic('g');
         btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Guardar Registro Actual");
@@ -190,7 +191,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
         btnCancelar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(1, 1, 1));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Cancelar 32 x 32.png"))); // NOI18N
         btnCancelar.setMnemonic('c');
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la Operacion del Registro");
@@ -201,19 +201,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
             }
         });
         jPanel6.add(btnCancelar);
-
-        btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
-        btnBuscar.setMnemonic('r');
-        btnBuscar.setText("Buscar");
-        btnBuscar.setToolTipText("Buscar el Registro");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-        jPanel6.add(btnBuscar);
 
         jpDetalles.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Detalles de medicamentos"));
 
@@ -279,7 +266,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         txtNombreMedicamentos.setEditable(false);
         txtNombreMedicamentos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Nombre"));
 
-        btnImagenBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-pill-32_Buscar.png"))); // NOI18N
         btnImagenBuscar.setText("Buscar Imagen");
         btnImagenBuscar.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)));
         btnImagenBuscar.setEnabled(false);
@@ -369,7 +355,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cbProveedores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(txtCodigoProveedor)
+                        .addComponent(txtCodigoProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbEstadoProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -398,10 +384,10 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jpDetalles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -570,12 +556,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         M_Proveedor.insert(
                                 Proveedor
                                         .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .id_persona(-1)
-                                                        .build()
-                                        )
+                                        .id(WIDTH)
                                         .codigoProveedor(txtCodigoProveedor.getText())
                                         .build()
                         )
@@ -596,14 +577,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         M_Proveedor.update(
                                 Proveedor
                                         .builder()
-                                        .persona(
-                                                Persona
-                                                        .builder()
-                                                        .id_persona(
-                                                                ((Proveedor) cbProveedores.getSelectedItem()).getPersona().getId_persona()
-                                                        )
-                                                        .build()
-                                        )
+                                        .id(((Proveedor) cbProveedores.getSelectedItem()).getId())
                                         .codigoProveedor(txtCodigoProveedor.getText())
                                         .build()
                         )
@@ -694,7 +668,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                 null
                 )
                  */
-                Resultado resultado = M_Medicamento.modificarMedicamento(
+                Resultado resultado = M_Medicamento.update(
                         null
                 );
                 JOptionPane.showInternalMessageDialog(
@@ -707,10 +681,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
 
             llenarTabla(cbEstadosMedicamentos.isSelected());
         }//Fin Crear o Modificar Imagenes
-
-        map.remove(((Proveedor) tblMedicamentos.getValueAt(
-                tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona());
-        map.clear();
 
         btnCancelarActionPerformed(null);
 
@@ -834,13 +804,6 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         image.getScaledInstance(180, 180, Image.SCALE_SMOOTH)
                 )
         );
-
-        map.remove(
-                ((Proveedor) tblMedicamentos.getValueAt(
-                        tblMedicamentos.getSelectedRow(),
-                        1
-                )).getPersona().getId_persona()
-        );
     }//GEN-LAST:event_btnImagenBuscarActionPerformed
 
     private void cbProveedoresMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbProveedoresMouseEntered
@@ -900,7 +863,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
         if (!isShowing() | !btnGuardar.isEnabled()) {
             return;
         }
-        
+
         setDatosComboBox();
     }//GEN-LAST:event_cbProveedoresActionPerformed
 
@@ -942,100 +905,99 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
                         3
                 ).toString().equals("Activo"));
 
-        SwingWorker<?, ?> w = new SwingWorker<>() {
-            @Override
-            protected Integer doInBackground() throws Exception {
-                jpbFoto.setVisible(true);
-                frmPrincipal.jpEstado.setVisible(true);
-                dpnEscritorio.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-                publish(10);
-                if (!map.containsKey(((Proveedor) tblMedicamentos.getValueAt(
-                        tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona())) {
-                    publish(12);
+//        SwingWorker<?, ?> w = new SwingWorker<>() {
+//            @Override
+//            protected Integer doInBackground() throws Exception {
+//                jpbFoto.setVisible(true);
+//                frmPrincipal.jpEstado.setVisible(true);
+//                dpnEscritorio.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+//                publish(10);
+//                if (!map.containsKey(((Proveedor) tblMedicamentos.getValueAt(
+//                        tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona())) {
+//                    publish(12);
 
 //                    img = getImagenes(
 //                            "select FOTO "
 //                            + "from T_Medicamentos "
 //                            + "where idMedicamento = "
 //                            + ((Proveedor) tblMedicamentos.getValueAt(tblMedicamentos.getSelectedRow(), 1)).getPersona().getId_persona());
-                    publish(37);
+//                    publish(37);
+//
+//                    if (img != null) {
+//                        publish(40);
+//                        map.put(((Proveedor) tblMedicamentos.getValueAt(
+//                                tblMedicamentos.getSelectedRow(), 1)).getPersona().
+//                                getId_persona(), img.getImage());
+//                        publish(55);
+//                        jlFoto.setIcon(new ImageIcon(
+//                                map.get(((Proveedor) tblMedicamentos.getValueAt(
+//                                        tblMedicamentos.getSelectedRow(), 1)).getPersona().
+//                                        getId_persona()).
+//                                        getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+//                        publish(90);
+//                    } else {
+//                        publish(80);
+//                        jlFoto.setIcon(new ImageIcon(
+//                                getClass().getResource("/imagenes/icons8-pill-180.png")));
+//                        publish(90);
+//                    }
+//                } else {
+//                    publish(40);
+//
+//                    jlFoto.setIcon(new ImageIcon(
+//                            map.get(((Proveedor) tblMedicamentos.getValueAt(
+//                                    tblMedicamentos.getSelectedRow(), 1)).getPersona().
+//                                    getId_persona()).getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+//                    publish(83);
+//                }
+//                return 100;
+//            }
 
-                    if (img != null) {
-                        publish(40);
-                        map.put(((Proveedor) tblMedicamentos.getValueAt(
-                                tblMedicamentos.getSelectedRow(), 1)).getPersona().
-                                getId_persona(), img.getImage());
-                        publish(55);
-                        jlFoto.setIcon(new ImageIcon(
-                                map.get(((Proveedor) tblMedicamentos.getValueAt(
-                                        tblMedicamentos.getSelectedRow(), 1)).getPersona().
-                                        getId_persona()).
-                                        getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
-                        publish(90);
-                    } else {
-                        publish(80);
-                        jlFoto.setIcon(new ImageIcon(
-                                getClass().getResource("/imagenes/icons8-pill-180.png")));
-                        publish(90);
-                    }
-                } else {
-                    publish(40);
-
-                    jlFoto.setIcon(new ImageIcon(
-                            map.get(((Proveedor) tblMedicamentos.getValueAt(
-                                    tblMedicamentos.getSelectedRow(), 1)).getPersona().
-                                    getId_persona()).getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
-                    publish(83);
-                }
-                return 100;
-            }
-
-            @Override
-            protected void done() {
-                super.done();
-                jpbFoto.setVisible(false);
-                frmPrincipal.jpEstado.setVisible(false);
-                dpnEscritorio.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-
-            @Override
-            protected void process(List<Object> chunks) {
-                super.process(chunks);
-                jpbFoto.setValue((Integer) chunks.get(0));
-                frmPrincipal.jpbEstado.setValue((Integer) chunks.get(0));
-            }
-        };
-        w.execute();
+//            @Override
+//            protected void done() {
+//                super.done();
+//                jpbFoto.setVisible(false);
+//                frmPrincipal.jpEstado.setVisible(false);
+//                dpnEscritorio.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//            }
+//
+//            @Override
+//            protected void process(List<Object> chunks) {
+//                super.process(chunks);
+//                jpbFoto.setValue((Integer) chunks.get(0));
+//                frmPrincipal.jpbEstado.setValue((Integer) chunks.get(0));
+//            }
+//        };
+//        w.execute();
     }
 
     private void llenarTabla(boolean estado) {
         tblMedicamentos.removeAll();
-        String titulos[] = {"no.", "Codigo Proveedor", "Nombre Medicamento", "Estado"};
-        Object registro[] = new Object[4];
-
-        ResultSet rs = getMedicamento(estado);
+        String titulos[] = {
+            "Nombre proveedor","Codigo proveedor", "Nombre medicamento", "Estado"
+        };
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-        int linea = 1;
-//new Proveedor(rs.getInt("idMedicamento"),
-//                        rs.getString("Codigo_Proveedor"));
-        try {
-            while (rs.next()) {
-                registro[0] = linea;
-                registro[1] = Proveedor.builder().build();
-                registro[2] = rs.getString("NombreMedicamento");
-                registro[3] = (rs.getBoolean("Estado") ? "Activo" : "Inactivo");
-                miTabla.addRow(registro);
-                linea++;
-            }
-            tblMedicamentos.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        } finally {
-            if (tblMedicamentos.getRowCount() != 0) {
-                mostrarRegistro();
-                ordenarTabla();
-            }
-        }
+        Object registro[] = new Object[4];
+        
+//        ResultSet rs = getMedicamento(estado); los medicamentos se buscan por estado.
+
+        M_Proveedor.select().stream().forEach(
+                proveedor ->{
+                    registro[0] = proveedor;
+                    registro[1] = proveedor.getCodigoProveedor();
+                    
+//                    registro[2] = rs.getString("NombreMedicamento");
+//                    registro[3] = (rs.getBoolean("Estado") ? "Activo" : "Inactivo");
+
+                    miTabla.addRow(registro);
+                }
+        );        
+
+        tblMedicamentos.setModel(miTabla);
+//            if (tblMedicamentos.getRowCount() != 0) {
+//                mostrarRegistro();
+//                ordenarTabla();
+//            }
     }
 
     private void navegador(boolean b) {
@@ -1051,45 +1013,46 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     private void llenarCombox() {
         cbProveedores.removeAllItems();
 
+        //TODO 05.04.2025 Revisar si recivimos la persona generica.
         cbProveedores.addItem(
-                Proveedor
+                Persona
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .id_persona(-1)
-                                        .pnombre("Ingrese un proveedor!")
-                                        .build()
-                        )
-                        .codigoProveedor("000000-0")
+                        .idPersona(0)
                         .build()
         );
 
         M_Proveedor.select().stream().forEach(
                 proveedor -> {
-                    cbProveedores.addItem(proveedor);
+                    cbProveedores.addItem(
+                            M_Persona.select(
+                                    Persona
+                                            .builder()
+                                            .idPersona(proveedor.getId())
+                                            .build()
+                            ).getFirst()
+                    );
                 }
         );
     }
 
     private void setDatosComboBox() {
-        if (cbProveedores.getItemCount() == 0 || cbProveedores.getSelectedIndex() == -1) {
-            return;
-        }
-
-        txtCodigoProveedor.setText(
-                cbProveedores.getItemAt(
-                        cbProveedores.getSelectedIndex()
-                ).getCodigoProveedor()
-        );
-        cbEstadoProveedor.setSelected(
-                cbProveedores.getItemAt(
-                        cbProveedores.getSelectedIndex()
-                ).getPersona().getEstado()
-        );
-        if (btnGuardar.isEnabled()) {
-            txtNombreMedicamentos.requestFocus();
-        }
+//        if (cbProveedores.getItemCount() == 0 || cbProveedores.getSelectedIndex() == -1) {
+//            return;
+//        }
+//
+//        txtCodigoProveedor.setText(
+//                cbProveedores.getItemAt(
+//                        cbProveedores.getSelectedIndex()
+//                ).getIdPersona()
+//        );
+//        cbEstadoProveedor.setSelected(
+//                cbProveedores.getItemAt(
+//                        cbProveedores.getSelectedIndex()
+//                ).getEstado()
+//        );
+//        if (btnGuardar.isEnabled()) {
+//            txtNombreMedicamentos.requestFocus();
+//        }
     }
 
     private void ordenarTabla() {
@@ -1116,7 +1079,7 @@ public class frmMedicamentos extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox cbEstadoMedicamento;
     private javax.swing.JCheckBox cbEstadoProveedor;
     private javax.swing.JCheckBox cbEstadosMedicamentos;
-    public static javax.swing.JComboBox<Proveedor> cbProveedores;
+    public static javax.swing.JComboBox<Persona> cbProveedores;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

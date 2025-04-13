@@ -80,8 +80,7 @@ public class frmProductosNGTest {
                           """
     )
     public void testLlenarTablaProductos() {
-        String criterioBusqueda = "";
-        JTable tabla = frmProductos.llenarTablaProductos(criterioBusqueda);
+        JTable tabla = frmProductos.llenarTablaProductos("");
 
         assertNotNull(
                 tabla,

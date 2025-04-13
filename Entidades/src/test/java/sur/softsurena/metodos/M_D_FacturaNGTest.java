@@ -34,7 +34,7 @@ public class M_D_FacturaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

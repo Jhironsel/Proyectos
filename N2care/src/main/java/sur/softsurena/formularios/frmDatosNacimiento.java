@@ -6,6 +6,8 @@ import sur.softsurena.utilidades.FechaHora;
 
 public class frmDatosNacimiento extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     public frmDatosNacimiento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -156,21 +158,22 @@ public class frmDatosNacimiento extends javax.swing.JDialog {
         }
 
         FechaHora f = new FechaHora(dchFechaNacimiento.getDate());
-        JOptionPane.showMessageDialog(
-                this,
-                agregarDatosNacimiento(
-                        new DatosNacimiento(
-                                ((Categorias) txtCedula.getValue()).getId(), 
-                                f.getFecha(),
-                                txtPesoNacer.getValue().toString(),
-                                txtEstaturaNacer.getValue().toString(),
-                                cbCesarea.isSelected(),
-                                txtTiempoGestacion.getValue().toString(),
-                                txtPC.getValue().toString()
-                        )
-                ),
-                "Resultados de la operacion",
-                JOptionPane.DEFAULT_OPTION);
+//        JOptionPane.showMessageDialog(
+//                this,
+//                agregarDatosNacimiento(
+//                        new DatosNacimiento(
+//                                ((Categorias) txtCedula.getValue()).getId(), 
+//                                f.getFecha(),
+//                                txtPesoNacer.getValue().toString(),
+//                                txtEstaturaNacer.getValue().toString(),
+//                                cbCesarea.isSelected(),
+//                                txtTiempoGestacion.getValue().toString(),
+//                                txtPC.getValue().toString()
+//                        )
+//                ),
+//                "Resultados de la operacion",
+//                JOptionPane.DEFAULT_OPTION
+//        );
         dispose();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -179,17 +182,17 @@ public class frmDatosNacimiento extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        ResultSet d = getDatosNacimiento(
-                ((Categorias) txtCedula.getValue()).getId()
-        );
-
-        dchFechaNacimiento.setDate(d.getDate("FECHANACIMIENTO"));
-        txtPesoNacer.setValue(d.getObject("PESONACIMIENTOKG"));
-        txtEstaturaNacer.setValue(d.getDouble("ALTURA") * 100);
-        jlResultado.setText("IMC: " + d.getString("MC"));
-        txtTiempoGestacion.setValue(d.getDouble("TIEMPOGESTACION"));
-        cbCesarea.setSelected(d.getBoolean("CESAREA"));
-        txtPC.setValue(d.getObject("PC"));
+//        ResultSet d = getDatosNacimiento(
+//                ((Categorias) txtCedula.getValue()).getId()
+//        );
+//
+//        dchFechaNacimiento.setDate(d.getDate("FECHANACIMIENTO"));
+//        txtPesoNacer.setValue(d.getObject("PESONACIMIENTOKG"));
+//        txtEstaturaNacer.setValue(d.getDouble("ALTURA") * 100);
+//        jlResultado.setText("IMC: " + d.getString("MC"));
+//        txtTiempoGestacion.setValue(d.getDouble("TIEMPOGESTACION"));
+//        cbCesarea.setSelected(d.getBoolean("CESAREA"));
+//        txtPC.setValue(d.getObject("PC"));
     }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

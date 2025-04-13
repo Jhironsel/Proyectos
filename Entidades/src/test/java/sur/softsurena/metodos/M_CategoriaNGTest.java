@@ -37,7 +37,7 @@ public class M_CategoriaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

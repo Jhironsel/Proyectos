@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import sur.softsurena.abstracta.Persona;
@@ -96,7 +95,7 @@ public class M_Dato_Nacimiento {
     }
 
     /**
-     * TODO Devolver una lista.
+     * TODO 12/04/2025 Estos metodo aqui no van. 
      * 
      * Dicha consulta debe traer la edad en meses y la medida del craneo en CM.
      * 
@@ -111,18 +110,21 @@ public class M_Dato_Nacimiento {
                         .build()
         ).getFirst().getFecha_nacimiento();
         
-        final String sql 
-                = """
-                  
-                  """;
+        final String sql = """
+                           
+                           """;
+        
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
+            
             ps.setInt(1, idPaciente);
+            
             return ps.executeQuery();
+            
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE, 

@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -17,6 +18,7 @@ import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmCajeros extends javax.swing.JFrame implements Runnable {
 
@@ -621,8 +623,12 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
                 }
             }
 
-        } catch (Exception e) {
-            //Instalar Logger
+        } catch (Exception ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al consultar las generales en el sistema.",
+                    ex
+            );
         }
         totales();
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -962,15 +968,15 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
     }
 
     private void llenarTabla() {
-        String titulos[] = {"ID Producto", "Descripcion", "Precio", "Cantidad",
-            "Valor"};
+        String titulos[] = {
+            "ID Producto", "Descripcion", "Precio", "Cantidad", "Valor"
+        };
         miTabla = new DefaultTableModel(null, titulos);
 
         tblDetalle.setModel(miTabla);
 
         //Aliniar Campos a la Derecha
-        DefaultTableCellRenderer tcr;
-        tcr = new DefaultTableCellHeaderRenderer();
+        DefaultTableCellRenderer tcr = new DefaultTableCellHeaderRenderer();
         tcr.setHorizontalAlignment(SwingConstants.RIGHT);
         tcr.setFont(new java.awt.Font("Tahoma", 50, 80));
         tcr.setBackground(Color.yellow);
@@ -981,23 +987,10 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
 
     private void repararRegistro() {
         TableColumn miTableColumn;
+        int[] anchoColumnas = {100, 500, 100, 100, 100};
         for (int i = 0; i < tblDetalle.getColumnCount(); i++) {
             miTableColumn = tblDetalle.getColumnModel().getColumn(i);
-            if (i == 0) {
-                miTableColumn.setPreferredWidth(100);
-            }
-            if (i == 1) {
-                miTableColumn.setPreferredWidth(500);
-            }
-            if (i == 2) {
-                miTableColumn.setPreferredWidth(100);
-            }
-            if (i == 3) {
-                miTableColumn.setPreferredWidth(100);
-            }
-            if (i == 4) {
-                miTableColumn.setPreferredWidth(100);
-            }
+            miTableColumn.setPreferredWidth(anchoColumnas[i]);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

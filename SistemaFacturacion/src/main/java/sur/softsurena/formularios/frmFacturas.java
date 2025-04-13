@@ -55,7 +55,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
 //------------------------------------------------------------------------------
     private void setPropiedad() {
-        File file = new File("properties/proFacturas.prop");
+        File file = new File("../properties/proFacturas.prop");
         try (InputStream is = new FileInputStream(file);) {
             getPropiedad().load(is);
         } catch (FileNotFoundException ex) {
@@ -89,12 +89,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
     public static frmFacturas getInstance() {
         return NewSingletonHolder.INSTANCE;
-    }
-
-    private void setLayout() {
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
-        flowLayout1.setAlignOnBaseline(true);
-        jpProductos.setLayout(flowLayout1);
     }
 
     private static class NewSingletonHolder {
@@ -184,12 +178,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jpCategoria = new javax.swing.JPanel();
         jspProductos = new javax.swing.JScrollPane();
         jpProductos = new javax.swing.JPanel();
-        btnPonerTemporal1 = new newscomponents.RSButtonGradientIcon_new();
-        btnPonerTemporal2 = new newscomponents.RSButtonGradientIcon_new();
-        btnPonerTemporal3 = new newscomponents.RSButtonGradientIcon_new();
-        btnPonerTemporal4 = new newscomponents.RSButtonGradientIcon_new();
-        btnPonerTemporal5 = new newscomponents.RSButtonGradientIcon_new();
-        btnPonerTemporal6 = new newscomponents.RSButtonGradientIcon_new();
 
         jMenu3.setText("File");
         rSMenuBar2.add(jMenu3);
@@ -588,7 +576,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addContainerGap()
                 .addComponent(jpCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -629,6 +617,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jLabel4.setMinimumSize(new java.awt.Dimension(0, 16));
         jpBusqueda.add(jLabel4);
 
+        jspCategoria.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
         jpCategoria.setBorder(javax.swing.BorderFactory.createTitledBorder("Categoria"));
         jpCategoria.setToolTipText("Areas de la categorias registradas en el sistema.");
         jpCategoria.setAutoscrolls(true);
@@ -642,107 +632,18 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         jspCategoria.setViewportView(jpCategoria);
 
         jspProductos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jspProductos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jspProductos.setAutoscrolls(true);
+        jspProductos.setDoubleBuffered(true);
+        jspProductos.setMaximumSize(new java.awt.Dimension(0, 0));
+        jspProductos.setMinimumSize(new java.awt.Dimension(0, 0));
+        jspProductos.setPreferredSize(new java.awt.Dimension(0, 1000));
 
         jpProductos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Productos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
-        jpProductos.setAutoscrolls(true);
-        jpProductos.setFocusCycleRoot(true);
-
-        btnPonerTemporal1.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal1.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal1.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal1.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal1.setRound(30);
-        btnPonerTemporal1.setSizeIcon(40.0F);
-        btnPonerTemporal1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal1ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal1);
-
-        btnPonerTemporal2.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal2.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal2.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal2.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal2.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal2.setRound(30);
-        btnPonerTemporal2.setSizeIcon(40.0F);
-        btnPonerTemporal2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal2ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal2);
-
-        btnPonerTemporal3.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal3.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal3.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal3.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal3.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal3.setRound(30);
-        btnPonerTemporal3.setSizeIcon(40.0F);
-        btnPonerTemporal3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal3ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal3);
-
-        btnPonerTemporal4.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal4.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal4.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal4.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal4.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal4.setRound(30);
-        btnPonerTemporal4.setSizeIcon(40.0F);
-        btnPonerTemporal4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal4ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal4);
-
-        btnPonerTemporal5.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal5.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal5.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal5.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal5.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal5.setRound(30);
-        btnPonerTemporal5.setSizeIcon(40.0F);
-        btnPonerTemporal5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal5ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal5);
-
-        btnPonerTemporal6.setText("<html><center>Getion<br>Temporal F5</center></html>");
-        btnPonerTemporal6.setToolTipText("<html><center>Temporal<br>F5</center></html>");
-        btnPonerTemporal6.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnPonerTemporal6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPonerTemporal6.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.HOURGLASS_FULL);
-        btnPonerTemporal6.setName("btnTemporal"); // NOI18N
-        btnPonerTemporal6.setRound(30);
-        btnPonerTemporal6.setSizeIcon(40.0F);
-        btnPonerTemporal6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPonerTemporal6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPonerTemporal6ActionPerformed(evt);
-            }
-        });
-        jpProductos.add(btnPonerTemporal6);
-
+        jpProductos.setPreferredSize(new java.awt.Dimension(0, 1000));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout();
+        flowLayout1.setAlignOnBaseline(true);
+        jpProductos.setLayout(flowLayout1);
         jspProductos.setViewportView(jpProductos);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -752,9 +653,9 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpBusqueda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                    .addComponent(jpBusqueda, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jspCategoria)
-                    .addComponent(jspProductos))
+                    .addComponent(jspProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -765,7 +666,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jspProductos)
+                .addComponent(jspProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -873,7 +774,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             jpProductos.removeAll();
             jpProductos.repaint();
-            setLayout();
 
             if (cbCriterio.getSelectedIndex() == 1) {
                 predicado = (f) -> f.getCodigo().contains(
@@ -1372,19 +1272,17 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     /**
      * Metodo encargado de grabar la factura en el sistema.
      *
-     * 1) Obtenemos el numero de la factura en el sistema.
-     *
-     * 2) Verificamos si la factura es acredito y haya un cliente seleccionado.
+     * - Verificamos si la factura es acredito y haya un cliente seleccionado.
      * Si esto se cumple hacemos que cajero seleccione un cliente.
      *
-     * 3) TODO esta parte debe de verificar si la factura se encuentra en la bd.
+     * - Obtenemos el numero de la factura en el sistema.
+     *
+     * - TODO esta parte debe de verificar si la factura se encuentra en la bd.
      * La factura debe de ir creandose en la base de datos.
      *
      * @param evt No utilizado en este metodo.
      */
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
-        Integer idFactura = Integer.valueOf(txtIdFactura.getText());
-//-----------------------------------------------------------------------------1
 
         if (rbtCredito.isSelected() && cmbClientes.getSelectedIndex() == 0) {
             JOptionPane.showInternalMessageDialog(
@@ -1399,7 +1297,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             cmbClientes.showPopup();
             return;
         }
-//-----------------------------------------------------------------------------3
 
         double total = Utilidades.controlDouble(txtTotalValor.getValue());
 
@@ -1440,7 +1337,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         }
 //-----------------------------------------------------------------------------5
 
-//        char estado = rbtCredito.isSelected() ? 'c' : 'p';
+        char estado = rbtCredito.isSelected() ? 'c' : 'p';
 //
 //        if (factura.getHeaderFactura().getEstado() == 'T') {
 //            //Preparar Factura Temporal
@@ -1523,7 +1420,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 ).toString()
         );
 
-//----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------1
+        Integer idFactura = Integer.valueOf(txtIdFactura.getText());
         Map<String, Integer> parametros = new HashMap<>();
 
         parametros.put("idFactura", idFactura);
@@ -1610,7 +1508,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             getPropiedad().store(
                     new FileWriter(
                             new File(
-                                    "properties/frmFacturaPropiedades.properties"
+                                    "../properties/frmFacturaPropiedades.properties"
                             )
                     ),
                     "Valor que permite obtener las categorias.");
@@ -1635,30 +1533,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
 
     }//GEN-LAST:event_formPropertyChange
-
-    private void btnPonerTemporal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal1ActionPerformed
-
-    private void btnPonerTemporal2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal2ActionPerformed
-
-    private void btnPonerTemporal3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal3ActionPerformed
-
-    private void btnPonerTemporal4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal4ActionPerformed
-
-    private void btnPonerTemporal5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal5ActionPerformed
-
-    private void btnPonerTemporal6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonerTemporal6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPonerTemporal6ActionPerformed
 
     /**
      * Es el metodo Sobre escrito que me permite hacer varias acciones en el.
@@ -1783,7 +1657,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             jpProductos.removeAll();
             jpProductos.repaint();
-            setLayout();
 
             //Seleccionar ultimo elemento
             tblDetalle.changeSelection(tblDetalle.getRowCount() - 1, 0, false, false);
@@ -1801,7 +1674,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
 
             jpProductos.removeAll();
             jpProductos.repaint();
-            setLayout();
 
             M_Producto.select(
                     Producto
@@ -2073,7 +1945,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         if (cbCriterio.getSelectedIndex() == 0) {
             jpProductos.removeAll();
             jpProductos.repaint();
-            setLayout();
             return true;
         }
         txtCriterio.setText("");
@@ -2198,12 +2069,6 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     private newscomponents.RSButtonGradientIcon_new btnLimpiarF12;
     private newscomponents.RSButtonGradientIcon_new btnPagoDeuda;
     private newscomponents.RSButtonGradientIcon_new btnPonerTemporal;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal1;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal2;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal3;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal4;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal5;
-    private newscomponents.RSButtonGradientIcon_new btnPonerTemporal6;
     private javax.swing.JComboBox<String> cbCriterio;
     private javax.swing.JCheckBox cbPrevista;
     private javax.swing.JCheckBox cbTodos;

@@ -44,12 +44,10 @@ import sur.softsurena.metodos.M_Consulta;
 import sur.softsurena.metodos.M_D_MotivoConsulta;
 import static sur.softsurena.metodos.M_D_MotivoConsulta.getDetalleMotivo;
 import sur.softsurena.metodos.M_Guia_Vigilancia_Desarrollo;
-import static sur.softsurena.metodos.M_Medicamento.getMedicamentoActivo;
 import sur.softsurena.metodos.M_Metrica;
 import sur.softsurena.metodos.M_Motivo_Consulta;
 import static sur.softsurena.metodos.M_Motivo_Consulta.agregarMotivo;
 import static sur.softsurena.metodos.M_Motivo_Consulta.getMotivo;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Utilidades;
 import utilidades.frmEliminarMotivo;
 import utilidades.frmFondo;
@@ -62,6 +60,7 @@ import utilidades.frmFuentes;
 public class frmConsultas2 extends javax.swing.JInternalFrame {
 
     private static frmConsultas2 consulta;
+    private static final long serialVersionUID = 1L;
     private int idPaciente;
     private int registro;
     private Object[] reg;
@@ -387,7 +386,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             jpListadoConsultaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpListadoConsultaLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -450,7 +449,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                     .addComponent(dcVigilanciaDesarrollo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAplicarFecha))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
         );
 
         jScrollPane4.setViewportView(jPanel5);
@@ -529,7 +528,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             jpMotivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpMotivoLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE))
         );
 
         jtpVisor.addTab("Motivos", jpMotivo);
@@ -563,7 +562,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             jpEnfermedadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEnfermedadesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jspEnfermedades, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addComponent(jspEnfermedades, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -789,7 +788,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
         );
         jpEnfermedades3Layout.setVerticalGroup(
             jpEnfermedades3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jspEnfermedades3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+            .addComponent(jspEnfermedades3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
         );
 
         jpEnfermedades4.setBackground(new java.awt.Color(49, 163, 217));
@@ -833,7 +832,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                     .addComponent(cbDoctores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dcReferimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(jspEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                .addComponent(jspEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE))
         );
 
         dcReferimiento.getDateEditor().addPropertyChangeListener(
@@ -863,11 +862,11 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                        .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE))
+                        .addComponent(jpEnfermedades1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                        .addComponent(jpEnfermedades2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
                     .addComponent(jpEnfermedades3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGap(0, 0, 0)
-                    .addComponent(jpEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                    .addComponent(jpEnfermedades4, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                     .addGap(0, 0, 0))
             );
 
@@ -951,7 +950,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                         .addComponent(txtFiltroMedicamentos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnAgregarMedicamento))
                     .addGap(0, 0, 0)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE))
             );
 
             jtpVisor.addTab("Receta", jPanel2);
@@ -996,7 +995,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             );
             jpGraficaLayout.setVerticalGroup(
                 jpGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 486, Short.MAX_VALUE)
+                .addGap(0, 515, Short.MAX_VALUE)
             );
 
             javax.swing.GroupLayout jpMetricasGraficasLayout = new javax.swing.GroupLayout(jpMetricasGraficas);
@@ -1011,7 +1010,7 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 .addGroup(jpMetricasGraficasLayout.createSequentialGroup()
                     .addComponent(jpTipoGrafica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, 0)
-                    .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                    .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addGap(0, 0, 0))
             );
 
@@ -1070,6 +1069,16 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(txtArs, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNoArs)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel1)
@@ -1080,23 +1089,11 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                                 .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(dcConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(txtArs, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNoArs)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnMensajes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGap(429, 429, 429)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dcConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(btnTerminarConsulta)
-                    .addContainerGap())
+                    .addContainerGap(358, Short.MAX_VALUE))
             );
             jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1132,32 +1129,32 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
                     public void propertyChange(PropertyChangeEvent e) {
                         if(isShowing() & e.getPropertyName().equals("date")){
                             jtPacientes.setSelectionMode(0);
-                            llenarTabla(Utilidades.formatDate(dcConsulta.getDate(), ""), "");
-                            btnTerminarConsulta.doClick();
+                            //llenarTabla(Utilidades.formatDate(dcConsulta.getDate(), "");
+                                btnTerminarConsulta.doClick();
+                            }
                         }
-                    }
-                });
+                    });
 
-                jScrollPane6.setViewportView(jPanel3);
+                    jScrollPane6.setViewportView(jPanel3);
 
-                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-                getContentPane().setLayout(layout);
-                layout.setHorizontalGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jspPadre)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                );
-                layout.setVerticalGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jspPadre, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))
-                );
+                    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+                    getContentPane().setLayout(layout);
+                    layout.setHorizontalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jspPadre)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    );
+                    layout.setVerticalGroup(
+                        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jspPadre)
+                            .addGap(0, 0, 0))
+                    );
 
-                pack();
-            }// </editor-fold>//GEN-END:initComponents
+                    pack();
+                }// </editor-fold>//GEN-END:initComponents
 
     private void jpListadoConsultaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jpListadoConsultaKeyReleased
         teclas(evt);
@@ -1263,10 +1260,10 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             //Instalar Logger
         }
 
-        llenarTabla(
-                Utilidades.formatDate(dcConsulta.getDate(), ""),
-                "gestion.frmConsultas2.formInternalFrameOpened()"
-        );
+//        llenarTabla(
+//                Utilidades.formatDate(dcConsulta.getDate(), ""),
+//                "gestion.frmConsultas2.formInternalFrameOpened()"
+//        );
 
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -1296,14 +1293,14 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
             habilitarConsulta(true, false);
 
-            idPaciente = ((Paciente) jtPacientes.getValueAt(registro, 1)).getId_persona();
+            idPaciente = ((Paciente) jtPacientes.getValueAt(registro, 1)).getId();
 
-            getDetalleMotivo(
-                    ((Paciente) jtPacientes.getValueAt(registro, 2)).getId_persona(),
-                    (Integer) jtPacientes.getValueAt(registro, 0)
-            );
-
-            ((JCheckBox) jpMotivos.getComponents()[rs.getInt(1)]).setSelected(true);
+//            getDetalleMotivo(
+//                    ((Paciente) jtPacientes.getValueAt(registro, 2)).getId(),
+//                    (Integer) jtPacientes.getValueAt(registro, 0)
+//            );
+//
+//            ((JCheckBox) jpMotivos.getComponents()[rs.getInt(1)]).setSelected(true);
 
             jpMotivo.validate();
             jpMotivo.revalidate();
@@ -1395,143 +1392,143 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtReferimientoKeyReleased
 
     private void btnTerminarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarConsultaActionPerformed
-        int r = JOptionPane.showInternalConfirmDialog(this,
-                "Desea Terminar la consulta?",
-                "Proceso de validacion",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        if (r == JOptionPane.NO_OPTION) {
-            return;
-        }
-
-        Integer turno = (Integer) jtPacientes.getValueAt(registro, 0);
-        Integer idConsulta = ((Categorias) jtPacientes.getValueAt(registro, 2)).getId();
-
-        BigDecimal peso = new BigDecimal(jsPeso.getValue().toString());
-        BigDecimal estatura = new BigDecimal(jsLongitud.getValue().toString());
-        BigDecimal cefalo = new BigDecimal(jsPCefalico.getValue().toString());
-
-        if (peso.compareTo(BigDecimal.ZERO) <= 0.0
-                || estatura.compareTo(BigDecimal.ZERO) <= 0.0
-                || cefalo.compareTo(BigDecimal.ZERO) <= 0.0) {
-            JOptionPane.showInternalMessageDialog(this,
-                    "Metricas no estan completa Peso: " + peso + " Estatura: "
-                    + estatura + " Cefalo: " + cefalo);
-            return;
-        }
-
-        for (Component component : jpMotivos.getComponents()) {
-
-            if (((JCheckBox) component).isSelected()) {
-                M_D_MotivoConsulta.agregarDetallleConsulta(
-                        D_Motivo_Consulta
-                                .builder()
-                                .id_consulta(-1)
-                                .id_motivo_consulta(0)
-                                .build()
-                );
-            } else {
-                //TODO 13/12/2024 Faltan los atributos aqui.
-                M_Motivo_Consulta.borrarMotivoConsulta(
-                        Motivo_Consulta
-                                .builder()
-                                .build()
-                );
-            }
-        }
-
-        if (jcbIncluirReceta.isSelected()) {
-            int idReceta = agregarReceta(idPaciente, idConsulta);
-            for (int i = 0; i < tblReceta.getRowCount(); i++) {
-                agregarRecetaDetalle(new D_Recetas(
-                        idReceta,
-                        i + 1,
-                        ((Categorias) tblReceta.getValueAt(i, 1)).getId(),
-                        new BigDecimal(tblReceta.getValueAt(i, 3).toString()),
-                        tblReceta.getValueAt(i, 2).toString()
-                ));
-            }
-
-            //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
-            //ese mismo nombre, a su lado se pasa el valor del parametro
-            Map<String, Object> parametros = new HashMap<>();
-            
-            parametros.put(
-                    "idReceta", 
-                    idReceta
-            );
-
-            File i = new File("n2careReceta.jasper");
-
-            new hiloImpresionFactura(
-                    true,
-                    false,
-                    i.getAbsolutePath(),
-                    parametros,
-                    frmPrincipal.jpEstado,
-                    frmPrincipal.jpbEstado).start();
-
-        }
-
-        M_Metrica.insert(
-                Metrica
-                        .builder()
-                        .consulta(
-                                Consulta
-                                        .builder()
-                                        .id(idConsulta)
-                                        .build()
-                        )
-                        .pesoKG(peso)
-                        .estaturaM(estatura)
-                        .escefalo(cefalo)
-                        .enf_detect(txtEnfermedades.getText())
-                        .hallazgosPositivo(txtHallazgos.getText())
-                        .idDiagnostico(txtID.getText())
-                        .tx(txtTx.getText())
-                        .complemento(txtComplemento.getText())
-                        .build()
-        );
-
-        habilitarConsulta(false, true);
-        jtPacientes.setEnabled(true);
-        jtpVisor.setSelectedIndex(0);
+//        int r = JOptionPane.showInternalConfirmDialog(this,
+//                "Desea Terminar la consulta?",
+//                "Proceso de validacion",
+//                JOptionPane.YES_NO_OPTION,
+//                JOptionPane.QUESTION_MESSAGE);
+//        if (r == JOptionPane.NO_OPTION) {
+//            return;
+//        }
+//
+//        Integer turno = (Integer) jtPacientes.getValueAt(registro, 0);
+//        Integer idConsulta = ((Categorias) jtPacientes.getValueAt(registro, 2)).getId();
+//
+//        BigDecimal peso = new BigDecimal(jsPeso.getValue().toString());
+//        BigDecimal estatura = new BigDecimal(jsLongitud.getValue().toString());
+//        BigDecimal cefalo = new BigDecimal(jsPCefalico.getValue().toString());
+//
+//        if (peso.compareTo(BigDecimal.ZERO) <= 0.0
+//                || estatura.compareTo(BigDecimal.ZERO) <= 0.0
+//                || cefalo.compareTo(BigDecimal.ZERO) <= 0.0) {
+//            JOptionPane.showInternalMessageDialog(this,
+//                    "Metricas no estan completa Peso: " + peso + " Estatura: "
+//                    + estatura + " Cefalo: " + cefalo);
+//            return;
+//        }
+//
+//        for (Component component : jpMotivos.getComponents()) {
+//
+//            if (((JCheckBox) component).isSelected()) {
+//                M_D_MotivoConsulta.agregarDetallleConsulta(
+//                        D_Motivo_Consulta
+//                                .builder()
+//                                .id_consulta(-1)
+//                                .id_motivo_consulta(0)
+//                                .build()
+//                );
+//            } else {
+//                //TODO 13/12/2024 Faltan los atributos aqui.
+//                M_Motivo_Consulta.borrarMotivoConsulta(
+//                        Motivo_Consulta
+//                                .builder()
+//                                .build()
+//                );
+//            }
+//        }
+//
+//        if (jcbIncluirReceta.isSelected()) {
+//            int idReceta = agregarReceta(idPaciente, idConsulta);
+//            for (int i = 0; i < tblReceta.getRowCount(); i++) {
+//                agregarRecetaDetalle(new D_Recetas(
+//                        idReceta,
+//                        i + 1,
+//                        ((Categorias) tblReceta.getValueAt(i, 1)).getId(),
+//                        new BigDecimal(tblReceta.getValueAt(i, 3).toString()),
+//                        tblReceta.getValueAt(i, 2).toString()
+//                ));
+//            }
+//
+//            //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
+//            //ese mismo nombre, a su lado se pasa el valor del parametro
+//            Map<String, Object> parametros = new HashMap<>();
+//            
+//            parametros.put(
+//                    "idReceta", 
+//                    idReceta
+//            );
+//
+//            File i = new File("n2careReceta.jasper");
+//
+//            new hiloImpresionFactura(
+//                    true,
+//                    false,
+//                    i.getAbsolutePath(),
+//                    parametros,
+//                    frmPrincipal.jpEstado,
+//                    frmPrincipal.jpbEstado).start();
+//
+//        }
+//
+//        M_Metrica.insert(
+//                Metrica
+//                        .builder()
+//                        .consulta(
+//                                Consulta
+//                                        .builder()
+//                                        .id(idConsulta)
+//                                        .build()
+//                        )
+//                        .pesoKG(peso)
+//                        .estaturaM(estatura)
+//                        .escefalo(cefalo)
+//                        .enf_detect(txtEnfermedades.getText())
+//                        .hallazgosPositivo(txtHallazgos.getText())
+//                        .idDiagnostico(txtID.getText())
+//                        .tx(txtTx.getText())
+//                        .complemento(txtComplemento.getText())
+//                        .build()
+//        );
+//
+//        habilitarConsulta(false, true);
+//        jtPacientes.setEnabled(true);
+//        jtpVisor.setSelectedIndex(0);
     }//GEN-LAST:event_btnTerminarConsultaActionPerformed
 
     private void cbOpcionGraficaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOpcionGraficaItemStateChanged
-        if (!isShowing()) {
-            return;
-        }
-        if (evt.getStateChange() == 1) {
-
-            nuevaGrafica();
-            switch (cbOpcionGrafica.getSelectedIndex()) {
-                case 1:
-                    PCefalicoChicoChica q = new PCefalicoChicoChica(idPaciente, 0);
-                    jpGrafica.add(q.createDemoPanel());
-                    break;
-                case 2:
-                    PesoParaEdadChicoChica p = new PesoParaEdadChicoChica(idPaciente, 0);
-                    jpGrafica.add(p.createDemoPanel());
-                    break;
-                case 3:
-                    LongitudAlturaParaEdadNino0a5anno l
-                            = new LongitudAlturaParaEdadNino0a5anno(idPaciente, 0);
-                    jpGrafica.add(l.createDemoPanel());
-                    break;
-                case 4:
-                    PesoParaLongitud u
-                            = new PesoParaLongitud(idPaciente, 0);
-                    jpGrafica.add(u.createDemoPanel());
-                    break;
-                case 5:
-                    PesoParaEstatura r
-                            = new PesoParaEstatura(idPaciente, 0);
-                    jpGrafica.add(r.createDemoPanel());
-                    break;
-            }
-            updateGrafica();
-        }
+//        if (!isShowing()) {
+//            return;
+//        }
+//        if (evt.getStateChange() == 1) {
+//
+//            nuevaGrafica();
+//            switch (cbOpcionGrafica.getSelectedIndex()) {
+//                case 1:
+//                    PCefalicoChicoChica q = new PCefalicoChicoChica(idPaciente, 0);
+//                    jpGrafica.add(q.createDemoPanel());
+//                    break;
+//                case 2:
+//                    PesoParaEdadChicoChica p = new PesoParaEdadChicoChica(idPaciente, 0);
+//                    jpGrafica.add(p.createDemoPanel());
+//                    break;
+//                case 3:
+//                    LongitudAlturaParaEdadNino0a5anno l
+//                            = new LongitudAlturaParaEdadNino0a5anno(idPaciente, 0);
+//                    jpGrafica.add(l.createDemoPanel());
+//                    break;
+//                case 4:
+//                    PesoParaLongitud u
+//                            = new PesoParaLongitud(idPaciente, 0);
+//                    jpGrafica.add(u.createDemoPanel());
+//                    break;
+//                case 5:
+//                    PesoParaEstatura r
+//                            = new PesoParaEstatura(idPaciente, 0);
+//                    jpGrafica.add(r.createDemoPanel());
+//                    break;
+//            }
+//            updateGrafica();
+//        }
     }//GEN-LAST:event_cbOpcionGraficaItemStateChanged
 
     private void jcbOpcionesVigilanciaDesarrolloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbOpcionesVigilanciaDesarrolloActionPerformed
@@ -1576,9 +1573,10 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
             return;
         }
 
-        JOptionPane.showInternalMessageDialog(this,
-                agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
-                        idPaciente));
+//        JOptionPane.showInternalMessageDialog(
+//                this,
+//                agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
+//                        idPaciente));
         jcbOpcionesVigilanciaDesarrolloActionPerformed(null);
     }//GEN-LAST:event_btnAplicarFechaActionPerformed
 
@@ -1617,95 +1615,95 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jcbIncluirRecetaActionPerformed
 
     private void txtFiltroMedicamentosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroMedicamentosKeyReleased
-        for (int i = 0; i < jcbMedicamentos.getItemCount(); i++) {
-            if (((Categorias) jcbMedicamentos.getItemAt(i)).getDescripcion().
-                    startsWith(txtFiltroMedicamentos.getText())) {
-                jcbMedicamentos.setSelectedIndex(i);
-                break;
-            }
-        }
+//        for (int i = 0; i < jcbMedicamentos.getItemCount(); i++) {
+//            if (((Categorias) jcbMedicamentos.getItemAt(i)).getDescripcion().
+//                    startsWith(txtFiltroMedicamentos.getText())) {
+//                jcbMedicamentos.setSelectedIndex(i);
+//                break;
+//            }
+//        }
     }//GEN-LAST:event_txtFiltroMedicamentosKeyReleased
 
     private void txtFiltroMedicamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltroMedicamentosActionPerformed
 
-        if (jcbMedicamentos.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un Medicamento");
-            return;
-        }
-
-        Float cantidad = null;
-        String usoDosis = null;
-        int linea = tblReceta.getRowCount() + 1;
-
-        String producto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getDescripcion();
-
-        int idProducto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getId();
-
-        reg = new Object[4];
-
-        do {
-            try {
-                if (cantidad == null) {
-                    cantidad = Float.parseFloat(JOptionPane.showInternalInputDialog(this,
-                            "Ingrese la cantidad del medicamento",
-                            "Proceso de validación de medicamento",
-                            JOptionPane.QUESTION_MESSAGE));
-                }
-                break;
-            } catch (Exception e) {
-
-                if (e.getMessage() == null) {
-                    jcbMedicamentos.setSelectedIndex(0);
-                    txtFiltroMedicamentos.requestFocus();
-
-                    return;
-                }
-            }
-        } while (true);
-
-        if (cantidad == null) {
-            jcbMedicamentos.setSelectedIndex(0);
-            txtFiltroMedicamentos.setText("");
-            return;
-        }
-
-        do {
-            try {
-                if (usoDosis == null) {
-                    usoDosis = JOptionPane.showInternalInputDialog(this,
-                            "Ingrese ahora la docis o uso del este medicamento.",
-                            "Proceso de validación de medicamento",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
-                break;
-            } catch (Exception e) {
-
-                if (e.getMessage() == null) {
-                    jcbMedicamentos.setSelectedIndex(0);
-                    txtFiltroMedicamentos.requestFocus();
-                    return;
-                }
-            }
-        } while (true);
-
-        if (usoDosis == null) {
-            jcbMedicamentos.setSelectedIndex(0);
-            txtFiltroMedicamentos.setText("");
-            return;
-        }
-
-        new Categorias(idProducto, producto)
-        reg[0] = linea;
-        reg[1] = Categorias.builder().build();
-        reg[2] = usoDosis;
-        reg[3] = cantidad;
-
-        miTablaMedicamento.addRow(reg);
-        tblReceta.setModel(miTablaMedicamento);
-        ordenarTablaReceta();
-        jcbMedicamentos.setSelectedIndex(0);
-        txtFiltroMedicamentos.setText("");
-        txtFiltroMedicamentos.requestFocus();
+//        if (jcbMedicamentos.getSelectedIndex() == 0) {
+//            JOptionPane.showMessageDialog(this, "Debe seleccionar un Medicamento");
+//            return;
+//        }
+//
+//        Float cantidad = null;
+//        String usoDosis = null;
+//        int linea = tblReceta.getRowCount() + 1;
+//
+//        String producto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getDescripcion();
+//
+//        int idProducto = ((Medicamento) jcbMedicamentos.getSelectedItem()).getId();
+//
+//        reg = new Object[4];
+//
+//        do {
+//            try {
+//                if (cantidad == null) {
+//                    cantidad = Float.parseFloat(JOptionPane.showInternalInputDialog(this,
+//                            "Ingrese la cantidad del medicamento",
+//                            "Proceso de validación de medicamento",
+//                            JOptionPane.QUESTION_MESSAGE));
+//                }
+//                break;
+//            } catch (Exception e) {
+//
+//                if (e.getMessage() == null) {
+//                    jcbMedicamentos.setSelectedIndex(0);
+//                    txtFiltroMedicamentos.requestFocus();
+//
+//                    return;
+//                }
+//            }
+//        } while (true);
+//
+//        if (cantidad == null) {
+//            jcbMedicamentos.setSelectedIndex(0);
+//            txtFiltroMedicamentos.setText("");
+//            return;
+//        }
+//
+//        do {
+//            try {
+//                if (usoDosis == null) {
+//                    usoDosis = JOptionPane.showInternalInputDialog(this,
+//                            "Ingrese ahora la docis o uso del este medicamento.",
+//                            "Proceso de validación de medicamento",
+//                            JOptionPane.INFORMATION_MESSAGE);
+//                }
+//                break;
+//            } catch (Exception e) {
+//
+//                if (e.getMessage() == null) {
+//                    jcbMedicamentos.setSelectedIndex(0);
+//                    txtFiltroMedicamentos.requestFocus();
+//                    return;
+//                }
+//            }
+//        } while (true);
+//
+//        if (usoDosis == null) {
+//            jcbMedicamentos.setSelectedIndex(0);
+//            txtFiltroMedicamentos.setText("");
+//            return;
+//        }
+//
+//        new Categorias(idProducto, producto);
+//        reg[0] = linea;
+//        reg[1] = Categorias.builder().build();
+//        reg[2] = usoDosis;
+//        reg[3] = cantidad;
+//
+//        miTablaMedicamento.addRow(reg);
+//        tblReceta.setModel(miTablaMedicamento);
+//        ordenarTablaReceta();
+//        jcbMedicamentos.setSelectedIndex(0);
+//        txtFiltroMedicamentos.setText("");
+//        txtFiltroMedicamentos.requestFocus();
     }//GEN-LAST:event_txtFiltroMedicamentosActionPerformed
 
     private void btnAgregarMedicamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarMedicamentoActionPerformed
@@ -1859,115 +1857,115 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
 
     public synchronized void llenarTabla(Date fecha, String d) {
 
-        jtPacientes.removeAll();
-
-        String titulos[] = {
-            "<html><b>Turno</b></html>",
-            "<html><b>Nombre Completo</b></html>",
-            "<html><b>Ars</b></html>",
-            "<html><b>Noº Ars</b></html>"
-        };
-
-        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-
-        Object fila[] = new Object[titulos.length];
-
-        List<Consulta> listaConsulta = M_Consulta.getConsulta(Utilidades.javaDateToSqlDate(fecha));
-
-        listaConsulta.stream().forEach(
-                dato -> {
-                    fila[0] = dato;
-                    fila[1] = dato.getPaciente();
-                    fila[2] = dato.getPaciente().getArs();
-                    fila[3] = dato.getPaciente().getAsegurado();
-                    miTabla.addRow(fila);
-                }
-        );
-
-        jtPacientes.setModel(miTabla);
+//        jtPacientes.removeAll();
+//
+//        String titulos[] = {
+//            "<html><b>Turno</b></html>",
+//            "<html><b>Nombre Completo</b></html>",
+//            "<html><b>Ars</b></html>",
+//            "<html><b>Noº Ars</b></html>"
+//        };
+//
+//        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
+//
+//        Object fila[] = new Object[titulos.length];
+//
+//        List<Consulta> listaConsulta = M_Consulta.getConsulta(Utilidades.javaDateToSqlDate(fecha));
+//
+//        listaConsulta.stream().forEach(
+//                dato -> {
+//                    fila[0] = dato;
+//                    fila[1] = dato.getPaciente();
+//                    fila[2] = dato.getPaciente().getArs();
+//                    fila[3] = dato.getPaciente().getAsegurado();
+//                    miTabla.addRow(fila);
+//                }
+//        );
+//
+//        jtPacientes.setModel(miTabla);
     }
 
     public synchronized void llenarTablaGuia(int idPaciente) {
-        jtGuiaVigilanciaDesarrollo.removeAll();
-        String titulos[] = {"Edad", "Caracteristica del desarrollo a evualar",
-            "Marque la eventualidad"};
-        Object reg1[] = new Object[3];
-        rs = getGuiaDesarrollo(idPaciente, true);
-
-        DefaultTableModel miTabla = new DefaultTableModel(null, titulos) {
-            Class[] types = new Class[]{
-                Object.class, Object.class, Boolean.class
-            };
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        };
-
-        try {
-            while (rs.next()) {
-                reg1[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
-                reg1[1] = rs.getString("CARACT_DESARR_EVALUAR");
-                reg1[2] = rs.getBoolean("resultado");
-                miTabla.addRow(reg1);
-            }
-            jtGuiaVigilanciaDesarrollo.setModel(miTabla);
-            miTabla.addTableModelListener((TableModelEvent e) -> {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    if (e.getColumn() == 2) {
-                        agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(
-                                jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
-                                idPaciente);
-//                        , (Boolean) jtGuiaVigilanciaDesarrollo.getValueAt(
-//                                        jtGuiaVigilanciaDesarrollo.getSelectedRow(), 2)
-                    }
-                }
-            });
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
-        ordenarTabla();
-    }
-
-    public synchronized void llenarTablaGuia2(int idPaciente) {
-        jtGuiaVigilanciaDesarrollo.removeAll();
-        String titulos[] = {"Edad", "Caracteristica del desarrollo a evualar",
-            "Registro de fecha"};
-        
-        Object reg2[] = new Object[titulos.length];
-        
-        //TODO 13/12/2024 Esta lista me parece que no es la que corresponde 
-        //con la tabla.
-        List<GuiaVigilanciaDesarrollo> lista = M_Guia_Vigilancia_Desarrollo.select(
-                FiltroBusqueda
-                        .builder()
-                        .id(idPaciente)
-                        .estado(false)
-                        .build()
-        );
-
-        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-//        {
-//            @Override
-//            Class<?>[] types = new Class<>[]{
-//                Object.class, Object.class, String.class
+//        jtGuiaVigilanciaDesarrollo.removeAll();
+//        String titulos[] = {"Edad", "Caracteristica del desarrollo a evualar",
+//            "Marque la eventualidad"};
+//        Object reg1[] = new Object[3];
+//        rs = getGuiaDesarrollo(idPaciente, true);
+//
+//        DefaultTableModel miTabla = new DefaultTableModel(null, titulos) {
+//            Class[] types = new Class[]{
+//                Object.class, Object.class, Boolean.class
 //            };
 //
 //            @Override
-//            public Class<?>[] getColumnClass(int columnIndex) {
+//            public Class getColumnClass(int columnIndex) {
 //                return types[columnIndex];
 //            }
 //        };
+//
+//        try {
+//            while (rs.next()) {
+//                reg1[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
+//                reg1[1] = rs.getString("CARACT_DESARR_EVALUAR");
+//                reg1[2] = rs.getBoolean("resultado");
+//                miTabla.addRow(reg1);
+//            }
+//            jtGuiaVigilanciaDesarrollo.setModel(miTabla);
+//            miTabla.addTableModelListener((TableModelEvent e) -> {
+//                if (e.getType() == TableModelEvent.UPDATE) {
+//                    if (e.getColumn() == 2) {
+//                        agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(
+//                                jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
+//                                idPaciente);
+////                        , (Boolean) jtGuiaVigilanciaDesarrollo.getValueAt(
+////                                        jtGuiaVigilanciaDesarrollo.getSelectedRow(), 2)
+//                    }
+//                }
+//            });
+//        } catch (SQLException ex) {
+//            //Instalar Logger
+//        }
+//        ordenarTabla();
+    }
 
-        while (rs.next()) {
-            reg2[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
-            reg2[1] = rs.getString("CARACT_DESARR_EVALUAR");
-            reg2[2] = rs.getString("resultado");
-            miTabla.addRow(reg2);
-        }
-        jtGuiaVigilanciaDesarrollo.setModel(miTabla);
-        ordenarTabla();
+    public synchronized void llenarTablaGuia2(int idPaciente) {
+//        jtGuiaVigilanciaDesarrollo.removeAll();
+//        String titulos[] = {"Edad", "Caracteristica del desarrollo a evualar",
+//            "Registro de fecha"};
+//        
+//        Object reg2[] = new Object[titulos.length];
+//        
+//        //TODO 13/12/2024 Esta lista me parece que no es la que corresponde 
+//        //con la tabla.
+//        List<GuiaVigilanciaDesarrollo> lista = M_Guia_Vigilancia_Desarrollo.select(
+//                FiltroBusqueda
+//                        .builder()
+//                        .id(idPaciente)
+//                        .estado(false)
+//                        .build()
+//        );
+//
+//        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
+////        {
+////            @Override
+////            Class<?>[] types = new Class<>[]{
+////                Object.class, Object.class, String.class
+////            };
+////
+////            @Override
+////            public Class<?>[] getColumnClass(int columnIndex) {
+////                return types[columnIndex];
+////            }
+////        };
+//
+//        while (rs.next()) {
+//            reg2[0] = new Categorias(rs.getInt("ID_GVD"), rs.getString("EDAD"));
+//            reg2[1] = rs.getString("CARACT_DESARR_EVALUAR");
+//            reg2[2] = rs.getString("resultado");
+//            miTabla.addRow(reg2);
+//        }
+//        jtGuiaVigilanciaDesarrollo.setModel(miTabla);
+//        ordenarTabla();
     }
 
     private synchronized void ordenarTabla() {
@@ -2090,25 +2088,25 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
     }
 
     private synchronized void llenarComboxDoctores(boolean actual) {
-
-        getFechaDoctores(
-                Utilidades.formatDate(
-                        dcReferimiento.getDate(),
-                        ""
-                ),
-                actual
-        );
-
-        cbDoctores.removeAllItems();
-
-        cbDoctores.addItem(
-                Usuario
-                        .builder()
-                        .id_persona(0)
-                        .pnombre("N/A")
-                        .apellidos("Seleccione un doctor")
-                        .build()
-        );
+//
+//        getFechaDoctores(
+//                Utilidades.formatDate(
+//                        dcReferimiento.getDate(),
+//                        ""
+//                ),
+//                actual
+//        );
+//
+//        cbDoctores.removeAllItems();
+//
+//        cbDoctores.addItem(
+//                Usuario
+//                        .builder()
+//                        .id_persona(0)
+//                        .pnombre("N/A")
+//                        .apellidos("Seleccione un doctor")
+//                        .build()
+//        );
         
 //                "<html><b>" + rs.getString("nombreCompleto").trim() + "</b> <br> "
 //                + frmHorario.dia(rs.getString("DIA")) + ": Hora: "
@@ -2140,31 +2138,31 @@ public class frmConsultas2 extends javax.swing.JInternalFrame {
      * Actualizado el Lunes 30 de enero 2023.
      */
     private synchronized void llenarComboxMedicamentos() {
-        List<Medicamento> medicamentosList = getMedicamentoActivo();
-
-        jcbMedicamentos.removeAllItems();
-
-        jcbMedicamentos.addItem(
-                Medicamento
-                        .builder()
-                        .id(-1)
-                        .descripcion("Seleccione un medicamento.")
-                        .build()
-        );
-
-        medicamentosList.stream().forEach(
-                medicamento -> {
-                    jcbMedicamentos.addItem(
-                            Medicamento
-                                    .builder()
-                                    .id(medicamento.getId())
-                                    .descripcion(
-                                            medicamento.getDescripcion()
-                                    )
-                                    .build()
-                    );
-                }
-        );
+//        List<Medicamento> medicamentosList = getMedicamentoActivo();
+//
+//        jcbMedicamentos.removeAllItems();
+//
+//        jcbMedicamentos.addItem(
+//                Medicamento
+//                        .builder()
+//                        .id(-1)
+//                        .descripcion("Seleccione un medicamento.")
+//                        .build()
+//        );
+//
+//        medicamentosList.stream().forEach(
+//                medicamento -> {
+//                    jcbMedicamentos.addItem(
+//                            Medicamento
+//                                    .builder()
+//                                    .id(medicamento.getId())
+//                                    .descripcion(
+//                                            medicamento.getDescripcion()
+//                                    )
+//                                    .build()
+//                    );
+//                }
+//        );
     }
 
     private void nuevaTabla() {

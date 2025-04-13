@@ -2,17 +2,23 @@ package utilidades;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Categoria;
-import static sur.softsurena.metodos.M_Padre.getPadresActivo;
+import sur.softsurena.entidades.Generales;
+import sur.softsurena.metodos.M_Generales;
+import sur.softsurena.metodos.M_Persona;
+import static sur.softsurena.utilidades.Utilidades.LOG;
+//import static sur.softsurena.metodos.M_Padre.getPadresActivo;
 
 public class frmBuscarCedula extends javax.swing.JDialog {
 
     private DefaultTableModel miTabla;
     private final String sexo;
-
 
     public frmBuscarCedula(java.awt.Frame parent, boolean modal, String sexo) {
         super(parent, modal);
@@ -147,12 +153,12 @@ public class frmBuscarCedula extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if(jtlPadres.getSelectedRow() == -1){
-            JOptionPane.showMessageDialog(this, 
+        if (jtlPadres.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this,
                     "Debe seleccionar un registro de la tabla");
             return;
         }
-        
+
 //        txtCedula.setValue(new Categoria(
 //                ((Categoria) jtlPadres.getValueAt(jtlPadres.getSelectedRow(), 0)).getIdUsuario(),
 //                ((Categoria) jtlPadres.getValueAt(jtlPadres.getSelectedRow(), 0)).getDescripcion()
@@ -161,25 +167,32 @@ public class frmBuscarCedula extends javax.swing.JDialog {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtCedulaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyReleased
-        String[] titulos = {"Cedula", "Nombres", "Apellidos"};
+        String[] titulos = {"Cedula", "Nombres y Apellidos"};
         Object[] obj = new Object[titulos.length];
 
-        ResultSet rs = getPadresActivo(txtCedula.getText().trim(), sexo);
+        Generales general = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(
+                                txtCedula.getText().trim()
+                        ).build()
+        ).getFirst();
+
+        Persona persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(general.getIdPersona())
+                        .build()
+        ).getFirst();
 
         miTabla = new DefaultTableModel(null, titulos);
 
-        try {
-            while (rs.next()) {
-//                obj[0] = new Categoria(rs.getInt("idPadre"),
-//                        rs.getString("cedula"));
-                obj[1] = rs.getString("Nombres");
-                obj[2] = rs.getString("Apellidos");
-                miTabla.addRow(obj);
-            }
-            jtlPadres.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        obj[0] = general;
+        obj[1] = persona;
+        
+        miTabla.addRow(obj);
+
+        jtlPadres.setModel(miTabla);
     }//GEN-LAST:event_txtCedulaKeyReleased
 
     private void jtlPadresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtlPadresMouseClicked

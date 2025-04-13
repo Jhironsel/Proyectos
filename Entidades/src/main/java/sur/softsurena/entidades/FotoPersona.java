@@ -3,7 +3,6 @@ package sur.softsurena.entidades;
 import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.abstracta.Persona;
 
 /**
  * POJO de la tabla FOTO_PERSONA de la base de datos.

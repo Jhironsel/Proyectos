@@ -3,6 +3,7 @@ package sur.softsurena.metodos;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -33,7 +34,7 @@ public class M_BaseDeDatosNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),
@@ -98,7 +99,6 @@ public class M_BaseDeDatosNGTest {
     )
     public void testPeriodoMaquina() {
         int result = M_BaseDeDatos.periodoMaquina();
-        //TODO Se debe verificar si el equipo esta registrado.
         assertTrue(result > 0, "La base de datos cuenta con periodo insuficiente.");
     }
 
@@ -122,7 +122,9 @@ public class M_BaseDeDatosNGTest {
                 "Error al conectarse..."
         );
         
-        Date fecha = new Date(new GregorianCalendar().getTimeInMillis());
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.MONTH, 1);
+        Date fecha = new Date(gregorianCalendar.getTimeInMillis());
         
         assertTrue(
                 M_BaseDeDatos.setLicencia(

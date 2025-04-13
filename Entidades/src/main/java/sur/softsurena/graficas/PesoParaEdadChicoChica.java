@@ -23,8 +23,9 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getPesoKG;
-import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PesoParaEdadChicoChica {
@@ -37,12 +38,15 @@ public class PesoParaEdadChicoChica {
     private Float SD1;
     private Float SD2;
     private Float SD3;
-    private final int tamanoFigura;
     private final int idPaciente;
 
-    public PesoParaEdadChicoChica(int idPaciente, int tamanoFigura) {
-        sexo = getSexoPaciente(idPaciente);
-        this.tamanoFigura = tamanoFigura;
+    public PesoParaEdadChicoChica(int idPaciente) {
+        sexo = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getSexo().toString();
         this.idPaciente = idPaciente;
     }
 
@@ -63,6 +67,8 @@ public class PesoParaEdadChicoChica {
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
 
             String str;
+            
+            localBufferedReader.readLine();
             
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {

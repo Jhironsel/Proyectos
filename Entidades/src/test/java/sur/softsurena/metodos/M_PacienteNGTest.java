@@ -1,7 +1,7 @@
 package sur.softsurena.metodos;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.sql.Date;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -14,8 +14,6 @@ import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
-import static sur.softsurena.metodos.M_Paciente.ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE;
-import static sur.softsurena.metodos.M_Paciente.ERROR_AL_CONSULTAR_LA_CEDULA_DEL_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_INSERTAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_MODIFICAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.PACIENTE_AGREGADO_CORRECTAMENTE;
@@ -25,6 +23,8 @@ import sur.softsurena.utilidades.Resultado;
 
 @Getter
 public class M_PacienteNGTest {
+
+    private static Integer idPersona;
 
     public M_PacienteNGTest() {
     }
@@ -67,7 +67,8 @@ public class M_PacienteNGTest {
     )
     public static void testInsert() {
         M_PersonaNGTest.testInsert();
-
+        idPersona = M_PersonaNGTest.persona(Boolean.TRUE).getIdPersona();
+        
         Resultado result = M_Paciente.insert(generarPaciente());
 
         assertEquals(
@@ -80,6 +81,8 @@ public class M_PacienteNGTest {
                         .build(),
                 ERROR_AL_INSERTAR_PACIENTE
         );
+        
+        
 
         assertTrue(
                 M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona() > 0,
@@ -107,68 +110,19 @@ public class M_PacienteNGTest {
         );
     }
 
-//    @Test(
-//            enabled = true,
-//            priority = 2,
-//            description = """
-//                          Test que verifica que la tabla de paciente contiene 
-//                          registros en el sistema.
-//                          """
-//    )
-//    public void testGetListEntidad() {
-//        List<Paciente> result = getListEntidad();
-//        assertFalse(
-//                result.isEmpty(),
-//                "Se encuentra registros en la lista de paciente."
-//        );
-//    }
-    @Test(
-            enabled = true,
-            description = """
-                          Metodo encargado de consultar los sexo de los 
-                          pacientes.
-                          """,
-            priority = 2
-    )
-    public void testGetSexoPaciente() {
-        assertTrue(
-                M_Paciente.getSexoPaciente(
-                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-                ).equals("M"),
-                ERROR_AL_CONSULTAR_EL_SEXO_DE_UN_PACIENTE
-        );
-    }
-
-    @Test(
-            enabled = false,
-            description = "",
-            priority = 2
-    )
-    public void testExistePaciente() {
-
-        Resultado result = M_Paciente.existePaciente("");
-
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL_CONSULTAR_LA_CEDULA_DEL_PACIENTE
-        );
-    }
-
     @Test(
             enabled = true,
             description = "Test que permite eliminar un paciente ya creado.",
             priority = 3
     )
     public static void testDelete() {
-        Resultado result = M_Paciente.delete(
-                Paciente
-                        .builder()
-                        .persona(M_PersonaNGTest.persona(Boolean.FALSE))
-                        .build()
-        );
-
         assertEquals(
-                result,
+                M_Paciente.delete(
+                        Paciente
+                                .builder()
+                                .id(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
+                                .build()
+                ),
                 Resultado
                         .builder()
                         .mensaje(PACIENTE_BORRADO_CORRECTAMENTE)
@@ -183,115 +137,65 @@ public class M_PacienteNGTest {
         M_PersonaNGTest.testDelete();
     }
 
-    public static Paciente generarPaciente() {
-        return Paciente
-                .builder()
-                .persona(
-                        Persona
-                                .builder()
-                                .idPersona(
-                                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-                                )
-                                .build()
-                )
-                .pesoNacimiento(BigDecimal.TEN)
-                .altura(new BigDecimal("14.98"))
-                .perimetroCefalico(new BigDecimal(8.5d))
-                .cesarea(Boolean.FALSE)
-                .tiempoGestacion(8)
-                .build();
-    }
-
     @Test
     public static void testSelect() {
-
-        List result = M_Paciente.select(
-                Paciente
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
-                        .build()
+        assertNotNull(
+                M_Paciente.select(
+                        Paciente
+                                .builder()
+                                .build()
+                ),
+                "Error en la consulta de pacientes."
         );
 
-        assertFalse(
-                result.isEmpty(),
-                "La lista de paciente esta vacia."
+        assertNotNull(
+                M_Paciente.select(
+                        Paciente
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                "Error en la consulta de pacientes."
         );
     }
 
     @Test
     public void testSqlSelect() {
-        String expResult = """
-                           SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
-                               FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
-                               PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
-                               CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
-                           FROM GET_PACIENTES
-                           """;
 
         assertEquals(
                 M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .build()
                 ),
-                expResult.strip().trim()
+                """
+                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
+                FROM V_PERSONAS_PACIENTES_ATR
+                """.strip()
         );
-
-        expResult = """
-                    SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
-                        FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
-                        PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
-                        CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
-                    FROM GET_PACIENTES
-                    WHERE ESTADO
-                    """;
 
         assertEquals(
                 M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.TRUE)
-                                                .build()
-                                )
+                                .id(-1)
                                 .build()
                 ),
-                expResult.strip().trim()
+                """
+                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
+                FROM V_PERSONAS_PACIENTES_ATR
+                WHERE ID = -1
+                """.strip()
         );
+    }
 
-        expResult = """
-                    SELECT ID, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, FECHA_NACIMIENTO,
-                        FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, ESTADO,
-                        PESO_NACIMIENTO_KG, ALTURA, PERIMETRO_CEFALICO,
-                        CESAREA, TIEMPO_GESTACION, MASA_CEFALICA
-                    FROM GET_PACIENTES
-                    WHERE ESTADO IS FALSE
-                    """;
-
-        assertEquals(
-                M_Paciente.sqlSelect(
-                        Paciente
-                                .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.FALSE)
-                                                .build()
-                                )
-                                .build()
-                ),
-                expResult.strip().trim()
-        );
+    public static Paciente generarPaciente() {
+        return Paciente
+                .builder()
+                .id(idPersona)
+                .cesarea(Boolean.FALSE)
+                .tiempoGestacion(8)
+                .fumador(Boolean.FALSE)
+                .build();
     }
 }

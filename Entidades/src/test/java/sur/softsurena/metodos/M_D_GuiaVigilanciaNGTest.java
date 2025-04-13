@@ -8,11 +8,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_GuiaVigilancia;
-import sur.softsurena.entidades.GuiaVigilanciaDesarrollo;
-import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_D_GuiaVigilancia.GUIA_DE__DESARROLLO_AGREGADA_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
@@ -37,7 +34,7 @@ public class M_D_GuiaVigilanciaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

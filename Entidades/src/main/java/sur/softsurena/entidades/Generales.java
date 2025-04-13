@@ -3,7 +3,6 @@ package sur.softsurena.entidades;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.abstracta.Persona;
 
 @SuperBuilder
 @Getter

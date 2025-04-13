@@ -2,11 +2,12 @@ package sur.softsurena.formularios;
 
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import sur.softsurena.archivos.frmLogin;
 import sur.softsurena.archivos.frmPaciente;
 import sur.softsurena.archivos.frmPadres;
-import sur.softsurena.archivos.frmUsuarios;
 import static sur.softsurena.conexion.Conexion.*;
 import sur.softsurena.control.frmHorario;
 import sur.softsurena.control.frmMedicamentos;
@@ -15,13 +16,14 @@ import sur.softsurena.gestion.frmConsultas2;
 import sur.softsurena.gestion.frmGestionConsultas;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.DesktopConFondo;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class frmPrincipal extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
-    
+
     public frmPrincipal() {
-        
+
         //Inicializamos las variables del formulario
         initComponents();//Inicializamos todos los componente del formulario.
         //Insertamos Informacion del usuario que tenemos activo en la ventana
@@ -275,11 +277,11 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
-                ((DesktopConFondo) dpnEscritorio).setImagen("/imagenes/Principal800x600.jpg");
+
+                ((DesktopConFondo) dpnEscritorio).setImagen("/imagenes/Principal 800 x 600.jpg");
                 return null;
             }
         };
@@ -287,31 +289,38 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void mnuArchivosSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosSalirActionPerformed
-        
+
         System.exit(0);
     }//GEN-LAST:event_mnuArchivosSalirActionPerformed
 
     private void mnuArchivosImpresorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosImpresorasActionPerformed
-        
+
         //TODO 13/12/2024 Testear esta opcion.
         new frmImpresoras2(this, true).setVisible(true);
     }//GEN-LAST:event_mnuArchivosImpresorasActionPerformed
 
     private void mnuArchivosPadresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPadresActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        System.out.println("Estoy fuera...");
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
+                System.out.println("Estoy dentro...");
                 frmPadres padres = frmPadres.getPadres();
-                padres.setCliPadre(0);
+                System.out.println("obtuve instancia.");
                 dpnEscritorio.remove(padres);
                 dpnEscritorio.add(padres);
-                padres.limpiarCampos();
-                padres.llenarCombos();
-                padres.llenarTabla(true);
+                System.out.println("Agregado al dpnEscritorio.");
+//                padres.limpiarCampos();
+//                padres.llenarCombos();
+//                padres.llenarTabla(true);
                 try {
                     padres.setMaximum(true);
                 } catch (PropertyVetoException ex) {
-                    //Instalar Logger
+                    LOG.log(
+                            Level.SEVERE,
+                            "No puede maximizarse la ventana.!",
+                            ex
+                    );
                 }
                 padres.setVisible(true);
                 return padres;
@@ -321,45 +330,58 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivosPadresActionPerformed
 
     private void mnuArchivosPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPacientesActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                
-                frmPaciente paciente = frmPaciente.getPadres();
-                dpnEscritorio.remove(paciente);
-                dpnEscritorio.add(paciente);
-                paciente.llenarCombox();
-                paciente.llenarTabla();
-                paciente.centralizar();
-                paciente.setMaximum(true);
-                return paciente;
-            }
-        };
-        w.execute();
-        w.run();
+        frmPaciente paciente = frmPaciente.getPadres();
+        dpnEscritorio.remove(paciente);
+        dpnEscritorio.add(paciente);
+        paciente.llenarCombox();
+        paciente.llenarTabla();
+        paciente.centralizar();
+        try {
+            paciente.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//        final SwingWorker<?, ?> w = new SwingWorker<>() {
+//            @Override
+//            protected Object doInBackground() throws Exception {
+//
+//                frmPaciente paciente = frmPaciente.getPadres();
+//                dpnEscritorio.remove(paciente);
+//                dpnEscritorio.add(paciente);
+//                paciente.llenarCombox();
+//                paciente.llenarTabla();
+//                paciente.centralizar();
+//                paciente.setMaximum(true);
+//                return paciente;
+//            }
+//        };
+//        w.execute();
+//        w.run();
     }//GEN-LAST:event_mnuArchivosPacientesActionPerformed
 
     private void mnuArchivosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosUsuariosActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
-                frmUsuarios u = frmUsuarios.getUsuarios();
-                dpnEscritorio.remove(u);
-                dpnEscritorio.add(u);
-                u.centralizar();
-                u.llenarTabla(true, 
-                        "Llenando la tabla de usuario desde el inicio");
-                
-                u.setMaximum(true);
-                return u;
+
+                //frmUsuarios u = frmUsuarios.getUsuarios();
+                frmUsuarios usuarios = frmUsuarios.getInstance();
+                dpnEscritorio.remove(usuarios);
+                dpnEscritorio.add(usuarios);
+//                u.centralizar();
+//                u.llenarTabla(true,
+//                        "Llenando la tabla de usuario desde el inicio");
+//
+                usuarios.setMaximum(true);
+                return usuarios;
             }
         };
         w.execute();
     }//GEN-LAST:event_mnuArchivosUsuariosActionPerformed
 
     private void mnuArchivoCerrarSeccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivoCerrarSeccionActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
 
@@ -376,16 +398,16 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivoCerrarSeccionActionPerformed
 
     private void mnuControlCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlCitasActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
+
                 frmHorario c = frmHorario.getControlCita();
                 dpnEscritorio.remove(c);
                 dpnEscritorio.add(c);
-                
+
                 c.centralizar();
-                
+
                 try {
                     c.setClosed(false);
                 } catch (PropertyVetoException ex) {
@@ -402,10 +424,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuControlCitasActionPerformed
 
     private void mnuControlSegurosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlSegurosActionPerformed
-        SwingWorker<?,?> w = new SwingWorker<>() {
+        SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
+
                 frmSeguros s = frmSeguros.getSeguros();
                 dpnEscritorio.remove(s);
                 dpnEscritorio.add(s);
@@ -417,7 +439,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuControlSegurosActionPerformed
 
     private void mnuControlMedicamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlMedicamentosActionPerformed
-        
+
         frmMedicamentos m = frmMedicamentos.getMedicamentos();
         dpnEscritorio.remove(m);
         dpnEscritorio.add(m);
@@ -425,10 +447,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuControlMedicamentosActionPerformed
 
     private void mnuGestionConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGestionConsultasActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
+
                 frmGestionConsultas c = frmGestionConsultas.getCitas();
                 dpnEscritorio.remove(c);
                 dpnEscritorio.add(c);
@@ -442,17 +464,17 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuGestionConsultasActionPerformed
 
     private void mnuConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConsultasActionPerformed
-        final SwingWorker<?,?> w = new SwingWorker<>() {
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
-                
+
                 frmConsultas2 consultas = frmConsultas2.getConsultas2();
-                
+
                 dpnEscritorio.remove(consultas);
                 dpnEscritorio.add(consultas);
-                
+
                 consultas.setMaximum(true);
-                
+
                 consultas.setVisible(true);
                 return consultas;
             }

@@ -21,25 +21,6 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmPagos extends javax.swing.JInternalFrame {
 
-    private int largo;
-    private int ancho;
-
-    public int getLargo() {
-        return largo;
-    }
-
-    public void setLargo(int largo) {
-        this.largo = largo;
-    }
-
-    public int getAncho() {
-        return ancho;
-    }
-
-    public void setAncho(int ancho) {
-        this.ancho = ancho;
-    }
-
     public frmPagos() {
         initComponents();
         jtAlumno.setAutoscrolls(true);
@@ -390,13 +371,13 @@ public class frmPagos extends javax.swing.JInternalFrame {
             lSugerencia.setText("No puede ingresar letras!!!");
         }
     }//GEN-LAST:event_txtMatriculaKeyTyped
-    
+
     int id_Tanda;
-    
+
     String periodo;
-    
+
     private DefaultTableModel miTabla;
-    
+
     private void btnBuscarEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEstudianteActionPerformed
 //            ResultSet rs = misFb.getEstudiante(txtMatricula.getText());
         ResultSet rs = null;
@@ -415,8 +396,8 @@ public class frmPagos extends javax.swing.JInternalFrame {
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -456,15 +437,18 @@ public class frmPagos extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
+
         FormatoTabla ft = new FormatoTabla(2);
+
         jtAlumno.setDefaultRenderer(Object.class, ft);
 
-        jtAlumno.getColumnModel().getColumn(0).setMaxWidth(90);
-        jtAlumno.getColumnModel().getColumn(0).setMinWidth(90);
-        jtAlumno.getColumnModel().getColumn(1).setMaxWidth(95);
-        jtAlumno.getColumnModel().getColumn(1).setMinWidth(95);
-        jtAlumno.getColumnModel().getColumn(2).setMaxWidth(90);
-        jtAlumno.getColumnModel().getColumn(2).setMinWidth(90);
+        int[] anchoColumnas = {90, 95, 90};
+
+        for (int i = 0; i < anchoColumnas.length; i++) {
+            jtAlumno.getColumnModel().getColumn(i).setMaxWidth(anchoColumnas[i]);
+            jtAlumno.getColumnModel().getColumn(i).setMinWidth(anchoColumnas[i]);
+        }
+
         jtAlumno.getTableHeader().getColumnModel().getColumn(2).setMaxWidth(100);
         jtAlumno.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
     }//GEN-LAST:event_btnBuscarEstudianteActionPerformed
@@ -478,14 +462,14 @@ public class frmPagos extends javax.swing.JInternalFrame {
             lSugerencia.setText("No puede ingresar letras!!!");
         }
     }//GEN-LAST:event_txtPagoKeyTyped
-    
+
     private void cerrar() {
         frmPrincipal miPrincipal = new frmPrincipal();
         miPrincipal.dpnEscritorio.getDesktopManager().closeFrame(this);
     }
-    
+
     private final String logotipo = "/Reportes/Logo.jpg";
-    
+
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
         if (txtPago.getText().equals("")) {
             lSugerencia.setText("Inserte una Cantidad");
@@ -494,7 +478,6 @@ public class frmPagos extends javax.swing.JInternalFrame {
 
 //        misFb.pPagoMensualidad("" + getIdUsuario(), txtPago.getText(),
 //                txtMatricula.getText(), jtAlumno.getValueAt(jtAlumno.getSelectedRow(), 1).toString());
-
 //        String archivo = misFb.getPatch("Recibo");
         String archivo = "";
 
@@ -503,7 +486,7 @@ public class frmPagos extends javax.swing.JInternalFrame {
         try {
             JDialog viewer = new JDialog(new javax.swing.JFrame(),
                     "Este Mensaje nunca lo he visto", true);
-            viewer.setSize(getAncho() - 200, getLargo() - 200);
+            viewer.setSize(200, 200);
             viewer.setLocationRelativeTo(null);
 
             Map parametros = new HashMap();
@@ -523,8 +506,8 @@ public class frmPagos extends javax.swing.JInternalFrame {
             viewer.setVisible(true);
         } catch (JRException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }

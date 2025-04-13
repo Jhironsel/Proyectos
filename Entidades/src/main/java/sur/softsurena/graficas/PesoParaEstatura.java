@@ -25,10 +25,11 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.AlturaPeso;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getAlturaPeso;
-import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -53,7 +54,12 @@ public class PesoParaEstatura {
      * @param idPaciente Identificador del paciente.
      */
     public PesoParaEstatura(int idPaciente) {
-        sexo = getSexoPaciente(idPaciente);
+        sexo = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getSexo().toString();
         this.idPaciente = idPaciente;
     }
 
@@ -68,8 +74,6 @@ public class PesoParaEstatura {
                     )
             );
 
-            String str = localBufferedReader.readLine();
-
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, true);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, true);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, true);
@@ -78,6 +82,8 @@ public class PesoParaEstatura {
             XYSeries localXYSeries6 = new XYSeries("SD2", true, true);
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
+            
+            String str = localBufferedReader.readLine();
 
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {

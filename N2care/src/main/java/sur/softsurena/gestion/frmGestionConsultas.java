@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -896,8 +895,8 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
                 "Codigo de Verificación: " + txtCodigoVerificacion.getText()
                 + "\n"
                 + txtNombreApellidosSeguro.getText()
-                + "\nCon el doctor y fecha: "
-                + ((Usuario) cbFechaUsuario.getSelectedItem()).getVentana(),
+                + "\nCon el doctor y fecha: ",
+//                + ((Usuario) cbFechaUsuario.getSelectedItem()).getVentana(),
                 "Proceso de validacion del sistema...",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
@@ -986,10 +985,10 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
                     + (String) tblGestionPacientes.getValueAt(
                             tblGestionPacientes.getSelectedRow(), 6)
             );
-            txtCovertura.setValue(
-                    ((Categoria) tblGestionPacientes.getValueAt(
-                            tblGestionPacientes.getSelectedRow(), 5)).getCovertura()
-            );
+//            txtCovertura.setValue(
+//                    ((Categoria) tblGestionPacientes.getValueAt(
+//                            tblGestionPacientes.getSelectedRow(), 5)).getCovertura()
+//            );
             
             txtCosto.setValue(1000.00d);
 
@@ -1021,29 +1020,29 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             return;
         }
 
-        int opc = JOptionPane.showInternalConfirmDialog(this,
-                "\nPaciente: "
-                + tblRegistrosPacientes.getValueAt(tblRegistrosPacientes.getSelectedRow(), 1)
-                + " "
-                + tblRegistrosPacientes.getValueAt(tblRegistrosPacientes.getSelectedRow(), 2)
-                + "\nDoctor: " + ((Usuario) cbFechaUsuario.getSelectedItem()).getVentana(),
-                "Verificacion de informacion de Consulta Medica!",
-                JOptionPane.YES_NO_OPTION);
-        if (opc == JOptionPane.NO_OPTION) {
-            return;
-        }
-
-        int turno =getTurnoCita(
-                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
-                Utilidades.formatDate(dcConsulta.getDate(), ""));
-
-        JOptionPane.showInternalMessageDialog(this, M_Consulta.insert(((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
-                        Utilidades.formatDate(dcConsulta.getDate(), ""),
-                        turno,
-                        ((Categoria) tblRegistrosPacientes.getValueAt(
-                                tblRegistrosPacientes.getSelectedRow(), 0)).getIdCategoria()),
-                "Resultado de la operacion",
-                JOptionPane.INFORMATION_MESSAGE);
+//        int opc = JOptionPane.showInternalConfirmDialog(this,
+//                "\nPaciente: "
+//                + tblRegistrosPacientes.getValueAt(tblRegistrosPacientes.getSelectedRow(), 1)
+//                + " "
+//                + tblRegistrosPacientes.getValueAt(tblRegistrosPacientes.getSelectedRow(), 2)
+//                + "\nDoctor: " + ((Usuario) cbFechaUsuario.getSelectedItem()).getVentana(),
+//                "Verificacion de informacion de Consulta Medica!",
+//                JOptionPane.YES_NO_OPTION);
+//        if (opc == JOptionPane.NO_OPTION) {
+//            return;
+//        }
+//
+//        int turno =getTurnoCita(
+//                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
+//                Utilidades.formatDate(dcConsulta.getDate(), ""));
+//
+//        JOptionPane.showInternalMessageDialog(this, M_Consulta.insert(((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta(),
+//                        Utilidades.formatDate(dcConsulta.getDate(), ""),
+//                        turno,
+//                        ((Categoria) tblRegistrosPacientes.getValueAt(
+//                                tblRegistrosPacientes.getSelectedRow(), 0)).getIdCategoria()),
+//                "Resultado de la operacion",
+//                JOptionPane.INFORMATION_MESSAGE);
 
         btnLimpiarCampoActionPerformed(null);
         llenarTabla("");
@@ -1153,26 +1152,26 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtpFormulariosStateChanged
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        Map<String, Object> parametros = new HashMap<>();
-        //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
-        //ese mismo nombre, a su lado se pasa el valor del parametro
-        parametros.put(
-                "idControlConsulta",
-                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta()
-        );
-        parametros.put(
-                "fecha", 
-                dcConsulta.getDate()
-        );
-        
-        File i = new File("n2careReporte.jasper");
-        
-        new hiloImpresionFactura(
-                true, 
-                false, 
-                i.getAbsolutePath(), 
-                parametros
-        ).start();
+//        Map<String, Object> parametros = new HashMap<>();
+//        //el nombre que se dio al parametro en JasperReport fue "p1", y se debe llamar desde Java con
+//        //ese mismo nombre, a su lado se pasa el valor del parametro
+//        parametros.put(
+//                "idControlConsulta",
+//                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta()
+//        );
+//        parametros.put(
+//                "fecha", 
+//                dcConsulta.getDate()
+//        );
+//        
+//        File i = new File("n2careReporte.jasper");
+//        
+//        new hiloImpresionFactura(
+//                true, 
+//                false, 
+//                i.getAbsolutePath(), 
+//                parametros
+//        ).start();
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtCodigoVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVerificacionActionPerformed
@@ -1276,22 +1275,22 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             filtro = "and a.nonss STARTING '" + filtro + "'";
         }
 
-        ResultSet rs = getPacienteActivo(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
-                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
-        try {
-            while (rs.next()) {
-                registro[0] = new Categoria(rs.getInt("IDPACIENTE"),
-                        rs.getString("CEDULAPACIENTE").trim());
-                registro[1] = rs.getString("NOMBRES").trim();
-                registro[2] = rs.getString("APELLIDOS").trim();
-                registro[3] = rs.getString("SEXO").trim();
-                registro[4] = rs.getString("IDARS").trim();
-                registro[5] = rs.getString("NONSS").trim();
-                miTabla.addRow(registro);
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+//        ResultSet rs = getPacienteActivo(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
+//                ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
+//        try {
+//            while (rs.next()) {
+//                registro[0] = new Categoria(rs.getInt("IDPACIENTE"),
+//                        rs.getString("CEDULAPACIENTE").trim());
+//                registro[1] = rs.getString("NOMBRES").trim();
+//                registro[2] = rs.getString("APELLIDOS").trim();
+//                registro[3] = rs.getString("SEXO").trim();
+//                registro[4] = rs.getString("IDARS").trim();
+//                registro[5] = rs.getString("NONSS").trim();
+//                miTabla.addRow(registro);
+//            }
+//        } catch (SQLException ex) {
+//            //Instalar Logger
+//        }
         tblRegistrosPacientes.setModel(miTabla);
     }
 
@@ -1333,28 +1332,28 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             if (rbSeguro.isSelected()) {
                 filtro = "and p.nonss STARTING '" + filtro + "'";
             }
-            rs = getPacienteActivo2(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
-                    ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
-            try {
-
-                while (rs.next()) {
-                    registro[0] = rs.getInt("TURNO");
-                    registro[1] = new Categorias(rs.getInt("IDPACIENTE"),
-                            rs.getString("CEDULAPACIENTE").trim());
-                    registro[2] = new Categorias(rs.getInt("IDCONSULTA"),
-                            rs.getString("NOMBRES").trim());
-                    registro[3] = new Categorias(rs.getInt("turno"),
-                            rs.getString("APELLIDOS").trim());
-                    registro[4] = rs.getString("SEXO").trim();
-                    registro[5] = new Categorias(rs.getDouble("COVER"),
-                            rs.getString("IDARS").trim());
-                    registro[6] = rs.getString("NONSS").trim();
-                    miTabla.addRow(registro);
-                }
-
-            } catch (SQLException ex) {
-                //Instalar Logger
-            }
+//            rs = getPacienteActivo2(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
+//                    ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
+//            try {
+//
+//                while (rs.next()) {
+//                    registro[0] = rs.getInt("TURNO");
+//                    registro[1] = new Categorias(rs.getInt("IDPACIENTE"),
+//                            rs.getString("CEDULAPACIENTE").trim());
+//                    registro[2] = new Categorias(rs.getInt("IDCONSULTA"),
+//                            rs.getString("NOMBRES").trim());
+//                    registro[3] = new Categorias(rs.getInt("turno"),
+//                            rs.getString("APELLIDOS").trim());
+//                    registro[4] = rs.getString("SEXO").trim();
+//                    registro[5] = new Categorias(rs.getDouble("COVER"),
+//                            rs.getString("IDARS").trim());
+//                    registro[6] = rs.getString("NONSS").trim();
+//                    miTabla.addRow(registro);
+//                }
+//
+//            } catch (SQLException ex) {
+//                //Instalar Logger
+//            }
         } else {
             Object registro2[] = new Object[8];
             String titulos2[] = {
@@ -1372,39 +1371,39 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             if (cbFechaUsuario.getItemCount() == 0) {
                 return;
             }
-            rs = getPacienteActivo3(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
-                    ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
-            try {
-                while (rs.next()) {
-                    registro2[0] = rs.getInt("TURNO");
-                    registro2[1] = rs.getString("CEDULAPACIENTE").trim();
-                    registro2[2] = rs.getString("NOMBRES").trim();
-                    registro2[3] = rs.getString("APELLIDOS").trim();
-                    registro2[4] = rs.getString("COD_AUTORIZACION").trim();
-                    registro2[5] = rs.getDouble("COSTO");
-                    registro2[6] = rs.getDouble("DESCUENTO");
-                    registro2[7] = rs.getDouble("TOTALCOSTO");
-                    miTabla.addRow(registro2);
-                }
-            } catch (SQLException ex) {
-                //Instalar Logger
-            }
+//            rs = getPacienteActivo3(filtro, Utilidades.formatDate(dcConsulta.getDate(), ""),
+//                    ((Usuario) cbFechaUsuario.getSelectedItem()).getIdControlConsulta());
+//            try {
+//                while (rs.next()) {
+//                    registro2[0] = rs.getInt("TURNO");
+//                    registro2[1] = rs.getString("CEDULAPACIENTE").trim();
+//                    registro2[2] = rs.getString("NOMBRES").trim();
+//                    registro2[3] = rs.getString("APELLIDOS").trim();
+//                    registro2[4] = rs.getString("COD_AUTORIZACION").trim();
+//                    registro2[5] = rs.getDouble("COSTO");
+//                    registro2[6] = rs.getDouble("DESCUENTO");
+//                    registro2[7] = rs.getDouble("TOTALCOSTO");
+//                    miTabla.addRow(registro2);
+//                }
+//            } catch (SQLException ex) {
+//                //Instalar Logger
+//            }
         }
         tblGestionPacientes.setModel(miTabla);
     }
 
     private synchronized void llenarComboxSeguro() {
         
-        ResultSet obj = getTipoSeguro();
-        cbReporteSeguro.removeAllItems();
-        try {
-            while (obj.next()) {
-                cbReporteSeguro.addItem(new Categorias(obj.getShort("IDARS"),
-                        obj.getString("DESCRIPCION").trim(), "Seguro"));
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+//        ResultSet obj = getTipoSeguro();
+//        cbReporteSeguro.removeAllItems();
+//        try {
+//            while (obj.next()) {
+//                cbReporteSeguro.addItem(new Categorias(obj.getShort("IDARS"),
+//                        obj.getString("DESCRIPCION").trim(), "Seguro"));
+//            }
+//        } catch (SQLException ex) {
+//            //Instalar Logger
+//        }
     }
 
     private synchronized void llenarComboxUsuarios() {
@@ -1414,65 +1413,65 @@ public class frmGestionConsultas extends javax.swing.JInternalFrame {
             actual = false;
         }
 
-        ResultSet rs = getFechaDoctores(Utilidades.formatDate(dcConsulta.getDate(), ""), actual);
-        cbFechaUsuario.removeAllItems();
-        try {
-            while (rs.next()) {
-                cbFechaUsuario.addItem(
-                        new Doctor(
-                                rs.getInt("IDCONTROLCONSULTA"),
-                                rs.getString("loginName").trim(),
-                                "<html> <b>" + rs.getString("nombreCompleto").trim() + "</b> <br> " + 
-                                        frmHorario.dia(rs.getString("DIA")) + ":"+
-                                        " Hora: " + rs.getString("INICIAL").substring(0, 5) + 
-                                        " hasta "+ rs.getString("FINAL").substring(0, 5) + 
-                                "</html>",
-                                rs.getString("nombreCompleto").trim() + 
-                                        " \nDia: " + frmHorario.dia(rs.getString("DIA")) + " "
-                        + Utilidades.formatDate(dcConsulta.getDate(), "dd/MM/yyyy")
-                        + " \nHora: " + rs.getString("INICIAL").substring(0, 5)
-                        + " hasta " + rs.getString("FINAL").substring(0, 5),
-                        rs.getInt("CANTIDAD_PACIENTE")));
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+//        ResultSet rs = getFechaDoctores(Utilidades.formatDate(dcConsulta.getDate(), ""), actual);
+//        cbFechaUsuario.removeAllItems();
+//        try {
+//            while (rs.next()) {
+//                cbFechaUsuario.addItem(
+//                        new Doctor(
+//                                rs.getInt("IDCONTROLCONSULTA"),
+//                                rs.getString("loginName").trim(),
+//                                "<html> <b>" + rs.getString("nombreCompleto").trim() + "</b> <br> " + 
+//                                        frmHorario.dia(rs.getString("DIA")) + ":"+
+//                                        " Hora: " + rs.getString("INICIAL").substring(0, 5) + 
+//                                        " hasta "+ rs.getString("FINAL").substring(0, 5) + 
+//                                "</html>",
+//                                rs.getString("nombreCompleto").trim() + 
+//                                        " \nDia: " + frmHorario.dia(rs.getString("DIA")) + " "
+//                        + Utilidades.formatDate(dcConsulta.getDate(), "dd/MM/yyyy")
+//                        + " \nHora: " + rs.getString("INICIAL").substring(0, 5)
+//                        + " hasta " + rs.getString("FINAL").substring(0, 5),
+//                        rs.getInt("CANTIDAD_PACIENTE")));
+//            }
+//            rs.close();
+//        } catch (SQLException ex) {
+//            //Instalar Logger
+//        }
     }
 
     private synchronized void turno() {
         
-        switch (jtpFormularios.getSelectedIndex()) {
-            case 0:
-                Object obj = cbFechaUsuario.getSelectedItem();
-                int cantPaciente = 0,
-                 cantMaxima = 1;
-
-                if (obj != null) {
-                    cantPaciente = getTurnoCita(((Usuario) obj).getIdControlConsulta(),
-                            Utilidades.formatDate(dcConsulta.getDate(), ""));
-                    cantMaxima = ((Usuario) obj).getCantidad();
-                }
-
-                String valor;
-
-                if (cantPaciente < cantMaxima) {
-                    valor = cantPaciente + " de " + cantMaxima;
-                } else {
-                    valor = "No disponible";
-                }
-                jlTurnoProximo.setText("Proximo turno " + (obj == null ? 0 : valor));
-                llenarTabla("");
-                break;
-            case 1:
-                llenarTabla2("");
-                jlTurnoProximo.setText(" ");
-                break;
-            case 2:
-                llenarComboxSeguro();
-                jlTurnoProximo.setText(" ");
-                break;
-            default:
-        }
+//        switch (jtpFormularios.getSelectedIndex()) {
+//            case 0:
+//                Object obj = cbFechaUsuario.getSelectedItem();
+//                int cantPaciente = 0,
+//                 cantMaxima = 1;
+//
+//                if (obj != null) {
+//                    cantPaciente = getTurnoCita(((Usuario) obj).getIdControlConsulta(),
+//                            Utilidades.formatDate(dcConsulta.getDate(), ""));
+//                    cantMaxima = ((Usuario) obj).getCantidad();
+//                }
+//
+//                String valor;
+//
+//                if (cantPaciente < cantMaxima) {
+//                    valor = cantPaciente + " de " + cantMaxima;
+//                } else {
+//                    valor = "No disponible";
+//                }
+//                jlTurnoProximo.setText("Proximo turno " + (obj == null ? 0 : valor));
+//                llenarTabla("");
+//                break;
+//            case 1:
+//                llenarTabla2("");
+//                jlTurnoProximo.setText(" ");
+//                break;
+//            case 2:
+//                llenarComboxSeguro();
+//                jlTurnoProximo.setText(" ");
+//                break;
+//            default:
+//        }
     }
 }

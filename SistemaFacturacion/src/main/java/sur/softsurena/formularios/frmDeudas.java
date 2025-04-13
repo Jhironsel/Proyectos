@@ -918,7 +918,6 @@ public class frmDeudas extends javax.swing.JInternalFrame {
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         jtpPrincipal.remove(jpRegistroDeuda);
         llenarTabla();
-//        mostrarRegistro();
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnGetTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetTotalActionPerformed
@@ -1340,7 +1339,7 @@ public class frmDeudas extends javax.swing.JInternalFrame {
      */
     public static void llenarTabla() {
         String titulos[] = {
-            "Nombre completo", "Cedula Cliente", "Concepto", "Monto", "Fecha",
+            "Cod.#","Nombre completo", "Cedula Cliente", "Concepto", "Monto", "Fecha",
             "Estado"
         };
         Object registro[] = new Object[titulos.length];
@@ -1353,16 +1352,23 @@ public class frmDeudas extends javax.swing.JInternalFrame {
         ).stream().forEach(
                 deudaR -> {
                     registro[0] = deudaR;
-                    registro[1] = M_Generales.select(
+                    registro[1] = M_Persona.select(
+                            Persona
+                                    .builder()
+                                    .idPersona(
+                                            deudaR.getIdCliente()
+                                    ).build()
+                    );
+                    registro[2] = M_Generales.select(
                             Generales
                                     .builder()
                                     .idPersona(deudaR.getIdCliente())
                                     .build()
                     ).getFirst();
-                    registro[2] = deudaR.getConcepto();
-                    registro[3] = deudaR.getMonto();
-                    registro[4] = deudaR.getFecha();
-                    registro[5] = deudaR.getEstadoDeuda();
+                    registro[3] = deudaR.getConcepto();
+                    registro[4] = deudaR.getMonto();
+                    registro[5] = deudaR.getFecha();
+                    registro[6] = deudaR.getEstadoDeuda();
                     miTabla.addRow(registro);
                 }
         );
@@ -1373,33 +1379,17 @@ public class frmDeudas extends javax.swing.JInternalFrame {
             tblClientes.setRowSelectionInterval(0, 0);
         }
 
-        tcr.setHorizontalAlignment(SwingConstants.RIGHT);//Monto
-        tblClientes.getColumnModel().getColumn(3).setCellRenderer(tcr);
+//        tcr.setHorizontalAlignment(SwingConstants.RIGHT);//Monto
+//        tblClientes.getColumnModel().getColumn(3).setCellRenderer(tcr);
 
         tcr.setHorizontalAlignment(SwingConstants.CENTER);//Estado
-        tblClientes.getColumnModel().getColumn(5).setCellRenderer(tcr);
+        tblClientes.getColumnModel().getColumn(4).setCellRenderer(tcr);
 
         TableColumn miTableColumn;
+        int[] ancho = {50, 100, 50,600,100,50,50};
         for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblClientes.getColumnModel().getColumn(i);
-            if (i == 0) {
-                miTableColumn.setPreferredWidth(120);
-            }
-            if (i == 1) {
-                miTableColumn.setPreferredWidth(25);
-            }
-            if (i == 2) {
-                miTableColumn.setPreferredWidth(900);
-            }
-            if (i == 3) {
-                miTableColumn.setPreferredWidth(30);
-            }
-            if (i == 4) {
-                miTableColumn.setPreferredWidth(15);
-            }
-            if (i == 5) {
-                miTableColumn.setPreferredWidth(10);
-            }
+            miTableColumn.setPreferredWidth(ancho[i]);
         }
     }
 

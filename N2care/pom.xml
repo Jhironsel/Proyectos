@@ -73,5 +73,12 @@
             <version>2</version>
             <type>jar</type>
         </dependency>
+        
+        <dependency>
+            <groupId>sur.softsurena</groupId>
+            <artifactId>SistemaFacturacion</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

@@ -8,7 +8,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.metodos.M_ARS;
-import sur.softsurena.utilidades.FiltroBusqueda;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -305,7 +304,10 @@ public class frmSeguros extends javax.swing.JInternalFrame {
             return;
         }
 
-        Resultado resultado = M_ARS.delete(((ARS) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 0)).getId());
+        Resultado resultado = M_ARS.delete(
+                ((ARS) jtConsulta.getValueAt(jtConsulta.getSelectedRow(), 
+                        0))
+        );
 
 
         JOptionPane.showInternalMessageDialog(
@@ -434,9 +436,7 @@ public class frmSeguros extends javax.swing.JInternalFrame {
             "Estado"};
 
         List<ARS> arsList = M_ARS.select(
-                FiltroBusqueda
-                        .builder()
-                        .build()
+                ARS.builder().build()
         );
 
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
@@ -446,7 +446,7 @@ public class frmSeguros extends javax.swing.JInternalFrame {
             registro[0] = ARS.builder().
                     id(ars.getId()).
                     descripcion(ars.getDescripcion()).build();
-            registro[1] = ars.getCantidad_registro();
+            registro[1] = ars.getCantidadRegistro();
             registro[2] = ars.getCovertura();
             registro[3] = ars.getEstado() ? "Activo" : "Inactivo";
         });

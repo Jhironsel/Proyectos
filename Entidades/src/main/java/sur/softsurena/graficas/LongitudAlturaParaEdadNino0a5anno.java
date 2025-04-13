@@ -24,8 +24,9 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getLongitudOEstatura;
-import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class LongitudAlturaParaEdadNino0a5anno {
@@ -38,12 +39,15 @@ public class LongitudAlturaParaEdadNino0a5anno {
     private Float SD1;
     private Float SD2;
     private Float SD3;
-    private final int tamanoFigura;
     private final int idPaciente;
 
-    public LongitudAlturaParaEdadNino0a5anno(int idPaciente, int tamanoFigura) {
-        sexo = getSexoPaciente(idPaciente);
-        this.tamanoFigura = tamanoFigura;
+    public LongitudAlturaParaEdadNino0a5anno(int idPaciente) {
+        sexo = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getSexo().toString();
         this.idPaciente = idPaciente;
     }
 
@@ -54,7 +58,6 @@ public class LongitudAlturaParaEdadNino0a5anno {
                     new InputStreamReader(XYSeriesCollection.class.
                             getClassLoader().getResourceAsStream(
                                     "datos/LogitudAlturaParaEdadNino0a5anno.txt")));
-            String str = localBufferedReader.readLine();
             XYSeries localXYSeries1 = new XYSeries("SD3neg", true, true);
             XYSeries localXYSeries2 = new XYSeries("SD2neg", true, true);
             XYSeries localXYSeries3 = new XYSeries("SD1neg", true, true);
@@ -64,7 +67,11 @@ public class LongitudAlturaParaEdadNino0a5anno {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("Longitud", true, true);
             XYSeries localXYSeries9 = new XYSeries("Estatura", true, true);
-
+            
+            localBufferedReader.readLine(); //Saltando primera fila.
+            
+            String str;
+            
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes

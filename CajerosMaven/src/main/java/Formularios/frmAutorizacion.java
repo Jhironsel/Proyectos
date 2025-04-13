@@ -1,6 +1,8 @@
 package Formularios;
 
+import java.util.logging.Level;
 import javax.swing.JFrame;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmAutorizacion extends javax.swing.JDialog {
 
@@ -105,7 +107,11 @@ public class frmAutorizacion extends javax.swing.JDialog {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
-            //Instalar Logger
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al consultar las generales en el sistema.",
+                    ex
+            );
         }
         
 //        if(!datos.isConectado()){

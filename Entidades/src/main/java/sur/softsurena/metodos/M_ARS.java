@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class M_ARS {
             @NonNull ARS ars
     ) {
         List<ARS> arsList = new ArrayList<>();
-
+        
         try (
                 Statement ps = getCnn().createStatement(
                         ResultSet.TYPE_FORWARD_ONLY,

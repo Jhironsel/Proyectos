@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paginas;
 
 @Getter

@@ -1,10 +1,10 @@
 package sur.softsurena.archivos;
 
 import com.toedter.calendar.JTextFieldDateEditor;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -12,23 +12,30 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.ARS;
+import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
+import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.formularios.frmPrincipal;
+import sur.softsurena.metodos.M_ARS;
+import sur.softsurena.metodos.M_Asegurado;
+import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Padre;
-import sur.softsurena.utilidades.FiltroBusqueda;
+import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_TiposSangres;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmPadres extends javax.swing.JInternalFrame {
 
     private static frmPadres padres;
     private static String cliente;
-    private static int cliPadre;
     private static boolean nuevo;
     private static DefaultTableModel miTabla;
     private static JTextFieldDateEditor editor;
     private static JButton button;
+    private static final long serialVersionUID = 1L;
 
     public frmPadres() {
         initComponents();
@@ -50,7 +57,8 @@ public class frmPadres extends javax.swing.JInternalFrame {
                         cbSeguro.requestFocus();
                         cbSeguro.showPopup();
                     }
-                });
+                }
+        );
 
     }
 
@@ -69,10 +77,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
         }
 
         return padres;
-    }
-
-    public void setCliPadre(int cliPadre) {
-        frmPadres.cliPadre = cliPadre;
     }
 
     @SuppressWarnings("unchecked")
@@ -133,9 +137,9 @@ public class frmPadres extends javax.swing.JInternalFrame {
         txtSNombre = new javax.swing.JTextField();
         txtApellidos = new javax.swing.JTextField();
         dchFechaNacimiento = new com.toedter.calendar.JDateChooser();
-        cbSexo = new javax.swing.JComboBox();
-        cbSangre = new javax.swing.JComboBox();
-        cbSeguro = new javax.swing.JComboBox();
+        cbSexo = new javax.swing.JComboBox<>();
+        cbSangre = new javax.swing.JComboBox<>();
+        cbSeguro = new javax.swing.JComboBox<>();
         txtNoSeguro = new javax.swing.JFormattedTextField();
         lbCedula = new javax.swing.JLabel();
         lbNombre = new javax.swing.JLabel();
@@ -348,7 +352,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
         );
 
         btnGrupo.add(cbCorreo);
@@ -471,7 +475,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         });
 
-        btnValidaCedulaPadre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-casilla-de-verificación-2-32.png"))); // NOI18N
         btnValidaCedulaPadre.setEnabled(false);
         btnValidaCedulaPadre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -502,7 +505,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnAntecedentes.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnAntecedentes.setForeground(new java.awt.Color(1, 1, 1));
-        btnAntecedentes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Salud32x32.png"))); // NOI18N
         btnAntecedentes.setToolTipText("Antecedentes");
         btnAntecedentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -539,19 +541,12 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSexo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecccione Sexo", "Masculino", "Femenina" }));
         cbSexo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbSexoItemStateChanged(evt);
             }
         });
-        cbSexo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbSexoActionPerformed(evt);
-            }
-        });
 
-        cbSangre.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autollena" }));
         cbSangre.setPreferredSize(new java.awt.Dimension(0, 0));
         cbSangre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -559,7 +554,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSeguro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Autollena" }));
         cbSeguro.setToolTipText("Seleccione el tipo de seguro del Padre.");
         cbSeguro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -769,7 +763,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Documento nuevo 32 x 32.png"))); // NOI18N
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
@@ -785,7 +778,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnModificar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(1, 1, 1));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Editar Documento 32 x 32.png"))); // NOI18N
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
@@ -798,7 +790,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnGuardar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Guardar 32 x 32.png"))); // NOI18N
         btnGuardar.setMnemonic('g');
         btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Guardar Registro Actual");
@@ -812,7 +803,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnCancelar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(1, 1, 1));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Cancelar 32 x 32.png"))); // NOI18N
         btnCancelar.setMnemonic('c');
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la Operacion del Registro");
@@ -826,7 +816,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnBorrar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Borrar 32 x 32.png"))); // NOI18N
         btnBorrar.setMnemonic('b');
         btnBorrar.setText("Borrar");
         btnBorrar.setToolTipText("Borrar Registro Actual");
@@ -839,7 +828,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
         btnBuscar.setMnemonic('r');
         btnBuscar.setText("Buscar");
         btnBuscar.setToolTipText("Buscar el Registro");
@@ -874,7 +862,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                .addComponent(jScrollPane3)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -927,50 +915,68 @@ public class frmPadres extends javax.swing.JInternalFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         //Validaciones de datos...
         if (txtCedula.getValue() == null) {
-            JOptionPane.showInternalConfirmDialog(this,
-                    "Inserte la cedula!!!", "Olvida algo!",
-                    JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showInternalConfirmDialog(
+                    this,
+                    "Inserte la cedula!!!",
+                    "",
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtCedula.requestFocus();
             return;
         }
 
         if (txtPNombre.getText().equals("")) {
-            JOptionPane.showInternalConfirmDialog(this,
-                    "Inserte el Nombre!!!", "Olvida algo!",
-                    JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showInternalConfirmDialog(
+                    this,
+                    "Inserte el Nombre!!!",
+                    "",
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtPNombre.requestFocus();
             return;
         }
 
         if (txtApellidos.getText().equals("")) {
-            JOptionPane.showInternalConfirmDialog(this,
-                    "Inserte el Apellido...", "Olvida algo!",
-                    JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showInternalConfirmDialog(
+                    this,
+                    "Inserte el Apellido...",
+                    "",
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtApellidos.requestFocus();
             return;
         }
 
         if (cbSeguro.getSelectedIndex() <= 0) {
-            int opc = JOptionPane.showInternalConfirmDialog(this,
+            int opc = JOptionPane.showInternalConfirmDialog(
+                    this,
                     "¿Desea continuar sin seguro?",
-                    "Confirmacion de procedimiento",
-                    JOptionPane.YES_NO_OPTION);
+                    "",
+                    JOptionPane.YES_NO_OPTION
+            );
+
             if (opc == JOptionPane.NO_OPTION) {
                 cbSeguro.requestFocus();
                 return;
             }
         } else if (txtNoSeguro.getText().isEmpty()) {
-            JOptionPane.showInternalConfirmDialog(this,
-                    "Inserte el No. de Ars...", "Olvida algo!",
-                    JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showInternalConfirmDialog(
+                    this,
+                    "Inserte el No. de Ars...",
+                    "",
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtNoSeguro.requestFocus();
             return;
         }
 
         if (dchFechaNacimiento.getDate() == null) {
-            JOptionPane.showInternalConfirmDialog(this,
+            JOptionPane.showInternalConfirmDialog(
+                    this,
                     "Debe indicar una fecha de nacimiento...",
-                    "Olvida algo!", JOptionPane.DEFAULT_OPTION);
+                    "",
+                    JOptionPane.DEFAULT_OPTION
+            );
             dchFechaNacimiento.requestFocus();
             return;
         }
@@ -983,47 +989,48 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }//FIN de las Validaciones..........................
 
-        Padre p = Padre
+        var persona = Persona
                 .builder()
-                .persona(
-                        Persona
-                                .builder()
-                                .id_persona(
-                                        nuevo
-                                                ? -1
-                                                : ((Padre) jtPadres.getValueAt(cliPadre, 0)).getPersona().getId_persona())
-                                .pnombre(txtPNombre.getText())
-                                .snombre(txtSNombre.getText())
-                                .apellidos(txtApellidos.getText())
-                                .sexo((cbSexo.getSelectedIndex() == 1 ? 'm' : 'f'))
-                                .generales(
-                                        Generales
-                                                .builder()
-                                                .cedula((String) txtCedula.getValue())
-                                                .tipoSangre(((TipoSangre) cbSangre.getSelectedItem()))
-                                                .build()
-                                )
-                                .estado(cbEstado.isSelected())
-                                .build()
+                .idPersona(
+                        nuevo
+                                ? -1
+                                : ((Padre) jtPadres.getValueAt(jtPadres.getSelectedRow(), 0)).getId()
                 )
+                .pnombre(txtPNombre.getText())
+                .snombre(txtSNombre.getText())
+                .apellidos(txtApellidos.getText())
+                .sexo((cbSexo.getSelectedIndex() == 1 ? 'm' : 'f'))
+                .estado(cbEstado.isSelected())
                 .build();
-        id_Ars(((ARS) cbSeguro.getSelectedItem()).getId()).
-                noNSS(txtNoSeguro.getValue().toString()).
-                direccion(txtDireccion.getText()).
-                fecha_Nacimiento(new java.sql.Date(dchFechaNacimiento.getDate().getTime())).;
 
+//        id_Ars(((ARS) cbSeguro.getSelectedItem()).getId()).
+//                noNSS(txtNoSeguro.getValue().toString()).
+//                direccion(txtDireccion.getText()).
+//                fecha_Nacimiento(new java.sql.Date(dchFechaNacimiento.getDate().getTime())).;
+//.generales(
+//                        Generales
+//                                .builder()
+//                                .cedula((String) txtCedula.getValue())
+//                                .tipoSangre(((TipoSangre) cbSangre.getSelectedItem()))
+//                                .build()
+//                )
+//        M_Padre.insert(Padre);
         if (nuevo) {
             //Insertar el Padre
-            JOptionPane.showInternalConfirmDialog(this,
-                    agregarPadre(p),
+            JOptionPane.showInternalConfirmDialog(
+                    this,
+                    M_Persona.insert(persona),
                     "Error inesperado",
-                    JOptionPane.DEFAULT_OPTION);
+                    JOptionPane.DEFAULT_OPTION
+            );
         } else {
             //Modificar un Padre
-            JOptionPane.showInternalMessageDialog(this,
-                    modificarPadre(p),
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    M_Persona.update(persona),
                     "Proceso de modificación",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
 
         llenarTabla(cbPadresActivos.isSelected());
@@ -1057,23 +1064,28 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
 
-        int resp = JOptionPane.showInternalConfirmDialog(this,
-                "Los registros no pueden ser eliminado de la base de datos\n"
-                + "Ellos cambian de estado a Inactivo.\n"
-                + "Desea Continuar?",
-                "Proceso de validacion de registros",
+        int resp = JOptionPane.showInternalConfirmDialog(
+                this,
+                """
+                Los registros no pueden ser eliminado de la base de datos
+                Ellos cambian de estado a Inactivo.
+                Desea Continuar?
+                """,
+                "",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
         if (resp == JOptionPane.NO_OPTION) {
             return;
         }
 
-        borrarPadre(((Padre) jtPadres.getValueAt(cliPadre, 0)).getCedula().trim());
+        M_Padre.delete(
+                ((Padre) jtPadres.getValueAt(jtPadres.getSelectedRow(), 0)).getId()
+        );
 
-        cliPadre = 0;
         //Actualizamos los cambios en la Tabla
         llenarTabla(cbPadresActivos.isSelected());
-        mostrarRegistro();
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -1081,15 +1093,20 @@ public class frmPadres extends javax.swing.JInternalFrame {
         do {
             if (cliente == null || cliente.equals("") || cliente.equals("null")) {
 
-                cliente = JOptionPane.showInternalInputDialog(this,
+                cliente = JOptionPane.showInternalInputDialog(
+                        this,
                         "Ingrese la Cedula, Nombre o Apellido del Padre",
-                        "Busqueda de información",
-                        JOptionPane.INFORMATION_MESSAGE);
+                        "",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
                 break;
             } else {
-                int opc = JOptionPane.showInternalConfirmDialog(this,
+                int opc = JOptionPane.showInternalConfirmDialog(
+                        this,
                         "Desea realizar nueva busqueda? \nEn Memoria tenemos {" + cliente + "}",
-                        "Confirmacion de Busqueda", JOptionPane.YES_NO_OPTION);
+                        "",
+                        JOptionPane.YES_NO_OPTION
+                );
                 if (opc == JOptionPane.YES_OPTION) {
                     cliente = null;
                     btnBuscarActionPerformed(null);
@@ -1108,29 +1125,23 @@ public class frmPadres extends javax.swing.JInternalFrame {
         for (int i = num; i < jtPadres.getRowCount(); i++) {
             if (jtPadres.getValueAt(i, 0).toString().toLowerCase().
                     contains(cliente.toLowerCase())) {
-                cliPadre = i;
                 break;
             }
             if (jtPadres.getValueAt(i, 1).toString().toLowerCase().
                     contains(cliente.toLowerCase())) {
-                cliPadre = i;
                 break;
             }
             if (jtPadres.getValueAt(i, 2).toString().toLowerCase().
                     contains(cliente.toLowerCase())) {
-                cliPadre = i;
                 break;
             }
         }
-        mostrarRegistro();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jtPadresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPadresMouseClicked
         if (!jtPadres.isEnabled()) {
             return;
         }
-        cliPadre = jtPadres.getSelectedRow();
-        mostrarRegistro();
     }//GEN-LAST:event_jtPadresMouseClicked
 
     private void jmSeleccionarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSeleccionarTodoActionPerformed
@@ -1224,22 +1235,30 @@ public class frmPadres extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtApellidosActionPerformed
 
     private void btnAntecedentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAntecedentesActionPerformed
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<Object, Object> w = new SwingWorker<Object, Object>() {
             @Override
             protected Object doInBackground() throws Exception {
 
-                if (((Padres) jtPadres.getValueAt(cliPadre, 0)).getCedula().
-                        equals("000-0000000-0")) {
+                if (((Generales) jtPadres.getValueAt(
+                        jtPadres.getSelectedRow(),
+                        0
+                )).getIdPersona() == 0) {
 
-                    JOptionPane.showInternalMessageDialog(null,
-                            "No se permite antecedentes en genericos");
+                    JOptionPane.showInternalMessageDialog(
+                            null,
+                            ""
+                    );
                     return null;
                 }
 
                 frmPadresAntecedentes frm = new frmPadresAntecedentes(
                         null,
                         true,
-                        ((Padres) jtPadres.getValueAt(cliPadre, 0)).getId());
+                        ((Generales) jtPadres.getValueAt(
+                                jtPadres.getSelectedRow(), 
+                                0
+                        )).getId()
+                );
                 frm.setLocationRelativeTo(null);
                 frm.setVisible(true);
                 return null;
@@ -1260,7 +1279,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
         }
 
         llenarTabla(cbPadresActivos.isSelected());
-        mostrarRegistro();
         ordenarTabla(true);
     }//GEN-LAST:event_cbPadresActivosActionPerformed
 
@@ -1333,7 +1351,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbDireccionItemStateChanged
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-
         ordenarTabla(true);
     }//GEN-LAST:event_formInternalFrameOpened
 
@@ -1352,10 +1369,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
             cbSeguro.setSelectedIndex(seguro);
         }
     }//GEN-LAST:event_formInternalFrameActivated
-
-    private void cbSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSexoActionPerformed
-
-    }//GEN-LAST:event_cbSexoActionPerformed
 
     private void cbSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSeguroActionPerformed
 
@@ -1384,91 +1397,66 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
     private void btnValidaCedulaPadreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidaCedulaPadreActionPerformed
 
-        Object cedula = txtCedula.getValue();
+        try {
+            txtCedula.commitEdit();
+        } catch (ParseException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al validar la cedula.",
+                    ex
+            );
+        }
 
-        if (cedula == null) {
-            JOptionPane.showInternalMessageDialog(this, "Cedula no valida");
+        if (txtCedula.getValue() == null) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Cedula no valida",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            txtCedula.requestFocus();
+            return;
+        }
+
+        var cedula = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula.getValue().toString())
+                        .build()
+        ).getLast();
+
+        Boolean validarCedula = !cedula.getCedula().equals("000-0000000-0");
+
+        if (validarCedula) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Cedula se encuentra registrada en el sistema.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
             txtCedula.setValue(null);
             txtCedula.requestFocus();
             return;
         }
 
-        for (int i = 0; i < jtPadres.getRowCount(); i++) {
-            if (cedula.toString().equals(((Padres) jtPadres.getValueAt(i, 0)).getCedula())) {
-                JOptionPane.showMessageDialog(null,
-                        "La cedula se encuentra registrada y activa",
-                        "Procedo de validación",
-                        JOptionPane.WARNING_MESSAGE);
-
-                txtCedula.setValue(null);
-                txtCedula.requestFocus();
-                return;
-            }
-        }
-
         //TODO 11/12/2024 Testear este metodo si funciona bien.
-        final SwingWorker w = new SwingWorker() {
+        final SwingWorker<Object, Object> w = new SwingWorker<Object, Object>() {
             @Override
             protected Object doInBackground() throws Exception {
 
-                if (existePadre(cedula.toString(), false)) {
-                    int opc = JOptionPane.showConfirmDialog(
+                if (validarCedula) {
+                    int opc = JOptionPane.showInternalConfirmDialog(
                             null,
                             """
                             Este numero de cedula existe en el sistema.
                             \u00bfDesea recuperarlo?""",
                             "",
-                            JOptionPane.YES_NO_OPTION);
+                            JOptionPane.YES_NO_OPTION
+                    );
 
                     if (opc == JOptionPane.YES_OPTION) {
-                        List<Padre> listaPadres = M_Padre.getPadres(
-                                FiltroBusqueda
-                                        .builder()
-                                        .criterioBusqueda(cedula.toString())
-                                        .build()
-                        );
-                        
-                        Padre padre = listaPadres.getFirst();
-                        txtPNombre.setText(padre.getPersona().getPnombre());
-                        txtApellidos.setText(padre.getPersona().getApellidos());
-
-                        txtNoSeguro.setValue(
-                                padre.getAsegurado().getNo_nss()
-                        );
-
-                        dchFechaNacimiento.setDate(
-                                padre.getPersona().getFecha_nacimiento()
-                        );
-
-                        String sexo = padre.getPersona().getSexo().toString();
-                        int sangre = padre.getGenerales().getTipoSangre().getId();
-                        int ars = padre.getAsegurado().getArs().getId();
-
-                        for (int i = 0; i < cbSexo.getItemCount(); i++) {
-                            cbSexo.setSelectedIndex(i);
-                            if (((String) cbSexo.getSelectedItem()).equals(sexo)) {
-                                break;
-                            }
-                        }
-
-                        for (int i = 0; i < cbSangre.getItemCount(); i++) {
-                            cbSangre.setSelectedIndex(i);
-                            if (((TipoSangre) cbSangre.getSelectedItem()).
-                                    getId() == sangre) {
-                                break;
-                            }
-                        }
-
-                        for (int i = 0; i < cbSeguro.getItemCount(); i++) {
-                            cbSeguro.setSelectedIndex(i);
-                            if (((ARS) cbSeguro.getSelectedItem()).
-                                    getId() == ars) {
-                                break;
-                            }
-                        }
-
+                        mostrarRegistro(cedula);
                         txtCedula.setEditable(false);
-
                         return true;
                     } else {//De lo contrario limpio el campo y intento de nuevo.
                         txtCedula.setValue(null);
@@ -1499,108 +1487,106 @@ public class frmPadres extends javax.swing.JInternalFrame {
         txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
-    private synchronized void mostrarRegistro() {
+    private synchronized void mostrarRegistro(Generales cedula) {
 
         if (jtPadres.getRowCount() == 0) {
             limpiarCampos();
             return;
         }
 
-        Padres p = Padres.builder().
-                id(((Padres) jtPadres.getValueAt(cliPadre, 0)).getId()).
-                cedula(((Padres) jtPadres.getValueAt(cliPadre, 0)).getCedula()).build();
+        Persona persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(cedula.getIdPersona())
+                        .build()
+        ).getLast();
 
-        txtCedula.setValue(p);
-
-        txtPNombre.setText((String) jtPadres.getValueAt(cliPadre, 1));
-
-        txtApellidos.setText((String) jtPadres.getValueAt(cliPadre, 2));
+        txtPNombre.setText(persona.getPnombre());
+        txtSNombre.setText(persona.getSnombre());
+        txtApellidos.setText(persona.getApellidos());
+        dchFechaNacimiento.setDate(
+                persona.getFecha_nacimiento()
+        );
 
         for (int i = 0; i < cbSexo.getItemCount(); i++) {
             cbSexo.setSelectedIndex(i);
-            if (((String) cbSexo.getSelectedItem()).equals(((String) jtPadres.getValueAt(cliPadre, 3)))) {
+            if (((String) cbSexo.getSelectedItem()).equals(
+                    persona.getSexo().toString()
+            )) {
                 break;
             }
         }
 
+        Asegurado asegurado = M_Asegurado.select(
+                Asegurado
+                        .builder()
+                        .idPersona(cedula.getIdPersona())
+                        .build()
+        ).getLast();
+
+        txtNoSeguro.setValue(
+                asegurado.getNo_nss()
+        );
+
         for (int i = 0; i < cbSangre.getItemCount(); i++) {
             cbSangre.setSelectedIndex(i);
-            if (((TipoSangre) cbSangre.getSelectedItem()).getId()
-                    == ((TipoSangre) jtPadres.getValueAt(cliPadre, 4)).getId()) {
+            if (((TipoSangre) cbSangre.getSelectedItem()).
+                    getId() == cedula.getIdTipoSangre()) {
                 break;
             }
         }
 
         for (int i = 0; i < cbSeguro.getItemCount(); i++) {
             cbSeguro.setSelectedIndex(i);
-            if (((ARS) cbSeguro.getSelectedItem()).getId()
-                    == ((ARS) jtPadres.getValueAt(cliPadre, 5)).getId()) {
+            if (((ARS) cbSeguro.getSelectedItem()).
+                    getId().equals(asegurado.getIdArs())) {
                 break;
             }
         }
 
-        txtNoSeguro.setValue(jtPadres.getValueAt(cliPadre, 6));
-
-        txtDireccion.setText((String) jtPadres.getValueAt(cliPadre, 10));
-
-        dchFechaNacimiento.setDate(((Padres) jtPadres.getValueAt(cliPadre, 12)).getFecha_Nacimiento()
-        );
-
-        cbEstado.setSelected((Boolean) jtPadres.getValueAt(cliPadre, 13)
-                .equals("Activo"));
+        cbEstado.setSelected(persona.getEstado());
 
         //Mover Cursor
-        jtPadres.setRowSelectionInterval(cliPadre, cliPadre);
+        jtPadres.setRowSelectionInterval(0, 0);
     }
 
     public synchronized void llenarTabla(boolean estado) {
-
-        cliPadre = 0;
         jtPadres.removeAll();
         String titulos[] = {
             "<html><b>Cedula</b></html>",
-            "<html><b>Nombres</b></html>",
-            "<html><b>Apellidos</b></html>",
-            "<html><b>Sexo</b></html>",
-            "<html><b>Tipo Sangre</b></html>",
-            "<html><b>Ars</b></html>",
-            "<html><b>Noº Seguro</b></html>",
-            "<html><b>Telefono</b></html>",
-            "<html><b>Movil</b></html>",
-            "<html><b>Correo</b></html>",
-            "<html><b>Direccion</b></html>",
-            "<html><b>Ciudad</b></html>",
-            "<html><b>Fecha Nacimiento</b></html>",
-            "<html><b>Estado</b></html>"};
-        Object registro[] = new Object[14];
-        try {
-            ResultSet rs = getPadresActivo(estado);
-            miTabla = new DefaultTableModel(null, titulos);
-            while (rs.next()) {
+            "<html><b>Nombres y Apellidos</b></html>",
+            "<html><b>Estado</b></html>"
+        };
+        Object registro[] = new Object[titulos.length];
 
-                registro[0] = Padres.builder().id(rs.getInt("IDPADRE")).
-                        cedula(rs.getString("CEDULA").trim()).build();
-                registro[1] = rs.getString("NOMBRES").trim();
-                registro[2] = rs.getString("APELLIDOS").trim();
-                registro[3] = rs.getString("SEXO").trim().equals("m") ? "Masculino" : "Femenina";
-                registro[4] = new TipoSangre(rs.getInt("IDTIPOSANGRE"), rs.getString("TIPOSANGRE").trim());
-                registro[5] = new ARS(rs.getInt("IDARS"), rs.getString("ARS").trim());;
-                registro[6] = rs.getString("NONSS").trim();
-                registro[7] = rs.getString("TELEFONO").trim();
-                registro[8] = rs.getString("MOVIL").trim();
-                registro[9] = rs.getString("CORREO").trim();
-                registro[10] = rs.getString("DIRECCION").trim();
-                registro[11] = rs.getString("CIUDAD").trim();
-                registro[12] = Utilidades.formatDate(rs.getDate("FECHANACIMIENTO"), "");
-                registro[13] = (rs.getBoolean("Estado") ? "Activo" : "Inactivo");
-                miTabla.addRow(registro);
-            }
-            jtPadres.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        } finally {
-            mostrarRegistro();
-        }
+        List<Padre> padresList = M_Padre.select(Padre.builder().build());
+
+        miTabla = new DefaultTableModel(null, titulos);
+
+        padresList.stream().forEach(
+                padre -> {
+                    registro[0] = M_Generales.select(
+                            Generales
+                                    .builder()
+                                    .idPersona(
+                                            padre.getId()
+                                    )
+                                    .build()
+                    ).getFirst();
+                    Persona persona = M_Persona.select(
+                            Persona
+                                    .builder()
+                                    .idPersona(
+                                            padre.getId()
+                                    )
+                                    .build()
+                    ).getFirst();
+                    registro[1] = persona;
+                    registro[2] = persona.getEstado();
+                    miTabla.addRow(registro);
+                }
+        );
+        jtPadres.setModel(miTabla);
     }
 
     public synchronized void ordenarTabla(boolean valor) {
@@ -1614,43 +1600,18 @@ public class frmPadres extends javax.swing.JInternalFrame {
             return;
         }
         //Establecer un tamaNo fijo a cierta columna...
+        int[] minAncho = {115, 175, 175, 80, 100, 100, 120, 110, 110};
+        int[] maxAncho = {115, 220, 220, 80, 100, 100, 120, 110, 110};
+        int[] preAncho = {115, 175, 175, 80, 100, 100, 120, 110, 110};
         //Cedula
         jtPadres.setEnabled(false);
-        jtPadres.getColumn(jtPadres.getColumnName(0)).setMinWidth(115);
-        jtPadres.getColumn(jtPadres.getColumnName(0)).setMaxWidth(115);
-        jtPadres.getColumn(jtPadres.getColumnName(0)).setPreferredWidth(115);
-        //Nombre
-        jtPadres.getColumn(jtPadres.getColumnName(1)).setMinWidth(175);
-        jtPadres.getColumn(jtPadres.getColumnName(1)).setMaxWidth(220);
-        jtPadres.getColumn(jtPadres.getColumnName(1)).setPreferredWidth(175);
-        //Apellidos
-        jtPadres.getColumn(jtPadres.getColumnName(2)).setMinWidth(175);
-        jtPadres.getColumn(jtPadres.getColumnName(2)).setMaxWidth(220);
-        jtPadres.getColumn(jtPadres.getColumnName(2)).setPreferredWidth(175);
-        //Sexo
-        jtPadres.getColumn(jtPadres.getColumnName(3)).setMinWidth(80);
-        jtPadres.getColumn(jtPadres.getColumnName(3)).setMaxWidth(80);
-        jtPadres.getColumn(jtPadres.getColumnName(3)).setPreferredWidth(80);
-        //Tipo de sangre
-        jtPadres.getColumn(jtPadres.getColumnName(4)).setMinWidth(100);
-        jtPadres.getColumn(jtPadres.getColumnName(4)).setMaxWidth(100);
-        jtPadres.getColumn(jtPadres.getColumnName(4)).setPreferredWidth(100);
-        //Tipo de sangre
-        jtPadres.getColumn(jtPadres.getColumnName(5)).setMinWidth(100);
-        jtPadres.getColumn(jtPadres.getColumnName(5)).setMaxWidth(100);
-        jtPadres.getColumn(jtPadres.getColumnName(5)).setPreferredWidth(100);
-        //No Seguro
-        jtPadres.getColumn(jtPadres.getColumnName(6)).setMinWidth(120);
-        jtPadres.getColumn(jtPadres.getColumnName(6)).setMaxWidth(120);
-        jtPadres.getColumn(jtPadres.getColumnName(6)).setPreferredWidth(120);
-        //Telefono
-        jtPadres.getColumn(jtPadres.getColumnName(7)).setMinWidth(110);
-        jtPadres.getColumn(jtPadres.getColumnName(7)).setMaxWidth(110);
-        jtPadres.getColumn(jtPadres.getColumnName(7)).setPreferredWidth(110);
-        //Movil
-        jtPadres.getColumn(jtPadres.getColumnName(8)).setMinWidth(110);
-        jtPadres.getColumn(jtPadres.getColumnName(8)).setMaxWidth(110);
-        jtPadres.getColumn(jtPadres.getColumnName(8)).setPreferredWidth(110);
+
+        for (int i = 0; i < minAncho.length; i++) {
+            jtPadres.getColumn(jtPadres.getColumnName(i)).setMinWidth(minAncho[i]);
+            jtPadres.getColumn(jtPadres.getColumnName(i)).setMaxWidth(maxAncho[i]);
+            jtPadres.getColumn(jtPadres.getColumnName(i)).setPreferredWidth(preAncho[i]);
+        }
+
         //Estado
         jtPadres.getColumn(jtPadres.getColumnName(13)).setMinWidth(60);
         jtPadres.getColumn(jtPadres.getColumnName(13)).setMaxWidth(60);
@@ -1670,7 +1631,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
         cbSangre.setSelectedIndex(0);
         cbSeguro.setSelectedIndex(0);
         txtNoSeguro.setValue(null);
-        txtDireccion.setText("");
         cbTodos.setSelected(true);
     }
 
@@ -1707,7 +1667,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
         cbSexo.setEnabled(b);
         cbSangre.setEnabled(b);
         editor.setEditable(b);
-        txtDireccion.setEditable(b);
         cbEstado.setEnabled(b);
     }
 
@@ -1722,34 +1681,23 @@ public class frmPadres extends javax.swing.JInternalFrame {
         cbSexo.setEnabled(valor);
         cbSangre.setEnabled(valor);
         cbEstado.setEnabled(valor);
-        txtDireccion.setEnabled(valor);
     }
 
     public synchronized void llenarCombos() {
-
-        ResultSet obj = getTipoSeguro();
-        ARS ars;
         cbSeguro.removeAllItems();
-        try {
-            while (obj.next()) {
-                ars = new ARS(obj.getInt("IDARS"), obj.getString("DESCRIPCION"));
-                cbSeguro.addItem(ars);
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
 
-        obj = getTipoSangre();
-        TipoSangre ts;
+        M_ARS.select(ARS.builder().build()).stream().forEach(
+                ars -> {
+                    cbSeguro.addItem(ars);
+                }
+        );
+
         cbSangre.removeAllItems();
-        try {
-            while (obj.next()) {
-                ts = new TipoSangre(obj.getInt("IDTIPOSANGRE"), obj.getString("DESCRIPCION"));
-                cbSangre.addItem(ts);
-            }
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        M_TiposSangres.getList().stream().forEach(
+                ts -> {
+                    cbSangre.addItem(ts);
+                }
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1768,9 +1716,9 @@ public class frmPadres extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox cbEstado;
     private javax.swing.JCheckBox cbFechaNacimiento;
     private javax.swing.JCheckBox cbPadresActivos;
-    private javax.swing.JComboBox cbSangre;
-    private javax.swing.JComboBox cbSeguro;
-    private javax.swing.JComboBox cbSexo;
+    private javax.swing.JComboBox<TipoSangre> cbSangre;
+    private javax.swing.JComboBox<ARS> cbSeguro;
+    private javax.swing.JComboBox<Sexo> cbSexo;
     private javax.swing.JCheckBox cbTodos;
     private com.toedter.calendar.JDateChooser dchFechaNacimiento;
     private javax.swing.JLabel jLabel11;

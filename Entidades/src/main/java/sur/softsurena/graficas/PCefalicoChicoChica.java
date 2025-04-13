@@ -23,8 +23,9 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import sur.softsurena.abstracta.Persona;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getPCefalico;
-import static sur.softsurena.metodos.M_Paciente.getSexoPaciente;
+import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PCefalicoChicoChica {
@@ -40,7 +41,12 @@ public class PCefalicoChicoChica {
     private final int idPaciente;
 
     public PCefalicoChicoChica(int idPaciente) {
-        sexo = getSexoPaciente(idPaciente);
+        sexo = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPaciente)
+                        .build()
+        ).getFirst().getSexo().toString();
         this.idPaciente = idPaciente;
     }
 
@@ -61,7 +67,9 @@ public class PCefalicoChicoChica {
             XYSeries localXYSeries8 = new XYSeries("DATOS", true, false);
             
             localBufferedReader.readLine();
+            
             String str;
+            
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes

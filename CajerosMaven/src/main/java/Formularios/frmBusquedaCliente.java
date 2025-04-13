@@ -2,9 +2,11 @@ package Formularios;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class frmBusquedaCliente extends javax.swing.JDialog {
 
@@ -270,7 +272,11 @@ public class frmBusquedaCliente extends javax.swing.JDialog {
             }
             tblTabla.setModel(miTabla);
         } catch (SQLException ex) {
-            //Instalar Logger
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al consultar las generales en el sistema.",
+                    ex
+            );
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

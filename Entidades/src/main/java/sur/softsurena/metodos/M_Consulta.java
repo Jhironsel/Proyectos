@@ -15,7 +15,7 @@ import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Consulta {
-    
+
     /**
      * Consulta al sistema sobre las consultas registradas.
      *
@@ -57,7 +57,7 @@ public class M_Consulta {
         }
         return consultaList;
     }
-    
+
     protected static String sqlSelect(Consulta consulta) {
         Boolean id = Objects.isNull(consulta.getId());
         Boolean id_controlConsulta = Objects.isNull(consulta.getIdControlConsulta());
@@ -68,7 +68,7 @@ public class M_Consulta {
         return """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
                     ESTADO
-                FROM CONSULTAS
+                FROM V_CONSULTAS
                 %s%s%s%s
                 """.formatted(
                 where ? "WHERE " : "",
@@ -77,9 +77,10 @@ public class M_Consulta {
                                 consulta.getIdControlConsulta()
                         ),
                 id_Paciente ? "" : "ID_PACIENTE = %d ".formatted(
-                        consulta.getIdPaciente())
-        ).trim().strip();
+                                consulta.getIdPaciente())
+        ).strip();
     }
+//------------------------------------------------------------------------------
 
     /**
      * Metodo que permite agregar las consulta de los paciente al sistema.
@@ -88,10 +89,9 @@ public class M_Consulta {
      * @return
      */
     public static synchronized Resultado insert(Consulta consulta) {
-        final String sql
-                = "SELECT O_ID FROM SP_I_CONSULTA(?, ?, ?, ?);";
+
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                "SELECT O_ID FROM SP_I_CONSULTA(?, ?, ?, ?);",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -131,6 +131,51 @@ public class M_Consulta {
             = "Error al insertar consulta";
     public static final String CONSULTA_AGREGADA_CORRECTAMENTE
             = "Consulta agregada correctamente";
+//------------------------------------------------------------------------------
+
+    /**
+     * Permite modificar las consultas en el sistema.
+     * 
+     * @param consulta
+     * @return 
+     */
+    public static synchronized Resultado update(Consulta consulta) {
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                "EXECUTE PROCEDURE SP_U_CONSULTAS (?,?,?,?,?);",
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ps.setInt(1, consulta.getId());
+            ps.setInt(2, consulta.getIdPaciente());
+            ps.setInt(3, consulta.getIdControlConsulta());
+            ps.setInt(4, consulta.getLinea());
+            ps.setBoolean(5, consulta.getEstado());
+
+            ps.executeUpdate();
+            
+            return Resultado
+                    .builder()
+                    .mensaje("Consulta actualizada correctamente.!!!")
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al actualizar registro.!!!", 
+                    ex
+            );
+            
+            return Resultado
+                    .builder()
+                    .mensaje("Error al actualizar registro.!!!")
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+    }
 
     /**
      *
@@ -138,12 +183,8 @@ public class M_Consulta {
      * @return
      */
     public static synchronized Resultado delete(Integer idConsulta) {
-        final String sql = """
-                           EXECUTE PROCEDURE SP_D_CONSULTA (?);
-                           """;
-
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                "EXECUTE PROCEDURE SP_D_CONSULTA (?);",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -158,20 +199,19 @@ public class M_Consulta {
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
                     ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA,
                     ex
             );
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
         }
-        return Resultado
-                .builder()
-                .mensaje(ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA)
-                .icono(JOptionPane.ERROR_MESSAGE)
-                .estado(Boolean.FALSE)
-                .build();
     }
     public static final String CONSULTA_ELIMINADA_CORRECTAMENTE_DEL_SIST
             = "Consulta eliminada correctamente del sistema.";

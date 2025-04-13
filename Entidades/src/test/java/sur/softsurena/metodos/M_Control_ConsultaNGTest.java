@@ -1,8 +1,6 @@
 package sur.softsurena.metodos;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -41,7 +39,7 @@ public class M_Control_ConsultaNGTest {
                 "SoftSurena.db",
                 "localhost",
                 "3050",
-                "RRR_SOFTSURENA"
+                "None"
         );
         assertTrue(
                 Conexion.verificar().getEstado(),

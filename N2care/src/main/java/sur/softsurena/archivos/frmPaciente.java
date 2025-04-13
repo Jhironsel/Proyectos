@@ -1,10 +1,6 @@
 package sur.softsurena.archivos;
 
-import java.awt.Image;
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -15,20 +11,18 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Asegurado;
-import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.FotoPersona;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.formularios.frmDatosNacimiento;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
-import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.metodos.M_ARS;
 import sur.softsurena.metodos.M_Asegurado;
 import sur.softsurena.metodos.M_Foto_Persona;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Paciente;
-import static sur.softsurena.metodos.M_Paciente.existePaciente;
+import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.metodos.M_TiposSangres;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -39,26 +33,21 @@ import utilidades.frmImagen;
 public class frmPaciente extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
-    private static frmPaciente paciente;
+    private static frmPaciente frmPaciente;
     private boolean nuevo;
-    private final Map<Integer, Image> map;
     private ImageIcon img = null;
 
     private frmPaciente() {
         initComponents();
-        this.map = new HashMap<>();
-        tblPacientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //tblPacientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jpbFoto.setVisible(false);
     }
 
     public synchronized static frmPaciente getPadres() {
-        System.out.println("1");
-        if (paciente == null) {
-            System.out.println("2");
-            paciente = new frmPaciente();
+        if (frmPaciente == null) {
+            frmPaciente = new frmPaciente();
         }
-        System.out.println("3");
-        return paciente;
+        return frmPaciente;
     }
 
     @SuppressWarnings("unchecked")
@@ -74,6 +63,15 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         cbEstadoTabla = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPacientes = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jlTiposangre = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jlSeguroMedico = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jlNumeroSeguro = new javax.swing.JLabel();
+        cbEstadoSeguro = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanel8 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -181,17 +179,62 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         tblPacientes.setMinimumSize(new java.awt.Dimension(400, 40));
         tblPacientes.setRowMargin(2);
         tblPacientes.setShowGrid(true);
+        tblPacientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPacientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPacientes);
+
+        jLabel3.setText("Tipo de Sangre: ");
+
+        jlTiposangre.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 153, 153)));
+
+        jLabel4.setText("Seguro Medico:");
+
+        jlSeguroMedico.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 153, 153)));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Numero:");
+
+        jlNumeroSeguro.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 153, 153)));
+
+        cbEstadoSeguro.setText("Desactivo");
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Cedula:;");
+
+        jFormattedTextField1.setEditable(false);
+        try {
+            jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cbEstadoTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1)
+                    .addComponent(cbEstadoTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlTiposangre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlSeguroMedico, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jlNumeroSeguro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbEstadoSeguro))
+                    .addComponent(jFormattedTextField1))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -200,9 +243,31 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(cbEstadoTabla)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlTiposangre, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                            .addComponent(jlSeguroMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlNumeroSeguro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbEstadoSeguro))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel3, jLabel4});
 
         jTabbedPane1.addTab("Registros", jPanel3);
 
@@ -327,7 +392,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             }
         });
 
-        btnBuscarMadre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
         btnBuscarMadre.setText("Buscar Madre");
         btnBuscarMadre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,7 +414,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             }
         });
 
-        btnBuscarPadre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
         btnBuscarPadre.setText("Buscar Padre");
         btnBuscarPadre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -359,7 +422,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         });
 
         btnAntecedentes.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        btnAntecedentes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Salud32x32.png"))); // NOI18N
         btnAntecedentes.setToolTipText("Antecedentes del paciente");
         btnAntecedentes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -367,7 +429,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             }
         });
 
-        btnDatosNacimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/nacido64x64.png"))); // NOI18N
         btnDatosNacimiento.setToolTipText("Datos de Nacimientos");
         btnDatosNacimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -388,21 +449,21 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnValidaCedulaPaciente)
                                         .addGap(3, 3, 3))
-                                    .addComponent(txtPNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                                    .addComponent(txtPNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(txtCedulaMadre, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                        .addComponent(txtCedulaMadre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnBuscarMadre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(cbSeguro, javax.swing.GroupLayout.Alignment.TRAILING, 0, 289, Short.MAX_VALUE))
+                                    .addComponent(cbSeguro, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(3, 3, 3)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -410,11 +471,11 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                             .addComponent(txtSNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cbSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtNoSeguro)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtCedulaPadre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtCedulaPadre, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscarPadre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnBuscarPadre, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -477,7 +538,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Foto Paciente"));
 
-        jlFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/nacido180x180.png"))); // NOI18N
         jlFoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jlFotoMouseClicked(evt);
@@ -542,8 +602,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,7 +618,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -567,9 +626,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Campos", jPanel8);
@@ -582,7 +641,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Documento nuevo 32 x 32.png"))); // NOI18N
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
@@ -598,7 +656,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnModificar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(1, 1, 1));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Editar Documento 32 x 32.png"))); // NOI18N
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
@@ -611,7 +668,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnBorrar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Borrar 32 x 32.png"))); // NOI18N
         btnBorrar.setMnemonic('b');
         btnBorrar.setText("Borrar");
         btnBorrar.setToolTipText("Borrar Registro Actual");
@@ -624,7 +680,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
         btnBuscar.setMnemonic('r');
         btnBuscar.setText("Buscar");
         btnBuscar.setToolTipText("Buscar el Registro");
@@ -637,7 +692,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnGuardar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Guardar 32 x 32.png"))); // NOI18N
         btnGuardar.setMnemonic('g');
         btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Guardar Registro Actual");
@@ -651,7 +705,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
         btnCancelar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(1, 1, 1));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Cancelar 32 x 32.png"))); // NOI18N
         btnCancelar.setMnemonic('c');
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la Operacion del Registro");
@@ -690,7 +743,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -720,48 +773,61 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (txtCedula.getValue() == null) {
-            JOptionPane.showInternalConfirmDialog(this,
+            JOptionPane.showInternalConfirmDialog(
+                    this,
                     "Digite cedula del paciente.",
                     "Proceso de validacion",
-                    JOptionPane.DEFAULT_OPTION);
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtCedula.requestFocus();
             return;
         }
 
         if (txtPNombre.getText().equals("")) {
-            JOptionPane.showInternalConfirmDialog(this,
+            JOptionPane.showInternalConfirmDialog(
+                    this,
                     "Digite un Nombre.",
                     "Proceso de validacion",
-                    JOptionPane.DEFAULT_OPTION);
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtPNombre.requestFocus();
             return;
         }
 
         if (txtApellidos.getText().equals("")) {
-            JOptionPane.showInternalConfirmDialog(this,
+            JOptionPane.showInternalConfirmDialog(
+                    this,
                     "Digite los Apellidos.",
                     "Proceso de validacion",
-                    JOptionPane.DEFAULT_OPTION);
+                    JOptionPane.DEFAULT_OPTION
+            );
             txtApellidos.requestFocus();
             return;
         }
 
         if (cbSeguro.getSelectedIndex() == 0) {
-            int resp = JOptionPane.showInternalConfirmDialog(this,
+
+            int resp = JOptionPane.showInternalConfirmDialog(
+                    this,
                     "Cuenta con Seguro?",
-                    "Confirmacion de seguro!",
+                    "",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
             if (resp == JOptionPane.YES_OPTION) {
                 cbSeguro.requestFocus();
                 cbSeguro.showPopup();
                 return;
             }
+
         }
 
         if (cbSeguro.getSelectedIndex() != 0 && txtNoSeguro.getText().isEmpty()) {
-            JOptionPane.showInternalMessageDialog(this,
-                    "Debe de digitar el numero de seguro.!");
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Debe de digitar el numero de seguro.!"
+            );
             txtNoSeguro.requestFocus();
             return;
         }
@@ -776,12 +842,16 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 cbEstado.setSelected(true);
             }
         }
+        String cedulaPaciente = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula.getValue().toString())
+                        .build()
+        ).getFirst().getCedula();
 
         // si es nuevo validamos que el Cliente no exista
         if (nuevo) {//Me parece que este caja de texto tendria problema cuando es un usuario nuevo
-            if (existePaciente(
-                    ((Persona) txtCedula.getValue()).getGenerales().getCedula()
-            ).getEstado()) {
+            if (!cedulaPaciente.equals("000-0000000-0")) {
                 JOptionPane.showInternalConfirmDialog(this,
                         "Cedula registrada en el sistema",
                         "Proceso de validacion",
@@ -790,47 +860,47 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 txtCedula.requestFocus();
                 return;
             }
-        } else if (!existePaciente(
-                ((Persona) txtCedula.getValue()).getGenerales().getCedula()
-        ).getEstado()) {
-            int respuesta = JOptionPane.showInternalConfirmDialog(
-                    this,
-                    "No puede modificar ese paciente con esa cedula",
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
+        } else {
+            if (cedulaPaciente.equals("000-0000000-0")) {
+                int respuesta = JOptionPane.showInternalConfirmDialog(
+                        this,
+                        "No puede modificar ese paciente con esa cedula",
+                        "",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
 
-            if (respuesta == JOptionPane.NO_OPTION) {
+                if (respuesta == JOptionPane.NO_OPTION) {
+                    return;
+                }
+
+                txtCedula.requestFocus();
+                txtCedula.setValue("");
                 return;
             }
-
-            txtCedula.requestFocus();
-            txtCedula.setValue("");
-            return;
         }
-        //Revision de cumplimiento...
+        //TODO 11/04/2025 Terminar este trabajo.
 
         int cedulaMadre, cedulaPadre;
 
         try {
-            cedulaMadre = ((Persona) txtCedulaMadre.getValue()).getId_persona();
+            cedulaMadre = ((Persona) txtCedulaMadre.getValue()).getIdPersona();
 
         } catch (Exception e) {
             cedulaMadre = 0;
         }
 
         try {
-            cedulaPadre = ((Persona) txtCedulaPadre.getValue()).getId_persona();
+            cedulaPadre = ((Persona) txtCedulaPadre.getValue()).getIdPersona();
 
         } catch (Exception e) {
             cedulaPadre = 0;
         }
 
-        Generales g = Generales
+        Generales generales = Generales
                 .builder()
                 .cedula(txtCedula.getValue().toString())
-                .tipoSangre((TipoSangre) cbSangre.getSelectedItem())
+                .idTipoSangre(((TipoSangre) cbSangre.getSelectedItem()).getId())
                 .build();
 
         Asegurado asegurado = Asegurado
@@ -839,27 +909,25 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 .no_nss(txtNoSeguro.getValue().toString())
                 .build();
 
-        Paciente p = Paciente
+        Paciente paciente = Paciente
                 .builder()
-                .persona(
-                        Persona
-                                .builder()
-                                .id_persona(
-                                        nuevo
-                                                ? -1
-                                                : ((Generales) txtCedula.getValue()).getPersona().getId_persona()
-                                )
-                                .pnombre(txtPNombre.getText())
-                                .snombre(txtSNombre.getText())
-                                .apellidos(txtApellidos.getText())
-                                .sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f')
-                                .generales(g)
-                                .estado(cbEstado.isSelected())
-                                .build()
-                )
                 .build();
 
-        Resultado resultado = nuevo ? M_Paciente.insert(p) : M_Paciente.update(p);
+        Persona persona = Persona
+                .builder()
+                .idPersona(
+                        nuevo
+                                ? -1
+                                : ((Generales) txtCedula.getValue()).getIdPersona()
+                )
+                .pnombre(txtPNombre.getText())
+                .snombre(txtSNombre.getText())
+                .apellidos(txtApellidos.getText())
+                .sexo(cbSexo.getSelectedIndex() == 1 ? 'm' : 'f')
+                .estado(cbEstado.isSelected())
+                .build();
+
+        Resultado resultado = nuevo ? M_Paciente.insert(paciente) : M_Paciente.update(paciente);
 
         JOptionPane.showInternalConfirmDialog(
                 this,
@@ -919,27 +987,30 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         buscador.setLocationRelativeTo(null);
         buscador.setVisible(true);
 
-        String cliente = String.valueOf(buscador.txtCedula.getValue());
+        String cedulaPaciente = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula.getValue().toString())
+                        .build()
+        ).getFirst().getCedula();
 
-        if (!cliente.isBlank()) {
-            int num = tblPacientes.getRowCount();
+        if (!cedulaPaciente.isBlank()) {
 
-            if (!existePaciente(cliente).getEstado()) {
-                JOptionPane.showInternalConfirmDialog(this, "El Cliente No Existe");
+            if (cedulaPaciente.equals("000-0000000-0")) {
+                JOptionPane.showInternalConfirmDialog(
+                        this,
+                        "El Cliente No Existe"
+                );
                 return;
             }
 
-            for (int i = 0; i < num; i++) {
-                if (tblPacientes.getValueAt(i, 0).toString().contains(cliente)) {
+            for (int i = 0; i < tblPacientes.getRowCount(); i++) {
+                if (tblPacientes.getValueAt(i, 0).toString().contains(cedulaPaciente)) {
+                    tblPacientes.setRowSelectionInterval(i, i);
                     break;
                 }
-                if (tblPacientes.getValueAt(i, 1).toString().contains(cliente)) {
-                    break;
-                }
-                if (tblPacientes.getValueAt(i, 2).toString().contains(cliente)) {
-                    break;
-                }
-                if (cliente.equals("")) {
+                if (tblPacientes.getValueAt(i, 1).toString().contains(cedulaPaciente)) {
+                    tblPacientes.setRowSelectionInterval(i, i);
                     break;
                 }
             }
@@ -985,17 +1056,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                     "No se permite antecedentes en genericos",
                     "",
                     JOptionPane.INFORMATION_MESSAGE
-                    
             );
             return;
         }
 
-        frmPacientesAntecedentes frm = new frmPacientesAntecedentes(
+        frmPacientesAntecedentes frm = frmPacientesAntecedentes.getInstance(
                 null,
                 true,
-                ((Categorias) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId()
+                ((Paciente) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId()
         );
+
         frm.setLocationRelativeTo(null);
+
         frm.setVisible(true);
     }//GEN-LAST:event_btnAntecedentesActionPerformed
 
@@ -1073,11 +1145,13 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtCedulaMadreActionPerformed
 
     private void jlAgregarFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlAgregarFotoMouseClicked
-        int idPersona = ((Categoria) txtCedula.getValue()).getId();
+        int idPersona = ((Persona) txtCedula.getValue()).getIdPersona();
 
         if (idPersona <= 0) {
-            JOptionPane.showInternalMessageDialog(this,
-                    "No se permite insertar foto al paciente generico");
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "No se permite insertar foto al paciente generico"
+            );
             return;
         }
 
@@ -1100,12 +1174,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             M_Foto_Persona.insert(
                     FotoPersona
                             .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .id_persona(idPersona)
-                                            .build()
-                            )
+                            .idPersona(idPersona)
                             .foto(
                                     Utilidades.imagenEncode64(
                                             fc.getSelectedFile()
@@ -1115,34 +1184,29 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                             .build()
             );
         }
-        map.remove(((Categorias) txtCedula.getValue()).getId());
     }//GEN-LAST:event_jlAgregarFotoMouseClicked
 
     private void jlFotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlFotoMouseClicked
         if (evt.getClickCount() == 2) {
 
-            int id = ((Categorias) txtCedula.getValue()).getId();
+            int id = ((Generales) txtCedula.getValue()).getIdPersona();
+
             if (id <= 0) {
-                JOptionPane.showInternalMessageDialog(this,
-                        "Generico no contiene imagen");
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Generico no contiene imagen"
+                );
                 return;
-            }//id, getDatos()
+            }
+
             frmImagen i = new frmImagen(
                     null,
                     true,
-                    new ImageIcon(
-                            map.get(
-                                    ((Categorias) txtCedula.getValue()).getId()
-                            ).getScaledInstance(
-                                    600,
-                                    600,
-                                    Image.SCALE_SMOOTH
-                            )
-                    )
+                    null
             );
             i.setLocationRelativeTo(null);
             i.setVisible(true);
-        }//Mostar la imagen mas grande 
+        }
     }//GEN-LAST:event_jlFotoMouseClicked
 
     private void txtNoSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoSeguroActionPerformed
@@ -1172,6 +1236,38 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         txtApellidos.requestFocus();
     }//GEN-LAST:event_txtSNombreActionPerformed
 
+    private void tblPacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPacientesMouseClicked
+        
+//        Generales generales = M_Generales.select(
+//                Generales
+//                        .builder()
+//                        .idPersona(paciente.getId())
+//                        .build()
+//        ).getLast();
+//
+//        Asegurado asegurado = M_Asegurado.select(
+//                Asegurado
+//                        .builder()
+//                        .idPersona(paciente.getId())
+//                        .build()
+//        ).getLast();
+//
+//        ARS ars = M_ARS.select(
+//                ARS
+//                        .builder()
+//                        .id(asegurado.getIdArs())
+//                        .build()
+//        ).getLast();
+//        
+//        M_TiposSangres.getList().stream().filter(
+//                            id -> id.getId() == generales.getIdTipoSangre()
+//                    ).findFirst().get().getDescripcion();
+//        
+//        registro[4] = ars.getDescripcion();
+//                    registro[5] = asegurado.getNo_nss();
+//                    registro[6] = (asegurado.getEstado() ? "Activo" : "Inactivo");
+    }//GEN-LAST:event_tblPacientesMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAntecedentes;
     private javax.swing.JButton btnBorrar;
@@ -1185,12 +1281,18 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnValidaCedulaPaciente;
     private javax.swing.JCheckBox cbEstado;
+    private javax.swing.JCheckBox cbEstadoSeguro;
     private javax.swing.JCheckBox cbEstadoTabla;
     private javax.swing.JComboBox<TipoSangre> cbSangre;
     private javax.swing.JComboBox<ARS> cbSeguro;
     private javax.swing.JComboBox<String> cbSexo;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1205,6 +1307,9 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel jlAgregarFoto;
     private javax.swing.JLabel jlFoto;
+    private javax.swing.JLabel jlNumeroSeguro;
+    private javax.swing.JLabel jlSeguroMedico;
+    private javax.swing.JLabel jlTiposangre;
     private javax.swing.JProgressBar jpbFoto;
     private javax.swing.JMenuItem mCopiar;
     private javax.swing.JMenuItem mPegar;
@@ -1220,7 +1325,6 @@ public class frmPaciente extends javax.swing.JInternalFrame {
 
     public synchronized void llenarTabla() {
         String titulos[] = {
-            "<html><b>Cedula</b></html>",
             "<html><b>Nombres y Apellidos</b></html>",
             "<html><b>Estado de persona</b></html>",
             "<html><b>Tipo de Sangre</b></html>",
@@ -1229,43 +1333,26 @@ public class frmPaciente extends javax.swing.JInternalFrame {
             "<html><b>Estado de seguro</b></html>"
         };
 
+        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
         Object registro[] = new Object[10];
         tblPacientes.removeAll();
 
-        List<Paciente> listaPaciente = M_Paciente.select(
+        M_Paciente.select(
                 Paciente
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .estado(cbEstadoTabla.isSelected())
-                                        .build()
-                        )
                         .build()
-        );
-
-        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-
-        listaPaciente.stream().forEach(
+        ).stream().forEach(
                 paciente -> {
-                    Generales generales = M_Generales.selectByID(
-                            paciente.getPersona().getId_persona()
-                    );
-
-                    Asegurado asegurado = M_Asegurado.select(
-                            Asegurado
+                    Persona persona = M_Persona.select(
+                            Persona
                                     .builder()
-                                    .persona(paciente.getPersona())
+                                    .idPersona(paciente.getId())
                                     .build()
-                    ).getFirst();
+                    ).getLast();
 
-                    registro[0] = generales;
-                    registro[1] = paciente;
-                    registro[2] = paciente.getPersona().getEstado();
-                    registro[3] = generales.getTipoSangre();
-                    registro[4] = asegurado.getArs();
-                    registro[5] = asegurado.getNo_nss();
-                    registro[6] = (asegurado.getEstado() ? "Activo" : "Inactivo");
+                    registro[0] = paciente;
+                    registro[2] = persona.getEstado();
+                    
                 }
         );
 
@@ -1276,7 +1363,12 @@ public class frmPaciente extends javax.swing.JInternalFrame {
         //TODO 12/12/2024 Esto creo que se debe ejecutar una vez. 
         miTabla.addTableModelListener((TableModelEvent e) -> {
             if (e.getType() == TableModelEvent.UPDATE) {
-                System.out.println("TODO 12/12/2024 Esto creo que se debe ejecutar una vez. \nIntentas actualizar. No es posible.");
+                System.out.println(
+                        """
+                        TODO 12/12/2024 Esto creo que se debe ejecutar una vez.
+                        Intentas actualizar. No es posible.
+                        """
+                );
             }
         });
     }
@@ -1429,10 +1521,10 @@ public class frmPaciente extends javax.swing.JInternalFrame {
     }
 
     private synchronized void limpiarCampo() {
-        jlFoto.setIcon(
-                new Imagenes("Nacido 180 x 180.png")
-                        .getIcono(180, 180)
-        );
+//        jlFoto.setIcon(
+//                new Imagenes("Nacido 180 x 180.png")
+//                        .getIcono(180, 180)
+//        );
         txtCedula.setValue("");
         txtPNombre.setText("");
         txtApellidos.setText("");
@@ -1452,7 +1544,7 @@ public class frmPaciente extends javax.swing.JInternalFrame {
                 730,
                 480);
         pack();
-        paciente.setVisible(true);
+        frmPaciente.setVisible(true);
     }
 
     public synchronized void llenarCombox() {

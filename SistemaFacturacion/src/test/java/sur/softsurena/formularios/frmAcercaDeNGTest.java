@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
  *
  * @author jhironsel
  */
-@Test(enabled = false)
+@Test(enabled = true)
 public class frmAcercaDeNGTest {
 
     private frmAcercaDe acercaDe;

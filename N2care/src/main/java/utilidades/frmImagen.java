@@ -3,8 +3,8 @@ package utilidades;
 import javax.swing.ImageIcon;
 
 public class frmImagen extends javax.swing.JDialog {
-//    private final Datos datos;
-//    private final int idPaciente;
+
+    private static final long serialVersionUID = 1L;
     
     public frmImagen(java.awt.Frame parent, boolean modal, ImageIcon imageIcon ) {
         super(parent, modal);

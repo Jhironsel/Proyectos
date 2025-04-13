@@ -12,8 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import static sur.softsurena.datos.alter.AlterMetodos.borrarUsuario;
-import static sur.softsurena.datos.select.SelectMetodos.*;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.formularios.frmPerfiles;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
@@ -21,8 +19,8 @@ import sur.softsurena.metodos.M_Usuario;
 
 public class frmUsuarios extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
     private static frmUsuarios usuario;
-    private int cliUsuario = 0;
     private boolean nuevo;
     private String rolAnterior;
     private final Map<String, Image> map;
@@ -30,7 +28,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     private int numeroUsuarios;
 
     public frmUsuarios() {
-        
+
         this.map = new HashMap<>();
         initComponents();
         tblUsuarios.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -38,7 +36,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }
 
     public synchronized static frmUsuarios getUsuarios() {
-        
+
         if (usuario == null) {
             usuario = new frmUsuarios();
         }
@@ -1029,11 +1027,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         if (!tblUsuarios.isEnabled()) {
             return;
         }
-        cliUsuario = 0;
         mostrarRegistro();
         btnPrimero.requestFocus();
     }//GEN-LAST:event_btnPrimeroActionPerformed
@@ -1043,17 +1040,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         //La tabla de usuario está habilitada.
         if (!tblUsuarios.isEnabled()) {
             return;
         }
-        
-        cliUsuario--;
-        
-        if (cliUsuario == -1) {
-            cliUsuario = numeroUsuarios - 1;
-        }
+
         mostrarRegistro();
         btnAnterior.requestFocus();
     }//GEN-LAST:event_btnAnteriorActionPerformed
@@ -1062,14 +1054,11 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         if (!tblUsuarios.isEnabled()) {
             return;
         }
-        cliUsuario++;
-        if (cliUsuario == numeroUsuarios) {
-            cliUsuario = 0;
-        }
+
         mostrarRegistro();
         btnSiguiente.requestFocus();
     }//GEN-LAST:event_btnSiguienteActionPerformed
@@ -1078,11 +1067,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         if (!tblUsuarios.isEnabled()) {
             return;
         }
-        cliUsuario = numeroUsuarios - 1;
         mostrarRegistro();
         btnUltimo.requestFocus();
     }//GEN-LAST:event_btnUltimoActionPerformed
@@ -1091,7 +1079,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         //Activamos el Flag de registro Nuevo
         nuevo = true;
         cbEstadosUsuarios.setSelected(true);
@@ -1103,7 +1091,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         if (txtUserName.getText().trim().isEmpty()
                 || tblUsuarios.getRowCount() == 0) {
             JOptionPane.showInternalMessageDialog(this,
@@ -1112,11 +1100,11 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     JOptionPane.DEFAULT_OPTION);
             return;
         }
-        
+
         rolAnterior = ((String) cbPerfil.getSelectedItem()).trim();
 
         nuevo = false;
-        
+
         //Botones Para Deshabilitar:
         navegador(false);
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -1125,7 +1113,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         if (!isShowing()) {
             return;
         }
-        
+
         if (txtPNombre.getText().trim().equals("")) {
             JOptionPane.showInternalMessageDialog(this,
                     "Debe Digitar un Nombre...",
@@ -1158,7 +1146,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             cbPerfil.requestFocus();
             return;
         }
-        
+
         if (!cbEstado.isSelected()) {
             int opc = JOptionPane.showInternalConfirmDialog(this,
                     "Dejara el usuario Inactivo",
@@ -1211,20 +1199,18 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         Usuario u = Usuario
                 .builder()
-                .user_name(txtUserName.getText().trim().toUpperCase())
+                //.user_name(txtUserName.getText().trim().toUpperCase())
                 .clave(new String(txtClaveRepetir.getPassword()).trim())
                 .administrador(jcbAdministrador.isSelected())
-                .especialidad(txtEspecialidad.getText().trim())
-                .cod_Exequatur(txtExequatur.getText().trim())
-                .pNombre(txtPNombre.getText().trim())
-                .sNombre(txtSNombre.getText().trim())
-                .apellidos(txtApellidos.getText().trim())
-                .estado(cbEstado.isSelected())
+                //.especialidad(txtEspecialidad.getText().trim())
+                //.cod_Exequatur(txtExequatur.getText().trim())
+                //.pNombre(txtPNombre.getText().trim())
+                //.sNombre(txtSNombre.getText().trim())
+                //.apellidos(txtApellidos.getText().trim())
+                //.estado(cbEstado.isSelected())
                 .build();
-        
+
         //(String) cbPerfil.getSelectedItem()).trim()
-                
-        
         if (nuevo) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1257,7 +1243,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        
+
         if (tblUsuarios.getRowCount() <= 0) {
             JOptionPane.showInternalMessageDialog(this,
                     "No existe informacion en la tabla, Agregue Usuarios",
@@ -1279,16 +1265,15 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     "Operacion de eliminacion",
                     JOptionPane.DEFAULT_OPTION);
         }
-        
-        
+
         llenarTabla(cbEstadosUsuarios.isSelected(),
                 "btnBorrar hemos borrado el usuario, Numero de Usuario actual: "
                 + numeroUsuarios);
-        
+
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        
+
         if (tblUsuarios.getRowCount() <= 0) {
             JOptionPane.showInternalMessageDialog(this,
                     "No existe informacion en la tabla, Agregue Usuarios",
@@ -1306,15 +1291,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         int num = tblUsuarios.getRowCount();
         for (int i = 0; i < num; i++) {
             if (tblUsuarios.getValueAt(i, 0).toString().equalsIgnoreCase(cliente)) {
-                cliUsuario = i;
                 break;
             }
             if (tblUsuarios.getValueAt(i, 1).toString().contains(cliente)) {
-                cliUsuario = i;
                 break;
             }
             if (tblUsuarios.getValueAt(i, 2).toString().contains(cliente)) {
-                cliUsuario = i;
                 break;
             }
             if (cliente.equals("")) {
@@ -1325,14 +1307,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        
+
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
         if (!tblUsuarios.isEnabled()) {
             return;
         }
-        cliUsuario = tblUsuarios.getSelectedRow();
         mostrarRegistro();
     }//GEN-LAST:event_tblUsuariosMouseClicked
 
@@ -1360,7 +1341,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtClaveActionPerformed
 
     private void txtClaveRepetirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveRepetirActionPerformed
-        
+
     }//GEN-LAST:event_txtClaveRepetirActionPerformed
 
     private void cbEstadosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadosUsuariosActionPerformed
@@ -1384,7 +1365,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
     private void cbPerfilPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cbPerfilPopupMenuWillBecomeInvisible
         if (btnGuardar.isEnabled()) {
-            
+
             txtExequatur.setValue(null);
             txtExequatur.requestFocus();
         }
@@ -1421,7 +1402,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtEspecialidadActionPerformed
 
     private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
-        
+
     }//GEN-LAST:event_txtUserNameActionPerformed
 
     private void btnValidaLoginNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidaLoginNameActionPerformed
@@ -1538,24 +1519,24 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 limpiarCampo();
                 return;
             }
-            txtUserName.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 0)).trim());
-            txtPNombre.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 1)).trim());
-            txtSNombre.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 2)).trim());
-            txtApellidos.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 3)).trim());
-
-            txtEspecialidad.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 7)).trim());
-
-            for (int i = 1; i < cbPerfil.getItemCount(); i++) {
-                cbPerfil.setSelectedIndex(i);
-                if (((String) cbPerfil.getSelectedItem()).equals(
-                        (String) tblUsuarios.getValueAt(cliUsuario, 8))) {
-                    break;
-                }
-            }
-            txtExequatur.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 9)).trim());
-            jcbAdministrador.setSelected(((String) tblUsuarios.getValueAt(cliUsuario, 10)).equals("Activo"));
-            cbEstado.setSelected(((String) tblUsuarios.getValueAt(cliUsuario, 11)).equals("Activo"));
-            tblUsuarios.setRowSelectionInterval(cliUsuario, cliUsuario);
+//            txtUserName.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 0)).trim());
+//            txtPNombre.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 1)).trim());
+//            txtSNombre.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 2)).trim());
+//            txtApellidos.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 3)).trim());
+//
+//            txtEspecialidad.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 7)).trim());
+//
+//            for (int i = 1; i < cbPerfil.getItemCount(); i++) {
+//                cbPerfil.setSelectedIndex(i);
+//                if (((String) cbPerfil.getSelectedItem()).equals(
+//                        (String) tblUsuarios.getValueAt(cliUsuario, 8))) {
+//                    break;
+//                }
+//            }
+//            txtExequatur.setText(String.valueOf(tblUsuarios.getValueAt(cliUsuario, 9)).trim());
+//            jcbAdministrador.setSelected(((String) tblUsuarios.getValueAt(cliUsuario, 10)).equals("Activo"));
+//            cbEstado.setSelected(((String) tblUsuarios.getValueAt(cliUsuario, 11)).equals("Activo"));
+//            tblUsuarios.setRowSelectionInterval(cliUsuario, cliUsuario);
         } catch (Exception e) {
             System.err.println("Eror mostrando el registro" + e.getMessage());
             e.printStackTrace();
@@ -1567,10 +1548,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     jpbFoto.setVisible(true);
                     if (!map.containsKey(txtUserName.getText().trim().toUpperCase())) {
                         publish(10);
-                        img = getImagenes("select FOTO "
-                                + "from T_FOTO_USUARIO "
-                                + "where TRIM(idUsuario) = '"
-                                + txtUserName.getText().trim().toUpperCase() + "';");
+//                        img = getImagenes("select FOTO "
+//                                + "from T_FOTO_USUARIO "
+//                                + "where TRIM(idUsuario) = '"
+//                                + txtUserName.getText().trim().toUpperCase() + "';");
                         publish(40);
                         if (img != null) {
                             publish(53);
@@ -1616,44 +1597,35 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }
 
     public synchronized void llenarTabla(boolean estado, String d) {
-        
-        cliUsuario = 0;
+
         numeroUsuarios = 0;
         tblUsuarios.removeAll();
         String titulos[] = {"Usuarios", "Primer Nombres", "Segundo Nombres",
             "Apellidos", "Movil", "Telefono", "Correo", "Especialidad", "Rol del sistema",
             "Exequátur", "Super Usuario", "Estado"};
         Object registro[] = new Object[12];
-        ResultSet rs = getUsuario(estado);
+//        ResultSet rs = getUsuario(estado);
         DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-        try {
-            while (rs.next()) {
-                registro[0] = rs.getString("LOGINUSER").trim();
-                registro[1] = rs.getString("P_NOMBRE").trim();
-                registro[2] = rs.getString("S_NOMBRE").trim();
-                registro[3] = rs.getString("APELLIDOS").trim();
-                registro[4] = rs.getString("Movil").trim();
-                registro[5] = rs.getString("TELEFONO").trim();
-                registro[6] = rs.getString("Correo").trim();
-                registro[7] = rs.getString("Especialidad").trim();
-                registro[8] = rs.getString("ROL").trim();
-                registro[9] = rs.getString("SQ").trim();
-                registro[10] = (rs.getBoolean("SuperUsuario") ? "Activo" : "Inactivo");
-                registro[11] = (rs.getBoolean("ESTADO") ? "Activo" : "Inactivo");
-                miTabla.addRow(registro);
-                numeroUsuarios++;
-            }
-            tblUsuarios.setModel(miTabla);
-        } catch (SQLException ex) {
-            //Instalar Logger
-        } finally {
-            mostrarRegistro();
-            ordenarTabla();
-        }
+
+//        registro[0] = rs.getString("LOGINUSER").trim();
+//        registro[1] = rs.getString("P_NOMBRE").trim();
+//        registro[2] = rs.getString("S_NOMBRE").trim();
+//        registro[3] = rs.getString("APELLIDOS").trim();
+//        registro[4] = rs.getString("Movil").trim();
+//        registro[5] = rs.getString("TELEFONO").trim();
+//        registro[6] = rs.getString("Correo").trim();
+//        registro[7] = rs.getString("Especialidad").trim();
+//        registro[8] = rs.getString("ROL").trim();
+//        registro[9] = rs.getString("SQ").trim();
+//        registro[10] = (rs.getBoolean("SuperUsuario") ? "Activo" : "Inactivo");
+//        registro[11] = (rs.getBoolean("ESTADO") ? "Activo" : "Inactivo");
+        miTabla.addRow(registro);
+        numeroUsuarios++;
+        tblUsuarios.setModel(miTabla);
     }
 
     public void centralizar() {
-        
+
         setBounds((dpnEscritorio.getWidth() - this.getWidth()) / 2,
                 (dpnEscritorio.getHeight() - this.getHeight()) / 2,
                 720,
@@ -1663,7 +1635,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }
 
     private void navegador(boolean b) {
-        
+
         btnPrimero.setEnabled(b);
         btnAnterior.setEnabled(b);
         btnSiguiente.setEnabled(b);
@@ -1759,7 +1731,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         tblUsuarios.getColumn(tblUsuarios.getColumnName(9)).setMaxWidth(150);
         tblUsuarios.getColumn(tblUsuarios.getColumnName(9)).setPreferredWidth(120);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBorrar;

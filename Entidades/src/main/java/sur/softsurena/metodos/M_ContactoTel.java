@@ -24,7 +24,9 @@ public class M_ContactoTel {
      * @param contacto
      * @return
      */
-    public static synchronized Resultado agregarContactosTel(ContactoTel contacto) {
+    public static synchronized Resultado agregarContactosTel(
+            ContactoTel contacto
+    ) {
         final String sql
                 = "SELECT O_ID FROM SP_I_CONTACTO_TEL(?,?,?,?)";
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -149,12 +151,12 @@ public class M_ContactoTel {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN_,
+                    ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN,
                     ex
             );
             return Resultado
                     .builder()
-                    .mensaje(ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN_)
+                    .mensaje(ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.FALSE)
                     .build();
@@ -162,7 +164,7 @@ public class M_ContactoTel {
     }
     public static final String CONTACTO_TELEFONICO_ELIMINADO_CORRECTAMEN
             = "Contacto telefonico eliminado correctamente.";
-    public static final String ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN_
+    public static final String ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN
             = "Error al eliminar contacto telefonico en el SP_D_CONTACTO_TEL del sistema.";
 
     /**

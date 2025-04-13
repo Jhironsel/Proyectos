@@ -194,9 +194,9 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jScrollPane6" min="-2" max="-2" attributes="0"/>
+              <Component id="jScrollPane6" min="-2" pref="111" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jspPadre" pref="640" max="32767" attributes="0"/>
+              <Component id="jspPadre" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -257,7 +257,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="565" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="583" max="32767" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -386,7 +386,7 @@
                                   <Component id="btnAplicarFecha" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="jScrollPane5" pref="536" max="32767" attributes="0"/>
+                              <Component id="jScrollPane5" pref="558" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -481,7 +481,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="565" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="583" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -665,7 +665,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="jspEnfermedades" pref="290" max="32767" attributes="0"/>
+                              <Component id="jspEnfermedades" pref="353" max="32767" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -927,12 +927,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jpEnfermedades1" pref="199" max="32767" attributes="0"/>
-                              <Component id="jpEnfermedades2" pref="199" max="32767" attributes="0"/>
+                              <Component id="jpEnfermedades1" pref="193" max="32767" attributes="0"/>
+                              <Component id="jpEnfermedades2" pref="193" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jpEnfermedades3" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                          <Component id="jpEnfermedades4" pref="224" max="32767" attributes="0"/>
+                          <Component id="jpEnfermedades4" pref="217" max="32767" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1104,7 +1104,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jspEnfermedades3" alignment="1" pref="156" max="32767" attributes="0"/>
+                          <Component id="jspEnfermedades3" alignment="1" pref="150" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1182,7 +1182,7 @@
                                   <Component id="dcReferimiento" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                              <Component id="jspEnfermedades4" pref="155" max="32767" attributes="0"/>
+                              <Component id="jspEnfermedades4" pref="172" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1286,7 +1286,7 @@
                               <Component id="btnAgregarMedicamento" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jScrollPane3" pref="481" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="508" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1416,7 +1416,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jpTipoGrafica" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jpGrafica" pref="558" max="32767" attributes="0"/>
+                          <Component id="jpGrafica" pref="538" max="32767" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1500,7 +1500,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="486" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="515" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1528,26 +1528,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtNombres" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtApellidos" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jLabel4" min="-2" pref="148" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="dcConsulta" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtArs" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
@@ -1558,12 +1539,28 @@
                                   <Component id="jLabel5" min="-2" pref="210" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnMensajes" min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="btnMensajes" min="-2" pref="210" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtNombres" alignment="0" min="-2" pref="210" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtApellidos" min="-2" pref="210" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel4" min="-2" pref="148" max="-2" attributes="0"/>
+                                  <Component id="dcConsulta" min="-2" pref="210" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="429" max="-2" attributes="0"/>
-                      <Component id="btnTerminarConsulta" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnTerminarConsulta" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="358" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1627,7 +1624,7 @@
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="dcConsulta.getDateEditor().addPropertyChangeListener(&#xa;new PropertyChangeListener(){&#xa;        public void propertyChange(PropertyChangeEvent e) {&#xa;                if(isShowing() &amp; e.getPropertyName().equals(&quot;date&quot;)){&#xa;                    jtPacientes.setSelectionMode(0);&#xa;                    llenarTabla(Utilidades.formatDate(dcConsulta.getDate(), &quot;&quot;), &quot;&quot;);&#xa;                    btnTerminarConsulta.doClick();&#xa;                }&#xa;        }&#xa;});"/>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="dcConsulta.getDateEditor().addPropertyChangeListener(&#xa;new PropertyChangeListener(){&#xa;        public void propertyChange(PropertyChangeEvent e) {&#xa;                if(isShowing() &amp; e.getPropertyName().equals(&quot;date&quot;)){&#xa;                    jtPacientes.setSelectionMode(0);&#xa;                    //llenarTabla(Utilidades.formatDate(dcConsulta.getDate(), &quot;&quot;);&#xa;                    btnTerminarConsulta.doClick();&#xa;                }&#xa;        }&#xa;});"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="txtArs">
