@@ -22,7 +22,7 @@ public class M_BaseDeDatos {
      *
      * @return Devuelve un string de la ubicacion logica de la base de datos.
      */
-    public synchronized static String pathBaseDeDatos() {
+    public static String pathBaseDeDatos() {
         final String sql = "SELECT MON$DATABASE_NAME FROM MON$DATABASE";
         try (PreparedStatement ps1 = getCnn().prepareStatement(
                 sql,
@@ -51,7 +51,7 @@ public class M_BaseDeDatos {
      *
      * @return
      */
-    public synchronized static int periodoMaquina() {
+    public static int periodoMaquina() {
         final String sql
                 = "SELECT DIAS_RESTANTES FROM V_T_E_S_SYS WHERE ID = 1";
 
@@ -90,7 +90,7 @@ public class M_BaseDeDatos {
      * @return Devuelve un valor booleano que indica si tuvo exito el proceso de
      * registro.
      */
-    public synchronized static Resultado setLicencia(
+    public static Resultado setLicencia(
             Date fecha,
             String idMaquina,
             String nombreEmpresa,
@@ -147,7 +147,7 @@ public class M_BaseDeDatos {
      * @return Devuelve la cantindad de registros que existe en una tabla dada
      * en el parametro.
      */
-    public synchronized static int cantidadRegistros(String tabla) {
+    public static int cantidadRegistros(String tabla) {
         final String sql = """
                            SELECT COALESCE(cantidad, 0) as cantidad
                            FROM V_RECCOUNT
@@ -183,7 +183,7 @@ public class M_BaseDeDatos {
      *
      * @return Devuelve un String con el identificador de la base de datos.
      */
-    public synchronized static String GET_GUID() {
+    public static String GET_GUID() {
         final String sql = """
                            SELECT DB_GUID FROM GET_GUID
                            """;

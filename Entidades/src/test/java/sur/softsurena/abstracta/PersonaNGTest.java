@@ -1,13 +1,10 @@
 package sur.softsurena.abstracta;
 
-import java.sql.Date;
-import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Paginas;
 
 /**
  *

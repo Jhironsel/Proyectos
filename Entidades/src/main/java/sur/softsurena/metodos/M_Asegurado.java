@@ -27,7 +27,7 @@ public class M_Asegurado {
      * 
      * @return 
      */
-    public synchronized static List<Asegurado> select(Asegurado asegurado) {
+    public static List<Asegurado> select(Asegurado asegurado) {
         final String sql = """
                            SELECT ID, ID_PERSONA, ID_ARS, NO_NSS, ESTADO
                            FROM V_ASEGURADOS
@@ -73,7 +73,7 @@ public class M_Asegurado {
      * @param asegurado
      * @return
      */
-    public synchronized static Resultado insert(Asegurado asegurado) {
+    public static Resultado insert(Asegurado asegurado) {
         final String sql = """
                            EXECUTE PROCEDURE SP_I_ASEGURADO(?,?,?,?)
                            """;
@@ -126,12 +126,12 @@ public class M_Asegurado {
             = "Registro de asegurado correctamente.";
     
 //------------------------------------------------------------------------------    
-    public synchronized static Resultado update(Asegurado asegurado) {
+    public static Resultado update(Asegurado asegurado) {
         return Resultado.builder().build();
     }
     
 //------------------------------------------------------------------------------    
-    public synchronized static Resultado delete(Asegurado asegurado) {
+    public static Resultado delete(Asegurado asegurado) {
         return Resultado.builder().build();
     }
 }

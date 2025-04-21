@@ -8,6 +8,8 @@ import sur.softsurena.utilidades.CustomJPanel;
 
 public class frmFondo extends JDialog {
 
+    private static final long serialVersionUID = 1L;
+
 
     public frmFondo(Frame parent, boolean modal) {
         super(parent, modal);

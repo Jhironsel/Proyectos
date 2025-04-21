@@ -179,6 +179,21 @@ public class M_CategoriaNGTest {
                 ORDER BY 1;
                 """.trim().strip()
         );
+        
+        assertEquals(
+                M_Categoria.sqlSelect(
+                        Categoria
+                                .builder()
+                                .descripcion("PRUEBA")
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                FROM V_CATEGORIAS
+                WHERE DESCRIPCION STARTING WITH 'PRUEBA'
+                ORDER BY 1;
+                """.trim().strip()
+        );
     }
 
     @Test(

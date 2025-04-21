@@ -28,7 +28,7 @@ public class M_Antecedente {
      * @return Se obtiene una lista de todos los antecendentes de los registros
      * del paciente.
      */
-    public synchronized static List<Antecedente> select(
+    public static List<Antecedente> select(
             @NonNull Antecedente antecedente
     ) {
 
@@ -94,7 +94,7 @@ public class M_Antecedente {
      * @return retorna una cadena o mensaje con la accion realizada por el
      * sistema.
      */
-    public synchronized static Resultado insert(
+    public static Resultado insert(
             @NonNull Antecedente antecedente
     ) {
         final String sql
@@ -148,7 +148,7 @@ public class M_Antecedente {
      *
      * @return
      */
-    public static synchronized Resultado update(
+    public static Resultado update(
             @NonNull Antecedente antecedente
     ) {
         final String sql = "EXECUTE PROCEDURE SP_U_ANTECEDENTE(?, ?);";
@@ -196,7 +196,7 @@ public class M_Antecedente {
      *
      * @return
      */
-    public synchronized static Resultado delete(
+    public static Resultado delete(
             @NonNull Antecedente antecedente
     ) {
         final String sql

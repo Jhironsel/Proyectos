@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class frmMensajes extends javax.swing.JInternalFrame {
 
+    private static final long serialVersionUID = 1L;
+
     public frmMensajes() {
         
         initComponents();

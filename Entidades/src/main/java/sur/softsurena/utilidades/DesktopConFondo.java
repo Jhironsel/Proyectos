@@ -3,21 +3,18 @@ package sur.softsurena.utilidades;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.logging.Level;
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class DesktopConFondo extends JDesktopPane {
 
     private Image imagen;
-
     public void setImagen(String nombreImagen) {
         if (nombreImagen != null) {
-            imagen = new ImageIcon(
-                    getClass().getResource(nombreImagen)).getImage();
-        } else {
-            imagen = null;
+            imagen = new Imagenes(nombreImagen).getIcono().getImage();
         }
+        
         repaint();
     }
 

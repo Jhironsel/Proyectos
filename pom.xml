@@ -10,20 +10,23 @@
     <packaging>pom</packaging>
     
     <modules>
-        <module>SistemaFacturacion</module>
-        <module>Entidades</module>
+        <!--Principales-->
         <module>Imagenes</module>
+        <module>Entidades</module>
+        <module>Modulo_Comun</module>
+        <module>Proxy</module>
+        
+        <!--Secundario-->
+        <module>SistemaFacturacion</module>
+        <module>N2care</module>
         <module>ControlCliente</module>
         <module>JHBingo</module>
         <!--<module>Curso JSF/CursoJSF</module>-->
         <module>TelegramBoot</module>
-        <!--<module>estanciainfantiles</module>-->
         <module>SophiaStudioMaven</module>
         <module>CajerosMaven</module>
         <module>JPA_Firebird</module>
-        <!--<module>n2care</module>-->
-        <module>Proxy</module>
-        <module>N2care</module>
+        <module>Estancia</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,13 +40,13 @@
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>jaybird</artifactId>
-            <version>5.0.6.java11</version>
+            <version>5.0.7.java11</version>
         </dependency>
         
         <dependency>
             <groupId>org.firebirdsql.jdbc</groupId>
             <artifactId>chacha64-plugin</artifactId>
-            <version>6.0.0</version>
+            <version>6.0.1</version>
         </dependency>
         
         <!--Utilizada para determinar los dialectos de firebird y las base de datos.-->
@@ -51,20 +54,21 @@
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
             <version>6.6.9.Final</version>
-            <!--            <version>6.5.2.Final</version>-->
         </dependency>
         
         <!--Dependecia para crear los POJO o JavaBeans de manera mas facil.-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.36</version>
+            <version>1.18.38</version>
 <!--            <scope>provided</scope>-->
             <type>jar</type>
         </dependency>
         
-        <!--Dependencias utilizada para la obtener la ayudas en la codificacion
-        de los proyectos web.-->
+        <!--
+        Dependencias utilizada para la obtener la ayudas en la codificacion
+        de los proyectos web.
+        -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -132,7 +136,9 @@
             <version>1.18.0</version>
             <!--<version>1.17.0</version>-->
             <type>jar</type>
-        </dependency><dependency>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.13.0</version>
@@ -188,24 +194,18 @@
             <groupId>sur.softsurena</groupId>
             <artifactId>RojeruSan.full_9.6</artifactId>
             <version>1</version>
-        </dependency><dependency>
+        </dependency>
+        
+        <dependency>
             <groupId>sur.softsurena</groupId>
             <artifactId>RojeruSan.full_6</artifactId>
             <version>1</version>
         </dependency>
         
-        
-<!--        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-vfs2</artifactId>
-            <version>2.10.0</version>
-        </dependency>-->
-        
         <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
             <version>2.0.3</version>
-            <!--<version>2.0.2</version>-->
             <type>jar</type>
         </dependency>
         
@@ -215,21 +215,22 @@
         <dependency>
             <groupId>com.resend</groupId>
             <artifactId>resend-java</artifactId>
-            <version>4.1.1</version>
-            <!--<version>3.2.0</version>-->
+            <version>4.2.0</version>
         </dependency>
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
-            <!--<version>2.0.13</version>-->
-        </dependency><dependency>
+        </dependency>
+        
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.17</version>
-            <!--<version>2.0.13</version>-->
-        </dependency><!--        Dependecia de SophiaStudio-->
+        </dependency>
+        
+        <!--        Dependecia de SophiaStudio-->
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
@@ -254,12 +255,15 @@
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
-        </dependency><dependency>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.11.0</version>
             <type>jar</type>
-        </dependency><!--Mis dependencias-->       
+        </dependency>
+        
+        <!--Mis dependencias-->       
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
@@ -272,9 +276,6 @@
             <version>1.0</version>
             <type>jar</type>
         </dependency>
-        
-        
-        <!--N2CARE-->
         
         <dependency>
             <groupId>com.softsurena</groupId>
@@ -328,6 +329,12 @@
             <artifactId>dpfpenrollment</artifactId>
             <version>1.5.0_14</version>
             <type>jar</type>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.12</version>
         </dependency>
         
     </dependencies>

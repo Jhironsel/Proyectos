@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import lombok.Getter;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.ContactoEmail;
@@ -169,7 +170,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         };
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel16 = new javax.swing.JPanel();
-        btnImprimirInforme1 = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnImprimirInforme = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnHistorialClientes = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnActualizarRegistrosCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
         jLabel1 = new javax.swing.JLabel();
@@ -178,7 +179,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jsPaginaNro = new javax.swing.JSpinner();
         jspMantenimiento = new javax.swing.JScrollPane();
         jpMantenimiento = new javax.swing.JPanel();
-        jpMantenimiento2 = new javax.swing.JPanel();
         jtpGeneralesDireccionContactos = new javax.swing.JTabbedPane();
         jpGenerales = new javax.swing.JPanel();
         jcbSexo = new javax.swing.JComboBox<>();
@@ -295,12 +295,14 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jpGeneral.setName("jpGeneral"); // NOI18N
 
         jtpPrincipal.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
+        jtpPrincipal.setName("jtpPrincipal"); // NOI18N
 
         jspClientes.setName("jspClientes"); // NOI18N
 
         jpClientes.setName("jpClientes"); // NOI18N
 
         jScrollPane6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -331,20 +333,22 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jScrollPane6.setViewportView(tblClientes);
 
         jScrollPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         jPanel16.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(187, 187, 187), 1, true));
+        jPanel16.setName("jPanel16"); // NOI18N
         jPanel16.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        btnImprimirInforme1.setText("Informe cliente");
-        btnImprimirInforme1.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PRINT);
-        btnImprimirInforme1.setName("btnImprimirInforme"); // NOI18N
-        btnImprimirInforme1.setRound(40);
-        btnImprimirInforme1.addActionListener(new java.awt.event.ActionListener() {
+        btnImprimirInforme.setText("Informe cliente");
+        btnImprimirInforme.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PRINT);
+        btnImprimirInforme.setName("btnImprimirInforme"); // NOI18N
+        btnImprimirInforme.setRound(40);
+        btnImprimirInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImprimirInforme1ActionPerformed(evt);
+                btnImprimirInformeActionPerformed(evt);
             }
         });
-        jPanel16.add(btnImprimirInforme1);
+        jPanel16.add(btnImprimirInforme);
 
         btnHistorialClientes.setText("Historial de Cliente");
         btnHistorialClientes.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
@@ -371,10 +375,12 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jScrollPane2.setViewportView(jPanel16);
 
         jLabel1.setText("Cantidad Reg.");
+        jLabel1.setName("jLabel1"); // NOI18N
 
         jsCantidadFilas.setModel(new javax.swing.SpinnerNumberModel(20, 10, null, 1));
         jsCantidadFilas.setMaximumSize(new java.awt.Dimension(50, 27));
         jsCantidadFilas.setMinimumSize(new java.awt.Dimension(20, 27));
+        jsCantidadFilas.setName("jsCantidadFilas"); // NOI18N
         jsCantidadFilas.setPreferredSize(new java.awt.Dimension(30, 27));
         jsCantidadFilas.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -383,10 +389,12 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         });
 
         jLabel2.setText("Pagina No.");
+        jLabel2.setName("jLabel2"); // NOI18N
 
         jsPaginaNro.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         jsPaginaNro.setMaximumSize(new java.awt.Dimension(50, 27));
         jsPaginaNro.setMinimumSize(new java.awt.Dimension(20, 27));
+        jsPaginaNro.setName("jsPaginaNro"); // NOI18N
         jsPaginaNro.setPreferredSize(new java.awt.Dimension(30, 27));
         jsPaginaNro.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -412,7 +420,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                     .addGroup(jpClientesLayout.createSequentialGroup()
                         .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane6)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 862, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         jpClientesLayout.setVerticalGroup(
@@ -438,8 +446,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jspMantenimiento.setName("jspMantenimiento"); // NOI18N
 
         jpMantenimiento.setName("jpMantenimiento"); // NOI18N
-
-        jpMantenimiento2.setName("jpMantenimiento2"); // NOI18N
 
         jtpGeneralesDireccionContactos.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true)));
         jtpGeneralesDireccionContactos.setToolTipText("");
@@ -646,6 +652,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jpDireccion.setToolTipText("Acceso con Control + 2");
         jpDireccion.setName("jpDireccion"); // NOI18N
 
+        jPanel5.setName("jPanel5"); // NOI18N
         jPanel5.setLayout(new java.awt.GridLayout(1, 3, 6, 0));
 
         jcbProvincias.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
@@ -697,6 +704,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         });
         jPanel5.add(jcbDistritoMunicipal);
 
+        jPanel6.setName("jPanel6"); // NOI18N
+
+        jPanel7.setName("jPanel7"); // NOI18N
         jPanel7.setLayout(new java.awt.GridLayout(1, 5, 5, 0));
 
         btnAgregarDirecciones.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PLUS_ONE);
@@ -764,6 +774,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 .addContainerGap())
         );
 
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
         tblDireccion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null}
@@ -785,6 +797,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         tblDireccion.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblDireccion.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblDireccion.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblDireccion.setName("tblDireccion"); // NOI18N
         tblDireccion.setShowGrid(true);
         tblDireccion.setSurrendersFocusOnKeystroke(true);
         tblDireccion.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -828,6 +841,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jpContactos.setName("jpContactos"); // NOI18N
 
         jtpContactos.setName("telefonoCorreos"); // NOI18N
+
+        jpTelefonos.setName("jpTelefonos"); // NOI18N
+
+        jPanel8.setName("jPanel8"); // NOI18N
 
         txtTelelfonoMovil.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Número"));
         try {
@@ -874,6 +891,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             }
         });
 
+        jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
         btnGMovilTelefono.add(jrbResidencial);
@@ -921,6 +939,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 .addGap(3, 3, 3))
         );
 
+        jScrollPane5.setName("jScrollPane5"); // NOI18N
+
         tblTelefonos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}
@@ -942,6 +962,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         tblTelefonos.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblTelefonos.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblTelefonos.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblTelefonos.setName("tblTelefonos"); // NOI18N
         tblTelefonos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblTelefonosMouseClicked(evt);
@@ -970,6 +991,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         );
 
         jtpContactos.addTab("Teléfonico", jpTelefonos);
+
+        jpCorreos.setName("jpCorreos"); // NOI18N
+
+        jPanel12.setName("jPanel12"); // NOI18N
 
         btnAgregarCorreo.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.PLUS_ONE);
         btnAgregarCorreo.setName("btnAgregarCorreo"); // NOI18N
@@ -1037,6 +1062,8 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 .addContainerGap())
         );
 
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
+
         tblCorreos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, "", null, null}
@@ -1058,6 +1085,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         tblCorreos.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblCorreos.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblCorreos.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblCorreos.setName("tblCorreos"); // NOI18N
         tblCorreos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCorreosMouseClicked(evt);
@@ -1109,42 +1137,25 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         jlFechaCreacion.setText("Fecha de creacion: ");
         jlFechaCreacion.setName("jlFechaCreacion"); // NOI18N
 
-        javax.swing.GroupLayout jpMantenimiento2Layout = new javax.swing.GroupLayout(jpMantenimiento2);
-        jpMantenimiento2.setLayout(jpMantenimiento2Layout);
-        jpMantenimiento2Layout.setHorizontalGroup(
-            jpMantenimiento2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpMantenimiento2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpMantenimiento2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtpGeneralesDireccionContactos)
-                    .addComponent(jlFechaCreacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jpMantenimiento2Layout.setVerticalGroup(
-            jpMantenimiento2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpMantenimiento2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlFechaCreacion)
-                .addGap(0, 0, 0)
-                .addComponent(jtpGeneralesDireccionContactos)
-                .addContainerGap())
-        );
-
         javax.swing.GroupLayout jpMantenimientoLayout = new javax.swing.GroupLayout(jpMantenimiento);
         jpMantenimiento.setLayout(jpMantenimientoLayout);
         jpMantenimientoLayout.setHorizontalGroup(
             jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpMantenimiento2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE)
+                .addGroup(jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtpGeneralesDireccionContactos)
+                    .addComponent(jlFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         jpMantenimientoLayout.setVerticalGroup(
             jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpMantenimiento2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE)
+                .addComponent(jlFechaCreacion)
+                .addGap(0, 0, 0)
+                .addComponent(jtpGeneralesDireccionContactos)
+                .addGap(47, 47, 47))
         );
 
         jspMantenimiento.setViewportView(jpMantenimiento);
@@ -1249,7 +1260,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
                     .addComponent(jtpPrincipal))
                 .addContainerGap())
         );
@@ -1628,28 +1639,27 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        Persona persona
-                = Persona
-                        .builder()
-                        .idPersona(idCliente)
-                        .persona(
-                                ((TipoPersona) jcbPersona.getSelectedItem())
-                                        .getAbreviatura()
+        Persona persona = Persona
+                .builder()
+                .idPersona(idCliente)
+                .persona(
+                        ((TipoPersona) jcbPersona.getSelectedItem())
+                                .getAbreviatura()
+                )
+                .sexo(
+                        ((Sexo) jcbSexo.getSelectedItem())
+                                .getAbreviatura()
+                )
+                .pnombre(txtPNombre.getText())
+                .snombre(txtSNombre.getText())
+                .apellidos(txtApellidos.getText())
+                .fecha_nacimiento(
+                        new java.sql.Date(
+                                dchFechaNacimiento.getDate().getTime()
                         )
-                        .sexo(
-                                ((Sexo) jcbSexo.getSelectedItem())
-                                        .getAbreviatura()
-                        )
-                        .pnombre(txtPNombre.getText())
-                        .snombre(txtSNombre.getText())
-                        .apellidos(txtApellidos.getText())
-                        .fecha_nacimiento(
-                                new java.sql.Date(
-                                        dchFechaNacimiento.getDate().getTime()
-                                )
-                        )
-                        .estado(cbEstado.isSelected())
-                        .build();
+                )
+                .estado(cbEstado.isSelected())
+                .build();
 
         Resultado resultados = (v_nuevo ? M_Persona.insert(persona) : M_Persona.update(persona));
 
@@ -1739,8 +1749,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             );
         }
 
-        //TODO 27/01/2025 Cambio de una Internal a una normal.
-        JOptionPane.showMessageDialog(
+        JOptionPane.showInternalMessageDialog(
                 this,
                 resultados,
                 "",
@@ -2124,12 +2133,6 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
     }//GEN-LAST:event_btnAgregarTelefonoMovilActionPerformed
 
-    private void limpiarTxtTelefonoMovil() {
-        txtTelelfonoMovil.setValue("");
-        txtTelelfonoMovil.requestFocus();
-        jrbMovil.setSelected(true);
-    }
-
     private void btnBorrarTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarTelefonoActionPerformed
 
         if (v_nuevo) {
@@ -2384,89 +2387,10 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             }
         }
     }//GEN-LAST:event_btnCedulaValidadActionPerformed
+
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         btnBotonesPrivilegios();
     }//GEN-LAST:event_formInternalFrameOpened
-
-    private static void btnBotonesPrivilegios() {
-        //1) Llenar la lista de clientes en el sistema.
-        llenarTablaClientes();
-
-        //2) Llenar los comboBox de las provincias.
-        jcbProvincias.removeAllItems();
-        M_Provincia.select(
-                Provincia
-                        .builder()
-                        .build()
-        ).forEach(
-                provincia -> {
-                    jcbProvincias.addItem(provincia);
-                }
-        );
-
-        //3) Llenar los comboBox de las personas juridicas.
-        jcbPersona.removeAllItems();
-        M_TipoPersona.getTipoPersonaList().stream().forEach(
-                tipoPersona -> jcbPersona.addItem(tipoPersona)
-        );
-
-        //4) Obtener la lista de sexo de personas.
-        jcbSexo.removeAllItems();
-        M_Sexo.getSexoList().stream().forEach(
-                sexo -> jcbSexo.addItem(sexo)
-        );
-
-        //5) Obtener la lista de estado civil de las personas.
-        jcbEstadoCivil.removeAllItems();
-        M_EstadoCivil.getEstadoCivilList().stream().forEach(
-                estadoCivil -> jcbEstadoCivil.addItem(estadoCivil)
-        );
-
-        //Validando los botones por consultas.
-        //Permiso para el boton de nuevo
-        btnNuevoCliente.setEnabled(
-                M_Privilegio.privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("SP_I_PERSONA")
-                                .nombre_campo("^")
-                                .build()
-                )
-                && M_Privilegio.privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("SP_I_PERSONA_CLIENTE")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-
-        //Permiso para el boton de Borrar
-        btnBorrarCliente.setEnabled(
-                M_Privilegio.privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("SP_D_PERSONA_CLIENTE")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-
-        //Permiso para el boton de Modificar
-        btnEditarCliente.setEnabled(
-                M_Privilegio.privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("SP_U_PERSONA")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
-    }
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
         btnAgregarCorreo.doClick();
@@ -2571,9 +2495,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_jtpGeneralesDireccionContactosKeyPressed
 
-    private void btnImprimirInforme1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirInforme1ActionPerformed
+    private void btnImprimirInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirInformeActionPerformed
         // TODO Trabajando en la impresion del listado de los clientes.
-    }//GEN-LAST:event_btnImprimirInforme1ActionPerformed
+    }//GEN-LAST:event_btnImprimirInformeActionPerformed
 
     private void jsCantidadFilasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jsCantidadFilasStateChanged
         llenarTablaClientes();
@@ -2649,7 +2573,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int cantidad = jcbProvincias.getItemCount();
-                        if(cantidad != 0){
+                        if (cantidad != 0) {
                             int randon = (int) (Math.random() * cantidad);
                             if (randon == 0) {
                                 randon++;
@@ -2694,7 +2618,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int cantidad = jcbMunicipios.getItemCount();
-                        if(cantidad != 0){
+                        if (cantidad != 0) {
                             int randon = (int) (Math.random() * cantidad);
                             if (randon == 0) {
                                 randon++;
@@ -2717,7 +2641,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int cantidad = jcbDistritoMunicipal.getItemCount();
-                        if(cantidad != 0){
+                        if (cantidad != 0) {
                             int randon = (int) (Math.random() * cantidad);
                             jcbDistritoMunicipal.setSelectedIndex(randon);
                         }
@@ -2733,7 +2657,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
                         int cantidad = tblClientes.getRowCount();
-                        if(cantidad != 0){
+                        if (cantidad != 0) {
                             int randon = (int) (Math.random() * cantidad);
 
                             if (randon == 0) {
@@ -2748,6 +2672,86 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_tblClientesKeyPressed
 
+    private static void btnBotonesPrivilegios() {
+        //1) Llenar la lista de clientes en el sistema.
+        llenarTablaClientes();
+
+        //2) Llenar los comboBox de las provincias.
+        jcbProvincias.removeAllItems();
+        M_Provincia.select(
+                Provincia
+                        .builder()
+                        .build()
+        ).forEach(
+                provincia -> {
+                    jcbProvincias.addItem(provincia);
+                }
+        );
+
+        //3) Llenar los comboBox de las personas juridicas.
+        jcbPersona.removeAllItems();
+        M_TipoPersona.getTipoPersonaList().stream().forEach(
+                tipoPersona -> jcbPersona.addItem(tipoPersona)
+        );
+
+        //4) Obtener la lista de sexo de personas.
+        jcbSexo.removeAllItems();
+        M_Sexo.getSexoList().stream().forEach(
+                sexo -> jcbSexo.addItem(sexo)
+        );
+
+        //5) Obtener la lista de estado civil de las personas.
+        jcbEstadoCivil.removeAllItems();
+        M_EstadoCivil.getEstadoCivilList().stream().forEach(
+                estadoCivil -> jcbEstadoCivil.addItem(estadoCivil)
+        );
+
+        //Validando los botones por consultas.
+        //Permiso para el boton de nuevo
+        btnNuevoCliente.setEnabled(
+                M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("SP_I_PERSONA")
+                                .nombre_campo("^")
+                                .build()
+                )
+                && M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("SP_I_PERSONA_CLIENTE")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        //Permiso para el boton de Borrar
+        btnBorrarCliente.setEnabled(
+                M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("SP_D_PERSONA_CLIENTE")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+
+        //Permiso para el boton de Modificar
+        btnEditarCliente.setEnabled(
+                M_Privilegio.privilegio(
+                        Privilegio
+                                .builder()
+                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+                                .nombre_relacion("SP_U_PERSONA")
+                                .nombre_campo("^")
+                                .build()
+                )
+        );
+    }
+    
     /**
      * Este metodo valida que: <br>
      * 1) Que en la tabla de los clientes del sistema deben de existir mas
@@ -2971,86 +2975,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         txtDireccion.setText("");
         txtDireccion.requestFocus();
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonMaterialIconOne btnActualizarRegistrosCliente;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarCorreo;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarDirecciones;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarTelefonoMovil;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCliente;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCorreo;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarDirrecion;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarTelefono;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnCedulaValidad;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnEditarCliente;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarCorreo;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarDireccion;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarTelefono;
-    private javax.swing.ButtonGroup btnGMovilTelefono;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnHistorialClientes;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnImprimirInforme1;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
-    private javax.swing.JCheckBox cbEstado;
-    private com.toedter.calendar.JDateChooser dchFechaNacimiento;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JComboBox<DistritoMunicipal> jcbDistritoMunicipal;
-    private static javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
-    private javax.swing.JComboBox<Municipio> jcbMunicipios;
-    private static javax.swing.JComboBox<TipoPersona> jcbPersona;
-    private static javax.swing.JComboBox<Provincia> jcbProvincias;
-    private static javax.swing.JComboBox<Sexo> jcbSexo;
-    private javax.swing.JLabel jlFechaCreacion;
-    private javax.swing.JPanel jpBotones;
-    private javax.swing.JPanel jpBotones2;
-    private javax.swing.JPanel jpClientes;
-    private javax.swing.JPanel jpContactos;
-    private javax.swing.JPanel jpCorreos;
-    private javax.swing.JPanel jpDireccion;
-    private javax.swing.JPanel jpGeneral;
-    private javax.swing.JPanel jpGenerales;
-    private javax.swing.JPanel jpMantenimiento;
-    private javax.swing.JPanel jpMantenimiento2;
-    private javax.swing.JPanel jpTelefonos;
-    private javax.swing.JRadioButton jrbMovil;
-    private javax.swing.JRadioButton jrbResidencial;
-    private static javax.swing.JSpinner jsCantidadFilas;
-    private static javax.swing.JSpinner jsPaginaNro;
-    private javax.swing.JScrollPane jspClientes;
-    private javax.swing.JScrollPane jspGeneral;
-    private javax.swing.JScrollPane jspMantenimiento;
-    private javax.swing.JTabbedPane jtpContactos;
-    private javax.swing.JTabbedPane jtpGeneralesDireccionContactos;
-    public static javax.swing.JTabbedPane jtpPrincipal;
-    private static rojerusan.RSTableMetro1 tblClientes;
-    private static rojerusan.RSTableMetro1 tblCorreos;
-    private static rojerusan.RSTableMetro1 tblDireccion;
-    private static rojerusan.RSTableMetro1 tblTelefonos;
-    private javax.swing.JTextField txtApellidos;
-    private javax.swing.JFormattedTextField txtCedula;
-    private javax.swing.JFormattedTextField txtCedula1;
-    private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtPNombre;
-    private javax.swing.JTextField txtSNombre;
-    private javax.swing.JFormattedTextField txtTelelfonoMovil;
-    // End of variables declaration//GEN-END:variables
-
+    
     /**
      * Es el metodo encargado de llenar el formulario del cliente cuando este se
      * va a modificar en la base de datos.<br>
@@ -3306,4 +3231,88 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         tblDireccion.setModel(v_dtmDireccion);
         return tblDireccion;
     }
+    
+    private void limpiarTxtTelefonoMovil() {
+        txtTelelfonoMovil.setValue("");
+        txtTelelfonoMovil.requestFocus();
+        jrbMovil.setSelected(true);
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSButtonMaterialIconOne btnActualizarRegistrosCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarCorreo;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarDirecciones;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarTelefonoMovil;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCorreo;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarDirrecion;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarTelefono;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnCedulaValidad;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnEditarCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarCorreo;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarDireccion;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnEditarTelefono;
+    private javax.swing.ButtonGroup btnGMovilTelefono;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnHistorialClientes;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnImprimirInforme;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
+    private javax.swing.JCheckBox cbEstado;
+    private com.toedter.calendar.JDateChooser dchFechaNacimiento;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JComboBox<sur.softsurena.entidades.DistritoMunicipal> jcbDistritoMunicipal;
+    private static javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
+    private javax.swing.JComboBox<Municipio> jcbMunicipios;
+    private static javax.swing.JComboBox<TipoPersona> jcbPersona;
+    private static javax.swing.JComboBox<Provincia> jcbProvincias;
+    private static javax.swing.JComboBox<Sexo> jcbSexo;
+    private javax.swing.JLabel jlFechaCreacion;
+    private javax.swing.JPanel jpBotones;
+    private javax.swing.JPanel jpBotones2;
+    private javax.swing.JPanel jpClientes;
+    private javax.swing.JPanel jpContactos;
+    private javax.swing.JPanel jpCorreos;
+    private javax.swing.JPanel jpDireccion;
+    private javax.swing.JPanel jpGeneral;
+    private javax.swing.JPanel jpGenerales;
+    private javax.swing.JPanel jpMantenimiento;
+    private javax.swing.JPanel jpTelefonos;
+    private javax.swing.JRadioButton jrbMovil;
+    private javax.swing.JRadioButton jrbResidencial;
+    private static javax.swing.JSpinner jsCantidadFilas;
+    private static javax.swing.JSpinner jsPaginaNro;
+    private javax.swing.JScrollPane jspClientes;
+    private javax.swing.JScrollPane jspGeneral;
+    private javax.swing.JScrollPane jspMantenimiento;
+    private javax.swing.JTabbedPane jtpContactos;
+    private javax.swing.JTabbedPane jtpGeneralesDireccionContactos;
+    private static javax.swing.JTabbedPane jtpPrincipal;
+    private static rojerusan.RSTableMetro1 tblClientes;
+    private static rojerusan.RSTableMetro1 tblCorreos;
+    private static rojerusan.RSTableMetro1 tblDireccion;
+    private static rojerusan.RSTableMetro1 tblTelefonos;
+    private javax.swing.JTextField txtApellidos;
+    private javax.swing.JFormattedTextField txtCedula;
+    private javax.swing.JFormattedTextField txtCedula1;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtPNombre;
+    private javax.swing.JTextField txtSNombre;
+    private javax.swing.JFormattedTextField txtTelelfonoMovil;
+    // End of variables declaration//GEN-END:variables
 }

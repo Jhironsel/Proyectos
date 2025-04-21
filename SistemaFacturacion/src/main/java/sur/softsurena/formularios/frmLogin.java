@@ -4,18 +4,17 @@ import RSMaterialComponent.RSButtonMaterialIconOne;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import sur.softsurena.FirebirdEventos.FirebirdEventos;
 import sur.softsurena.conexion.Conexion;
+import sur.softsurena.conexion.frmParametros;
 import sur.softsurena.metodos.Imagenes;
-import static sur.softsurena.metodos.M_BaseDeDatos.periodoMaquina;
-import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -267,122 +266,35 @@ public final class frmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        //Validación de campos del login. 
-        if (txtUsuario.getText().isBlank()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Ingrese un usuario",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtUsuario.requestFocus();
+        if(!Conexion.validarUsario(txtUsuario, txtClave, this)){
             return;
-        }
-
-        if (txtClave.getPassword().length == 0) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Inserte una clave",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtClave.requestFocus();
-            return;
-        }//Fin de validaciones de campos
-
-        frmParametros parametros = frmParametros.getInstance();
-
-        Conexion.getInstance(
-                txtUsuario.getText(),
-                new String(txtClave.getPassword()),
-                parametros.cargarParamentos().getPathBaseDatos(),
-                parametros.cargarParamentos().getHost(),
-                parametros.cargarParamentos().getPuerto(),
-                "NONE"
-        );
-
-        Resultado resultado = Conexion.verificar();
-
-        if (!resultado.getEstado()) {
-            int num = JOptionPane.showConfirmDialog(
-                    this,
-                    "Este equipo no esta Autorizado! \nDesea Registrar?",
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            if (num == JOptionPane.YES_OPTION) {
-                registro();
-                Conexion.setInstanceNull();
-                return;
-            }
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    resultado.getMensaje(),
-                    "",
-                    resultado.getIcono()
-            );
-
-            txtClave.setText("");
-            txtUsuario.setText("");
-            txtUsuario.requestFocus();
-            return;
-        }
-
-        //Comprobación de los dias restante de la licencia.
-        int dia = periodoMaquina();
-        if (dia < 1) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Licencia expirada...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-            int resp = JOptionPane.showConfirmDialog(
-                    this,
-                    "Desea registrar el producto?",
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            
-            if (resp == JOptionPane.OK_OPTION) {
-                registro();
-            }
-            return;
-        }
-
-        if (dia > 1 && dia < 10) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Tiempo de version de prueba se acaba en " + dia + " dias.",
-                    "",
-                    JOptionPane.WARNING_MESSAGE
-            );
         }
         
+//        FirebirdEventos firebirdEvetos = new FirebirdEventos();
         
-        FirebirdEventos firebirdEvetos = new FirebirdEventos();
-        
-        firebirdEvetos.conectese(
-                txtUsuario.getText(), 
-                new String(txtClave.getPassword())
-        );
-
-        if (!firebirdEvetos.registro()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Eventos no han sido registrado, deberá siempre actualizar las tablas.",
-                    "",
-                    JOptionPane.WARNING_MESSAGE
+        try {
+            FirebirdEventos.createFor(Conexion.getCnn());
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE, 
+                    "No hay coneccion.!!!", 
+                    ex
             );
         }
-
-        //Blanquear la pass
-        txtClave.setText("");
-
+//        firebirdEvetos.conectese(
+//                txtUsuario.getText(),
+//                new String(txtClave.getPassword())
+//        );
+//
+//        if (!firebirdEvetos.registro()) {
+//            JOptionPane.showMessageDialog(
+//                    this,
+//                    "Eventos no han sido registrado, deberá siempre actualizar las tablas.",
+//                    "",
+//                    JOptionPane.WARNING_MESSAGE
+//            );
+//        }
+        
         frmPrincipal principal = new frmPrincipal();
         principal.setVisible(true);
         principal.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -427,17 +339,7 @@ public final class frmLogin extends javax.swing.JFrame {
         JLSystema.setText("Usted se encuentra en el SO: " + sistema);
     }//GEN-LAST:event_formWindowOpened
 
-    private void registro() {
-        frmRegistros miRegistros = frmRegistros.getInstance(this, true);
-        miRegistros.setVisible(true);
-
-        if (miRegistros.txtIdMaquina.getText().equalsIgnoreCase("cancelado")) {
-            return;
-        }
-
-        miRegistros.dispose();
-
-    }
+    
 
     public static void main(String args[]) {
         Utilidades.beep();

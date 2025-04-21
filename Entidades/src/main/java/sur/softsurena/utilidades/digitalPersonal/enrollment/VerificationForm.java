@@ -11,7 +11,7 @@ import java.awt.Frame;
 
 public class VerificationForm extends CaptureForm
 {
-	private DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
+	private final DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
 	
 	VerificationForm(Frame owner) {
 		super(owner);
@@ -20,7 +20,7 @@ public class VerificationForm extends CaptureForm
 	@Override protected void init()
 	{
 		super.init();
-		this.setTitle("Fingerprint Enrollment");
+		this.setTitle("Inscripcion de huellas dactilares.");
 		updateStatus(0);
 	}
 
@@ -35,19 +35,19 @@ public class VerificationForm extends CaptureForm
 		{
 			// Compare the feature set with our template
 			DPFPVerificationResult result = 
-				verificator.verify(features, ((MainForm)getOwner()).getTemplate());
+				verificator.verify(features, ((MainForm) getOwner()).getTemplate());
 			updateStatus(result.getFalseAcceptRate());
 			if (result.isVerified())
-				makeReport("The fingerprint was VERIFIED.");
+				makeReport("La huella dactilar fue verificada. COINCIDEN");
 			else
-				makeReport("The fingerprint was NOT VERIFIED.");
+				makeReport("La huella dactilar NO FUE verificada.");
 		}
 	}
 	
 	private void updateStatus(int FAR)
 	{
 		// Show "False accept rate" value
-		setStatus(String.format("False Accept Rate (FAR) = %1$s", FAR));
+		setStatus(String.format("Tasa de aceptación falsa (FAR) = %1$s", FAR));
 	}
 
 }

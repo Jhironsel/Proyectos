@@ -352,7 +352,7 @@ public class M_Producto {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             cs.setInt(1, ID);
 
-            cs.execute();
+            cs.executeUpdate();
 
             return Resultado
                     .builder()

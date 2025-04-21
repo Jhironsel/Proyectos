@@ -3,9 +3,20 @@ package sur.softsurena.control;
 import static sur.softsurena.formularios.frmPrincipal.dpnEscritorio;
 
 public class frmRecetas extends javax.swing.JInternalFrame {
+    private static final long serialVersionUID = 1L;
+    
     private static frmRecetas recetas;
     
-    public frmRecetas() {
+    static{
+    }
+    
+    public frmRecetas(String saludo){
+        frmRecetas aqui = new frmRecetas();
+        aqui.centralizar();
+        System.out.println(saludo);
+    }
+    
+    private frmRecetas() {
         initComponents();
     }
     public synchronized static frmRecetas getRecetas(){

@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.modulo_comun.frmUsuarios;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;

@@ -17,7 +17,7 @@ public class frmLogin extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private SwingWorker<Object, Object> swinWorker;
+    private SwingWorker<?, ?> swinWorker;
 
     public frmLogin() {
         initComponents();

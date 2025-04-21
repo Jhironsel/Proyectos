@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.firebirdsql.event.DatabaseEvent;
 import org.firebirdsql.event.FBEventManager;
 import org.firebirdsql.gds.ng.WireCrypt;
+import sur.softsurena.conexion.frmParametros;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
 import sur.softsurena.formularios.frmClientes;
@@ -12,9 +13,8 @@ import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
 import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
 import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
 import sur.softsurena.formularios.frmDeudas;
-import sur.softsurena.formularios.frmParametros;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
-import static sur.softsurena.formularios.frmUsuarios.llenarTablaUsuarios;
+import static sur.softsurena.modulo_comun.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class FirebirdEventos extends FBEventManager {

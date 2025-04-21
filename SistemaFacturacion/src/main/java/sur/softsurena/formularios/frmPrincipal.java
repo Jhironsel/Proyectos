@@ -1,5 +1,11 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.modulo_comun.frmEmpresaDatos;
+import sur.softsurena.modulo_comun.frmCambioClave;
+import sur.softsurena.modulo_comun.frmAcercaDe;
+import sur.softsurena.modulo_comun.frmImpresoras2;
+import sur.softsurena.modulo_comun.frmUsuarios;
+import sur.softsurena.modulo_comun.frmPersonas;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -16,7 +22,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import lombok.Getter;
 import lombok.NonNull;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -48,7 +53,6 @@ import sur.softsurena.utilidades.Utilidades;
  *
  * @author jhironsel
  */
-@Getter
 public final class frmPrincipal extends javax.swing.JFrame {
 
     //Formularios Modales
@@ -1164,7 +1168,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOcultarPanelActionPerformed
 
     private void mnuMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoClientesActionPerformed
-        abrirFormulario(frmClientes.getInstance());
+        //abrirFormulario(frmClientes.getInstance());
+        var persona = frmPersonas.getInstance();
+//        persona.get
+        abrirFormulario(persona);
     }//GEN-LAST:event_mnuMantenimientoClientesActionPerformed
 
     private void mnuMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProductosActionPerformed

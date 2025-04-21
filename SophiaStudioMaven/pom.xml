@@ -12,10 +12,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <dependencies>
-
         <dependency>
             <groupId>sur.softsurena</groupId>
-            <artifactId>Entidades</artifactId>
+            <artifactId>Modulo_Comun</artifactId>
             <version>2</version>
             <type>jar</type>
         </dependency>

@@ -18,7 +18,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Mensualidad {
     private final Integer id;
-    private final Estudiante estudiante;
+    private final Integer idEstudiante;
     private final BigDecimal monto;
     private final Date fecha;
+    
 }

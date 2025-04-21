@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class frmEliminarMotivo extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     private final JPanel comp;
     
     public frmEliminarMotivo(JFrame f, boolean b, JPanel comp) {
@@ -82,7 +84,7 @@ public class frmEliminarMotivo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        DefaultListModel modelo = new DefaultListModel();
+        DefaultListModel<Object> modelo = new DefaultListModel<>();
         for (Component obj: comp.getComponents()) {
             if(obj.getName() != null){
                 modelo.addElement(obj.getName());

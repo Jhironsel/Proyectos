@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +23,7 @@ public class M_ARS {
      * @param ars
      * @return retorna una lista completa de los seguros sociales del sistema.
      */
-    public synchronized static List<ARS> select(
+    public static List<ARS> select(
             @NonNull ARS ars
     ) {
         List<ARS> arsList = new ArrayList<>();
@@ -80,7 +79,7 @@ public class M_ARS {
      *
      * @return
      */
-    public synchronized static Resultado insert(ARS ars) {
+    public static Resultado insert(ARS ars) {
         final String sql
                 = """
                   SELECT O_ID 
@@ -134,7 +133,7 @@ public class M_ARS {
      * @param ars
      * @return
      */
-    public synchronized static Resultado update(ARS ars) {
+    public static Resultado update(ARS ars) {
         String sql = "EXECUTE PROCEDURE SP_U_ARS (?, ?, ?, ?);";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -181,7 +180,7 @@ public class M_ARS {
      * @param ars
      * @return
      */
-    public synchronized static Resultado delete(ARS ars) {
+    public static Resultado delete(ARS ars) {
         final String sql = "EXECUTE PROCEDURE SP_D_ARS(?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(

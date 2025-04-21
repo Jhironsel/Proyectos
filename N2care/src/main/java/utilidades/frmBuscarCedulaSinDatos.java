@@ -1,6 +1,8 @@
 package utilidades;
 
 public class frmBuscarCedulaSinDatos extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     
     public frmBuscarCedulaSinDatos(java.awt.Frame parent, boolean modal) {

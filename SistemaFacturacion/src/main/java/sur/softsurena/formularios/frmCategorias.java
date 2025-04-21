@@ -32,7 +32,7 @@ public class frmCategorias extends javax.swing.JDialog {
     private static boolean modal;
 
     public static frmCategorias getInstance(frmPrincipal parent, boolean modal) {
-        principal = parent;
+        frmCategorias.principal = parent;
         frmCategorias.modal = modal;
         return NewSingletonHolder.INSTANCE;
     }
@@ -283,9 +283,16 @@ public class frmCategorias extends javax.swing.JDialog {
 
         if (miCategoria.getAceptar()) {
             if (!nombreCategoria.equals(miCategoria.txtCategoria.getText())) {
-                if (M_Categoria.exist(
-                        miCategoria.txtCategoria.getText()
-                )) {
+                
+                var categoriaLista = M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .descripcion(miCategoria.txtCategoria.getText())
+                                .build()
+                );
+                
+                
+                if (!categoriaLista.isEmpty()) {
                     JOptionPane.showMessageDialog(
                             this,
                             "Este nombre de Categoria Existe",

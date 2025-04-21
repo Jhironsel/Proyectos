@@ -703,7 +703,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
         
     }//GEN-LAST:event_formWindowClosing
 
-    private synchronized void clientes() {
+    private void clientes() {
         cmbCliente.removeAllItems();
         cmbCliente.repaint();
         Categoria opc;
@@ -725,7 +725,7 @@ public class frmCajeros extends javax.swing.JFrame implements Runnable {
 //        }
     }
 
-    private synchronized void cmProductos() {
+    private void cmProductos() {
         cmbProducto.removeAllItems();
         textAutoCompleter.removeAllItems();
 //        Categoria opc = new Categoria(-1, "Seleccione un Producto...");

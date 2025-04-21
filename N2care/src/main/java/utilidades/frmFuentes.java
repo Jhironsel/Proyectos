@@ -10,6 +10,8 @@ import javax.swing.JColorChooser;
 
 public class frmFuentes extends javax.swing.JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     private Font fuente;
     private Color color;
 

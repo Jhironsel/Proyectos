@@ -7,7 +7,7 @@ public class FechaHora {
 
     private final Date curDate;
     private final SimpleDateFormat dateFormat;
-    private SimpleDateFormat dateFormat1;
+    private final SimpleDateFormat dateFormat1;
 
     public FechaHora() {
         GregorianCalendar currentDate = new GregorianCalendar();
@@ -19,6 +19,7 @@ public class FechaHora {
     public FechaHora(Date fecha){        
         curDate = fecha;
         dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateFormat1 = new SimpleDateFormat("HH:mm:ss");
     }
     
     public String getFecha() {

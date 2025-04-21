@@ -433,7 +433,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.body</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <negated>false</negated>
@@ -448,7 +448,7 @@
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>1</windowIndex>
+        <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <doubleClick>false</doubleClick>

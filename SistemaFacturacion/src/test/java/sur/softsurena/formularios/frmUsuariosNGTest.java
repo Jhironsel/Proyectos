@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.modulo_comun.frmUsuarios;
 import java.io.File;
 import javax.swing.JTable;
 import static org.testng.Assert.*;

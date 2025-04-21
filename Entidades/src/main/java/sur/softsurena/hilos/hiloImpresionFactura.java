@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.formularios.frmPrintFacturaConReporte2;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 

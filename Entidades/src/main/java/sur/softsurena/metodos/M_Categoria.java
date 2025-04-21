@@ -49,7 +49,7 @@ public class M_Categoria {
      * @return Devuelve un conjunto de datos de la tabla Categoria del sistema,
      * donde contiene todos los campos de la tabla.
      */
-    public synchronized static List<Categoria> select(
+    public static List<Categoria> select(
             @NonNull Categoria categoria
     ) {
         List<Categoria> categorias = new ArrayList<>();
@@ -90,7 +90,6 @@ public class M_Categoria {
         Boolean descripcion = Objects.isNull(categoria.getDescripcion());
 
         Boolean where = id && estado && descripcion;
-        Boolean and = id || estado;
 
         return """
                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
@@ -99,7 +98,7 @@ public class M_Categoria {
                """.formatted(
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(categoria.getId_categoria()),
-                and ? "" : "",
+                descripcion ? "" : "DESCRIPCION STARTING WITH '%s' ".formatted(categoria.getDescripcion()),
                 estado ? "" : categoria.getEstado() ? "ESTADO " : "ESTADO IS FALSE "
         ).trim().strip().concat("\nORDER BY 1;");
     }
@@ -116,7 +115,7 @@ public class M_Categoria {
      * @return Retorna un mensaje que permite saber si la categoria fue agregada
      * o no.
      */
-    public synchronized static Resultado insert(Categoria categoria) {
+    public static Resultado insert(Categoria categoria) {
         final String sql = """
                            SELECT ID FROM SP_I_CATEGORIA(?,?)
                            """;
@@ -171,7 +170,7 @@ public class M_Categoria {
      * @return Retorna un valor de tipo String que indica si la operación se
      * realizo con exito si o no.
      */
-    public synchronized static Resultado update(Categoria categoria) {
+    public static Resultado update(Categoria categoria) {
         final String sql
                 = "EXECUTE PROCEDURE SP_U_CATEGORIA(?,?,?)";
 
@@ -268,7 +267,7 @@ public class M_Categoria {
      * @return Retorna un valor boolean indicando si existe o no la descripcion
      * de la categoria que se le pretende dar.
      */
-    public synchronized static Boolean exist(String descripcion) {
+    public static Boolean exist(String descripcion) {
         final String sql
                 = "SELECT (1) FROM V_CATEGORIAS WHERE DESCRIPCION LIKE ?";
 
@@ -283,7 +282,11 @@ public class M_Categoria {
                 return rs.next();
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.log(
+                    Level.SEVERE, 
+                    ex.getMessage(), 
+                    ex
+            );
             return false;
         }
     }

@@ -24,7 +24,7 @@ public class M_Cajero {
      * @return El valor devuelto de este metodo es una lista de atributos de los
      * usuarios del sistema.
      */
-    public synchronized static List<Cajero> select() {
+    public static List<Cajero> select() {
         List<Cajero> cajerosList = new ArrayList<>();
 
         final String SELECT

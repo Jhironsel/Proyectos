@@ -6,8 +6,12 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import lombok.NonNull;
+import static sur.softsurena.metodos.M_BaseDeDatos.periodoMaquina;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -17,18 +21,19 @@ public class Conexion {
     private static String USER, CLAVE, ROLE;
     private static final String PROTOCOLO_FIREBIRD = "jdbc:firebirdsql://";
     private static StringBuilder URL_DB;
-
+    private static frmRegistros miRegistros;
+    
     public static Connection getCnn() {
         return cnn;
     }
 
-    public synchronized static void setCnn(Connection cnn) {
+    public static void setCnn(Connection cnn) {
         Conexion.cnn = cnn;
     }
 
     /**
      * Unico Metodo que permite obtener una instancia de la clase Conexión.La
- cual requeire de los siguientes parametros de entrada.
+     * cual requeire de los siguientes parametros de entrada.
      *
      * @param user Es el usuario registrado en el sistema.
      * @param clave Clave de acceso del usuario.
@@ -51,7 +56,7 @@ public class Conexion {
         Conexion.USER = user;
         Conexion.CLAVE = clave;
         Conexion.ROLE = role;
-        
+
         StringBuilder p = new StringBuilder("");
 
         if (!puerto.isBlank()) {
@@ -70,15 +75,118 @@ public class Conexion {
 
     //--------------------------------------------------------------------------
     private static class ConexionHolder {
+
         private static Conexion INSTANCE = new Conexion();
     }
-    
-    public static void setInstanceNull(){
+
+    public static void setInstanceNull() {
         Conexion.ConexionHolder.INSTANCE = null;
     }
-    
-    private Conexion() {}
-    
+
+    private Conexion() {
+        
+    }
+
+    public static boolean validarUsario(
+            JTextField txtUsuario, JPasswordField txtClave, JFrame jframe
+    ) {
+        //Validación de campos del login. 
+        if (txtUsuario.getText().isBlank()) {
+            JOptionPane.showMessageDialog(
+                    jframe,
+                    "Ingrese un usuario",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            txtUsuario.requestFocus();
+            return false;
+        }
+
+        if (txtClave.getPassword().length == 0) {
+            JOptionPane.showMessageDialog(
+                    jframe,
+                    "Inserte una clave",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            txtClave.requestFocus();
+            return false;
+        }//Fin de validaciones de campos
+
+        frmParametros parametros = frmParametros.getInstance();
+
+        Conexion.getInstance(
+                txtUsuario.getText(),
+                new String(txtClave.getPassword()),
+                parametros.cargarParamentos().getPathBaseDatos(),
+                parametros.cargarParamentos().getHost(),
+                parametros.cargarParamentos().getPuerto(),
+                "NONE"
+        );
+
+        Resultado resultado = Conexion.verificar();
+
+        if (!resultado.getEstado()) {
+            JOptionPane.showMessageDialog(
+                    jframe,
+                    resultado.getMensaje(),
+                    "",
+                    resultado.getIcono()
+            );
+
+            txtClave.setText("");
+            txtUsuario.setText("");
+            txtUsuario.requestFocus();
+            return false;
+        }
+
+        //Comprobación de los dias restante de la licencia.
+        int dia = periodoMaquina();
+        if (dia < 1) {
+            JOptionPane.showMessageDialog(
+                    jframe,
+                    "Licencia expirada...",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            int resp = JOptionPane.showConfirmDialog(
+                    jframe,
+                    "Desea registrar el producto?",
+                    "",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (resp == JOptionPane.OK_OPTION) {
+                miRegistros = frmRegistros.getInstance(null, true);
+                miRegistros.setVisible(true);
+
+                if (miRegistros.txtIdMaquina.getText()
+                        .equalsIgnoreCase("cancelado")) {
+                    return false;
+                }
+
+                miRegistros.dispose();
+                Conexion.setInstanceNull();
+            }
+            return false;
+        }
+
+        if (dia > 1 && dia < 10) {
+            JOptionPane.showMessageDialog(
+                    jframe,
+                    "Tiempo de version de prueba se acaba en " + dia + " dias.",
+                    "",
+                    JOptionPane.WARNING_MESSAGE
+            );
+        }
+
+        //Blanquear la pass
+        txtClave.setText("");
+        return true;
+    }
+
     /**
      * Metodo que permite a los usuarios del sistema validar si estan
      * debidamente Loggeado,
@@ -92,8 +200,8 @@ public class Conexion {
         properties.setProperty("user", Conexion.USER);
         properties.setProperty("password", Conexion.CLAVE);
         properties.setProperty("charSet", "UTF8");
-        
-        if(Objects.nonNull(Conexion.ROLE)){
+
+        if (Objects.nonNull(Conexion.ROLE)) {
             properties.setProperty("roleName", Conexion.ROLE);
         }
 
@@ -101,15 +209,16 @@ public class Conexion {
             setCnn(DriverManager.getConnection(URL_DB.toString(), properties));
             return Resultado
                     .builder()
-                    .mensaje("Mensaje")
+                    .mensaje("Bienvendo al sistema.")
                     .estado(Boolean.TRUE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .build();
         } catch (java.sql.SQLInvalidAuthorizationSpecException ex1) {
+            Utilidades.LOG.setLevel(Level.INFO);
             Utilidades.LOG.log(
-                    Level.SEVERE,
+                    Level.INFO,
                     JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI,
-                    ex1
+                    ex1.getCause()
             );
             return Resultado
                     .builder()
@@ -144,7 +253,11 @@ public class Conexion {
                 mensaje = ex.getMessage();
             }
 
-            Utilidades.LOG.log(Level.SEVERE, mensaje, ex);
+            Utilidades.LOG.log(
+                    Level.SEVERE, 
+                    mensaje, 
+                    ex
+            );
 
             return Resultado
                     .builder()
@@ -168,7 +281,7 @@ public class Conexion {
      * Esta variable indica que el usuario y la contraseña son incorrecto.
      */
     public static final String JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI
-            = "JAVASQL_SQL_INVALID_AUTHORIZATION_SPEC_EXCEPTI";
+            = "Usuario y contraseña incorrecta.!!!";
     /**
      * Esta variable indica que la fecha inicial es incorrecta. Debe ajustar la
      * fecha del servidor.

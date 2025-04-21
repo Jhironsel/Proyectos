@@ -1,8 +1,6 @@
 package sur.softsurena.archivos;
 
 import java.awt.Image;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +26,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     private int numeroUsuarios;
 
     public frmUsuarios() {
-
-        this.map = new HashMap<>();
         initComponents();
+        this.map = new HashMap<>();
         tblUsuarios.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jpbFoto.setVisible(false);
     }
@@ -111,11 +108,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jrbMasculino = new javax.swing.JRadioButton();
         jrbFemenino = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        btnPrimero = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
-        btnSiguiente = new javax.swing.JButton();
-        btnUltimo = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -257,7 +249,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
-        btnValidaLoginName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/icons8-casilla-de-verificación-2-32.png"))); // NOI18N
         btnValidaLoginName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnValidaLoginNameActionPerformed(evt);
@@ -283,7 +274,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         });
 
         cbPerfil.setFont(new java.awt.Font("FreeMono", 0, 14)); // NOI18N
-        cbPerfil.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione Perfil", "DOCTOR", "SECRETARIA" }));
         cbPerfil.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -521,8 +511,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(" Foto "));
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        jlFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/user180x180.png"))); // NOI18N
 
         jpbFoto.setStringPainted(true);
 
@@ -825,67 +813,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Controles", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 14))); // NOI18N
         jPanel1.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
 
-        jPanel5.setLayout(new java.awt.GridLayout(1, 4, 4, 0));
-
-        btnPrimero.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        btnPrimero.setForeground(new java.awt.Color(1, 1, 1));
-        btnPrimero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Anterior 32 x 32.png"))); // NOI18N
-        btnPrimero.setMnemonic('p');
-        btnPrimero.setText("Primero");
-        btnPrimero.setToolTipText("Va al Primer Registro");
-        btnPrimero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrimeroActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnPrimero);
-
-        btnAnterior.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        btnAnterior.setForeground(new java.awt.Color(1, 1, 1));
-        btnAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Izquierda 32 x 32.png"))); // NOI18N
-        btnAnterior.setMnemonic('a');
-        btnAnterior.setText("Anterior");
-        btnAnterior.setToolTipText("Va al Anterior Registro");
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnAnterior);
-
-        btnSiguiente.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        btnSiguiente.setForeground(new java.awt.Color(1, 1, 1));
-        btnSiguiente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Flecha Derecha 32 x 32.png"))); // NOI18N
-        btnSiguiente.setMnemonic('s');
-        btnSiguiente.setText("Siguiente");
-        btnSiguiente.setToolTipText("Va al Siguiente Registro");
-        btnSiguiente.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSiguienteActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnSiguiente);
-
-        btnUltimo.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        btnUltimo.setForeground(new java.awt.Color(1, 1, 1));
-        btnUltimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Siguiente 32 x 32.png"))); // NOI18N
-        btnUltimo.setMnemonic('u');
-        btnUltimo.setText("Ultimo");
-        btnUltimo.setToolTipText("Va al Ultimo Registro");
-        btnUltimo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnUltimo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUltimoActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btnUltimo);
-
         jPanel6.setLayout(new java.awt.GridLayout(1, 0, 4, 0));
 
         btnNuevo.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Documento nuevo 32 x 32.png"))); // NOI18N
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
@@ -901,7 +832,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         btnModificar.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnModificar.setForeground(new java.awt.Color(1, 1, 1));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Editar Documento 32 x 32.png"))); // NOI18N
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
@@ -914,7 +844,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         btnGuardar.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Guardar 32 x 32.png"))); // NOI18N
         btnGuardar.setMnemonic('g');
         btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Guardar Registro Actual");
@@ -928,7 +857,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         btnCancelar.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(1, 1, 1));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Cancelar 32 x 32.png"))); // NOI18N
         btnCancelar.setMnemonic('c');
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la Operacion del Registro");
@@ -942,7 +870,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         btnBorrar.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Borrar 32 x 32.png"))); // NOI18N
         btnBorrar.setMnemonic('b');
         btnBorrar.setText("Borrar");
         btnBorrar.setToolTipText("Borrar Registro Actual");
@@ -955,7 +882,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         btnBuscar.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Buscar3 32 x 32.png"))); // NOI18N
         btnBuscar.setMnemonic('r');
         btnBuscar.setText("Buscar");
         btnBuscar.setToolTipText("Buscar el Registro");
@@ -971,16 +897,13 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -1022,58 +945,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnPrimeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeroActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblUsuarios.isEnabled()) {
-            return;
-        }
-        mostrarRegistro();
-        btnPrimero.requestFocus();
-    }//GEN-LAST:event_btnPrimeroActionPerformed
-
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-        //Se está mostrando el jframe
-        if (!isShowing()) {
-            return;
-        }
-
-        //La tabla de usuario está habilitada.
-        if (!tblUsuarios.isEnabled()) {
-            return;
-        }
-
-        mostrarRegistro();
-        btnAnterior.requestFocus();
-    }//GEN-LAST:event_btnAnteriorActionPerformed
-
-    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblUsuarios.isEnabled()) {
-            return;
-        }
-
-        mostrarRegistro();
-        btnSiguiente.requestFocus();
-    }//GEN-LAST:event_btnSiguienteActionPerformed
-
-    private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
-        if (!isShowing()) {
-            return;
-        }
-
-        if (!tblUsuarios.isEnabled()) {
-            return;
-        }
-        mostrarRegistro();
-        btnUltimo.requestFocus();
-    }//GEN-LAST:event_btnUltimoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         if (!isShowing()) {
@@ -1239,7 +1110,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         navegador(true);
         txtClave.setText("");
         txtClaveRepetir.setText("");
-        btnPrimeroActionPerformed(null);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
@@ -1435,13 +1305,17 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             );
             if (!Objects.isNull(usuario1)) {
 
-                int opc = JOptionPane.showInternalConfirmDialog(this,
-                        "-Usuario ya esta registrado!!! "
-                        + "\n--Se Encuentra Inactivo."
-                        + "\n---Desea activarlo",
-                        "Confirmacion de Usuario",
+                int opc = JOptionPane.showInternalConfirmDialog(
+                        this,
+                        """
+                        Usuario ya esta registrado!!!
+                        Se Encuentra Inactivo.
+                        Desea activarlo?
+                        """,
+                        "",
                         JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.QUESTION_MESSAGE
+                );
 
                 if (opc == JOptionPane.YES_OPTION) {
                     //TODO 14/12/2024 Esta variable fue eliminada del siguiente metodo. true.
@@ -1450,7 +1324,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     txtUserName.requestFocus();
                     txtUserName.setSelectionStart(0);
                     txtUserName.setSelectionEnd(txtUserName.getText().length());
-                    return;
                 }
             }
         }
@@ -1542,7 +1415,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             e.printStackTrace();
         } finally {
             //Segundo hilo para que busque la foto.
-            final SwingWorker<Integer, Integer> w = new SwingWorker() {
+            final SwingWorker<?, ?> w = new SwingWorker<>() {
                 @Override
                 protected Integer doInBackground() throws Exception {
                     jpbFoto.setVisible(true);
@@ -1557,21 +1430,21 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                             publish(53);
                             map.put(txtUserName.getText().trim().toUpperCase(), img.getImage());
                             publish(78);
-                            jlFoto.setIcon(new ImageIcon(
-                                    map.get(txtUserName.getText().trim().toUpperCase())
-                                            .getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+//                            jlFoto.setIcon(new ImageIcon(
+//                                    map.get(txtUserName.getText().trim().toUpperCase())
+//                                            .getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
                             publish(82);
                         } else {
                             publish(79);
-                            jlFoto.setIcon(new ImageIcon(
-                                    getClass().getResource("/imagenes/user180x180.png")));
+//                            jlFoto.setIcon(new ImageIcon(
+//                                    getClass().getResource("/imagenes/user180x180.png")));
                             publish(95);
                         }
                     } else {
                         publish(60);
-                        jlFoto.setIcon(new ImageIcon(
-                                map.get(txtUserName.getText().trim().toUpperCase())
-                                        .getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
+//                        jlFoto.setIcon(new ImageIcon(
+//                                map.get(txtUserName.getText().trim().toUpperCase())
+//                                        .getScaledInstance(180, 180, Image.SCALE_SMOOTH)));
                         publish(84);
                     }
                     return 100;
@@ -1584,10 +1457,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 }
 
                 @Override
-                protected void process(List chunks) {
+                protected void process(List<Object> chunks) {
                     super.process(chunks);
                     jpbFoto.setValue((Integer) chunks.get(0));
-
                 }
 
             };
@@ -1635,11 +1507,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }
 
     private void navegador(boolean b) {
-
-        btnPrimero.setEnabled(b);
-        btnAnterior.setEnabled(b);
-        btnSiguiente.setEnabled(b);
-        btnUltimo.setEnabled(b);
         btnNuevo.setEnabled(b);
         btnModificar.setEnabled(b);
         btnBorrar.setEnabled(b);
@@ -1664,8 +1531,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         cbPerfil.setEnabled(!b);
 
         if (nuevo) {
-            jlFoto.setIcon(new ImageIcon(
-                    getClass().getResource("/imagenes/user180x180.png")));
+//            jlFoto.setIcon(new ImageIcon(
+//                    getClass().getResource("/imagenes/user180x180.png")));
             txtUserName.setEditable(true);
             limpiarCampo();
         } else {
@@ -1690,50 +1557,21 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }
 
     private synchronized void ordenarTabla() {
-        //Cedula
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(0)).setMinWidth(80);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(0)).setMaxWidth(130);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(0)).setPreferredWidth(90);
-        //Cedula
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(1)).setMinWidth(130);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(1)).setMaxWidth(160);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(1)).setPreferredWidth(130);
-        //Cedula Paciente
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(2)).setMinWidth(150);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(2)).setMaxWidth(180);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(2)).setPreferredWidth(150);
-        //Nombre Paciente
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(3)).setMinWidth(115);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(3)).setMaxWidth(170);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(3)).setPreferredWidth(150);
-        //Apellidos Paciente
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(4)).setMinWidth(105);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(4)).setMaxWidth(105);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(4)).setPreferredWidth(105);
-        //Sexo
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(5)).setMinWidth(105);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(5)).setMaxWidth(105);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(5)).setPreferredWidth(105);
-        //Sangre
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(6)).setMinWidth(160);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(6)).setMaxWidth(180);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(6)).setPreferredWidth(160);
-        //Seguro
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(7)).setMinWidth(100);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(7)).setMaxWidth(150);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(7)).setPreferredWidth(110);
-        //NumeroSeguro
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(8)).setMinWidth(110);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(8)).setMaxWidth(150);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(8)).setPreferredWidth(120);
-        //Estado
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(9)).setMinWidth(110);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(9)).setMaxWidth(150);
-        tblUsuarios.getColumn(tblUsuarios.getColumnName(9)).setPreferredWidth(120);
+        int[] minAncho = {80, 130, 150, 115, 105, 105, 160, 100, 100, 110};
+        int[] maxAncho = {130, 160, 180, 170, 105, 105, 180, 150, 150, 150};
+        int[] preAncho = {90, 130, 150, 150, 105, 105, 160, 110, 110, 120};
+        
+        for (int i = 0; i < minAncho.length; i++) {
+            tblUsuarios.getColumn(
+                    tblUsuarios.getColumnName(i)).setMinWidth(minAncho[i]);
+            tblUsuarios.getColumn(
+                    tblUsuarios.getColumnName(i)).setMaxWidth(maxAncho[i]);
+            tblUsuarios.getColumn(
+                    tblUsuarios.getColumnName(i)).setPreferredWidth(preAncho[i]);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
@@ -1741,9 +1579,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnPerfiles;
-    private javax.swing.JButton btnPrimero;
-    private javax.swing.JButton btnSiguiente;
-    private javax.swing.JButton btnUltimo;
     private javax.swing.JButton btnValidaLoginName;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -1769,7 +1604,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;

@@ -24,7 +24,7 @@ public class M_Almacen {
      *
      * @return Una lista de los resultados del sistema.
      */
-    public synchronized static List<Almacen> select(
+    public static List<Almacen> select(
             @NonNull Almacen almacen
     ) {
         final String sql
@@ -79,7 +79,7 @@ public class M_Almacen {
      * @param almacen
      * @return
      */
-    public synchronized static Resultado insert(
+    public static Resultado insert(
             @NonNull Almacen almacen
     ) {
         final String sql
@@ -133,7 +133,7 @@ public class M_Almacen {
      * @param id identificador del registros del sistema.
      * @return
      */
-    public synchronized static Resultado delete(
+    public static Resultado delete(
             int id
     ) {
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -183,7 +183,7 @@ public class M_Almacen {
      *
      * @return
      */
-    public synchronized static Resultado update(
+    public static Resultado update(
             @NonNull Almacen almacen
     ) {
         try (PreparedStatement cs = getCnn().prepareStatement(

@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import javax.swing.ImageIcon;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -46,21 +45,22 @@ public class ImagenesNGTest {
                 instance.getIcono(), 
                 "Obtenemos null de la imagen."
         );
+        
     }
 
     @Test(
-            enabled = false,
+            enabled = true,
             priority = 0,
             description = """
                           """
     )
     public void testGetIcono_int_int() {
-        int ancho = 0;
-        int alto = 0;
-        Imagenes instance = null;
-        ImageIcon expResult = null;
-        ImageIcon result = instance.getIcono(ancho, alto);
-        assertEquals(result, expResult);
+        Imagenes instance = new Imagenes("NoImageTransp 96 x 96.png");
+        
+        assertTrue(
+                instance.getIcono(42, 42).getIconHeight() != 0,
+                "Icono no es mayor que cero."
+        );
     }
 
     @Test

@@ -10,18 +10,18 @@ import java.awt.event.*;
 import java.util.*;
 
 /**
- * Enrollment control test 
+ * Enrollment control test
  */
 public class EnrollmentDialog
-	extends JDialog
-{
+        extends JDialog {
+
     private EnumMap<DPFPFingerIndex, DPFPTemplate> templates;
 
     public EnrollmentDialog(Frame owner, int maxCount, final String reasonToFail, EnumMap<DPFPFingerIndex, DPFPTemplate> templates) {
-        super (owner, true);
+        super(owner, true);
         this.templates = templates;
 
-        setTitle("Fingerprint Enrollment");
+        setTitle("Inscripción de huellas dactilares");
 
         DPFPEnrollmentControl enrollmentControl = new DPFPEnrollmentControl();
 
@@ -30,8 +30,8 @@ public class EnrollmentDialog
         enrollmentControl.setEnrolledFingers(fingers);
         enrollmentControl.setMaxEnrollFingerCount(maxCount);
 
-        enrollmentControl.addEnrollmentListener(new DPFPEnrollmentListener()
-        {
+        enrollmentControl.addEnrollmentListener(new DPFPEnrollmentListener() {
+            @Override
             public void fingerDeleted(DPFPEnrollmentEvent e) throws DPFPEnrollmentVetoException {
                 if (reasonToFail != null) {
                     throw new DPFPEnrollmentVetoException(reasonToFail);
@@ -40,30 +40,30 @@ public class EnrollmentDialog
                 }
             }
 
+            @Override
             public void fingerEnrolled(DPFPEnrollmentEvent e) throws DPFPEnrollmentVetoException {
                 if (reasonToFail != null) {
 //                  e.setStopCapture(false);
                     throw new DPFPEnrollmentVetoException(reasonToFail);
-                } else
+                } else {
                     EnrollmentDialog.this.templates.put(e.getFingerIndex(), e.getTemplate());
+                }
             }
         });
 
-		getContentPane().setLayout(new BorderLayout());
+        getContentPane().setLayout(new BorderLayout());
 
-		JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);                //End Dialog
-            }
+        JButton closeButton = new JButton("Cerrar");
+        closeButton.addActionListener((ActionEvent e) -> {
+            setVisible(false);                //End Dialog
         });
 
-		JPanel bottom = new JPanel();
-		bottom.add(closeButton);
-		add(enrollmentControl, BorderLayout.CENTER);
-		add(bottom, BorderLayout.PAGE_END);
+        JPanel bottom = new JPanel();
+        bottom.add(closeButton);
+        add(enrollmentControl, BorderLayout.CENTER);
+        add(bottom, BorderLayout.PAGE_END);
 
-		pack();
-        setLocationRelativeTo(null);         
-   }
+        pack();
+        setLocationRelativeTo(null);
+    }
 }

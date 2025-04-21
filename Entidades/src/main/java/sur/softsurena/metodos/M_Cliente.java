@@ -30,7 +30,7 @@ public class M_Cliente {
      *
      * @return
      */
-    public synchronized static List<Cliente> select(
+    public static List<Cliente> select(
             @NonNull Cliente cliente
     ) {
         List<Cliente> lista = new ArrayList<>();
@@ -94,7 +94,7 @@ public class M_Cliente {
      *
      * @return
      */
-    public synchronized static List<Cliente> selectATR(
+    public static List<Cliente> selectATR(
             @NonNull Cliente cliente
     ) {
         List<Cliente> lista = new ArrayList<>();
@@ -162,7 +162,7 @@ public class M_Cliente {
      *
      * @return Un objecto de la clase
      */
-    public synchronized static Resultado insertById(int id) {
+    public static Resultado insertById(int id) {
         try (CallableStatement cs = getCnn().prepareCall(
                 "EXECUTE PROCEDURE SP_I_PERSONA_CLIENTE(?)",
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -209,7 +209,7 @@ public class M_Cliente {
      * @param idCliente
      * @return
      */
-    public synchronized static Resultado delete(int idCliente) {
+    public static Resultado delete(int idCliente) {
         final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_CLIENTE (?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

@@ -14,8 +14,7 @@ import java.util.*;
 /**
  * Enrollment control test console
  */
-public class MainForm
-        extends JFrame {
+public class MainForm extends JFrame {
 
     private EnumMap<DPFPFingerIndex, DPFPTemplate> templates = new EnumMap<>(DPFPFingerIndex.class);
     private final EnumMap<DPFPFingerIndex, JCheckBox> checkBoxes = new EnumMap<>(DPFPFingerIndex.class);
@@ -24,8 +23,8 @@ public class MainForm
     private SpinnerNumberModel maxCount = new SpinnerNumberModel(DPFPFingerIndex.values().length, 0, DPFPFingerIndex.values().length, 1);
     private final JSpinner maxCountSpinner;
 
-    private final JButton enrollButton = new JButton("Enroll Fingerprints");
-    private final JButton verifyButton = new JButton("Verify Fingerprint");
+    private final JButton enrollButton = new JButton("Inscribir huellas dactilares");
+    private final JButton verifyButton = new JButton("Verificar huella dactilares");
     private SpinnerNumberModel farRequested
             = new SpinnerNumberModel(DPFPVerification.MEDIUM_SECURITY_FAR, 1, DPFPVerification.PROBABILITY_ONE, 100);
     private JSpinner farRequestedSpinner;
@@ -42,15 +41,15 @@ public class MainForm
     }
 
     public MainForm() {
-        super("Java UI Sample");
+        super("Sistema de huellas");
 
         setState(Frame.NORMAL);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         //// Enrollment Panel
         JPanel enrollmentConfigPanel = new JPanel();
-        enrollmentConfigPanel.setBorder(BorderFactory.createTitledBorder("Enrollment"));
+        enrollmentConfigPanel.setBorder(BorderFactory.createTitledBorder("Inscripción"));
         enrollmentConfigPanel.setLayout(new BoxLayout(enrollmentConfigPanel, BoxLayout.Y_AXIS));
 
         ///// Count
@@ -60,12 +59,12 @@ public class MainForm
         maxFormatter.setAllowsInvalid(false);
 
         JPanel maxcountPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        maxcountPanel.add(new JLabel("Max. enrolled fingerprints count"));
+        maxcountPanel.add(new JLabel("Recuento máximo de huellas dactilares registradas"));
         maxcountPanel.add(maxCountSpinner);
 
         ///// Fingers
         JPanel fingersPanel = new JPanel(new GridBagLayout());
-        fingersPanel.setBorder(BorderFactory.createTitledBorder("Enrolled Fingerprints"));
+        fingersPanel.setBorder(BorderFactory.createTitledBorder("Inscribir huellas dactilares"));
         for (DPFPFingerIndex finger : DPFPFingerIndex.values()) {
             JCheckBox jCheckBox = new JCheckBox(Utilities.fingerName(finger));
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -88,15 +87,20 @@ public class MainForm
                 public void actionPerformed(ActionEvent e) {
                     JCheckBox cb = (JCheckBox) e.getSource();
                     if (cb.isSelected()) {
-                        JOptionPane.showMessageDialog(MainForm.this,
-                                "To enroll the finger, click Enroll Fingerprints.", "Fingerprint Enrollment",
+                        JOptionPane.showMessageDialog(
+                                MainForm.this,
+                                "Para inscribir el dedo, haga clic en Inscribir huellas dactilares.", 
+                                "Inscripción de huellas dactilares",
                                 JOptionPane.INFORMATION_MESSAGE);
                         cb.setSelected(false);
 //                      templates.put(index, fakeTemplate);
                     } else {
-                        if (JOptionPane.showConfirmDialog(MainForm.this,
-                                "Are you sure you want to delete the " + Utilities.fingerprintName(index) + "?", "Fingerprint Enrollment",
-                                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        if (JOptionPane.showConfirmDialog(
+                                MainForm.this,
+                                "¿Estás seguro de que quieres eliminar el" + Utilities.fingerprintName(index) + "?", 
+                                "Inscripción de huellas dactilares",
+                                JOptionPane.YES_NO_OPTION
+                        ) == JOptionPane.YES_OPTION) {
                             templates.remove(index);
                         } else {
                             cb.setSelected(true);
@@ -107,7 +111,7 @@ public class MainForm
             });
         }
 
-        final JCheckBox enforceFailure = new JCheckBox("Enforce enrollment or unenrollment failure");
+        final JCheckBox enforceFailure = new JCheckBox("Hacer cumplir la inscripción o cancelar la inscripción en caso de fallo");
         enforceFailure.setAlignmentX(CENTER_ALIGNMENT);
         enforceFailure.setHorizontalTextPosition(SwingConstants.LEADING);
 
@@ -121,7 +125,7 @@ public class MainForm
                     new EnrollmentDialog(
                             MainForm.this,
                             maxCount.getNumber().intValue(),
-                            enforceFailure.isSelected() ? "Just because I'm not in a mood." : null,
+                            enforceFailure.isSelected() ? "Sólo porque no estoy en modo." : null,
                             templates
                     ).setVisible(true);
                     UpdateUI();
@@ -138,7 +142,7 @@ public class MainForm
 
         //// Verification Panel
         JPanel verificationConfigPanel = new JPanel();
-        verificationConfigPanel.setBorder(BorderFactory.createTitledBorder("Verification"));
+        verificationConfigPanel.setBorder(BorderFactory.createTitledBorder("Verificación"));
         verificationConfigPanel.setLayout(new BoxLayout(verificationConfigPanel, BoxLayout.Y_AXIS));
 
         ///// False Accept Rate
@@ -151,7 +155,7 @@ public class MainForm
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new Insets(0, 4, 0, 0);
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        farPanel.add(new JLabel("False Accept Rate (FAR) requested: "), gridBagConstraints);
+        farPanel.add(new JLabel("Tasa de aceptación falsa (FAR) solicitada: "), gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -173,7 +177,7 @@ public class MainForm
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(0, 4, 0, 0);
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        farPanel.add(new JLabel("False Accept Rate (FAR) achieved: "), gridBagConstraints);
+        farPanel.add(new JLabel("Tasa de aceptación falsa (FAR) lograda: "), gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -185,7 +189,7 @@ public class MainForm
         farAchieved.setPreferredSize(new Dimension(100, 20));
         farPanel.add(farAchieved, gridBagConstraints);
 
-        fingerMatched = new JCheckBox("Fingerprint matched");
+        fingerMatched = new JCheckBox("Huella dactilar coincidente");
         fingerMatched.setEnabled(false);
         fingerMatched.setAlignmentX(CENTER_ALIGNMENT);
         fingerMatched.setHorizontalTextPosition(SwingConstants.LEADING);

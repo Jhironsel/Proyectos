@@ -23,6 +23,7 @@ import sur.softsurena.metodos.M_Asegurado;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Padre;
 import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_Sexo;
 import sur.softsurena.metodos.M_TiposSangres;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -120,12 +121,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         };
         jpFiltro = new javax.swing.JPanel();
-        cbCorreo = new javax.swing.JCheckBox();
         cbPadresActivos = new javax.swing.JCheckBox();
-        cbTodos = new javax.swing.JCheckBox();
-        cbCiudad = new javax.swing.JCheckBox();
-        cbDireccion = new javax.swing.JCheckBox();
-        cbFechaNacimiento = new javax.swing.JCheckBox();
         jpDatos = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jpCedula = new javax.swing.JPanel();
@@ -157,10 +153,10 @@ public class frmPadres extends javax.swing.JInternalFrame {
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
-        btnGuardar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         jmSeleccionarTodo.setText("Seleccionar Todo");
         jmSeleccionarTodo.addActionListener(new java.awt.event.ActionListener() {
@@ -348,20 +344,12 @@ public class frmPadres extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
         );
-
-        btnGrupo.add(cbCorreo);
-        cbCorreo.setText("Correo");
-        cbCorreo.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbCorreoItemStateChanged(evt);
-            }
-        });
 
         cbPadresActivos.setSelected(true);
         cbPadresActivos.setText("Padres Activos");
@@ -371,50 +359,12 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         });
 
-        btnGrupo.add(cbTodos);
-        cbTodos.setSelected(true);
-        cbTodos.setText("Ocultar Todas");
-
-        btnGrupo.add(cbCiudad);
-        cbCiudad.setText("Ciudad");
-        cbCiudad.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbCiudadItemStateChanged(evt);
-            }
-        });
-
-        btnGrupo.add(cbDireccion);
-        cbDireccion.setText("Dirección");
-        cbDireccion.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbDireccionItemStateChanged(evt);
-            }
-        });
-
-        btnGrupo.add(cbFechaNacimiento);
-        cbFechaNacimiento.setText("Fecha Nacimientos");
-        cbFechaNacimiento.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbFechaNacimientoItemStateChanged(evt);
-            }
-        });
-
         javax.swing.GroupLayout jpFiltroLayout = new javax.swing.GroupLayout(jpFiltro);
         jpFiltro.setLayout(jpFiltroLayout);
         jpFiltroLayout.setHorizontalGroup(
             jpFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpFiltroLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbCorreo)
-                .addGap(0, 0, 0)
-                .addComponent(cbCiudad)
-                .addGap(0, 0, 0)
-                .addComponent(cbFechaNacimiento)
-                .addGap(0, 0, 0)
-                .addComponent(cbDireccion)
-                .addGap(0, 0, 0)
-                .addComponent(cbTodos)
-                .addGap(0, 0, 0)
                 .addComponent(cbPadresActivos)
                 .addGap(0, 0, 0))
         );
@@ -422,13 +372,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
             jpFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpFiltroLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(jpFiltroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbFechaNacimiento)
-                    .addComponent(cbCiudad)
-                    .addComponent(cbDireccion)
-                    .addComponent(cbCorreo)
-                    .addComponent(cbPadresActivos)
-                    .addComponent(cbTodos))
+                .addComponent(cbPadresActivos)
                 .addGap(0, 0, 0))
         );
 
@@ -761,11 +705,13 @@ public class frmPadres extends javax.swing.JInternalFrame {
         jPanel6.setMinimumSize(new java.awt.Dimension(0, 0));
         jPanel6.setLayout(new java.awt.GridLayout(1, 0, 4, 0));
 
+        btnNuevo.setBackground(new java.awt.Color(0, 0, 255));
         btnNuevo.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnNuevo.setForeground(new java.awt.Color(1, 1, 1));
+        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
         btnNuevo.setMnemonic('n');
         btnNuevo.setText("Nuevo");
         btnNuevo.setToolTipText("Crear un nuevo Registro");
+        btnNuevo.setBorder(null);
         btnNuevo.setMaximumSize(new java.awt.Dimension(104, 44));
         btnNuevo.setMinimumSize(new java.awt.Dimension(104, 44));
         btnNuevo.setPreferredSize(new java.awt.Dimension(104, 44));
@@ -776,11 +722,13 @@ public class frmPadres extends javax.swing.JInternalFrame {
         });
         jPanel6.add(btnNuevo);
 
+        btnModificar.setBackground(new java.awt.Color(0, 204, 0));
         btnModificar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnModificar.setForeground(new java.awt.Color(1, 1, 1));
+        btnModificar.setForeground(new java.awt.Color(255, 255, 255));
         btnModificar.setMnemonic('m');
         btnModificar.setText("Modificar");
         btnModificar.setToolTipText("Modificar Registro Actual");
+        btnModificar.setBorder(null);
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
@@ -788,11 +736,41 @@ public class frmPadres extends javax.swing.JInternalFrame {
         });
         jPanel6.add(btnModificar);
 
+        btnBorrar.setBackground(new java.awt.Color(204, 0, 0));
+        btnBorrar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setMnemonic('b');
+        btnBorrar.setText("Borrar");
+        btnBorrar.setToolTipText("Borrar Registro Actual");
+        btnBorrar.setBorder(null);
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnBorrar);
+
+        btnBuscar.setBackground(new java.awt.Color(204, 204, 0));
+        btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setMnemonic('r');
+        btnBuscar.setText("Buscar");
+        btnBuscar.setToolTipText("Buscar el Registro");
+        btnBuscar.setBorder(null);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnBuscar);
+
+        btnGuardar.setBackground(new java.awt.Color(204, 153, 0));
         btnGuardar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardar.setMnemonic('g');
         btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Guardar Registro Actual");
+        btnGuardar.setBorder(null);
         btnGuardar.setEnabled(false);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -802,10 +780,11 @@ public class frmPadres extends javax.swing.JInternalFrame {
         jPanel6.add(btnGuardar);
 
         btnCancelar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnCancelar.setForeground(new java.awt.Color(1, 1, 1));
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setMnemonic('c');
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la Operacion del Registro");
+        btnCancelar.setBorder(null);
         btnCancelar.setEnabled(false);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -813,30 +792,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
             }
         });
         jPanel6.add(btnCancelar);
-
-        btnBorrar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnBorrar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBorrar.setMnemonic('b');
-        btnBorrar.setText("Borrar");
-        btnBorrar.setToolTipText("Borrar Registro Actual");
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
-            }
-        });
-        jPanel6.add(btnBorrar);
-
-        btnBuscar.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(1, 1, 1));
-        btnBuscar.setMnemonic('r');
-        btnBuscar.setText("Buscar");
-        btnBuscar.setToolTipText("Buscar el Registro");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-        jPanel6.add(btnBuscar);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1049,18 +1004,22 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         if (!cbPadresActivos.isSelected()) {
-            JOptionPane.showInternalMessageDialog(this,
+            JOptionPane.showInternalMessageDialog(
+                    this,
                     "No puede ser borrado.",
                     "Proceso de validación",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             return;
         }
 
         if (jtPadres.getSelectedRow() == -1) {
-            JOptionPane.showInternalMessageDialog(this,
+            JOptionPane.showInternalMessageDialog(
+                    this,
                     "Debe de seleccionar un registro de la tabla!!!",
                     "Proceso de validación",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             return;
         }
 
@@ -1282,92 +1241,26 @@ public class frmPadres extends javax.swing.JInternalFrame {
         ordenarTabla(true);
     }//GEN-LAST:event_cbPadresActivosActionPerformed
 
-    private void cbCorreoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCorreoItemStateChanged
-        if (!jtPadres.getRowSelectionAllowed()) {
-            return;
-        }
-
-        if (cbCorreo.isSelected()) {
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setMinWidth(100);
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setMaxWidth(200);
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setPreferredWidth(200);
-        } else {
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setMinWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setMaxWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(9)).setPreferredWidth(0);
-        }
-        ordenarTabla(false);
-    }//GEN-LAST:event_cbCorreoItemStateChanged
-
-    private void cbCiudadItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCiudadItemStateChanged
-        if (!jtPadres.getRowSelectionAllowed()) {
-            return;
-        }
-
-        if (cbCiudad.isSelected()) {
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setMinWidth(100);
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setMaxWidth(200);
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setPreferredWidth(200);
-        } else {
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setMinWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setMaxWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(11)).setPreferredWidth(0);
-        }
-        ordenarTabla(false);
-    }//GEN-LAST:event_cbCiudadItemStateChanged
-
-    private void cbFechaNacimientoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbFechaNacimientoItemStateChanged
-        if (!jtPadres.getRowSelectionAllowed()) {
-            return;
-        }
-
-        if (cbFechaNacimiento.isSelected()) {
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setMinWidth(100);
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setMaxWidth(140);
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setPreferredWidth(140);
-        } else {
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setMinWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setMaxWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(12)).setPreferredWidth(0);
-        }
-        ordenarTabla(false);
-    }//GEN-LAST:event_cbFechaNacimientoItemStateChanged
-
-    private void cbDireccionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbDireccionItemStateChanged
-        if (!jtPadres.getRowSelectionAllowed()) {
-            return;
-        }
-
-        if (cbDireccion.isSelected()) {
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setMinWidth(100);
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setMaxWidth(300);
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setPreferredWidth(300);
-        } else {
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setMinWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setMaxWidth(0);
-            jtPadres.getColumn(jtPadres.getColumnName(10)).setPreferredWidth(0);
-        }
-        ordenarTabla(false);
-    }//GEN-LAST:event_cbDireccionItemStateChanged
-
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        ordenarTabla(true);
+        limpiarCampos();
+        llenarCombos();
+        llenarTabla(true);
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
-        if (btnGuardar.isEnabled()) {
-            //sangre: Guardar la posicion de la sangre
-            int sangre = cbSangre.getSelectedIndex();
-
-            //seguro: Guardar la posicion del segugo
-            int seguro = cbSeguro.getSelectedIndex();
-
-            llenarCombos();
-            //volvemos a poner el sexo en la posicion que tenia
-            cbSangre.setSelectedIndex(sangre);
-            //volvemos a poner el seguro en la posicion que tenia
-            cbSeguro.setSelectedIndex(seguro);
-        }
+//        if (btnGuardar.isEnabled()) {
+//            //sangre: Guardar la posicion de la sangre
+//            int sangre = cbSangre.getSelectedIndex();
+//
+//            //seguro: Guardar la posicion del segugo
+//            int seguro = cbSeguro.getSelectedIndex();
+//
+//            llenarCombos();
+//            //volvemos a poner el sexo en la posicion que tenia
+//            cbSangre.setSelectedIndex(sangre);
+//            //volvemos a poner el seguro en la posicion que tenia
+//            cbSeguro.setSelectedIndex(seguro);
+//        }
     }//GEN-LAST:event_formInternalFrameActivated
 
     private void cbSeguroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSeguroActionPerformed
@@ -1376,7 +1269,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
             txtNoSeguro.setValue(null);
             cbSexo.requestFocus();
-            cbSexo.showPopup();
+            //cbSexo.showPopup();
         }
         if (cbSeguro.getSelectedIndex() != 0 & cbSeguro.isEnabled()) {
             txtNoSeguro.requestFocus();
@@ -1479,7 +1372,7 @@ public class frmPadres extends javax.swing.JInternalFrame {
     private void cbSexoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSexoItemStateChanged
 
         cbSangre.requestFocus();
-        cbSangre.showPopup();
+//        cbSangre.showPopup();
         Utilidades.showTooltip(cbSangre);
     }//GEN-LAST:event_cbSexoItemStateChanged
 
@@ -1593,10 +1486,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
 
         //Invocar los metodos que ocultan ciertas columnas
         if (valor) {
-            cbCiudadItemStateChanged(null);
-            cbCorreoItemStateChanged(null);
-            cbDireccionItemStateChanged(null);
-            cbFechaNacimientoItemStateChanged(null);
             return;
         }
         //Establecer un tamaNo fijo a cierta columna...
@@ -1631,7 +1520,6 @@ public class frmPadres extends javax.swing.JInternalFrame {
         cbSangre.setSelectedIndex(0);
         cbSeguro.setSelectedIndex(0);
         txtNoSeguro.setValue(null);
-        cbTodos.setSelected(true);
     }
 
     private void navegador(boolean b) {
@@ -1686,7 +1574,11 @@ public class frmPadres extends javax.swing.JInternalFrame {
     public synchronized void llenarCombos() {
         cbSeguro.removeAllItems();
 
-        M_ARS.select(ARS.builder().build()).stream().forEach(
+        M_ARS.select(
+                ARS
+                        .builder()
+                        .build()
+        ).stream().forEach(
                 ars -> {
                     cbSeguro.addItem(ars);
                 }
@@ -1696,6 +1588,13 @@ public class frmPadres extends javax.swing.JInternalFrame {
         M_TiposSangres.getList().stream().forEach(
                 ts -> {
                     cbSangre.addItem(ts);
+                }
+        );
+        
+        cbSexo.removeAllItems();
+        M_Sexo.getSexoList().stream().forEach(
+                sexo->{
+                    cbSexo.addItem(sexo);
                 }
         );
     }
@@ -1710,16 +1609,11 @@ public class frmPadres extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnValidaCedulaPadre;
-    private javax.swing.JCheckBox cbCiudad;
-    private javax.swing.JCheckBox cbCorreo;
-    private javax.swing.JCheckBox cbDireccion;
     private javax.swing.JCheckBox cbEstado;
-    private javax.swing.JCheckBox cbFechaNacimiento;
     private javax.swing.JCheckBox cbPadresActivos;
     private javax.swing.JComboBox<TipoSangre> cbSangre;
     private javax.swing.JComboBox<ARS> cbSeguro;
     private javax.swing.JComboBox<Sexo> cbSexo;
-    private javax.swing.JCheckBox cbTodos;
     private com.toedter.calendar.JDateChooser dchFechaNacimiento;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;

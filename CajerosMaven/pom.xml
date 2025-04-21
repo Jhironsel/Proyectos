@@ -14,15 +14,10 @@
     <properties>
         <exec.mainClass>CajerosMaven</exec.mainClass>
     </properties>
-    <dependencies>
+        <dependencies>
         <dependency>
             <groupId>sur.softsurena</groupId>
-            <artifactId>Entidades</artifactId>
-            <version>2</version>
-        </dependency>
-        <dependency>
-            <groupId>sur.softsurena</groupId>
-            <artifactId>Imagenes</artifactId>
+            <artifactId>Modulo_Comun</artifactId>
             <version>2</version>
             <type>jar</type>
         </dependency>

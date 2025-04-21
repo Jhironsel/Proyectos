@@ -19,8 +19,6 @@ public class Imagenes {
         ruta = "/sur/softsurena/imagenes/".concat(archivoExtension);
     }
 
-    private Imagenes(){}
-
     public ImageIcon getIcono() {
         return new ImageIcon(getClass().getResource(ruta));
     }

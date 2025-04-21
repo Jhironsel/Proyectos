@@ -60,7 +60,7 @@ import sur.softsurena.metodos.Imagenes;
 
 public class Utilidades {
 
-    public static final Logger LOG = Logger.getLogger(Utilidades.class.getName());
+    public static final Logger LOG  = Logger.getLogger(Utilidades.class.getName());
 
     static {
         final File file = new File("Logs/Log " + new Date().toString().replace(":", ".") + ".log");
@@ -71,9 +71,8 @@ public class Utilidades {
                     true
             );
 
-            fh.setLevel(Level.SEVERE);
             fh.setLevel(Level.WARNING);
-
+            
             fh.setFormatter(new SimpleFormatter());
 
             LOG.addHandler(fh);
@@ -372,6 +371,10 @@ public class Utilidades {
         }
 
         return "";
+    }
+    
+    public synchronized static String bytesEncode64(byte[] bytes) {
+        return Base64.encodeBase64URLSafeString(bytes);
     }
 
     //--------------------------------------------------------------------------

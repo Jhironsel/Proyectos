@@ -1,6 +1,8 @@
 package sur.softsurena.formularios;
 
 public class frmDiasConsultas extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     public frmDiasConsultas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);

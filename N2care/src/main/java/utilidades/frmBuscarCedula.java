@@ -1,21 +1,16 @@
 package utilidades;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
-import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Persona;
-import static sur.softsurena.utilidades.Utilidades.LOG;
-//import static sur.softsurena.metodos.M_Padre.getPadresActivo;
 
 public class frmBuscarCedula extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
     private final String sexo;

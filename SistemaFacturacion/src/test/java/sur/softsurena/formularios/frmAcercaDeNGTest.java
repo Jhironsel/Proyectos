@@ -1,5 +1,6 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.modulo_comun.frmAcercaDe;
 import javax.swing.JLabel;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;

@@ -17,6 +17,7 @@ import lombok.NonNull;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.*;
 import static sur.softsurena.formularios.frmPrincipal.mnuMovimientosNuevaFactura;
+import sur.softsurena.hilos.frmPrintFacturaConReporte2;
 import sur.softsurena.hilos.hiloImpresionFactura;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.metodos.*;

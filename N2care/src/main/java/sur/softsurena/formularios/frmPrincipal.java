@@ -1,5 +1,8 @@
 package sur.softsurena.formularios;
 
+import sur.softsurena.modulo_comun.frmAcercaDe;
+import sur.softsurena.modulo_comun.frmImpresoras2;
+import sur.softsurena.modulo_comun.frmUsuarios;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
@@ -8,7 +11,6 @@ import javax.swing.SwingWorker;
 import sur.softsurena.archivos.frmLogin;
 import sur.softsurena.archivos.frmPaciente;
 import sur.softsurena.archivos.frmPadres;
-import static sur.softsurena.conexion.Conexion.*;
 import sur.softsurena.control.frmHorario;
 import sur.softsurena.control.frmMedicamentos;
 import sur.softsurena.control.frmSeguros;
@@ -16,6 +18,7 @@ import sur.softsurena.gestion.frmConsultas2;
 import sur.softsurena.gestion.frmGestionConsultas;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.DesktopConFondo;
+import static sur.softsurena.conexion.Conexion.*;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class frmPrincipal extends javax.swing.JFrame {
@@ -79,6 +82,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         mnuGestionConsultas = new javax.swing.JMenuItem();
         mnuConsultas = new javax.swing.JMenuItem();
+        mnuAyuda = new javax.swing.JMenu();
+        mnuAyudaAcercaDe = new javax.swing.JMenuItem();
+        mnuAyudaAyuda = new javax.swing.JMenuItem();
 
         txtUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         txtUsuario.setForeground(new java.awt.Color(254, 254, 254));
@@ -256,6 +262,33 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu5);
 
+        mnuAyuda.setMnemonic('y');
+        mnuAyuda.setText("Ayuda");
+        mnuAyuda.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
+
+        mnuAyudaAcercaDe.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        mnuAyudaAcercaDe.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
+        mnuAyudaAcercaDe.setText("Acerca de...");
+        mnuAyudaAcercaDe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAyudaAcercaDeActionPerformed(evt);
+            }
+        });
+        mnuAyuda.add(mnuAyudaAcercaDe);
+
+        mnuAyudaAyuda.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        mnuAyudaAyuda.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
+        mnuAyudaAyuda.setText("Ayuda...");
+        mnuAyudaAyuda.setToolTipText("");
+        mnuAyudaAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAyudaAyudaActionPerformed(evt);
+            }
+        });
+        mnuAyuda.add(mnuAyudaAyuda);
+
+        mbMenu.add(mnuAyuda);
+
         setJMenuBar(mbMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,72 +333,69 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuArchivosImpresorasActionPerformed
 
     private void mnuArchivosPadresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPadresActionPerformed
-        System.out.println("Estoy fuera...");
-        final SwingWorker<?, ?> w = new SwingWorker<>() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                System.out.println("Estoy dentro...");
-                frmPadres padres = frmPadres.getPadres();
-                System.out.println("obtuve instancia.");
-                dpnEscritorio.remove(padres);
-                dpnEscritorio.add(padres);
-                System.out.println("Agregado al dpnEscritorio.");
-//                padres.limpiarCampos();
-//                padres.llenarCombos();
-//                padres.llenarTabla(true);
-                try {
-                    padres.setMaximum(true);
-                } catch (PropertyVetoException ex) {
-                    LOG.log(
-                            Level.SEVERE,
-                            "No puede maximizarse la ventana.!",
-                            ex
-                    );
-                }
-                padres.setVisible(true);
-                return padres;
-            }
-        };
-        w.execute();
-    }//GEN-LAST:event_mnuArchivosPadresActionPerformed
-
-    private void mnuArchivosPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPacientesActionPerformed
-        frmPaciente paciente = frmPaciente.getPadres();
-        dpnEscritorio.remove(paciente);
-        dpnEscritorio.add(paciente);
-        paciente.llenarCombox();
-        paciente.llenarTabla();
-        paciente.centralizar();
-        try {
-            paciente.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
 //        final SwingWorker<?, ?> w = new SwingWorker<>() {
 //            @Override
 //            protected Object doInBackground() throws Exception {
-//
-//                frmPaciente paciente = frmPaciente.getPadres();
-//                dpnEscritorio.remove(paciente);
-//                dpnEscritorio.add(paciente);
-//                paciente.llenarCombox();
-//                paciente.llenarTabla();
-//                paciente.centralizar();
-//                paciente.setMaximum(true);
-//                return paciente;
+//                frmPadres padres = frmPadres.getPadres();
+//                dpnEscritorio.remove(padres);
+//                dpnEscritorio.add(padres);
+        ////                padres.limpiarCampos();
+////                padres.llenarCombos();
+////                padres.llenarTabla(true);
+//                try {
+//                    padres.setMaximum(true);
+//                } catch (PropertyVetoException ex) {
+//                    LOG.log(
+//                            Level.SEVERE,
+//                            "No puede maximizarse la ventana.!",
+//                            ex
+//                    );
+//                }
+//                padres.setVisible(true);
+//                return padres;
 //            }
 //        };
 //        w.execute();
-//        w.run();
+        frmPadres padres = frmPadres.getPadres();
+        dpnEscritorio.remove(padres);
+        dpnEscritorio.add(padres);
+        try {
+            padres.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    "No puede maximizarse la ventana.!",
+                    ex
+            );
+        }
+        padres.setVisible(true);
+    }//GEN-LAST:event_mnuArchivosPadresActionPerformed
+
+    private void mnuArchivosPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPacientesActionPerformed
+
+        final SwingWorker<?, ?> w = new SwingWorker<>() {
+            @Override
+            protected Object doInBackground() throws PropertyVetoException {
+                frmPaciente paciente = frmPaciente.getPadres();
+                dpnEscritorio.remove(paciente);
+                dpnEscritorio.add(paciente);
+                paciente.llenarCombox();
+                paciente.llenarTabla();
+                paciente.centralizar();
+                paciente.setMaximum(true);
+                paciente.setVisible(true);
+                return paciente;
+            }
+        };
+        w.execute();
     }//GEN-LAST:event_mnuArchivosPacientesActionPerformed
 
     private void mnuArchivosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosUsuariosActionPerformed
         final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
-            protected Object doInBackground() throws Exception {
+            protected Object doInBackground() throws PropertyVetoException {
 
-                //frmUsuarios u = frmUsuarios.getUsuarios();
+                //frmUsuarios usuarios = frmUsuarios.getUsuarios();
                 frmUsuarios usuarios = frmUsuarios.getInstance();
                 dpnEscritorio.remove(usuarios);
                 dpnEscritorio.add(usuarios);
@@ -374,6 +404,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 //                        "Llenando la tabla de usuario desde el inicio");
 //
                 usuarios.setMaximum(true);
+                usuarios.setVisible(true);
                 return usuarios;
             }
         };
@@ -482,6 +513,16 @@ public final class frmPrincipal extends javax.swing.JFrame {
         w.execute();
     }//GEN-LAST:event_mnuConsultasActionPerformed
 
+    private void mnuAyudaAcercaDeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAyudaAcercaDeActionPerformed
+        frmAcercaDe acerca = frmAcercaDe.getInstance(null, true);
+        acerca.setLocationRelativeTo(this);
+        acerca.setVisible(true);
+    }//GEN-LAST:event_mnuAyudaAcercaDeActionPerformed
+
+    private void mnuAyudaAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAyudaAyudaActionPerformed
+
+    }//GEN-LAST:event_mnuAyudaAyudaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDesktopPane dpnEscritorio;
     public static javax.swing.JLabel jLabelImpresion;
@@ -501,6 +542,9 @@ public final class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuArchivosPadres;
     private javax.swing.JMenuItem mnuArchivosSalir;
     private javax.swing.JMenuItem mnuArchivosUsuarios;
+    private javax.swing.JMenu mnuAyuda;
+    private javax.swing.JMenuItem mnuAyudaAcercaDe;
+    private javax.swing.JMenuItem mnuAyudaAyuda;
     private javax.swing.JMenuItem mnuConsultas;
     private javax.swing.JMenuItem mnuControlCitas;
     private javax.swing.JMenuItem mnuControlMedicamentos;

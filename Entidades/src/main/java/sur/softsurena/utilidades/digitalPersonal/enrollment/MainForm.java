@@ -34,40 +34,50 @@ public class MainForm extends JFrame {
 
         @Override
         public String getDescription() {
-            return "Fingerprint Template File (*.fpt)";
+            return "Archivo de plantilla de huellas dactilares (*.fpt)";
         }
     }
 
-    MainForm() {
+    public MainForm(boolean mostrarGuardarLeer) {
         setState(Frame.NORMAL);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setTitle("Fingerprint Enrollment and Verification Sample");
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.setTitle("Sistema de huellas dactilares.");
         setResizable(false);
 
-        final JButton enroll = new JButton("Fingerprint Enrollment");
-        enroll.addActionListener((ActionEvent e) -> {
-            onEnroll();
-        });
+        final JButton enroll = new JButton("Inscripción de huellas dactilares");
+        enroll.addActionListener(
+                (ActionEvent e) -> {
+                    onEnroll();
+                }
+        );
 
-        final JButton verify = new JButton("Fingerprint Verification");
-        verify.addActionListener((ActionEvent e) -> {
-            onVerify();
-        });
+        final JButton verify = new JButton("Verificación de huellas dactilares");
+        verify.addActionListener(
+                (ActionEvent e) -> {
+                    onVerify();
+                }
+        );
 
-        final JButton save = new JButton("Save Fingerprint Template");
-        save.addActionListener((ActionEvent e) -> {
-            onSave();
-        });
+        final JButton save = new JButton("Guardar plantilla de huellas dactilares");
+        save.addActionListener(
+                (ActionEvent e) -> {
+                    onSave();
+                }
+        );
 
-        final JButton load = new JButton("Read Fingerprint Template");
-        load.addActionListener((ActionEvent e) -> {
-            onLoad();
-        });
+        final JButton load = new JButton("Leer plantilla de huellas dactilares");
+        load.addActionListener(
+                (ActionEvent e) -> {
+                    onLoad();
+                }
+        );
 
-        final JButton quit = new JButton("Close");
-        quit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
-        });
+        final JButton quit = new JButton("Cierra");
+        quit.addActionListener(
+                (ActionEvent e) -> {
+                    dispose();
+                }
+        );
 
         this.addPropertyChangeListener(
                 TEMPLATE_PROPERTY,
@@ -80,7 +90,8 @@ public class MainForm extends JFrame {
                     if (template != null) {
                         JOptionPane.showMessageDialog(
                                 MainForm.this,
-                                "The fingerprint template is ready for fingerprint verification.", "Fingerprint Enrollment",
+                                "La plantilla de huellas dactilares está lista para la verificación de huellas dactilares.",
+                                "Inscripción de huellas dactilares",
                                 JOptionPane.INFORMATION_MESSAGE
                         );
                     }
@@ -92,8 +103,10 @@ public class MainForm extends JFrame {
         center.setBorder(BorderFactory.createEmptyBorder(20, 20, 5, 20));
         center.add(enroll);
         center.add(verify);
+        if(mostrarGuardarLeer){
         center.add(save);
         center.add(load);
+        }
 
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.TRAILING));
         bottom.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
@@ -132,8 +145,8 @@ public class MainForm extends JFrame {
                     }
                     if (file.exists()) {
                         int choice = JOptionPane.showConfirmDialog(this,
-                                String.format("File \"%1$s\" already exists.\nDo you want to replace it?", file.toString()),
-                                "Fingerprint saving",
+                                String.format("Archivo \"%1$s\" ya existe.\nQuieres remplazarlo?", file.toString()),
+                                "Guardando huellas dactilares.",
                                 JOptionPane.YES_NO_CANCEL_OPTION);
                         if (choice == JOptionPane.NO_OPTION) {
                             continue;
@@ -144,7 +157,12 @@ public class MainForm extends JFrame {
                     stream.write(getTemplate().serialize());
                     stream.close();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Fingerprint saving", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            this,
+                            ex.getLocalizedMessage(),
+                            "Guardando huellas dactilares.",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                 }
             }
             break;
@@ -159,11 +177,16 @@ public class MainForm extends JFrame {
                 byte[] data = new byte[stream.available()];
                 stream.read(data);
                 stream.close();
-                DPFPTemplate t = DPFPGlobal.getTemplateFactory().createTemplate();
-                t.deserialize(data);
-                setTemplate(t);
+                DPFPTemplate template = DPFPGlobal.getTemplateFactory().createTemplate();
+                template.deserialize(data);
+                setTemplate(template);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Fingerprint loading", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        this,
+                        ex.getLocalizedMessage(),
+                        "Cargando huella dactilares.",
+                        JOptionPane.ERROR_MESSAGE
+                );
             }
         }
     }
@@ -183,7 +206,7 @@ public class MainForm extends JFrame {
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new MainForm();
+            new MainForm(false);
         });
     }
 
