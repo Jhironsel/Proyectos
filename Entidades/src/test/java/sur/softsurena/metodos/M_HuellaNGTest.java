@@ -1,5 +1,8 @@
 package sur.softsurena.metodos;
 
+import com.digitalpersona.onetouch.DPFPGlobal;
+import com.digitalpersona.onetouch.DPFPTemplate;
+import com.digitalpersona.onetouch.verification.DPFPVerification;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.AfterClass;
@@ -10,6 +13,7 @@ import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Huella;
 import sur.softsurena.utilidades.Resultado;
+import sur.softsurena.utilidades.digitalPersonal.enrollment.VerificationForm;
 
 /**
  *
@@ -132,6 +136,17 @@ public class M_HuellaNGTest {
         Resultado expResult = null;
         Resultado result = M_Huella.insert(huella);
         assertEquals(result, expResult);
+        
+        
+        M_Huella.select(
+                Huella.builder().build()
+        ).forEach(
+                huellaRegistrada ->{
+                    DPFPTemplate template = null;
+                    template.deserialize(huellaRegistrada.getHuella());
+                    VerificationForm verificador = new VerificationForm(null, template);
+                }
+        );
     }
 
     @Test(

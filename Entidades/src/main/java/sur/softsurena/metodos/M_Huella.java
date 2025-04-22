@@ -30,6 +30,12 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class M_Huella {
 
+    /**
+     * Metodo que consulta las huellas del sistema. Este puede entregar todas 
+     * las huellas registradas o las huellas de una persona. 
+     * @param huella
+     * @return
+     */
     public static List<Huella> select(
             @NonNull Huella huella
     ) {
@@ -81,6 +87,11 @@ public class M_Huella {
     }
 //------------------------------------------------------------------------------
 
+    /**
+     * Metod que permite insertar una huella de una persona en el sistema. 
+     * @param huella
+     * @return
+     */
     public static Resultado insert(
             @NonNull Huella huella
     ) {
@@ -128,8 +139,12 @@ public class M_Huella {
     public static final String ERROR_AL_INSERTAR_LA_HUELLA_EN_EL_SISTEMA
             = "Error al insertar la huella en el sistema.";
 //------------------------------------------------------------------------------
-    //Necesito que termines el siguiente metodo update por mi.
     
+    /**
+     * Metodo que actualiza una huella de una personas en el sistema.
+     * @param huella
+     * @return
+     */
     public static Resultado update(
             @NonNull Huella huella
     ){
@@ -174,6 +189,12 @@ public class M_Huella {
             = "Huella actualizada correctamente.!!!";
 //------------------------------------------------------------------------------
     
+    /**
+     * Metodo que elimina un registro de una huella en el sistema.
+     * 
+     * @param huella
+     * @return
+     */
     public synchronized static Resultado delete(
             @NonNull Huella huella
     ){
@@ -209,6 +230,12 @@ public class M_Huella {
         }
     }
 //------------------------------------------------------------------------------
+
+    /**
+     * Metodo que elimina las huellas de una persona en el sistema.
+     * @param huella
+     * @return
+     */
     public synchronized static Resultado deleteByIDPersona(
             @NonNull Huella huella
     ){

@@ -4,17 +4,25 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
+import com.digitalpersona.onetouch.DPFPTemplate;
 import com.digitalpersona.onetouch.verification.DPFPVerification;
 import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import java.awt.Frame;
+import java.util.Objects;
 
 
 public class VerificationForm extends CaptureForm
 {
 	private final DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
-	
+	private DPFPTemplate template;
 	VerificationForm(Frame owner) {
 		super(owner);
+                this.template = null;
+	}
+        
+        public VerificationForm(Frame owner, DPFPTemplate template) {
+		super(owner);
+                this.template = template;
 	}
 	
 	@Override protected void init()
@@ -30,12 +38,15 @@ public class VerificationForm extends CaptureForm
 		// Process the sample and create a feature set for the enrollment purpose.
 		DPFPFeatureSet features = extractFeatures(sample, DPFPDataPurpose.DATA_PURPOSE_VERIFICATION);
 
+                if(Objects.nonNull(((MainForm) getOwner()).getTemplate()))
+                    template = ((MainForm) getOwner()).getTemplate();
+                
 		// Check quality of the sample and start verification if it's good
 		if (features != null)
 		{
 			// Compare the feature set with our template
 			DPFPVerificationResult result = 
-				verificator.verify(features, ((MainForm) getOwner()).getTemplate());
+				verificator.verify(features, template);
 			updateStatus(result.getFalseAcceptRate());
 			if (result.isVerified())
 				makeReport("La huella dactilar fue verificada. COINCIDEN");
