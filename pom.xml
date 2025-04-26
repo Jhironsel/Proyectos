@@ -13,20 +13,22 @@
         <!--Principales-->
         <module>Imagenes</module>
         <module>Entidades</module>
-        <module>Modulo_Comun</module>
         <module>Proxy</module>
         
         <!--Secundario-->
+        <module>Modulo_Comun</module>
+        
+        <!--Terciarios-->
         <module>SistemaFacturacion</module>
+        <module>Estancia</module>
         <module>N2care</module>
         <module>ControlCliente</module>
-        <module>JHBingo</module>
-        <!--<module>Curso JSF/CursoJSF</module>-->
-        <module>TelegramBoot</module>
         <module>SophiaStudioMaven</module>
+        <module>JHBingo</module>
+        <module>TelegramBoot</module>
         <module>CajerosMaven</module>
         <module>JPA_Firebird</module>
-        <module>Estancia</module>
+        <!--<module>Curso JSF/CursoJSF</module>-->
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

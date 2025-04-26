@@ -75,7 +75,7 @@ public class M_BaseDeDatosNGTest {
         );
         
         File file = new File(result);
-        
+
         assertTrue(
                 file.canRead(), 
                 "No puede leerse la base de datos."

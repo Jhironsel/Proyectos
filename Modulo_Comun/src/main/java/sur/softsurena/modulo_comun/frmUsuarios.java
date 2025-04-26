@@ -22,7 +22,6 @@ import static sur.softsurena.metodos.M_Role.modificarRol;
 import static sur.softsurena.metodos.M_Role.quitarRolUsuario;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
-import static sur.softsurena.metodos.M_Usuario.getNombresUsuarios;
 import static sur.softsurena.metodos.M_Usuario.getUsuarios;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Resultado;
@@ -57,7 +56,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         btnModificar = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnBorrar = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnBuscar = new RSMaterialComponent.RSButtonMaterialIconOne();
-        jtpPrivilegios = new javax.swing.JTabbedPane();
+        jtpGeneral = new javax.swing.JTabbedPane();
         jpMantUsuarios = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblUsuarios = new RSMaterialComponent.RSTableMetro();
@@ -181,10 +180,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         jScrollPane1.setViewportView(jPanel2);
 
-        jtpPrivilegios.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        jtpPrivilegios.addChangeListener(new javax.swing.event.ChangeListener() {
+        jtpGeneral.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jtpGeneral.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jtpPrivilegiosStateChanged(evt);
+                jtpGeneralStateChanged(evt);
             }
         });
 
@@ -222,7 +221,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addGap(6, 6, 6))
         );
 
-        jtpPrivilegios.addTab("<html><center><b>Mantenimiento<br>Usuarios</b><center></html>", null, jpMantUsuarios, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
+        jtpGeneral.addTab("<html><center><b>Mantenimiento<br>Usuarios</b><center></html>", null, jpMantUsuarios, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(37, 45, 223), 2));
 
@@ -402,7 +401,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
         jpMantRolesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jPanel1, jPanel3});
 
-        jtpPrivilegios.addTab("<html><center><b>Mantenimiento<br>Roles</b><center></html>", null, jpMantRoles, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
+        jtpGeneral.addTab("<html><center><b>Mantenimiento<br>Roles</b><center></html>", null, jpMantRoles, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
 
         jScrollPane3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
 
@@ -577,19 +576,19 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jtpPrivilegios.addTab("<html><center><b>Asignación<br>Roles</b><center></html>", null, jpDefRoles, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
+        jtpGeneral.addTab("<html><center><b>Asignación<br>Roles</b><center></html>", null, jpDefRoles, "Permite definir los roles del sistema que agrupan a un conjuto de usuarios.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jtpPrivilegios)
+            .addComponent(jtpGeneral)
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jtpPrivilegios)
+                .addComponent(jtpGeneral)
                 .addGap(0, 0, 0)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
@@ -603,14 +602,14 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios
-                || jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
+        if (jtpGeneral.getSelectedComponent() == jpMantUsuarios
+                || jtpGeneral.getSelectedComponent() == jpDefRoles) {
 
             frmUsuariosAgregar u = frmUsuariosAgregar.getInstance(null, true);
             u.setLocationRelativeTo(null);
             u.setVisible(true);
 
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpMantRoles) {
 
             String rol = JOptionPane.showInternalInputDialog(
                     this,
@@ -629,9 +628,32 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
+        if (jtpGeneral.getSelectedComponent() == jpMantUsuarios) {
 
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
+            if (tblUsuarios.getSelectedRow() == -1) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Debes seleccionar un usuario.",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+            
+            String userName = tblUsuarios.getValueAt(
+                    tblUsuarios.getSelectedRow(), 0).
+                    toString().strip();
+
+            frmUsuariosAgregar user = frmUsuariosAgregar.getInstance(
+                    null,
+                    true,
+                    M_Usuario.getUsuario(userName)
+            );
+
+            user.setLocationRelativeTo(null);
+            user.setVisible(true);
+
+        } else if (jtpGeneral.getSelectedComponent() == jpMantRoles) {
             if (tblRoles.getSelectedRow() == -1) {
                 JOptionPane.showInternalMessageDialog(
                         this,
@@ -658,28 +680,8 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
             modificarRol(rolActual, rolNuevo);
             llenarTblRoles();
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios) {
-            if (tblUsuarios.getSelectedRow() == -1) {
-                JOptionPane.showInternalMessageDialog(
-                        this,
-                        "Debes seleccionar un usuario.",
-                        "",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-            String userName = tblUsuarios.getValueAt(
-                    tblUsuarios.getSelectedRow(), 0).
-                    toString().strip();
+        } else if (jtpGeneral.getSelectedComponent() == jpDefRoles) {
 
-            frmUsuariosAgregar user = frmUsuariosAgregar.getInstance(
-                    null,
-                    true,
-                    M_Usuario.getUsuario(userName)
-            );
-
-            user.setLocationRelativeTo(null);
-            user.setVisible(true);
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -688,9 +690,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
      * @param evt
      */
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
+        if (jtpGeneral.getSelectedComponent() == jpDefRoles) {
             //TODO TRABAJAR EN LA OPERACIONES DE PRIVILEGIOS.
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpMantRoles) {
             //Validar que exista un rol seleccionado
             if (tblRoles.getSelectedRow() == -1) {
                 JOptionPane.showInternalMessageDialog(
@@ -722,7 +724,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
 
             llenarTblRoles();
             tblRolesMouseClicked(null);
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios) {
+        } else if (jtpGeneral.getSelectedComponent() == jpMantUsuarios) {
             String usuario = tblUsuarios.getValueAt(
                     tblUsuarios.getSelectedRow(), 0).toString();
 
@@ -802,7 +804,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             return;
         }
 
-        if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios) {
+        if (jtpGeneral.getSelectedComponent() == jpMantUsuarios) {
             Usuario usuario1 = M_Usuario.getUsuario(usuario);
             if (Objects.isNull(usuario1)) {
                 JOptionPane.showInternalMessageDialog(
@@ -830,28 +832,28 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                     break;
                 }
             }
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpMantRoles) {
             for (int i = 0; i < tblRoles.getRowCount(); i++) {
                 if (tblRoles.getValueAt(i, 0).toString().strip().equalsIgnoreCase(usuario.strip())) {
                     tblRoles.setRowSelectionInterval(i, i);
                     break;
                 }
             }
-        } else if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpDefRoles) {
 
         }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void jtpPrivilegiosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jtpPrivilegiosStateChanged
-        if (jtpPrivilegios.getSelectedComponent() == jpMantUsuarios) {
+    private void jtpGeneralStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jtpGeneralStateChanged
+        if (jtpGeneral.getSelectedComponent() == jpMantUsuarios) {
             llenarTablaUsuarios();
-        } else if (jtpPrivilegios.getSelectedComponent() == jpMantRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpMantRoles) {
             llenarTblRoles();
-        } else if (jtpPrivilegios.getSelectedComponent() == jpDefRoles) {
+        } else if (jtpGeneral.getSelectedComponent() == jpDefRoles) {
             llenarTblListadoUsuarios();
         }
-    }//GEN-LAST:event_jtpPrivilegiosStateChanged
+    }//GEN-LAST:event_jtpGeneralStateChanged
 
     private void btnAsignarRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarRolActionPerformed
         if (tblListadoUsuarios.getSelectedRow() == -1) {
@@ -1314,7 +1316,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         };
 
-        getNombresUsuarios().stream().forEach(
+        M_Usuario.getUsuarios().stream().forEach(
                 usuario -> {
                     registro[0] = usuario.getPersona().getUser_name().strip();
                     miTabla.addRow(registro);
@@ -1380,46 +1382,6 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         repararColumnaTable(tblRolesUsuario);
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAsignarPermiso;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnAsignarRol;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarPermiso;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarAgregarPermisoAdmin;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarPermisoAdministrativoUsuario;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarRolUsuario;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane11;
-    private javax.swing.JScrollPane jScrollPane12;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JPanel jpDefRoles;
-    private javax.swing.JPanel jpMantRoles;
-    private javax.swing.JPanel jpMantUsuarios;
-    private javax.swing.JTabbedPane jtpPrivilegios;
-    private RSMaterialComponent.RSTableMetro tblListadoUsuarios;
-    private RSMaterialComponent.RSTableMetro tblPermisosAsignados;
-    private RSMaterialComponent.RSTableMetro tblPermisosDisponibles;
-    private RSMaterialComponent.RSTableMetro tblRoles;
-    private RSMaterialComponent.RSTableMetro tblRolesDisponibles;
-    private RSMaterialComponent.RSTableMetro tblRolesUsuario;
-    private static RSMaterialComponent.RSTableMetro tblUsuarios;
-    private javax.swing.JTextPane txtDescripcion;
-    private javax.swing.JTextPane txtDescripcion1;
-    // End of variables declaration//GEN-END:variables
-
     /**
      * Metodo que valida que un rol y un permiso por asignar esten seleccionado.
      *
@@ -1450,6 +1412,10 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean validarSeleccionUsuarioRol() {
         //Validar que tenga un rol seleccionado.
         if (tblListadoUsuarios.getSelectedRow() == -1) {
@@ -1473,5 +1439,44 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
         return false;
     }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSButtonMaterialIconOne btnAsignarPermiso;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnAsignarRol;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarPermiso;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnNuevo;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarAgregarPermisoAdmin;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarPermisoAdministrativoUsuario;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnQuitarRolUsuario;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JPanel jpDefRoles;
+    private javax.swing.JPanel jpMantRoles;
+    private javax.swing.JPanel jpMantUsuarios;
+    private javax.swing.JTabbedPane jtpGeneral;
+    private RSMaterialComponent.RSTableMetro tblListadoUsuarios;
+    private RSMaterialComponent.RSTableMetro tblPermisosAsignados;
+    private RSMaterialComponent.RSTableMetro tblPermisosDisponibles;
+    private RSMaterialComponent.RSTableMetro tblRoles;
+    private RSMaterialComponent.RSTableMetro tblRolesDisponibles;
+    private RSMaterialComponent.RSTableMetro tblRolesUsuario;
+    private static RSMaterialComponent.RSTableMetro tblUsuarios;
+    private javax.swing.JTextPane txtDescripcion;
+    private javax.swing.JTextPane txtDescripcion1;
+    // End of variables declaration//GEN-END:variables
 }
-//private static rojerusan.RSTableMetro1 tblClientes;

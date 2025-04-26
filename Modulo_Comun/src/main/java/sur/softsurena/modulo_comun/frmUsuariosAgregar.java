@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
-import static sur.softsurena.metodos.M_Etiqueta.getEtiquetasUsuario;
+import sur.softsurena.metodos.M_Etiqueta;
 import sur.softsurena.metodos.M_Role;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
@@ -25,7 +25,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private static final long serialVersionUID = 1L;
 
     private static boolean nuevo;//Si el suario es nuevo o no
-    
+
     private static Frame parent;
     private static boolean modal;
     private static Usuario usuario;
@@ -37,7 +37,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         frmUsuariosAgregar.modal = modal;
         return NewSingletonHolder.INSTANCE;
     }
-    
+
     public static frmUsuariosAgregar getInstance(
             Frame parent, boolean modal, Usuario usuario
     ) {
@@ -46,25 +46,25 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         frmUsuariosAgregar.usuario = usuario;
         return NewSingletonHolder2.INSTANCE2;
     }
-    
+
     private static class NewSingletonHolder {
 
-        private static final frmUsuariosAgregar INSTANCE = 
-                new frmUsuariosAgregar(
+        private static final frmUsuariosAgregar INSTANCE
+                = new frmUsuariosAgregar(
                         frmUsuariosAgregar.parent, frmUsuariosAgregar.modal
                 );
     }
-    
+
     private static class NewSingletonHolder2 {
 
-        private static final frmUsuariosAgregar INSTANCE2 = 
-                new frmUsuariosAgregar(
-                        frmUsuariosAgregar.parent, 
-                        frmUsuariosAgregar.modal, 
+        private static final frmUsuariosAgregar INSTANCE2
+                = new frmUsuariosAgregar(
+                        frmUsuariosAgregar.parent,
+                        frmUsuariosAgregar.modal,
                         frmUsuariosAgregar.usuario
                 );
     }
-    
+
     /*Este constructor es utilizado para agregar nuevos usuarios*/
     private frmUsuariosAgregar(Frame parent, boolean modal) {
         super(parent, modal);
@@ -290,11 +290,12 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             }
         ));
         tblRoles.setToolTipText("Roles que el usuario tiene registrado.");
-        tblRoles.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblRoles.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tblRoles.setName("tblRoles"); // NOI18N
         tblRoles.setPreferredScrollableViewportSize(new java.awt.Dimension(450, 0));
         tblRoles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblRoles.setShowGrid(true);
+        tblRoles.getTableHeader().setResizingAllowed(false);
         tblRoles.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(tblRoles);
 
@@ -358,7 +359,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             }
         ));
         tblEtiquetas.setToolTipText("Las etiquetas son atributos que pueden usar los usuario del sistema.");
-        tblEtiquetas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblEtiquetas.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tblEtiquetas.setName("tblEtiquetas"); // NOI18N
         tblEtiquetas.setPreferredScrollableViewportSize(new java.awt.Dimension(450, 0));
         tblEtiquetas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -411,7 +412,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 478, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -632,7 +633,8 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         String clave1 = new String(txtClave1.getPassword()),
                 clave2 = new String(txtClave2.getPassword());
 
-        if (nuevo) {//Si es nuevo se realizan las verificaciones de las claves..
+        if (nuevo) {
+            //Si es nuevo se realizan las verificaciones de las claves..
             if (clave1.isBlank()) {
                 JOptionPane.showMessageDialog(
                         this,
@@ -654,22 +656,8 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 txtClave2.requestFocus();
                 return;
             }
-        }
-//-----------------------------------------------------------------------------5
-        if (!clave1.equals(clave2)) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Claves no coinciden.",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtClave2.setText("");
-            txtClave1.setText("");
-            txtClave1.requestFocus();
-            return;
-        }
+        } else {
 //-----------------------------------------------------------------------------6
-        if (!nuevo) {
             if (tblRoles.getRowCount() <= 0) {
                 int resp = JOptionPane.showConfirmDialog(
                         this,
@@ -689,6 +677,21 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
             }
         }
+
+//-----------------------------------------------------------------------------5
+        if (!clave1.equals(clave2)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Claves no coinciden.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            txtClave2.setText("");
+            txtClave1.setText("");
+            txtClave1.requestFocus();
+            return;
+        }
+
 //-----------------------------------------------------------------------------7
         if (tblRoles.getRowCount() <= 0) {
             int resp = JOptionPane.showConfirmDialog(
@@ -709,8 +712,10 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
 //-----------------------------------------------------------------------------8
-        Usuario usuario = M_Usuario.getUsuario(txtUserName.getText().strip());
-        if (!Objects.isNull(usuario) && nuevo) {
+        if (!Objects.isNull(
+                M_Usuario.getUsuario(
+                        txtUserName.getText().strip())
+        ) && nuevo) {
             int respuesta = JOptionPane.showConfirmDialog(
                     this,
                     "Usuario ya existe. \n\nDesea recuperar el usuario?",
@@ -733,23 +738,22 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
 //-----------------------------------------------------------------------------9
-        String mensaje
-                = "<html>"
-                + "<h1>Se va a agregar el Usuario: " + txtUserName.getText() + "</h1></br>"
-                + "<h1>Con Nombre y Apellido: "
-                + txtPNombre.getText()
-                + " "
-                + (txtSNombre.getText().isBlank() ? "" : txtSNombre.getText().concat(" "))
-                + txtApellidos.getText()
-                + "</h1></br>"
-                + "<h1>Delegar: "
-                + (cbAdministrador.isSelected() ? "Activado" : "NO Activado")
-                + "</h1></br>"
-                + "<h1>Estado del Usuario: "
-                + (cbEstado.isSelected() ? "Activo" : "No Activo")
-                + "</h1></br>"
-                + "<h1>Desea continuar? </h1>"
-                + "</html>";
+        String mensaje = """
+                         <html>
+                            <h1>Se va a agregar el usuario: %s </h1></br>
+                            <h1>         Nombre y Apellido: %s %s%s</h1></br>
+                            <h1>             Administrador: %s</h1></br>
+                            <h1>                    Estado: %s</h1>
+                            <h1>Desea continuar? </h1>
+                         </html>
+                         """.formatted(
+                                 txtUserName.getText(),
+                                 txtPNombre.getText(),
+                                 txtSNombre.getText().isBlank() ? "" : txtSNombre.getText().concat(" "),
+                                 txtApellidos.getText(),
+                                 cbAdministrador.isSelected() ? "Activado" : "NO Activado",
+                                 cbEstado.isSelected() ? "Activo" : "No Activo"
+                         );
 
         int resp = JOptionPane.showConfirmDialog(
                 this,
@@ -784,12 +788,15 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             if (tblEtiquetas.getValueAt(i, 0).toString().contains("DROP")) {
                 etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
             } else {
-                etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + " = " + "'" + tblEtiquetas.getValueAt(i, 1).toString() + "'" + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
+                etiquetas = etiquetas + 
+                        tblEtiquetas.getValueAt(i, 0).toString() + " = " + "'" + 
+                        tblEtiquetas.getValueAt(i, 1).toString() + "'" + 
+                        ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
             }
         }
 
 //----------------------------------------------------------------------------12
-        usuario = Usuario
+        Usuario usuarioSistema = Usuario
                 .builder()
                 .persona(
                         Persona
@@ -809,7 +816,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                 .build();
 
 //----------------------------------------------------------------------------13
-        Resultado resultado = (nuevo ? M_Usuario.insert(usuario) : M_Usuario.update(usuario));
+        Resultado resultado = (nuevo ? M_Usuario.insert(usuarioSistema) : M_Usuario.update(usuarioSistema));
 
 //----------------------------------------------------------------------------14
         JOptionPane.showMessageDialog(
@@ -999,6 +1006,9 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         miTabla.removeRow(tblRoles.getSelectedRow());
 
         tblRoles.setModel(miTabla);
+
+        repararColumnaTable(tblRoles);
+        columnasCheckBox(tblRoles, new int[]{1});
     }//GEN-LAST:event_btnBorrarRolActionPerformed
 
     private void btnEditarTagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarTagActionPerformed
@@ -1019,6 +1029,73 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         etiqueta.setVisible(true);
 
     }//GEN-LAST:event_btnEditarTagActionPerformed
+
+    private void cargarUsuario(Usuario usuario) {
+        txtUserName.setText(usuario.getPersona().getUser_name());
+        txtUserName.setEditable(false);
+
+        txtPNombre.setText(usuario.getPersona().getPnombre());
+        txtSNombre.setText(usuario.getPersona().getSnombre());
+        txtApellidos.setText(usuario.getPersona().getApellidos());
+
+        cbEstado.setSelected(usuario.getPersona().getEstado());
+        cbEstadoActionPerformed(null);
+
+        cbAdministrador.setSelected(usuario.getAdministrador());
+        cbAdministradorActionPerformed(null);
+
+        txtDescripcion.setText(usuario.getDescripcion());
+
+//------------------------------------------------------------------------------
+        String titulos2[] = {"Roles", "Con Admin", "Descripción"};
+        Object registro2[] = new Object[titulos2.length];
+        DefaultTableModel dtmRoles = new DefaultTableModel(null, titulos2);
+
+        tblRoles.removeAll();
+        M_Role.selectDisponibles(
+                usuario
+                        .getPersona()
+                        .getUser_name(),
+                true
+        ).stream().forEach(
+                rol -> {
+                    registro2[0] = rol;
+                    registro2[1] = rol.getOpcionPermiso() == 2;
+                    //El 2 indica que si administra el role.
+                    registro2[2] = rol.getDescripcion();
+
+                    dtmRoles.addRow(registro2);
+                }
+        );
+
+        tblRoles.setModel(dtmRoles);
+        repararColumnaTable(tblRoles);
+        columnasCheckBox(tblRoles, new int[]{1});
+        tblRoles.setBackgoundHover(new java.awt.Color(102, 102, 255));
+
+//------------------------------------------------------------------------------
+        String titulos[] = {"Propiedad", "Valor"};
+        Object registro[] = new Object[titulos.length];
+        DefaultTableModel dtmEtiquetas = new DefaultTableModel(null, titulos);
+
+        tblEtiquetas.removeAll();
+        M_Etiqueta.getEtiquetasUsuario(
+                usuario
+                        .getPersona()
+                        .getUser_name()
+        ).stream().forEach(
+                etiqueta -> {
+                    registro[0] = etiqueta.getPropiedad();
+                    registro[1] = etiqueta.getValor();
+
+                    dtmEtiquetas.addRow(registro);
+                }
+        );
+
+        tblEtiquetas.setModel(dtmEtiquetas);
+        repararColumnaTable(tblEtiquetas);
+        tblEtiquetas.setBackgoundHover(new java.awt.Color(102, 102, 255));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnAceptar;
@@ -1051,72 +1128,4 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     private rojeru_san.rsfield.RSTextFullRound txtSNombre;
     private rojeru_san.rsfield.RSTextFullRound txtUserName;
     // End of variables declaration//GEN-END:variables
-
-    private void cargarUsuario(Usuario usuario) {
-        txtUserName.setText(usuario.getPersona().getUser_name());
-        txtUserName.setEditable(false);
-
-        txtPNombre.setText(usuario.getPersona().getPnombre());
-        txtSNombre.setText(usuario.getPersona().getSnombre());
-        txtApellidos.setText(usuario.getPersona().getApellidos());
-
-        cbEstado.setSelected(usuario.getPersona().getEstado());
-        cbEstadoActionPerformed(null);
-
-        cbAdministrador.setSelected(usuario.getAdministrador());
-        cbAdministradorActionPerformed(null);
-
-        txtDescripcion.setText(usuario.getDescripcion());
-
-        String titulos[] = {"Propiedad", "Valor"};
-
-        Object registro[] = new Object[titulos.length];
-
-        DefaultTableModel dtmEtiquetas = new DefaultTableModel(null, titulos);
-
-        tblEtiquetas.removeAll();
-
-        getEtiquetasUsuario(usuario.getPersona().getUser_name()).stream().forEach(
-                etiqueta -> {
-                    registro[0] = etiqueta.getPropiedad();
-                    registro[1] = etiqueta.getValor();
-
-                    dtmEtiquetas.addRow(registro);
-                }
-        );
-
-        tblEtiquetas.setModel(dtmEtiquetas);
-
-        repararColumnaTable(tblEtiquetas);
-
-        tblEtiquetas.setBackgoundHover(new java.awt.Color(102, 102, 255));
-
-        String titulos2[] = {"Roles", "Con Admin", "Descripción"};
-
-        Object registro2[] = new Object[titulos2.length];
-
-        DefaultTableModel dtmRoles = new DefaultTableModel(null, titulos2);
-
-        tblRoles.removeAll();
-
-        M_Role.selectDisponibles(
-                usuario.getPersona().getUser_name(), true
-        ).stream().forEach(
-                rol -> {
-                    registro2[0] = rol;
-                    registro2[1] = rol.getOpcionPermiso() == 2;
-                    //El 2 indica que si administra el role.
-                    registro2[2] = rol.getDescripcion();
-
-                    dtmRoles.addRow(registro2);
-                }
-        );
-
-        tblRoles.setModel(dtmRoles);
-
-        repararColumnaTable(tblRoles);
-        columnasCheckBox(tblRoles, new int[]{1});
-
-        tblRoles.setBackgoundHover(new java.awt.Color(102, 102, 255));
-    }
 }

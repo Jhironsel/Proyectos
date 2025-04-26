@@ -282,18 +282,6 @@ public class M_UsuarioNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 0
-    )
-    public void testGetNombresUsuarios() {
-        List expResult = null;
-        List result = M_Usuario.getNombresUsuarios();
-        assertEquals(result, expResult);
-    }
-//------------------------------------------------------------------------------
-
-    @Test(
             enabled = true,
             description = """
                           Metodo que permite eliminar un usuario del sistema.

@@ -246,10 +246,14 @@ public class M_CategoriaNGTest {
             priority = 5
     )
     public static void testDelete() {
-        Resultado result = M_Categoria.delete(idCategoria);
-        assertTrue(
-                result.getEstado(),
-                OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA.formatted(idCategoria)
+        assertEquals(
+                M_Categoria.delete(idCategoria),
+                Resultado
+                    .builder()
+                    .mensaje(M_Categoria.CATEGORIA__BORRADO__CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build()
         );
     }
 }

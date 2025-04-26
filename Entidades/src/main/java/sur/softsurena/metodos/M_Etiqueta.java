@@ -15,10 +15,11 @@ public class M_Etiqueta {
     public static synchronized List<Etiqueta> getEtiquetasUsuario(String usuario) {
         List<Etiqueta> etiquetaList = new ArrayList<>();
 
-        final String sql
-                = "SELECT LLAVE, VALOR "
-                + "FROM VS_USUARIOS_TAGS "
-                + "WHERE USUARIO STARTING WITH ?";
+        final String sql = """
+                           SELECT LLAVE, VALOR 
+                           FROM VS_USUARIOS_TAGS 
+                           WHERE UPPER(USUARIO) STARTING WITH UPPER(?)
+                           """;
         
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

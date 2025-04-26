@@ -332,7 +332,11 @@ public class M_Usuario {
                         .build();
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.log(
+                    Level.SEVERE, 
+                    ex.getMessage(), 
+                    ex
+            );
         }
         return null;
     }
@@ -376,45 +380,6 @@ public class M_Usuario {
                             .descripcion(rs.getString("DESCRIPCION"))
                             .build()
                     );
-                }
-            }
-            return usuarios;
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
-        }
-    }
-
-    /**
-     * Metodo utilizado para obtener todos los nombres de los usuarios del
-     * sistema. En primera instacia se utilizada para consultar la base de datos
-     * y obtener los roles de este.
-     *
-     * @return Retorna una lista de usuarios del sistema.
-     */
-    public synchronized static List<Usuario> getNombresUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
-        Usuario u;
-        final String sql = "SELECT USERNAME FROM VS_USUARIOS;";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    u = Usuario
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .user_name(rs.getString("USERNAME"))
-                                            .build()
-                            )
-                            .build();
-                    usuarios.add(u);
                 }
             }
             return usuarios;

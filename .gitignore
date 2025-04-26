@@ -1,25 +1,25 @@
 /CajerosMaven/target/
+/CajerosMaven/Logs/
 
 /SophiaStudioMaven/target/
+/SophiaStudioMaven/Logs/
 
 /Entidades/.idea
 /Entidades/Logs/
 /Entidades/target/
 
 /Imagenes/target/
+/Imagenes/Logs/
 
 /JHBingo/target/
 
 /JPA_Firebird/target/
 
-/Entidades/nbproject/
-/Entidades/target/
 
-/Imagenes/target/
-/Imagenes/nbproject/
 
 /ControlCliente/.vscode
 /ControlCliente/target/
+/ControlCliente/Logs/
 
 /SistemaFacturacion/Logs/
 /SistemaFacturacion/target/
@@ -31,9 +31,7 @@
 /Proxy/target/
 
 /Modulo_Comun/target/
+/Modulo_Comun/Logs/
 
 /Estancia/target/
 /Estancia/Logs/
-
-*.log
-/target/

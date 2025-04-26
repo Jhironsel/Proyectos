@@ -251,7 +251,7 @@ public class M_Categoria {
                     .build();
         }
     }
-    private static final String CATEGORIA__BORRADO__CORRECTAMENTE
+    public static final String CATEGORIA__BORRADO__CORRECTAMENTE
             = "Categoria Borrado Correctamente.";
 
     public static final String OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA

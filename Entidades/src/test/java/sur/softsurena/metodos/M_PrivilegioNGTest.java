@@ -7,8 +7,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Privilegio;
+import sur.softsurena.entidades.Usuario;
 
 /**
  *
@@ -16,6 +18,8 @@ import sur.softsurena.entidades.Privilegio;
  */
 @Getter
 public class M_PrivilegioNGTest {
+
+    private final String usuario = "jhironsel";
 
     public M_PrivilegioNGTest() {
     }
@@ -58,7 +62,7 @@ public class M_PrivilegioNGTest {
                           siendo usado en el sistema.
                           """
     )
-    public void testPrivilegio() {
+    public void testPrivilegio() {        
         boolean result = M_Privilegio.privilegio(
                 Privilegio
                                 .builder()
@@ -68,7 +72,32 @@ public class M_PrivilegioNGTest {
                                 .nombre_relacion("V_PRODUCTOS")
                                 .build()
         );
+        
+        if(!result){
+            Usuario user_name = M_Usuario.getUsuario(usuario);
+            
+            M_Usuario.update(
+                    Usuario
+                            .builder()
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .pnombre(user_name.getPersona().getPnombre())
+                                            .snombre(user_name.getPersona().getSnombre())
+                                            .apellidos(user_name.getPersona().getApellidos())
+                                            .estado(user_name.getPersona().getEstado())
+                                            .user_name(user_name.getPersona().getUser_name())
+                                            .build()
+                            )
+                            .administrador(user_name.getAdministrador())
+                            .descripcion(user_name.getDescripcion())
+                            .build()
+            );
+        }
+        
         assertTrue(result, "No se tiene acceso a V_PRODUCTOS");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -80,6 +109,8 @@ public class M_PrivilegioNGTest {
                         .build()
         );
         assertTrue(result, "No se tiene acceso a V_TURNOS");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -91,6 +122,8 @@ public class M_PrivilegioNGTest {
                         .build()
         );
         assertTrue(result, "No se tiene acceso a V_PERSONAS_CLIENTES");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -102,6 +135,8 @@ public class M_PrivilegioNGTest {
                         .build()
         );
         assertTrue(result, "No se tiene acceso a V_CATEGORIAS");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -113,6 +148,8 @@ public class M_PrivilegioNGTest {
                         .build()
         );
         assertTrue(result, "No se tiene acceso a V_M_FACTURAS");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
@@ -124,6 +161,8 @@ public class M_PrivilegioNGTest {
                         .build()
         );
         assertTrue(result, "No se tiene acceso a V_PRECIOS");
+        
+        
         //----------------------------------------------------------------------
         result = M_Privilegio.privilegio(
                 Privilegio
