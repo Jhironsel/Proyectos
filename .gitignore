@@ -1,37 +1,51 @@
-/CajerosMaven/target/
-/CajerosMaven/Logs/
+/.idea/
 
-/SophiaStudioMaven/target/
-/SophiaStudioMaven/Logs/
+/CajerosMaven/Logs/
+/CajerosMaven/target/
+
+/ControlCliente/.idea/
+/ControlCliente/.vscode/
+/ControlCliente/Logs/
+/ControlCliente/target/
 
 /Entidades/.idea
+/Entidades/Backups/
+/Entidades/Imagenes/
 /Entidades/Logs/
 /Entidades/target/
 
-/Imagenes/target/
-/Imagenes/Logs/
+/Estancia/Logs/
+/Estancia/foto/
+/Estancia/target/
 
+/Imagenes/Logs/
+/Imagenes/target/
+
+/JHBingo/Logs/
 /JHBingo/target/
 
+/JPA_Firebird/Logs/
 /JPA_Firebird/target/
 
+/Modulo_Comun/Logs/
+/Modulo_Comun/target/
 
+/N2Care/Logs/
+/N2Care/target/
 
-/ControlCliente/.vscode
-/ControlCliente/target/
-/ControlCliente/Logs/
+/Proxy/Logs/
+/Proxy/target/
 
 /SistemaFacturacion/Logs/
 /SistemaFacturacion/target/
 /SistemaFacturacion/test-reports/
 
+/SophiaStudioMaven/Logs/
+/SophiaStudioMaven/taget/
+
+
+/TelegramBoot/.idea/
+/TelegramBoot/.mvn/
 /TelegramBoot/target/
 
 
-/Proxy/target/
-
-/Modulo_Comun/target/
-/Modulo_Comun/Logs/
-
-/Estancia/target/
-/Estancia/Logs/
