@@ -19,7 +19,7 @@ import sur.softsurena.entidades.Usuario;
 @Getter
 public class M_PrivilegioNGTest {
 
-    private final String usuario = "jhironsel";
+    private final String USER_NAME = "jhironsel";
 
     public M_PrivilegioNGTest() {
     }
@@ -27,7 +27,7 @@ public class M_PrivilegioNGTest {
     @BeforeClass
     public void setUpClass() throws Exception {
         Conexion.getInstance(
-                "jhironsel",
+                USER_NAME,
                 "1",
                 "SoftSurena.db",
                 "localhost",
@@ -74,7 +74,7 @@ public class M_PrivilegioNGTest {
         );
         
         if(!result){
-            Usuario user_name = M_Usuario.getUsuario(usuario);
+            Usuario user_name = M_Usuario.getUsuario(USER_NAME);
             
             M_Usuario.update(
                     Usuario

@@ -19,14 +19,11 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 /**
  * Esta clase ayuda al sistema a gestionar las categorias del sistemas.
  *
- * - Permite agregar nuevas categorias con el metodo agregarCategoria(Categorias
- * c).
+ * - Permite agregar nuevas categorias con el metodo insert(Categorias c).
  *
- * - Permite modificar las categorias existente con el metodo
- * modificarCategoria(Categorias c).
+ * - Permite modificar las categorias existente con el metodo update(Categorias c).
  *
- * - Permite eliminar las categorias con el metodo borrarCategoria(int
- * idCategoria).
+ * - Permite eliminar las categorias con el metodo delete(int idCategoria).
  *
  * - Permite obtener un listado de categorias del sistema, usando el metodo
  * getCategorias(), getCategoriaActivas().
@@ -69,7 +66,6 @@ public class M_Categoria {
                                 .descripcion(rs.getString("DESCRIPCION"))
                                 .fecha_creacion(rs.getDate("FECHA_CREACION"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                .image_texto(rs.getString("IMAGEN_TEXTO"))
                                 .build()
                 );
             }
@@ -92,7 +88,7 @@ public class M_Categoria {
         Boolean where = id && estado && descripcion;
 
         return """
-               SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+               SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                FROM V_CATEGORIAS
                %s%s%s%s
                """.formatted(
@@ -253,41 +249,6 @@ public class M_Categoria {
     }
     public static final String CATEGORIA__BORRADO__CORRECTAMENTE
             = "Categoria Borrado Correctamente.";
-
     public static final String OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA
             = "Ocurrio un error al intentar borrar la Categoria {%s}...";
-
-    /**
-     * Metodo que permite investigar si existe una descripcion de una categoria.
-     *
-     * @param descripcion Es la descripcion que se pretende dar a la categoria
-     * la cual este metodo verifica de comprobar si existe o no. devolviendo
-     * true si existe o false si no existe.
-     *
-     * @return Retorna un valor boolean indicando si existe o no la descripcion
-     * de la categoria que se le pretende dar.
-     */
-    public static Boolean exist(String descripcion) {
-        final String sql
-                = "SELECT (1) FROM V_CATEGORIAS WHERE DESCRIPCION LIKE ?";
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setString(1, descripcion);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
-                    ex
-            );
-            return false;
-        }
-    }
 }

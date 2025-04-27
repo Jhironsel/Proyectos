@@ -1807,8 +1807,15 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         ).stream().forEach(
                 categoria -> {
                     //Obteniendo la imagen de la categoria.
+                    String foto = M_Foto_Categoria.select(
+                            FotoCategoria
+                                    .builder()
+                                    .id(categoria.getId_categoria())
+                                    .build()
+                    ).getLast().getFoto();
+                    
                     ImageIcon imagen = Utilidades.imagenDecode64(
-                            categoria.getImage_texto(),
+                            foto,
                             64,
                             64
                     );

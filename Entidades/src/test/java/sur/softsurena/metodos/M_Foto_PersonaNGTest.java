@@ -79,7 +79,9 @@ public class M_Foto_PersonaNGTest {
                           """
     )
     public void testInsert() {
-        Resultado resultado = M_Persona.insert(M_PersonaNGTest.persona(Boolean.TRUE));
+        Resultado resultado = M_Persona.insert(
+                M_PersonaNGTest.persona(Boolean.TRUE)
+        );
 
         Resultado result = M_Foto_Persona.insert(
                 FotoPersona
@@ -87,7 +89,7 @@ public class M_Foto_PersonaNGTest {
                         .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
-                                        new File("ejemplo.png")
+                                        new File("Imagenes/ImagenPrueba.png")
                                 )
                         )
                         .actual(Boolean.TRUE)
@@ -110,7 +112,7 @@ public class M_Foto_PersonaNGTest {
                         .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
-                                        new File("ejemplo.png")
+                                        new File("Imagenes/ImagenPrueba.png")
                                 )
                         )
                         .actual(Boolean.TRUE)
@@ -137,7 +139,7 @@ public class M_Foto_PersonaNGTest {
                         .idPersona(resultado.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
-                                        new File("ejemplo.png")
+                                        new File("Imagenes/ImagenPrueba.png")
                                 )
                         )
                         .actual(Boolean.FALSE)

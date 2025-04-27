@@ -79,25 +79,33 @@ public class M_Persona {
 
     protected static String sqlSelect(Persona persona) {
         Boolean id = Objects.isNull(persona.getIdPersona());
+        Boolean tipoPersona = Objects.isNull(persona.getPersona());
         Boolean pNombre = Objects.isNull(persona.getPnombre());
         Boolean sNombre = Objects.isNull(persona.getSnombre());
         Boolean apellidos = Objects.isNull(persona.getApellidos());
         Boolean estado = Objects.isNull(persona.getEstado());
-        Boolean where = id && pNombre && sNombre && apellidos && estado;
+        
+        Boolean where = id && tipoPersona && pNombre && sNombre && apellidos && 
+                estado;
 
         return """
                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
                    ESTADO, USER_NAME, ROL_USUARIO
                FROM V_PERSONAS
-               %s%s%s%s%s%s
+               %s%s%s%s%s
                """.strip().trim().formatted(
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(persona.getIdPersona()),
-                pNombre ? "":"OR PNOMBRE STARTING WITH '%s' ".formatted(persona.getPnombre()),
-                sNombre ? "":"OR SNOMBRE STARTING WITH '%s' ".formatted(persona.getSnombre()),
-                apellidos ? "":"OR APELLIDOS STARTING WITH '%s' ".formatted(persona.getApellidos()),
-                estado ? "":"AND ESTADO IS %b ".formatted(persona.getEstado())
+                tipoPersona ? "":"PERSONA STARTING WITH '%s' ".formatted(persona.getPersona()),
+                (pNombre || sNombre || apellidos) ? "":"""
+                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s'
+                                                       """.formatted(
+                                                               persona.getPnombre(), 
+                                                               persona.getSnombre(), 
+                                                               persona.getApellidos()
+                                                       ),
+                estado ? "":"ESTADO IS %B ".formatted(persona.getEstado())
         ).strip().trim();
     }
 //------------------------------------------------------------------------------

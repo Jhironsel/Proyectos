@@ -1,6 +1,5 @@
 package sur.softsurena.entidades;
 
-import java.io.File;
 import java.sql.Date;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +11,6 @@ public class Categoria implements Comparable {
     private final Integer id_categoria;
     private final String descripcion;
     private final Date fecha_creacion;
-    private final String image_texto;
     private final Boolean estado;
 
     @Override

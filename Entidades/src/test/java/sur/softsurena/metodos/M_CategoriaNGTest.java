@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -11,7 +10,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
-import static sur.softsurena.metodos.M_Categoria.OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_LA__CA;
 import static sur.softsurena.metodos.M_Categoria.SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.generarCodigoBarra;
 import sur.softsurena.utilidades.Resultado;
@@ -24,7 +22,6 @@ import sur.softsurena.utilidades.Resultado;
 public class M_CategoriaNGTest {
 
     public static int idCategoria;
-    public static String descripcion;
 
     public M_CategoriaNGTest() {
     }
@@ -82,12 +79,12 @@ public class M_CategoriaNGTest {
                         .build(),
                 "Problemas en el registro de la categoria."
         );
-        
+
         assertTrue(
                 result.getId() > 0,
                 "Identificador de la categoria es menor que cero!!!"
-                );
-        
+        );
+
         idCategoria = result.getId();
     }
 
@@ -97,13 +94,12 @@ public class M_CategoriaNGTest {
             priority = 1
     )
     public void testUpdate() {
-        descripcion = generarCodigoBarra();
         assertEquals(
                 M_Categoria.update(
                         Categoria
                                 .builder()
                                 .id_categoria(idCategoria)
-                                .descripcion(descripcion)
+                                .descripcion(generarCodigoBarra())
                                 .estado(Boolean.FALSE)
                                 .build()
                 ),
@@ -129,7 +125,7 @@ public class M_CategoriaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
                 ORDER BY 1;
                 """.trim().strip()
@@ -143,7 +139,7 @@ public class M_CategoriaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
                 WHERE ID = 0 
                 ORDER BY 1;
@@ -158,7 +154,7 @@ public class M_CategoriaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
                 WHERE ESTADO
                 ORDER BY 1;
@@ -173,13 +169,13 @@ public class M_CategoriaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
                 WHERE ESTADO IS FALSE
                 ORDER BY 1;
                 """.trim().strip()
         );
-        
+
         assertEquals(
                 M_Categoria.sqlSelect(
                         Categoria
@@ -188,7 +184,7 @@ public class M_CategoriaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO, COALESCE(IMAGEN_TEXTO,'') IMAGEN_TEXTO
+                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
                 WHERE DESCRIPCION STARTING WITH 'PRUEBA'
                 ORDER BY 1;
@@ -202,58 +198,71 @@ public class M_CategoriaNGTest {
             priority = 2
     )
     public void testSelect() {
-        List result = M_Categoria.select(
-                Categoria
-                        .builder()
-                        .estado(Boolean.TRUE)
-                        .build()
+        
+        assertNotNull(
+                M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .build()
+                ),
+                "Error al consultar."
+        );
+        
+        assertNotNull(
+                M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .id_categoria(0)
+                                .build()
+                ),
+                "Error al consultar."
+        );
+        
+        assertNotNull(
+                M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                "Error al consultar."
+        );
+
+        assertNotNull(
+                M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                "Error al consultar."
         );
         assertNotNull(
-                result,
-                "Error al obtener todas las categorias con fotos."
+                M_Categoria.select(
+                        Categoria
+                                .builder()
+                                .descripcion("PRUEBA")
+                                .build()
+                ),
+                "Error al consultar."
         );
 
-        result = M_Categoria.select(
-                Categoria
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-        assertNotNull(
-                result,
-                "Error al obtener todas las categorias sin fotos."
-        );
-
-    }
-
-    @Test(
-            enabled = true,
-            description = "Permite verificar que una categoria esta registrada en el sistema.",
-            priority = 4
-    )
-    public static void testExist() {
-
-        Boolean result = M_Categoria.exist(descripcion);
-        assertTrue(
-                result,
-                "No existe registros de pruebas en la consulta."
-        );
     }
 
     @Test(
             enabled = true,
             description = "Permite eliminar una gategoria del sistema.",
-            priority = 5
+            priority = 4
     )
     public static void testDelete() {
         assertEquals(
                 M_Categoria.delete(idCategoria),
                 Resultado
-                    .builder()
-                    .mensaje(M_Categoria.CATEGORIA__BORRADO__CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build()
+                        .builder()
+                        .mensaje(M_Categoria.CATEGORIA__BORRADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
     }
 }

@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 public class SlidePaneFactory extends Box {
 
     StateListener listener;
-    List<StateListener> listeList = new ArrayList<StateListener>();
+    List<StateListener> listeList = new ArrayList<>();
 
     private SlidePaneFactory(final boolean isGroup) {
         super(BoxLayout.Y_AXIS);

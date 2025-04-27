@@ -9,7 +9,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.FotoCategoria;
 import sur.softsurena.metodos.M_Categoria;
+import sur.softsurena.metodos.M_Foto_Categoria;
 import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -348,7 +350,12 @@ public class frmCategorias extends javax.swing.JDialog {
         }
 
         //Consultamos la base de datos para saber si ese nombre de categoria existe.
-        if (M_Categoria.exist(nombreCategoria.toUpperCase())) {
+        if (M_Categoria.select(
+                Categoria
+                        .builder()
+                        .descripcion(nombreCategoria.toUpperCase())
+                        .build()
+        ).isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
                     "Este nombre de Categoria ya existe en el sistema.",
@@ -391,9 +398,17 @@ public class frmCategorias extends javax.swing.JDialog {
             fechaCreacion = "01.01.2000";
         }
 
+        int index = cbCategoria.getSelectedIndex();
+        String foto = M_Foto_Categoria.select(
+                FotoCategoria
+                        .builder()
+                        .id(cbCategoria.getItemAt(index).getId_categoria())
+                        .build()
+        ).getFirst().getFoto();
+        
         jlImagen.setIcon(
                 Utilidades.imagenDecode64(
-                        ((Categoria) cbCategoria.getSelectedItem()).getImage_texto(),
+                        foto,
                         96,
                         96
                 )
@@ -477,7 +492,6 @@ public class frmCategorias extends javax.swing.JDialog {
                         .builder()
                         .id_categoria(-1)
                         .descripcion("Seleccione una categoria")
-                        .image_texto("")
                         .fecha_creacion(null)
                         .estado(false)
                         .build()
@@ -494,7 +508,6 @@ public class frmCategorias extends javax.swing.JDialog {
                                     .builder()
                                     .id_categoria(categoria.getId_categoria())
                                     .descripcion(categoria.getDescripcion())
-                                    .image_texto(categoria.getImage_texto())
                                     .fecha_creacion(categoria.getFecha_creacion())
                                     .estado(categoria.getEstado())
                                     .build()

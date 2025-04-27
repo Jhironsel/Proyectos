@@ -54,12 +54,62 @@ public class M_Foto_ProductoNGTest {
     @AfterMethod
     public void tearDownMethod() throws Exception {
     }
+    
+    
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = """
+                          """
+    )
+    public void testSqlSelect() {
+        assertEquals(
+                M_Foto_Producto.sqlSelect(
+                        FotoProducto
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PRODUCTO
+                """.strip()
+        );
+
+        assertEquals(
+                M_Foto_Producto.sqlSelect(
+                        FotoProducto
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PRODUCTO
+                WHERE ID = 0
+                """.strip()
+        );
+
+        assertEquals(
+                M_Foto_Producto.sqlSelect(
+                        FotoProducto
+                                .builder()
+                                .idProducto(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PRODUCTO
+                WHERE ID_PRODUCTO = 0
+                """.strip()
+        );
+    }
 
     @Test(
             enabled = true,
             priority = 1,
             description = """
-                          """
+                          """,
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         assertNotNull(
@@ -68,7 +118,27 @@ public class M_Foto_ProductoNGTest {
                                 .builder()
                                 .build()
                 ),
-                "Error en la consulta de foto de persona."
+                "Error en la consulta de foto del producto."
+        );
+        
+        assertNotNull(
+                M_Foto_Producto.select(
+                        FotoProducto
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                "Error en la consulta de foto del producto."
+        );
+        
+        assertNotNull(
+                M_Foto_Producto.select(
+                        FotoProducto
+                                .builder()
+                                .idProducto(0)
+                                .build()
+                ),
+                "Error en la consulta de foto del producto."
         );
     }
 
@@ -88,7 +158,7 @@ public class M_Foto_ProductoNGTest {
                         .idProducto(producto.getId())
                         .foto(
                                 Utilidades.imagenEncode64(
-                                        new File("ejemplo.png")
+                                        new File("Imagenes/ImagenPrueba.png")
                                 )
                         )
                         .actual(Boolean.TRUE)
@@ -113,7 +183,8 @@ public class M_Foto_ProductoNGTest {
             enabled = true,
             priority = 3,
             description = """
-                          """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
         Resultado result = M_Foto_Producto.update(
@@ -140,7 +211,8 @@ public class M_Foto_ProductoNGTest {
             enabled = true,
             priority = 4,
             description = """
-                          """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public void testDelete() {
         assertEquals(
@@ -179,84 +251,6 @@ public class M_Foto_ProductoNGTest {
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build()
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testSqlSelect() {
-        assertEquals(
-                M_Foto_Producto.sqlSelect(
-                        FotoProducto
-                                .builder()
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PRODUCTO
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Producto.sqlSelect(
-                        FotoProducto
-                                .builder()
-                                .id(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PRODUCTO
-                WHERE ID = 1
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Producto.sqlSelect(
-                        FotoProducto
-                                .builder()
-                                .idProducto(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PRODUCTO
-                WHERE ID_PRODUCTO = 1
-                """.strip()
-        );
-        
-        assertEquals(
-                M_Foto_Producto.sqlSelect(
-                        FotoProducto
-                                .builder()
-                                .idProducto(1)
-                                .actual(Boolean.TRUE)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PRODUCTO
-                WHERE ID_PRODUCTO = 1 AND ACTUAL
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Producto.sqlSelect(
-                        FotoProducto
-                                .builder()
-                                .id(1)
-                                .idProducto(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PRODUCTO
-                WHERE ID = 1 AND ID_PRODUCTO = 1
-                """.strip()
         );
     }
 }

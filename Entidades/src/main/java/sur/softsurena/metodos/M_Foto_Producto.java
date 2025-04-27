@@ -63,22 +63,18 @@ public class M_Foto_Producto {
     protected static String sqlSelect(FotoProducto fotoProducto) {
         Boolean id = Objects.isNull(fotoProducto.getId());
         Boolean id_persona = Objects.isNull(fotoProducto.getIdProducto());
-        Boolean actual = Objects.isNull(fotoProducto.getActual());
         
-        Boolean where = id && id_persona && actual;
-        Boolean and = !id && !id_persona;
+        Boolean where = id && id_persona;
         return """
                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
                FROM V_FOTO_PRODUCTO
-               %s%s%s%s%s
+               %s%s%s
                """.formatted(
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(fotoProducto.getId()),
-                and ? "AND " : "",
                 id_persona ? "" : "ID_PRODUCTO = %d ".formatted(
                         fotoProducto.getIdProducto()
-                ),
-                actual ? "":(fotoProducto.getActual() ? "AND ACTUAL ":"AND ACTUAL IS FALSE")
+                )
         ).trim().strip();
     }
     
