@@ -1807,12 +1807,18 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
         ).stream().forEach(
                 categoria -> {
                     //Obteniendo la imagen de la categoria.
-                    String foto = M_Foto_Categoria.select(
+                    var listaFoto = M_Foto_Categoria.select(
                             FotoCategoria
                                     .builder()
                                     .id(categoria.getId_categoria())
                                     .build()
-                    ).getLast().getFoto();
+                    ).stream().filter(foto -> foto.getActual() == true).findFirst();
+                    
+                    String foto = "";
+                    
+                    if(listaFoto.isPresent()){
+                        foto = listaFoto.get().getFoto();
+                    }
                     
                     ImageIcon imagen = Utilidades.imagenDecode64(
                             foto,
@@ -1884,9 +1890,8 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                             Persona
                                     .builder()
                                     .idPersona(cliente.getId())
-                                    .estado(true)
                                     .build()
-                    ).stream().forEach(
+                    ).stream().filter(filtro -> filtro.getEstado()).forEach(
                             persona -> {
                                 cmbClientes.addItem(persona);
                             }

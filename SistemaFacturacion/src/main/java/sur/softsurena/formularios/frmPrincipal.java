@@ -68,7 +68,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         usuario = M_Usuario.getUsuarioActual();
 
         initComponents();
-        ((DesktopConFondo) dpnEscritorio).setImagen("/sur/softsurena/imagenes/Fondo 1024 x 723.jpg");
+        ((DesktopConFondo) dpnEscritorio).setImagen("Fondo 1024 x 723.jpg");
 
         barraMenu();
 
