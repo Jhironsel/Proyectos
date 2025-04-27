@@ -737,7 +737,7 @@ public class frmPrincipal extends javax.swing.JFrame implements Runnable {
         miJD.setVisible(true);
     }//GEN-LAST:event_mnuContactarActionPerformed
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        //((DesktopConFondo) dpnEscritorio).setImagen("/images/Portal.png");
+        ((DesktopConFondo) dpnEscritorio).setImagen("SoftSurena 800 x 550.png");
     }//GEN-LAST:event_formWindowOpened
 
     private void mnuCambiarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCambiarUsuarioActionPerformed

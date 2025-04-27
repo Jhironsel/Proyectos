@@ -314,7 +314,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
             @Override
             protected Object doInBackground() throws Exception {
 
-                ((DesktopConFondo) dpnEscritorio).setImagen("/imagenes/Principal 800 x 600.jpg");
+                ((DesktopConFondo) dpnEscritorio).setImagen("Principal 800 x 600.jpg");
                 return null;
             }
         };

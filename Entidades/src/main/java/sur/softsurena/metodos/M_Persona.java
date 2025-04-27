@@ -99,7 +99,7 @@ public class M_Persona {
                 id ? "" : "ID = %d ".formatted(persona.getIdPersona()),
                 tipoPersona ? "":"PERSONA STARTING WITH '%s' ".formatted(persona.getPersona()),
                 (pNombre || sNombre || apellidos) ? "":"""
-                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s'
+                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s' 
                                                        """.formatted(
                                                                persona.getPnombre(), 
                                                                persona.getSnombre(), 

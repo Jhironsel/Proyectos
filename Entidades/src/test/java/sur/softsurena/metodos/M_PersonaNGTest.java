@@ -66,13 +66,113 @@ public class M_PersonaNGTest {
     }
 
     //--------------------------------------------------------------------------
+    @Test
+    public void testSqlSelect() {
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                """.strip().trim()
+        );
+
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .idPersona(0)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ID = 0
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .persona('F')
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE PERSONA STARTING WITH 'F'
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .pnombre("GENERICO")
+                                .snombre("GENERICO")
+                                .apellidos("GENERICO")
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE PNOMBRE STARTING WITH 'GENERICO' OR SNOMBRE STARTING WITH 'GENERICO' OR APELLIDOS STARTING WITH 'GENERICO'
+                """.strip().trim()
+        );
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ESTADO IS TRUE
+                """.strip().trim()
+        );
+        
+        
+        assertEquals(
+                M_Persona.sqlSelect(
+                        Persona
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, USER_NAME, ROL_USUARIO
+                FROM V_PERSONAS
+                WHERE ESTADO IS FALSE
+                """.strip().trim()
+        );
+    }
+//------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 0,
             description = """
                           Test que permite obtener un registro de la base de 
                           datos del sistema.
-                          """
+                          """,
+            dependsOnMethods = {"testSqlSelect"}
     )
     public static void testSelect() {
         Persona result = M_Persona.select(
@@ -206,105 +306,5 @@ public class M_PersonaNGTest {
                 )
                 .estado(estado)
                 .build();
-    }
-
-    @Test
-    public void testSqlList() {
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                """.strip().trim()
-        );
-
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .idPersona(0)
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                WHERE ID = 0
-                """.strip().trim()
-        );
-        
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .persona('F')
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                WHERE PERSONA STARTING WITH 'F'
-                """.strip().trim()
-        );
-        
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .pnombre("GENERICO")
-                                .snombre("GENERICO")
-                                .apellidos("GENERICO")
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                WHERE PNOMBRE STARTING WITH 'GENERICO' OR SNOMBRE STARTING WITH 'GENERICO' OR APELLIDOS STARTING WITH 'GENERICO'
-                """.strip().trim()
-        );
-        
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .estado(Boolean.TRUE)
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                WHERE ESTADO IS TRUE
-                """.strip().trim()
-        );
-        
-        
-        assertEquals(
-                M_Persona.sqlSelect(
-                        Persona
-                                .builder()
-                                .estado(Boolean.FALSE)
-                                .build()
-                ),
-                """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
-                    ESTADO, USER_NAME, ROL_USUARIO
-                FROM V_PERSONAS
-                WHERE ESTADO IS FALSE
-                """.strip().trim()
-        );
     }
 }
