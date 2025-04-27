@@ -297,11 +297,12 @@ public class M_Usuario {
      * usuarios del sistema.
      */
     public synchronized static Usuario getUsuario(String userName) {
-        final String sql
-                = "SELECT PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, ADMINISTRADOR, "
-                + "         DESCRIPCION "
-                + "FROM VS_USUARIOS "
-                + "WHERE TRIM(UPPER(USERNAME)) STARTING WITH UPPER(TRIM(?));";
+        final String sql = """
+                           SELECT PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, ADMINISTRADOR, 
+                           DESCRIPCION 
+                           FROM VS_USUARIOS 
+                           WHERE TRIM(UPPER(USERNAME)) STARTING WITH UPPER(TRIM(?));
+                           """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
