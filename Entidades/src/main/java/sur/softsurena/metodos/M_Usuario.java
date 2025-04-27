@@ -234,22 +234,20 @@ public class M_Usuario {
             = "Error al borrar usuario.";
 
     /**
-     * Metodo para consultar cual es el usuario actual del sistema.<br/>
+     * Metodo para consultar cual es el usuario actual del sistema.<br>
      *
      * Una vez iniciada la session del usuario en el sistema, hacemos una
      * consulta a la base de datos, que nos devuelve el usuario y el rol de
-     * este.<br/>
+     * este.<br>
      *
      * @return Un objecto de la clase usuario con los datos del usuario del
-     * sistema que ha iniciado sessión actualmente.<br/>
+     * sistema que ha iniciado sessión actualmente.<br>
      */
     public synchronized static Usuario getUsuarioActual() {
         final String sql = """
-                           SELECT TRIM(CURRENT_USER) USUARIO, 
-                                IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', 
-                                    'ADMINISTRADOR', 
-                                    TRIM(CURRENT_ROLE)
-                           ) ROLE 
+                           SELECT 
+                                TRIM(CURRENT_USER) USUARIO, 
+                                IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', 'ADMINISTRADOR', TRIM(CURRENT_ROLE)) ROLE 
                            FROM RDB$DATABASE
                            """;
 
@@ -272,7 +270,11 @@ public class M_Usuario {
                         .build();
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
             return null;
         }
     }
@@ -303,6 +305,22 @@ public class M_Usuario {
                 + "FROM VS_USUARIOS "
                 + "WHERE TRIM(UPPER(USERNAME)) STARTING WITH UPPER(TRIM(?));";
 
+        Usuario usuario = Usuario
+                            .builder()
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .pnombre("Usuario")
+                                            .snombre("NO")
+                                            .apellidos("encontrado")
+                                            .estado(false)
+                                            .user_name(userName)
+                                            .build()
+                            )
+                            .administrador(false)
+                            .descripcion("Usuario no se encuentra en el sistema.")
+                            .build();
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -312,33 +330,32 @@ public class M_Usuario {
             ps.setString(1, userName);
 
             try (ResultSet rs = ps.executeQuery();) {
-
-                rs.absolute(1);
-
-                return Usuario
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pnombre(rs.getString("PNOMBRE"))
-                                        .snombre(rs.getString("SNOMBRE"))
-                                        .apellidos(rs.getString("APELLIDOS"))
-                                        .estado(rs.getBoolean("ESTADO"))
-                                        .user_name(userName)
-                                        .build()
-                        )
-                        .administrador(rs.getBoolean("ADMINISTRADOR"))
-                        .descripcion(rs.getString("DESCRIPCION"))
-                        .build();
+                if (rs.absolute(1)) {
+                    usuario = Usuario
+                            .builder()
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .pnombre(rs.getString("PNOMBRE"))
+                                            .snombre(rs.getString("SNOMBRE"))
+                                            .apellidos(rs.getString("APELLIDOS"))
+                                            .estado(rs.getBoolean("ESTADO"))
+                                            .user_name(userName)
+                                            .build()
+                            )
+                            .administrador(rs.getBoolean("ADMINISTRADOR"))
+                            .descripcion(rs.getString("DESCRIPCION"))
+                            .build();
+                }
             }
         } catch (SQLException ex) {
             LOG.log(
-                    Level.SEVERE, 
-                    ex.getMessage(), 
+                    Level.SEVERE,
+                    ex.getMessage(),
                     ex
             );
         }
-        return null;
+        return usuario;
     }
 
     /**
@@ -382,10 +399,13 @@ public class M_Usuario {
                     );
                 }
             }
-            return usuarios;
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
-            return null;
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
         }
+        return usuarios;
     }
 }
