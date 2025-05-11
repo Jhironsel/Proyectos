@@ -115,13 +115,13 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jpNavegacion" alignment="0" max="32767" attributes="0"/>
-          <Component id="jScrollPane2" alignment="0" pref="807" max="32767" attributes="0"/>
+          <Component id="jScrollPane2" alignment="0" pref="788" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jScrollPane2" pref="698" max="32767" attributes="0"/>
+              <Component id="jScrollPane2" pref="515" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               <Component id="jpNavegacion" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
@@ -161,115 +161,143 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jScrollPane7" alignment="1" min="-2" pref="388" max="-2" attributes="0"/>
-                              <Component id="jScrollPane6" min="-2" pref="388" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                          <Component id="jScrollPane6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane7" pref="618" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel1" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane6">
+                <Container class="javax.swing.JPanel" name="jPanel1">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jScrollPane6" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
                   </Properties>
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jScrollPane6" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane7" min="-2" pref="388" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane6" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jScrollPane7" pref="588" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
                   <SubComponents>
-                    <Container class="javax.swing.JPanel" name="jpFiltro">
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane6">
                       <Properties>
-                        <Property name="name" type="java.lang.String" value="jpFiltro" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="jScrollPane6" noResource="true"/>
                       </Properties>
 
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                  <Component id="txtFiltroBusqueda" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cbEstadoEmpleados" min="-2" pref="110" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="txtFiltroBusqueda" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cbEstadoEmpleados" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="RSMaterialComponent.RSTextFieldMaterialIcon" name="txtFiltroBusqueda">
+                        <Container class="javax.swing.JPanel" name="jpFiltro">
                           <Properties>
-                            <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
-                              <Value id="FIND_IN_PAGE"/>
+                            <Property name="name" type="java.lang.String" value="jpFiltro" noResource="true"/>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Component id="txtFiltroBusqueda" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace pref="20" max="32767" attributes="0"/>
+                                      <Component id="cbEstadoEmpleados" min="-2" pref="110" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="txtFiltroBusqueda" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cbEstadoEmpleados" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="RSMaterialComponent.RSTextFieldMaterialIcon" name="txtFiltroBusqueda">
+                              <Properties>
+                                <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
+                                  <Value id="FIND_IN_PAGE"/>
+                                </Property>
+                                <Property name="name" type="java.lang.String" value="txtFiltroBusqueda" noResource="true"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtFiltroBusquedaKeyReleased"/>
+                              </Events>
+                            </Component>
+                            <Component class="RSMaterialComponent.RSCheckBoxMaterial" name="cbEstadoEmpleados">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="Activo"/>
+                                <Property name="name" type="java.lang.String" value="cbEstadoEmpleados" noResource="true"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbEstadoEmpleadosActionPerformed"/>
+                              </Events>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane7">
+                      <Properties>
+                        <Property name="name" type="java.lang.String" value="jScrollPane7" noResource="true"/>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="RSMaterialComponent.RSTableMetroCustom" name="jtEmpleados">
+                          <Properties>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="4" rowCount="4">
+                                <Column editable="true" title="Title 1" type="java.lang.Object"/>
+                                <Column editable="true" title="Title 2" type="java.lang.Object"/>
+                                <Column editable="true" title="Title 3" type="java.lang.Object"/>
+                                <Column editable="true" title="Title 4" type="java.lang.Object"/>
+                              </Table>
                             </Property>
-                            <Property name="name" type="java.lang.String" value="txtFiltroBusqueda" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="jtEmpleados" noResource="true"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtFiltroBusquedaKeyReleased"/>
-                          </Events>
-                        </Component>
-                        <Component class="RSMaterialComponent.RSCheckBoxMaterial" name="cbEstadoEmpleados">
-                          <Properties>
-                            <Property name="text" type="java.lang.String" value="Activo"/>
-                            <Property name="name" type="java.lang.String" value="cbEstadoEmpleados" noResource="true"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbEstadoEmpleadosActionPerformed"/>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jtEmpleadosMouseClicked"/>
                           </Events>
                         </Component>
                       </SubComponents>
                     </Container>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane7">
-                  <Properties>
-                    <Property name="name" type="java.lang.String" value="jScrollPane7" noResource="true"/>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                  </AuxValues>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                  <SubComponents>
-                    <Component class="RSMaterialComponent.RSTableMetroCustom" name="jtEmpleados">
-                      <Properties>
-                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="4" rowCount="4">
-                            <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                            <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                            <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                            <Column editable="true" title="Title 4" type="java.lang.Object"/>
-                          </Table>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="jtEmpleados" noResource="true"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jtEmpleadosMouseClicked"/>
-                      </Events>
-                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -297,9 +325,9 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="rSPanelMaterialGradient1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -308,7 +336,7 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="rSPanelMaterialGradient1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="149" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -419,7 +447,7 @@
                                                       <Group type="102" alignment="0" attributes="0">
                                                           <Component id="jcbCargos" min="-2" pref="180" max="-2" attributes="0"/>
                                                           <EmptySpace max="32767" attributes="0"/>
-                                                          <Component id="rSButtonGradientIcon_new1" min="-2" pref="180" max="-2" attributes="0"/>
+                                                          <Component id="btnGrabarHuella" min="-2" pref="180" max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
                                               </Group>
@@ -455,7 +483,7 @@
                                           <Group type="103" groupAlignment="2" attributes="0">
                                               <Component id="jcbDepartamentos" alignment="2" min="-2" pref="52" max="-2" attributes="0"/>
                                               <Component id="jcbCargos" alignment="2" min="-2" pref="52" max="-2" attributes="0"/>
-                                              <Component id="rSButtonGradientIcon_new1" alignment="2" min="-2" pref="52" max="-2" attributes="0"/>
+                                              <Component id="btnGrabarHuella" alignment="2" min="-2" pref="52" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
@@ -741,16 +769,16 @@
                                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPNombreActionPerformed"/>
                                   </Events>
                                 </Component>
-                                <Component class="newscomponents.RSButtonGradientIcon_new" name="rSButtonGradientIcon_new1">
+                                <Component class="newscomponents.RSButtonGradientIcon_new" name="btnGrabarHuella">
                                   <Properties>
                                     <Property name="text" type="java.lang.String" value="Enrrolar huella"/>
                                     <Property name="icons" type="rojeru_san.efectos.ValoresEnum$ICONS" editor="org.netbeans.modules.form.editors.EnumEditor">
                                       <Value id="FINGERPRINT"/>
                                     </Property>
-                                    <Property name="name" type="java.lang.String" value="rSButtonGradientIcon_new1" noResource="true"/>
+                                    <Property name="name" type="java.lang.String" value="btnGrabarHuella" noResource="true"/>
                                   </Properties>
                                   <Events>
-                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rSButtonGradientIcon_new1ActionPerformed"/>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGrabarHuellaActionPerformed"/>
                                   </Events>
                                 </Component>
                                 <Component class="javax.swing.JComboBox" name="jcbDepartamentos">
