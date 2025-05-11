@@ -17,16 +17,16 @@ public class Factura {
         return id.toString();
     }
 
-    public static Factura getFacturaTest() {
-        return Factura
-                .builder()
-                .id(0)
-                .m_factura(//2
-                        M_Factura.getM_FacturaTest()
-                )
-                .d_factura(
-                        D_Factura.getListTest()
-                )
-                .build();
-    }
+//    public static Factura getFacturaTest() {
+//        return Factura
+//                .builder()
+//                .id(0)
+//                .m_factura(//2
+//                        M_Factura.getM_FacturaTest()
+//                )
+//                .d_factura(
+//                        D_Factura.getListTest()
+//                )
+//                .build();
+//    }
 }

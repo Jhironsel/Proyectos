@@ -19,32 +19,36 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_CategoriaNGTest {
 
     public static int idCategoria;
 
     public M_CategoriaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_CategoriaNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "None"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -57,65 +61,8 @@ public class M_CategoriaNGTest {
 
     @Test(
             enabled = true,
-            description = "Permite registrar una categoria al sistema.",
-            priority = 0
-    )
-    public static void testInsert() {
-        Resultado result = M_Categoria.insert(
-                Categoria
-                        .builder()
-                        .descripcion(generarCodigoBarra())
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(M_Categoria.CATEGORIA_AGREGADA_CON_EXITO)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                "Problemas en el registro de la categoria."
-        );
-
-        assertTrue(
-                result.getId() > 0,
-                "Identificador de la categoria es menor que cero!!!"
-        );
-
-        idCategoria = result.getId();
-    }
-
-    @Test(
-            enabled = true,
-            description = "Permite modificar una categoria del sistema.",
-            priority = 1
-    )
-    public void testUpdate() {
-        assertEquals(
-                M_Categoria.update(
-                        Categoria
-                                .builder()
-                                .id_categoria(idCategoria)
-                                .descripcion(generarCodigoBarra())
-                                .estado(Boolean.FALSE)
-                                .build()
-                ),
-                Resultado
-                        .builder()
-                        .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-    }
-
-    @Test(
-            enabled = true,
             description = "Pruebas de consultas a las categorias con o sin fotos.",
-            priority = 2
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(
@@ -195,7 +142,7 @@ public class M_CategoriaNGTest {
     @Test(
             enabled = true,
             description = "Pruebas de consultas a las categorias con o sin fotos.",
-            priority = 2
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         
@@ -251,8 +198,65 @@ public class M_CategoriaNGTest {
 
     @Test(
             enabled = true,
+            description = "Permite registrar una categoria al sistema.",
+            dependsOnMethods = "testSelect"
+    )
+    public static void testInsert() {
+        Resultado result = M_Categoria.insert(
+                Categoria
+                        .builder()
+                        .descripcion(generarCodigoBarra())
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(M_Categoria.CATEGORIA_AGREGADA_CON_EXITO)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                "Problemas en el registro de la categoria."
+        );
+
+        assertTrue(
+                result.getId() > 0,
+                "Identificador de la categoria es menor que cero!!!"
+        );
+
+        idCategoria = result.getId();
+    }
+
+    @Test(
+            enabled = true,
+            description = "Permite modificar una categoria del sistema.",
+            dependsOnMethods = "testInsert"
+    )
+    public void testUpdate() {
+        assertEquals(
+                M_Categoria.update(
+                        Categoria
+                                .builder()
+                                .id_categoria(idCategoria)
+                                .descripcion(generarCodigoBarra())
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+    }
+
+    @Test(
+            enabled = true,
             description = "Permite eliminar una gategoria del sistema.",
-            priority = 4
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
         assertEquals(

@@ -81,10 +81,10 @@ public class M_Turno {
                         ? ""
                         : "AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('%s'));"
                                 .formatted(turno.getTurno_usuario())
-        );
+        ).strip();
     }
 
-//------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     /**
      * Metodo que nos permite habilitar a los cajeros al modulo de facturacion.
      *
@@ -92,19 +92,25 @@ public class M_Turno {
      * @return
      */
     public synchronized static Resultado insert(String idUsuario) {
-        final String sql = "EXECUTE PROCEDURE ADMIN_HABILITAR_TURNO(?)";
-        try (CallableStatement cs = getCnn().prepareCall(
+        final String sql = """
+                           SELECT ID
+                           FROM SP_I_TURNO(?);
+                           """;
+        try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setString(1, idUsuario);
+            ps.setString(1, idUsuario);
 
-            cs.execute();
+            ResultSet rs = ps.executeQuery();
+
+            rs.next();
 
             return Resultado
                     .builder()
+                    .id(rs.getInt("ID"))
                     .estado(Boolean.TRUE)
                     .mensaje(TURNO_HABILITADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
@@ -113,6 +119,7 @@ public class M_Turno {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
             return Resultado
                     .builder()
+                    .id(-1)
                     .estado(Boolean.FALSE)
                     .mensaje(ERROR_AL_HABILITAR_EL_TURNO)
                     .icono(JOptionPane.ERROR_MESSAGE)
@@ -124,6 +131,7 @@ public class M_Turno {
     public static final String TURNO_HABILITADO_CORRECTAMENTE
             = "Turno habilitado correctamente.";
 
+    //--------------------------------------------------------------------------
     /**
      * Metodo que nos permite cerrar los turno de los cajeros habiertos en el
      * sistema.
@@ -141,9 +149,9 @@ public class M_Turno {
         )) {
 
             cs.setInt(1, idTurno);
-            
+
             cs.executeUpdate();
-            
+
             return Resultado
                     .builder()
                     .mensaje(TURNO_CERRADO_CORRECTAMENTE)
@@ -156,16 +164,62 @@ public class M_Turno {
                     ex.getMessage(),
                     ex
             );
-        }
-        return Resultado
+            return Resultado
                     .builder()
                     .mensaje(ERROR_AL_CERRAR_EL__TURNO)
                     .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
+    }
+    public static final String ERROR_AL_CERRAR_EL__TURNO
+            = "Error al cerrar el Turno.!!!";
+    public static final String TURNO_CERRADO_CORRECTAMENTE
+            = "Turno cerrado correctamente.!!!";
+    
+    //--------------------------------------------------------------------------
+    /**
+     * Metodo que elimina fisicamente el registro de turno.
+     * 
+     * @param idTurno
+     * @return 
+     */
+    public synchronized static Resultado delete(Integer idTurno) {
+        final String sql = "EXECUTE PROCEDURE SP_D_TURNO(?)";
+        
+        try (CallableStatement cs = getCnn().prepareCall(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+
+            cs.setInt(1, idTurno);
+
+            cs.executeUpdate();
+
+            return Resultado
+                    .builder()
+                    .mensaje(TURNO_ELIMINADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+            return Resultado
+                    .builder()
+                    .mensaje(ERROR_AL_ELIMINAR_TURNO)
+                    .icono(JOptionPane.ERROR_MESSAGE)
+                    .estado(Boolean.FALSE)
+                    .build();
+        }
     }
-    public static final String ERROR_AL_CERRAR_EL__TURNO 
-            = "Error al cerrar el Turno.!!!";
-    public static final String TURNO_CERRADO_CORRECTAMENTE 
-            = "Turno cerrado correctamente.!!!";
+    public static final String ERROR_AL_ELIMINAR_TURNO 
+            = "Error al eliminar turno.";
+    public static final String TURNO_ELIMINADO_CORRECTAMENTE 
+            = "Turno eliminado correctamente.";
 }

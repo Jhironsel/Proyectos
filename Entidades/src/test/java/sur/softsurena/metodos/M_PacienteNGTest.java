@@ -1,7 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.sql.Date;
-import java.util.Calendar;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -10,8 +8,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_INSERTAR_PACIENTE;
@@ -22,144 +18,32 @@ import static sur.softsurena.metodos.M_Paciente.PACIENTE_MODIFICADO_CORRECTAMENT
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_PacienteNGTest {
 
-    private static Integer idPersona;
+    private static Integer idPaciente;
 
-    public M_PacienteNGTest() {
-    }
+    public M_PacienteNGTest() {}
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          Test que realiza el ingreso de un paciente al sistema.
                           """
     )
-    public static void testInsert() {
-        M_PersonaNGTest.testInsert();
-        idPersona = M_PersonaNGTest.persona(Boolean.TRUE).getIdPersona();
-        
-        Resultado result = M_Paciente.insert(generarPaciente());
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(PACIENTE_AGREGADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL_INSERTAR_PACIENTE
-        );
-        
-        
-
-        assertTrue(
-                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona() > 0,
-                ERROR_AL_INSERTAR_PACIENTE
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = "",
-            priority = 1
-    )
-    public static void testUpdate() {
-        Resultado result = M_Paciente.update(generarPaciente());
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(PACIENTE_MODIFICADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL_MODIFICAR_PACIENTE
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = "Test que permite eliminar un paciente ya creado.",
-            priority = 3
-    )
-    public static void testDelete() {
-        assertEquals(
-                M_Paciente.delete(
-                        Paciente
-                                .builder()
-                                .id(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
-                                .build()
-                ),
-                Resultado
-                        .builder()
-                        .mensaje(PACIENTE_BORRADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL_BORRAR_PACIENTE.formatted(
-                        M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-                )
-        );
-
-        M_PersonaNGTest.testDelete();
-    }
-
-    @Test
-    public static void testSelect() {
-        assertNotNull(
-                M_Paciente.select(
-                        Paciente
-                                .builder()
-                                .build()
-                ),
-                "Error en la consulta de pacientes."
-        );
-
-        assertNotNull(
-                M_Paciente.select(
-                        Paciente
-                                .builder()
-                                .id(-1)
-                                .build()
-                ),
-                "Error en la consulta de pacientes."
-        );
-    }
-
-    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -188,11 +72,117 @@ public class M_PacienteNGTest {
                 """.strip()
         );
     }
+    
+    @Test(
+            dependsOnMethods = "testSqlSelect"
+    )
+    public static void testSelect() {
+        assertNotNull(
+                M_Paciente.select(
+                        Paciente
+                                .builder()
+                                .build()
+                ),
+                "Error en la consulta de pacientes."
+        );
+
+        assertNotNull(
+                M_Paciente.select(
+                        Paciente
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                "Error en la consulta de pacientes."
+        );
+    }
+
+    @Test(
+            enabled = true,
+            description = """
+                          Test que realiza el ingreso de un paciente al sistema.
+                          """
+    )
+    public static void testInsert() {
+        M_PersonaNGTest.testInsert();
+        idPaciente = M_PersonaNGTest.getPersona(Boolean.TRUE).getIdPersona();
+        
+        Resultado result = M_Paciente.insert(generarPaciente());
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(PACIENTE_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_INSERTAR_PACIENTE
+        );
+        
+        
+
+        assertTrue(
+                M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona() > 0,
+                ERROR_AL_INSERTAR_PACIENTE
+        );
+    }
+
+    @Test(
+            enabled = true,
+            description = "",
+            dependsOnMethods = "testInsert"
+    )
+    public static void testUpdate() {
+        Resultado result = M_Paciente.update(generarPaciente());
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(PACIENTE_MODIFICADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_MODIFICAR_PACIENTE
+        );
+    }
+
+    @Test(
+            enabled = true,
+            description = "Test que permite eliminar un paciente ya creado.",
+            dependsOnMethods = {"testInsert", "testUpdate"}
+    )
+    public static void testDelete() {
+        assertEquals(
+                M_Paciente.delete(
+                        Paciente
+                                .builder()
+                                .id(
+                                        M_PersonaNGTest
+                                                .getPersona(Boolean.FALSE)
+                                                .getIdPersona()
+                                )
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(PACIENTE_BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_BORRAR_PACIENTE.formatted(
+                        M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona()
+                )
+        );
+
+        M_PersonaNGTest.testDelete();
+    }
 
     public static Paciente generarPaciente() {
         return Paciente
                 .builder()
-                .id(idPersona)
+                .id(idPaciente)
                 .cesarea(Boolean.FALSE)
                 .tiempoGestacion(8)
                 .fumador(Boolean.FALSE)

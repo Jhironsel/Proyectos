@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 public class PacienteNGTest {
 
     public PacienteNGTest() {
+        System.out.println("sur.softsurena.entidades.PacienteNGTest.<init>()");
     }
 
     @BeforeClass

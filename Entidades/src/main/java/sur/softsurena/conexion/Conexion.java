@@ -23,10 +23,18 @@ public class Conexion {
     private static StringBuilder URL_DB;
     private static frmRegistros miRegistros;
     
-    public static Connection getCnn() {
+    /**
+     * Metodo que ofrece la conexion realizada y validada del sistema.
+     * @return
+     */
+    public synchronized static Connection getCnn() {
         return cnn;
     }
 
+    /**
+     * Metodo que setea la conexion del sistema.
+     * @param cnn 
+     */
     public static void setCnn(Connection cnn) {
         Conexion.cnn = cnn;
     }
@@ -53,6 +61,7 @@ public class Conexion {
             @NonNull String puerto,
             @NonNull String role
     ) {
+        
         Conexion.USER = user;
         Conexion.CLAVE = clave;
         Conexion.ROLE = role;

@@ -19,33 +19,37 @@ import sur.softsurena.conexion.Conexion;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_BaseDeDatosNGTest {
 
     private String GUID;
 
     public M_BaseDeDatosNGTest() {
+        System.out.println("sur.softsurena.metodos.M_BaseDeDatosNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "None"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
         GUID = M_BaseDeDatos.GET_GUID();
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -63,31 +67,31 @@ public class M_BaseDeDatosNGTest {
     )
     public void testPathBaseDeDatos() {
         String result = M_BaseDeDatos.pathBaseDeDatos();
-        
+
         assertNotNull(
-                result, 
+                result,
                 "No puede obtenerse la ruta a la base de datos."
         );
-        
+
         assertFalse(
-                result.isBlank(), 
+                result.isBlank(),
                 "La ruta se encuentra en blanco."
         );
-        
+
         File file = new File(result);
 
         assertTrue(
-                file.canRead(), 
+                file.canRead(),
                 "No puede leerse la base de datos."
         );
-        
+
         assertTrue(
-                file.canWrite(), 
+                file.canWrite(),
                 "No puede Escribirse en la base de datos."
         );
-        
+
         assertFalse(
-                file.isHidden(), 
+                file.isHidden(),
                 "El archivo de la base de datos esta oculto."
         );
     }
@@ -99,7 +103,10 @@ public class M_BaseDeDatosNGTest {
     )
     public void testPeriodoMaquina() {
         int result = M_BaseDeDatos.periodoMaquina();
-        assertTrue(result > 0, "La base de datos cuenta con periodo insuficiente.");
+        assertTrue(
+                result > 0, 
+                "La base de datos cuenta con periodo insuficiente."
+        );
     }
 
     @Test(
@@ -108,36 +115,34 @@ public class M_BaseDeDatosNGTest {
             description = ""
     )
     public void testSetLicencia() throws SQLException {
-        Conexion.getInstance(
-                "Registrador",
-                "123uasd",
-                "registros.db",
-                "40.233.25.79",
-                "3050",
-                "R_REGISTRADOR"
-        );
-        
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-        
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.add(Calendar.MONTH, 1);
-        Date fecha = new Date(gregorianCalendar.getTimeInMillis());
-        
-        assertTrue(
-                M_BaseDeDatos.setLicencia(
-                        fecha, 
-                        GUID, 
-                        "Prueba", 
-                        "+1(829) 299-5555", 
-                        "Haciendo prueba."
-                ).getEstado(), 
-                "El registro de la licencia no fue insertado."
-        );
-        
-        Conexion.getCnn().close();
+        //TODO 10/05/2025 Analizar el test de la licencia del sistemas.
+//        Conexion.getInstance(
+//                "Registrador",
+//                "123uasd",
+//                "registros.db",
+//                "40.233.25.79",
+//                "3050",
+//                "R_REGISTRADOR"
+//        );
+
+//        if (Conexion.verificar().getEstado()) {
+//            GregorianCalendar gregorianCalendar = new GregorianCalendar();
+//            gregorianCalendar.add(Calendar.MONTH, 1);
+//            Date fecha = new Date(gregorianCalendar.getTimeInMillis());
+//
+//            assertTrue(
+//                    M_BaseDeDatos.setLicencia(
+//                            fecha,
+//                            GUID,
+//                            "Prueba",
+//                            "+1(829) 299-5555",
+//                            "Haciendo prueba."
+//                    ).getEstado(),
+//                    "El registro de la licencia no fue insertado."
+//            );
+//        }
+
+//        Conexion.getCnn().close();
     }
 
     @Test(

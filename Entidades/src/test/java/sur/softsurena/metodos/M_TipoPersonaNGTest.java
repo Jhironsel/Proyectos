@@ -10,9 +10,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_TipoPersonaNGTest {
 
     public M_TipoPersonaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_TipoPersonaNGTest.<init>()");
     }
 
     @BeforeClass

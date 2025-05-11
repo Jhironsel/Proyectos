@@ -12,29 +12,34 @@ import sur.softsurena.entidades.Gasto;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_GastoNGTest {
     
     public M_GastoNGTest() {
+        System.out.println("sur.softsurena.metodos.M_GastoNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -49,7 +54,8 @@ public class M_GastoNGTest {
     @Test(
             enabled = false,
             priority = 0,
-            description = ""
+            description = """
+                          """
     )
     public void testAgregarGastosPorTurno() {
         Gasto gasto = null;

@@ -33,7 +33,7 @@ public class M_D_Factura {
      * @return Ahora devuelve un resultado que indica el estado de la 
      * operaciones de registros.
      */
-    public static synchronized Resultado agregarDetalleFactura(
+    public static synchronized Resultado insert(
             Factura factura
     ){
         final String sql
@@ -95,7 +95,7 @@ public class M_D_Factura {
      * @param idFactura
      * @return
      */
-    public synchronized static List<D_Factura> getBuscarTemporal(Integer idFactura) {
+    public synchronized static List<D_Factura> select(Integer idFactura) {
         
         final String sql = """
                            SELECT ID, LINEA, ID_PRODUCTO, ID_PRECIO, 

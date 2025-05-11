@@ -27,7 +27,7 @@ public class M_ContactoEmail {
      * registros en el sistema.
      * @return
      */
-    public static synchronized Resultado agregarContactosEmail(ContactoEmail contacto) {
+    public static synchronized Resultado insert(ContactoEmail contacto) {
         try (PreparedStatement ps = getCnn().prepareStatement(
                 """
                 SELECT O_ID
@@ -72,13 +72,14 @@ public class M_ContactoEmail {
     public static final String CORREO_AGREGADO_O_MODIFICADO_CORRECTAMENT
             = "Correo agregado o modificado correctamente.";
 
+    //--------------------------------------------------------------------------
     /**
      * Modifica el contacto de correo de una persona.
      *
      * @param contacto
      * @return
      */
-    public static Resultado modificarContactosEmail(ContactoEmail contacto) {
+    public static Resultado update(ContactoEmail contacto) {
         try (PreparedStatement ps = getCnn().prepareStatement(
                 """
                 EXECUTE PROCEDURE SP_U_CONTACTO_EMAIL (?,?,?,?);
@@ -127,7 +128,7 @@ public class M_ContactoEmail {
      * @param id_persona
      * @return
      */
-    public synchronized static List<ContactoEmail> getCorreoByID(
+    public synchronized static List<ContactoEmail> selectByID(
             Integer id_persona
     ) {
         final String sql
@@ -218,7 +219,7 @@ public class M_ContactoEmail {
         return ptr.matcher(correo).matches();
     }
 
-    public static Resultado borrarContactoEmail(int idEmail) {
+    public static Resultado delete(int idEmail) {
         try (PreparedStatement ps = getCnn().prepareStatement(
                 """
                 EXECUTE PROCEDURE SP_D_CONTACTO_EMAIL (?);

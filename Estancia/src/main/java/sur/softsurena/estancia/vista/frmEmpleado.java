@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
@@ -1451,6 +1452,23 @@ public class frmEmpleado extends javax.swing.JInternalFrame {
                 return;
             }
         }
+        
+        if(Objects.isNull(template)){
+            int respuesta = JOptionPane.showInternalConfirmDialog(
+                    this, 
+                    """
+                    Empleado no ha registrado su huella en el sistema.
+                    Desea continuar con el registro?
+                    """, 
+                    "", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            
+            if(respuesta == JOptionPane.NO_OPTION){
+                return;
+            }
+        }
 
 //        ByteArrayInputStream temp = null;
 //        int tam = 0;
@@ -2199,7 +2217,7 @@ public class frmEmpleado extends javax.swing.JInternalFrame {
             );
             tblDireccion.setModel(v_dtmDireccion);
         } else {
-            M_ContactoDireccion.agregarDireccion(direccion);
+            M_ContactoDireccion.insert(direccion);
         }
 
         LimpiarComboBoxProMuniDistr();
@@ -2395,7 +2413,7 @@ public class frmEmpleado extends javax.swing.JInternalFrame {
             });
             tblTelefonos.setModel(v_dtmTelefono);
         } else {
-            M_ContactoTel.agregarContactosTel(contactoTel);
+            M_ContactoTel.insert(contactoTel);
         }
 
         limpiarTxtTelefonoMovil();
@@ -2524,7 +2542,7 @@ public class frmEmpleado extends javax.swing.JInternalFrame {
 
             tblCorreos.setModel(v_dtmCorreo);
         } else {
-            M_ContactoEmail.agregarContactosEmail(contactoEmail);
+            M_ContactoEmail.insert(contactoEmail);
         }
 
         txtCorreo.setText("");

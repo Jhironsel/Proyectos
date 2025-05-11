@@ -18,33 +18,37 @@ import sur.softsurena.utilidades.Utilidades;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_Foto_ProductoNGTest {
 
     private Integer idfoto;
     private Integer idProducto;
 
     public M_Foto_ProductoNGTest() {
+        System.out.println("sur.softsurena.metodos.M_Foto_ProductoNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -58,9 +62,9 @@ public class M_Foto_ProductoNGTest {
     
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(

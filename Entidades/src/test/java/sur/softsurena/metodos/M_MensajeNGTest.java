@@ -14,9 +14,13 @@ import sur.softsurena.entidades.Mensaje;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_MensajeNGTest {
 
     public M_MensajeNGTest() {
+        System.out.println("sur.softsurena.metodos.M_MensajeNGTest.<init>()");
     }
 
     @BeforeClass

@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.ContactoTel;
 import sur.softsurena.utilidades.Resultado;
 
@@ -18,34 +17,22 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ContactoTelNGTest {
 
-    private final M_PersonaNGTest persona;
-    private Integer idContactoTel = -1;
+    public static Integer idContactoTel;
 
     public M_ContactoTelNGTest() {
-        persona = new M_PersonaNGTest();
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -62,12 +49,13 @@ public class M_ContactoTelNGTest {
             description = """
                           Test que permite agregar un telefono de contacto de 
                           una persona.
-                          """
+                          """,
+            groups = "contactoTel.insert"
     )
-    public void testAgregarContactosTel() {
-        persona.testInsert();
+    public void testInsert() {
+        M_PersonaNGTest.testInsert();
 
-        Resultado result = M_ContactoTel.agregarContactosTel(
+        Resultado result = M_ContactoTel.insert(
                 telefono()
         );
 
@@ -99,7 +87,7 @@ public class M_ContactoTelNGTest {
                           """
     )
     public void testModificarContactoTel() {
-        Resultado result = M_ContactoTel.modificarContactoTel(
+        Resultado result = M_ContactoTel.update(
                 telefono()
         );
 
@@ -126,10 +114,10 @@ public class M_ContactoTelNGTest {
                           """
     )
     public void testGetTelefonoByID() {
-        List result = M_ContactoTel.getTelefonoByID(
-                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
+        List result = M_ContactoTel.selectByID(
+                M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona()
         );
-        
+
         assertFalse(
                 result.isEmpty(),
                 M_ContactoTel.ERROR_AL_CONSULTAR_LA_VISTA_V_CONTACTOS_T
@@ -145,7 +133,7 @@ public class M_ContactoTelNGTest {
                           """
     )
     public void testEliminarContactoTel() {
-        Resultado result = M_ContactoTel.eliminarContactoTel(idContactoTel);
+        Resultado result = M_ContactoTel.delete(idContactoTel);
         assertEquals(
                 result,
                 Resultado
@@ -156,7 +144,7 @@ public class M_ContactoTelNGTest {
                         .build(),
                 M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN
         );
-        persona.testDelete();
+        M_PersonaNGTest.testDelete();
     }
 
     @Test(
@@ -194,7 +182,11 @@ public class M_ContactoTelNGTest {
         return ContactoTel
                 .builder()
                 .id(idContactoTel)
-                .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
+                .idPersona(
+                        M_PersonaNGTest
+                                .getPersona(Boolean.FALSE)
+                                .getIdPersona()
+                )
                 .telefono(M_ContactoTel.generarTelMovil())
                 .tipo("Telefono")
                 .porDefecto(Boolean.TRUE)

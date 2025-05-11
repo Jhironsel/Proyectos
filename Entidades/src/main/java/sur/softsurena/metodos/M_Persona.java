@@ -31,14 +31,14 @@ public class M_Persona {
      *
      * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
      */
-    public static List<Persona> select(
+    public synchronized static List<Persona> select(
             @NonNull Persona persona
     ) {
         List<Persona> personaList = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlSelect(persona),
-                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
@@ -77,6 +77,7 @@ public class M_Persona {
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
             = "Error al consultar la vista V_PERSONAS del sistema.";
 
+    //--------------------------------------------------------------------------
     protected static String sqlSelect(Persona persona) {
         Boolean id = Objects.isNull(persona.getIdPersona());
         Boolean tipoPersona = Objects.isNull(persona.getPersona());

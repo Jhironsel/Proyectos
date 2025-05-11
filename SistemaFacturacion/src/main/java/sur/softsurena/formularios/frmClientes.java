@@ -1698,7 +1698,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             v_direccionesList.stream().forEach(
                     direccion -> {
                         mensajeResultado(
-                                M_ContactoDireccion.agregarDireccion(
+                                M_ContactoDireccion.insert(
                                         ContactoDireccion
                                                 .builder()
                                                 .idPersona(idCliente)
@@ -1735,7 +1735,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             v_contactosCorreosList.stream().forEach(
                     contacto -> {
                         mensajeResultado(
-                                M_ContactoEmail.agregarContactosEmail(
+                                M_ContactoEmail.insert(
                                         ContactoEmail
                                                 .builder()
                                                 .idPersona(idCliente)
@@ -1986,7 +1986,9 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
             );
             tblDireccion.setModel(v_dtmDireccion);
         } else {
-            M_ContactoDireccion.agregarDireccion(direccion);
+            M_ContactoDireccion.insert(
+                    direccion
+            );
         }
 
         LimpiarComboBoxProMuniDistr();
@@ -2248,7 +2250,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
 
             tblCorreos.setModel(v_dtmCorreo);
         } else {
-            M_ContactoEmail.agregarContactosEmail(contactoEmail);
+            M_ContactoEmail.insert(contactoEmail);
         }
 
         txtCorreo.setText("");
@@ -3149,7 +3151,7 @@ public class frmClientes extends javax.swing.JInternalFrame implements ICliente 
         }
         registro = new Object[TITULOS_CORREO.length];
         limpiarTablaCorreo();
-        M_ContactoEmail.getCorreoByID(idCliente).stream().forEach(
+        M_ContactoEmail.selectByID(idCliente).stream().forEach(
                 p_correo -> {
                     registro[0] = p_correo;
                     registro[1] = p_correo.getFecha();

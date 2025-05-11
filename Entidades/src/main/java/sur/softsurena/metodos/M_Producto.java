@@ -39,7 +39,7 @@ public class M_Producto {
         List<Producto> listaProducto = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlProductos(producto),
+                sqlSelect(producto),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -72,9 +72,9 @@ public class M_Producto {
         return listaProducto;
     }
     public static final String ERROR_AL_CONSULTAR_LA_BASE_DE_DATOS_CON_L
-            = "Error al consultar la base de datos con la vista GET_PRODUCTOS del sistema.";
+            = "Error al consultar PRODUCTOS del sistema.";
 
-    protected static String sqlProductos(Producto producto) {
+    protected static String sqlSelect(Producto producto) {
         Boolean f_id = Objects.isNull(producto.getId());
         Boolean f_categoria = Objects.isNull(producto.getIdCategoria());
         Boolean f_codigo = Objects.isNull(producto.getCodigo());
@@ -245,91 +245,6 @@ public class M_Producto {
             = "Error al Modificar Producto...";
     public static final String PRODUCTO__MODIFICADO__CORRECTAMENTE
             = "Producto Modificado Correctamente";
-
-//------------------------------------------------------------------------------
-    /**
-     * Metodo que nos permite verificar si una categoria esta asociada a un
-     * producto del sistema, la cual no se permite su eliminacion.
-     *
-     * @param idCategoria
-     *
-     * @return
-     */
-    public synchronized static boolean existeCategoriaProductos(int idCategoria) {
-        final String sql = """
-                           SELECT (1) 
-                           FROM RDB$DATABASE 
-                           WHERE EXISTS (
-                                         SELECT (1) 
-                                         FROM V_PRODUCTOS p 
-                                         WHERE p.ID_CATEGORIA = ?
-                                        )
-                           """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, idCategoria);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return false;
-        }
-    }
-
-//------------------------------------------------------------------------------
-    /**
-     * Metodo que verifica la existencia de un producto por su codigo de barra o
-     * descripción. Metodo actualizado el 26 de abril 2022
-     *
-     * @param criterio este valor representa el valor del codigo de barra del
-     * producto o nombre de 25 caracteres.
-     * @return
-     */
-    public synchronized static boolean existeProducto(String criterio) {
-        final String sql = """
-                           SELECT (1) 
-                           FROM RDB$DATABASE 
-                           WHERE EXISTS(
-                                        SELECT (1) 
-                                        FROM V_PRODUCTOS 
-                                        WHERE codigo STARTING WITH ? or 
-                                              descripcion STARTING WITH ?
-                           );
-                           """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setString(1, criterio);
-            ps.setString(2, criterio);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return false;
-        }
-    }
 
     //------------------------------------------------------------------------------
     /**

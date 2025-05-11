@@ -89,7 +89,7 @@ public class M_Horario {
             st.setBoolean(4, horario.getEstado());
 
             var rs = st.executeQuery();
-            rs.first();
+            rs.next();
             return Resultado
                     .builder()
                     .id(rs.getInt("ID"))

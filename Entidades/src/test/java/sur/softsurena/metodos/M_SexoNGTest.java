@@ -15,9 +15,13 @@ import org.testng.annotations.Test;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_SexoNGTest {
 
     public M_SexoNGTest() {
+        System.out.println("sur.softsurena.metodos.M_SexoNGTest.<init>()");
     }
 
     @BeforeClass

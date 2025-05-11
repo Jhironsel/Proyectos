@@ -13,7 +13,7 @@ public class SynchronousEventNotifier {
 
     public SynchronousEventNotifier(String database, String user, String pass) {
         eventManager = new FBEventManager(GDSType.getType("PURE_JAVA"));
-        eventManager.setDatabase(database);
+        eventManager.setDatabaseName(database);
         eventManager.setUser(user);
         eventManager.setPassword(pass);
     }

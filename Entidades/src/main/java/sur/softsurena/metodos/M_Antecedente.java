@@ -45,7 +45,7 @@ public class M_Antecedente {
                             Antecedente
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .id(rs.getInt("ID_CONSULTA"))
+                                    .idConsulta(rs.getInt("ID_CONSULTA"))
                                     .descripcion(rs.getString("Descripcion"))
                                     .build()
                     );

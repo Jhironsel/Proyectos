@@ -4,8 +4,10 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import sur.softsurena.abstracta.Persona;
@@ -251,24 +253,23 @@ public class M_Usuario {
                            FROM RDB$DATABASE
                            """;
 
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-            try (ResultSet rs = ps.executeQuery();) {
-                rs.next();
-                return Usuario
-                        .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .user_name(rs.getString("USUARIO"))
-                                        .rol(rs.getString("ROLE"))
-                                        .build()
-                        )
-                        .build();
-            }
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ResultSet rs = ps.executeQuery(sql);
+            rs.next();
+            return Usuario
+                    .builder()
+                    .persona(
+                            Persona
+                                    .builder()
+                                    .user_name(rs.getString("USUARIO"))
+                                    .rol(rs.getString("ROLE"))
+                                    .build()
+                    )
+                    .build();
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -280,123 +281,37 @@ public class M_Usuario {
     }
 
     /**
-     * Metodo para llamar a los usuarios del sistema, este ejecuta un \n
-     * procedimiento almacenado que realizar el SELECT complejo en la BD.
      *
-     * Actualizado 09 Julio 2022, se agregar el campo estatico de la clase
-     * Usuario el cual contiene el SQL de la consulta de este metodo.
-     *
-     * Consulta que nos permite tener el nombre de usuario, primer nombre,
-     * segundo nombre, apellidos, estado del usuario, si es administrador y una
-     * breve descripcion del usuario que se haya registrado.
-     *
-     * @param userName Es el identificador que utiliza el usuario para iniciar
-     * session en el sistema, este campo tambien puede recibir un string con el
-     * valor all para obtener todos los usuarios del sistema.
-     *
-     * @return retorna un conjunto de valores dependiendo del valor pasado por
-     * parametro, si se le pasa all recibi un conjunto de datos de todos los
-     * usuarios del sistema.
-     */
-    public synchronized static Usuario getUsuario(String userName) {
-        final String sql = """
-                           SELECT PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, ADMINISTRADOR, 
-                           DESCRIPCION 
-                           FROM VS_USUARIOS 
-                           WHERE TRIM(UPPER(USERNAME)) STARTING WITH UPPER(TRIM(?));
-                           """;
-
-        Usuario usuario = Usuario
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre("Usuario")
-                                            .snombre("NO")
-                                            .apellidos("encontrado")
-                                            .estado(false)
-                                            .user_name(userName)
-                                            .build()
-                            )
-                            .administrador(false)
-                            .descripcion("Usuario no se encuentra en el sistema.")
-                            .build();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_SCROLL_SENSITIVE,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
-            ps.setString(1, userName);
-
-            try (ResultSet rs = ps.executeQuery();) {
-                if (rs.absolute(1)) {
-                    usuario = Usuario
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre(rs.getString("PNOMBRE"))
-                                            .snombre(rs.getString("SNOMBRE"))
-                                            .apellidos(rs.getString("APELLIDOS"))
-                                            .estado(rs.getBoolean("ESTADO"))
-                                            .user_name(userName)
-                                            .build()
-                            )
-                            .administrador(rs.getBoolean("ADMINISTRADOR"))
-                            .descripcion(rs.getString("DESCRIPCION"))
-                            .build();
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return usuario;
-    }
-
-    /**
-     * Se esta utilizando para llenar la tabla de usuarios.
-     *
-     * Este Query es utilizado para obtener Inf. de los usuarios del sistema.
-     * Actualizado: 15 Sep 2022.
-     *
+     * @param usuario
      * @return
      */
-    public synchronized static List<Usuario> getUsuarios() {
+    public synchronized static List<Usuario> select(Usuario usuario) {
         List<Usuario> usuarios = new ArrayList<>();
-        final String sql
-                = "SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, "
-                + "     ADMINISTRADOR, DESCRIPCION "
-                + "FROM VS_USUARIOS;";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(usuario),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {
-                    usuarios.add(Usuario
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre(rs.getString("PNOMBRE"))
-                                            .snombre(rs.getString("SNOMBRE"))
-                                            .apellidos(rs.getString("APELLIDOS"))
-                                            .estado(rs.getBoolean("ESTADO"))
-                                            .user_name(rs.getString("USERNAME"))
-                                            .build()
-                            )
-                            .administrador(rs.getBoolean("ADMINISTRADOR"))
-                            .descripcion(rs.getString("DESCRIPCION"))
-                            .build()
+                    usuarios.add(
+                            Usuario
+                                    .builder()
+                                    .persona(
+                                            Persona
+                                                    .builder()
+                                                    .pnombre(rs.getString("PNOMBRE"))
+                                                    .snombre(rs.getString("SNOMBRE"))
+                                                    .apellidos(rs.getString("APELLIDOS"))
+                                                    .estado(rs.getBoolean("ESTADO"))
+                                                    .user_name(rs.getString("USERNAME"))
+                                                    .build()
+                                    )
+                                    .administrador(rs.getBoolean("ADMINISTRADOR"))
+                                    .descripcion(rs.getString("DESCRIPCION"))
+                                    .build()
                     );
                 }
             }
@@ -408,5 +323,37 @@ public class M_Usuario {
             );
         }
         return usuarios;
+    }
+
+    public static String sqlSelect(Usuario usuario) {
+        Boolean userName = Objects.isNull(usuario.getPersona().getUser_name());
+        Boolean nombresApellidos
+                = Objects.isNull(usuario.getPersona().getPnombre())
+                && Objects.isNull(usuario.getPersona().getSnombre())
+                && Objects.isNull(usuario.getPersona().getApellidos());
+        Boolean estado = Objects.isNull(usuario.getPersona().getEstado());
+        Boolean administradores = Objects.isNull(usuario.getAdministrador());
+
+        Boolean where = userName && nombresApellidos && estado && administradores;
+
+        final String sql
+                = """
+                  SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                        ADMINISTRADOR, DESCRIPCION 
+                  FROM VS_USUARIOS
+                  %s%s%s%s
+                  """.strip().formatted(
+                        where ? "" : "WHERE ",
+                        nombresApellidos ? "" : "USERNAME STARTING WITH '%s' OR PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s' ".formatted(
+                                        usuario.getPersona().getUser_name(),
+                                        usuario.getPersona().getPnombre(),
+                                        usuario.getPersona().getSnombre(),
+                                        usuario.getPersona().getApellidos()
+                                ),
+                        estado ? "" : "ESTADO IS %B ".formatted(usuario.getPersona().getEstado()),
+                        administradores ? "" : "ADMINISTRADOR IS %B ".formatted(usuario.getAdministrador())
+                ).strip();
+
+        return sql;
     }
 }

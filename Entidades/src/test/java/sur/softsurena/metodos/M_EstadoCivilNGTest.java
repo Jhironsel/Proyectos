@@ -13,9 +13,13 @@ import org.testng.annotations.Test;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_EstadoCivilNGTest {
 
     public M_EstadoCivilNGTest() {
+        System.out.println("sur.softsurena.metodos.M_EstadoCivilNGTest.<init>()");
     }
 
     @BeforeClass

@@ -8,7 +8,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Estudiante;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__MODIFICADO__CORRECTAMENTE;
@@ -19,71 +18,32 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_EstudianteNGTest {
 
     public M_EstudianteNGTest() {
+        System.out.println("sur.softsurena.metodos.M_EstudianteNGTest.<init>()");
     }
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
-    )
-    public void testSelect() {
-        assertNotNull(
-                M_Estudiante.select(
-                        Estudiante
-                                .builder()
-                                .build()
-                ),
-                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
-        );
-        assertNotNull(
-                M_Estudiante.select(
-                        Estudiante
-                                .builder()
-                                .matricula("000")
-                                .build()
-                ),
-                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(
@@ -112,11 +72,39 @@ public class M_EstudianteNGTest {
         );
     }
 
+    @Test(
+            enabled = true,
+            description = """
+                          """,
+            dependsOnMethods = "testSqlSelect"
+    )
+    public void testSelect() {
+        assertNotNull(
+                M_Estudiante.select(
+                        Estudiante
+                                .builder()
+                                .build()
+                ),
+                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
+        );
+        assertNotNull(
+                M_Estudiante.select(
+                        Estudiante
+                                .builder()
+                                .matricula("000")
+                                .build()
+                ),
+                "Error en la consulta de la tabla de V_PERSONAS_ESTUDIANTES_ATR."
+        );
+    }
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 1,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = "testSelect"
     )
     public void testInsert() {
         M_PersonaNGTest.testInsert();
@@ -126,12 +114,15 @@ public class M_EstudianteNGTest {
                                 .builder()
                                 .id(
                                         M_PersonaNGTest
-                                                .persona(
+                                                .getPersona(
                                                         Boolean.TRUE
                                                 )
                                                 .getIdPersona()
                                 )
-                                .matricula("INSERT_PRUEBA")
+                                .matricula(
+                                        M_ContactoTel
+                                                .generarTelMovil()
+                                                .substring(8, 16))
                                 .build()
                 ),
                 Resultado
@@ -146,7 +137,9 @@ public class M_EstudianteNGTest {
     @Test(
             enabled = true,
             priority = 2,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
         assertEquals(
@@ -155,7 +148,7 @@ public class M_EstudianteNGTest {
                                 .builder()
                                 .id(
                                         M_PersonaNGTest
-                                                .persona(
+                                                .getPersona(
                                                         Boolean.TRUE
                                                 )
                                                 .getIdPersona()
@@ -174,8 +167,12 @@ public class M_EstudianteNGTest {
 
     @Test(
             enabled = true,
-            priority = 3,
-            description = ""
+            dependsOnMethods = {
+                "testInsert", 
+                "testUpdate"
+            },
+            description = """
+                          """
     )
     public void testDelete() {
         assertEquals(
@@ -184,7 +181,7 @@ public class M_EstudianteNGTest {
                                 .builder()
                                 .id(
                                         M_PersonaNGTest
-                                                .persona(
+                                                .getPersona(
                                                         Boolean.TRUE
                                                 )
                                                 .getIdPersona()

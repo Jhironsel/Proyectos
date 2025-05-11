@@ -19,6 +19,9 @@ import sur.softsurena.utilidades.Resultado;
  * 
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ConsultaNGTest {
     
     private static Integer idConsulta;
@@ -28,28 +31,29 @@ public class M_ConsultaNGTest {
     }
     
     public M_ConsultaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_ConsultaNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -192,9 +196,9 @@ public class M_ConsultaNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public static void testSqlSelect() {
         assertEquals(

@@ -29,45 +29,35 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_PersonaNGTest {
 
     private static Integer idPersona;
 
-    public M_PersonaNGTest() {
-    }
+    public M_PersonaNGTest() {}
 
-    @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    @BeforeClass(
+            alwaysRun = true
+    )
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     //--------------------------------------------------------------------------
-    @Test
-    public void testSqlSelect() {
+    @Test(
+            alwaysRun = true,
+            enabled = true
+    )
+    public static void testSqlSelect() {
         assertEquals(
                 M_Persona.sqlSelect(
                         Persona
@@ -165,28 +155,18 @@ public class M_PersonaNGTest {
                 """.strip().trim()
         );
     }
-//------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     @Test(
             enabled = true,
+            dependsOnMethods = {"testSqlSelect"},
             description = """
                           Test que permite obtener un registro de la base de 
                           datos del sistema.
-                          """,
-            dependsOnMethods = {"testSqlSelect"}
+                          """
     )
     public static void testSelect() {
         Persona result = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(idPersona)
-                        .build()
-        ).getFirst();
-        assertNotNull(
-                result,
-                "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
-        );
-
-        result = M_Persona.select(
                 Persona
                         .builder()
                         .idPersona(0)
@@ -202,16 +182,16 @@ public class M_PersonaNGTest {
     //--------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 0,
             description = """
                           Prueba que permite insertar una persona al sistema.
                           y obtener su ID en la variable idPersona.
-                          """
+                          """, 
+            groups = "persona.insert"
     )
     public static void testInsert() {
 
         Resultado result = M_Persona.insert(
-                persona(true)
+                getPersona(true)
         );
 
         assertEquals(
@@ -231,21 +211,33 @@ public class M_PersonaNGTest {
         );
 
         idPersona = result.getId();
+
+        var persona = M_Persona.select(
+                Persona
+                        .builder()
+                        .idPersona(idPersona)
+                        .build()
+        ).getFirst();
+        
+        assertNotNull(
+                persona,
+                "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
+        );
     }
 
     //--------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 1,
             description = """
                           Prueba que permite actualizar un registros del sistema
                           previamente insertado.
-                          """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public static void testUpdate() {
 
         Resultado result = M_Persona.update(
-                persona(false)
+                getPersona(false)
         );
 
         assertEquals(
@@ -263,11 +255,11 @@ public class M_PersonaNGTest {
     //--------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 4,
             description = """
                           Test que permite eliminar el registro del sistema de 
                           la tabla de Persona.
-                          """
+                          """,
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
         
@@ -290,7 +282,7 @@ public class M_PersonaNGTest {
         );
     }
 
-    public static Persona persona(Boolean estado) {
+    public static Persona getPersona(Boolean estado) {
         return Persona
                 .builder()
                 .idPersona(idPersona)

@@ -19,30 +19,30 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  *
  * @author jhironsel
  */
-public class M_Estudiante{
+public class M_Estudiante {
 
     /**
      *
      * @param estudiante
-     * 
+     *
      * @return
      */
     public synchronized static List<Estudiante> select(
             @NonNull Estudiante estudiante
     ) {
-        
+
         List<Estudiante> listaEstudiante = new ArrayList<>();
-        
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlSelect(estudiante),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-        
+
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 listaEstudiante.add(
                         Estudiante
                                 .builder()
@@ -51,7 +51,7 @@ public class M_Estudiante{
                                 .build()
                 );
             }
-            
+
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
@@ -61,7 +61,7 @@ public class M_Estudiante{
         }
         return listaEstudiante;
     }
-    
+
     protected static String sqlSelect(Estudiante estudiante) {
         Boolean matricula = Objects.isNull(estudiante.getMatricula());
         return """
@@ -69,15 +69,15 @@ public class M_Estudiante{
                FROM V_PERSONAS_ESTUDIANTES_ATR
                %s
                """.formatted(
-                       matricula ? 
-                               "":
-                               "WHERE MATRICULA STARTING WITH '%s' "
-                                       .formatted(
-                                               estudiante.getMatricula()
-                                       )
-               ).strip();
+                matricula
+                        ? ""
+                        : "WHERE MATRICULA STARTING WITH '%s' "
+                                .formatted(
+                                        estudiante.getMatricula()
+                                )
+        ).strip();
     }
-    
+
 //------------------------------------------------------------------------------
     /**
      * Metodo que permite agregar un estudiante al sistema de ballet, el cual
@@ -131,10 +131,9 @@ public class M_Estudiante{
     public static final String ESTUDIANTE__AGREGADO__CORRECTAMENTE
             = "Estudiante Agregado Correctamente.";
 
-
     /**
-     * Metodo que permite modificar las matriculas de los estudiantes. 
-     * 
+     * Metodo que permite modificar las matriculas de los estudiantes.
+     *
      * @param estudiante
      * @return
      */
@@ -163,7 +162,7 @@ public class M_Estudiante{
                     ex.getMessage(),
                     ex
             );
-            
+
             return Resultado
                     .builder()
                     .mensaje(ESTUDIANTE_NO_PUDO_SER__MODIFICADO__CONCTAT)
@@ -186,28 +185,31 @@ public class M_Estudiante{
     public synchronized static Resultado delete(
             Estudiante estudiante
     ) {
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 "EXECUTE PROCEDURE SP_D_PERSONA_ESTUDIANTE(?);",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
+
             ps.setInt(1, estudiante.getId());
+
+            ps.executeUpdate();
             
-             ps.executeUpdate();
             return Resultado
                     .builder()
                     .mensaje("Estudiante borrado correctamente.!!")
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
-        }catch (SQLException ex) {
+        } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
                     ex.getMessage(),
                     ex
             );
-            
+
             return Resultado
                     .builder()
                     .mensaje("Error al eliminar el estudiante.")

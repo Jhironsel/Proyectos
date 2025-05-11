@@ -12,6 +12,11 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Etiqueta {
 
+    /**
+     * Metodo que permite obtener las etiquedas de los usuarios del sistema.
+     * @param usuario
+     * @return 
+     */
     public static synchronized List<Etiqueta> getEtiquetasUsuario(String usuario) {
         List<Etiqueta> etiquetaList = new ArrayList<>();
 
