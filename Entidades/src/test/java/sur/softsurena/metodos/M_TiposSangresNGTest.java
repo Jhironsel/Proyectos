@@ -14,6 +14,9 @@ import sur.softsurena.conexion.Conexion;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_TiposSangresNGTest {
 
     public M_TiposSangresNGTest() {
@@ -21,23 +24,23 @@ public class M_TiposSangresNGTest {
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod

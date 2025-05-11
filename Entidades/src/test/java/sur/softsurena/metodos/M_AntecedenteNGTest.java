@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.sql.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
@@ -9,11 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Antecedente;
-import sur.softsurena.entidades.Consulta;
-import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_MODIFICADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Antecedente.BORRADO_CORRECTAMENTE;
@@ -25,37 +20,22 @@ import sur.softsurena.utilidades.Resultado;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_AntecedenteNGTest {
 
-    private Integer id_antecedente;
-    private Integer idConsulta;
-    private Integer idPaciente;
-    
-    public M_AntecedenteNGTest() {
-    }
+    private static Integer idAntecedente, idConsulta;
+
+    public M_AntecedenteNGTest() {}
 //------------------------------------------------------------------------------
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 //------------------------------------------------------------------------------
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 //------------------------------------------------------------------------------
 
     @BeforeMethod
@@ -67,31 +47,26 @@ public class M_AntecedenteNGTest {
     public void tearDownMethod() throws Exception {
     }
 //------------------------------------------------------------------------------
+
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
-        String expResult = """
-                           SELECT ID, ID_CONSULTA, DESCRIPCION 
-                           FROM V_ANTECEDENTES
-                           """;
+
         assertEquals(
                 M_Antecedente.sqlSelect(
                         Antecedente
                                 .builder()
                                 .build()
                 ),
-                expResult.trim().strip()
+                """
+                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                FROM V_ANTECEDENTES
+                """.strip()
         );
-
-        expResult = """
-                    SELECT ID, ID_CONSULTA, DESCRIPCION 
-                    FROM V_ANTECEDENTES
-                    WHERE ID = -1
-                    """;
 
         assertEquals(
                 M_Antecedente.sqlSelect(
@@ -100,14 +75,12 @@ public class M_AntecedenteNGTest {
                                 .id(-1)
                                 .build()
                 ),
-                expResult.trim().strip()
+                """
+                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                FROM V_ANTECEDENTES
+                WHERE ID = -1
+                """.strip()
         );
-
-        expResult = """
-                    SELECT ID, ID_CONSULTA, DESCRIPCION 
-                    FROM V_ANTECEDENTES
-                    WHERE ID_CONSULTA = -1
-                    """;
 
         assertEquals(
                 M_Antecedente.sqlSelect(
@@ -116,14 +89,12 @@ public class M_AntecedenteNGTest {
                                 .idConsulta(-1)
                                 .build()
                 ),
-                expResult.trim().strip()
+                """
+                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                FROM V_ANTECEDENTES
+                WHERE ID_CONSULTA = -1
+                """.strip()
         );
-
-        expResult = """
-                    SELECT ID, ID_CONSULTA, DESCRIPCION 
-                    FROM V_ANTECEDENTES
-                    WHERE ID = -1 AND ID_CONSULTA = -1
-                    """;
 
         assertEquals(
                 M_Antecedente.sqlSelect(
@@ -133,10 +104,15 @@ public class M_AntecedenteNGTest {
                                 .idConsulta(-1)
                                 .build()
                 ),
-                expResult.trim().strip()
+                """
+                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                FROM V_ANTECEDENTES
+                WHERE ID = -1 AND ID_CONSULTA = -1
+                """.strip()
         );
     }
 //------------------------------------------------------------------------------
+
     @Test(
             enabled = true,
             priority = 1,
@@ -161,7 +137,7 @@ public class M_AntecedenteNGTest {
         List<Antecedente> lista = M_Antecedente.select(
                 Antecedente
                         .builder()
-                        .id(id_antecedente)
+                        .id(idAntecedente)
                         .build()
         );
 
@@ -171,7 +147,7 @@ public class M_AntecedenteNGTest {
         );
     }
 
-//------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 2,
@@ -181,7 +157,7 @@ public class M_AntecedenteNGTest {
     )
     public void testInsert() {
         M_ConsultaNGTest.testInsert();
-        
+
         Resultado result = M_Antecedente.insert(
                 Antecedente
                         .builder()
@@ -200,16 +176,16 @@ public class M_AntecedenteNGTest {
                         .build(),
                 "No puede ser agregado el registro."
         );
-        
+
         assertTrue(
                 result.getId() > 0,
                 result.getMensaje()
-                );
+        );
 
-        id_antecedente = result.getId();
+        idAntecedente = result.getId();
     }
-    
-//------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     @Test(
             enabled = true,
             description = "",
@@ -220,7 +196,7 @@ public class M_AntecedenteNGTest {
                 M_Antecedente.update(
                         Antecedente
                                 .builder()
-                                .id(id_antecedente)
+                                .id(idAntecedente)
                                 .descripcion("Actualizado")
                                 .build()
                 ),
@@ -246,7 +222,7 @@ public class M_AntecedenteNGTest {
                 M_Antecedente.delete(
                         Antecedente
                                 .builder()
-                                .id(id_antecedente)
+                                .id(idAntecedente)
                                 .build()
                 ),
                 Resultado
@@ -258,5 +234,14 @@ public class M_AntecedenteNGTest {
                 ERROR_AL_BORRAR_PACIENTE
         );
         M_ConsultaNGTest.testDelete();
+    }
+    
+    public static Antecedente getAntecedente(){
+        
+        return Antecedente
+                .builder()
+                .id(idAntecedente)
+                .idConsulta(idConsulta)//TODO 11.05.2025 Buscar la consulta
+                .build();
     }
 }

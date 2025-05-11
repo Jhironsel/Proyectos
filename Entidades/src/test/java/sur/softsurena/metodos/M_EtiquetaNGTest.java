@@ -16,29 +16,34 @@ import sur.softsurena.entidades.Usuario;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_EtiquetaNGTest {
     
     public M_EtiquetaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_EtiquetaNGTest.<init>()");
     }
     
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
     
     @AfterClass
     public void tearDownClass() throws Exception {
+//        Conexion.getCnn().close();
     }
     
     @BeforeMethod
@@ -54,7 +59,18 @@ public class M_EtiquetaNGTest {
         boolean empty = M_Etiqueta.getEtiquetasUsuario("SYSDBA").isEmpty();
         
         if (empty) {
-            Usuario usuario = M_Usuario.getUsuario("SYSDBA");
+            var usuario = M_Usuario.select(
+                    Usuario
+                            .builder()
+                            .persona(
+                                    Persona
+                                            .builder()
+                                            .user_name("SYSDBA")
+                                            .build())
+                            .build()
+            ).getLast();
+            
+            
             
             M_Usuario.update(
                     Usuario

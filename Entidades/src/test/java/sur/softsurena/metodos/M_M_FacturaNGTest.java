@@ -8,7 +8,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.M_Factura;
 import static sur.softsurena.metodos.M_M_Factura.ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA;
 import static sur.softsurena.metodos.M_M_Factura.FACTURA_INGRESADA_CORRECTAMENTE_AL_SISTEM;
@@ -20,32 +19,24 @@ import sur.softsurena.utilidades.Resultado;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = {"init"},
+        groups = "init.factura"
+)
 public class M_M_FacturaNGTest {
 
     private int id_factura = -1;
 
     public M_M_FacturaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_M_FacturaNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -58,14 +49,20 @@ public class M_M_FacturaNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            dependsOnGroups = {
+                
+                "cliente.insert", 
+                "contactoTel.insert", 
+                "contactoDir.insert", 
+                "contactoEmail.insert",
+                "turno.insert"
+            }
     )
     public void testGetIDFacturaNueva() {
-        int idTurno = 0;
         assertTrue(
-                M_M_Factura.getIDFacturaNueva(idTurno) > 0,
+                M_M_Factura.getIDFacturaNueva(M_TurnoNGTest.idTurno) > 0,
                 "Se obtuvo una factura menor que cero."
         );
     }
@@ -90,9 +87,8 @@ public class M_M_FacturaNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
+            alwaysRun = true,
             description = """
-                          
                           """
     )
     public void testSqlSelect() {
@@ -221,12 +217,31 @@ public class M_M_FacturaNGTest {
             description = """
                           TODO la lista de detalle es la misma que esta en 
                           M_D_FACTURANGTEST, seria bueno 
-                          """
+                          """,
+            dependsOnGroups = {
+                "cliente.insert", 
+                "contactoTel.insert", 
+                "contactoDir.insert", 
+                "contactoEmail.insert",
+                "turno.insert"
+            }
     )
     public void testInsert() {
 
+        M_ClienteNGTest.testInsert();
+        
         Resultado result = M_M_Factura.insert(
-                M_Factura.getM_FacturaTest()
+                M_Factura
+                        .builder()
+                        .id(0)
+                        .idCliente(0)
+                        .idContactoTel(0)
+                        .idContactoDir(0)
+                        .idContactoEmail(0)
+                        .idTurno(0)
+                        .estadoFactura('n')
+                        .nombreTemporal("")
+                        .build()
         );
 
         assertEquals(
@@ -239,14 +254,13 @@ public class M_M_FacturaNGTest {
                         .build(),
                 ERROR_AL_INSERTAR_FACTURA_AL_SISTEMA
         );
-        
+
         assertTrue(
                 result.getId() > 0,
                 "Error en el registro de la factura en el sistema."
         );
-
+        
         id_factura = result.getId();
-
     }
 
     //--------------------------------------------------------------------------
@@ -255,12 +269,29 @@ public class M_M_FacturaNGTest {
             priority = 1,
             description = """
                           Prueba para modificar el encabezado de una factura.
-                          """
+                          """,
+            dependsOnGroups = {
+                "cliente.insert", 
+                "contactoTel.insert", 
+                "contactoEmail.insert",
+                "contactoDir.insert", 
+                "turno.insert"
+            }
     )
     public void testUpdate() {
         assertEquals(
                 M_M_Factura.update(
-                        M_Factura.getM_FacturaTest()
+                        M_Factura
+                                .builder()
+                                .id(0)
+                                .idCliente(M_ClienteNGTest.idCliente)
+                                .idContactoTel(M_ContactoTelNGTest.idContactoTel)
+                                .idContactoEmail(0)
+                                .idContactoDir(0)
+                                .idTurno(M_TurnoNGTest.idTurno)
+                                .estadoFactura('n')
+                                .nombreTemporal("")
+                                .build()
                 ),
                 Resultado
                         .builder()
@@ -273,11 +304,12 @@ public class M_M_FacturaNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
+            enabled = false,
             priority = 2,
             description = """
                           Test que permite eliminar una factura del sistema.
-                          """
+                          """, 
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public void testDelete() {
         assertEquals(

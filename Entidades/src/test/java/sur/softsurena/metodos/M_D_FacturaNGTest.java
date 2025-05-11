@@ -9,9 +9,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
+import sur.softsurena.entidades.M_Factura;
 import static sur.softsurena.metodos.M_D_Factura.DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME;
 import sur.softsurena.utilidades.Resultado;
 
@@ -20,32 +20,21 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = {"init", "init.factura"}
+)
 public class M_D_FacturaNGTest {
 
-    public M_D_FacturaNGTest() {
-    }
+    public M_D_FacturaNGTest() {}
 
     //--------------------------------------------------------------------------
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
     }
 
     //--------------------------------------------------------------------------
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
     }
 
     //--------------------------------------------------------------------------
@@ -67,9 +56,28 @@ public class M_D_FacturaNGTest {
                           sitema.
                           """
     )
-    public void testAgregarDetalleFactura() {
-        Resultado result = M_D_Factura.agregarDetalleFactura(
-                Factura.getFacturaTest()
+    public void testInsert() {
+        Resultado result = M_D_Factura.insert(
+                Factura
+                        .builder()
+                        .id(0)
+                        .m_factura(//2
+                                M_Factura
+                                        .builder()
+                                        .id(0)
+                                        .idCliente(0)
+                                        .idContactoTel(0)
+                                        .idContactoDir(0)
+                                        .idContactoEmail(0)
+                                        .idTurno(0)
+                                        .estadoFactura('n')
+                                        .nombreTemporal("")
+                                        .build()
+                        )
+                        .d_factura(
+                                null //D_Factura.getListTest()
+                        )
+                        .build()
         );
 
         assertEquals(
@@ -91,11 +99,11 @@ public class M_D_FacturaNGTest {
                           Test que verifica las facturas en temporal.
                           """
     )
-    public void testGetBuscarTemporal() {
+    public void testSelect() {
         Integer idFactura = 0;
 
         List<D_Factura> buscarTemporal
-                = M_D_Factura.getBuscarTemporal(idFactura);
+                = M_D_Factura.select(idFactura);
 
         assertFalse(
                 buscarTemporal.isEmpty(),

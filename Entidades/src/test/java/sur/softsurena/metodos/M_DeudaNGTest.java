@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.utilidades.Resultado;
 
@@ -18,46 +17,31 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_DeudaNGTest {
 
-    private Integer idDeuda;
+    public static Integer idDeuda;
 
-    public M_DeudaNGTest() {
-    }
+    public M_DeudaNGTest() {}
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     
     @Test(
             enabled = true,
-            priority = 0,
+            alwaysRun = true,
             description = """
                           """
     )
@@ -109,7 +93,8 @@ public class M_DeudaNGTest {
             priority = 1,
             description = """
                           Por el momento la tabla de deudas contiene registros.
-                          """
+                          """,
+            dependsOnMethods = "testSqlGetDeudas"
     )
     public void testSelect() {
         assertNotNull(
@@ -143,7 +128,6 @@ public class M_DeudaNGTest {
 
     @Test(
             enabled = true,
-            priority = 2,
             description = """
                           Prueba que realiza una insersion a la tabla de deuda.
                           """
@@ -154,7 +138,7 @@ public class M_DeudaNGTest {
         Resultado result = M_Deuda.insert(
                 Deuda
                         .builder()
-                        .idCliente(M_PersonaNGTest.persona(true).getIdPersona())
+                        .idCliente(M_PersonaNGTest.getPersona(true).getIdPersona())
                         .concepto("Sistema de prueba de deuda en registros.")
                         .monto(
                                 BigDecimal.valueOf(2300.55)
@@ -179,7 +163,9 @@ public class M_DeudaNGTest {
     @Test(
             enabled = true,
             priority = 3,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
 
@@ -200,14 +186,17 @@ public class M_DeudaNGTest {
                 "Falla de prueba de actualizacion de deuda."
         );
     }
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
             priority = 4,
             description = """
-                          """
+                          """,
+            dependsOnMethods = {
+                "testInsert",
+                "testUpdate"
+            }
     )
     public void testDelete() {
 

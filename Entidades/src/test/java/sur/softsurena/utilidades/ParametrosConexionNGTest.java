@@ -12,12 +12,16 @@ import org.testng.annotations.Test;
  *
  * @author jhironsel
  */
+@Test(
+        priority = 2
+)
 public class ParametrosConexionNGTest {
 
     private ParametrosConexion parametros;
     private boolean parametrosNulo;
 
     public ParametrosConexionNGTest() {
+        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.<init>()");
     }
 
     @BeforeClass
@@ -44,6 +48,8 @@ public class ParametrosConexionNGTest {
                           """
     )
     public void testGetInstance() {
+        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.testGetInstance()");
+        
         this.parametros = ParametrosConexion.getInstance();
         assertNotNull(
                 this.parametros,
@@ -59,6 +65,7 @@ public class ParametrosConexionNGTest {
                           """
     )
     public void testCargarParamentos() {
+        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.testCargarParamentos()");
         Servidor result = parametros.cargarParamentos();
 
         if (Objects.nonNull(result)) {
@@ -76,7 +83,8 @@ public class ParametrosConexionNGTest {
                           """
     )
     public void testEscribirParametros() {
-
+        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.testEscribirParametros()");
+        
         if (parametrosNulo) {
 
             parametros.escribirParametros(

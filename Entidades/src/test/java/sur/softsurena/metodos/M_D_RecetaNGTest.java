@@ -14,9 +14,13 @@ import sur.softsurena.entidades.D_Receta;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_D_RecetaNGTest {
 
     public M_D_RecetaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_D_RecetaNGTest.<init>()");
     }
 
     @BeforeClass

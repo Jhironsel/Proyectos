@@ -24,7 +24,7 @@ public class M_ContactoTel {
      * @param contacto
      * @return
      */
-    public static synchronized Resultado agregarContactosTel(
+    public static synchronized Resultado insert(
             ContactoTel contacto
     ) {
         final String sql
@@ -83,7 +83,7 @@ public class M_ContactoTel {
      * @param contacto
      * @return
      */
-    public static Resultado modificarContactoTel(ContactoTel contacto) {
+    public static Resultado update(ContactoTel contacto) {
         final String sql
                 = """
                   EXECUTE PROCEDURE SP_U_CONTACTO_TEL(?,?,?,?,? );
@@ -128,7 +128,7 @@ public class M_ContactoTel {
     public static final String CONTACTO_TELEFONICO_ACTUALIZADO_CORRECTAM
             = "Contacto telefonico actualizado correctamente.";
 
-    public static Resultado eliminarContactoTel(int id) {
+    public static Resultado delete(int id) {
         final String sql
                 = """
                 EXECUTE PROCEDURE SP_D_CONTACTO_TEL (?);
@@ -174,7 +174,7 @@ public class M_ContactoTel {
      * @param id_persona
      * @return
      */
-    public synchronized static List<ContactoTel> getTelefonoByID(Integer id_persona) {
+    public synchronized static List<ContactoTel> selectByID(Integer id_persona) {
         final String sql
                 = "SELECT ID, TELEFONO, FECHA, TIPO, ESTADO, POR_DEFECTO "
                 + "FROM V_CONTACTOS_TEL "

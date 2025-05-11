@@ -209,7 +209,7 @@ public class M_Cliente {
      * @param idCliente
      * @return
      */
-    public static Resultado delete(int idCliente) {
+    public synchronized static Resultado delete(int idCliente) {
         final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_CLIENTE (?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,

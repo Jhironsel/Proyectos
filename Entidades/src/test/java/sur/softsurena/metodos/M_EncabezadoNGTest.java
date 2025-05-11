@@ -12,9 +12,13 @@ import org.testng.annotations.Test;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_EncabezadoNGTest {
 
     public M_EncabezadoNGTest() {
+        System.out.println("sur.softsurena.metodos.M_EncabezadoNGTest.<init>()");
     }
 
     @BeforeClass

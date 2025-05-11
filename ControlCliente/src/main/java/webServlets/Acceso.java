@@ -108,7 +108,7 @@ public class Acceso extends HttpServlet {
                 );
                 //.saldo(new BigDecimal(req.getParameter("txtSaldo")))
 
-                M_ContactoEmail.agregarContactosEmail(
+                M_ContactoEmail.insert(
                         ContactoEmail
                                 .builder()
                                 .idPersona(resultado.getId())

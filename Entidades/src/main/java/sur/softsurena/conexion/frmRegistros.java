@@ -343,15 +343,15 @@ public class frmRegistros extends javax.swing.JDialog {
                 resultado.getIcono()
         );
 
-        try {
-            Conexion.getCnn().close();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al cerrar conexion.",
-                    ex
-            );
-        }
+//        try {
+//            Conexion.getCnn().close();
+//        } catch (SQLException ex) {
+//            LOG.log(
+//                    Level.SEVERE,
+//                    "Error al cerrar conexion.",
+//                    ex
+//            );
+//        }
         
         if(resultado.getEstado()){
             dispose();
@@ -394,15 +394,15 @@ public class frmRegistros extends javax.swing.JDialog {
         txtUsuario.setEnabled(false);
         txtClave.setEnabled(false);
 
-        try {
-            Conexion.getCnn().close();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al cerrar conexion.",
-                    ex
-            );
-        }
+//        try {
+//            Conexion.getCnn().close();
+//        } catch (SQLException ex) {
+//            LOG.log(
+//                    Level.SEVERE,
+//                    "Error al cerrar conexion.",
+//                    ex
+//            );
+//        }
 
         Conexion.setInstanceNull();
     }//GEN-LAST:event_btnObtenerIdActionPerformed

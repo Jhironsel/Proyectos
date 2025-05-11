@@ -10,9 +10,11 @@ import org.testng.annotations.Test;
  *
  * @author jhironsel
  */
+@Test
 public class PersonaNGTest {
     
     public PersonaNGTest() {
+        System.out.println("sur.softsurena.abstracta.PersonaNGTest.<init>()");
     }
 
     @BeforeClass

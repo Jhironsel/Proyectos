@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.util.Date;
 import java.util.Objects;
 import javax.swing.JOptionPane;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Utilidades;
@@ -11,7 +12,7 @@ import sur.softsurena.utilidades.Utilidades;
 public class frmSolicitudFecha extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static Frame parent;
     private static boolean modal;
 
@@ -20,16 +21,16 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
         frmSolicitudFecha.modal = modal;
         return NewSingletonHolder.INSTANCE;
     }
-    
+
     private static class NewSingletonHolder {
 
-        private static final frmSolicitudFecha INSTANCE = 
-                new frmSolicitudFecha(
-                        frmSolicitudFecha.parent, 
+        private static final frmSolicitudFecha INSTANCE
+                = new frmSolicitudFecha(
+                        frmSolicitudFecha.parent,
                         frmSolicitudFecha.modal
                 );
     }
-    
+
     private frmSolicitudFecha(Frame parent, boolean modal) {
         super(parent, modal);
 
@@ -260,10 +261,20 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        M_Usuario.getUsuarios().stream().forEach(
-            usuario -> {
-                jcbUsuarios.addItem(usuario);
-            }
+        M_Usuario.select(
+                Usuario
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .estado(true)
+                                        .build()
+                        )
+                        .build()
+        ).stream().forEach(
+                usuario -> {
+                    jcbUsuarios.addItem(usuario);
+                }
         );
     }//GEN-LAST:event_formWindowOpened
 
@@ -360,7 +371,7 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(
                         this,
                         "Fecha futura, incorrecta!!!",
-                        "", 
+                        "",
                         JOptionPane.ERROR_MESSAGE
                 );
                 return;
@@ -373,7 +384,7 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(
                         this,
                         "Intervalo de factura, incorrecto!!!",
-                        "", 
+                        "",
                         JOptionPane.ERROR_MESSAGE
                 );
                 return;
@@ -385,7 +396,7 @@ public class frmSolicitudFecha extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(
                         null,
                         "Debe seleccionar un estado",
-                        "", 
+                        "",
                         JOptionPane.ERROR_MESSAGE
                 );
             }

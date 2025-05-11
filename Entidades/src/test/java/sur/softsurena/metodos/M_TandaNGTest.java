@@ -13,9 +13,13 @@ import sur.softsurena.entidades.Tanda;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_TandaNGTest {
     
     public M_TandaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_TandaNGTest.<init>()");
     }
 
     @BeforeClass

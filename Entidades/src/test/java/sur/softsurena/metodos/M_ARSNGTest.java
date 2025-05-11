@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.*;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.ARS;
 import static sur.softsurena.metodos.M_ARS.BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ARS.ERROR_AL_BORRAR_ARS;
@@ -17,100 +16,89 @@ import static sur.softsurena.metodos.M_ARS.SEGURO_MODIFICADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ARSNGTest {
 
-    private static Integer id_ARS;
-//------------------------------------------------------------------------------
+    private static Integer idARS;
 
-    public M_ARSNGTest() {
-    }
+    public M_ARSNGTest() {}
 
-//------------------------------------------------------------------------------
     @BeforeClass
-    public void setUpClass() throws Exception {
-        
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
-//------------------------------------------------------------------------------
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
-//------------------------------------------------------------------------------
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-//------------------------------------------------------------------------------
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 //------------------------------------------------------------------------------
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          Test que verifica que un ARS puede ser insertardo en
-                          el sistema.
-                          """
+                          Test para verificar que la consulta es la correcta.
+                          """,
+            alwaysRun = true
     )
-    public static void testInsert() {
-        Resultado result = M_ARS.insert(
-                ARS
-                        .builder()
-                        .descripcion(
-                                "TestARS_".concat(
-                                        M_Generales.generarCedula().substring(6, 11)
-                                )
-                        )
-                        .covertura(
-                                BigDecimal.valueOf(60.00)
-                        )
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
+    public void testSqlARS() {
 
         assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(SEGURO_AGREGADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL_INSERTAR__SEGURO
+                M_ARS.sqlARS(
+                        ARS
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                FROM V_ARS;
+                """.strip()
         );
 
-        assertTrue(
-                result.getId() > 0,
-                ERROR_AL_INSERTAR__SEGURO
+        //----------------------------------------------------------------------
+        assertEquals(
+                M_ARS.sqlARS(
+                        ARS
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                FROM V_ARS
+                WHERE ESTADO;
+                """.strip()
         );
 
-        id_ARS = result.getId();
+        //----------------------------------------------------------------------
+
+        assertEquals(
+                M_ARS.sqlARS(
+                        ARS
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                """
+                SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
+                FROM V_ARS
+                WHERE ESTADO IS FALSE;
+                """.strip()
+        );
     }
 
-//------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 1,
             description = """
                           Test en cargado de verificar la consultas de las 
                           ARS del sistema.
-                          """
+                          """,
+            dependsOnMethods = "testSqlARS"
     )
     public static void testSelect() {
         assertNotNull(
@@ -144,17 +132,62 @@ public class M_ARSNGTest {
 
     }
 
+    //--------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            description = """
+                          Test que verifica que un ARS puede ser insertardo en
+                          el sistema.
+                          """,
+            groups = "ars.insert",
+            dependsOnMethods = "testSelect"
+    )
+    public static void testInsert() {
+        Resultado result = M_ARS.insert(
+                ARS
+                        .builder()
+                        .descripcion(
+                                "TestARS_".concat(
+                                        M_Generales.generarCedula().substring(6, 11)
+                                )
+                        )
+                        .covertura(
+                                BigDecimal.valueOf(60.00)
+                        )
+                        .estado(Boolean.FALSE)
+                        .build()
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(SEGURO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_INSERTAR__SEGURO
+        );
+
+        assertTrue(
+                result.getId() > 0,
+                ERROR_AL_INSERTAR__SEGURO
+        );
+
+        idARS = result.getId();
+    }
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 2,
-            description = "Test para modificar las ars del sistema."
+            description = "Test para modificar las ars del sistema.",
+            dependsOnMethods = "testInsert"
     )
     public static void testUpdate() {
         Resultado result = M_ARS.update(
                 ARS
                         .builder()
-                        .id(id_ARS)
+                        .id(idARS)
                         .descripcion("Senasa3")
                         .covertura(BigDecimal.valueOf(50.00))
                         .estado(Boolean.TRUE)
@@ -176,17 +209,17 @@ public class M_ARSNGTest {
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 5,
             description = """
                           Test que permite eliminar un registro de ars del
                           sistema.
-                          """
+                          """,
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
         Resultado result = M_ARS.delete(
                 ARS
                         .builder()
-                        .id(id_ARS)
+                        .id(idARS)
                         .build()
         );
 
@@ -200,60 +233,5 @@ public class M_ARSNGTest {
                         .build(),
                 ERROR_AL_BORRAR_ARS
         );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Test para verificar que la consulta es la correcta.
-                          """
-    )
-    public void testSqlARS() {
-//------------------------------------------------------------------------------
-        String expResult = """
-                           SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
-                           FROM V_ARS;
-                           """.strip().trim();
-
-        String result = M_ARS.sqlARS(
-                ARS
-                        .builder()
-                        .build()
-        );
-
-        assertEquals(result, expResult);
-
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
-                    FROM V_ARS
-                    WHERE ESTADO;
-                    """.strip().trim();
-
-        result = M_ARS.sqlARS(
-                ARS
-                        .builder()
-                        .estado(Boolean.TRUE)
-                        .build()
-        );
-
-        assertEquals(result, expResult);
-
-//------------------------------------------------------------------------------
-        expResult = """
-                    SELECT ID, DESCRIPCION, COVERTURA_CONSULTA_PORCIENTO, ESTADO, CANTIDAD_REGISTRO
-                    FROM V_ARS
-                    WHERE ESTADO IS FALSE;
-                    """.strip().trim();
-
-        result = M_ARS.sqlARS(
-                ARS
-                        .builder()
-                        .estado(Boolean.FALSE)
-                        .build()
-        );
-
-        assertEquals(result, expResult);
     }
 }

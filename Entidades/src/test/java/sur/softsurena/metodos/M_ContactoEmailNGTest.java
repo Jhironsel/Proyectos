@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.ContactoEmail;
 import static sur.softsurena.metodos.M_ContactoEmail.CONTACTO_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoEmail.CORREO_AGREGADO_O_MODIFICADO_CORRECTAMENT;
@@ -25,57 +24,43 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ContactoEmailNGTest {
 
-    private int idCorreo;
-    private final M_PersonaNGTest persona;
+    private static int idCorreo, idPersona;
 
-    public M_ContactoEmailNGTest() {
-        persona = new M_PersonaNGTest();
-    }
+    public M_ContactoEmailNGTest() {}
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     @Test(
             enabled = true,
-            priority = 0,
-            description = "Permita agregar un contacto y su correo"
+            description = "Permita agregar un contacto y su correo",
+            dependsOnMethods = "testselectByID",
+            groups = "contactoEmail.insert"
     )
-    public void testAgregarContactosEmail() {
+    public void testInsert() {
 
-        persona.testInsert();
-
-        Resultado result = M_ContactoEmail.agregarContactosEmail(
+        M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.getPersona(Boolean.TRUE).getIdPersona();
+        Resultado result = M_ContactoEmail.insert(
                 ContactoEmail
                         .builder()
-                        .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
+                        .idPersona(
+                                idPersona
+                        )
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.TRUE)
@@ -100,20 +85,42 @@ public class M_ContactoEmailNGTest {
                 ERROR_AL_AGREGAR_O_MODIFICAR_CORREO
         );
     }
+    
+    @Test(
+            enabled = true,
+            description = "Realizamos consulta y eliminamos cliente.",
+            dependsOnMethods = "testInsert"
+    )
+    public void testselectByID() {
+        List result = M_ContactoEmail.selectByID(
+                idPersona
+        );
+
+        assertFalse(
+                result.isEmpty(),
+                ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO
+        );
+
+        assertNotNull(
+                result,
+                "Consulta no puede devolver nulo."
+        );
+
+    }
 
     @Test(
             enabled = true,
-            priority = 1,
             description = """
                           Modifica los contactos del sistema.
-                          """
+                          """,
+            dependsOnMethods = "testInsert"
     )
-    public void testModificarContactosEmail() {
-        Resultado result = M_ContactoEmail.modificarContactosEmail(
+    public void testUpdate() {
+        Resultado result = M_ContactoEmail.update(
                 ContactoEmail
                         .builder()
                         .id(idCorreo)
-                        .idPersona(M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona())
+                        .idPersona(idPersona)
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.FALSE)
@@ -131,68 +138,18 @@ public class M_ContactoEmailNGTest {
                 ERROR_AL_EJECUTAR_EL___DEL_SISTEMA
         );
     }
+    
+    
 
     @Test(
             enabled = true,
-            priority = 2,
-            description = "Realizamos consulta y eliminamos cliente."
-    )
-    public void testGetCorreoByID() {
-        List result = M_ContactoEmail.getCorreoByID(
-                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-        );
-
-        assertFalse(
-                result.isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO
-        );
-
-        assertNotNull(
-                result,
-                "Consulta no puede devolver nulo."
-        );
-
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = "Test que genera un correo y valida si es correcto."
-    )
-    public void testGenerarCorreo() {
-        String result = M_ContactoEmail.generarCorreo();
-        assertTrue(
-                M_ContactoEmail.correo(result),
-                "Correo que causa el error %s".formatted(result)
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = "Verificamos si validan los correo correctamente."
-    )
-    public void testCorreo() {
-        assertTrue(M_ContactoEmail.correo("correo@correo.com"));
-
-        assertTrue(M_ContactoEmail.correo("correo111@correo.com"));
-
-        assertTrue(M_ContactoEmail.correo("correo.123_123@correo.com"));
-
-        assertFalse(M_ContactoEmail.correo("@correo111@correo.com"));
-
-        assertFalse(M_ContactoEmail.correo("correo@correo.com123"));
-    }
-
-    @Test(
-            enabled = true,
-            priority = 3,
             description = """
                           Verificamos si validan los correo correctamente.
-                          """
+                          """,
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
-    public void testBorrarContactoEmail() {
-        Resultado result = M_ContactoEmail.borrarContactoEmail(idCorreo);
+    public void testDelete() {
+        Resultado result = M_ContactoEmail.delete(idCorreo);
 
         assertEquals(
                 result,
@@ -204,6 +161,36 @@ public class M_ContactoEmailNGTest {
                         .build(),
                 ERROR_AL_BORRAR_EL_CONTACTO_DE_CORREO_DEL
         );
-        persona.testDelete();
+        M_PersonaNGTest.testDelete();
+    }
+
+    @Test(
+            enabled = true,
+            description = "Test que genera un correo y valida si es correcto.",
+            alwaysRun = true
+    )
+    public void testGenerarCorreo() {
+        String result = M_ContactoEmail.generarCorreo();
+        assertTrue(
+                M_ContactoEmail.correo(result),
+                "Correo que causa el error %s".formatted(result)
+        );
+    }
+
+    @Test(
+            enabled = true,
+            description = "Verificamos si validan los correo correctamente.",
+            alwaysRun = true
+    )
+    public void testCorreo() {
+        assertTrue(M_ContactoEmail.correo("correo@correo.com"));
+
+        assertTrue(M_ContactoEmail.correo("correo111@correo.com"));
+
+        assertTrue(M_ContactoEmail.correo("correo.123_123@correo.com"));
+
+        assertFalse(M_ContactoEmail.correo("@correo111@correo.com"));
+
+        assertFalse(M_ContactoEmail.correo("correo@correo.com123"));
     }
 }

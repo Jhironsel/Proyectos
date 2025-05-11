@@ -17,6 +17,9 @@ import sur.softsurena.utilidades.Utilidades;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_Foto_PersonaNGTest {
 
     private Integer idfoto;
@@ -24,27 +27,28 @@ public class M_Foto_PersonaNGTest {
     private Integer idPersona2;
 
     public M_Foto_PersonaNGTest() {
+        System.out.println("sur.softsurena.metodos.M_Foto_PersonaNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -80,7 +84,7 @@ public class M_Foto_PersonaNGTest {
     )
     public void testInsert() {
         Resultado resultado = M_Persona.insert(
-                M_PersonaNGTest.persona(Boolean.TRUE)
+                M_PersonaNGTest.getPersona(Boolean.TRUE)
         );
 
         Resultado result = M_Foto_Persona.insert(
@@ -131,7 +135,7 @@ public class M_Foto_PersonaNGTest {
 
         idPersona = resultado.getId();
 //------------------------------------------------------------------------------
-        resultado = M_Persona.insert(M_PersonaNGTest.persona(Boolean.TRUE));
+        resultado = M_Persona.insert(M_PersonaNGTest.getPersona(Boolean.TRUE));
 
         result = M_Foto_Persona.insert(
                 FotoPersona
@@ -236,7 +240,8 @@ public class M_Foto_PersonaNGTest {
             enabled = true,
             priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(

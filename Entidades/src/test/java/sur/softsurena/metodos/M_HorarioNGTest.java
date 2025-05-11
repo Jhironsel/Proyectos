@@ -20,23 +20,27 @@ import sur.softsurena.utilidades.Resultado;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_HorarioNGTest {
 
     private Integer idHorario;
 
     public M_HorarioNGTest() {
+        System.out.println("sur.softsurena.metodos.M_HorarioNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
 
         assertTrue(
                 Conexion.verificar().getEstado(),
@@ -46,7 +50,7 @@ public class M_HorarioNGTest {
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -110,9 +114,9 @@ public class M_HorarioNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
 

@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Cliente;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_NO_PUEDE_SER_BORRADO;
@@ -22,64 +21,26 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ClienteNGTest {
+    
+    public static Integer idCliente;
 
-    public M_ClienteNGTest() {
-    }
+    public M_ClienteNGTest() {}
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = ""
-    )
-    public void testAgregarClienteById() {
-        M_PersonaNGTest.testInsert();
-
-        Resultado result = M_Cliente.insertById(
-                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-        );
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(CLIENTE__AGREGADO__CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                ERROR_AL_INSERTAR__CLIENTE
-        );
-
-    }
+    public void tearDownMethod() throws Exception {}
 
     @Test(
             enabled = true,
@@ -88,33 +49,7 @@ public class M_ClienteNGTest {
                           Eliminamos registros del cliente de la tabla PERSONAS_CLIENTES
                           """
     )
-    public void testBorrarCliente() {
-        Resultado result = M_Cliente.delete(
-                M_PersonaNGTest.persona(Boolean.FALSE).getIdPersona()
-        );
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(CLIENTE_BORRADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                CLIENTE_NO_PUEDE_SER_BORRADO
-        );
-
-        M_PersonaNGTest.testDelete();
-    }
-
-    @Test(
-            enabled = false,
-            priority = 1,
-            description = """
-                          Eliminamos registros del cliente de la tabla PERSONAS_CLIENTES
-                          """
-    )
-    public void testGetPersonasClientes() {
+    public void testSelect() {
         List expResult = null;
 
         List result = M_Cliente.select(
@@ -145,7 +80,65 @@ public class M_ClienteNGTest {
                 SELECT ID
                 FROM V_PERSONAS_CLIENTES
                 """.strip().trim());
-//------------------------------------------------------------------------------
 
+    }
+    
+    
+
+    @Test(
+            enabled = true,
+            priority = 0,
+            description = "",
+            groups = "cliente.insert", 
+            dependsOnGroups = "persona.insert"
+    )
+    public static void testInsert() {
+        M_PersonaNGTest.testInsert();
+
+        idCliente = M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona();
+        
+        Resultado result = M_Cliente.insertById(
+                idCliente
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(CLIENTE__AGREGADO__CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                ERROR_AL_INSERTAR__CLIENTE
+        );
+
+    }
+
+    //--------------------------------------------------------------------------
+    @Test(
+            enabled = true,
+            priority = 1,
+            description = """
+                          Eliminamos registros del cliente de la tabla 
+                          PERSONAS_CLIENTES.
+                          """
+    )
+    public static void testDelete() {
+        Resultado result = M_Cliente.delete(
+                idCliente
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(CLIENTE_BORRADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                CLIENTE_NO_PUEDE_SER_BORRADO
+        );
+
+        M_PersonaNGTest.testDelete();
     }
 }

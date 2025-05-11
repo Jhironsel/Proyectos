@@ -7,42 +7,44 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Privilegio;
-import sur.softsurena.entidades.Usuario;
 
 /**
  *
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = {"init"}
+)
 public class M_PrivilegioNGTest {
 
     private final String USER_NAME = "jhironsel";
 
     public M_PrivilegioNGTest() {
+        System.out.println("sur.softsurena.metodos.M_PrivilegioNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                USER_NAME,
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                USER_NAME,
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -72,28 +74,6 @@ public class M_PrivilegioNGTest {
                                 .nombre_relacion("V_PRODUCTOS")
                                 .build()
         );
-        
-        if(!result){
-            Usuario user_name = M_Usuario.getUsuario(USER_NAME);
-            
-            M_Usuario.update(
-                    Usuario
-                            .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre(user_name.getPersona().getPnombre())
-                                            .snombre(user_name.getPersona().getSnombre())
-                                            .apellidos(user_name.getPersona().getApellidos())
-                                            .estado(user_name.getPersona().getEstado())
-                                            .user_name(user_name.getPersona().getUser_name())
-                                            .build()
-                            )
-                            .administrador(user_name.getAdministrador())
-                            .descripcion(user_name.getDescripcion())
-                            .build()
-            );
-        }
         
         assertTrue(result, "No se tiene acceso a V_PRODUCTOS");
         

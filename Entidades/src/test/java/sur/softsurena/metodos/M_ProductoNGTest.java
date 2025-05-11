@@ -20,32 +20,36 @@ import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAME
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ProductoNGTest {
 
     private static Integer id_producto;
 
     public M_ProductoNGTest() {
+        System.out.println("sur.softsurena.metodos.M_ProductoNGTest.<init>()");
     }
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod
@@ -59,14 +63,13 @@ public class M_ProductoNGTest {
     
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          
-                          """
+                          """,
+            alwaysRun = true
     )
-    public void testSqlProductos() {
+    public void testSqlSelect() {
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .build()
@@ -80,7 +83,7 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .id(0)
@@ -97,7 +100,7 @@ public class M_ProductoNGTest {
 
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .idCategoria(0)
@@ -114,7 +117,7 @@ public class M_ProductoNGTest {
 
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .idCategoria(0)
@@ -132,7 +135,7 @@ public class M_ProductoNGTest {
 
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .idCategoria(0)
@@ -150,7 +153,7 @@ public class M_ProductoNGTest {
 
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .id(0)
@@ -167,7 +170,7 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .id(0)
@@ -184,7 +187,29 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
+                        Producto
+                                .builder()
+                                .id(0)
+                                .estado(Boolean.TRUE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ID = 0 AND ESTADO OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                """.strip().trim()
+        );
+//------------------------------------------------------------------------------
+        assertEquals(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .id(0)
@@ -206,29 +231,7 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
-                        Producto
-                                .builder()
-                                .id(0)
-                                .estado(Boolean.FALSE)
-                                .codigo("0")
-                                .descripcion("0")
-                                .build()
-                ),
-                """
-                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
-                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
-                FROM V_PRODUCTOS
-                WHERE ID = 0 AND ESTADO IS FALSE OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
-                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
-                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
-                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
-                ORDER BY ID
-                """.strip().trim()
-        );
-//------------------------------------------------------------------------------
-        assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .id(0)
@@ -258,7 +261,7 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .estado(Boolean.FALSE)
@@ -287,7 +290,7 @@ public class M_ProductoNGTest {
         );
 //------------------------------------------------------------------------------
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .estado(Boolean.TRUE)
@@ -317,7 +320,7 @@ public class M_ProductoNGTest {
 //------------------------------------------------------------------------------
 
         assertEquals(
-                M_Producto.sqlProductos(
+                M_Producto.sqlSelect(
                         Producto
                                 .builder()
                                 .codigo("0")
@@ -351,7 +354,7 @@ public class M_ProductoNGTest {
                           Test que verifica si el registro de seleccion de 
                           producto existentes.
                           """,
-            priority = 0
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         List<Producto> productos = M_Producto.select(
@@ -412,7 +415,7 @@ public class M_ProductoNGTest {
     @Test(
             enabled = true,
             description = "Test encargada de agregar producto al sistema.",
-            priority = 2
+            dependsOnMethods = "testSelect"
     )
     public static void testInsert() {
         M_CategoriaNGTest.testInsert();
@@ -434,7 +437,7 @@ public class M_ProductoNGTest {
     @Test(
             enabled = true,
             description = "Test encargado de modificar el producto del sistema. ",
-            priority = 3
+            dependsOnMethods = {"testInsert"}
     )
     public void testUpdate() {
         Resultado result = M_Producto.update(producto(Boolean.TRUE));
@@ -452,34 +455,9 @@ public class M_ProductoNGTest {
     }
 
     @Test(
-            enabled = false,
-            description = "",
-            priority = 1
-    )
-    public void testExisteCategoriaProductos() {
-        int idCategoria = 0;
-        boolean expResult = false;
-        boolean result = M_Producto.existeCategoriaProductos(idCategoria);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = false,
-            description = """
-                          """,
-            priority = 1
-    )
-    public void testExisteProducto() {
-        String criterio = "";
-        boolean expResult = false;
-        boolean result = M_Producto.existeProducto(criterio);
-        assertEquals(result, expResult);
-    }
-
-    @Test(
             enabled = true,
             description = "",
-            priority = 10
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDeleteByID() {
         Resultado result = M_Producto.delete(id_producto);
@@ -502,7 +480,6 @@ public class M_ProductoNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
                           Metodo que genera Productos aleatorio.
                           """
@@ -516,7 +493,6 @@ public class M_ProductoNGTest {
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
                           Metodo que genera codigo de barra aleatorio.
                           """
@@ -524,7 +500,8 @@ public class M_ProductoNGTest {
     public void testGenerarCodigoBarra() {
         assertNotNull(
                 M_Producto.generarCodigoBarra(),
-                "Codigo Barra No generado");
+                "Codigo Barra No generado"
+        );
     }
     
     public synchronized static Producto producto(Boolean estado) {

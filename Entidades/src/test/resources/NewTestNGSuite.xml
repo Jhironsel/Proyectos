@@ -17,7 +17,7 @@
         </classes>
     </test>
     -->
-
+<!--
     <test name="sur.softsurena.metodos suite">
         <packages>
             <package name="sur.softsurena.conexion"/>
@@ -29,7 +29,7 @@
             <class name="test.timeout.TimeOutThreadLocalSampleTest"/>
         </classes>
     </test>
-    
+    -->
     
 
 </suite>

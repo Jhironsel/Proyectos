@@ -5,6 +5,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
@@ -83,13 +84,12 @@ public class M_E_S_SYS {
                   FROM V_T_E_S_SYS 
                   WHERE ID = 1; 
                   """;
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+        try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery(sql);
             
             rs.next();
             

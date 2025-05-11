@@ -26,14 +26,15 @@ public class M_Privilegio {
      * permisos necesarios.
      */
     public synchronized static boolean privilegio(Privilegio privilegio) {
-        final String sql
-                = "SELECT (1) "
-                + "FROM VS_PRIVILEGIO "
-                + "WHERE (TRIM(USUARIO) STARTING WITH TRIM(CURRENT_USER) OR "
-                + "      TRIM(USUARIO) STARTING WITH TRIM(CURRENT_ROLE)) AND "
-                + "      TRIM(ABRV_PRIVILEGIO) STARTING WITH TRIM(?) AND "
-                + "      TRIM(NOMBRE_RELACION) STARTING WITH TRIM(?) OR "
-                + "      TRIM(NOMBRE_CAMPO) STARTING WITH TRIM(?); ";
+        final String sql = """
+                           SELECT (1) 
+                           FROM VS_PRIVILEGIO 
+                           WHERE (TRIM(USUARIO) STARTING WITH TRIM(CURRENT_USER) OR 
+                                TRIM(USUARIO) STARTING WITH TRIM(CURRENT_ROLE)) AND 
+                                TRIM(ABRV_PRIVILEGIO) STARTING WITH TRIM(?) AND 
+                                TRIM(NOMBRE_RELACION) STARTING WITH TRIM(?) OR 
+                                TRIM(NOMBRE_CAMPO) STARTING WITH TRIM(?); 
+                           """;
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,

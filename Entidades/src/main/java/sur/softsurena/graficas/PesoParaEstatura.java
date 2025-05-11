@@ -250,15 +250,15 @@ public class PesoParaEstatura {
 
     public static void main(String[] args) throws SQLException {
 
-        Conexion.getInstance(
-                "sysdba", 
-                "1", 
-                "softsurena.db", 
-                "localhost", 
-                "3050",
-                "NONE"
-        );
-        Conexion.verificar();
+//        Conexion.getInstance(
+//                "sysdba", 
+//                "1", 
+//                "softsurena.db", 
+//                "localhost", 
+//                "3050",
+//                "NONE"
+//        );
+//        Conexion.verificar();
         PesoParaEstatura peso = new PesoParaEstatura(0);
         peso.createDemoPanel().setVisible(true);
         
@@ -269,6 +269,6 @@ public class PesoParaEstatura {
         marco.setVisible(true);
         
         
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 }

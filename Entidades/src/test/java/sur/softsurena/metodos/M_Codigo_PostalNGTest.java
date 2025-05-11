@@ -14,9 +14,13 @@ import org.testng.annotations.Test;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_Codigo_PostalNGTest {
     
     public M_Codigo_PostalNGTest() {
+        System.out.println("sur.softsurena.metodos.M_Codigo_PostalNGTest.<init>()");
     }
 
     @BeforeClass

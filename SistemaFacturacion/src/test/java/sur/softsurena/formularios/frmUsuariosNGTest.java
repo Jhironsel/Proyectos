@@ -16,6 +16,9 @@ import xy.ui.testing.util.TestingUtils;
  *
  * @author jhironsel
  */
+@Test(
+        dependsOnGroups = "init"
+)
 public class frmUsuariosNGTest {
 
     public frmUsuariosNGTest() {
@@ -23,24 +26,24 @@ public class frmUsuariosNGTest {
 
     @BeforeClass
     public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
+//        Conexion.getInstance(
+//                "sysdba",
+//                "1",
+//                "SoftSurena.db",
+//                "localhost",
+//                "3050",
+//                "NONE"
+//        );
+//        assertTrue(
+//                Conexion.verificar().getEstado(),
+//                "Error al conectarse..."
+//        );
     }
 
     @AfterClass
     public void tearDownClass() throws Exception {
         frmUsuarios.getInstance().dispose();
-        Conexion.getCnn().close();
+//        Conexion.getCnn().close();
     }
 
     @BeforeMethod

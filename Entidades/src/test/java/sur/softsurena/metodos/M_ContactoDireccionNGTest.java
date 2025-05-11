@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.ContactoDireccion;
 import static sur.softsurena.metodos.M_ContactoDireccion.DIRECCION_AGREGADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoDireccion.DIRECCION_DE_CONTACTO_ACTUALIZADA_CORRECT;
@@ -17,71 +16,62 @@ import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_ACTUALIZAR_LA_
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_BORRAR_EL_REGISTRO_DE_LA_DIRECCI;
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_INSERTAR_DIRECCION;
 import static sur.softsurena.metodos.M_ContactoDireccion.REGISTRO_DE_LA_DIRECCION_BORRADO_CORRECTA;
-import static sur.softsurena.metodos.M_ContactoDireccion.agregarDireccion;
 import sur.softsurena.utilidades.Resultado;
 
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_ContactoDireccionNGTest {
 
-    private int id_direccion;
+    private int idDireccion, idPersona, idProvincia, idMunicipio,
+            idDistritoMunicipal, idCodigoPostal;
 
-    public M_ContactoDireccionNGTest() {
-    }
+    public M_ContactoDireccionNGTest() {}
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "None"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
+
+    
+    //--------------------------------------------------------------------------
 
     @Test(
             enabled = true,
-            priority = 0,
             description = """
                           Metodo que permite agregar un direcion de una persona.
-                          """
+                          """,
+            dependsOnMethods = "testSelectByID",
+            groups = "contactoDir.insert"
     )
-    public void testAgregarDireccion() {
+    public void testInsert() {
 
         M_PersonaNGTest.testInsert();
 
-        Resultado result = agregarDireccion(ContactoDireccion
-                .builder()
-                .idPersona(
-                        M_PersonaNGTest
-                                .persona(Boolean.FALSE)
-                                .getIdPersona()
-                )
-                .idProvincia(0)
-                .idMunicipio(0)
-                .idDistritoMunicipal(0)
-                
-                .direccion("Insercion de prueba.")
-                .porDefecto(Boolean.TRUE)
-                .build()
+        idPersona = M_PersonaNGTest
+                .getPersona(Boolean.FALSE)
+                .getIdPersona();
+
+        Resultado result = M_ContactoDireccion.insert(
+                ContactoDireccion
+                        .builder()
+                        .idPersona(
+                                idPersona
+                        )
+                        .idProvincia(0)
+                        .idMunicipio(0)
+                        .idDistritoMunicipal(0)
+                        .direccion("Insercion de prueba.")
+                        .porDefecto(Boolean.TRUE)
+                        .build()
         );
 
         assertEquals(
@@ -100,41 +90,38 @@ public class M_ContactoDireccionNGTest {
                 ERROR_AL_INSERTAR_DIRECCION
         );
 
-        id_direccion = result.getId();
-
-    }//FIN
-
+        idDireccion = result.getId();
+    }//----------------------------------------------------------------------FIN
+    
     @Test(
             enabled = true,
-            priority = 1,
             description = """
                           Permite consulta las direcciones de una personas del 
                           sistema.
-                          """
+                          """,
+            dependsOnMethods = "testInsert"
     )
-    public void testGetDireccionByID() {
-        int id_persona = 0;
-        List result = M_ContactoDireccion.selectByID(id_persona);
+    public void testSelectByID() {
+        List result = M_ContactoDireccion.selectByID(idPersona);
         assertFalse(
                 result.isEmpty(),
                 "La lista contiene datos"
         );
-    }
+    }//----------------------------------------------------------------------FIN
 
     @Test(
             enabled = true,
-            priority = 1,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = "testInsert"
     )
-    public void testModificarDireccion() {
+    public void testUpdate() {
 
-        Resultado result = M_ContactoDireccion.modificarDireccion(ContactoDireccion
+        Resultado result = M_ContactoDireccion.update(ContactoDireccion
                 .builder()
-                .id(id_direccion)
+                .id(idDireccion)
                 .idPersona(
-                        M_PersonaNGTest
-                                .persona(Boolean.FALSE)
-                                .getIdPersona()
+                        idPersona
                 )
                 .idProvincia(2)
                 .idMunicipio(12)
@@ -160,15 +147,15 @@ public class M_ContactoDireccionNGTest {
 
     @Test(
             enabled = true,
-            priority = 2,
             description = """
                           Test que realiza la eliminacion de un registros de 
                           direccion de un contacto del sistema.
-                          """
+                          """,
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
-    public void testBorrarDireccion() {
+    public void testDelete() {
 
-        Resultado result = M_ContactoDireccion.borrarDireccion(id_direccion);
+        Resultado result = M_ContactoDireccion.delete(idDireccion);
 
         assertEquals(
                 result,

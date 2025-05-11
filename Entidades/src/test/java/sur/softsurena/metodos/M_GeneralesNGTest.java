@@ -9,7 +9,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Generales;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE;
@@ -24,51 +23,36 @@ import sur.softsurena.utilidades.Resultado;
  * @author jhironsel
  */
 @Getter
+@Test(
+        dependsOnGroups = "init"
+)
 public class M_GeneralesNGTest {
 
+    private static int idGeneral, idPersona, idTipoSangre;
     private final SoftAssert softAssert;
-    private String cedula;
-    private int idGeneral;
 
     public M_GeneralesNGTest() {
         softAssert = new SoftAssert();
     }
 
     @BeforeClass
-    public void setUpClass() throws Exception {
-        Conexion.getInstance(
-                "sysdba",
-                "1",
-                "SoftSurena.db",
-                "localhost",
-                "3050",
-                "NONE"
-        );
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
+    public void setUpClass() throws Exception {}
 
     @AfterClass
-    public void tearDownClass() throws Exception {
-        Conexion.getCnn().close();
-    }
+    public void tearDownClass() throws Exception {}
 
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
     
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 0,
             description = """
-                          """
+                          """,
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(
@@ -126,7 +110,8 @@ public class M_GeneralesNGTest {
             enabled = true,
             priority = 0,
             description = """
-                          """
+                          """,
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         assertNotNull(
@@ -193,9 +178,7 @@ public class M_GeneralesNGTest {
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
-            priority = 1,
             description = """
-                          
                           """
     )
     public void testInsert() {
@@ -207,7 +190,7 @@ public class M_GeneralesNGTest {
                                 .builder()
                                 .idPersona(
                                         M_PersonaNGTest
-                                                .persona(Boolean.FALSE)
+                                                .getPersona(Boolean.FALSE)
                                                 .getIdPersona()
                                 )
                                 .cedula(
@@ -231,7 +214,9 @@ public class M_GeneralesNGTest {
     @Test(
             enabled = true,
             priority = 3,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
         assertEquals(
@@ -240,7 +225,7 @@ public class M_GeneralesNGTest {
                                 .builder()
                                 .idPersona(
                                         M_PersonaNGTest
-                                                .persona(Boolean.TRUE)
+                                                .getPersona(Boolean.TRUE)
                                                 .getIdPersona()
                                 )
                                 .cedula(M_Generales.generarCedula())
@@ -262,11 +247,13 @@ public class M_GeneralesNGTest {
     @Test(
             enabled = true,
             priority = 4,
-            description = ""
+            description = """
+                          """,
+            dependsOnMethods = {"", ""}
     )
     public void testDelete() {
         Resultado result = M_Generales.delete(
-                M_PersonaNGTest.persona(Boolean.TRUE).getIdPersona()
+                M_PersonaNGTest.getPersona(Boolean.TRUE).getIdPersona()
         );
 
         assertEquals(
@@ -331,5 +318,16 @@ public class M_GeneralesNGTest {
 
         //Deberia de ejecutarse al final de todas las pruebas.
         //softAssert.assertAll(); // Verifica todas las condiciones
+    }
+    
+    public static Generales getGenerales(){
+        return Generales
+                .builder()
+                .id(idGeneral)
+                .idPersona(idPersona)
+                .idTipoSangre(idTipoSangre)
+                .cedula(M_Generales.generarCedula())
+                .estado_civil('X')
+                .build();
     }
 }
