@@ -143,7 +143,7 @@ public class M_Producto {
      */
     public synchronized static Resultado insert(Producto producto) {
         final String sql
-                = "SELECT O_ID FROM SP_I_PRODUCTO(?,?,?,?,?)";
+                = "SELECT ID FROM SP_I_PRODUCTO(?,?,?,?,?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -163,7 +163,7 @@ public class M_Producto {
 
             return Resultado
                     .builder()
-                    .id(rs.getInt("O_ID"))
+                    .id(rs.getInt("ID"))
                     .mensaje(PRODUCTO_AGREGADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)

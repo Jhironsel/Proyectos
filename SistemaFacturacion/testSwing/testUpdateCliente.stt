@@ -5,7 +5,7 @@
     <testableModalWindowsForcedToDocumentModality>true</testableModalWindowsForcedToDocumentModality>
     <testableWindowsAlwaysOnTopFeatureDisabled>true</testableWindowsAlwaysOnTopFeatureDisabled>
   </editingOptions>
-  <maximumSecondsToWaitBetwneenActions>1.5</maximumSecondsToWaitBetwneenActions>
+  <maximumSecondsToWaitBetwneenActions>1.1</maximumSecondsToWaitBetwneenActions>
   <minimumSecondsToWaitBetwneenActions>1.0</minimumSecondsToWaitBetwneenActions>
   <testActions>
     <xy.ui.testing.action.CallMainMethodAction>
@@ -81,7 +81,7 @@
     <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>tblClientes</componentName>
+        <componentName>tblPersonas</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -102,7 +102,7 @@
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>btnEditarCliente</componentName>
+        <componentName>btnModificarPersona</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -264,7 +264,7 @@
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
-        <occurrencesToSkip>1</occurrencesToSkip>
+        <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
@@ -390,7 +390,7 @@
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>OptionPane.button</componentName>
-        <occurrencesToSkip>1</occurrencesToSkip>
+        <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
@@ -403,7 +403,7 @@
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>btnGuardar</componentName>
+        <componentName>btnGuardarRegistro</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -456,20 +456,5 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
-    <xy.ui.testing.action.component.CheckVisibleStringsAction>
-      <completenessChecked>false</completenessChecked>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>tblClientes</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <negated>false</negated>
-      <orderChecked>false</orderChecked>
-      <visibleStrings>
-        <string>Jhadiel</string>
-      </visibleStrings>
-    </xy.ui.testing.action.component.CheckVisibleStringsAction>
   </testActions>
 </xy.ui.testing.Tester>

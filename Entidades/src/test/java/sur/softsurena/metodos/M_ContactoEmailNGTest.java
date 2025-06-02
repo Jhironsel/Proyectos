@@ -4,10 +4,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoEmail;
 import static sur.softsurena.metodos.M_ContactoEmail.CONTACTO_BORRADO_CORRECTAMENTE;
@@ -25,42 +21,22 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = "init",
+        groups = "gContactoEmail"
 )
 public class M_ContactoEmailNGTest {
 
-    private static int idCorreo, idPersona;
-
-    public M_ContactoEmailNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
+    private static int idCorreo;
 
     @Test(
-            enabled = true,
-            description = "Permita agregar un contacto y su correo",
-            dependsOnMethods = "testselectByID",
             groups = "contactoEmail.insert"
     )
     public void testInsert() {
 
-        M_PersonaNGTest.testInsert();
-        idPersona = M_PersonaNGTest.getPersona(Boolean.TRUE).getIdPersona();
         Resultado result = M_ContactoEmail.insert(
                 ContactoEmail
                         .builder()
-                        .idPersona(
-                                idPersona
-                        )
+                        .idPersona(0)
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.TRUE)
@@ -87,14 +63,10 @@ public class M_ContactoEmailNGTest {
     }
     
     @Test(
-            enabled = true,
-            description = "Realizamos consulta y eliminamos cliente.",
             dependsOnMethods = "testInsert"
     )
     public void testselectByID() {
-        List result = M_ContactoEmail.selectByID(
-                idPersona
-        );
+        List result = M_ContactoEmail.selectByID(0);
 
         assertFalse(
                 result.isEmpty(),
@@ -109,10 +81,6 @@ public class M_ContactoEmailNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = """
-                          Modifica los contactos del sistema.
-                          """,
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
@@ -120,7 +88,7 @@ public class M_ContactoEmailNGTest {
                 ContactoEmail
                         .builder()
                         .id(idCorreo)
-                        .idPersona(idPersona)
+                        .idPersona(0)
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.FALSE)
@@ -142,10 +110,6 @@ public class M_ContactoEmailNGTest {
     
 
     @Test(
-            enabled = true,
-            description = """
-                          Verificamos si validan los correo correctamente.
-                          """,
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public void testDelete() {
@@ -161,12 +125,9 @@ public class M_ContactoEmailNGTest {
                         .build(),
                 ERROR_AL_BORRAR_EL_CONTACTO_DE_CORREO_DEL
         );
-        M_PersonaNGTest.testDelete();
     }
 
     @Test(
-            enabled = true,
-            description = "Test que genera un correo y valida si es correcto.",
             alwaysRun = true
     )
     public void testGenerarCorreo() {
@@ -178,8 +139,6 @@ public class M_ContactoEmailNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Verificamos si validan los correo correctamente.",
             alwaysRun = true
     )
     public void testCorreo() {

@@ -4,12 +4,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.D_Motivo_Consulta;
 import static sur.softsurena.metodos.M_D_MotivoConsulta.DETALLES_AGREGADOS_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_D_MotivoConsulta.ERROR_AL_ELIMINAR_DETALLE_DE_MOTIVO_DE_LA;
@@ -27,88 +22,41 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_D_MotivoConsultaNGTest {
 
-    public M_D_MotivoConsultaNGTest() {
-        System.out.println("sur.softsurena.metodos.M_D_MotivoConsultaNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
     @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """
+            enabled = false
     )
     public void testAgregarDetallleConsulta() {
         //TODO Se debe crear proceso para agregar una consulta.
-        Resultado result = M_D_MotivoConsulta.agregarDetallleConsulta(
-                D_Motivo_Consulta
+
+        assertEquals(
+                M_D_MotivoConsulta.agregarDetallleConsulta(
+                        D_Motivo_Consulta
+                                .builder()
+                                .id_consulta(0)
+                                .id_motivo_consulta(0)
+                                .build()
+                ),
+                Resultado
                         .builder()
-                        .id_consulta(0)
-                        .id_motivo_consulta(0)
-                        .build()
-        );
-        
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL_INSERTAR__DETALLE__CONSULTA
-        );
-
-        assertEquals(
-                result.getMensaje(),
-                DETALLES_AGREGADOS_CORRECTAMENTE,
-                ERROR_AL_INSERTAR__DETALLE__CONSULTA
-        );
-
-        assertEquals(
-                result.getIcono(),
-                JOptionPane.INFORMATION_MESSAGE,
+                        .mensaje(DETALLES_AGREGADOS_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
                 ERROR_AL_INSERTAR__DETALLE__CONSULTA
         );
     }
 
     @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Consulta los motivos que una consulta fue realizada.
-                          """
+            enabled = true
     )
     public void testGetDetalleMotivo() {
-        
+
         int idConsulta = 0;
-        
+
         List<D_Motivo_Consulta> lista = M_D_MotivoConsulta.getDetalleMotivo(
                 idConsulta
         );
-        
+
         assertTrue(
                 lista.isEmpty(),
                 "Por el momento la lista no puede contener registros."
@@ -116,9 +64,7 @@ public class M_D_MotivoConsultaNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testBorrarDetalleMotivoConsulta() {
         Resultado result = borrarDetalleMotivoConsulta(D_Motivo_Consulta.builder().build()

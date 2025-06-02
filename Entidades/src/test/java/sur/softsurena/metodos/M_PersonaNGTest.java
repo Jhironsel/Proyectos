@@ -3,13 +3,8 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.abstracta.Persona;
-import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.metodos.M_Persona.ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA;
@@ -30,29 +25,13 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = "init",
+        groups = "persona"
 )
 public class M_PersonaNGTest {
 
-    private static Integer idPersona;
-
-    public M_PersonaNGTest() {}
-
-    @BeforeClass(
-            alwaysRun = true
-    )
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    //--------------------------------------------------------------------------
+    public static Integer idPersona;
+    
     @Test(
             alwaysRun = true,
             enabled = true
@@ -181,11 +160,6 @@ public class M_PersonaNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Prueba que permite insertar una persona al sistema.
-                          y obtener su ID en la variable idPersona.
-                          """, 
             groups = "persona.insert"
     )
     public static void testInsert() {
@@ -254,14 +228,9 @@ public class M_PersonaNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Test que permite eliminar el registro del sistema de 
-                          la tabla de Persona.
-                          """,
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
-    public static void testDelete() {
+    public synchronized static void testDelete() {
         
         assertTrue(
                 idPersona > 0,
@@ -282,7 +251,12 @@ public class M_PersonaNGTest {
         );
     }
 
-    public static Persona getPersona(Boolean estado) {
+    /**
+     * Metodo que contiene los atributos basicos de una persona.
+     * @param estado
+     * @return
+     */
+    public synchronized static Persona getPersona(Boolean estado) {
         return Persona
                 .builder()
                 .idPersona(idPersona)

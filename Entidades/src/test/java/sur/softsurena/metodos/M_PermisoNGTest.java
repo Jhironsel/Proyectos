@@ -3,12 +3,7 @@ package sur.softsurena.metodos;
 import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -21,42 +16,8 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_PermisoNGTest {
 
-    public M_PermisoNGTest() {
-        System.out.println("sur.softsurena.metodos.M_PermisoNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testGetPermisosAsignados() {
         String rol = "";
@@ -66,9 +27,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testGetPermisosDisponibles() {
         String rol = "";
@@ -78,9 +37,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testQuitarPermisoAdminRole() {
         String rol = "";
@@ -91,9 +48,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testQuitarPermisoAdminProcedimiento() {
         String procedimiento = "";
@@ -104,9 +59,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testAgregarPermisoAdminProcedimiento() {
         String procedimiento = "";
@@ -117,9 +70,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testAgregarPermisoAdminRole() {
         String role = "";
@@ -130,9 +81,7 @@ public class M_PermisoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testBorrarPermisoAdminProcedimiento() {
         String procedimiento = "";

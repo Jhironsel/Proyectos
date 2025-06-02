@@ -3,10 +3,6 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
@@ -23,27 +19,9 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_PacienteNGTest {
 
-    private static Integer idPaciente;
+    public static Integer idPersona;
 
-    public M_PacienteNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    @Test(
-            enabled = true,
-            description = """
-                          """
-    )
+    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -97,15 +75,10 @@ public class M_PacienteNGTest {
         );
     }
 
-    @Test(
-            enabled = true,
-            description = """
-                          Test que realiza el ingreso de un paciente al sistema.
-                          """
-    )
+    @Test
     public static void testInsert() {
         M_PersonaNGTest.testInsert();
-        idPaciente = M_PersonaNGTest.getPersona(Boolean.TRUE).getIdPersona();
+        idPersona = M_PersonaNGTest.idPersona;
         
         Resultado result = M_Paciente.insert(generarPaciente());
 
@@ -123,14 +96,12 @@ public class M_PacienteNGTest {
         
 
         assertTrue(
-                M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona() > 0,
+                idPersona > 0,
                 ERROR_AL_INSERTAR_PACIENTE
         );
     }
 
     @Test(
-            enabled = true,
-            description = "",
             dependsOnMethods = "testInsert"
     )
     public static void testUpdate() {
@@ -149,8 +120,6 @@ public class M_PacienteNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Test que permite eliminar un paciente ya creado.",
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
@@ -158,11 +127,7 @@ public class M_PacienteNGTest {
                 M_Paciente.delete(
                         Paciente
                                 .builder()
-                                .id(
-                                        M_PersonaNGTest
-                                                .getPersona(Boolean.FALSE)
-                                                .getIdPersona()
-                                )
+                                .id(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -171,18 +136,17 @@ public class M_PacienteNGTest {
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build(),
-                ERROR_AL_BORRAR_PACIENTE.formatted(
-                        M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona()
-                )
+                ERROR_AL_BORRAR_PACIENTE.formatted(idPersona)
         );
 
+        M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
 
     public static Paciente generarPaciente() {
         return Paciente
                 .builder()
-                .id(idPaciente)
+                .id(idPersona)
                 .cesarea(Boolean.FALSE)
                 .tiempoGestacion(8)
                 .fumador(Boolean.FALSE)

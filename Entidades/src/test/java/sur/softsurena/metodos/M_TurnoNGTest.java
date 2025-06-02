@@ -3,11 +3,8 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import sur.softsurena.entidades.M_Factura;
 import sur.softsurena.entidades.Turno;
 import static sur.softsurena.metodos.M_Turno.TURNO_CERRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Turno.TURNO_ELIMINADO_CORRECTAMENTE;
@@ -21,37 +18,13 @@ import sur.softsurena.utilidades.Resultado;
 @Getter
 @Test(
         dependsOnGroups = "init",
-        groups = "turno"
+        groups = "gTurno"
 )
 public class M_TurnoNGTest {
 
     public static Integer idTurno;
 
-    public M_TurnoNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
+    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -135,11 +108,8 @@ public class M_TurnoNGTest {
     }
 
     @Test(
-            enabled = true,
-            dependsOnMethods = "testSqlSelect",
             groups = "turno.select",
-            description = """
-                          """
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         assertNotNull(
@@ -195,14 +165,10 @@ public class M_TurnoNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """,
             groups = "turno.insert",
             dependsOnGroups = {"usuario.insert"}
     )
-    public void testInsert() {
+    public static void testInsert() {
         var listaTurno = M_Turno.select(
                 Turno
                         .builder()
@@ -210,6 +176,7 @@ public class M_TurnoNGTest {
                         .turno_usuario("CAJERO")
                         .build()
         );
+
         if (listaTurno.isEmpty()) {
             var resultado = M_Turno.insert("CAJERO");
 
@@ -224,10 +191,13 @@ public class M_TurnoNGTest {
             );
 
             idTurno = resultado.getId();
-        }else{
-            idTurno = listaTurno.getLast().getId();
+            System.out.println("Se inserto el turno con el ID: " + idTurno);
+        } else {
+
+            idTurno = listaTurno.getFirst().getId();
+            System.out.println("Se realizo una consulta y se encontro un turno con el ID: " + idTurno);
             assertTrue(
-                    idTurno >= 0, 
+                    idTurno > 0,
                     "Error al consultar los turnos del sistema."
             );
         }
@@ -235,14 +205,11 @@ public class M_TurnoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """,
             dependsOnMethods = "testInsert",
             groups = "turno.update"
     )
     public void testUpdate() {
+        System.out.println("Actualizar el turno con el ID: " + idTurno);
         assertEquals(
                 M_Turno.update(idTurno),
                 Resultado
@@ -254,18 +221,26 @@ public class M_TurnoNGTest {
         );
     }
 
-    /**
-     * Test of delete method, of class M_Turno.
-     */
     @Test(
-            enabled = false,
-            priority = 0,
-            description = """
-                          """,
-            dependsOnMethods = {"testInsert", "testUpdate"},
-            groups = "turno.delete"
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
-    public void testDelete() {
+    public synchronized static void testDelete() {
+        System.out.println("Eliminar turno con el ID: " + idTurno);
+
+        M_M_Factura.select(
+                M_Factura
+                        .builder()
+                        .idTurno(idTurno)
+                        .build()
+        ).stream().forEach(
+                factura -> {
+
+                    M_M_FacturaNGTest.idFactura = factura.getId();
+
+                    M_M_FacturaNGTest.testDelete();
+                }
+        );
+
         assertEquals(
                 M_Turno.delete(idTurno),
                 Resultado

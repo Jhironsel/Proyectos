@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Permiso.agregarPermisoAdminRole;
@@ -22,7 +23,6 @@ import static sur.softsurena.metodos.M_Role.modificarRol;
 import static sur.softsurena.metodos.M_Role.quitarRolUsuario;
 import static sur.softsurena.metodos.M_Role.quitarRolesUsuario;
 import sur.softsurena.metodos.M_Usuario;
-import static sur.softsurena.metodos.M_Usuario.getUsuarios;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.columnasCheckBox;
@@ -639,7 +639,7 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
                 );
                 return;
             }
-            
+
             String userName = tblUsuarios.getValueAt(
                     tblUsuarios.getSelectedRow(), 0).
                     toString().strip();
@@ -647,7 +647,17 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             frmUsuariosAgregar user = frmUsuariosAgregar.getInstance(
                     null,
                     true,
-                    M_Usuario.getUsuario(userName)
+                    M_Usuario.select(
+                            Usuario
+                                    .builder()
+                                    .userName(userName)
+                                    .persona(
+                                            Persona
+                                                    .builder()
+                                                    .build()
+                                    )
+                                    .build()
+                    ).getFirst()
             );
 
             user.setLocationRelativeTo(null);
@@ -805,7 +815,12 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
         }
 
         if (jtpGeneral.getSelectedComponent() == jpMantUsuarios) {
-            Usuario usuario1 = M_Usuario.getUsuario(usuario);
+            Usuario usuario1 = M_Usuario.select(
+                    Usuario
+                            .builder()
+                            .userName(usuario)
+                            .build()
+            ).getFirst();
             if (Objects.isNull(usuario1)) {
                 JOptionPane.showInternalMessageDialog(
                         this,
@@ -1193,7 +1208,16 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         };
 
-        getUsuarios().stream().forEach(
+        M_Usuario.select(
+                Usuario
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .build()
+                        )
+                        .build()
+        ).stream().forEach(
                 usuario -> {
                     registro[0] = usuario;
                     registro[1] = usuario.getPersona().getPnombre();
@@ -1316,9 +1340,9 @@ public class frmUsuarios extends javax.swing.JInternalFrame {
             }
         };
 
-        M_Usuario.getUsuarios().stream().forEach(
+        M_Usuario.select(Usuario.builder().build()).stream().forEach(
                 usuario -> {
-                    registro[0] = usuario.getPersona().getUser_name().strip();
+                    registro[0] = usuario.getUserName().strip();
                     miTabla.addRow(registro);
                 }
         );

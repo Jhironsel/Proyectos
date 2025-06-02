@@ -8,12 +8,12 @@ import org.firebirdsql.gds.ng.WireCrypt;
 import sur.softsurena.conexion.frmParametros;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.formularios.frmAlmacenes;
-import sur.softsurena.formularios.frmClientes;
-import static sur.softsurena.formularios.frmClientes.llenarTablaCorreos;
-import static sur.softsurena.formularios.frmClientes.llenarTablaDirreciones;
-import static sur.softsurena.formularios.frmClientes.llenarTablaTelefonos;
 import sur.softsurena.formularios.frmDeudas;
 import static sur.softsurena.formularios.frmProductos.llenarTablaProductos;
+import sur.softsurena.modulo_comun.frmPersonas;
+import static sur.softsurena.modulo_comun.frmPersonas.llenarTablaCorreos;
+import static sur.softsurena.modulo_comun.frmPersonas.llenarTablaDirreciones;
+import static sur.softsurena.modulo_comun.frmPersonas.llenarTablaTelefonos;
 import static sur.softsurena.modulo_comun.frmUsuarios.llenarTablaUsuarios;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -27,12 +27,45 @@ public class FirebirdEventos extends FBEventManager {
     }
 
     public static void main(String[] args) {
-        FirebirdEventos eventos = new FirebirdEventos();
+//        FirebirdEventos eventos = new FirebirdEventos();
+//
+//        FirebirdEventos.USUARIO = "sysdba";
+//        FirebirdEventos.CLAVE = "1";
+//
+//        eventos.registro();
 
-        FirebirdEventos.USUARIO = "sysdba";
-        FirebirdEventos.CLAVE = "1";
+        System.out.println("Resultados 1:"+Boolean.logicalAnd(true, true));
+        System.out.println("Resultados 1:"+Boolean.logicalAnd(true, false));
+        System.out.println("Resultados 1:"+Boolean.logicalAnd(false, true));
+        System.out.println("Resultados 1:"+Boolean.logicalAnd(false, false));
+        
+        System.out.println("");
+        System.out.println("Resultados 1:"+Boolean.logicalOr(true, true));
+        System.out.println("Resultados 1:"+Boolean.logicalOr(true, false));
+        System.out.println("Resultados 1:"+Boolean.logicalOr(false, true));
+        System.out.println("Resultados 1:"+Boolean.logicalOr(false, false));
+        
+        System.out.println("");
+        System.out.println("Resultados 1:"+Boolean.logicalXor(true, true));
+        System.out.println("Resultados 1:"+Boolean.logicalXor(true, false));
+        System.out.println("Resultados 1:"+Boolean.logicalXor(false, true));
+        System.out.println("Resultados 1:"+Boolean.logicalXor(false, false));
+        /*
+        Resultados 1:true
+        Resultados 1:false
+        Resultados 1:false
+        Resultados 1:false
 
-        eventos.registro();
+        Resultados 1:true
+        Resultados 1:true
+        Resultados 1:true
+        Resultados 1:false
+
+        Resultados 1:false
+        Resultados 1:true
+        Resultados 1:true
+        Resultados 1:false
+        */
     }
 
     public synchronized boolean registro() {
@@ -84,7 +117,7 @@ public class FirebirdEventos extends FBEventManager {
                         "Event [{0}] occured {1} time(s)",
                         new Object[]{event.getEventName(), event.getEventCount()}
                 );
-                frmClientes.llenarTablaClientes();
+                frmPersonas.llenarTablaPersonas();
             });
 
             //Eventos de usuario.***********************************************

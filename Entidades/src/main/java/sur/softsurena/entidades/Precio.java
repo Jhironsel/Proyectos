@@ -13,18 +13,19 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Precio {
     private final Integer id;
-    private final Producto producto;
-    private final TipoPrecio tipoPrecio;
-    private final TipoImpuesto tipoImpusto;
+    private final Integer idProducto;
+    private final Integer idTipoPrecio;
+    private final Integer idTipoImpusto;
     private final BigDecimal precio;
     private final String moneda;
     private final Date fechaInicio;
     private final Date fechaFin;
     private final BigDecimal descuento;
     private final BigDecimal costoEnvio;
+    private final Boolean estado;
 
     @Override
     public String toString() {
-        return "Tipo precio: ".concat(tipoPrecio.getNombre()).concat(", Precio: ".concat(precio.toString()));
+        return id.toString();
     }
 }

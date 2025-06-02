@@ -4,12 +4,7 @@ import java.util.Calendar;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Antecedente;
 import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.ControlConsulta;
@@ -27,57 +22,25 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = "init",
+        groups = "controlConsulta"
 )
 public class M_Control_ConsultaNGTest {
 
-    private static Integer idControlConsulta;
-
-    public M_Control_ConsultaNGTest() {
-        System.out.println("sur.softsurena.metodos.M_Control_ConsultaNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "None"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public static Integer idControlConsulta;
 
     @Test(
             enabled = true,
-            description = """
-                          """,
             alwaysRun = true
     )
     public void testSqlSelect() {
 
-        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
-                .builder()
-                .build()
-        ),
+        assertEquals(
+                M_ControlConsulta.sqlSelect(
+                        ControlConsulta
+                                .builder()
+                                .build()
+                ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
                       ESTADO
@@ -85,11 +48,13 @@ public class M_Control_ConsultaNGTest {
                 """.trim().strip()
         );
 
-        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
-                .builder()
-                .id(-1)
-                .build()
-        ),
+        assertEquals(
+                M_ControlConsulta.sqlSelect(
+                        ControlConsulta
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
                       ESTADO
@@ -98,11 +63,13 @@ public class M_Control_ConsultaNGTest {
                 """.trim().strip()
         );
 
-        assertEquals(M_ControlConsulta.sqlSelect(ControlConsulta
-                .builder()
-                .user_name("Jhironsel")
-                .build()
-        ),
+        assertEquals(
+                M_ControlConsulta.sqlSelect(
+                        ControlConsulta
+                                .builder()
+                                .user_name("Jhironsel")
+                                .build()
+                ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
                       ESTADO
@@ -114,12 +81,7 @@ public class M_Control_ConsultaNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          Te permite registrar un control de consulta en el 
-                          sistema.
-                          """
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         assertNotNull(
@@ -132,20 +94,14 @@ public class M_Control_ConsultaNGTest {
         );
     }
 
-    @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Te permite registrar un control de consulta en el 
-                          sistema.
-                          """
-    )
+    @Test
     public static void testInsert() {
         var listaControlConsulta = M_ControlConsulta.select(
                 ControlConsulta
                         .builder()
                         .build()
         );
+
         if (listaControlConsulta.isEmpty()) {
             Resultado result = M_ControlConsulta.insert(
                     controlConsulta()
@@ -190,7 +146,7 @@ public class M_Control_ConsultaNGTest {
                                     );
                                 }
                         );
-                        
+
                         M_Consulta.delete(
                                 consulta.getId()
                         );
@@ -209,9 +165,7 @@ public class M_Control_ConsultaNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 3,
-            description = ""
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
 
@@ -232,9 +186,7 @@ public class M_Control_ConsultaNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 4,
-            description = "Prueba que elimina una consulta del sistema."
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
         Resultado result = M_ControlConsulta.delete(

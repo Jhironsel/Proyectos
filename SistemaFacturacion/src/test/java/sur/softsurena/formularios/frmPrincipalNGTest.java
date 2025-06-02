@@ -7,13 +7,9 @@ import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.formularios.frmPrincipal.abrirFormulario;
+import sur.softsurena.modulo_comun.frmPersonas;
 
 /**
  *
@@ -24,37 +20,6 @@ public class frmPrincipalNGTest {
 
     private frmPrincipal principal;
 
-    public frmPrincipalNGTest() {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 
     @Test(
             enabled = true,
@@ -136,7 +101,7 @@ public class frmPrincipalNGTest {
         abrirFormulario(frmMovimientoEntradaSalida.getInstance());
         abrirFormulario(new frmRestaurarDatos());
         abrirFormulario(frmGraficos.getInstance());
-        abrirFormulario(frmClientes.getInstance());
+        abrirFormulario(frmPersonas.getInstance());
         abrirFormulario(frmProductos.getInstance(new frmPrincipal()));
         abrirFormulario(frmUsuarios.getInstance());
         abrirFormulario(frmFacturas.getInstance());
@@ -158,7 +123,7 @@ public class frmPrincipalNGTest {
                           """
     )
     public void testAbrirFormularioCentralizado() {
-        frmPrincipal.abrirFormularioCentralizado(frmClientes.getInstance());
+        frmPrincipal.abrirFormularioCentralizado(frmPersonas.getInstance());
     }
 
 }

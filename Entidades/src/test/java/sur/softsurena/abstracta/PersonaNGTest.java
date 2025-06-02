@@ -1,9 +1,5 @@
 package sur.softsurena.abstracta;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -12,26 +8,6 @@ import org.testng.annotations.Test;
  */
 @Test
 public class PersonaNGTest {
-    
-    public PersonaNGTest() {
-        System.out.println("sur.softsurena.abstracta.PersonaNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 
     @Test
     public void testToString() {

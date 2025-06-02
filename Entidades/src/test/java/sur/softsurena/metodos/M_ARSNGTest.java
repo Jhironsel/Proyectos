@@ -23,28 +23,7 @@ public class M_ARSNGTest {
 
     private static Integer idARS;
 
-    public M_ARSNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-//------------------------------------------------------------------------------
-
-    @Test(
-            enabled = true,
-            description = """
-                          Test para verificar que la consulta es la correcta.
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlARS() {
 
         assertEquals(

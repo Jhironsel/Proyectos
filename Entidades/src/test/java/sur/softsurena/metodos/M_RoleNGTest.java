@@ -4,12 +4,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.metodos.M_Role.ERROR_AL_ASIGNAR_ROL;
 import static sur.softsurena.metodos.M_Role.ERROR_AL_CONSULTAR_LOS_ROLES_DEL_SISTEMA;
 import static sur.softsurena.metodos.M_Role.ROL_ASIGNADO_A_USUARIO;
@@ -20,40 +15,6 @@ import sur.softsurena.utilidades.Resultado;
         dependsOnGroups = "init"
 )
 public class M_RoleNGTest {
-
-    public M_RoleNGTest() {
-        System.out.println("sur.softsurena.metodos.M_RoleNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 
     @Test(
             enabled = true,
@@ -132,13 +93,7 @@ public class M_RoleNGTest {
         assertEquals(result, expResult);
     }
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          
-                          """
-    )
+    @Test
     public void testAsignarRolUsuario() {
         String rol = "RDB$ADMIN";
         String usuario = "SYSDBA";
@@ -147,22 +102,15 @@ public class M_RoleNGTest {
         Resultado result = M_Role.asignarRolUsuario(rol, usuario, admin);
         
         assertEquals(
-                result.getMensaje(), 
-                ROL_ASIGNADO_A_USUARIO,
+                result, 
+                Resultado
+                    .builder()
+                    .mensaje(ROL_ASIGNADO_A_USUARIO)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
                 ERROR_AL_ASIGNAR_ROL
         );
-        
-        assertEquals(
-                result.getIcono(), 
-                JOptionPane.INFORMATION_MESSAGE,
-                ERROR_AL_ASIGNAR_ROL
-        );
-        
-        assertTrue(
-                result.getEstado(),
-                ERROR_AL_ASIGNAR_ROL
-        );
-        
     }
 
     @Test(

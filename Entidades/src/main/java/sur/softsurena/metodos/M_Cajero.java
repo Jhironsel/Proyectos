@@ -47,10 +47,11 @@ public class M_Cajero {
                                     .usuario(
                                             Usuario
                                                     .builder()
+                                                    .userName(rs.getString("USER_NAME"))
                                                     .persona(
                                                             Persona
                                                                     .builder()
-                                                                    .user_name(rs.getString("USER_NAME"))
+                                                                    
                                                                     .rol(rs.getString("ROL"))
                                                                     .pnombre(rs.getString("PNOMBRE"))
                                                                     .snombre(rs.getString("SNOMBRE"))

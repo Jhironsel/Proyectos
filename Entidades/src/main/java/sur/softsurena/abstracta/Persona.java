@@ -20,7 +20,6 @@ public class Persona {
     private final Date fecha_ingreso;
     private final Date fecha_hora_ultima_update;
     private final Boolean estado;
-    private final String user_name;
     private final String rol;
     private final Paginas pagina;
 
@@ -51,7 +50,6 @@ public class Persona {
         sb.append(", fecha_ingreso=").append(fecha_ingreso);
         sb.append(", fecha_hora_ultima_update=").append(fecha_hora_ultima_update);
         sb.append(", estado=").append(estado);
-        sb.append(", user_name=").append(user_name);
         sb.append(", rol=").append(rol);
         sb.append('}');
         return sb.toString();
@@ -70,7 +68,6 @@ public class Persona {
         hash = 47 * hash + Objects.hashCode(this.fecha_ingreso);
         hash = 47 * hash + Objects.hashCode(this.fecha_hora_ultima_update);
         hash = 47 * hash + Objects.hashCode(this.estado);
-        hash = 47 * hash + Objects.hashCode(this.user_name);
         hash = 47 * hash + Objects.hashCode(this.rol);
         return hash;
     }

@@ -1,13 +1,8 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Cliente;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
@@ -25,50 +20,10 @@ import sur.softsurena.utilidades.Resultado;
         dependsOnGroups = "init"
 )
 public class M_ClienteNGTest {
-    
-    public static Integer idCliente;
 
-    public M_ClienteNGTest() {}
+    public static Integer idPersona;
 
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          Eliminamos registros del cliente de la tabla PERSONAS_CLIENTES
-                          """
-    )
-    public void testSelect() {
-        List expResult = null;
-
-        List result = M_Cliente.select(
-                Cliente
-                        .builder()
-                        .build()
-        );
-
-        assertEquals(result, expResult);
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Test que me permite crear distintas consultas a la 
-                          Base de Datos sobre los cliente del sistema.
-                          """
-    )
+    @Test
     public void testSqlSelect() {
         assertEquals(
                 M_Cliente.sqlSelect(
@@ -79,26 +34,34 @@ public class M_ClienteNGTest {
                 """
                 SELECT ID
                 FROM V_PERSONAS_CLIENTES
-                """.strip().trim());
-
+                """.strip()
+        );
     }
-    
-    
 
     @Test(
-            enabled = true,
-            priority = 0,
-            description = "",
-            groups = "cliente.insert", 
-            dependsOnGroups = "persona.insert"
+            dependsOnMethods = "testSqlSelect"
+    )
+    public void testSelect() {
+
+        assertNotNull(
+                M_Cliente.select(
+                        Cliente
+                                .builder()
+                                .build()
+                ),
+                "Error al consultar la lista de clientes."
+        );
+    }
+
+    @Test(
+            groups = "cliente.insert"
     )
     public static void testInsert() {
         M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
 
-        idCliente = M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona();
-        
         Resultado result = M_Cliente.insertById(
-                idCliente
+                idPersona
         );
 
         assertEquals(
@@ -111,21 +74,15 @@ public class M_ClienteNGTest {
                         .build(),
                 ERROR_AL_INSERTAR__CLIENTE
         );
-
     }
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          Eliminamos registros del cliente de la tabla 
-                          PERSONAS_CLIENTES.
-                          """
+            dependsOnMethods = "testInsert"
     )
     public static void testDelete() {
         Resultado result = M_Cliente.delete(
-                idCliente
+                idPersona
         );
 
         assertEquals(
@@ -139,6 +96,7 @@ public class M_ClienteNGTest {
                 CLIENTE_NO_PUEDE_SER_BORRADO
         );
 
+        M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
 }

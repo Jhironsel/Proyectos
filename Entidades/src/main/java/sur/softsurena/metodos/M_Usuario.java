@@ -74,7 +74,7 @@ public class M_Usuario {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setString(1, usuario.getPersona().getUser_name());
+            cs.setString(1, usuario.getUserName());
             cs.setString(2, usuario.getClave());
             cs.setString(3, usuario.getPersona().getPnombre());
             cs.setString(4, usuario.getPersona().getSnombre());
@@ -104,7 +104,7 @@ public class M_Usuario {
                 role -> {
                     asignarRolUsuario(
                             role.getRoleName(),
-                            usuario.getPersona().getUser_name(),
+                            usuario.getUserName(),
                             role.isConAdmin()
                     );
                 }
@@ -136,7 +136,7 @@ public class M_Usuario {
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
-            cs.setString(1, usuario.getPersona().getUser_name());
+            cs.setString(1, usuario.getUserName());
             cs.setString(2, usuario.getClave());
             cs.setString(3, usuario.getPersona().getPnombre());
             cs.setString(4, usuario.getPersona().getSnombre());
@@ -159,7 +159,7 @@ public class M_Usuario {
                 role -> {
                     asignarRolUsuario(
                             role.getRoleName(),
-                            usuario.getPersona().getUser_name(),
+                            usuario.getUserName(),
                             role.isConAdmin()
                     );
                 }
@@ -265,10 +265,10 @@ public class M_Usuario {
                     .persona(
                             Persona
                                     .builder()
-                                    .user_name(rs.getString("USUARIO"))
                                     .rol(rs.getString("ROLE"))
                                     .build()
                     )
+                    .userName(rs.getString("USUARIO"))
                     .build();
         } catch (SQLException ex) {
             LOG.log(
@@ -306,9 +306,9 @@ public class M_Usuario {
                                                     .snombre(rs.getString("SNOMBRE"))
                                                     .apellidos(rs.getString("APELLIDOS"))
                                                     .estado(rs.getBoolean("ESTADO"))
-                                                    .user_name(rs.getString("USERNAME"))
                                                     .build()
                                     )
+                                    .userName(rs.getString("USERNAME"))
                                     .administrador(rs.getBoolean("ADMINISTRADOR"))
                                     .descripcion(rs.getString("DESCRIPCION"))
                                     .build()
@@ -326,7 +326,7 @@ public class M_Usuario {
     }
 
     public static String sqlSelect(Usuario usuario) {
-        Boolean userName = Objects.isNull(usuario.getPersona().getUser_name());
+        Boolean userName = Objects.isNull(usuario.getUserName());
         Boolean nombresApellidos
                 = Objects.isNull(usuario.getPersona().getPnombre())
                 && Objects.isNull(usuario.getPersona().getSnombre())
@@ -345,7 +345,7 @@ public class M_Usuario {
                   """.strip().formatted(
                         where ? "" : "WHERE ",
                         nombresApellidos ? "" : "USERNAME STARTING WITH '%s' OR PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s' ".formatted(
-                                        usuario.getPersona().getUser_name(),
+                                        usuario.getUserName(),
                                         usuario.getPersona().getPnombre(),
                                         usuario.getPersona().getSnombre(),
                                         usuario.getPersona().getApellidos()

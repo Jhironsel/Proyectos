@@ -5,10 +5,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Role;
@@ -29,33 +25,12 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_UsuarioNGTest {
 
-    public M_UsuarioNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    @Test(
-            enabled = true,
-            description = """
-                          Metodo que verifica que las propiedades de nombres y 
-                          rol de usuario que hace el test.
-                          """,
-            priority = 0
-    )
+    @Test
     public void testGetUsuarioActual() {
         Usuario result = M_Usuario.getUsuarioActual();
 
         assertEquals(
-                result.getPersona().getUser_name(),
+                result.getUserName(),
                 "SYSDBA"
         );
 
@@ -64,13 +39,8 @@ public class M_UsuarioNGTest {
                 "ADMINISTRADOR"
         );
     }
-    
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            description = "",
-            priority = 0
-    )
+
+    @Test
     public void testCambioClave() {
         String usuario = "sysdba";
         String clave = "1";
@@ -81,13 +51,7 @@ public class M_UsuarioNGTest {
         );
     }
 
-//------------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            description = """
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
         assertEquals(
                 M_Usuario.sqlSelect(
@@ -179,10 +143,10 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
+                                .userName("SYSDBA")
                                 .persona(
                                         Persona
                                                 .builder()
-                                                .user_name("SYSDBA")
                                                 .pnombre("SYSDBA")
                                                 .snombre("SYSDBA")
                                                 .apellidos("SYSDBA")
@@ -200,9 +164,6 @@ public class M_UsuarioNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = """
-                          """,
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
@@ -272,10 +233,10 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
+                                .userName("SYSDBA")
                                 .persona(
                                         Persona
                                                 .builder()
-                                                .user_name("SYSDBA")
                                                 .pnombre("SYSDBA")
                                                 .snombre("SYSDBA")
                                                 .apellidos("SYSDBA")
@@ -287,23 +248,17 @@ public class M_UsuarioNGTest {
         );
     }
 
-//------------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Metodo encargado de registrar a un usuario al sistema.
-                          """,
-            priority = 2,
             groups = "usuario.insert"
     )
     public void testInsert() {
         var listaUsuario = M_Usuario.select(
                 Usuario
                         .builder()
+                        .userName("CAJERO")
                         .persona(
                                 Persona
                                         .builder()
-                                        .user_name("CAJERO")
                                         .pnombre("CAJERO")
                                         .snombre("CAJERO")
                                         .apellidos("CAJERO")
@@ -328,10 +283,10 @@ public class M_UsuarioNGTest {
             result = M_Usuario.insert(
                     Usuario
                             .builder()
+                            .userName("CAJERO")
                             .persona(
                                     Persona
                                             .builder()
-                                            .user_name("CAJERO")
                                             .pnombre("")
                                             .snombre("")
                                             .apellidos("")
@@ -363,10 +318,10 @@ public class M_UsuarioNGTest {
         listaUsuario = M_Usuario.select(
                 Usuario
                         .builder()
+                        .userName("ADMINISTRADOR")
                         .persona(
                                 Persona
                                         .builder()
-                                        .user_name("ADMINISTRADOR")
                                         .pnombre("ADMINISTRADOR")
                                         .snombre("ADMINISTRADOR")
                                         .apellidos("ADMINISTRADOR")
@@ -389,10 +344,10 @@ public class M_UsuarioNGTest {
             result = M_Usuario.insert(
                     Usuario
                             .builder()
+                            .userName("ADMINISTRADOR")
                             .persona(
                                     Persona
                                             .builder()
-                                            .user_name("ADMINISTRADOR")
                                             .pnombre("")
                                             .snombre("")
                                             .apellidos("")
@@ -430,10 +385,10 @@ public class M_UsuarioNGTest {
         result = M_Usuario.insert(
                 Usuario
                         .builder()
+                        .userName("PRUEBA")
                         .persona(
                                 Persona
                                         .builder()
-                                        .user_name("PRUEBA")
                                         .pnombre("PRUEBA")
                                         .snombre("PRUEBA")
                                         .apellidos("PRUEBA")
@@ -460,13 +415,7 @@ public class M_UsuarioNGTest {
 
     }
 
-//------------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Prueba que se encarga de modificar los usuarios del 
-                          sistema.
-                          """,
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
@@ -482,10 +431,10 @@ public class M_UsuarioNGTest {
         Resultado result = M_Usuario.update(
                 Usuario
                         .builder()
+                        .userName("PRUEBA")
                         .persona(
                                 Persona
                                         .builder()
-                                        .user_name("PRUEBA")
                                         .pnombre("")
                                         .snombre("")
                                         .apellidos("")
@@ -511,14 +460,10 @@ public class M_UsuarioNGTest {
                 ERROR_AL_MODIFICAR_USUARIO
         );
     }
-//------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            description = """
-                          Metodo que permite eliminar un usuario del sistema.
-                          """,
-            dependsOnMethods = {"testInsert", "testUpdate"}
+            dependsOnMethods = {"testInsert", "testUpdate"},
+            groups = "usuario.delete"
     )
     public void testDelete() {
         Resultado result = M_Usuario.delete("PRUEBA");

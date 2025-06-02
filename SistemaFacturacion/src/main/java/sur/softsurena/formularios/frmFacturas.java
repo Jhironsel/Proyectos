@@ -93,6 +93,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
     }
 
     private static class NewSingletonHolder {
+
         private static final frmFacturas INSTANCE = new frmFacturas();
     }
 
@@ -721,7 +722,7 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 Turno
                         .builder()
                         .turno_usuario(
-                                getUsuarioActual().getPersona().getUser_name()
+                                getUsuarioActual().getUserName()
                         )
                         .estado(true)
                         .build()
@@ -859,9 +860,20 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                 return;
             }
 
-            if (!M_Producto.existeProducto(
-                    txtCriterio.getText().trim()
-            )) {
+            if (!M_Producto.select(
+                    Producto
+                            .builder()
+                            .codigo(txtCriterio.getText().trim())
+                            .descripcion(txtCriterio.getText().trim())
+                            .pagina(
+                                    Paginas
+                                            .builder()
+                                            .nPaginaNro(1)
+                                            .nCantidadFilas(20)
+                                            .build()
+                            )
+                            .build()
+            ).isEmpty()) {
                 JOptionPane.showInternalMessageDialog(
                         this,
                         "El Producto No Existe...",
@@ -1586,15 +1598,10 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
             List<Precio> listaPrecio = M_Precio.select(
                     Precio
                             .builder()
-                            .producto(
-                                    Producto
-                                            .builder()
-                                            .id(
-                                                    Integer.valueOf(
-                                                            btn.getToolTipText()
-                                                    )
-                                            )
-                                            .build()
+                            .idProducto(
+                                    Integer.valueOf(
+                                            btn.getToolTipText()
+                                    )
                             )
                             .build()
             );
@@ -1813,13 +1820,13 @@ public final class frmFacturas extends javax.swing.JInternalFrame implements Act
                                     .id(categoria.getId_categoria())
                                     .build()
                     ).stream().filter(foto -> foto.getActual() == true).findFirst();
-                    
+
                     String foto = "";
-                    
-                    if(listaFoto.isPresent()){
+
+                    if (listaFoto.isPresent()) {
                         foto = listaFoto.get().getFoto();
                     }
-                    
+
                     ImageIcon imagen = Utilidades.imagenDecode64(
                             foto,
                             64,

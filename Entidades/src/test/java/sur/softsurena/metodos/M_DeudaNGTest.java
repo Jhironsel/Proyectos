@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.utilidades.Resultado;
@@ -22,23 +18,8 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_DeudaNGTest {
 
-    public static Integer idDeuda;
+    public static Integer idDeuda, idPersona;
 
-    public M_DeudaNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    
     @Test(
             enabled = true,
             alwaysRun = true,
@@ -86,7 +67,7 @@ public class M_DeudaNGTest {
                     """.trim().strip()
         );
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
             enabled = true,
@@ -134,11 +115,12 @@ public class M_DeudaNGTest {
     )
     public void testInsert() {
         M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
 
         Resultado result = M_Deuda.insert(
                 Deuda
                         .builder()
-                        .idCliente(M_PersonaNGTest.getPersona(true).getIdPersona())
+                        .idCliente(idPersona)
                         .concepto("Sistema de prueba de deuda en registros.")
                         .monto(
                                 BigDecimal.valueOf(2300.55)
@@ -200,12 +182,13 @@ public class M_DeudaNGTest {
     )
     public void testDelete() {
 
-        assertEquals(M_Deuda.delete(
-                Deuda
-                        .builder()
-                        .id(idDeuda)
-                        .build()
-        ),
+        assertEquals(
+                M_Deuda.delete(
+                        Deuda
+                                .builder()
+                                .id(idDeuda)
+                                .build()
+                ),
                 Resultado
                         .builder()
                         .mensaje("Operación realizada correctamente.!!!")
@@ -213,6 +196,9 @@ public class M_DeudaNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
+        
+        M_PersonaNGTest.idPersona = idPersona;
+        M_PersonaNGTest.testDelete();
     }
 
 }

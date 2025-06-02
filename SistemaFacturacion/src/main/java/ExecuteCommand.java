@@ -8,7 +8,7 @@ public class ExecuteCommand {
 
     public static void main(String[] args) {
         try {
-            String[] comandos = {"lsblk -o NAME,UUID"};
+            String[] comandos = {"java --version"};
             Process process = Runtime.getRuntime().exec(comandos);
             
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -23,7 +23,7 @@ public class ExecuteCommand {
             process.destroy(); // Destruye el proceso
 
         } catch (IOException | InterruptedException e) {
-            LOG.log(Level.SEVERE, "Error a leer las UUID del sistema.", e);
+            LOG.log(Level.SEVERE, "", e);
         }
     }
 }

@@ -661,12 +661,10 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenuBar.setForeground(new java.awt.Color(255, 255, 255));
 
         mnuOpciones.setForeground(new java.awt.Color(255, 255, 255));
-        mnuOpciones.setMnemonic('O');
         mnuOpciones.setText("Opciones");
         mnuOpciones.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
         mnuOpcionesCambioClave.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuOpcionesCambioClave.setMnemonic('m');
         mnuOpcionesCambioClave.setText("Cambio de Clave ...");
         mnuOpcionesCambioClave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -676,7 +674,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuOpciones.add(mnuOpcionesCambioClave);
 
         mnuOpcionesCambioUsuario.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuOpcionesCambioUsuario.setMnemonic('b');
         mnuOpcionesCambioUsuario.setText("Cambio de Usuario ...");
         mnuOpcionesCambioUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -706,7 +703,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         mnuMantenimientoClientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         mnuMantenimientoClientes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
         mnuMantenimientoClientes.setMnemonic('C');
-        mnuMantenimientoClientes.setText("Clientes ...");
+        mnuMantenimientoClientes.setText("Personas ...");
         mnuMantenimientoClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnuMantenimientoClientesActionPerformed(evt);
@@ -717,7 +714,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuMantenimientoProductos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         mnuMantenimientoProductos.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuMantenimientoProductos.setMnemonic('P');
         mnuMantenimientoProductos.setText("Productos ...");
         mnuMantenimientoProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -729,7 +725,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuMantenimientoProveedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
         mnuMantenimientoProveedores.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuMantenimientoProveedores.setMnemonic('P');
         mnuMantenimientoProveedores.setText("Proveedores ...");
         mnuMantenimientoProveedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,7 +736,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuMantenimientoAlmacenes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnuMantenimientoAlmacenes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuMantenimientoAlmacenes.setMnemonic('P');
         mnuMantenimientoAlmacenes.setText("Almacenes ...");
         mnuMantenimientoAlmacenes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -775,14 +769,12 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuMantenimiento);
 
         mnuSistemas.setForeground(new java.awt.Color(255, 255, 255));
-        mnuSistemas.setMnemonic('S');
         mnuSistemas.setText("Sistemas");
         mnuSistemas.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         mnuSistemas.setName("mnuSistemas"); // NOI18N
 
         mnuSistemaNomina.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
         mnuSistemaNomina.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuSistemaNomina.setMnemonic('P');
         mnuSistemaNomina.setText("Nomina ...");
         mnuSistemaNomina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -794,7 +786,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         mnuSistemaGestorGastos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F8, 0));
         mnuSistemaGestorGastos.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuSistemaGestorGastos.setMnemonic('P');
         mnuSistemaGestorGastos.setText("Gestor de gastos ...");
         mnuSistemaGestorGastos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -806,7 +797,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuSistemas);
 
         mnuMovimientos.setForeground(new java.awt.Color(255, 255, 255));
-        mnuMovimientos.setMnemonic('M');
         mnuMovimientos.setText("Movimientos");
         mnuMovimientos.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
@@ -855,7 +845,6 @@ public final class frmPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuMovimientos);
 
         mnuAyuda.setForeground(new java.awt.Color(255, 255, 255));
-        mnuAyuda.setMnemonic('y');
         mnuAyuda.setText("Ayuda");
         mnuAyuda.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
@@ -1168,10 +1157,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOcultarPanelActionPerformed
 
     private void mnuMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoClientesActionPerformed
-        //abrirFormulario(frmClientes.getInstance());
-        var persona = frmPersonas.getInstance();
-//        persona.get
-        abrirFormulario(persona);
+        abrirFormulario(frmPersonas.getInstance());
     }//GEN-LAST:event_mnuMantenimientoClientesActionPerformed
 
     private void mnuMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProductosActionPerformed
@@ -1205,7 +1191,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         if (M_Turno.select(
                 Turno
                         .builder()
-                        .turno_usuario(usuario.getPersona().getUser_name())
+                        .turno_usuario(usuario.getUserName())
                         .estado(true)
                         .build()
         ).isEmpty()) {
@@ -1669,7 +1655,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         //Hacemos la consulta a la base de datos, para saber cual es el usuario
         //y el rol del usuario conectado a la base de datos.
 
-        jlUser.setText(usuario.getPersona().getUser_name());
+        jlUser.setText(usuario.getUserName());
 
         //Proceso para cargar los roles del usuario al sistema.
         cbRoles.removeAllItems();
@@ -1687,7 +1673,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 
         //Se carga los roles del usuario en el comboBox.
         M_Role.selectDisponibles(
-                usuario.getPersona().getUser_name().strip(),
+                usuario.getUserName().strip(),
                 true
         ).stream().forEach(
                 rolItem -> {

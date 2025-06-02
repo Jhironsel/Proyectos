@@ -59,7 +59,7 @@ public class M_Persona {
                                 .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
                                 .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                .user_name(rs.getString("USER_NAME"))
+                                //.user_name(rs.getString("USER_NAME"))
                                 .rol(rs.getString("ROL_USUARIO"))
                                 .build()
                 );
@@ -121,7 +121,7 @@ public class M_Persona {
      * @return nos devolver un objeto Resultado que contiene el identificador
      * asignado.
      */
-    public static Resultado insert(Persona persona) {
+    public static synchronized Resultado insert(Persona persona) {
         final String sql = """
                            SELECT ID_PERSONA
                            FROM SP_I_PERSONA(?,?,?,?,?,?,?);
@@ -213,6 +213,7 @@ public class M_Persona {
 
             return Resultado
                     .builder()
+                    .id(persona.getIdPersona())
                     .mensaje(PERSONA_ACTUALIZADA_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
@@ -227,6 +228,7 @@ public class M_Persona {
 
             return Resultado
                     .builder()
+                    .id(persona.getIdPersona())
                     .mensaje(ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA)
                     .icono(JOptionPane.ERROR_MESSAGE)
                     .estado(Boolean.FALSE)

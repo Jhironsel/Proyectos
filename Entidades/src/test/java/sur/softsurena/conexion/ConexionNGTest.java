@@ -5,10 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -20,22 +16,7 @@ import org.testng.annotations.Test;
         enabled = true
 )
 public class ConexionNGTest {
-
-    public ConexionNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    //--------------------------------------------------------------------------
+    
     @Test(
             enabled = true
     )
@@ -107,5 +88,4 @@ public class ConexionNGTest {
         Connection cnn = null;
         Conexion.setCnn(cnn);
     }
-
 }

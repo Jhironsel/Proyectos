@@ -9,6 +9,7 @@ import sur.softsurena.abstracta.Persona;
 @SuperBuilder
 public class Usuario {
 
+    private final String userName;
     private final Persona persona;
     private final String clave;
     private final String descripcion;
@@ -19,7 +20,7 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return persona.getUser_name();
+        return userName;
     }
 
 }

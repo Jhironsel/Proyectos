@@ -3,12 +3,7 @@ package sur.softsurena.formularios;
 import java.io.File;
 import javax.swing.JTable;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import xy.ui.testing.Tester;
 import xy.ui.testing.util.TestingUtils;
 
@@ -18,53 +13,8 @@ import xy.ui.testing.util.TestingUtils;
  */
 @Test(enabled = true)
 public class frmProductosNGTest {
-
-    public frmProductosNGTest() {
-    }
-//------------------------------------------------------------------------------
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-//------------------------------------------------------------------------------
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-//------------------------------------------------------------------------------
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-//------------------------------------------------------------------------------
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-//------------------------------------------------------------------------------
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Test que se verificar el formulario de productos del
-                          sistema.
-                          Debe ser el primer metodo en ejecutarse.
-                          """
-    )
+    
+    @Test
     public void testGetInstance() {
         assertNotNull(
                 frmProductos.getInstance(new frmPrincipal()),
@@ -74,10 +24,7 @@ public class frmProductosNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          """
+            dependsOnMethods = "testGetInstance"
     )
     public void testLlenarTablaProductos() {
         JTable tabla = frmProductos.llenarTablaProductos("");
@@ -97,10 +44,7 @@ public class frmProductosNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          """
+            dependsOnMethods = "testLlenarTablaProductos"
     )
     public void testInsertProducto() throws Exception {
         TestingUtils.assertSuccessfulReplay(
@@ -111,10 +55,7 @@ public class frmProductosNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 3,
-            description = """
-                          """
+            dependsOnMethods = "testInsertProducto"
     )
     public void testUpdateProducto() throws Exception {
         TestingUtils.assertSuccessfulReplay(
@@ -125,10 +66,7 @@ public class frmProductosNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 4,
-            description = """
-                          """
+            dependsOnMethods = "testUpdateProducto"
     )
     public void testDeleteProducto() throws Exception {
         TestingUtils.assertSuccessfulReplay(

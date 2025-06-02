@@ -5,12 +5,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import static sur.softsurena.metodos.M_E_S_SYS.REGISTRO_EXITOSO;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -25,46 +20,7 @@ import sur.softsurena.utilidades.Utilidades;
 )
 public class M_E_S_SYSNGTest {
 
-    public M_E_S_SYSNGTest() {
-        System.out.println("sur.softsurena.metodos.M_E_S_SYSNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Prueba que realiza la insersion de una imagen 
-                          """
-    )
+    @Test
     public void testInsertLogo() {
         File file = new File("Imagenes/ImagenPrueba.png");
         
@@ -81,11 +37,7 @@ public class M_E_S_SYSNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          
-                          """
+            dependsOnMethods = "testInsertLogo"
     )
     public void testGetLogo() {
         
@@ -106,6 +58,5 @@ public class M_E_S_SYSNGTest {
                 imagenDecode64.getIconWidth() > 0,
                 "La imagen no tiene anchura."
         );
-        
     }
 }

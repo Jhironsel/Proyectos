@@ -5,10 +5,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import newscomponents.RSButtonGradientIcon_new;
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import rojeru_san.RSMTextFull;
 import sur.softsurena.abstracta.Persona;
@@ -22,22 +18,6 @@ import sur.softsurena.entidades.Cliente;
 public class frmBusquedaClienteNGTest {
 
     public frmBusquedaClienteNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
     }
 
     @Test(

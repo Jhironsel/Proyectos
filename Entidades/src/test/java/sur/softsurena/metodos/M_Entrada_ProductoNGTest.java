@@ -3,12 +3,7 @@ package sur.softsurena.metodos;
 import java.sql.ResultSet;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.EntradaProducto;
 import sur.softsurena.utilidades.Resultado;
 
@@ -22,43 +17,8 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_Entrada_ProductoNGTest {
 
-    public M_Entrada_ProductoNGTest() {
-        System.out.println("sur.softsurena.metodos.M_Entrada_ProductoNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testAgregarProductoEntrada() {
         EntradaProducto e = null;
@@ -68,9 +28,7 @@ public class M_Entrada_ProductoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testAgregarProductoSalida() {
         int IDENTRADA_PRODUCTO = 0;
@@ -86,9 +44,7 @@ public class M_Entrada_ProductoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testGetEntradaProducto() {
         int mes = 0;
@@ -97,5 +53,4 @@ public class M_Entrada_ProductoNGTest {
         ResultSet result = M_Entrada_Producto.getEntradaProducto(mes, year);
         assertEquals(result, expResult);
     }
-
 }

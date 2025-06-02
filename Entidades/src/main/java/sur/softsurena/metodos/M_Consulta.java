@@ -157,25 +157,27 @@ public class M_Consulta {
             
             return Resultado
                     .builder()
-                    .mensaje("Consulta actualizada correctamente.!!!")
+                    .mensaje(CONSULTA_ACTUALIZADA_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
         } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al actualizar registro.!!!", 
+            LOG.log(Level.SEVERE, ERROR_AL_ACTUALIZAR_REGISTRO, 
                     ex
             );
             
             return Resultado
                     .builder()
-                    .mensaje("Error al actualizar registro.!!!")
+                    .mensaje(ERROR_AL_ACTUALIZAR_REGISTRO)
                     .icono(JOptionPane.ERROR_MESSAGE)
                     .estado(Boolean.FALSE)
                     .build();
         }
     }
+    public static final String ERROR_AL_ACTUALIZAR_REGISTRO 
+            = "Error al actualizar registro.!!!";
+    public static final String CONSULTA_ACTUALIZADA_CORRECTAMENTE 
+            = "Consulta actualizada correctamente.!!!";
 
     /**
      *

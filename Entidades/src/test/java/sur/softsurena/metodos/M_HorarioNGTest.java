@@ -5,12 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Horario;
 import static sur.softsurena.metodos.M_Horario.AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Horario.HORARIO_ELIMINADO__CORRECTAMENTE;
@@ -25,99 +20,9 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_HorarioNGTest {
 
-    private Integer idHorario;
+    private static Integer idHorario;
 
-    public M_HorarioNGTest() {
-        System.out.println("sur.softsurena.metodos.M_HorarioNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-
-        assertTrue(
-                Conexion.verificar().getEstado(),
-                "Error al conectarse..."
-        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testSelect() {
-        assertNotNull(
-                M_Horario.select(Horario.builder().build()),
-                "Error en la consultade horario."
-        );
-        assertNotNull(
-                M_Horario.select(
-                        Horario
-                                .builder()
-                                .id(-2)
-                                .build()
-                ),
-                "Error en la consultade horario."
-        );
-        assertNotNull(
-                M_Horario.select(
-                        Horario
-                                .builder()
-                                .descripcion("Entrada")
-                                .build()
-                ),
-                "Error en la consultade horario."
-        );
-
-        assertNotNull(
-                M_Horario.select(
-                        Horario
-                                .builder()
-                                .estado(Boolean.TRUE)
-                                .build()
-                ),
-                "Error en la consultade horario."
-        );
-
-        assertNotNull(
-                M_Horario.select(
-                        Horario
-                                .builder()
-                                .estado(Boolean.FALSE)
-                                .build()
-                ),
-                "Error en la consultade horario."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            description = """
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -190,11 +95,54 @@ public class M_HorarioNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          """
+            dependsOnMethods = "testSqlSelect"
     )
+    public void testSelect() {
+        assertNotNull(
+                M_Horario.select(Horario.builder().build()),
+                "Error en la consultade horario."
+        );
+        assertNotNull(
+                M_Horario.select(
+                        Horario
+                                .builder()
+                                .id(-2)
+                                .build()
+                ),
+                "Error en la consultade horario."
+        );
+        assertNotNull(
+                M_Horario.select(
+                        Horario
+                                .builder()
+                                .descripcion("Entrada")
+                                .build()
+                ),
+                "Error en la consultade horario."
+        );
+
+        assertNotNull(
+                M_Horario.select(
+                        Horario
+                                .builder()
+                                .estado(Boolean.TRUE)
+                                .build()
+                ),
+                "Error en la consultade horario."
+        );
+
+        assertNotNull(
+                M_Horario.select(
+                        Horario
+                                .builder()
+                                .estado(Boolean.FALSE)
+                                .build()
+                ),
+                "Error en la consultade horario."
+        );
+    }
+
+    @Test
     public void testInsert() {
         var hora = GregorianCalendar.getInstance();
         hora.set(Calendar.HOUR_OF_DAY, 14);

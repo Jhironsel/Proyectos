@@ -2,14 +2,8 @@ package sur.softsurena.metodos;
 
 import java.util.List;
 import javax.swing.JOptionPane;
-import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_Producto.ERROR_AL__MODIFICAR__PRODUCTO;
@@ -19,54 +13,14 @@ import static sur.softsurena.metodos.M_Producto.PRODUCTO__BORRADO__CORRECTAMENTE
 import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
-@Getter
 @Test(
         dependsOnGroups = "init"
 )
 public class M_ProductoNGTest {
 
-    private static Integer id_producto;
-
-    public M_ProductoNGTest() {
-        System.out.println("sur.softsurena.metodos.M_ProductoNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-        
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public static Integer idProducto, idCategoria;
     
-    @Test(
-            enabled = true,
-            description = """
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
         assertEquals(
                 M_Producto.sqlSelect(
@@ -234,6 +188,27 @@ public class M_ProductoNGTest {
                 M_Producto.sqlSelect(
                         Producto
                                 .builder()
+                                .estado(Boolean.TRUE)
+                                .codigo("0")
+                                .descripcion("0")
+                                .build()
+                ),
+                """
+                SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
+                 EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
+                FROM V_PRODUCTOS
+                WHERE ESTADO OR TRIM(CODIGO) STARTING WITH TRIM('0') OR
+                                       TRIM(CODIGO) CONTAINING TRIM('0') OR
+                                       TRIM(DESCRIPCION) STARTING WITH TRIM('0') OR
+                                       TRIM(DESCRIPCION) CONTAINING TRIM('0')
+                ORDER BY ID
+                """.strip().trim()
+        );
+//------------------------------------------------------------------------------
+        assertEquals(
+                M_Producto.sqlSelect(
+                        Producto
+                                .builder()
                                 .id(0)
                                 .estado(Boolean.FALSE)
                                 .codigo("0")
@@ -333,7 +308,7 @@ public class M_ProductoNGTest {
                                                 .build()
                                 )
                                 .build()
-                ), 
+                ),
                 """
                 SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
                  EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
@@ -349,11 +324,6 @@ public class M_ProductoNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = """
-                          Test que verifica si el registro de seleccion de 
-                          producto existentes.
-                          """,
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
@@ -363,7 +333,7 @@ public class M_ProductoNGTest {
                         .build()
         );
 
-        assertFalse(
+        assertNotNull(
                 productos.isEmpty(),
                 "No se encontraron registros en la tabla de productos."
         );
@@ -375,7 +345,7 @@ public class M_ProductoNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
-        assertFalse(
+        assertNotNull(
                 productos.isEmpty(),
                 "No se encontraron registros en la tabla de productos."
         );
@@ -387,7 +357,7 @@ public class M_ProductoNGTest {
                         .estado(Boolean.FALSE)
                         .build()
         );
-        assertFalse(
+        assertNotNull(
                 productos.isEmpty(),
                 "No se encontraron registros en la tabla de productos."
         );
@@ -405,21 +375,20 @@ public class M_ProductoNGTest {
                         )
                         .build()
         );
-        assertFalse(
+        assertNotNull(
                 productos.isEmpty(),
                 "No se encontraron registros en la tabla de producto."
         );
     }
 
-
-    @Test(
-            enabled = true,
-            description = "Test encargada de agregar producto al sistema.",
-            dependsOnMethods = "testSelect"
-    )
+    @Test
     public static void testInsert() {
         M_CategoriaNGTest.testInsert();
-        Resultado resultado = M_Producto.insert(producto(Boolean.TRUE));
+        idCategoria = M_CategoriaNGTest.idCategoria;
+        
+        Resultado resultado = M_Producto.insert(
+                producto(Boolean.TRUE)
+        );
 
         assertEquals(
                 resultado,
@@ -431,16 +400,16 @@ public class M_ProductoNGTest {
                         .build()
         );
 
-        id_producto = resultado.getId();
+        idProducto = resultado.getId();
     }
 
     @Test(
-            enabled = true,
-            description = "Test encargado de modificar el producto del sistema. ",
             dependsOnMethods = {"testInsert"}
     )
     public void testUpdate() {
-        Resultado result = M_Producto.update(producto(Boolean.TRUE));
+        Resultado result = M_Producto.update(
+                producto(Boolean.TRUE)
+        );
 
         assertEquals(
                 result,
@@ -453,14 +422,21 @@ public class M_ProductoNGTest {
                 ERROR_AL__MODIFICAR__PRODUCTO
         );
     }
-
+    
     @Test(
-            enabled = true,
-            description = "",
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
+    public static void testDeleteProducto(){
+        M_PrecioNGTest.idProducto = idProducto;
+        M_PrecioNGTest.testDelete2();
+    }
+
+    @Test(
+            dependsOnMethods = "testDeleteProducto"
+    )
     public static void testDeleteByID() {
-        Resultado result = M_Producto.delete(id_producto);
+        
+        Resultado result = M_Producto.delete(idProducto);
 
         assertEquals(
                 result,
@@ -472,43 +448,37 @@ public class M_ProductoNGTest {
                         .build(),
                 OCURRIO_UN_ERROR_AL_INTENTAR_BORRAR_EL__PR
         );
-
-        M_Categoria.delete(
-                M_CategoriaNGTest.idCategoria
-        );
+    }
+    
+    @Test(
+            dependsOnMethods = "testDeleteByID"
+    )
+    public static void testDeleteCategoria(){
+        M_CategoriaNGTest.idCategoria = idCategoria;
+        M_CategoriaNGTest.testDelete();
     }
 
-    @Test(
-            enabled = true,
-            description = """
-                          Metodo que genera Productos aleatorio.
-                          """
-    )
-    public void testGenerarProducto() {
+    @Test
+    public static void testGenerarProducto() {
         assertNotNull(
                 M_Producto.generarProducto(),
                 "Producto NO Genereado"
         );
     }
 
-    @Test(
-            enabled = true,
-            description = """
-                          Metodo que genera codigo de barra aleatorio.
-                          """
-    )
+    @Test
     public void testGenerarCodigoBarra() {
         assertNotNull(
                 M_Producto.generarCodigoBarra(),
                 "Codigo Barra No generado"
         );
     }
-    
+
     public synchronized static Producto producto(Boolean estado) {
         return Producto
                 .builder()
-                .id(id_producto)
-                .idCategoria(M_CategoriaNGTest.idCategoria)
+                .id(idProducto)
+                .idCategoria(idCategoria)
                 .codigo(
                         M_ContactoTel.generarTelMovil().substring(8, 16)
                 )

@@ -212,12 +212,12 @@ public class M_Foto_Categoria {
             = "Error al eliminar la foto de la categoria.";
 
 //------------------------------------------------------------------------------
-    public static Resultado deleteById_persona(
+    public static Resultado deleteById_categoria(
             @NonNull FotoCategoria fotoCategoria
     ) {
 
         final String sql = """
-                           EXECUTE PROCEDURE SP_D_FOTO_PRODUCTO_BY_ID_PRODUCTO(?)
+                           EXECUTE PROCEDURE SP_D_FOTO_CATEGORIA_BY_ID_CATEGORIA(?)
                            """;
 
         try (CallableStatement cs = getCnn().prepareCall(

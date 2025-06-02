@@ -4,10 +4,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoTel;
 import sur.softsurena.utilidades.Resultado;
@@ -18,43 +14,26 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = "init",
+        groups = "contactoTel"
 )
 public class M_ContactoTelNGTest {
 
-    public static Integer idContactoTel;
-
-    public M_ContactoTelNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
+    public static Integer idContactoTel, idPersona;
+    
+    @Test(
+            groups = "contactoTel.insert"
+    )
+    public void persona() {
+        M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
     }
 
     @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Test que permite agregar un telefono de contacto de 
-                          una persona.
-                          """,
-            groups = "contactoTel.insert"
+            groups = "contactoTel.insert",
+            dependsOnMethods = "persona"
     )
     public void testInsert() {
-        M_PersonaNGTest.testInsert();
-
         Resultado result = M_ContactoTel.insert(
                 telefono()
         );
@@ -79,14 +58,9 @@ public class M_ContactoTelNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          Test que permite actualizar uno numero telefonico en
-                          el sistema.
-                          """
+            dependsOnMethods = "testInsert"
     )
-    public void testModificarContactoTel() {
+    public void testUpdate() {
         Resultado result = M_ContactoTel.update(
                 telefono()
         );
@@ -106,17 +80,10 @@ public class M_ContactoTelNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Test que localiza un numero telefonico de una persona
-                          en el sistema.
-                          """
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
-    public void testGetTelefonoByID() {
-        List result = M_ContactoTel.selectByID(
-                M_PersonaNGTest.getPersona(Boolean.FALSE).getIdPersona()
-        );
+    public void testSelectByID() {
+        List result = M_ContactoTel.selectByID(idPersona);
 
         assertFalse(
                 result.isEmpty(),
@@ -125,14 +92,9 @@ public class M_ContactoTelNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 5,
-            description = """
-                          Test que permite eliminar un contacto telefonico del 
-                          sistema.
-                          """
+            dependsOnMethods = {"testInsert", "testUpdate", "testSelectByID"}
     )
-    public void testEliminarContactoTel() {
+    public void testDetele() {
         Resultado result = M_ContactoTel.delete(idContactoTel);
         assertEquals(
                 result,
@@ -144,49 +106,33 @@ public class M_ContactoTelNGTest {
                         .build(),
                 M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN
         );
+        
+    }
+    
+    @Test(
+            dependsOnMethods = {"testDetele"}
+    )
+    public void testDetele2() {
+        M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
+    @Test
     public void testGenerarTelMovil() {
-        String result = M_ContactoTel.generarTelMovil();
         assertTrue(
-                M_ContactoTel.telefono(result),
+                M_ContactoTel.telefono(M_ContactoTel.generarTelMovil()),
                 "Numero generado no es correcto."
         );
     }
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """
-    )
-    public void testTelefono() {
-        String tel = M_ContactoTel.generarTelMovil();
-        boolean expResult = true;
-        boolean result = M_ContactoTel.telefono(tel);
-        assertEquals(
-                result,
-                expResult,
-                "Metodo de validar telefono captura numero incorrecto."
-        );
-    }
+    @Test
+    public void testTelefono() {}
 
     private ContactoTel telefono() {
         return ContactoTel
                 .builder()
                 .id(idContactoTel)
-                .idPersona(
-                        M_PersonaNGTest
-                                .getPersona(Boolean.FALSE)
-                                .getIdPersona()
-                )
+                .idPersona(idPersona)
                 .telefono(M_ContactoTel.generarTelMovil())
                 .tipo("Telefono")
                 .porDefecto(Boolean.TRUE)

@@ -3,10 +3,6 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Estudiante;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__AGREGADO__CORRECTAMENTE;
@@ -23,28 +19,9 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_EstudianteNGTest {
 
-    public M_EstudianteNGTest() {
-        System.out.println("sur.softsurena.metodos.M_EstudianteNGTest.<init>()");
-    }
+    public static Integer idPersona;
 
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
-
-    @Test(
-            enabled = true,
-            description = """
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
         assertEquals(
                 M_Estudiante.sqlSelect(
@@ -73,9 +50,6 @@ public class M_EstudianteNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = """
-                          """,
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
@@ -100,25 +74,15 @@ public class M_EstudianteNGTest {
 
 //------------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          """,
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
         M_PersonaNGTest.testInsert();
-        assertEquals(
-                M_Estudiante.insert(
-                        Estudiante
+        idPersona = M_PersonaNGTest.idPersona;
+
+        assertEquals(M_Estudiante.insert(Estudiante
                                 .builder()
-                                .id(
-                                        M_PersonaNGTest
-                                                .getPersona(
-                                                        Boolean.TRUE
-                                                )
-                                                .getIdPersona()
-                                )
+                                .id(idPersona)
                                 .matricula(
                                         M_ContactoTel
                                                 .generarTelMovil()
@@ -135,25 +99,14 @@ public class M_EstudianteNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          """,
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
-        assertEquals(
-                M_Estudiante.update(
-                        Estudiante
+        assertEquals(M_Estudiante.update(Estudiante
                                 .builder()
-                                .id(
-                                        M_PersonaNGTest
-                                                .getPersona(
-                                                        Boolean.TRUE
-                                                )
-                                                .getIdPersona()
+                                .id(idPersona
                                 )
-                                .matricula("UPDATE_PRUEBA")
+                                .matricula(M_Generales.generarCedula().substring(0, 8))
                                 .build()
                 ),
                 Resultado
@@ -166,25 +119,15 @@ public class M_EstudianteNGTest {
     }
 
     @Test(
-            enabled = true,
             dependsOnMethods = {
-                "testInsert", 
+                "testInsert",
                 "testUpdate"
-            },
-            description = """
-                          """
+            }
     )
     public void testDelete() {
-        assertEquals(
-                M_Estudiante.delete(
-                        Estudiante
+        assertEquals(M_Estudiante.delete(Estudiante
                                 .builder()
-                                .id(
-                                        M_PersonaNGTest
-                                                .getPersona(
-                                                        Boolean.TRUE
-                                                )
-                                                .getIdPersona()
+                                .id(idPersona
                                 )
                                 .build()
                 ),
@@ -195,6 +138,7 @@ public class M_EstudianteNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
+        M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
 

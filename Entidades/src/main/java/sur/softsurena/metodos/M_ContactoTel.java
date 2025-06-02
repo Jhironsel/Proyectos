@@ -215,34 +215,37 @@ public class M_ContactoTel {
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_CONTACTOS_T
             = "Error al consultar la vista V_CONTACTOS_TEL del sistema.";
 
+    /**
+     * Metodo que genera numero aleatorio de republica dominicana.
+     * @return 
+     */
     public static String generarTelMovil() {
         StringBuilder telefonoMovil = new StringBuilder();
-        String codigoArea[] = {"809", "829", "849"};
+        
         int indexArea = (int) (Math.random() * 3);
-
-        int num1 = (int) (Math.random() * 10);
-        int num2 = (int) (Math.random() * 10);
-        int num3 = (int) (Math.random() * 10);
-        int num4 = (int) (Math.random() * 10);
-        int num5 = (int) (Math.random() * 10);
-        int num6 = (int) (Math.random() * 10);
-        int num7 = (int) (Math.random() * 10);
+        String codigoArea[] = {"809", "829", "849"};
 
         telefonoMovil.
                 append("+1(").
                 append(codigoArea[indexArea]).
                 append(") ").
-                append(num1).
-                append(num2).
-                append(num3).
+                append((int) (Math.random() * 10)).
+                append((int) (Math.random() * 10)).
+                append((int) (Math.random() * 10)).
                 append("-").
-                append(num4).
-                append(num5).
-                append(num6).
-                append(num7);
+                append((int) (Math.random() * 10)).
+                append((int) (Math.random() * 10)).
+                append((int) (Math.random() * 10)).
+                append((int) (Math.random() * 10));
         return telefonoMovil.toString();
     }
 
+    /**
+     * Este metodo verifica que el numero recibido sea un numero dominicano.
+     * 
+     * @param tel
+     * @return 
+     */
     public static boolean telefono(String tel) {
         Pattern pat = Pattern.compile("[+][1][(][8][0|2|4][9][)]\\s\\d{3}-\\d{4}");
         Matcher mat = pat.matcher(tel.trim());

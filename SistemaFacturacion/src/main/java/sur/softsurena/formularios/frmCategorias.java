@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.FotoCategoria;
+import sur.softsurena.entidades.Producto;
 import sur.softsurena.metodos.M_Categoria;
 import sur.softsurena.metodos.M_Foto_Categoria;
 import sur.softsurena.metodos.M_Producto;
@@ -229,7 +230,12 @@ public class frmCategorias extends javax.swing.JDialog {
          */
         idCategoria = ((Categoria) cbCategoria.getSelectedItem()).getId_categoria();
 
-        if (M_Producto.existeCategoriaProductos(idCategoria)) {
+        if (!M_Producto.select(
+                Producto
+                        .builder()
+                        .idCategoria(idCategoria)
+                        .build()
+        ).isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
                     "No se permite eliminar categoria porque existe producto Asociados.",

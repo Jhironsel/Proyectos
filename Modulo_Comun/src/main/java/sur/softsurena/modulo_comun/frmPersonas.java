@@ -17,7 +17,6 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
-import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.ContactoEmail;
 import sur.softsurena.entidades.ContactoTel;
 import sur.softsurena.entidades.ContactoDireccion;
@@ -30,8 +29,6 @@ import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Provincia;
 import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoPersona;
-import sur.softsurena.interfaces.ICliente;
-import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_ContactoEmail;
 import sur.softsurena.metodos.M_ContactoTel;
 import sur.softsurena.metodos.M_ContactoDireccion;
@@ -47,9 +44,25 @@ import sur.softsurena.metodos.M_TipoPersona;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
-public class frmPersonas extends javax.swing.JInternalFrame implements ICliente {
+public class frmPersonas extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Es utilizada para definir los cabezales de las tablas de direcciones.
+     */
+    final static String[] TITULOS_DIRECCION = {"Provincia", "Municipio", "Distrito M.",
+        "Calle y No. Casa", "Fecha", "Estado", "Por defecto"};
+
+    /**
+     * Es utilizada para definir los cabezales de las tablas de correo.
+     */
+    final static String[] TITULOS_CORREO = {"Correo", "Fecha", "Estado", "Por defecto"};
+
+    /**
+     * Es utilizada para definir los cabezales de las tablas de telefono.
+     */
+    final static String[] TITULOS_TELEFONO = {"Numero", "Tipo", "Fecha", "Estado", "Por defecto"};
 
     private Boolean v_nuevo = false;
 
@@ -63,7 +76,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
     private static List<ContactoTel> v_contactosTelsList;
 
-    private static Integer idCliente;
+    private static Integer idPersona;
 
     private static Object registro[];
 
@@ -76,7 +89,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 Privilegio
                         .builder()
                         .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                        .nombre_relacion("V_PERSONAS_CLIENTES")
+                        .nombre_relacion("V_PERSONAS")
                         .nombre_campo("^")
                         .build()
         )) {
@@ -161,10 +174,21 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         jspGeneral = new javax.swing.JScrollPane();
         jpGeneral = new javax.swing.JPanel();
         jtpPrincipal = new javax.swing.JTabbedPane();
-        jspClientes = new javax.swing.JScrollPane();
-        jpClientes = new javax.swing.JPanel();
+        jspPersonas = new javax.swing.JScrollPane();
+        jpPersonas = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jsCantidadFilas = new javax.swing.JSpinner();
+        jsPaginaNro = new javax.swing.JSpinner();
+        jPanel15 = new javax.swing.JPanel();
+        jcbFiltroTodos = new javax.swing.JCheckBox();
+        jcbFiltroCliente = new javax.swing.JCheckBox();
+        jcbFiltroEmpleado = new javax.swing.JCheckBox();
+        jcbFiltroEstudiante = new javax.swing.JCheckBox();
+        jcbFiltroPaciente = new javax.swing.JCheckBox();
+        jcbFiltroPadre = new javax.swing.JCheckBox();
+        jcbFiltroProveedor = new javax.swing.JCheckBox();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tblClientes = new rojerusan.RSTableMetro1(){
+        tblPersonas = new rojerusan.RSTableMetro1(){
             @Override
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Las celdas no son editables.
@@ -172,25 +196,37 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         };
         jScrollPane2 = new javax.swing.JScrollPane();
         jpBotonesPrincipal = new javax.swing.JPanel();
-        btnActualizarRegistrosCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
-        jLabel1 = new javax.swing.JLabel();
-        jsCantidadFilas = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
-        jsPaginaNro = new javax.swing.JSpinner();
+        btnActualizarRegistrosPersona = new RSMaterialComponent.RSButtonMaterialIconOne();
         jspMantenimiento = new javax.swing.JScrollPane();
         jpMantenimiento = new javax.swing.JPanel();
         jtpGeneralesDireccionContactos = new javax.swing.JTabbedPane();
         jpGenerales = new javax.swing.JPanel();
-        jcbSexo = new javax.swing.JComboBox<>();
-        txtSNombre = new javax.swing.JTextField();
-        jcbPersona = new javax.swing.JComboBox<>();
-        cbEstado = new javax.swing.JCheckBox();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
         txtCedula = new javax.swing.JFormattedTextField();
-        dchFechaNacimiento = new com.toedter.calendar.JDateChooser();
         btnCedulaValidad = new RSMaterialComponent.RSButtonMaterialIconOne();
-        txtApellidos = new javax.swing.JTextField();
-        jcbEstadoCivil = new javax.swing.JComboBox<>();
+        cbEstado = new javax.swing.JCheckBox();
+        jPanel4 = new javax.swing.JPanel();
         txtPNombre = new javax.swing.JTextField();
+        txtSNombre = new javax.swing.JTextField();
+        jPanel10 = new javax.swing.JPanel();
+        txtApellidos = new javax.swing.JTextField();
+        jPanel16 = new javax.swing.JPanel();
+        jcbPersona = new javax.swing.JComboBox<>();
+        dchFechaNacimiento = new com.toedter.calendar.JDateChooser();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        jcbEstadoCivil = new javax.swing.JComboBox<>();
+        jcbSexo = new javax.swing.JComboBox<>();
+        jPanel18 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        jcbCliente = new javax.swing.JCheckBox();
+        jcbEmpleado = new javax.swing.JCheckBox();
+        jcbEstudiante = new javax.swing.JCheckBox();
+        jcbPaciente = new javax.swing.JCheckBox();
+        jcbPadre = new javax.swing.JCheckBox();
+        jcbProveedor = new javax.swing.JCheckBox();
         jpDireccion = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jcbProvincias = new javax.swing.JComboBox<>();
@@ -242,12 +278,12 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         };
         jlFechaCreacion = new javax.swing.JLabel();
         jpBotones = new javax.swing.JPanel();
-        btnNuevoCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnEditarCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnBorrarCliente = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnBuscar = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnGuardar = new RSMaterialComponent.RSButtonMaterialIconOne();
-        btnCancelar = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnNuevaPersona = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnModificarPersona = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnBorrarPersona = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnBuscarPersona = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnGuardarRegistro = new RSMaterialComponent.RSButtonMaterialIconOne();
+        btnCancelarRegistro = new RSMaterialComponent.RSButtonMaterialIconOne();
 
         txtCedula1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Cedula", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
         try {
@@ -268,8 +304,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         setMaximizable(true);
         setResizable(true);
         setTitle("Personas");
-        setToolTipText("Mantenimientos de los clientes del sistema.");
-        setName("frmClientes"); // NOI18N
+        setToolTipText("Mantenimientos de los registros de persona del sistema.");
+        setName("frmPersonas"); // NOI18N
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameActivated(evt);
@@ -295,66 +331,16 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         jtpPrincipal.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
         jtpPrincipal.setName("jtpPrincipal"); // NOI18N
+        jtpPrincipal.setPreferredSize(new java.awt.Dimension(3011, 625));
 
-        jspClientes.setName("jspClientes"); // NOI18N
+        jspPersonas.setName("jspPersonas"); // NOI18N
 
-        jpClientes.setName("jpClientes"); // NOI18N
+        jpPersonas.setName("jpPersonas"); // NOI18N
 
-        jScrollPane6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
-        jScrollPane6.setName("jScrollPane6"); // NOI18N
-
-        tblClientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Cedula", "Persona", "Primer Nombre", "Segundo Nombre", "Apellidos", "Sexo", "Fecha Nacimiento", "Fecha de Ingreso", "Estado"
-            }
-        ) {
-            Class<?>[] types = new Class<?>[]{
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
-
-            public Class<?> getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tblClientes.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        tblClientes.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        tblClientes.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        tblClientes.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        tblClientes.setName("tblClientes"); // NOI18N
-        tblClientes.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblClientesKeyPressed(evt);
-            }
-        });
-        jScrollPane6.setViewportView(tblClientes);
-
-        jScrollPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
-
-        jpBotonesPrincipal.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(187, 187, 187), 1, true));
-        jpBotonesPrincipal.setName("jpBotonesPrincipal"); // NOI18N
-        jpBotonesPrincipal.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-        btnActualizarRegistrosCliente.setText("Actualizar registros");
-        btnActualizarRegistrosCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.UPDATE);
-        btnActualizarRegistrosCliente.setName("btnHistorial"); // NOI18N
-        btnActualizarRegistrosCliente.setRound(40);
-        btnActualizarRegistrosCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarRegistrosClienteActionPerformed(evt);
-            }
-        });
-        jpBotonesPrincipal.add(btnActualizarRegistrosCliente);
-
-        jScrollPane2.setViewportView(jpBotonesPrincipal);
-
-        jLabel1.setText("Cantidad Reg.");
-        jLabel1.setName("jLabel1"); // NOI18N
+        jPanel11.setName("jPanel11"); // NOI18N
 
         jsCantidadFilas.setModel(new javax.swing.SpinnerNumberModel(20, 10, null, 1));
+        jsCantidadFilas.setBorder(javax.swing.BorderFactory.createTitledBorder("Registros"));
         jsCantidadFilas.setMaximumSize(new java.awt.Dimension(50, 27));
         jsCantidadFilas.setMinimumSize(new java.awt.Dimension(20, 27));
         jsCantidadFilas.setName("jsCantidadFilas"); // NOI18N
@@ -365,10 +351,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             }
         });
 
-        jLabel2.setText("Pagina No.");
-        jLabel2.setName("jLabel2"); // NOI18N
-
         jsPaginaNro.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        jsPaginaNro.setBorder(javax.swing.BorderFactory.createTitledBorder("Paginas"));
         jsPaginaNro.setMaximumSize(new java.awt.Dimension(50, 27));
         jsPaginaNro.setMinimumSize(new java.awt.Dimension(20, 27));
         jsPaginaNro.setName("jsPaginaNro"); // NOI18N
@@ -379,46 +363,144 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             }
         });
 
-        javax.swing.GroupLayout jpClientesLayout = new javax.swing.GroupLayout(jpClientes);
-        jpClientes.setLayout(jpClientesLayout);
-        jpClientesLayout.setHorizontalGroup(
-            jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpClientesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpClientesLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpClientesLayout.createSequentialGroup()
-                        .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE))
-                        .addContainerGap())))
-        );
-        jpClientesLayout.setVerticalGroup(
-            jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpClientesLayout.createSequentialGroup()
-                .addGroup(jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        jPanel15.setName("jPanel15"); // NOI18N
+        jPanel15.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+
+        jcbFiltroTodos.setText("Todos");
+        jcbFiltroTodos.setMaximumSize(new java.awt.Dimension(100, 20));
+        jcbFiltroTodos.setName("jcbFiltroTodos"); // NOI18N
+        jPanel15.add(jcbFiltroTodos);
+
+        jcbFiltroCliente.setText("Cliente");
+        jcbFiltroCliente.setMaximumSize(new java.awt.Dimension(100, 20));
+        jcbFiltroCliente.setName("jcbFiltroCliente"); // NOI18N
+        jPanel15.add(jcbFiltroCliente);
+
+        jcbFiltroEmpleado.setText("Empleado");
+        jcbFiltroEmpleado.setName("jcbFiltroEmpleado"); // NOI18N
+        jPanel15.add(jcbFiltroEmpleado);
+
+        jcbFiltroEstudiante.setText("Estudiante");
+        jcbFiltroEstudiante.setName("jcbFiltroEstudiante"); // NOI18N
+        jPanel15.add(jcbFiltroEstudiante);
+
+        jcbFiltroPaciente.setText("Paciente");
+        jcbFiltroPaciente.setName("jcbFiltroPaciente"); // NOI18N
+        jPanel15.add(jcbFiltroPaciente);
+
+        jcbFiltroPadre.setText("Padre");
+        jcbFiltroPadre.setName("jcbFiltroPadre"); // NOI18N
+        jPanel15.add(jcbFiltroPadre);
+
+        jcbFiltroProveedor.setText("Proveedor");
+        jcbFiltroProveedor.setName("jcbFiltroProveedor"); // NOI18N
+        jPanel15.add(jcbFiltroProveedor);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel11Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jsCantidadFilas, jsPaginaNro});
+
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jsCantidadFilas, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
+        );
+
+        jScrollPane6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
+        jScrollPane6.setName("jScrollPane6"); // NOI18N
+
+        tblPersonas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cedula", "Persona", "Nombres y apellidos", "Sexo", "Fecha de nacimiento", "Fecha de Ingreso", "Estado"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblPersonas.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblPersonas.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblPersonas.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblPersonas.setFontRowSelect(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        tblPersonas.setName("tblPersonas"); // NOI18N
+        tblPersonas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblPersonasKeyPressed(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblPersonas);
+
+        jScrollPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true));
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        jpBotonesPrincipal.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(187, 187, 187), 1, true));
+        jpBotonesPrincipal.setName("jpBotonesPrincipal"); // NOI18N
+        jpBotonesPrincipal.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        btnActualizarRegistrosPersona.setText("Actualizar registros");
+        btnActualizarRegistrosPersona.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.UPDATE);
+        btnActualizarRegistrosPersona.setName("btnHistorial"); // NOI18N
+        btnActualizarRegistrosPersona.setRound(40);
+        btnActualizarRegistrosPersona.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarRegistrosPersonaActionPerformed(evt);
+            }
+        });
+        jpBotonesPrincipal.add(btnActualizarRegistrosPersona);
+
+        jScrollPane2.setViewportView(jpBotonesPrincipal);
+
+        javax.swing.GroupLayout jpPersonasLayout = new javax.swing.GroupLayout(jpPersonas);
+        jpPersonas.setLayout(jpPersonasLayout);
+        jpPersonasLayout.setHorizontalGroup(
+            jpPersonasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPersonasLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpPersonasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jpPersonasLayout.setVerticalGroup(
+            jpPersonasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPersonasLayout.createSequentialGroup()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jspClientes.setViewportView(jpClientes);
+        jspPersonas.setViewportView(jpPersonas);
 
-        jtpPrincipal.addTab("Personas", jspClientes);
+        jtpPrincipal.addTab("Personas", jspPersonas);
 
         jspMantenimiento.setName("jspMantenimiento"); // NOI18N
 
@@ -436,44 +518,56 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         jpGenerales.setToolTipText("Acceso con Control + 1");
         jpGenerales.setName("jpGenerales"); // NOI18N
 
-        jcbSexo.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        jcbSexo.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Sexo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        jcbSexo.setName("jcbSexo"); // NOI18N
-        jcbSexo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jcbSexoPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setLayout(new java.awt.GridLayout(5, 0, 10, 10));
 
-        txtSNombre.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        txtSNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Segundo nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        txtSNombre.setDoubleBuffered(true);
-        txtSNombre.setFocusTraversalPolicyProvider(true);
-        txtSNombre.setMinimumSize(new java.awt.Dimension(0, 0));
-        txtSNombre.setName("txtSNombre"); // NOI18N
-        txtSNombre.setPreferredSize(new java.awt.Dimension(0, 25));
-        txtSNombre.addActionListener(new java.awt.event.ActionListener() {
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+
+        jPanel14.setName("jPanel14"); // NOI18N
+        jPanel14.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        txtCedula.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Cedula", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        try {
+            txtCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtCedula.setText("");
+        txtCedula.setToolTipText("Cedula de la persona.");
+        txtCedula.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtCedula.setFocusTraversalPolicyProvider(true);
+        txtCedula.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        txtCedula.setMaximumSize(new java.awt.Dimension(50, 2147483647));
+        txtCedula.setName("txtCedula"); // NOI18N
+        txtCedula.setPreferredSize(new java.awt.Dimension(100, 43));
+        txtCedula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSNombreActionPerformed(evt);
+                txtCedulaActionPerformed(evt);
             }
         });
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyPressed(evt);
+            }
+        });
+        jPanel14.add(txtCedula);
 
-        jcbPersona.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        jcbPersona.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Tipo persona", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        jcbPersona.setName("jcbPersona"); // NOI18N
-        jcbPersona.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jcbPersonaPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        btnCedulaValidad.setBackground(new java.awt.Color(0, 255, 75));
+        btnCedulaValidad.setToolTipText("Verifica la cedula de la persona.");
+        btnCedulaValidad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnCedulaValidad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCedulaValidad.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SYNC);
+        btnCedulaValidad.setName("btnCedulaValidad"); // NOI18N
+        btnCedulaValidad.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnCedulaValidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCedulaValidadActionPerformed(evt);
             }
         });
+        jPanel14.add(btnCedulaValidad);
+
+        jPanel3.add(jPanel14);
 
         cbEstado.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         cbEstado.setSelected(true);
@@ -490,45 +584,45 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 cbEstadoActionPerformed(evt);
             }
         });
+        jPanel3.add(cbEstado);
 
-        txtCedula.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Cedula", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        try {
-            txtCedula.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtCedula.setText("012-0089344-8");
-        txtCedula.setToolTipText("Cedula del Cliente");
-        txtCedula.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
-        txtCedula.setFocusTraversalPolicyProvider(true);
-        txtCedula.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        txtCedula.setName("txtCedula"); // NOI18N
-        txtCedula.addActionListener(new java.awt.event.ActionListener() {
+        jPanel2.add(jPanel3);
+
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+
+        txtPNombre.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        txtPNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Primer nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        txtPNombre.setDoubleBuffered(true);
+        txtPNombre.setFocusTraversalPolicyProvider(true);
+        txtPNombre.setMinimumSize(new java.awt.Dimension(0, 0));
+        txtPNombre.setName("txtPNombre"); // NOI18N
+        txtPNombre.setPreferredSize(new java.awt.Dimension(0, 25));
+        txtPNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCedulaActionPerformed(evt);
+                txtPNombreActionPerformed(evt);
             }
         });
-        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCedulaKeyPressed(evt);
-            }
-        });
+        jPanel4.add(txtPNombre);
 
-        dchFechaNacimiento.setDateFormatString("dd.MM.yyyy");
-        dchFechaNacimiento.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        dchFechaNacimiento.setName("jdcFechaNacimiento"); // NOI18N
-
-        btnCedulaValidad.setBackground(new java.awt.Color(0, 255, 75));
-        btnCedulaValidad.setToolTipText("Verifica la cedula del cliente.");
-        btnCedulaValidad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnCedulaValidad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCedulaValidad.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SYNC);
-        btnCedulaValidad.setName("btnCedulaValidad"); // NOI18N
-        btnCedulaValidad.addActionListener(new java.awt.event.ActionListener() {
+        txtSNombre.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        txtSNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Segundo nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        txtSNombre.setDoubleBuffered(true);
+        txtSNombre.setFocusTraversalPolicyProvider(true);
+        txtSNombre.setMinimumSize(new java.awt.Dimension(0, 0));
+        txtSNombre.setName("txtSNombre"); // NOI18N
+        txtSNombre.setPreferredSize(new java.awt.Dimension(0, 25));
+        txtSNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCedulaValidadActionPerformed(evt);
+                txtSNombreActionPerformed(evt);
             }
         });
+        jPanel4.add(txtSNombre);
+
+        jPanel2.add(jPanel4);
+
+        jPanel10.setName("jPanel10"); // NOI18N
+        jPanel10.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
         txtApellidos.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         txtApellidos.setHorizontalAlignment(javax.swing.JTextField.LEFT);
@@ -543,6 +637,42 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 txtApellidosActionPerformed(evt);
             }
         });
+        jPanel10.add(txtApellidos);
+
+        jPanel16.setName("jPanel16"); // NOI18N
+        jPanel16.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+
+        jcbPersona.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        jcbPersona.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Tipo persona", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        jcbPersona.setName("jcbPersona"); // NOI18N
+        jcbPersona.setPreferredSize(new java.awt.Dimension(200, 47));
+        jcbPersona.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jcbPersonaPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        jPanel16.add(jcbPersona);
+
+        dchFechaNacimiento.setDateFormatString("dd.MM.yyyy");
+        dchFechaNacimiento.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        dchFechaNacimiento.setName("jdcFechaNacimiento"); // NOI18N
+        jPanel16.add(dchFechaNacimiento);
+
+        jPanel10.add(jPanel16);
+
+        jPanel2.add(jPanel10);
+
+        jPanel9.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel9.setName("jPanel9"); // NOI18N
+        jPanel9.setPreferredSize(new java.awt.Dimension(746, 50));
+        jPanel9.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+
+        jPanel17.setName("jPanel17"); // NOI18N
+        jPanel17.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
         jcbEstadoCivil.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         jcbEstadoCivil.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Estado civil", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
@@ -556,73 +686,87 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
+        jPanel17.add(jcbEstadoCivil);
 
-        txtPNombre.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
-        txtPNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Primer nombre", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
-        txtPNombre.setDoubleBuffered(true);
-        txtPNombre.setFocusTraversalPolicyProvider(true);
-        txtPNombre.setMinimumSize(new java.awt.Dimension(0, 0));
-        txtPNombre.setName("txtPNombre"); // NOI18N
-        txtPNombre.setPreferredSize(new java.awt.Dimension(0, 25));
-        txtPNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPNombreActionPerformed(evt);
+        jcbSexo.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
+        jcbSexo.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Sexo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        jcbSexo.setName("jcbSexo"); // NOI18N
+        jcbSexo.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jcbSexoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
+        jPanel17.add(jcbSexo);
+
+        jPanel9.add(jPanel17);
+
+        jPanel18.setName("jPanel18"); // NOI18N
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 413, Short.MAX_VALUE)
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 49, Short.MAX_VALUE)
+        );
+
+        jPanel9.add(jPanel18);
+
+        jPanel2.add(jPanel9);
+
+        jPanel13.setName("jPanel13"); // NOI18N
+        jPanel13.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+
+        jcbCliente.setText("Cliente");
+        jcbCliente.setMaximumSize(new java.awt.Dimension(100, 20));
+        jcbCliente.setName("jcbCliente"); // NOI18N
+        jPanel13.add(jcbCliente);
+
+        jcbEmpleado.setText("Empleado");
+        jcbEmpleado.setName("jcbEmpleado"); // NOI18N
+        jPanel13.add(jcbEmpleado);
+
+        jcbEstudiante.setText("Estudiante");
+        jcbEstudiante.setName("jcbEstudiante"); // NOI18N
+        jPanel13.add(jcbEstudiante);
+
+        jcbPaciente.setText("Paciente");
+        jcbPaciente.setName("jcbPaciente"); // NOI18N
+        jPanel13.add(jcbPaciente);
+
+        jcbPadre.setText("Padre");
+        jcbPadre.setName("jcbPadre"); // NOI18N
+        jPanel13.add(jcbPadre);
+
+        jcbProveedor.setText("Proveedor");
+        jcbProveedor.setName("jcbProveedor"); // NOI18N
+        jPanel13.add(jcbProveedor);
+
+        jPanel2.add(jPanel13);
 
         javax.swing.GroupLayout jpGeneralesLayout = new javax.swing.GroupLayout(jpGenerales);
         jpGenerales.setLayout(jpGeneralesLayout);
         jpGeneralesLayout.setHorizontalGroup(
             jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpGeneralesLayout.createSequentialGroup()
-                .addContainerGap(58, Short.MAX_VALUE)
-                .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jpGeneralesLayout.createSequentialGroup()
-                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCedulaValidad, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jpGeneralesLayout.createSequentialGroup()
-                        .addComponent(txtPNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 734, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpGeneralesLayout.createSequentialGroup()
-                        .addComponent(jcbPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(57, Short.MAX_VALUE))
+            .addGroup(jpGeneralesLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jpGeneralesLayout.setVerticalGroup(
             jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpGeneralesLayout.createSequentialGroup()
-                .addContainerGap(127, Short.MAX_VALUE)
-                .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCedulaValidad, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6)
-                .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jcbPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dchFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jcbEstadoCivil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jcbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        jpGeneralesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jcbEstadoCivil, jcbPersona, jcbSexo});
 
         jtpGeneralesDireccionContactos.addTab("Generales", jpGenerales);
 
@@ -792,7 +936,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .addGroup(jpDireccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpDireccionLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jpDireccionLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jpDireccionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -808,8 +952,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE))
         );
 
         jtpGeneralesDireccionContactos.addTab("Dirección", jpDireccion);
@@ -897,7 +1040,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .addComponent(btnEditarTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBorrarTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(361, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -967,7 +1110,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1081,7 +1224,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jpCorreosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 864, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jpCorreosLayout.setVerticalGroup(
@@ -1090,7 +1233,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .addGap(3, 3, 3)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1102,15 +1245,14 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             jpContactosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpContactosLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jtpContactos)
-                .addGap(0, 0, 0))
+                .addComponent(jtpContactos))
         );
         jpContactosLayout.setVerticalGroup(
             jpContactosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpContactosLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jtpContactos)
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
 
         jtpGeneralesDireccionContactos.addTab("Contactos", jpContactos);
@@ -1123,20 +1265,20 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         jpMantenimientoLayout.setHorizontalGroup(
             jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(6, 6, 6)
+                .addGroup(jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlFechaCreacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jtpGeneralesDireccionContactos))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jpMantenimientoLayout.setVerticalGroup(
             jpMantenimientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpMantenimientoLayout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jlFechaCreacion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpGeneralesDireccionContactos)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jspMantenimiento.setViewportView(jpMantenimiento);
@@ -1150,73 +1292,73 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         jpBotones.setPreferredSize(new java.awt.Dimension(800, 80));
         jpBotones.setLayout(new java.awt.GridLayout(1, 0, 6, 0));
 
-        btnNuevoCliente.setText("Nuevo");
-        btnNuevoCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
-        btnNuevoCliente.setName("btnNuevoCliente"); // NOI18N
-        btnNuevoCliente.setRound(40);
-        btnNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevaPersona.setText("Nuevo");
+        btnNuevaPersona.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ADD);
+        btnNuevaPersona.setName("btnNuevaPersona"); // NOI18N
+        btnNuevaPersona.setRound(40);
+        btnNuevaPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoClienteActionPerformed(evt);
+                btnNuevaPersonaActionPerformed(evt);
             }
         });
-        jpBotones.add(btnNuevoCliente);
+        jpBotones.add(btnNuevaPersona);
 
-        btnEditarCliente.setText("Modificar");
-        btnEditarCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
-        btnEditarCliente.setName("btnEditarCliente"); // NOI18N
-        btnEditarCliente.setRound(40);
-        btnEditarCliente.addActionListener(new java.awt.event.ActionListener() {
+        btnModificarPersona.setText("Modificar");
+        btnModificarPersona.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.MODE_EDIT);
+        btnModificarPersona.setName("btnModificarPersona"); // NOI18N
+        btnModificarPersona.setRound(40);
+        btnModificarPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarClienteActionPerformed(evt);
+                btnModificarPersonaActionPerformed(evt);
             }
         });
-        jpBotones.add(btnEditarCliente);
+        jpBotones.add(btnModificarPersona);
 
-        btnBorrarCliente.setText("Borrar");
-        btnBorrarCliente.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DELETE);
-        btnBorrarCliente.setName("btnBorrarCliente"); // NOI18N
-        btnBorrarCliente.setRound(40);
-        btnBorrarCliente.addActionListener(new java.awt.event.ActionListener() {
+        btnBorrarPersona.setText("Borrar");
+        btnBorrarPersona.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DELETE);
+        btnBorrarPersona.setName("btnBorrarPersona"); // NOI18N
+        btnBorrarPersona.setRound(40);
+        btnBorrarPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarClienteActionPerformed(evt);
+                btnBorrarPersonaActionPerformed(evt);
             }
         });
-        jpBotones.add(btnBorrarCliente);
+        jpBotones.add(btnBorrarPersona);
 
-        btnBuscar.setText("Buscar");
-        btnBuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.FIND_IN_PAGE);
-        btnBuscar.setName("btnBuscar"); // NOI18N
-        btnBuscar.setRound(40);
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscarPersona.setText("Buscar");
+        btnBuscarPersona.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.FIND_IN_PAGE);
+        btnBuscarPersona.setName("btnBuscarPersona"); // NOI18N
+        btnBuscarPersona.setRound(40);
+        btnBuscarPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
+                btnBuscarPersonaActionPerformed(evt);
             }
         });
-        jpBotones.add(btnBuscar);
+        jpBotones.add(btnBuscarPersona);
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.setEnabled(false);
-        btnGuardar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SAVE);
-        btnGuardar.setName("btnGuardar"); // NOI18N
-        btnGuardar.setRound(40);
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarRegistro.setText("Guardar");
+        btnGuardarRegistro.setEnabled(false);
+        btnGuardarRegistro.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SAVE);
+        btnGuardarRegistro.setName("btnGuardarRegistro"); // NOI18N
+        btnGuardarRegistro.setRound(40);
+        btnGuardarRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnGuardarRegistroActionPerformed(evt);
             }
         });
-        jpBotones.add(btnGuardar);
+        jpBotones.add(btnGuardarRegistro);
 
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setEnabled(false);
-        btnCancelar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
-        btnCancelar.setName("btnCancelar"); // NOI18N
-        btnCancelar.setRound(40);
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarRegistro.setText("Cancelar");
+        btnCancelarRegistro.setEnabled(false);
+        btnCancelarRegistro.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
+        btnCancelarRegistro.setName("btnCancelarRegistro"); // NOI18N
+        btnCancelarRegistro.setRound(40);
+        btnCancelarRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnCancelarRegistroActionPerformed(evt);
             }
         });
-        jpBotones.add(btnCancelar);
+        jpBotones.add(btnCancelarRegistro);
 
         javax.swing.GroupLayout jpGeneralLayout = new javax.swing.GroupLayout(jpGeneral);
         jpGeneral.setLayout(jpGeneralLayout);
@@ -1225,16 +1367,15 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jpGeneralLayout.createSequentialGroup()
-                        .addComponent(jtpPrincipal)
-                        .addContainerGap())))
+                    .addComponent(jtpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jpGeneralLayout.setVerticalGroup(
             jpGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpGeneralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jtpPrincipal)
+                .addComponent(jtpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1247,32 +1388,32 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jspGeneral)
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jspGeneral)
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNuevoClienteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
+    private void btnNuevaPersonaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnNuevaPersonaActionPerformed
         v_nuevo = true;//Se va a ingresar un nuevo registro al sistema
         cambioBoton(true);
         limpiarTablasDirTelCorr();
-    }//GEN-LAST:event_btnNuevoClienteActionPerformed
+    }//GEN-LAST:event_btnNuevaPersonaActionPerformed
 
-    private void btnEditarClienteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed
+    private void btnModificarPersonaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnModificarPersonaActionPerformed
         //Se valida que exista un campo seleccionado
         if (validarRegistro("modificar.")) {
             return;
         }
-
-        limpiarTablasDirTelCorr();
 
         //Se hace false para indicar que es una modificacion de registro.
         v_nuevo = false;
@@ -1280,16 +1421,17 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         //Se agrega el panel de manteniento y se muestra.
         cambioBoton(true);
 
-        idCliente = ((Generales) tblClientes.getValueAt(
-                tblClientes.getSelectedRow(), 0
+        limpiarTablasDirTelCorr();
+
+        idPersona = ((Persona) tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(),
+                2
         )).getIdPersona();
 
-        //Al mostrarse el modulo de mantenimiento se deberia mostrar la 
-        //informacion del cliente.
         mostrarRegistro();
-    }//GEN-LAST:event_btnEditarClienteActionPerformed
+    }//GEN-LAST:event_btnModificarPersonaActionPerformed
 
-    private void btnBorrarClienteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnBorrarClienteActionPerformed
+    private void btnBorrarPersonaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnBorrarPersonaActionPerformed
         //Validamos que está correcto en la tabla.
         //Si el metodo devuelve true devolvemos el proceso.
         if (validarRegistro("eliminar.")) {
@@ -1300,7 +1442,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         //la eliminación del registro.
         int rta = JOptionPane.showInternalConfirmDialog(
                 this,
-                "¿Esta Seguro de Eliminar Registro del Cliente?",
+                "¿Esta Seguro de eliminar registro de la persona?",
                 "",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE
@@ -1312,11 +1454,11 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        //Mandamos a borrar el cliente y obtenemos el resultado de la operacion
+        //Mandamos a borrar la persona y obtenemos el resultado de la operacion
         //y almacenamos en una variable.
         Resultado resultados = M_Persona.delete(
-                ((Generales) tblClientes.getValueAt(
-                        tblClientes.getSelectedRow(),
+                ((Generales) tblPersonas.getValueAt(
+                        tblPersonas.getSelectedRow(),
                         0
                 )).getIdPersona()
         );
@@ -1327,9 +1469,9 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 "",
                 resultados.getIcono()
         );
-    }//GEN-LAST:event_btnBorrarClienteActionPerformed
+    }//GEN-LAST:event_btnBorrarPersonaActionPerformed
 
-    private void btnBuscarActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+    private void btnBuscarPersonaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnBuscarPersonaActionPerformed
         txtCedula1.setValue(null);
         //Utilidades.showTooltip(txtCedula1);
         JOptionPane.showInternalMessageDialog(
@@ -1351,18 +1493,18 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         jsPaginaNro.setValue(1);
 
-        llenarTablaClientes();
+        llenarTablaPersonas();
 
-        if (tblClientes.getRowCount() == 0) {
+        if (tblPersonas.getRowCount() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "No se encontro registros con dichos criterios.",
                     "",
                     JOptionPane.WARNING_MESSAGE
             );
-            btnActualizarRegistrosCliente.doClick();
+            btnActualizarRegistrosPersona.doClick();
         }
-    }//GEN-LAST:event_btnBuscarActionPerformed
+    }//GEN-LAST:event_btnBuscarPersonaActionPerformed
 
     /**
      * Metodo para guardar los registros del sistema.
@@ -1377,7 +1519,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
      * se realiza peticion de focus al componente txtCedula. Y se deja el texto
      * de la cedula seleccionado.
      *
-     * 3) Validamos el primer nombre del cliente que no este vacio. En caso de
+     * 3) Validamos el primer nombre de la persona que no este vacio. En caso de
      * ser necesario nos cambiamos a la ventana correspondiente...
      *
      * 4) Validamos que el campo apellidos no este vacio.
@@ -1386,7 +1528,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
      *
      * 6) Nos aseguramos que la fecha ingresada sea menor que la fecha actual.
      *
-     * 7) Valida que el cliente cuente con una direccion fisica. Si el usuario
+     * 7) Valida que la persona cuente con una direccion fisica. Si el usuario
      * indica que no se va a registrar una direccion, el flujo continua.
      *
      * 8) Valida que exista una forma de contactar a una persona por su correo o
@@ -1399,10 +1541,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
      *
      * @param evt
      */
-    private void btnGuardarActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarRegistroActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnGuardarRegistroActionPerformed
         if (Utilidades.validarCampo(txtCedula)) {
-            // 
-            //de una cedula.
             JOptionPane.showInternalMessageDialog(
                     this,
                     """
@@ -1413,7 +1553,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             );
             return;
         }
-//-----------------------------------------------------------------------------1
+        //----------------------------------------------------------------------
         if (!M_Generales.cedula(txtCedula.getValue().toString())) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
@@ -1440,7 +1580,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
         }
-//-----------------------------------------------------------------------------2
+        //----------------------------------------------------------------------
         if (txtPNombre.getText().isBlank()) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1455,7 +1595,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
             return;
         }
-//-----------------------------------------------------------------------------3
+        //----------------------------------------------------------------------
         if (txtApellidos.getText().isBlank()) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1470,8 +1610,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
             return;
         }
-//-----------------------------------------------------------------------------4
 
+        //----------------------------------------------------------------------
         if (Objects.isNull(dchFechaNacimiento.getDate())) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1483,7 +1623,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             dchFechaNacimiento.requestFocus();
             return;
         }
-//-----------------------------------------------------------------------------5
+
+        //----------------------------------------------------------------------
         if (dchFechaNacimiento.getDate().after(new Date())) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -1495,12 +1636,13 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             dchFechaNacimiento.requestFocus();
             return;
         }
-//-----------------------------------------------------------------------------6
+
+        //----------------------------------------------------------------------
         if (tblDireccion.getRowCount() < 1) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
-                    Cliente no cuenta con una dirrecion.
+                    Persona no cuenta con una dirrecion.
                     Desea agregar una direccion?
                     """,
                     "",
@@ -1514,12 +1656,13 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
         }
-//-----------------------------------------------------------------------------7
-        if (tblCorreos.getRowCount() < 1 & tblTelefonos.getRowCount() < 1) {
+
+        //----------------------------------------------------------------------
+        if (tblCorreos.getRowCount() == 1 || tblTelefonos.getRowCount() < 1) {
             int resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
-                    No existe forma de contactar al cliente.
+                    No existe forma de contactar a la persona.
                     Desea agreguar un numero de telefono o correo electronico?
                     """,
                     "",
@@ -1535,33 +1678,32 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             }
 
         }
-//-----------------------------------------------------------------------------8
+
+        //----------------------------------------------------------------------
         //Buscar la cedula en la base de datos.
-        Generales cedula = M_Generales.select(
+        var cedula = M_Generales.select(
                 Generales
                         .builder()
                         .cedula(txtCedula.getValue().toString())
                         .build()
-        ).getFirst();
+        );
 
-        idCliente = -1;
-
-        //Condicional para saber si no esta vacia la lista. 
-        if (cedula.getIdPersona() > 0) {
-            //Cliente existe en la base de datos. 
-            idCliente = cedula.getIdPersona(); //Validacion 8
+        if (!cedula.isEmpty()) {
+            idPersona = cedula.getLast().getIdPersona();
+        } else {
+            idPersona = -1;
         }
 
-        // si es nuevo validamos que el Cliente no exista
+        // si es nuevo validamos que la persona no exista
         String accion = "editar";
         if (v_nuevo) {
             accion = "crear";
-            if (idCliente > 0) {
+            if (idPersona > 0) {
                 //Preguntar si desea carga la data desde la base de datos.
                 int resp = JOptionPane.showInternalConfirmDialog(
                         this,
                         """
-                        Cliente se encuentra en la base de datos.
+                        Persona se encuentra en la base de datos.
                         Desea cargar el registro?
                         """,
                         "",
@@ -1576,14 +1718,14 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 return;
             }
         } else {
-            idCliente = ((Generales) tblClientes.getValueAt(
-                    tblClientes.getSelectedRow(), 0
+            idPersona = ((Persona) tblPersonas.getValueAt(
+                    tblPersonas.getSelectedRow(), 2
             )).getIdPersona();
         }
 
         int resp = JOptionPane.showInternalConfirmDialog(
                 this,
-                "<html><b>Se va a " + accion + " el Cliente: </b>"
+                "<html><b>Se va a " + accion + " la persona: </b>"
                 + txtPNombre.getText()
                 + (txtSNombre.getText().isEmpty() || txtSNombre.getText().isBlank()
                 ? "" : " " + txtSNombre.getText())
@@ -1593,7 +1735,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                         dchFechaNacimiento.getDate(),
                         "dd-MM-yyyy"
                 )
-                + "<br><b>Estado del Cliente: </b>" + cbEstado.getText()
+                + "<br><b>Estado de la persona: </b>" + cbEstado.getText()
                 + "<br><b>Desea continuar? </b></html>",
                 """
                 """,
@@ -1607,7 +1749,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         Persona persona = Persona
                 .builder()
-                .idPersona(idCliente)
+                .idPersona(idPersona)
                 .persona(
                         ((TipoPersona) jcbPersona.getSelectedItem())
                                 .getAbreviatura()
@@ -1627,47 +1769,42 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 .estado(cbEstado.isSelected())
                 .build();
 
-        Resultado resultados = (v_nuevo ? M_Persona.insert(persona) : M_Persona.update(persona));
+        Resultado resultadoIUPersona = (v_nuevo ? M_Persona.insert(persona) : M_Persona.update(persona));
 
-        if (!resultados.getEstado()) {
+        if (!resultadoIUPersona.getEstado()) {
             mensajeResultado(
-                    resultados,
+                    resultadoIUPersona,
                     false
             );
             return;
         }
 
-        idCliente = resultados.getId();
-
-        if (v_nuevo && resultados.getEstado()) {
-            mensajeResultado(
-                    M_Cliente.insertById(idCliente),
-                    false
-            );
-
-            mensajeResultado(
-                    M_Generales.insert(
-                            Generales
-                                    .builder()
-                                    .idPersona(idCliente)
-                                    .cedula(txtCedula.getValue().toString())
-                                    .estado_civil(
-                                            ((EstadoCivil) jcbEstadoCivil.getSelectedItem())
-                                                    .getAbreviatura()
-                                    )
-                                    .idTipoSangre(0)
-                                    .build()
-                    ),
-                    false
-            );
+        mensajeResultado(
+                M_Generales.updateOrInsert(
+                        Generales
+                                .builder()
+                                .idPersona(resultadoIUPersona.getId())
+                                .cedula(txtCedula.getValue().toString())
+                                .estado_civil(
+                                        ((EstadoCivil) jcbEstadoCivil.getSelectedItem())
+                                                .getAbreviatura()
+                                )
+                                .idTipoSangre(0)
+                                .build()
+                ),
+                false
+        );
+        
+        if (v_nuevo && resultadoIUPersona.getEstado()) {
 
             v_direccionesList.stream().forEach(
                     direccion -> {
                         mensajeResultado(
-                                M_ContactoDireccion.agregarDireccion(
+                                M_ContactoDireccion.updateOrInsert(
                                         ContactoDireccion
                                                 .builder()
-                                                .idPersona(idCliente)
+                                                .id(0)
+                                                .idPersona(resultadoIUPersona.getId())
                                                 .idProvincia(direccion.getIdProvincia())
                                                 .idMunicipio(direccion.getIdMunicipio())
                                                 .idDistritoMunicipal(direccion.getIdDistritoMunicipal())
@@ -1684,10 +1821,10 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             v_contactosTelsList.stream().forEach(
                     contacto -> {
                         mensajeResultado(
-                                M_ContactoTel.agregarContactosTel(
+                                M_ContactoTel.insert(
                                         ContactoTel
                                                 .builder()
-                                                .idPersona(idCliente)
+                                                .idPersona(resultadoIUPersona.getId())
                                                 .telefono(contacto.getTelefono())
                                                 .tipo(contacto.getTipo())
                                                 .porDefecto(contacto.getPorDefecto())
@@ -1701,10 +1838,10 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             v_contactosCorreosList.stream().forEach(
                     contacto -> {
                         mensajeResultado(
-                                M_ContactoEmail.agregarContactosEmail(
+                                M_ContactoEmail.insert(
                                         ContactoEmail
                                                 .builder()
-                                                .idPersona(idCliente)
+                                                .idPersona(resultadoIUPersona.getId())
                                                 .email(contacto.getEmail())
                                                 .porDefecto(contacto.getPorDefecto())
                                                 .build()
@@ -1713,28 +1850,30 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                         );
                     }
             );
+        } else {
+
         }
 
         JOptionPane.showInternalMessageDialog(
                 this,
-                resultados,
+                resultadoIUPersona,
                 "",
-                resultados.getIcono()
+                resultadoIUPersona.getIcono()
         );
 
-        if (resultados.getEstado()) {
-            btnCancelarActionPerformed(evt);
+        if (resultadoIUPersona.getEstado()) {
+            btnCancelarRegistroActionPerformed(evt);
             limpiarListas();
             v_nuevo = null;
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_btnGuardarRegistroActionPerformed
 
-    private void btnCancelarActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarRegistroActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegistroActionPerformed
         //Botones Para habilitar:
         cambioBoton(false);
         limpiarListas();
         limpiarTablasDirTelCorr();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }//GEN-LAST:event_btnCancelarRegistroActionPerformed
 
     private void txtCedulaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
         btnCedulaValidad.requestFocus();
@@ -1776,7 +1915,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         } else {
             cbEstado.setText("Inactivo");
         }
-        btnGuardar.requestFocus();
+        btnGuardarRegistro.requestFocus();
     }//GEN-LAST:event_cbEstadoActionPerformed
 
     private void txtPNombreActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtPNombreActionPerformed
@@ -1842,22 +1981,18 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        //preguntamos si es la direccion por defecto.
-        Boolean porDefecto = true;
-        if (tblDireccion.getRowCount() > 0) {
-            //Se pregunta si la direccion es por defecto.
-            int resp = JOptionPane.showInternalConfirmDialog(
-                    this,
-                    """
-                        Es la dirección por defecto del cliente?
+        //Se pregunta si la direccion es por defecto.
+        int resp = JOptionPane.showInternalConfirmDialog(
+                this,
+                """
+                    Es la dirección por defecto de la persona?
                     """,
-                    """
-                    """,
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            porDefecto = resp == JOptionPane.YES_OPTION;
-        }
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        Boolean porDefecto = resp == JOptionPane.YES_OPTION;
 
         //Se preparan la provincia, municipio y el distrito municipal.
         Integer id_direccion = -1;
@@ -1872,7 +2007,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         ContactoDireccion direccion = ContactoDireccion
                 .builder()
                 .id(id_direccion)
-                .idPersona(idCliente)
+                .idPersona(idPersona)
                 .idProvincia(
                         ((Provincia) jcbProvincias.getSelectedItem()).getId()
                 )
@@ -1917,24 +2052,28 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
             v_direccionesList.stream().forEach(
                     dir -> {
+
                         registro[0] = (M_Provincia.select(
                                 Provincia
                                         .builder()
                                         .id(dir.getIdProvincia())
                                         .build()
                         ).getLast());
+
                         registro[1] = (M_Municipio.select(
                                 Municipio
                                         .builder()
                                         .id(dir.getIdMunicipio())
                                         .build()
                         ).getLast());
+
                         registro[2] = (M_DistritoMunicipal.select(
                                 DistritoMunicipal
                                         .builder()
                                         .id(dir.getIdDistritoMunicipal())
                                         .build()
                         ).getLast());
+
                         registro[3] = dir.getDireccion();
                         registro[4] = dir.getFecha();
                         registro[5] = dir.getEstado();
@@ -1942,14 +2081,14 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                         v_dtmDireccion.addRow(registro);
                     }
             );
+
             tblDireccion.setModel(v_dtmDireccion);
         } else {
-            M_ContactoDireccion.agregarDireccion(direccion);
+            M_ContactoDireccion.updateOrInsert(direccion);
+            llenarTablaDirreciones(idPersona);
         }
 
         LimpiarComboBoxProMuniDistr();
-
-
     }//GEN-LAST:event_btnAgregarDireccionesActionPerformed
 
     private void btnBorrarDirrecionActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnBorrarDirrecionActionPerformed
@@ -2001,7 +2140,6 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        //Esta validacion deberia de ser si el cliente en nacional
         if (!M_ContactoTel.telefono(
                 txtTelelfonoMovil.getValue().toString()
         )) {
@@ -2014,20 +2152,17 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             limpiarTxtTelefonoMovil();
             return;
         }
-        Boolean por_defecto = true;
-        if (tblTelefonos.getRowCount() > 0) {
-            //Se pregunta si la direccion es por defecto.
-            int resp = JOptionPane.showInternalConfirmDialog(
-                    this,
-                    """
-                    Es el telefono por defecto del cliente?
+        //Se pregunta si la direccion es por defecto.
+        int resp = JOptionPane.showInternalConfirmDialog(
+                this,
+                """
+                    Es el telefono por defecto de la persona?
                     """,
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            por_defecto = resp == JOptionPane.YES_OPTION;
-        }
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        Boolean por_defecto = resp == JOptionPane.YES_OPTION;
 
         Integer id_telefono = -1;
 
@@ -2040,7 +2175,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         ContactoTel contactoTel = ContactoTel
                 .builder()
                 .id(id_telefono)
-                .idPersona(idCliente)
+                .idPersona(idPersona)
                 .telefono(txtTelelfonoMovil.getValue().toString())
                 .tipo((jrbMovil.isSelected() ? "Movil" : "Telefono"))
                 .fecha(new java.sql.Date(Calendar.getInstance().getTimeInMillis()))
@@ -2083,12 +2218,11 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             });
             tblTelefonos.setModel(v_dtmTelefono);
         } else {
-            M_ContactoTel.agregarContactosTel(contactoTel);
+            M_ContactoTel.insert(contactoTel);
+            llenarTablaTelefonos(idPersona);
         }
 
         limpiarTxtTelefonoMovil();
-
-
     }//GEN-LAST:event_btnAgregarTelefonoMovilActionPerformed
 
     private void limpiarTxtTelefonoMovil() {
@@ -2138,20 +2272,16 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        Boolean por_defecto = true;
-
-        if (tblCorreos.getRowCount() > 0) {
-            int resp = JOptionPane.showInternalConfirmDialog(
-                    this,
-                    """
-                        Es el correo por defecto del cliente?
-                    """,
-                    "",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-            por_defecto = resp == JOptionPane.YES_OPTION;
-        }
+        int resp = JOptionPane.showInternalConfirmDialog(
+                this,
+                """
+                Es el correo por defecto de la persona?
+                """,
+                "",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        Boolean por_defecto = resp == JOptionPane.YES_OPTION;
 
         Integer id_correo = -1;
 
@@ -2165,7 +2295,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                 = ContactoEmail
                         .builder()
                         .id(id_correo)
-                        .idPersona(idCliente)
+                        .idPersona(idPersona)
                         .email(txtCorreo.getText())
                         .estado(Boolean.TRUE)
                         .fecha(
@@ -2212,7 +2342,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
             tblCorreos.setModel(v_dtmCorreo);
         } else {
-            M_ContactoEmail.agregarContactosEmail(contactoEmail);
+            M_ContactoEmail.insert(contactoEmail);
+            llenarTablaCorreos(idPersona);
         }
 
         txtCorreo.setText("");
@@ -2237,12 +2368,12 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_btnBorrarCorreoActionPerformed
 
     private void btnCedulaValidadActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnCedulaValidadActionPerformed
-        if (txtCedula.getValue().toString().equals("000-0000000-0")) {
+
+        if (Utilidades.validarCampo(txtCedula)) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     """
-                    Cedula GENERICA del sistema.
-                    Modifique la cedula del cliente.
+                    Digite una cedula valida.
                     """,
                     "",
                     JOptionPane.ERROR_MESSAGE
@@ -2252,10 +2383,13 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        if (Utilidades.validarCampo(txtCedula)) {
+        if (txtCedula.getValue().toString().equals("000-0000000-0")) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Error en el campo de la cedula, Vuelva a digitarla de nuevo",
+                    """
+                    Cedula GENERICA del sistema.
+                    Modifique la cedula de la persona.
+                    """,
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -2264,15 +2398,14 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             return;
         }
 
-        Generales cedula = M_Generales.select(
+        var listaCedula = M_Generales.select(
                 Generales
                         .builder()
                         .cedula(txtCedula.getValue().toString())
                         .build()
-        ).getFirst();
+        );
 
-        if (cedula.getIdPersona() < 0) {
-
+        if (listaCedula.isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Cedula valida, puede continuar.",
@@ -2281,73 +2414,65 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             );
             txtPNombre.requestFocus();
         } else {
-            idCliente = cedula.getIdPersona();
+
+            System.out.println("idPersona: %d".formatted(listaCedula.getLast().getIdPersona()));
+            Persona persona = M_Persona.select(
+                    Persona
+                            .builder()
+                            .idPersona(listaCedula.getLast().getIdPersona())
+                            .build()
+            ).getFirst();
 
             if (v_nuevo) {
-                if (idCliente > 0 && !M_Persona.select(
-                        Persona
-                                .builder()
-                                .idPersona(idCliente)
-                                .build()
-                ).getFirst().getEstado()) {
+                boolean valor = Boolean.logicalAnd(
+                        listaCedula.getLast().getIdPersona() > 0,
+                        !persona.getEstado()
+                );
+
+                if (valor) {
                     int resp = JOptionPane.showInternalConfirmDialog(
                             this,
                             """
-                            Esta cedula está registrada.
-                            Procede a habilitar el cliente?
+                            Esta persona está registrada y de estado inactivo.
+                            Procede a habilitar a la persona?
                             """,
                             "",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE
                     );
 
-                    //Preguntamos si desea cargar la informacion del cliente.
+                    //Preguntamos si desea cargar la informacion de la persona.
                     if (resp == JOptionPane.NO_OPTION) {
-                        btnCancelarActionPerformed(evt);
+                        btnCancelarRegistroActionPerformed(evt);
                         return;
                     }
 
-                    /**
-                     * Al insertar un cliente ya registrado el siguiente metodo
-                     * devuelve falso, es por ello se valida la negacion de
-                     * false, para obtener true.
-                     */
-                    Resultado resultado = M_Cliente.insertById(idCliente);
-
-                    //!resultado.getEstado();
-                    JOptionPane.showInternalMessageDialog(
-                            this,
-                            resultado.getMensaje(),
-                            "",
-                            resultado.getIcono()
-                    );
-                } else {
-                    int respuesta = JOptionPane.showInternalConfirmDialog(
-                            this,
-                            """
-                            Este usuario esta registrado y activo.
-                            Desea activar usuario?
-                            """,
-                            "Id Cliente: ".concat(idCliente.toString()),
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE
+                    //habilitando a la persona en el sistema.
+                    M_Persona.update(
+                            Persona
+                                    .builder()
+                                    .idPersona(persona.getIdPersona())
+                                    .persona(persona.getPersona())
+                                    .pnombre(persona.getPnombre())
+                                    .snombre(persona.getSnombre())
+                                    .apellidos(persona.getApellidos())
+                                    .sexo(persona.getSexo())
+                                    .fecha_nacimiento(persona.getFecha_nacimiento())
+                                    .estado(Boolean.TRUE)
+                                    .build()
                     );
 
-                    if (respuesta == JOptionPane.NO_OPTION) {
-                        return;
-                    }
-
-                    Resultado resultado = M_Cliente.insertById(idCliente);
-
-                    JOptionPane.showInternalMessageDialog(
-                            this,
-                            resultado.getMensaje(),
-                            "",
-                            resultado.getIcono()
-                    );
-
-                    btnCancelarActionPerformed(evt);
+                    btnCancelarRegistroActionPerformed(evt);
                 }
+            } else {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        """
+                        Esta cedula se encuentra registrada en el sistema.
+                        """,
+                        "",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             }
         }
     }//GEN-LAST:event_btnCedulaValidadActionPerformed
@@ -2356,8 +2481,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_formInternalFrameOpened
 
     private static void btnBotonesPrivilegios() {
-        //1) Llenar la lista de clientes en el sistema.
-        llenarTablaClientes();
+        //1) Llenar la lista de personas en el sistema.
+        llenarTablaPersonas();
 
         //2) Llenar los comboBox de las provincias.
         jcbProvincias.removeAllItems();
@@ -2391,7 +2516,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         //Validando los botones por consultas.
         //Permiso para el boton de nuevo
-        btnNuevoCliente.setEnabled(
+        btnNuevaPersona.setEnabled(
                 M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
@@ -2400,18 +2525,29 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                                 .nombre_campo("^")
                                 .build()
                 )
-                && M_Privilegio.privilegio(
+        //                && M_Privilegio.privilegio(
+        //                        Privilegio
+        //                                .builder()
+        //                                .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
+        //                                .nombre_relacion("SP_I_PERSONA_CLIENTE")
+        //                                .nombre_campo("^")
+        //                                .build()
+        //                )
+        );
+
+        //Permiso para el boton de Borrar
+        btnBorrarPersona.setEnabled(
+                M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
                                 .privilegio(Privilegio.PRIVILEGIO_EXECUTE)
-                                .nombre_relacion("SP_I_PERSONA_CLIENTE")
+                                .nombre_relacion("SP_D_PERSONA")
                                 .nombre_campo("^")
                                 .build()
                 )
         );
 
-        //Permiso para el boton de Borrar
-        btnBorrarCliente.setEnabled(
+        jcbCliente.setEnabled(
                 M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
@@ -2423,7 +2559,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         );
 
         //Permiso para el boton de Modificar
-        btnEditarCliente.setEnabled(
+        btnModificarPersona.setEnabled(
                 M_Privilegio.privilegio(
                         Privilegio
                                 .builder()
@@ -2455,11 +2591,10 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     /**
      * Para una direccion ser modificada debe cumplir lo siguente:
      *
-     * 1) No contener ningun registros en facturas. 2)
+     * 1) No contener ningun registros en facturas.
      *
-     * Al editar una factura se debe: 1) Deshabilitar el boton de borrar
+     * 2) Al editar una factura se debe: 1) Deshabilitar el boton de borrar
      * registro.
-     *
      *
      * @param evt
      */
@@ -2539,16 +2674,16 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     }//GEN-LAST:event_jtpGeneralesDireccionContactosKeyPressed
 
     private void jsCantidadFilasStateChanged(ChangeEvent evt) {//GEN-FIRST:event_jsCantidadFilasStateChanged
-        llenarTablaClientes();
+        llenarTablaPersonas();
     }//GEN-LAST:event_jsCantidadFilasStateChanged
 
     private void jsPaginaNroStateChanged(ChangeEvent evt) {//GEN-FIRST:event_jsPaginaNroStateChanged
-        llenarTablaClientes();
+        llenarTablaPersonas();
     }//GEN-LAST:event_jsPaginaNroStateChanged
 
-    private void btnActualizarRegistrosClienteActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnActualizarRegistrosClienteActionPerformed
-        llenarTablaClientes();
-    }//GEN-LAST:event_btnActualizarRegistrosClienteActionPerformed
+    private void btnActualizarRegistrosPersonaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_btnActualizarRegistrosPersonaActionPerformed
+        llenarTablaPersonas();
+    }//GEN-LAST:event_btnActualizarRegistrosPersonaActionPerformed
 
     private void formInternalFrameActivated(InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
 
@@ -2690,12 +2825,12 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         }
     }//GEN-LAST:event_jcbDistritoMunicipalKeyPressed
 
-    private void tblClientesKeyPressed(KeyEvent evt) {//GEN-FIRST:event_tblClientesKeyPressed
+    private void tblPersonasKeyPressed(KeyEvent evt) {//GEN-FIRST:event_tblPersonasKeyPressed
         if (evt.isControlDown()) {
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        int cantidad = tblClientes.getRowCount();
+                        int cantidad = tblPersonas.getRowCount();
                         if (cantidad != 0) {
                             int randon = (int) (Math.random() * cantidad);
 
@@ -2703,21 +2838,20 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                                 randon = 1;
                             }
 
-                            tblClientes.setRowSelectionInterval(randon, randon);
+                            tblPersonas.setRowSelectionInterval(randon, randon);
                         }
                     }
                 }
             }
         }
-    }//GEN-LAST:event_tblClientesKeyPressed
+    }//GEN-LAST:event_tblPersonasKeyPressed
 
     /**
      * Este metodo valida que: <br>
-     * 1) Que en la tabla de los clientes del sistema deben de existir mas
-     * de<br>
-     * de un registros.<br>
+     * 1) Que en la tabla de las personas del sistema deben de existir mas de un
+     * registros.<br>
      * 2) Que en la tabla haya un elemento seleccionado. <br>
-     * 3) Que cliente seleccionado no sea el GENERICO.<br>
+     * 3) Que la persona seleccionado no sea el GENERICO.<br>
      *
      * <hr>
      *
@@ -2726,12 +2860,15 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
      * indicando que no existe restriciones.
      */
     private boolean validarRegistro(String accion) {
-        //Si la tabla de registro de los cliente está vacia devolvemos true
+        //Si la tabla de registro de las personas está vacia devolvemos true
         //para que el proceso no continue.
-        if (tblClientes.getRowCount() <= 0) {
+        if (tblPersonas.getRowCount() <= 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Debe contar con clientes en registros, Ingrese nuevos clientes.",
+                    """
+                    Debe contar con una persona registrada.
+                    Registre una persona.
+                    """,
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -2740,25 +2877,25 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         //Si no existe un registro seleccionado devolvemos true para que el 
         //proceso no continue
-        if (tblClientes.getSelectedRow() < 0) {
+        if (tblPersonas.getSelectedRow() < 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Debe de seleccionar un cliente",
+                    "Debe de seleccionar una persona.",
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
             return true;
         }
 
-        //Verificamos que el registro no sea de un cliente generico, de serlo lo 
+        //Verificamos que el registro no sea de una persona generica, de serlo lo 
         // devolvemos true para que el proceso no continue. 
-        if (((Generales) tblClientes.getValueAt(
-                tblClientes.getSelectedRow(),
+        if (((Generales) tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(),
                 0
         )).getIdPersona() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Cliente GENERICO no puede ser %s".formatted(accion),
+                    "Persona GENERICO no puede ser %s".formatted(accion),
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -2784,8 +2921,8 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
      * 1) Los botones de nuevo, editar, borrar y buscar deben habilitarse. <br>
      * 2) Los botones de guardar y cancelar pasan inhabilitarse.<br><br>
      *
-     * Al presionar nuevo o editar debe cambiarse en la vista Clientes a
-     * Mantenimiento.<br>
+     * Al presionar nuevo o editar debe cambiarse en la vista Mantenimiento.<br>
+     *
      * Este metodo se llama desde el boton nuevo y modificar con el valor del
      * parametros true y desde cancelar con el valor del parametro false.
      */
@@ -2793,16 +2930,16 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         /*
             Aqui pasan los JScrollPane se alternan con el valor de activo,
         true selecciona el mantenimiento y false selecciona los registros de 
-        clientes.
+        personas.
          */
         if (activo) {
             jtpPrincipal.addTab("Mantenimiento", jspMantenimiento);
             jtpPrincipal.setSelectedComponent(jspMantenimiento);
-            jtpPrincipal.setEnabledAt(jtpPrincipal.indexOfComponent(jspClientes), false);
+            jtpPrincipal.setEnabledAt(jtpPrincipal.indexOfComponent(jspPersonas), false);
         } else {
-            jtpPrincipal.setSelectedComponent(jspClientes);
+            jtpPrincipal.setSelectedComponent(jspPersonas);
             jtpPrincipal.remove(jspMantenimiento);
-            jtpPrincipal.setEnabledAt(jtpPrincipal.indexOfComponent(jspClientes), true);
+            jtpPrincipal.setEnabledAt(jtpPrincipal.indexOfComponent(jspPersonas), true);
         }
 
         /*
@@ -2818,16 +2955,16 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
             En caso contrario si el valor de activo es falso, los botones nuevo,
         modificar, borrar y buscar se habilitan.
          */
-        btnNuevoCliente.setEnabled(!activo);
-        btnEditarCliente.setEnabled(!activo);
-        btnBorrarCliente.setEnabled(!activo);
-        btnBuscar.setEnabled(!activo);
+        btnNuevaPersona.setEnabled(!activo);
+        btnModificarPersona.setEnabled(!activo);
+        btnBorrarPersona.setEnabled(!activo);
+        btnBuscarPersona.setEnabled(!activo);
 
         jlFechaCreacion.setVisible(!v_nuevo);
 
         //Botones de guardar y cancelar
-        btnGuardar.setEnabled(activo);
-        btnCancelar.setEnabled(activo);
+        btnGuardarRegistro.setEnabled(activo);
+        btnCancelarRegistro.setEnabled(activo);
 
         //txt Vaciar
         txtPNombre.setText("");
@@ -2937,38 +3074,32 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     }
 
     /**
-     * Es el metodo encargado de llenar el formulario del cliente cuando este se
-     * va a modificar en la base de datos.<br>
+     * Es el metodo encargado de llenar el formulario de la persona cuando este
+     * se va a modificar en la base de datos.<br>
      *
-     * El mismo idCliente es utilizado para obtener la lista de direcciones,
-     * lista de correo y lista de telefonos del cliente.<br\>
-     *
-     * TODO 24/11/2024 Comprobar que este metodo traer consigo una persona.
+     * El mismo idPersona es utilizado para obtener la lista de direcciones,
+     * lista de correo y lista de telefonos del persona.<br\>
      */
     private void mostrarRegistro() {
-        List<Cliente> lista = M_Cliente.select(
-                Cliente
+        List<Persona> lista = M_Persona.select(
+                Persona
                         .builder()
-                        .id(idCliente)
+                        .idPersona(idPersona)
                         .build()
         );
 
         if (lista.isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Cliente no encontrado.!!!",
+                    "Persona no encontrado.!!!",
                     "",
                     JOptionPane.INFORMATION_MESSAGE
             );
+            btnCancelarRegistro.doClick();
             return;
         }
 
-        Persona persona = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(idCliente)
-                        .build()
-        ).getFirst();
+        Persona persona = lista.getLast();
 
         txtPNombre.setText(persona.getPnombre());
         txtSNombre.setText(persona.getSnombre());
@@ -2990,7 +3121,7 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
 
         //------BUSCAR TIPO DE PERSONA------------------------------------------
         for (int i = 0; i < jcbPersona.getItemCount(); i++) {
-            if (persona.equals(
+            if (persona.getPersona().equals(
                     jcbPersona.getItemAt(i).getAbreviatura()
             )) {
                 jcbPersona.setSelectedIndex(i);
@@ -3009,46 +3140,79 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         }
 
         //-----GENERALES--------------------------------------------------------
-        Generales general = M_Generales.select(
+        var listaGenerales = M_Generales.select(
                 Generales
                         .builder()
-                        .idPersona(idCliente)
+                        .idPersona(idPersona)
                         .build()
-        ).getFirst();
+        );
 
-        txtCedula.setValue(general);
+        if (!listaGenerales.isEmpty()) {
+            txtCedula.setValue(listaGenerales.getLast().getCedula());
 
-        for (int i = 0; i < jcbEstadoCivil.getItemCount(); i++) {
-            if (general.getEstado_civil().equals(
-                    jcbEstadoCivil.getItemAt(i).getAbreviatura()
-            )) {
-                jcbEstadoCivil.setSelectedIndex(i);
-                break;
+            for (int i = 0; i < jcbEstadoCivil.getItemCount(); i++) {
+                if (listaGenerales.getLast().getEstado_civil().equals(
+                        jcbEstadoCivil.getItemAt(i).getAbreviatura()
+                )) {
+                    jcbEstadoCivil.setSelectedIndex(i);
+                    break;
+                }
             }
+        } else {
+            txtCedula.setValue(
+                    Generales
+                            .builder()
+                            .id(-1)
+                            .idPersona(-1)
+                            .idTipoSangre(0)
+                            .cedula("000-0000000-0")
+                            .estado_civil('s')
+                            .build()
+            );
         }
-        //----------------------------------------------------------------------
 
+        //----------------------------------------------------------------------
         limpiarListas();
 
-        llenarTablaDirreciones(idCliente);
-        llenarTablaTelefonos(idCliente);
-        llenarTablaCorreos(idCliente);
+        llenarTablaDirreciones(idPersona);
+        llenarTablaTelefonos(idPersona);
+        llenarTablaCorreos(idPersona);
     }
 
     /**
-     * Metodo utilizado para llenar la tabla de cliente del sistema. Nota: Este
-     * evento Debe ser publico porque este es llamado desde los eventos de
-     * Firebird.
+     * Metodo utilizado para llenar la tabla de personas del sistema.
      *
+     * Nota: Este evento Debe ser publico porque este es llamado desde los
+     * eventos de Firebird.
      */
-    public synchronized static void llenarTablaClientes() {
+    public synchronized static void llenarTablaPersonas() {
 
-        registro = new Object[TITULOS_CLIENTE.length];
+        final String[] TITULOS_PERSONA = {"Cedulas", "Persona", "Nombres y Apellidos", "Sexo", "Fecha nacimiento",
+            "Fecha Ingreso", "Estado"
+        };
 
-        DefaultTableModel dtmClientes = new DefaultTableModel(null, TITULOS_CLIENTE);
+        registro = new Object[TITULOS_PERSONA.length];
 
-        M_Cliente.select(
-                Cliente
+        DefaultTableModel dtmPersonas = new DefaultTableModel(null, TITULOS_PERSONA) {
+
+            Class[] types = new Class[]{
+                java.lang.Object.class,
+                java.lang.Object.class,
+                java.lang.Object.class,
+                java.lang.Object.class,
+                java.lang.Object.class,
+                java.lang.Object.class,
+                java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+        };
+
+        M_Persona.select(
+                Persona
                         .builder()
                         .pagina(
                                 Paginas
@@ -3059,57 +3223,61 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
                         )
                         .build()
         ).stream().forEach(
-                cliente -> {
-                    Persona persona = M_Persona.select(
-                            Persona
-                                    .builder()
-                                    .idPersona(cliente.getId())
-                                    .build()
-                    ).getFirst();
+                persona -> {
 
-                    Generales general = M_Generales.select(
+                    var listaCedula = M_Generales.select(
                             Generales
                                     .builder()
-                                    .idPersona(cliente.getId())
+                                    .idPersona(persona.getIdPersona())
                                     .build()
-                    ).getFirst();
+                    );
+                    Generales general;
+                    if (listaCedula.isEmpty()) {
+                        general = Generales
+                                .builder()
+                                .id(-1)
+                                .idPersona(-1)
+                                .idTipoSangre(0)
+                                .cedula("000-0000000-0")
+                                .estado_civil('s')
+                                .build();
+                    } else {
+                        general = listaCedula.getLast();
+                    }
 
                     registro[0] = general;
                     registro[1] = String.valueOf(
                             persona.getPersona()
                     ).equalsIgnoreCase("j") ? "JURÍDICA" : "FÍSICA";
-                    registro[2] = persona.getPnombre();
-                    registro[3] = persona.getSnombre();
-                    registro[4] = persona.getApellidos();
-                    registro[5] = String.valueOf(
+                    registro[2] = persona;
+                    registro[3] = String.valueOf(
                             persona.getSexo()
                     ).equalsIgnoreCase("M") ? "MASCULINO" : "FEMENINO";
-                    registro[6] = Utilidades.formatDate(
+                    registro[4] = Utilidades.formatDate(
                             persona.getFecha_nacimiento(),
                             "dd/MM/yyyy"
                     );
-                    registro[7] = Utilidades.formatDate(
+                    registro[5] = Utilidades.formatDate(
                             persona.getFecha_ingreso(),
                             "dd/MM/yyyy"
                     );
-                    registro[8] = persona.getEstado();
+                    registro[6] = persona.getEstado();
 
-                    dtmClientes.addRow(registro);
+                    dtmPersonas.addRow(registro);
                 }
         );
 
-        tblClientes.removeAll();
-        tblClientes.setModel(dtmClientes);
-        tblClientes.setBackgoundHover(new java.awt.Color(102, 102, 255));
+        tblPersonas.removeAll();
+        tblPersonas.setModel(dtmPersonas);
     }
 
-    public static synchronized JTable llenarTablaCorreos(Integer idCliente) {
-        if (Objects.isNull(idCliente)) {
-            idCliente = frmPersonas.idCliente;
+    public static synchronized JTable llenarTablaCorreos(Integer idPersona) {
+        if (Objects.isNull(idPersona)) {
+            idPersona = frmPersonas.idPersona;
         }
         registro = new Object[TITULOS_CORREO.length];
         limpiarTablaCorreo();
-        M_ContactoEmail.getCorreoByID(idCliente).stream().forEach(
+        M_ContactoEmail.selectByID(idPersona).stream().forEach(
                 p_correo -> {
                     registro[0] = p_correo;
                     registro[1] = p_correo.getFecha();
@@ -3125,35 +3293,36 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
         return tblCorreos;
     }
 
-    public static synchronized JTable llenarTablaTelefonos(Integer idCliente) {
-        if (Objects.isNull(idCliente)) {
-            idCliente = frmPersonas.idCliente;
+    public static synchronized JTable llenarTablaTelefonos(Integer idPersona) {
+        if (Objects.isNull(idPersona)) {
+            idPersona = frmPersonas.idPersona;
         }
         registro = new Object[TITULOS_TELEFONO.length];
         limpiarTablaTelefono();
-        M_ContactoTel.getTelefonoByID(idCliente).stream().forEach(p_telefono -> {
-            registro[0] = p_telefono;
-            registro[1] = p_telefono.getTipo();
-            registro[2] = p_telefono.getFecha();
-            registro[3] = p_telefono.getEstado();
-            registro[4] = p_telefono.getPorDefecto();
+        M_ContactoTel.selectByID(idPersona).stream().forEach(
+                p_telefono -> {
+                    registro[0] = p_telefono;
+                    registro[1] = p_telefono.getTipo();
+                    registro[2] = p_telefono.getFecha();
+                    registro[3] = p_telefono.getEstado();
+                    registro[4] = p_telefono.getPorDefecto();
 
-            v_contactosTelsList.add(p_telefono);
+                    v_contactosTelsList.add(p_telefono);
 
-            v_dtmTelefono.addRow(registro);
-        }
+                    v_dtmTelefono.addRow(registro);
+                }
         );
         tblTelefonos.setModel(v_dtmTelefono);
         return tblTelefonos;
     }
 
-    public static synchronized JTable llenarTablaDirreciones(Integer idCliente) {
-        if (Objects.isNull(idCliente)) {
-            idCliente = frmPersonas.idCliente;
+    public static synchronized JTable llenarTablaDirreciones(Integer idPersona) {
+        if (Objects.isNull(idPersona)) {
+            idPersona = frmPersonas.idPersona;
         }
         registro = new Object[TITULOS_DIRECCION.length];
         limpiarTablaDireccion();
-        M_ContactoDireccion.selectByID(idCliente).stream().forEach(
+        M_ContactoDireccion.selectByID(idPersona).stream().forEach(
                 dir -> {
                     registro[0] = (M_Provincia.select(
                             Provincia
@@ -3193,69 +3362,92 @@ public class frmPersonas extends javax.swing.JInternalFrame implements ICliente 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private RSMaterialComponent.RSButtonMaterialIconOne btnActualizarRegistrosCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnActualizarRegistrosPersona;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarCorreo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarDirecciones;
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarTelefonoMovil;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarCorreo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarDirrecion;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrarPersona;
     private RSMaterialComponent.RSButtonMaterialIconOne btnBorrarTelefono;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnBuscar;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnBuscarPersona;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnCancelarRegistro;
     private RSMaterialComponent.RSButtonMaterialIconOne btnCedulaValidad;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnEditarCliente;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarCorreo;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarDireccion;
     private RSMaterialComponent.RSButtonMaterialIconOne btnEditarTelefono;
     private javax.swing.ButtonGroup btnGMovilTelefono;
-    private RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
-    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevoCliente;
+    private RSMaterialComponent.RSButtonMaterialIconOne btnGuardarRegistro;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnModificarPersona;
+    private static RSMaterialComponent.RSButtonMaterialIconOne btnNuevaPersona;
     private javax.swing.JCheckBox cbEstado;
     private com.toedter.calendar.JDateChooser dchFechaNacimiento;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    javax.swing.JPanel jPanel12;
-    javax.swing.JPanel jPanel5;
-    javax.swing.JPanel jPanel6;
-    javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    javax.swing.JScrollPane jScrollPane2;
-    javax.swing.JScrollPane jScrollPane3;
-    javax.swing.JScrollPane jScrollPane4;
-    javax.swing.JScrollPane jScrollPane5;
-    javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private static javax.swing.JCheckBox jcbCliente;
     private javax.swing.JComboBox<DistritoMunicipal> jcbDistritoMunicipal;
+    private javax.swing.JCheckBox jcbEmpleado;
     private static javax.swing.JComboBox<EstadoCivil> jcbEstadoCivil;
+    private javax.swing.JCheckBox jcbEstudiante;
+    private javax.swing.JCheckBox jcbFiltroCliente;
+    private javax.swing.JCheckBox jcbFiltroEmpleado;
+    private javax.swing.JCheckBox jcbFiltroEstudiante;
+    private javax.swing.JCheckBox jcbFiltroPaciente;
+    private javax.swing.JCheckBox jcbFiltroPadre;
+    private javax.swing.JCheckBox jcbFiltroProveedor;
+    private javax.swing.JCheckBox jcbFiltroTodos;
     private static javax.swing.JComboBox<Municipio> jcbMunicipios;
+    private javax.swing.JCheckBox jcbPaciente;
+    private javax.swing.JCheckBox jcbPadre;
     private static javax.swing.JComboBox<TipoPersona> jcbPersona;
+    private javax.swing.JCheckBox jcbProveedor;
     private static javax.swing.JComboBox<Provincia> jcbProvincias;
     private static javax.swing.JComboBox<Sexo> jcbSexo;
     private javax.swing.JLabel jlFechaCreacion;
     private javax.swing.JPanel jpBotones;
-    javax.swing.JPanel jpBotonesPrincipal;
-    javax.swing.JPanel jpClientes;
+    private javax.swing.JPanel jpBotonesPrincipal;
     private javax.swing.JPanel jpContactos;
-    javax.swing.JPanel jpCorreos;
-    javax.swing.JPanel jpDireccion;
+    private javax.swing.JPanel jpCorreos;
+    private javax.swing.JPanel jpDireccion;
     private javax.swing.JPanel jpGeneral;
-    javax.swing.JPanel jpGenerales;
+    private javax.swing.JPanel jpGenerales;
     private javax.swing.JPanel jpMantenimiento;
+    private javax.swing.JPanel jpPersonas;
     private javax.swing.JPanel jpTelefonos;
     private javax.swing.JRadioButton jrbMovil;
     private javax.swing.JRadioButton jrbResidencial;
     private static javax.swing.JSpinner jsCantidadFilas;
     private static javax.swing.JSpinner jsPaginaNro;
-    private javax.swing.JScrollPane jspClientes;
     private javax.swing.JScrollPane jspGeneral;
     private javax.swing.JScrollPane jspMantenimiento;
+    private javax.swing.JScrollPane jspPersonas;
     private javax.swing.JTabbedPane jtpContactos;
     private javax.swing.JTabbedPane jtpGeneralesDireccionContactos;
     private javax.swing.JTabbedPane jtpPrincipal;
-    private static rojerusan.RSTableMetro1 tblClientes;
     private static rojerusan.RSTableMetro1 tblCorreos;
     private static rojerusan.RSTableMetro1 tblDireccion;
+    private static rojerusan.RSTableMetro1 tblPersonas;
     private static rojerusan.RSTableMetro1 tblTelefonos;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JFormattedTextField txtCedula;

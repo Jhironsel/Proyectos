@@ -291,7 +291,8 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
 
         //Obtenemos el cajero seleccionado.
         String userName = ((Usuario) tblCajerosDisponible.getValueAt(
-                userSelected, 0)).getPersona().getUser_name();
+                userSelected, 0
+        )).getUserName();
 
         //Verificamos si el usuario tiene turno abierto
         if (!M_Turno.select(
@@ -437,7 +438,7 @@ public class frmAdministradorTurnos extends javax.swing.JInternalFrame {
 
         String userName = (
                 (Usuario) tblCajerosDisponible.getValueAt(cajeroSelectRow, 0)
-                ).getPersona().getUser_name();
+                ).getUserName();
 
         crearReporte(userName);
     }//GEN-LAST:event_tblCajerosDisponibleMouseClicked

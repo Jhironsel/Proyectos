@@ -11,4 +11,12 @@
     <properties>
         <exec.mainClass>sur.softsurena.proxy.Proxy</exec.mainClass>
     </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>sur.softsurena</groupId>
+            <artifactId>Entidades</artifactId>
+            <version>2</version>
+        </dependency>
+    </dependencies>
 </project>

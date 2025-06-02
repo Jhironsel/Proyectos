@@ -81,7 +81,7 @@
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>btnNuevoCliente</componentName>
+        <componentName>btnNuevaPersona</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -664,7 +664,7 @@
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>btnGuardar</componentName>
+        <componentName>btnGuardarRegistro</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>

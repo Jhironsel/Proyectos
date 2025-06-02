@@ -3,13 +3,9 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.FotoCategoria;
 import static sur.softsurena.metodos.M_Categoria.SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.generarCodigoBarra;
 import sur.softsurena.utilidades.Resultado;
@@ -24,46 +20,9 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_CategoriaNGTest {
 
-    public static int idCategoria;
+    public static Integer idCategoria;
 
-    public M_CategoriaNGTest() {
-        System.out.println("sur.softsurena.metodos.M_CategoriaNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "None"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            description = "Pruebas de consultas a las categorias con o sin fotos.",
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
         assertEquals(
                 M_Categoria.sqlSelect(
@@ -140,8 +99,6 @@ public class M_CategoriaNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Pruebas de consultas a las categorias con o sin fotos.",
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
@@ -197,8 +154,6 @@ public class M_CategoriaNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Permite registrar una categoria al sistema.",
             dependsOnMethods = "testSelect"
     )
     public static void testInsert() {
@@ -230,8 +185,6 @@ public class M_CategoriaNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Permite modificar una categoria del sistema.",
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
@@ -241,7 +194,7 @@ public class M_CategoriaNGTest {
                                 .builder()
                                 .id_categoria(idCategoria)
                                 .descripcion(generarCodigoBarra())
-                                .estado(Boolean.FALSE)
+                                .estado(Boolean.TRUE)
                                 .build()
                 ),
                 Resultado
@@ -254,11 +207,17 @@ public class M_CategoriaNGTest {
     }
 
     @Test(
-            enabled = true,
-            description = "Permite eliminar una gategoria del sistema.",
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
+        
+        M_Foto_Categoria.deleteById_categoria(
+                FotoCategoria
+                        .builder()
+                        .idCategoria(idCategoria)
+                        .build()
+        );
+        
         assertEquals(
                 M_Categoria.delete(idCategoria),
                 Resultado

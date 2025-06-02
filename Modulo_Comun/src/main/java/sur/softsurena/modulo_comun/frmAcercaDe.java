@@ -6,6 +6,10 @@ import javax.swing.JLabel;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.Utilidades;
 
+/**
+ * Clase que carga la informacion del acerda del sistema.
+ * @author jhironsel
+ */
 public class frmAcercaDe extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;

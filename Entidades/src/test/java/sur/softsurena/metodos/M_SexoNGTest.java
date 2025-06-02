@@ -2,10 +2,6 @@ package sur.softsurena.metodos;
 
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -20,31 +16,7 @@ import org.testng.annotations.Test;
 )
 public class M_SexoNGTest {
 
-    public M_SexoNGTest() {
-        System.out.println("sur.softsurena.metodos.M_SexoNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = "Test que verifica la lista de sexo de los componente JComboBox."
-    )
+    @Test
     public void testGetSexoList() {
         assertFalse(
                 M_Sexo.getSexoList().isEmpty(), 

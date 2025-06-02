@@ -19,17 +19,14 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 /**
  * Esta clase ayuda al sistema a gestionar las categorias del sistemas.
  *
+ * - Permite consultar las contegorias del sistema con el metodo select
+ * (Categoria c)
+ * 
  * - Permite agregar nuevas categorias con el metodo insert(Categorias c).
  *
  * - Permite modificar las categorias existente con el metodo update(Categorias c).
  *
  * - Permite eliminar las categorias con el metodo delete(int idCategoria).
- *
- * - Permite obtener un listado de categorias del sistema, usando el metodo
- * getCategorias(), getCategoriaActivas().
- *
- * Permite verificar la existencia de una categoria en el sistema. Dicho metodo
- * es existeCategoria(String descripcion).
  *
  * @author jhironsel
  */

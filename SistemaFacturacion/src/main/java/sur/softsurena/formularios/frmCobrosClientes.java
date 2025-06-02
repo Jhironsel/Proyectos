@@ -533,7 +533,7 @@ public class frmCobrosClientes extends javax.swing.JDialog {
         Map<String, Object> parametros = new HashMap<>();
         parametros.put(
                 "nombreCajero",
-                getUsuarioActual().getPersona().getUser_name()
+                getUsuarioActual().getUserName()
         );
         parametros.put(
                 "idFactura",

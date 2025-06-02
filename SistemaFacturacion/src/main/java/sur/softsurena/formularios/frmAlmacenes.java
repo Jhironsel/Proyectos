@@ -27,7 +27,7 @@ import static sur.softsurena.utilidades.Utilidades.repararColumnaTable;
 public class frmAlmacenes extends javax.swing.JInternalFrame {
 
     private static final long serialVersionUID = 1L;
-    private static boolean v_nuevo;
+    private static boolean nuevo;
 
     public static frmAlmacenes getInstance() {
         if (!M_Privilegio.privilegio(
@@ -57,9 +57,9 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         return NewSingletonHolder.INSTANCE;
     }
 
-    private int idAlmacen() {
-        if(tblAlmacenes.getRowCount() == 0) return -1;
-        if(tblAlmacenes.getSelectedRow() == -1) return -1;
+    private Integer idAlmacen() {
+        if(tblAlmacenes.getRowCount() == 0) return null;
+        if(tblAlmacenes.getSelectedRow() == -1) return null;
         
         return ((Almacen) tblAlmacenes.getValueAt(
                 tblAlmacenes.getSelectedRow(),
@@ -386,7 +386,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        v_nuevo = true;
+        nuevo = true;
         cambioBoton(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -397,7 +397,7 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         }
 
         //Se hace false para indicar que es una modificacion de registro.
-        v_nuevo = false;
+        nuevo = false;
 
         //Se agrega el panel de manteniento y se muestra.
         cambioBoton(true);
@@ -406,7 +406,6 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
                 Almacen
                         .builder()
                         .id(idAlmacen())
-                        .nombre("")
                         .build()
         ).stream().forEach(
                 almacen -> {
@@ -427,11 +426,13 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
 
         //Mostramos un mensaje de advertencia si el usuario desea continuar con
         //la eliminación del registro.
-        int rta = JOptionPane.showConfirmDialog(this,
+        int rta = JOptionPane.showConfirmDialog(
+                this,
                 "¿Esta seguro de eliminar el registro del sistema?",
                 "",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+                JOptionPane.QUESTION_MESSAGE
+        );
 
         //Si el usuario responde a que no a las opciones entonces devolvemos el
         //proceso.
@@ -522,18 +523,13 @@ public class frmAlmacenes extends javax.swing.JInternalFrame {
         //Creamos objeto del almacen.
         var almacen = Almacen
                 .builder()
-                .id(idAlmacen())
+                .id(nuevo ? null:idAlmacen())
                 .nombre(txtNombreAlmacen.getText())
                 .ubicacion(txtDetalleUbicacion.getText())
                 .estado(rsEstado.isSelected())
                 .build();
 
-        Resultado resultado;
-        if (v_nuevo) {
-            resultado = M_Almacen.insert(almacen);
-        } else {
-            resultado = M_Almacen.update(almacen);
-        }
+        Resultado resultado = M_Almacen.updateOrInsert(almacen);
 
         JOptionPane.showInternalMessageDialog(
                 this,

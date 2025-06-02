@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -84,9 +85,9 @@ public class M_ContactoDireccion {
      *
      * @return Devuelve true si la operacion fue exitosa, false caso contrario.
      */
-    public static synchronized Resultado insert(ContactoDireccion direccion) {
+    public static synchronized Resultado updateOrInsert(ContactoDireccion direccion) {
         final String sql
-                = "SELECT O_ID FROM SP_I_CONTACTO_DIRECCION(?,?,?,?,?,?,?);";
+                = "SELECT O_ID FROM SP_UI_CONTACTO_DIRECCION(?,?,?,?,?,?,?,?);";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -95,17 +96,22 @@ public class M_ContactoDireccion {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, direccion.getIdPersona());
-            ps.setInt(2, direccion.getIdProvincia());
-            ps.setInt(3, direccion.getIdMunicipio());
-            ps.setInt(4, direccion.getIdDistritoMunicipal());
+            if(Objects.isNull(direccion.getId())){
+                ps.setNull(1, Types.INTEGER);
+            }else{
+                ps.setInt(1, direccion.getId());
+            }
+            ps.setInt(2, direccion.getIdPersona());
+            ps.setInt(3, direccion.getIdProvincia());
+            ps.setInt(4, direccion.getIdMunicipio());
+            ps.setInt(5, direccion.getIdDistritoMunicipal());
             ps.setInt(
-                    5,
+                    6,
                     Objects.isNull(direccion.getIdCodigoPostal())
                     ? 0 : (int) direccion.getIdCodigoPostal()
             );
-            ps.setString(6, direccion.getDireccion());
-            ps.setBoolean(7, direccion.getPorDefecto());
+            ps.setString(7, direccion.getDireccion());
+            ps.setBoolean(8, direccion.getPorDefecto());
 
             ResultSet rs = ps.executeQuery();
 
@@ -133,62 +139,9 @@ public class M_ContactoDireccion {
                 .build();
     }
     public static final String ERROR_AL_INSERTAR_DIRECCION
-            = "Error al insertar direccion.";
+            = "Error al insertar/actualizar direccion.";
     public static final String DIRECCION_AGREGADA_CORRECTAMENTE
-            = "Direccion agregada o modificada correctamente.";
-
-    //--------------------------------------------------------------------------
-    public static synchronized Resultado update(
-            ContactoDireccion direccion
-    ) {
-        final String sql = """
-                           EXECUTE PROCEDURE SP_U_CONTACTO_DIRECCION
-                                (?,?,?,?,?,?,?,?,?);
-                           """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, direccion.getId());
-            ps.setInt(2, direccion.getIdPersona());
-            ps.setInt(3, direccion.getIdProvincia());
-            ps.setInt(4, direccion.getIdMunicipio());
-            ps.setInt(5, direccion.getIdDistritoMunicipal());
-            ps.setInt(6, direccion.getIdCodigoPostal());
-            ps.setString(7, direccion.getDireccion());
-            ps.setBoolean(8, direccion.getEstado());
-            ps.setBoolean(9, direccion.getPorDefecto());
-
-            ps.execute();
-
-            return Resultado
-                    .builder()
-                    .mensaje(DIRECCION_DE_CONTACTO_ACTUALIZADA_CORRECT)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_ACTUALIZAR_LA_DIRECCION_DEL_CONT,
-                    ex
-            );
-        }
-        return Resultado
-                .builder()
-                .mensaje(ERROR_AL_ACTUALIZAR_LA_DIRECCION_DEL_CONT)
-                .icono(JOptionPane.ERROR_MESSAGE)
-                .estado(Boolean.FALSE)
-                .build();
-
-    }
-    public static final String DIRECCION_DE_CONTACTO_ACTUALIZADA_CORRECT
-            = "Direccion de contacto actualizada correctamente.";
-    public static final String ERROR_AL_ACTUALIZAR_LA_DIRECCION_DEL_CONT
-            = "Error al actualizar la direccion del contacto.";
+            = "Direccion insertada/actualizada correctamente.";
 
     //--------------------------------------------------------------------------
     public synchronized static Resultado delete(int id_direccion) {

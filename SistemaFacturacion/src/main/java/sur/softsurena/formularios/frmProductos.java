@@ -1057,7 +1057,12 @@ public class frmProductos extends javax.swing.JInternalFrame implements IProduct
             int id = -1;
 
             if (v_nuevo) {
-                if (M_Producto.existeProducto(txtCodigoBarra.getText())) {
+                if (!M_Producto.select(
+                        Producto
+                                .builder()
+                                .codigo(txtCodigoBarra.getText())
+                                .build()
+                ).isEmpty()) {
                     JOptionPane.showInternalMessageDialog(
                             this,
                             "Codigo de barra existente en el sistema",

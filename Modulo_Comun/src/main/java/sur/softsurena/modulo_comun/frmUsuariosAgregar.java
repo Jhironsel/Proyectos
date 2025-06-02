@@ -712,10 +712,17 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         }
 
 //-----------------------------------------------------------------------------8
-        if (!Objects.isNull(
-                M_Usuario.getUsuario(
-                        txtUserName.getText().strip())
-        ) && nuevo) {
+        if (!M_Usuario.select(
+                Usuario
+                        .builder()
+                        .persona(
+                                Persona
+                                        .builder()
+                                        .build()
+                        )
+                        .userName(txtUserName.getText().strip())
+                        .build()
+        ).isEmpty() && nuevo) {
             int respuesta = JOptionPane.showConfirmDialog(
                     this,
                     "Usuario ya existe. \n\nDesea recuperar el usuario?",
@@ -726,7 +733,17 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
             if (respuesta == JOptionPane.YES_OPTION) {
                 cargarUsuario(
-                        M_Usuario.getUsuario(txtUserName.getText().strip())
+                        M_Usuario.select(
+                                Usuario
+                                        .builder()
+                                        .userName(txtUserName.getText().strip())
+                                        .persona(
+                                                Persona
+                                                        .builder()
+                                                        .build()
+                                        )
+                                        .build()
+                        ).getFirst()
                 );
                 nuevo = false;
                 txtClave1.setText("");
@@ -747,13 +764,13 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
                             <h1>Desea continuar? </h1>
                          </html>
                          """.formatted(
-                                 txtUserName.getText(),
-                                 txtPNombre.getText(),
-                                 txtSNombre.getText().isBlank() ? "" : txtSNombre.getText().concat(" "),
-                                 txtApellidos.getText(),
-                                 cbAdministrador.isSelected() ? "Activado" : "NO Activado",
-                                 cbEstado.isSelected() ? "Activo" : "No Activo"
-                         );
+                txtUserName.getText(),
+                txtPNombre.getText(),
+                txtSNombre.getText().isBlank() ? "" : txtSNombre.getText().concat(" "),
+                txtApellidos.getText(),
+                cbAdministrador.isSelected() ? "Activado" : "NO Activado",
+                cbEstado.isSelected() ? "Activo" : "No Activo"
+        );
 
         int resp = JOptionPane.showConfirmDialog(
                 this,
@@ -788,20 +805,20 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
             if (tblEtiquetas.getValueAt(i, 0).toString().contains("DROP")) {
                 etiquetas = etiquetas + tblEtiquetas.getValueAt(i, 0).toString() + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
             } else {
-                etiquetas = etiquetas + 
-                        tblEtiquetas.getValueAt(i, 0).toString() + " = " + "'" + 
-                        tblEtiquetas.getValueAt(i, 1).toString() + "'" + 
-                        ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
+                etiquetas = etiquetas
+                        + tblEtiquetas.getValueAt(i, 0).toString() + " = " + "'"
+                        + tblEtiquetas.getValueAt(i, 1).toString() + "'"
+                        + ((i == tblEtiquetas.getRowCount() - 1) ? "" : ", ");
             }
         }
 
 //----------------------------------------------------------------------------12
         Usuario usuarioSistema = Usuario
                 .builder()
+                .userName(txtUserName.getText())
                 .persona(
                         Persona
                                 .builder()
-                                .user_name(txtUserName.getText())
                                 .pnombre(txtPNombre.getText())
                                 .snombre(txtSNombre.getText())
                                 .apellidos(txtApellidos.getText())
@@ -1031,7 +1048,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarTagActionPerformed
 
     private void cargarUsuario(Usuario usuario) {
-        txtUserName.setText(usuario.getPersona().getUser_name());
+        txtUserName.setText(usuario.getUserName());
         txtUserName.setEditable(false);
 
         txtPNombre.setText(usuario.getPersona().getPnombre());
@@ -1046,7 +1063,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
 
         txtDescripcion.setText(usuario.getDescripcion());
 
-//------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         String titulos2[] = {"Roles", "Con Admin", "Descripción"};
         Object registro2[] = new Object[titulos2.length];
         DefaultTableModel dtmRoles = new DefaultTableModel(null, titulos2);
@@ -1054,9 +1071,8 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         tblRoles.removeAll();
         M_Role.selectDisponibles(
                 usuario
-                        .getPersona()
-                        .getUser_name(),
-                true
+                        .getUserName(),
+                false
         ).stream().forEach(
                 rol -> {
                     registro2[0] = rol;
@@ -1073,7 +1089,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         columnasCheckBox(tblRoles, new int[]{1});
         tblRoles.setBackgoundHover(new java.awt.Color(102, 102, 255));
 
-//------------------------------------------------------------------------------
+        //----------------------------------------------------------------------
         String titulos[] = {"Propiedad", "Valor"};
         Object registro[] = new Object[titulos.length];
         DefaultTableModel dtmEtiquetas = new DefaultTableModel(null, titulos);
@@ -1081,8 +1097,7 @@ public class frmUsuariosAgregar extends javax.swing.JDialog {
         tblEtiquetas.removeAll();
         M_Etiqueta.getEtiquetasUsuario(
                 usuario
-                        .getPersona()
-                        .getUser_name()
+                        .getUserName()
         ).stream().forEach(
                 etiqueta -> {
                     registro[0] = etiqueta.getPropiedad();

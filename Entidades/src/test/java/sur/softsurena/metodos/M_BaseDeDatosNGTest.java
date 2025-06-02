@@ -1,18 +1,10 @@
 package sur.softsurena.metodos;
 
 import java.io.File;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 
 /**
  *
@@ -25,40 +17,6 @@ import sur.softsurena.conexion.Conexion;
 public class M_BaseDeDatosNGTest {
 
     private String GUID;
-
-    public M_BaseDeDatosNGTest() {
-        System.out.println("sur.softsurena.metodos.M_BaseDeDatosNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "None"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-        GUID = M_BaseDeDatos.GET_GUID();
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
 
     @Test(
             enabled = true,

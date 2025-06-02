@@ -3,12 +3,7 @@ package sur.softsurena.metodos;
 import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 
 /**
  *
@@ -20,43 +15,8 @@ import sur.softsurena.conexion.Conexion;
 )
 public class M_Carton_BingoNGTest {
 
-    public M_Carton_BingoNGTest() {
-        System.out.println("sur.softsurena.metodos.M_Carton_BingoNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testCheckBingo() {
         boolean expResult = false;
@@ -65,9 +25,7 @@ public class M_Carton_BingoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testGenerarCarton() {
         List expResult = null;
@@ -76,9 +34,7 @@ public class M_Carton_BingoNGTest {
     }
 
     @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
+            enabled = false
     )
     public void testGenerarCarton_int() {
         int cantidad = 0;

@@ -4,40 +4,17 @@ import java.sql.ResultSet;
 import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Tanda;
 import sur.softsurena.utilidades.Resultado;
 
+//TODO 14.05.2025 Crear test de tandas.
 @Getter
 @Test(
         dependsOnGroups = "init"
 )
 public class M_TandaNGTest {
     
-    public M_TandaNGTest() {
-        System.out.println("sur.softsurena.metodos.M_TandaNGTest.<init>()");
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
     @Test(
             enabled = false,
             description = "",

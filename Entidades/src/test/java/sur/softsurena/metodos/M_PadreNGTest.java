@@ -3,10 +3,6 @@ package sur.softsurena.metodos;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.entidades.Paginas;
@@ -24,85 +20,11 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_PadreNGTest {
 
-    public M_PadreNGTest() {}
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {}
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {}
+    private static Integer idPersona;
 
     @Test(
             enabled = true,
-            priority = 0,
-            description = ""
-    )
-    public void testSelect() {
-
-        assertNotNull(
-                M_Padre.select(
-                        Padre
-                                .builder()
-                                .build()
-                ),
-                "Error al consultar la lista de padres."
-        );
-
-        assertNotNull(
-                M_Padre.select(
-                        Padre
-                                .builder()
-                                .id(-1)
-                                .build()
-                ),
-                "Error al consultar la lista de padres."
-        );
-
-        assertNotNull(
-                M_Padre.select(
-                        Padre
-                                .builder()
-                                .pagina(
-                                        Paginas
-                                                .builder()
-                                                .nPaginaNro(1)
-                                                .nCantidadFilas(20)
-                                                .build()
-                                )
-                                .build()
-                ),
-                "Error al consultar la lista de padres."
-        );
-
-        assertNotNull(
-                M_Padre.select(
-                        Padre
-                                .builder()
-                                .id(-1)
-                                .pagina(
-                                        Paginas
-                                                .builder()
-                                                .nPaginaNro(1)
-                                                .nCantidadFilas(20)
-                                                .build()
-                                )
-                                .build()
-                ),
-                "Error al consultar la lista de padres."
-        );
-    }
-
-    @Test(
-            enabled = true,
-            alwaysRun = true,
-            description = """
-                          """
+            alwaysRun = true
     )
     public void testSqlSelect() {
         assertEquals(
@@ -174,23 +96,78 @@ public class M_PadreNGTest {
         );
 
     }
+    
+    @Test(
+            enabled = true, 
+            dependsOnMethods = "testSqlSelect"
+    )
+    public void testSelect() {
+
+        assertNotNull(
+                M_Padre.select(
+                        Padre
+                                .builder()
+                                .build()
+                ),
+                "Error al consultar la lista de padres."
+        );
+
+        assertNotNull(
+                M_Padre.select(
+                        Padre
+                                .builder()
+                                .id(-1)
+                                .build()
+                ),
+                "Error al consultar la lista de padres."
+        );
+
+        assertNotNull(
+                M_Padre.select(
+                        Padre
+                                .builder()
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                "Error al consultar la lista de padres."
+        );
+
+        assertNotNull(
+                M_Padre.select(
+                        Padre
+                                .builder()
+                                .id(-1)
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                "Error al consultar la lista de padres."
+        );
+    }
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = ""
+            enabled = true
     )
     public void testInsert() {
         M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
+        
         assertEquals(
                 M_Padre.insert(
                         Padre
                                 .builder()
-                                .id(
-                                        M_PersonaNGTest
-                                                .getPersona(Boolean.TRUE)
-                                                .getIdPersona()
-                                )
+                                .id(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -204,17 +181,12 @@ public class M_PadreNGTest {
 
     @Test(
             enabled = true,
-            priority = 2,
-            description = ""
+            dependsOnMethods = "testInsert"
     )
     public void testDelete() {
 
         assertEquals(
-                M_Padre.delete(
-                        M_PersonaNGTest
-                                .getPersona(Boolean.TRUE)
-                                .getIdPersona()
-                ),
+                M_Padre.delete(idPersona),
                 Resultado
                         .builder()
                         .mensaje(BORRADO_DE_REGISTRO_CORRECTAMENTE)
@@ -222,6 +194,8 @@ public class M_PadreNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
+
+        M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
 }

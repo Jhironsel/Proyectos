@@ -3,12 +3,7 @@ package sur.softsurena.metodos;
 import java.io.File;
 import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.FotoPersona;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
@@ -26,44 +21,66 @@ public class M_Foto_PersonaNGTest {
     private Integer idPersona;
     private Integer idPersona2;
 
-    public M_Foto_PersonaNGTest() {
-        System.out.println("sur.softsurena.metodos.M_Foto_PersonaNGTest.<init>()");
-    }
+    @Test
+    public void testSqlSelect() {
+        assertEquals(
+                M_Foto_Persona.sqlSelect(
+                        FotoPersona
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PERSONA
+                """.strip()
+        );
 
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
+        assertEquals(
+                M_Foto_Persona.sqlSelect(
+                        FotoPersona
+                                .builder()
+                                .id(1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PERSONA
+                WHERE ID = 1
+                """.strip()
+        );
 
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
+        assertEquals(
+                M_Foto_Persona.sqlSelect(
+                        FotoPersona
+                                .builder()
+                                .idPersona(1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PERSONA
+                WHERE ID_PERSONA = 1
+                """.strip()
+        );
 
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
+        assertEquals(
+                M_Foto_Persona.sqlSelect(
+                        FotoPersona
+                                .builder()
+                                .id(1)
+                                .idPersona(1)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
+                FROM V_FOTO_PERSONA
+                WHERE ID = 1 AND ID_PERSONA = 1
+                """.strip()
+        );
     }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
+    
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          """
+            dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
         assertNotNull(
@@ -233,70 +250,6 @@ public class M_Foto_PersonaNGTest {
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build()
-        );
-    }
-
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          """,
-            alwaysRun = true
-    )
-    public void testSqlSelect() {
-        assertEquals(
-                M_Foto_Persona.sqlSelect(
-                        FotoPersona
-                                .builder()
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PERSONA
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Persona.sqlSelect(
-                        FotoPersona
-                                .builder()
-                                .id(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PERSONA
-                WHERE ID = 1
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Persona.sqlSelect(
-                        FotoPersona
-                                .builder()
-                                .idPersona(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PERSONA
-                WHERE ID_PERSONA = 1
-                """.strip()
-        );
-
-        assertEquals(
-                M_Foto_Persona.sqlSelect(
-                        FotoPersona
-                                .builder()
-                                .id(1)
-                                .idPersona(1)
-                                .build()
-                ),
-                """
-                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
-                FROM V_FOTO_PERSONA
-                WHERE ID = 1 AND ID_PERSONA = 1
-                """.strip()
         );
     }
 }

@@ -69,14 +69,16 @@ public class M_Turno {
 
     protected static String sqlSelect(Turno turno) {
         Boolean f_criterio = Objects.isNull(turno.getTurno_usuario());
-
+        Boolean estado = Objects.isNull(turno.getEstado());
+        Boolean where = f_criterio && estado;
         return """
                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
                FROM V_TURNOS 
-               WHERE %s%s
+               %s%s%s
                """.formatted(
-                (turno.getEstado() ? "ESTADO " : "ESTADO IS FALSE "),
+                where ? "" : "WHERE ",
+                (estado ? "" : (turno.getEstado() ? "ESTADO " : "ESTADO IS FALSE ")),
                 f_criterio
                         ? ""
                         : "AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('%s'));"
@@ -140,7 +142,7 @@ public class M_Turno {
      * @return
      */
     public synchronized static Resultado update(Integer idTurno) {
-        final String sql = "EXECUTE PROCEDURE ADMIN_CERRAR_TURNO(?)";
+        final String sql = "EXECUTE PROCEDURE SP_U_TURNO(?)";
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -176,17 +178,17 @@ public class M_Turno {
             = "Error al cerrar el Turno.!!!";
     public static final String TURNO_CERRADO_CORRECTAMENTE
             = "Turno cerrado correctamente.!!!";
-    
+
     //--------------------------------------------------------------------------
     /**
      * Metodo que elimina fisicamente el registro de turno.
-     * 
+     *
      * @param idTurno
-     * @return 
+     * @return
      */
     public synchronized static Resultado delete(Integer idTurno) {
         final String sql = "EXECUTE PROCEDURE SP_D_TURNO(?)";
-        
+
         try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -218,8 +220,8 @@ public class M_Turno {
                     .build();
         }
     }
-    public static final String ERROR_AL_ELIMINAR_TURNO 
+    public static final String ERROR_AL_ELIMINAR_TURNO
             = "Error al eliminar turno.";
-    public static final String TURNO_ELIMINADO_CORRECTAMENTE 
+    public static final String TURNO_ELIMINADO_CORRECTAMENTE
             = "Turno eliminado correctamente.";
 }

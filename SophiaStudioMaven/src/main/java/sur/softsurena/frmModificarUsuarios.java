@@ -266,10 +266,10 @@ public class frmModificarUsuarios extends javax.swing.JInternalFrame {
         Usuario miUsuario = 
                 Usuario
                         .builder()
+                        .userName(txtNombre.getText())
                         .persona(
                                 Persona
                                         .builder()
-                                        .user_name(txtNombre.getText())
                                         .pnombre(txtNombre.getText())
                                         .apellidos(txtApellidos.getText())
                                         .estado(jcbEstado.isSelected())

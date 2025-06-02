@@ -1,114 +1,51 @@
 package sur.softsurena.formularios;
 
 import java.io.File;
-import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 import xy.ui.testing.Tester;
 import xy.ui.testing.util.TestingUtils;
 
-@Test(enabled = false)
+@Test(
+        threadPoolSize = 2
+)
 public class frmClientesNGTest {
 
-    public frmClientesNGTest() {
-    }
-//------------------------------------------------------------------------------
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-    
-//------------------------------------------------------------------------------
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-    
-//------------------------------------------------------------------------------
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-    
-//------------------------------------------------------------------------------
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-        //frmClientes instance = frmClientes.getInstance();
-        //instance.getBtnCancelar().doClick();
-    }
-
-//------------------------------------------------------------------------------
-    @Test(
-        enabled = true,
-            priority = 0,
-            description = """
-                          Prueba Swing.
-                          """
-    )
-    public void testSwingProvinciaMunicipioDistrito() throws Exception{
-        
+    //--------------------------------------------------------------------------
+    @Test
+    public void testSwingProvinciaMunicipioDistrito() throws Exception {
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testProvinciaMunicipioDistrito.stt")
         );
     }
 
-//------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     @Test(
-        enabled = true,
-            priority = 1,
-            description = """
-                          Prueba Swing.
-                          """
+            dependsOnMethods = "testSwingProvinciaMunicipioDistrito"
     )
-    public void testSwingInsertCliente() throws Exception{
-        
+    public void testSwingInsertCliente() throws Exception {
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testInsertCliente.stt")
         );
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
-        enabled = true,
-            priority = 2,
-            description = """
-                          Prueba Swing.
-                          """
+            //dependsOnMethods = "testSwingInsertCliente"
     )
-    public void testSwingUpdateCliente() throws Exception{
-        
+    public void testSwingUpdateCliente() throws Exception {
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testUpdateCliente.stt")
         );
     }
-    
+
 //------------------------------------------------------------------------------
     @Test(
-        enabled = true,
-            priority = 3,
-            description = """
-                          Prueba Swing.
-                          """
+            dependsOnMethods = "testSwingUpdateCliente"
     )
-    public void testSwingDeleteCliente() throws Exception{
-        
+    public void testSwingDeleteCliente() throws Exception {
         TestingUtils.assertSuccessfulReplay(
                 new Tester(),
                 new File("testSwing/testBorrarCliente.stt")

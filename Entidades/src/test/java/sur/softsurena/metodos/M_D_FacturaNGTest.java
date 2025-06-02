@@ -1,17 +1,13 @@
 package sur.softsurena.metodos;
 
+import java.math.BigDecimal;
 import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.D_Factura;
 import sur.softsurena.entidades.Factura;
-import sur.softsurena.entidades.M_Factura;
 import static sur.softsurena.metodos.M_D_Factura.DETALLE_DE_LA_FACTURA_AGREGADO_CORRECTAME;
 import sur.softsurena.utilidades.Resultado;
 
@@ -21,61 +17,23 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = {"init", "init.factura"}
+        dependsOnGroups = {"init", "gFactura"},
+        groups = "gDFactura"
 )
 public class M_D_FacturaNGTest {
+    public static Integer idFactura, idProducto, idProducto2, idPrecio, 
+            idPrecio2;
 
-    public M_D_FacturaNGTest() {}
-
-    //--------------------------------------------------------------------------
-    @BeforeClass
-    public void setUpClass() throws Exception {
-    }
-
-    //--------------------------------------------------------------------------
-    @AfterClass
-    public void tearDownClass() throws Exception {
-    }
-
-    //--------------------------------------------------------------------------
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    //--------------------------------------------------------------------------
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-
-    //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Metodo que agrega detalles de las facturas en el 
-                          sitema.
-                          """
+            dependsOnGroups = "gGetIDFacturaNueva"
     )
     public void testInsert() {
+        
         Resultado result = M_D_Factura.insert(
                 Factura
                         .builder()
-                        .id(0)
-                        .m_factura(//2
-                                M_Factura
-                                        .builder()
-                                        .id(0)
-                                        .idCliente(0)
-                                        .idContactoTel(0)
-                                        .idContactoDir(0)
-                                        .idContactoEmail(0)
-                                        .idTurno(0)
-                                        .estadoFactura('n')
-                                        .nombreTemporal("")
-                                        .build()
-                        )
                         .d_factura(
-                                null //D_Factura.getListTest()
+                                getListTest()
                         )
                         .build()
         );
@@ -91,16 +49,10 @@ public class M_D_FacturaNGTest {
         );
     }
 
-    //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Test que verifica las facturas en temporal.
-                          """
+            dependsOnMethods = "testInsert"
     )
     public void testSelect() {
-        Integer idFactura = 0;
 
         List<D_Factura> buscarTemporal
                 = M_D_Factura.select(idFactura);
@@ -108,6 +60,78 @@ public class M_D_FacturaNGTest {
         assertFalse(
                 buscarTemporal.isEmpty(),
                 "La lista de factura Temporales no se encuentra con registros."
+        );
+    }
+    
+
+    @Test(
+            dependsOnMethods = "testSelect"
+    )
+    public void testDelete() {
+        
+        M_D_Factura.select(idFactura).stream().forEach(
+                detalle -> {
+                    M_D_Factura.delete(detalle.getId());
+                }
+        );
+        
+        assertTrue(
+                M_D_Factura.select(idFactura).isEmpty(),
+                "Detalle de la factura %d no han sido eliminados.".formatted(
+                        idFactura
+                )
+        );
+    }
+    
+    @Test(
+            dependsOnMethods = "testDelete"
+    )
+    public void testDeleteProducto() {
+        M_PrecioNGTest.idPrecio = idPrecio2;
+        M_PrecioNGTest.testDelete();
+        
+        M_PrecioNGTest.idPrecio = idPrecio;
+        M_PrecioNGTest.testDelete();
+        
+        M_ProductoNGTest.idProducto = idProducto2;
+        M_ProductoNGTest.testDeleteByID();
+        
+        M_ProductoNGTest.idProducto = idProducto;
+        M_ProductoNGTest.testDeleteByID();
+    }
+
+    public static List<D_Factura> getListTest() {
+        
+        M_M_FacturaNGTest.testInsert();
+        idFactura = M_M_FacturaNGTest.idFactura;
+        
+        
+        M_PrecioNGTest.testInsert();
+        idPrecio = M_PrecioNGTest.idPrecio;
+        idProducto = M_PrecioNGTest.idProducto;
+        
+        M_PrecioNGTest.testInsert();
+        idProducto2 = M_PrecioNGTest.idProducto;
+        idPrecio2 = M_PrecioNGTest.idPrecio;
+        
+        
+        return List.of(
+                D_Factura
+                        .builder()
+                        .linea(0)
+                        .idFactura(idFactura)
+                        .idProducto(idProducto)
+                        .idPrecio(idPrecio)
+                        .cantidad(BigDecimal.TEN)
+                        .build(),
+                D_Factura
+                        .builder()
+                        .linea(1)
+                        .idFactura(idFactura)
+                        .idProducto(idProducto2)
+                        .idPrecio(idPrecio2)
+                        .cantidad(BigDecimal.TWO)
+                        .build()
         );
     }
 }

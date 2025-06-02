@@ -14,7 +14,6 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Precio;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.TipoImpuesto;
-import sur.softsurena.entidades.TipoPrecio;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -35,12 +34,15 @@ public class M_Precio {
         final String sql = """
                            SELECT ID, ID_PRODUCTO, ID_TIPO_PRECIO, 
                                 ID_TIPO_IMPUESTO, PRECIO, MONEDA, FECHA_INICIO, 
-                                FECHA_FIN, DESCUENTO, COSTO_ENVIO
+                                FECHA_FIN, DESCUENTO, COSTO_ENVIO, ESTADO
                            FROM V_PRECIOS
                            %s
-                           """.formatted(Objects.isNull(precio)
-                ? ""
-                : "WHERE ID_PRODUCTO = %d;".formatted(precio.getProducto().getId())
+                           """.formatted(
+                                   Objects.isNull(precio) ? 
+                                           "" : 
+                                           "WHERE ID_PRODUCTO = %d AND ESTADO;".formatted(
+                                                   precio.getIdProducto()
+                                           )
         );
 
         List<Precio> lista = new ArrayList<>();
@@ -55,34 +57,20 @@ public class M_Precio {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                int idPrecio = rs.getInt("ID_TIPO_PRECIO");
                 lista.add(
                         Precio
                                 .builder()
                                 .id(rs.getInt("ID"))
-                                .producto(
-                                        Producto
-                                                .builder()
-                                                .id(rs.getInt("ID_PRODUCTO"))
-                                                .build()
-                                )
-                                .tipoPrecio(
-                                        M_TipoPrecio.getTipoPrecios().stream().filter(
-                                                precioID -> precioID.getId() == idPrecio
-                                        ).findFirst().get()
-                                )
-                                .tipoImpusto(
-                                        TipoImpuesto
-                                                .builder()
-                                                .id(rs.getInt("ID_TIPO_IMPUESTO"))
-                                                .build()
-                                )
+                                .idProducto(rs.getInt("ID_PRODUCTO"))
+                                .idTipoPrecio(rs.getInt("ID_TIPO_PRECIO"))
+                                .idTipoImpusto(rs.getInt("ID_TIPO_IMPUESTO"))
                                 .precio(rs.getBigDecimal("PRECIO"))
                                 .moneda(rs.getString("MONEDA"))
                                 .fechaInicio(rs.getDate("FECHA_INICIO"))
                                 .fechaFin(rs.getDate("FECHA_FIN"))
                                 .descuento(rs.getBigDecimal("DESCUENTO"))
                                 .costoEnvio(rs.getBigDecimal("COSTO_ENVIO"))
+                                .estado(rs.getBoolean("ESTADO"))
                                 .build()
                 );
             }
@@ -106,24 +94,25 @@ public class M_Precio {
     public static Resultado insert(Precio precio) {
         final String sql = """
                            SELECT ID
-                           FROM SP_I_PRECIOS (?,?,?,?,?,?,?,?,?)
+                           FROM SP_I_PRECIOS(?,?,?,?,?,?,?,?,?,?)
                            """;
 
-        try (CallableStatement ps = Conexion.getCnn().prepareCall(
+        try (PreparedStatement ps = Conexion.getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(2, precio.getProducto().getId());
-            ps.setInt(3, precio.getTipoPrecio().getId());
-            ps.setInt(4, precio.getTipoImpusto().getId());
-            ps.setBigDecimal(5, precio.getPrecio());
-            ps.setString(6, precio.getMoneda());
-            ps.setDate(7, precio.getFechaInicio());
-            ps.setDate(8, precio.getFechaFin());
-            ps.setBigDecimal(9, precio.getDescuento());
-            ps.setBigDecimal(10, precio.getCostoEnvio());
+            ps.setInt(1, precio.getIdProducto());
+            ps.setInt(2, precio.getIdTipoPrecio());
+            ps.setInt(3, precio.getIdTipoImpusto());
+            ps.setBigDecimal(4, precio.getPrecio());
+            ps.setString(5, precio.getMoneda());
+            ps.setDate(6, precio.getFechaInicio());
+            ps.setDate(7, precio.getFechaFin());
+            ps.setBigDecimal(8, precio.getDescuento());
+            ps.setBigDecimal(9, precio.getCostoEnvio());
+            ps.setBoolean(10, precio.getEstado());
 
             ResultSet rs = ps.executeQuery();
 
@@ -164,7 +153,7 @@ public class M_Precio {
      */
     public static Resultado update(Precio precio) {
         final String sql = """
-                           EXECUTE PROCEDURE SP_U_PRECIO (?,?,?,?,?,?,?,?,?,?)
+                           EXECUTE PROCEDURE SP_U_PRECIO (?,?,?,?,?,?,?,?,?,?,?)
                            """;
 
         try (CallableStatement ps = Conexion.getCnn().prepareCall(
@@ -174,15 +163,16 @@ public class M_Precio {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, precio.getId());
-            ps.setInt(2, precio.getProducto().getId());
-            ps.setInt(3, precio.getTipoPrecio().getId());
-            ps.setInt(4, precio.getTipoImpusto().getId());
+            ps.setInt(2, precio.getIdProducto());
+            ps.setInt(3, precio.getIdTipoPrecio());
+            ps.setInt(4, precio.getIdTipoImpusto());
             ps.setBigDecimal(5, precio.getPrecio());
             ps.setString(6, precio.getMoneda());
             ps.setDate(7, precio.getFechaInicio());
             ps.setDate(8, precio.getFechaFin());
             ps.setBigDecimal(9, precio.getDescuento());
             ps.setBigDecimal(10, precio.getCostoEnvio());
+            ps.setBoolean(11, precio.getEstado());
 
             ps.executeUpdate();
 
@@ -215,7 +205,9 @@ public class M_Precio {
      *
      * @return
      */
-    public static Resultado delete(@NonNull Precio precio) {
+    public static Resultado delete(
+            @NonNull Precio precio
+    ) {
         final String sql = "EXECUTE PROCEDURE SP_D_PRECIO (?)";
 
         try (CallableStatement ps = Conexion.getCnn().prepareCall(
@@ -230,7 +222,7 @@ public class M_Precio {
 
             return Resultado
                     .builder()
-                    .mensaje("Precio eliminado correctamente.!!!")
+                    .mensaje(PRECIO_ELIMINADO_CORRECTAMENTE)
                     .icono(JOptionPane.INFORMATION_MESSAGE)
                     .estado(Boolean.TRUE)
                     .build();
@@ -244,9 +236,13 @@ public class M_Precio {
         }
         return Resultado
                 .builder()
-                .mensaje("Error precio no puede ser eliminado del sistema.!!!")
+                .mensaje(ERROR_PRECIO_NO_PUEDE_SER_ELIMINADO_DEL_S)
                 .icono(JOptionPane.ERROR_MESSAGE)
                 .estado(Boolean.FALSE)
                 .build();
     }
+    public static final String ERROR_PRECIO_NO_PUEDE_SER_ELIMINADO_DEL_S 
+            = "Error precio no puede ser eliminado del sistema.!!!";
+    public static final String PRECIO_ELIMINADO_CORRECTAMENTE 
+            = "Precio eliminado correctamente.!!!";
 }

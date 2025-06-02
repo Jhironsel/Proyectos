@@ -3,10 +3,6 @@ package sur.softsurena.metodos;
 import java.util.List;
 import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Antecedente;
 import static sur.softsurena.metodos.M_Antecedente.ANTECEDENTE_AGREGADO_CORRECTAMENTE;
@@ -27,33 +23,7 @@ public class M_AntecedenteNGTest {
 
     private static Integer idAntecedente, idConsulta;
 
-    public M_AntecedenteNGTest() {}
-//------------------------------------------------------------------------------
-
-    @BeforeClass
-    public void setUpClass() throws Exception {}
-//------------------------------------------------------------------------------
-
-    @AfterClass
-    public void tearDownClass() throws Exception {}
-//------------------------------------------------------------------------------
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-//------------------------------------------------------------------------------
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
-//------------------------------------------------------------------------------
-
-    @Test(
-            enabled = true,
-            description = """
-                          """,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -111,13 +81,42 @@ public class M_AntecedenteNGTest {
                 """.strip()
         );
     }
-//------------------------------------------------------------------------------
 
+    //--------------------------------------------------------------------------
+    @Test
+    public void testInsert() {
+        M_ConsultaNGTest.testInsert();
+
+        idConsulta = M_ConsultaNGTest.idConsulta;
+        Resultado result = M_Antecedente.insert(
+                Antecedente
+                        .builder()
+                        .idConsulta(idConsulta)
+                        .descripcion("Prueba de antecendetes")
+                        .build()
+        );
+
+        assertEquals(
+                result,
+                Resultado
+                        .builder()
+                        .mensaje(ANTECEDENTE_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build(),
+                "No puede ser agregado el registro."
+        );
+
+        assertTrue(
+                result.getId() > 0,
+                result.getMensaje()
+        );
+
+        idAntecedente = result.getId();
+    }
+    
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          """
+            dependsOnMethods = {"testSqlSelect", "testInsert"}
     )
     public void testSelect() {
         int idPadre = -1;
@@ -149,47 +148,7 @@ public class M_AntecedenteNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          Agrega un antecedente de un paciente al sistema.
-                          """
-    )
-    public void testInsert() {
-        M_ConsultaNGTest.testInsert();
-
-        Resultado result = M_Antecedente.insert(
-                Antecedente
-                        .builder()
-                        .idConsulta(M_ConsultaNGTest.getIdConsulta())
-                        .descripcion("Prueba de antecendetes")
-                        .build()
-        );
-
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(ANTECEDENTE_AGREGADO_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                "No puede ser agregado el registro."
-        );
-
-        assertTrue(
-                result.getId() > 0,
-                result.getMensaje()
-        );
-
-        idAntecedente = result.getId();
-    }
-
-    //--------------------------------------------------------------------------
-    @Test(
-            enabled = true,
-            description = "",
-            priority = 3
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
         assertEquals(
@@ -212,10 +171,7 @@ public class M_AntecedenteNGTest {
 //------------------------------------------------------------------------------
 
     @Test(
-            enabled = true,
-            priority = 4,
-            description = """
-                          """
+            dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public void testDelete() {
         assertEquals(
@@ -233,15 +189,21 @@ public class M_AntecedenteNGTest {
                         .build(),
                 ERROR_AL_BORRAR_PACIENTE
         );
+    }
+    
+    @Test(
+            dependsOnMethods = "testDelete"
+    )
+    public void testDelete2() {
+        M_ConsultaNGTest.idConsulta = idConsulta;
         M_ConsultaNGTest.testDelete();
     }
     
     public static Antecedente getAntecedente(){
-        
         return Antecedente
                 .builder()
                 .id(idAntecedente)
-                .idConsulta(idConsulta)//TODO 11.05.2025 Buscar la consulta
+                .idConsulta(idConsulta)
                 .build();
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.SwingWorker;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.modulo_comun.frmImpresoras2;
+import sur.softsurena.modulo_comun.frmPersonas;
 import sur.softsurena.utilidades.DesktopConFondo;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -21,7 +22,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
         //principal
         var usuario = M_Usuario.getUsuarioActual();
         txtUsuario.setText("Usuario: %s %s.".formatted(
-                usuario.getPersona().getUser_name(),
+                usuario.getUserName(),
                 usuario.getPersona().getRol()
         ));
 
@@ -310,7 +311,7 @@ public final class frmPrincipal extends javax.swing.JFrame {
 //        };
 //        w.execute();
 
-        frmEmpleado e = frmEmpleado.getEmpleados();
+        var e = frmPersonas.getInstance();
         dpnEscritorio.remove(e);
         dpnEscritorio.add(e);
         try {

@@ -36,7 +36,7 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jpBotones" pref="790" max="32767" attributes="0"/>
+                  <Component id="jpBotones" pref="792" max="32767" attributes="0"/>
                   <Component id="jtpPrincipal" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>

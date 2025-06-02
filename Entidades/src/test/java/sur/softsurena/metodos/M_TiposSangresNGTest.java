@@ -2,64 +2,15 @@ package sur.softsurena.metodos;
 
 import lombok.Getter;
 import static org.testng.Assert.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import sur.softsurena.conexion.Conexion;
 
-/**
- * 
- * @author jhironsel
- */
 @Getter
 @Test(
         dependsOnGroups = "init"
 )
 public class M_TiposSangresNGTest {
-
-    public M_TiposSangresNGTest() {
-    }
-
-    @BeforeClass
-    public void setUpClass() throws Exception {
-//        Conexion.getInstance(
-//                "sysdba",
-//                "1",
-//                "SoftSurena.db",
-//                "localhost",
-//                "3050",
-//                "NONE"
-//        );
-//        assertTrue(
-//                Conexion.verificar().getEstado(),
-//                "Error al conectarse..."
-//        );
-    }
-
-    @AfterClass
-    public void tearDownClass() throws Exception {
-//        Conexion.getCnn().close();
-    }
-
-    @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
-
-    @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
     
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Metodo que permite obtener de la base de datos los 
-                          tipos de sangre que existen en el sistema, para ser 
-                           asignado a los pacientes.
-                          """
-    )
+    @Test
     public void testGetTipoSangre() {
         assertFalse(
                 M_TiposSangres.getList().isEmpty(), 
