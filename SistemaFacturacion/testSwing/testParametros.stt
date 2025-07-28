@@ -11,13 +11,13 @@
     <xy.ui.testing.action.CallMainMethodAction>
       <arguments/>
       <checkThrownExceptionAfterSeconds class="null"/>
-      <className>sur.softsurena.formularios.frmLogin</className>
+      <className>sur.softsurena.vistas.VistaLogin</className>
       <disabled>false</disabled>
     </xy.ui.testing.action.CallMainMethodAction>
     <xy.ui.testing.action.component.FocusAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>txtUsuario</componentName>
+        <componentName>txtUser</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -27,7 +27,7 @@
     <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>txtUsuario</componentName>
+        <componentName>txtUser</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -73,7 +73,7 @@
         <componentClassName class="null"/>
         <componentName>txtHost</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -84,7 +84,7 @@
         <componentClassName class="null"/>
         <componentName>txtHost</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -96,7 +96,7 @@
         <componentClassName class="null"/>
         <componentName>txtPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -107,7 +107,7 @@
         <componentClassName class="null"/>
         <componentName>txtPuerto</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -119,7 +119,7 @@
         <componentClassName class="null"/>
         <componentName>txtPathBaseDatos</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
@@ -130,7 +130,7 @@
         <componentClassName class="null"/>
         <componentName>txtPathBaseDatos</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <propertyName>Text</propertyName>
@@ -142,24 +142,10 @@
         <componentClassName class="null"/>
         <componentName>btnAceptar</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
+        <windowIndex>1</windowIndex>
       </componentFinder>
       <disabled>false</disabled>
       <eventType>FOCUS_GAIN</eventType>
     </xy.ui.testing.action.component.FocusAction>
-    <xy.ui.testing.action.component.ClickAction>
-      <button>LEFT_BUTTON</button>
-      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
-        <componentClassName class="null"/>
-        <componentName>btnAceptar</componentName>
-        <occurrencesToSkip>0</occurrencesToSkip>
-        <windowIndex>0</windowIndex>
-      </componentFinder>
-      <disabled>false</disabled>
-      <doubleClick>false</doubleClick>
-      <eventsIntervalMilliseconds>100</eventsIntervalMilliseconds>
-      <locationOnComponent class="null"/>
-      <poupTrigger>false</poupTrigger>
-    </xy.ui.testing.action.component.ClickAction>
   </testActions>
 </xy.ui.testing.Tester>

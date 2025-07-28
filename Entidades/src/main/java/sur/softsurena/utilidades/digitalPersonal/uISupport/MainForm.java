@@ -14,7 +14,9 @@ import java.util.*;
 /**
  * Enrollment control test console
  */
-public class MainForm extends JFrame {
+public final class MainForm extends JFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private EnumMap<DPFPFingerIndex, DPFPTemplate> templates = new EnumMap<>(DPFPFingerIndex.class);
     private final EnumMap<DPFPFingerIndex, JCheckBox> checkBoxes = new EnumMap<>(DPFPFingerIndex.class);

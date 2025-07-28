@@ -129,8 +129,8 @@ public class M_D_MotivoConsulta {
         final String sql
                 = """                  
                   SELECT ID, ID_MOTIVO_CONSULTA
-                  FROM V_D_MOTIVO_CONSULTA 
-                  WHERE ID_CONSULTA = ?
+                  FROM V_D_MOTIVO_CONSULTA
+                  WHERE ID_CONSULTA = ?;
                   """;
         
         List<D_Motivo_Consulta> lista = new ArrayList<>();

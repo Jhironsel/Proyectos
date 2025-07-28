@@ -33,6 +33,7 @@ public class M_Generales {
             @NonNull Generales generales
     ) {
         List<Generales> lista = new ArrayList<>();
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlSelect(generales),
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -42,15 +43,29 @@ public class M_Generales {
 
             @Cleanup
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+
+            if (rs.next()) {
+                do {
+                    lista.add(
+                            Generales
+                                    .builder()
+                                    .id(rs.getInt("ID"))
+                                    .idPersona(rs.getInt("ID_PERSONA"))
+                                    .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                    .cedula(rs.getString("CEDULA"))
+                                    .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                    .build()
+                    );
+                } while (rs.next());
+            } else {
                 lista.add(
                         Generales
                                 .builder()
-                                .id(rs.getInt("ID"))
-                                .idPersona(rs.getInt("ID_PERSONA"))
-                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
-                                .cedula(rs.getString("CEDULA"))
-                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                .id(0)
+                                .idPersona(0)
+                                .idTipoSangre(0)
+                                .cedula("000-0000000-0")
+                                .estado_civil('X')
                                 .build()
                 );
             }
@@ -71,15 +86,24 @@ public class M_Generales {
         Boolean cedula = Objects.isNull(generales.getCedula());
         Boolean where = id && idPersona && cedula;
 
+        Boolean f_row = Objects.isNull(generales.getPagina());
+
         return """
                SELECT ID, ID_PERSONA, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
                FROM V_GENERALES
-               %s%s%s%s
+               %s%s%s%s%s
                """.formatted(
                 where ? "" : "WHERE ",
                 idPersona ? "" : "ID_PERSONA = %d ".formatted(generales.getIdPersona()),
                 id ? "" : "ID = %d ".formatted(generales.getId()),
-                cedula ? "" : "CEDULA STARTING WITH '%s' ".formatted(generales.getCedula())
+                cedula ? "" : "CEDULA STARTING WITH '%s' ".formatted(generales.getCedula()),
+                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        generales.getPagina().getNPaginaNro(),
+                                        generales.getPagina().getNCantidadFilas(),
+                                        generales.getPagina().getNPaginaNro(),
+                                        generales.getPagina().getNCantidadFilas()
+                                )
         ).strip();
     }
 
@@ -89,15 +113,14 @@ public class M_Generales {
      * @param general
      * @return
      */
-    public static Resultado updateOrInsert(
+    public static Resultado insert(
             @NonNull Generales general
     ) {
         final String sql = """
-                           SELECT ID
-                           FROM SP_UI_GENERAL(?,?,?,?)
+                           EXECUTE PROCEDURE SP_I_GENERAL(?,?,?,?)
                            """;
 
-        try (PreparedStatement cs = getCnn().prepareStatement(
+        try (CallableStatement cs = getCnn().prepareCall(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
@@ -109,17 +132,14 @@ public class M_Generales {
             cs.setInt(3, general.getIdTipoSangre());
             cs.setString(4, general.getEstado_civil().toString());
 
-            ResultSet rs = cs.executeQuery();
+            cs.executeUpdate();
 
-            if (rs.next()) {
-                return Resultado
-                        .builder()
-                        .id(rs.getInt("ID"))
-                        .mensaje(GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build();
-            }
+            return Resultado
+                    .builder()
+                    .mensaje(GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
 
         } catch (SQLException ex) {
             LOG.log(
@@ -136,9 +156,64 @@ public class M_Generales {
                 .build();
     }
     public static final String ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
-            = "Error al insertar/actualizar generales en el sistema.";
+            = "Error al insertar generales en el sistema.";
     public static final String GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS
-            = "Generales insertada/actualizada correctamente en el sistema.";
+            = "General insertada correctamente en el sistema.";
+
+    //--------------------------------------------------------------------------
+    /**
+     * Metodo que permite la actulizaciones de las generales de una persona en
+     * el sistema.
+     *
+     * @param general
+     *
+     * @return
+     */
+    public static Resultado update(
+            @NonNull Generales general
+    ) {
+        final String sql = """
+                           EXECUTE PROCEDURE SP_U_GENERAL(?,?,?,?);
+                           """;
+
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sql,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ps.setInt(1, general.getIdPersona());
+            ps.setString(2, general.getCedula());
+            ps.setInt(3, general.getIdTipoSangre());
+            ps.setString(4, general.getEstado_civil().toString());
+
+            ps.execute();
+
+            return Resultado
+                    .builder()
+                    .mensaje(GENERALES_ACTUALIZADA_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S,
+                    ex
+            );
+        }
+        return Resultado
+                .builder()
+                .mensaje(ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
+    }
+    public static final String ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S
+            = "Error al actualizar las Generales en el sistema.";
+    public static final String GENERALES_ACTUALIZADA_CORRECTAMENTE
+            = "Generales actualizada correctamente.";
 
 //------------------------------------------------------------------------------
     public static Resultado delete(Integer id) {

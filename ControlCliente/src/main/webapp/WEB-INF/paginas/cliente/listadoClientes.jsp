@@ -10,6 +10,7 @@
                         <h3>Listado de clientes</h3>
                     </div>
                     <table class="table table-striped">
+                        <caption>Listados de clientes</caption>
                         <thead class="thead-dark">
                             <tr>
                                 <th>#</th>

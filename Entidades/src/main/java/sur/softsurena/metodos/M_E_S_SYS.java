@@ -80,9 +80,9 @@ public class M_E_S_SYS {
     public synchronized static String getLogo() {
         final String sql
                 = """
-                  SELECT LOGO 
-                  FROM V_T_E_S_SYS 
-                  WHERE ID = 1; 
+                  SELECT LOGO
+                  FROM V_T_E_S_SYS
+                  WHERE ID = 1;
                   """;
         try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,

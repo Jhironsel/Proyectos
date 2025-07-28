@@ -21,7 +21,7 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Horario {
     
     public static List<Horario> select(Horario horario){
-        //TODO 18.04.2025 queda pendiente crear paginacion a este select.
+        //TODO 18/04/2025 queda pendiente crear paginacion a este select.
         List<Horario> lista = new ArrayList<>();
         
         try (Statement ps = getCnn().createStatement(

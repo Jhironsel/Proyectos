@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -24,13 +23,12 @@ public class M_Carton_BingoNGTest {
         assertEquals(result, expResult);
     }
 
-    @Test(
-            enabled = false
-    )
+    @Test
     public void testGenerarCarton() {
-        List expResult = null;
-        List result = M_Carton_Bingo.generarCarton();
-        assertEquals(result, expResult);
+        assertNotNull(
+                M_Carton_Bingo.generarCarton(), 
+                "Error al generar carton de bingo...!"
+        );
     }
 
     @Test(

@@ -14,11 +14,11 @@ import sur.softsurena.metodos.M_Persona;
 @Getter
 public class Empleado {
     private final Integer id;
-    private final Integer idCargo;
     private final Integer idDepartamento;
+    private final Integer idCargo;
     private final BigDecimal sueldoBruto;
     
-    private final Paginas paginas;
+    private final Paginas pagina;
     
     @Override
     public String toString() {

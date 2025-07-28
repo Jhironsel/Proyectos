@@ -34,7 +34,7 @@ public class M_ConsultaNGTest {
                         Consulta.builder().build()
                 ),
                 """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,
                     ESTADO
                 FROM V_CONSULTAS
                 """.strip()
@@ -48,7 +48,7 @@ public class M_ConsultaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,
                     ESTADO
                 FROM V_CONSULTAS
                 WHERE ID = -1
@@ -61,7 +61,7 @@ public class M_ConsultaNGTest {
                 .build()
         ),
                 """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,
                     ESTADO
                 FROM V_CONSULTAS
                 WHERE ID_CONTROL_CONSULTA = -1
@@ -76,7 +76,7 @@ public class M_ConsultaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,
                     ESTADO
                 FROM V_CONSULTAS
                 WHERE ID_PACIENTE = -1

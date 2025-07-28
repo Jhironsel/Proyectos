@@ -12,8 +12,6 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Precio;
-import sur.softsurena.entidades.Producto;
-import sur.softsurena.entidades.TipoImpuesto;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 
@@ -32,8 +30,8 @@ public class M_Precio {
      */
     public static List<Precio> select(Precio precio) {
         final String sql = """
-                           SELECT ID, ID_PRODUCTO, ID_TIPO_PRECIO, 
-                                ID_TIPO_IMPUESTO, PRECIO, MONEDA, FECHA_INICIO, 
+                           SELECT ID, ID_PRODUCTO, ID_TIPO_PRECIO,
+                                ID_TIPO_IMPUESTO, PRECIO, MONEDA, FECHA_INICIO,
                                 FECHA_FIN, DESCUENTO, COSTO_ENVIO, ESTADO
                            FROM V_PRECIOS
                            %s

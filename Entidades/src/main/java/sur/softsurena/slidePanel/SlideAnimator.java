@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -14,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.Timer;
 
-public class SlideAnimator extends Object {
+public final class SlideAnimator extends Object {
 
     protected static final int ANIMATION_TIME = 500;
     protected static final int DISPOSE_TIME = 10000;
@@ -25,11 +24,9 @@ public class SlideAnimator extends Object {
     JPanel container;
     JComponent contents;
     AnimatingSheet animatingSheet;
-    Rectangle desktopBounds;
     Dimension tempWindowSize;
     Timer animationTimer;
     long animationStart;
-    boolean visible = true;
 
     public SlideAnimator() {
         initDesktopBounds();
@@ -42,18 +39,11 @@ public class SlideAnimator extends Object {
         animatingSheet = new AnimatingSheet();
     }
 
-    public void Dispose() {
-        visible = false;
-    }
+    public void Dispose() {}
 
-    protected void initDesktopBounds() {
-        GraphicsEnvironment env =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
-        desktopBounds = env.getMaximumWindowBounds();
-    }
+    protected void initDesktopBounds() {}
 
     public void setContents() {
-        visible = true;
         JWindow tempWindow = new JWindow();
         tempWindow.getContentPane().add(contents);
         tempWindow.pack();
@@ -66,26 +56,24 @@ public class SlideAnimator extends Object {
 
     public void showAt() {
         setContents();
-        ActionListener animationLogic = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                long elapsed =
-                        System.currentTimeMillis() - animationStart;
-                if (elapsed > ANIMATION_TIME) {
-                    container.removeAll();
-                    container.add(contents);
-                    container.revalidate();
-                    animationTimer.stop();
-                } else {
-                    float progress =
-                            (float) elapsed / ANIMATION_TIME_F;
-                    int animatingHeight =
-                            (int) (progress * tempWindowSize.getHeight());
-                    animatingHeight = Math.max(animatingHeight, 1);
-                    animatingSheet.setAnimatingHeight(animatingHeight);
-                    container.setVisible(true);
-                    container.repaint();
-                    container.revalidate();
-                }
+        ActionListener animationLogic = (ActionEvent e) -> {
+            long elapsed =
+                    System.currentTimeMillis() - animationStart;
+            if (elapsed > ANIMATION_TIME) {
+                container.removeAll();
+                container.add(contents);
+                container.revalidate();
+                animationTimer.stop();
+            } else {
+                float progress =
+                        (float) elapsed / ANIMATION_TIME_F;
+                int animatingHeight =
+                        (int) (progress * tempWindowSize.getHeight());
+                animatingHeight = Math.max(animatingHeight, 1);
+                animatingSheet.setAnimatingHeight(animatingHeight);
+                container.setVisible(true);
+                container.repaint();
+                container.revalidate();
             }
         };
         animationTimer =
@@ -135,24 +123,29 @@ public class SlideAnimator extends Object {
             source.paint(offscreenGraphics);
         }
 
+        @Override
         public Dimension getPreferredSize() {
             return animatingSize;
         }
 
+        @Override
         public Dimension getMinimumSize() {
             return animatingSize;
         }
 
+        @Override
         public Dimension getMaximumSize() {
             return animatingSize;
         }
 
+        @Override
         public void update(Graphics g) {
             // override to eliminate flicker from
             // unneccessary clear
             paint(g);
         }
 
+        @Override
         public void paint(Graphics g) {
             // get the top-most n pixels of source and
             // paint them into g, where n is height

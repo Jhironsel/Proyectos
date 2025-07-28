@@ -66,14 +66,12 @@ public class PCefalicoChicoChica {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, false);
             XYSeries localXYSeries8 = new XYSeries("DATOS", true, false);
             
-            localBufferedReader.readLine();
-            
-            String str;
+            String str = localBufferedReader.readLine();
             
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes
-                if (Integer.parseInt(str.substring(8, 11).trim()) == (sexo.equals("m") ? 1 : 2) & f1 <= 36) {//Determina Sexo
+                if (Integer.parseInt(str.substring(8, 11).trim()) == (sexo.equals("m") ? 1 : 2) && f1 <= 36) {//Determina Sexo
                     localXYSeries1.add(f1, Float.parseFloat(str.substring(52, 59).trim()));//SD3Neg
                     localXYSeries2.add(f1, Float.parseFloat(str.substring(63, 69).trim()));//SD2Neg
                     localXYSeries3.add(f1, Float.parseFloat(str.substring(73, 79).trim()));//SD1Neg

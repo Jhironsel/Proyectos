@@ -18,7 +18,126 @@ import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Usuario {
+    
+    /**
+     * 
+     * @param usuario
+     * @return 
+     */
+    public static String sqlSelect(Usuario usuario) {
+        Boolean userName = Objects.isNull(usuario.getUserName());
+        Boolean estado = Objects.isNull(usuario.getPersona().getEstado());
+        Boolean administradores = Objects.isNull(usuario.getAdministrador());
 
+        Boolean where = userName && estado && administradores;
+
+        final String sql
+                = """
+                  SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                        ADMINISTRADOR, DESCRIPCION
+                  FROM VS_USUARIOS
+                  %s%s%s%s
+                  """.strip().formatted(
+                        where ? "" : "WHERE ",
+                        userName ? "" : "TRIM(UPPER(USERNAME)) STARTING WITH TRIM(UPPER('%s')) ".formatted(usuario.getUserName()),
+                        estado ? "" : "ESTADO IS %B ".formatted(usuario.getPersona().getEstado()),
+                        administradores ? "" : "ADMINISTRADOR IS %B ".formatted(usuario.getAdministrador())
+                ).strip();
+
+        return sql;
+    }
+
+    /**
+     *
+     * @param usuario
+     * @return
+     */
+    public synchronized static List<Usuario> select(Usuario usuario) {
+        List<Usuario> usuarios = new ArrayList<>();
+        try (PreparedStatement ps = getCnn().prepareStatement(
+                sqlSelect(usuario),
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            try (ResultSet rs = ps.executeQuery();) {
+                while (rs.next()) {
+                    usuarios.add(
+                            Usuario
+                                    .builder()
+                                    .persona(
+                                            Persona
+                                                    .builder()
+                                                    .pnombre(rs.getString("PNOMBRE"))
+                                                    .snombre(rs.getString("SNOMBRE"))
+                                                    .apellidos(rs.getString("APELLIDOS"))
+                                                    .estado(rs.getBoolean("ESTADO"))
+                                                    .build()
+                                    )
+                                    .userName(rs.getString("USERNAME"))
+                                    .administrador(rs.getBoolean("ADMINISTRADOR"))
+                                    .descripcion(rs.getString("DESCRIPCION"))
+                                    .build()
+                    );
+                }
+            }
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+        }
+        return usuarios;
+    }
+
+    
+    
+    /**
+     * Metodo para consultar cual es el usuario actual del sistema.<br>
+     *
+     * Una vez iniciada la session del usuario en el sistema, hacemos una
+     * consulta a la base de datos, que nos devuelve el usuario y el rol de
+     * este.<br>
+     *
+     * @return Un objecto de la clase usuario con los datos del usuario del
+     * sistema que ha iniciado sessión actualmente.<br>
+     */
+    public synchronized static Usuario getUsuarioActual() {
+        final String sql = """
+                           SELECT
+                                TRIM(CURRENT_USER) USUARIO,
+                                IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', 'ADMINISTRADOR', TRIM(CURRENT_ROLE)) ROLE
+                           FROM RDB$DATABASE
+                           """;
+
+        try (Statement ps = getCnn().createStatement(
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            ResultSet rs = ps.executeQuery(sql);
+            rs.next();
+            return Usuario
+                    .builder()
+                    .persona(
+                            Persona
+                                    .builder()
+                                    .rol(rs.getString("ROLE"))
+                                    .build()
+                    )
+                    .userName(rs.getString("USUARIO"))
+                    .build();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+            return null;
+        }
+    }
+    
     /**
      * Metodo que permite el cambio de contraseña de un usuario en el sistema.
      *
@@ -234,126 +353,4 @@ public class M_Usuario {
             = "Usuario borrado correctamente.";
     public static final String ERROR_AL_BORRAR_USUARIO
             = "Error al borrar usuario.";
-
-    /**
-     * Metodo para consultar cual es el usuario actual del sistema.<br>
-     *
-     * Una vez iniciada la session del usuario en el sistema, hacemos una
-     * consulta a la base de datos, que nos devuelve el usuario y el rol de
-     * este.<br>
-     *
-     * @return Un objecto de la clase usuario con los datos del usuario del
-     * sistema que ha iniciado sessión actualmente.<br>
-     */
-    public synchronized static Usuario getUsuarioActual() {
-        final String sql = """
-                           SELECT 
-                                TRIM(CURRENT_USER) USUARIO, 
-                                IIF(TRIM(CURRENT_ROLE) = 'RDB$ADMIN', 'ADMINISTRADOR', TRIM(CURRENT_ROLE)) ROLE 
-                           FROM RDB$DATABASE
-                           """;
-
-        try (Statement ps = getCnn().createStatement(
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ResultSet rs = ps.executeQuery(sql);
-            rs.next();
-            return Usuario
-                    .builder()
-                    .persona(
-                            Persona
-                                    .builder()
-                                    .rol(rs.getString("ROLE"))
-                                    .build()
-                    )
-                    .userName(rs.getString("USUARIO"))
-                    .build();
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @param usuario
-     * @return
-     */
-    public synchronized static List<Usuario> select(Usuario usuario) {
-        List<Usuario> usuarios = new ArrayList<>();
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(usuario),
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            try (ResultSet rs = ps.executeQuery();) {
-                while (rs.next()) {
-                    usuarios.add(
-                            Usuario
-                                    .builder()
-                                    .persona(
-                                            Persona
-                                                    .builder()
-                                                    .pnombre(rs.getString("PNOMBRE"))
-                                                    .snombre(rs.getString("SNOMBRE"))
-                                                    .apellidos(rs.getString("APELLIDOS"))
-                                                    .estado(rs.getBoolean("ESTADO"))
-                                                    .build()
-                                    )
-                                    .userName(rs.getString("USERNAME"))
-                                    .administrador(rs.getBoolean("ADMINISTRADOR"))
-                                    .descripcion(rs.getString("DESCRIPCION"))
-                                    .build()
-                    );
-                }
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
-        return usuarios;
-    }
-
-    public static String sqlSelect(Usuario usuario) {
-        Boolean userName = Objects.isNull(usuario.getUserName());
-        Boolean nombresApellidos
-                = Objects.isNull(usuario.getPersona().getPnombre())
-                && Objects.isNull(usuario.getPersona().getSnombre())
-                && Objects.isNull(usuario.getPersona().getApellidos());
-        Boolean estado = Objects.isNull(usuario.getPersona().getEstado());
-        Boolean administradores = Objects.isNull(usuario.getAdministrador());
-
-        Boolean where = userName && nombresApellidos && estado && administradores;
-
-        final String sql
-                = """
-                  SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
-                        ADMINISTRADOR, DESCRIPCION 
-                  FROM VS_USUARIOS
-                  %s%s%s%s
-                  """.strip().formatted(
-                        where ? "" : "WHERE ",
-                        nombresApellidos ? "" : "USERNAME STARTING WITH '%s' OR PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s' ".formatted(
-                                        usuario.getUserName(),
-                                        usuario.getPersona().getPnombre(),
-                                        usuario.getPersona().getSnombre(),
-                                        usuario.getPersona().getApellidos()
-                                ),
-                        estado ? "" : "ESTADO IS %B ".formatted(usuario.getPersona().getEstado()),
-                        administradores ? "" : "ADMINISTRADOR IS %B ".formatted(usuario.getAdministrador())
-                ).strip();
-
-        return sql;
-    }
 }

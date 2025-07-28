@@ -74,7 +74,7 @@ public class M_Control_ConsultaNGTest {
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
                       ESTADO
                 FROM V_CONTROL_CONSULTA
-                WHERE USER_NAME STARTING WITH 'Jhironsel' 
+                WHERE USER_NAME STARTING WITH 'Jhironsel'
                 """.trim().strip()
         );
     }

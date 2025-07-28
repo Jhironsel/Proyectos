@@ -27,9 +27,9 @@ public class M_Medicamento {
      */
     public synchronized static List<Medicamento> select() {
         final String sql = """
-                           SELECT ID, DESCRIPCION 
-                           FROM V_PRODUCTOS 
-                           WHERE estado 
+                           SELECT ID, DESCRIPCION
+                           FROM V_PRODUCTOS
+                           WHERE estado
                            ORDER BY 2
                            """;
 

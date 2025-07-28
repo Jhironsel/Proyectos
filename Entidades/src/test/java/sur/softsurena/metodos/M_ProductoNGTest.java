@@ -32,7 +32,7 @@ public class M_ProductoNGTest {
                 SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
                  EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
                 FROM V_PRODUCTOS
-                ORDER BY ID 
+                ORDER BY ID
                 """.strip().trim()
         );
 //------------------------------------------------------------------------------

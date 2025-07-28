@@ -20,10 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-public class MainForm extends JFrame {
+public final class MainForm extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+    
     public static String TEMPLATE_PROPERTY = "template";
-    private DPFPTemplate template;
+    private transient DPFPTemplate template;
 
     public class TemplateFileFilter extends javax.swing.filechooser.FileFilter {
 
@@ -155,7 +157,6 @@ public class MainForm extends JFrame {
                         }
                     }
                     stream.write(getTemplate().serialize());
-                    stream.close();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(
                             this,
@@ -176,10 +177,9 @@ public class MainForm extends JFrame {
             try (FileInputStream stream = new FileInputStream(chooser.getSelectedFile())) {
                 byte[] data = new byte[stream.available()];
                 stream.read(data);
-                stream.close();
-                DPFPTemplate template = DPFPGlobal.getTemplateFactory().createTemplate();
-                template.deserialize(data);
-                setTemplate(template);
+                DPFPTemplate _template = DPFPGlobal.getTemplateFactory().createTemplate();
+                _template.deserialize(data);
+                setTemplate(_template);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         this,

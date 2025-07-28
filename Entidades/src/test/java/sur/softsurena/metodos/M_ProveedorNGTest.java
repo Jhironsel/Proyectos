@@ -81,7 +81,9 @@ public class M_ProveedorNGTest {
     @Test
     public void testSelect() {
         assertNotNull(
-                M_Proveedor.select(),
+                M_Proveedor.select(
+                        Proveedor.builder().build()
+                ),
                 "Error a consultar la lista de proveedores."
         );
     }

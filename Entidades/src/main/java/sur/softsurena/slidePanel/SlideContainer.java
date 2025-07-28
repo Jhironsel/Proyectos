@@ -10,17 +10,21 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import javax.swing.JPanel;
 
-public class SlideContainer extends JPanel {
+public final class SlideContainer extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+
+    @Override
     public Insets getInsets() {
         return new Insets(0, 1, 1, 1);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         int h = getHeight();
-        int w = getWidth();
+        
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -28,19 +32,24 @@ public class SlideContainer extends JPanel {
          * Top Polygon
          */
         GeneralPath path = new GeneralPath();
-        path.moveTo(70, 0);
-        path.lineTo(8, 0);
-        path.quadTo(0, 0, 0, 7);
-        path.lineTo(0, 55);
-        path.lineTo(getWidth() - 1, 55);
-        path.lineTo(getWidth() - 1, 7);
-        path.quadTo(getWidth() - 1, 0, getWidth() - 8, 0);
-        path.lineTo(30, 0);
+        path.moveTo(70F, 0F);
+        path.lineTo(8F, 0F);
+        path.quadTo(0F, 0F, 0F, 7F);
+        path.lineTo(0F, 55F);
+        path.lineTo(getWidth() - 1F, 55F);
+        path.lineTo(getWidth() - 1F, 7F);
+        path.quadTo(getWidth() - 1F, 0F, getWidth() - 8F, 0F);
+        path.lineTo(30F, 0F);
 
         Rectangle bounds1 = path.getBounds();
-        GradientPaint painter = new GradientPaint(0, path.getBounds().y,
-                true ? new Color(240, 240, 240) : new Color(240, 240, 240), 0,
-                bounds1.y + bounds1.height - 1, true ? new Color(240, 240, 240) : new Color(240, 240, 240));
+        GradientPaint painter = new GradientPaint(
+                0.0f,
+                (float) path.getBounds().y,
+                new Color(240, 240, 240), 
+                0.0f,
+                (float) bounds1.y + (float) bounds1.height - 1F, 
+                new Color(240, 240, 240)
+        );
         g2d.setPaint(painter);
         g2d.fill(path);
 
@@ -63,12 +72,12 @@ public class SlideContainer extends JPanel {
          */
         h = h - 30;
         path = new GeneralPath();
-        path.moveTo(0, h);
-        path.lineTo(0, h + 22);
-        path.quadTo(0, h + 29, 8, h + 29);
-        path.lineTo(getWidth() - 8, h + 29);
-        path.quadTo(getWidth() - 1, h + 29, getWidth() - 1, h + 22);
-        path.lineTo(getWidth() - 1, h);
+        path.moveTo(0f, h);
+        path.lineTo(0f, h + 22f);
+        path.quadTo(0f, h + 29f, 8f, h + 29f);
+        path.lineTo(getWidth() - 8f, h + 29f);
+        path.quadTo(getWidth() - 1f, h + 29f, getWidth() - 1f, h + 22f);
+        path.lineTo(getWidth() - 1f, h);
         g2d.fill(path);
         g2d.setColor(new Color(128, 128, 128));
         g2d.draw(path);

@@ -1,6 +1,5 @@
-<meta http-equiv="refresh" content="5;url=${pageContext.request.contextPath}/index.jsp">
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <title>Error en el sistema.</title>
         <jsp:include page="WEB-INF/paginas/comunes/scriptArriba.jsp"/>

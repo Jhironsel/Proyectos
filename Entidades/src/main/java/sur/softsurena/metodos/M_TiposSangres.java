@@ -31,9 +31,9 @@ public class M_TiposSangres {
     public synchronized static List<TipoSangre> getList() {
         List<TipoSangre> tiposSangresList = new ArrayList<>();
         final String sql = """
-                           SELECT ID, DESCRIPCION 
+                           SELECT ID, DESCRIPCION
                            FROM V_T_TIPOS_SANGRE
-                           WHERE ID >= 0 
+                           WHERE ID >= 0
                            ORDER BY 1
                            """;
 

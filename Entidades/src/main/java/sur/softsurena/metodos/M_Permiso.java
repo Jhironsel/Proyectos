@@ -23,10 +23,10 @@ public class M_Permiso {
     /**
      * Este metodo devuelve todos los relacionados a un rol del sistema.
      *
-     * @param rol
+     * @param user
      * @return
      */
-    public synchronized static List<Role> getPermisosAsignados(String rol) {
+    public synchronized static List<Role> getPermisosAsignados(String user) {
         
         final String sql
                 = """
@@ -43,7 +43,7 @@ public class M_Permiso {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setString(1, rol);
+            ps.setString(1, user);
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -81,20 +81,21 @@ public class M_Permiso {
      * Consulta que permite obtener los permisos que tiene un rol disponible en
      * el sistema.
      *
-     * @param rol
+     * @param user
      * @return
      */
-    public synchronized static List<Role> getPermisosDisponibles(String rol) {
+    public synchronized static List<Role> getPermisosDisponibles(String user) {
 
-        final String sql = """
-            SELECT p.PROCEDIMIENTO, p.DESCRIPCION  
-            FROM VS_PROCEDIMIENTOS p 
-            LEFT JOIN VS_PRIVILEGIO r ON 
-                    TRIM(r.NOMBRE_RELACION) LIKE TRIM(p.PROCEDIMIENTO) AND
-                    TRIM(r.USUARIO)  LIKE ? 
-            WHERE p.PROCEDIMIENTO STARTING WITH 'PERM_' AND 
-                    TRIM(r.USUARIO) IS NULL AND 
-                    p.PROCEDIMIENTO NOT STARTING WITH 'TRANSITIONS'
+        final String sql = 
+                """
+                SELECT p.PROCEDIMIENTO, p.DESCRIPCION
+                FROM VS_PROCEDIMIENTOS p
+                LEFT JOIN VS_PRIVILEGIO r ON
+                            TRIM(r.NOMBRE_RELACION) LIKE TRIM(p.PROCEDIMIENTO) AND
+                            TRIM(r.USUARIO)  LIKE ?
+                WHERE p.PROCEDIMIENTO STARTING WITH 'PERM_' AND
+                        TRIM(r.USUARIO) IS NULL AND
+                p.PROCEDIMIENTO NOT STARTING WITH 'TRANSITIONS';
         """;
 
         List<Role> roles = new ArrayList<>();
@@ -104,7 +105,7 @@ public class M_Permiso {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
 
-            ps.setString(1, rol);
+            ps.setString(1, user);
 
             try (ResultSet rs = ps.executeQuery();) {
                 while (rs.next()) {

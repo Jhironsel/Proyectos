@@ -34,8 +34,8 @@ public class M_TurnoNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
+                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
                 FROM V_TURNOS
                 """.strip()
         );
@@ -49,9 +49,9 @@ public class M_TurnoNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
-                FROM V_TURNOS 
+                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
+                FROM V_TURNOS
                 WHERE ESTADO
                 """.strip()
         );
@@ -65,9 +65,9 @@ public class M_TurnoNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
-                FROM V_TURNOS 
+                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
+                FROM V_TURNOS
                 WHERE ESTADO IS FALSE
                 """.strip()
         );
@@ -82,9 +82,9 @@ public class M_TurnoNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
-                FROM V_TURNOS 
+                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
+                FROM V_TURNOS
                 WHERE ESTADO AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('JHIRONSEL'));
                 """.strip()
         );
@@ -99,9 +99,9 @@ public class M_TurnoNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
-                FROM V_TURNOS 
+                SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+                ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
+                FROM V_TURNOS
                 WHERE ESTADO IS FALSE AND UPPER(TRIM(TURNO_USUARIO)) LIKE UPPER(TRIM('JHIRONSEL'));
                 """.strip()
         );
@@ -191,11 +191,9 @@ public class M_TurnoNGTest {
             );
 
             idTurno = resultado.getId();
-            System.out.println("Se inserto el turno con el ID: " + idTurno);
         } else {
 
             idTurno = listaTurno.getFirst().getId();
-            System.out.println("Se realizo una consulta y se encontro un turno con el ID: " + idTurno);
             assertTrue(
                     idTurno > 0,
                     "Error al consultar los turnos del sistema."
@@ -209,7 +207,6 @@ public class M_TurnoNGTest {
             groups = "turno.update"
     )
     public void testUpdate() {
-        System.out.println("Actualizar el turno con el ID: " + idTurno);
         assertEquals(
                 M_Turno.update(idTurno),
                 Resultado
@@ -225,8 +222,6 @@ public class M_TurnoNGTest {
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public synchronized static void testDelete() {
-        System.out.println("Eliminar turno con el ID: " + idTurno);
-
         M_M_Factura.select(
                 M_Factura
                         .builder()

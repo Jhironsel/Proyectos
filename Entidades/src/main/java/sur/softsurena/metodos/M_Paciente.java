@@ -19,15 +19,15 @@ public class M_Paciente {
     //--------------------------------------------------------------------------
     /**
      * Consulta que permite obtener los atributos de los paciente en el sitema.
-     * 
-     * @param paciente 
+     *
+     * @param paciente
      * @return
      */
     public static List<Paciente> select(
             @NonNull Paciente paciente
     ) {
         List<Paciente> pacienteList = new ArrayList<>();
-        
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlSelect(paciente),
                 ResultSet.TYPE_FORWARD_ONLY,
@@ -58,22 +58,32 @@ public class M_Paciente {
         }
         return pacienteList;
     }
-    
+    public static final String ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES
+            = "Error al consultar la vista GET_PACIENTES del sistema.";
+
     protected static String sqlSelect(Paciente paciente) {
         Boolean id = Objects.isNull(paciente.getId());
         Boolean where = id;
-        
+
+        Boolean pagina = Objects.isNull(paciente.getPagina());
+
         return """
                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
                FROM V_PERSONAS_PACIENTES_ATR
                %s%s
                """.strip().formatted(
-                       where ? "":"WHERE ",
-                       id ? "": "ID = %d ".formatted(paciente.getId())
-               ).strip();
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(paciente.getId())
+        ).strip().concat("%s").formatted(
+                pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        paciente.getPagina().getNPaginaNro(),
+                                        paciente.getPagina().getNCantidadFilas(),
+                                        paciente.getPagina().getNPaginaNro(),
+                                        paciente.getPagina().getNCantidadFilas()
+                                )
+        );
     }
-    public static final String ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES
-            = "Error al consultar la vista GET_PACIENTES del sistema.";
 
     //--------------------------------------------------------------------------
     /**
@@ -88,7 +98,7 @@ public class M_Paciente {
     public static Resultado insert(Paciente paciente) {
         final String sql
                 = """
-                  EXECUTE PROCEDURE SP_I_PERSONA_PACIENTE (?,?,?,?);
+                  EXECUTE PROCEDURE SP_I_PERSONA_PACIENTE (?);
                   """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -98,10 +108,6 @@ public class M_Paciente {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, paciente.getId());
-            ps.setBoolean(2, paciente.getCesarea());
-            ps.setInt(3, paciente.getTiempoGestacion());
-            ps.setBoolean(4, paciente.getFumador());
-            
 
             ps.execute();
 
@@ -117,13 +123,13 @@ public class M_Paciente {
                     ERROR_AL_INSERTAR_PACIENTE,
                     ex
             );
-            return Resultado
-                    .builder()
-                    .mensaje(ERROR_AL_INSERTAR_PACIENTE)
-                    .icono(JOptionPane.ERROR_MESSAGE)
-                    .estado(Boolean.FALSE)
-                    .build();
         }
+        return Resultado
+                .builder()
+                .mensaje(ERROR_AL_INSERTAR_PACIENTE)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
     }
     public static final String ERROR_AL_INSERTAR_PACIENTE
             = "Error al insertar paciente.";

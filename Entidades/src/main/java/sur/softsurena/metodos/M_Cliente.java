@@ -74,6 +74,9 @@ public class M_Cliente {
             Cliente cliente
     ) {
         Boolean id = Objects.isNull(cliente.getId());
+        
+        Boolean pagina = Objects.isNull(cliente.getPagina());
+        
         StringBuilder sb = new StringBuilder();
         sb.append(
                 """
@@ -82,6 +85,15 @@ public class M_Cliente {
                 """
         );
         sb.append(id ? "":"WHERE ID = %d ".formatted(cliente.getId()));
+        sb.append(pagina ? "": "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        cliente.getPagina().getNPaginaNro(),
+                                        cliente.getPagina().getNCantidadFilas(),
+                                        cliente.getPagina().getNPaginaNro(),
+                                        cliente.getPagina().getNCantidadFilas()
+                                )
+        );
+        
 
         return sb.toString().strip();
     }
@@ -143,7 +155,7 @@ public class M_Cliente {
         StringBuilder sb = new StringBuilder();
         sb.append(
                 """
-                SELECT ID, TOTAL_FACTURADO, TOTAL_DEUDA, CANTIDAD_FACTURA, 
+                SELECT ID, TOTAL_FACTURADO, TOTAL_DEUDA, CANTIDAD_FACTURA,
                     FECHA_ULTIMA_COMPRA, SALDO
                 FROM V_PERSONAS_CLIENTES_ATR
                 """
@@ -158,21 +170,20 @@ public class M_Cliente {
      * Permite agregar un cliente ya registrado en la tabla de Personas a
      * Personas_Cliente.
      *
-     * @param id Identificador de la personas en el sistema.
+     * @param cliente Identificador de la personas en el sistema.
      *
      * @return Un objecto de la clase
      */
-    public static Resultado insertById(int id) {
+    public static Resultado insert(Cliente cliente) {
         try (CallableStatement cs = getCnn().prepareCall(
                 "EXECUTE PROCEDURE SP_I_PERSONA_CLIENTE(?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, id);
+            cs.setInt(1, cliente.getId());
 
             cs.execute();
-
             return Resultado
                     .builder()
                     .mensaje(CLIENTE__AGREGADO__CORRECTAMENTE)
@@ -206,18 +217,18 @@ public class M_Cliente {
      *
      * Para eliminar un cliente, no debe de tener registros en el sistema.
      *
-     * @param idCliente
+     * @param cliente
      * @return
      */
-    public synchronized static Resultado delete(int idCliente) {
-        final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_CLIENTE (?);";
+    public static Resultado delete(Cliente cliente) {
+        final String sql = "EXECUTE PROCEDURE SP_D_PERSONA_CLIENTE(?);";
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, idCliente);
+            ps.setInt(1, cliente.getId());
 
             ps.execute();
 
@@ -236,7 +247,6 @@ public class M_Cliente {
         }
         return Resultado
                 .builder()
-                .id(-1)
                 .mensaje(CLIENTE_NO_PUEDE_SER_BORRADO)
                 .icono(JOptionPane.ERROR_MESSAGE)
                 .estado(Boolean.FALSE)

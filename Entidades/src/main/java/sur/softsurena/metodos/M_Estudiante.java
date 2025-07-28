@@ -63,19 +63,28 @@ public class M_Estudiante {
     }
 
     protected static String sqlSelect(Estudiante estudiante) {
+        Boolean id = Objects.isNull(estudiante.getId());
         Boolean matricula = Objects.isNull(estudiante.getMatricula());
+        Boolean pagina = Objects.isNull(estudiante.getPagina());
+        
+        Boolean where =  id && matricula;
         return """
                SELECT ID, MATRICULA
                FROM V_PERSONAS_ESTUDIANTES_ATR
-               %s
+               %s%s%s
                """.formatted(
-                matricula
-                        ? ""
-                        : "WHERE MATRICULA STARTING WITH '%s' "
+                       where ? "":"WHERE ",
+                       id ? "":"ID = %d".formatted(estudiante.getId()),
+                       matricula ? "" : "MATRICULA STARTING WITH '%s' ".formatted(estudiante.getMatricula())
+        ).strip().concat("%s").formatted(
+                pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
-                                        estudiante.getMatricula()
+                                        estudiante.getPagina().getNPaginaNro(),
+                                        estudiante.getPagina().getNCantidadFilas(),
+                                        estudiante.getPagina().getNPaginaNro(),
+                                        estudiante.getPagina().getNCantidadFilas()
                                 )
-        ).strip();
+        );
     }
 
 //------------------------------------------------------------------------------
@@ -95,13 +104,12 @@ public class M_Estudiante {
             Estudiante estudiante
     ) {
         try (CallableStatement cs = getCnn().prepareCall(
-                "EXECUTE PROCEDURE SP_I_PERSONA_ESTUDIANTE(?,?)",
+                "EXECUTE PROCEDURE SP_I_PERSONA_ESTUDIANTE(?)",
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             cs.setInt(1, estudiante.getId());
-            cs.setString(2, estudiante.getMatricula());
 
             cs.execute();
 
@@ -196,7 +204,7 @@ public class M_Estudiante {
             ps.setInt(1, estudiante.getId());
 
             ps.executeUpdate();
-            
+
             return Resultado
                     .builder()
                     .mensaje("Estudiante borrado correctamente.!!")

@@ -27,7 +27,7 @@ public class M_ARS {
             @NonNull ARS ars
     ) {
         List<ARS> arsList = new ArrayList<>();
-        
+
         try (
                 Statement ps = getCnn().createStatement(
                         ResultSet.TYPE_FORWARD_ONLY,
@@ -82,7 +82,7 @@ public class M_ARS {
     public static Resultado insert(ARS ars) {
         final String sql
                 = """
-                  SELECT O_ID 
+                  SELECT O_ID
                   FROM SP_I_ARS (?, ?, ?);
                   """;
 

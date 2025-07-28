@@ -18,15 +18,15 @@ import java.awt.geom.GeneralPath;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class TitlePanel extends JPanel {
+public final class TitlePanel extends JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     int width = 0;
     private Color startColor = Color.WHITE;//new Color(238, 238, 238);
     private Color endColor = Color.GRAY;//new Color(255, 255, 255);
-    GeneralPath path;
     Color accentColor = new Color(0x80ffffff);
     Color textColor = new Color(0x0f0f0f);
-    private Image imageIcon;
     private String title = "Test";
     private Container parent;
     private boolean isToggleIcon;
@@ -34,10 +34,10 @@ public class TitlePanel extends JPanel {
     public TitlePanel(String title, Image imageIcon, int width) {
         super();
         this.width = width;
-        this.imageIcon = imageIcon;
         this.title = title;
         MouseListener mouseListener = new MouseAdapter() {
 
+            @Override
             public void mouseClicked(MouseEvent e) {
                 getParentNode((Container) e.getSource());
                 if (parent != null) {
@@ -45,10 +45,12 @@ public class TitlePanel extends JPanel {
                 }
             }
 
+            @Override
             public void mouseEntered(MouseEvent e) {
                 setCursor("HAND");
             }
 
+            @Override
             public void mouseExited(MouseEvent e) {
                 setCursor("DEFAULT");
             }
@@ -84,10 +86,12 @@ public class TitlePanel extends JPanel {
 
     }
 
+    @Override
     public int getWidth() {
         return width;
     }
 
+    @Override
     public int getHeight() {
         return 30;
     }
@@ -98,6 +102,7 @@ public class TitlePanel extends JPanel {
      *
      * @param g
      */
+    @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
         int h = getHeight();
@@ -145,14 +150,6 @@ public class TitlePanel extends JPanel {
             g2d.drawString(title, 40, 21);
         }
 
-        /**
-         *  image
-         */
-        if (imageIcon != null) {
-            //new ImageIcon("images/self.png").getImage();
-            g2d.drawImage(imageIcon, 5, 5, 20, 20,
-                    null, null);
-        }
         if(isToggleIcon){
             g2d.drawImage(new ImageIcon("images/arrowUp.png").getImage(), getWidth() - 20, 10, 10, 10,
                 null, null);
@@ -164,6 +161,7 @@ public class TitlePanel extends JPanel {
 
     /**
      *  This method sets the Actual Background Color of the Button
+     * @param color
      */
     public void setStartColor(Color color) {
         startColor = color;
@@ -171,6 +169,7 @@ public class TitlePanel extends JPanel {
 
     /**
      *  This method sets the Pressed Color of the Button
+     * @param pressedColor
      */
     public void setEndColor(Color pressedColor) {
         endColor = pressedColor;

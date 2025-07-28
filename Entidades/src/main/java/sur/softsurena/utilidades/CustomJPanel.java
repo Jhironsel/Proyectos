@@ -10,9 +10,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class CustomJPanel extends JPanel {
+public final class CustomJPanel extends JPanel {
 
-    private BufferedImage image;
+    private static final long serialVersionUID = 1L;
+
+    private transient BufferedImage image;
     private int x, y;
     private static CustomJPanel custom;
 

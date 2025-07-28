@@ -14,18 +14,22 @@ public class SampleApp {
     public static void main (String[] args) {
 
         try {
-            UserDatabase.Factory dbFactory = (UserDatabase.Factory)Class.forName(DEFAULT_DB_FACTORY).newInstance();
+            UserDatabase.Factory dbFactory =  
+                    (UserDatabase.Factory) Class.forName(DEFAULT_DB_FACTORY).newInstance();
+            
             UserDatabase userDatabase = dbFactory.createDB();
 
-            UserInterface.Factory uiFactory = (UserInterface.Factory)Class.forName(DEFAULT_UI_FACTORY).newInstance();
+            UserInterface.Factory uiFactory = 
+                    (UserInterface.Factory) Class.forName(DEFAULT_UI_FACTORY).newInstance();
+            
             UserInterface userInterface = uiFactory.createUI(userDatabase);
 
             ExecutorService exec = Executors.newCachedThreadPool();
             exec.execute(userInterface);
 
             exec.shutdown();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            
         }
     }
 }

@@ -9,9 +9,11 @@ import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 
-public class EnrollmentForm extends CaptureForm {
+public final class EnrollmentForm extends CaptureForm {
 
-    private final DPFPEnrollment enroller = DPFPGlobal.getEnrollmentFactory().createEnrollment();
+    private static final long serialVersionUID = 1L;
+
+    private transient final DPFPEnrollment enroller = DPFPGlobal.getEnrollmentFactory().createEnrollment();
 
     EnrollmentForm(Frame owner) {
         super(owner);

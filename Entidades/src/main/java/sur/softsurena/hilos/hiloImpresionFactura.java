@@ -23,7 +23,7 @@ import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class hiloImpresionFactura extends Thread {
+public final class hiloImpresionFactura extends Thread {
 
     //Variable que permite iniciar o continuar el hilo. 
     private boolean continuar = true;
@@ -34,7 +34,7 @@ public class hiloImpresionFactura extends Thread {
     
     private final String fileReporte;
     
-    private final Map parametros;
+    private final Map<String, Object> parametros;
     
     private final JPanel jPanelImpresion;
     
@@ -58,7 +58,7 @@ public class hiloImpresionFactura extends Thread {
             Boolean preVista, 
             Boolean credito,
             String fileReporte, 
-            Map parametros, 
+            Map<String, Object> parametros, 
             JPanel jPanelImpresion,
             JProgressBar jprImpresion
     ) {
@@ -104,7 +104,7 @@ public class hiloImpresionFactura extends Thread {
                     
                     jprImpresion.setValue(77);
                     jprImpresion.setString("77% Image Creada");
-                    frmPrintFacturaConReporte2 miReport = new frmPrintFacturaConReporte2(null, true);
+                    VistaPrintFacturaConReporte2 miReport = new VistaPrintFacturaConReporte2(null, true);
                     
                     jprImpresion.setValue(89);
                     jprImpresion.setString("89% Imagen cargada");

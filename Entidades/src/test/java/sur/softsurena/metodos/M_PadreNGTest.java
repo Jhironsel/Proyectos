@@ -186,7 +186,9 @@ public class M_PadreNGTest {
     public void testDelete() {
 
         assertEquals(
-                M_Padre.delete(idPersona),
+                M_Padre.delete(
+                        Padre.builder().id(idPersona).build()
+                ),
                 Resultado
                         .builder()
                         .mensaje(BORRADO_DE_REGISTRO_CORRECTAMENTE)

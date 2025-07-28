@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -189,11 +190,13 @@ public class M_ContactoEmail {
             "@yahoo.com",
             "@TeJodiste.net"
         };
-
-        int num1 = (int) (Math.random() * 10);
-        int num2 = (int) (Math.random() * 10);
-        int num3 = (int) (Math.random() * 10);
-        int num4 = (int) (Math.random() * 10);
+        
+        
+        SecureRandom random = new SecureRandom();
+        int num1 = (int) (random.nextDouble() * 10);
+        int num2 = (int) (random.nextDouble() * 10);
+        int num3 = (int) (random.nextDouble() * 10);
+        int num4 = (int) (random.nextDouble() * 10);
 
         telefonoMovil
                 .append("correo_prueba_")
@@ -201,7 +204,7 @@ public class M_ContactoEmail {
                 .append(num2)
                 .append(num3)
                 .append(num4)
-                .append(correoDominio[(int) (Math.random() * correoDominio.length)]
+                .append(correoDominio[(int) (random.nextDouble() * correoDominio.length)]
                 );
 
         return telefonoMovil.toString();

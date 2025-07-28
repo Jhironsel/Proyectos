@@ -21,7 +21,7 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_ARSNGTest {
 
-    private static Integer idARS;
+    private static Resultado resultado;
 
     @Test
     public void testSqlARS() {
@@ -72,11 +72,6 @@ public class M_ARSNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Test en cargado de verificar la consultas de las 
-                          ARS del sistema.
-                          """,
             dependsOnMethods = "testSqlARS"
     )
     public static void testSelect() {
@@ -113,16 +108,11 @@ public class M_ARSNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Test que verifica que un ARS puede ser insertardo en
-                          el sistema.
-                          """,
             groups = "ars.insert",
             dependsOnMethods = "testSelect"
     )
     public static void testInsert() {
-        Resultado result = M_ARS.insert(
+        resultado = M_ARS.insert(
                 ARS
                         .builder()
                         .descripcion(
@@ -138,7 +128,7 @@ public class M_ARSNGTest {
         );
 
         assertEquals(
-                result,
+                resultado,
                 Resultado
                         .builder()
                         .mensaje(SEGURO_AGREGADO_CORRECTAMENTE)
@@ -149,24 +139,20 @@ public class M_ARSNGTest {
         );
 
         assertTrue(
-                result.getId() > 0,
+                resultado.getId() > 0,
                 ERROR_AL_INSERTAR__SEGURO
         );
-
-        idARS = result.getId();
     }
 
 //------------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = "Test para modificar las ars del sistema.",
             dependsOnMethods = "testInsert"
     )
     public static void testUpdate() {
         Resultado result = M_ARS.update(
                 ARS
                         .builder()
-                        .id(idARS)
+                        .id(resultado.getId())
                         .descripcion("Senasa3")
                         .covertura(BigDecimal.valueOf(50.00))
                         .estado(Boolean.TRUE)
@@ -187,18 +173,13 @@ public class M_ARSNGTest {
 
 //------------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Test que permite eliminar un registro de ars del
-                          sistema.
-                          """,
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
         Resultado result = M_ARS.delete(
                 ARS
                         .builder()
-                        .id(idARS)
+                        .id(resultado.getId())
                         .build()
         );
 

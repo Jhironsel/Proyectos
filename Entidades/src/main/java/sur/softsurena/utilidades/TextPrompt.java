@@ -16,8 +16,10 @@ import javax.swing.text.*;
  * of the parent text component. You are free to change the properties after
  * class construction.
  */
-public class TextPrompt extends JLabel
+public final class TextPrompt extends JLabel
         implements FocusListener, DocumentListener {
+
+    private static final long serialVersionUID = 1L;
 
     public enum Show {
         ALWAYS,
@@ -26,7 +28,7 @@ public class TextPrompt extends JLabel
     }
 
     private JTextComponent component;
-    private Document document;
+    private transient Document document;
 
     private Show show;
     private boolean showPromptOnce;

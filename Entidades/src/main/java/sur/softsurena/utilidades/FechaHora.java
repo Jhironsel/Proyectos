@@ -11,7 +11,7 @@ public class FechaHora {
 
     public FechaHora() {
         GregorianCalendar currentDate = new GregorianCalendar();
-        curDate = (Date) currentDate.getTime();
+        curDate = currentDate.getTime();
         dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         dateFormat1 = new SimpleDateFormat("HH:mm:ss");
     }

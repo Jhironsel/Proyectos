@@ -5,6 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Almacen;
+import static sur.softsurena.metodos.M_Almacen.ALMACEN_ACTUALIZADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_AGREGADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ALMACEN_ELIMINADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Almacen.ERROR_AL_ELIMINAR_ALMACEN;
@@ -16,7 +17,7 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_AlmacenNGTest {
 
-    private static int idAlmacen;
+    private static Resultado resultado;
 
     @Test
     public void testSqlSelect() {
@@ -27,7 +28,7 @@ public class M_AlmacenNGTest {
                                 .build()
                 ), 
                 """
-                SELECT ID, NOMBRE, UBICACION, ESTADO
+                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                 FROM V_ALMACENES
                 """.strip()
         );
@@ -40,7 +41,7 @@ public class M_AlmacenNGTest {
                                 .build()
                 ), 
                 """
-                SELECT ID, NOMBRE, UBICACION, ESTADO
+                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                 FROM V_ALMACENES
                 WHERE ID = 1
                 """.strip()
@@ -54,7 +55,7 @@ public class M_AlmacenNGTest {
                                 .build()
                 ), 
                 """
-                SELECT ID, NOMBRE, UBICACION, ESTADO
+                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                 FROM V_ALMACENES
                 WHERE NOMBRE STARTING WITH 'PRUEBA'
                 """.strip()
@@ -68,9 +69,9 @@ public class M_AlmacenNGTest {
                                 .build()
                 ), 
                 """
-                SELECT ID, NOMBRE, UBICACION, ESTADO
+                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                 FROM V_ALMACENES
-                WHERE ESTADO IS true
+                WHERE ESTADO IS TRUE
                 """.strip()
         );
         
@@ -82,9 +83,9 @@ public class M_AlmacenNGTest {
                                 .build()
                 ), 
                 """
-                SELECT ID, NOMBRE, UBICACION, ESTADO
+                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                 FROM V_ALMACENES
-                WHERE ESTADO IS false
+                WHERE ESTADO IS FALSE
                 """.strip()
         );
     }
@@ -165,10 +166,9 @@ public class M_AlmacenNGTest {
                         .id(0)
                         .build()
         ).isEmpty()) {
-            M_Almacen.updateOrInsert(
+            M_Almacen.insert(
                     Almacen
                             .builder()
-                            .id(0)
                             .nombre("Almacen general")
                             .ubicacion("Almacen generico del sistema.")
                             .estado(Boolean.TRUE)
@@ -182,7 +182,7 @@ public class M_AlmacenNGTest {
     )
     public static void testInsert() {
         
-        Resultado result = M_Almacen.updateOrInsert(
+        resultado = M_Almacen.insert(
                 Almacen
                         .builder()
                         .nombre("Registro prueba")
@@ -192,7 +192,7 @@ public class M_AlmacenNGTest {
         );
         
         assertEquals(
-                result,
+                resultado,
                 Resultado
                         .builder()
                         .mensaje(ALMACEN_AGREGADO_CORRECTAMENTE)
@@ -203,41 +203,42 @@ public class M_AlmacenNGTest {
         );
 
         assertTrue(
-                result.getId() > 0,
+                resultado.getId() > 0,
                 "Error al insertar almacen."
         );
-
-        idAlmacen = result.getId();
-
-        result = M_Almacen.updateOrInsert(
+    }
+    
+    @Test(
+            dependsOnMethods = "testInsert"
+    )
+    public static void testUpdate() {
+        Resultado result = M_Almacen.update(
                 Almacen
                         .builder()
-                        .id(idAlmacen)
-                        .nombre("Texto de prueba")
-                        .ubicacion("Debe de describir la ubicacion del almacen.")
+                        .id(resultado.getId())
+                        .nombre("Registro ha sido actualizado")
+                        .ubicacion("Ha sido movido.")
                         .estado(Boolean.FALSE)
                         .build()
         );
-        
+
         assertEquals(
                 result,
                 Resultado
                         .builder()
-                        .mensaje(ALMACEN_AGREGADO_CORRECTAMENTE)
+                        .mensaje(ALMACEN_ACTUALIZADO_CORRECTAMENTE)
                         .icono(JOptionPane.INFORMATION_MESSAGE)
                         .estado(Boolean.TRUE)
                         .build(),
-                M_Almacen.ERROR_AL_INSERTAR__ALMACEN
+                ERROR_AL_ELIMINAR_ALMACEN
         );
-
     }
 
     @Test(
-            
-            dependsOnMethods = {"testInsert"}
+            dependsOnMethods = {"testUpdate"}
     )
     public static void testDelete() {
-        Resultado result = M_Almacen.delete(idAlmacen);
+        Resultado result = M_Almacen.delete(resultado.getId());
         assertEquals(
                 result,
                 Resultado
@@ -253,7 +254,7 @@ public class M_AlmacenNGTest {
     public static Almacen getAlmacen(){
         return Almacen
                 .builder()
-                .id(idAlmacen)
+                .id(resultado.getId())
                 .nombre("Almacen generado")
                 .ubicacion("Ubicacion generada.")
                 .estado(Boolean.TRUE)

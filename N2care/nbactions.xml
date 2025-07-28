@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.6.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>archivos.frmLogin</exec.args>
+                <exec.args>sur.softsurena.vistas.VistaLogin</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>

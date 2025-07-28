@@ -1,7 +1,6 @@
 
 package sur.softsurena.entidades;
 
-import sur.softsurena.abstracta.Persona;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -12,12 +11,14 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Deuda{
     private final Integer id;
-    private final Integer idCliente;
+    private final Integer idPersona;
     private final String concepto;
     private final BigDecimal monto;
     private final Date fecha;
     private final Time hora;
     private final Character estadoDeuda;
+    
+    private final Paginas pagina;
 
     @Override
     public String toString() {

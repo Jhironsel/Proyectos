@@ -83,10 +83,8 @@ public class M_ContactoTelNGTest {
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public void testSelectByID() {
-        List result = M_ContactoTel.selectByID(idPersona);
-
         assertFalse(
-                result.isEmpty(),
+                M_ContactoTel.selectByID(idPersona).isEmpty(),
                 M_ContactoTel.ERROR_AL_CONSULTAR_LA_VISTA_V_CONTACTOS_T
         );
     }

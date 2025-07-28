@@ -18,19 +18,18 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_Proveedor {
+
     /**
      * Consulta a la base de datos sobre los proveedores del sistema.
      *
+     * @param proveedor
      * @return
      */
-    public synchronized static List<Proveedor> select() {
-        final String sql = """
-                           SELECT ID
-                           FROM V_PERSONAS_PROVEEDORES
-                           """;
+    public synchronized static List<Proveedor> select(Proveedor proveedor) {
+
         List<Proveedor> lista = new ArrayList<>();
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(proveedor),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -52,6 +51,34 @@ public class M_Proveedor {
             );
         }
         return lista;
+    }
+
+    public static String sqlSelect(Proveedor proveedor) {
+        Boolean id = Objects.isNull(proveedor.getId());
+        Boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
+
+        Boolean where = id && codigo;
+        
+        Boolean pagina = Objects.isNull(proveedor.getPagina());
+
+        String sql = """
+                     SELECT ID
+                     FROM V_PERSONAS_PROVEEDORES
+                     %s%s
+                     """.formatted(
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(proveedor.getId()),
+                codigo ? "" : "CODIGO STARTING WITH '%s'".formatted(proveedor.getCodigoProveedor())
+        );
+        return sql.concat("%s").formatted(
+                        pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                        .formatted(
+                                                proveedor.getPagina().getNPaginaNro(),
+                                                proveedor.getPagina().getNCantidadFilas(),
+                                                proveedor.getPagina().getNPaginaNro(),
+                                                proveedor.getPagina().getNCantidadFilas()
+                                        )
+                );
     }
 
     public synchronized static List<Proveedor> selectATR(Proveedor proveedor) {
@@ -87,16 +114,27 @@ public class M_Proveedor {
         boolean id = Objects.isNull(proveedor.getId());
         boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
         boolean where = id && codigo;
+
+        Boolean pagina = Objects.isNull(proveedor.getPagina());
+
         final String sql = """
                            SELECT ID, CODIGO
                            FROM V_PERSONAS_PROVEEDORES_ATR
                            %s%s%s
                            """.formatted(
-                                   where ? "":"WHERE ", 
-                                   id ? "":"ID = %d ".formatted(proveedor.getId()),
-                                   codigo ? "":"CODIGO STARTING WITH '%s' ".formatted(proveedor.getCodigoProveedor())
-                           );
-        return sql.strip();
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(proveedor.getId()),
+                codigo ? "" : "CODIGO STARTING WITH '%s' ".formatted(proveedor.getCodigoProveedor())
+        );
+        return sql.strip().concat("%s").formatted(
+                pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        proveedor.getPagina().getNPaginaNro(),
+                                        proveedor.getPagina().getNCantidadFilas(),
+                                        proveedor.getPagina().getNPaginaNro(),
+                                        proveedor.getPagina().getNCantidadFilas()
+                                )
+        ).strip();
     }
 //------------------------------------------------------------------------------
 
@@ -111,7 +149,7 @@ public class M_Proveedor {
 
         final String sql
                 = """
-                  EXECUTE PROCEDURE SP_I_PERSONA_PROVEEDOR (?,?)
+                  EXECUTE PROCEDURE SP_I_PERSONA_PROVEEDOR(?)
                   """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -122,7 +160,6 @@ public class M_Proveedor {
         )) {
 
             ps.setInt(1, proveedor.getId());
-            ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
 

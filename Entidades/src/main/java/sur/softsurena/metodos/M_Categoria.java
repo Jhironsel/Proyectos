@@ -117,7 +117,7 @@ public class M_Categoria {
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
+        )) {            
             ps.setString(1, categoria.getDescripcion());
             ps.setBoolean(2, categoria.getEstado());
 

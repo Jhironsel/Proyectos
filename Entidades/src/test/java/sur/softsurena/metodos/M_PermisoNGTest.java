@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -20,20 +19,20 @@ public class M_PermisoNGTest {
             enabled = false
     )
     public void testGetPermisosAsignados() {
-        String rol = "";
-        List expResult = null;
-        List result = M_Permiso.getPermisosAsignados(rol);
-        assertEquals(result, expResult);
+        assertFalse(
+                M_Permiso.getPermisosAsignados("SYSDBA").isEmpty(), 
+                "Error no se encuentra los roles de "
+        );
     }
 
     @Test(
             enabled = false
     )
     public void testGetPermisosDisponibles() {
-        String rol = "";
-        List expResult = null;
-        List result = M_Permiso.getPermisosDisponibles(rol);
-        assertEquals(result, expResult);
+        assertFalse(
+                M_Permiso.getPermisosDisponibles("SYSDBA").isEmpty(), 
+                "Error no se encuentra los permisos de SYSDBA."
+        );
     }
 
     @Test(

@@ -42,14 +42,13 @@ public class M_RoleNGTest {
             enabled = true,
             priority = 0,
             description = """
-                          Test que verifica que la tabla de consulta roles este 
+                          Test que verifica que la tabla de consulta roles este
                           vacia.
                           """
     )
     public void testGetRoles() {
-        List result = M_Role.getRoles();
         assertFalse(
-                result.isEmpty(),
+                M_Role.getRoles().isEmpty(),
                 "Existen registros de roles en el sistema."
         );
     }

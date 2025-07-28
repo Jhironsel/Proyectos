@@ -8,11 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import sur.softsurena.metodos.Imagenes;
 
-public class ButtonJTabbedPane extends JPanel {
+public final class ButtonJTabbedPane extends JPanel {
 
-    private JLabel L;
-    private JButton B;
-    private int size = 10;
+    private static final long serialVersionUID = 1L;
+
+    private final JLabel L;
+    private final JButton B;
 
     public ButtonJTabbedPane(String title, JTabbedPane jtp) {
         setOpaque(false);

@@ -136,11 +136,11 @@ public class M_Padre {
      * Metodo que elimina el registro del identificador de la tabla
      * PERSONAS_PADRES.
      *
-     * @param id
+     * @param padre
      *
      * @return
      */
-    public synchronized static Resultado delete(int id) {
+    public synchronized static Resultado delete(Padre padre) {
         final String sql
                 = "EXECUTE PROCEDURE SP_D_PERSONA_PADRE(?)";
 
@@ -150,7 +150,7 @@ public class M_Padre {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, id);
+            ps.setInt(1, padre.getId());
 
             ps.executeUpdate();
 
@@ -164,7 +164,7 @@ public class M_Padre {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ex.getMessage(),
+                    ERROR_AL_BORRAR_PADRE,
                     ex
             );
             return Resultado

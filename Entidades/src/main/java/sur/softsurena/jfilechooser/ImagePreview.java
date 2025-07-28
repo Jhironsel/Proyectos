@@ -5,8 +5,10 @@ import java.beans.*;
 import java.awt.*;
 import java.io.File;
 
-public class ImagePreview extends JComponent 
+public final class ImagePreview extends JComponent 
                            implements PropertyChangeListener {
+
+    private static final long serialVersionUID = 1L;
     ImageIcon thumbnail = null;
     File f = null;
                              
@@ -29,6 +31,7 @@ public class ImagePreview extends JComponent
         }
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         String prop = e.getPropertyName();
         if (prop.equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {
@@ -40,6 +43,7 @@ public class ImagePreview extends JComponent
         }
     }
 
+    @Override
     public void paint(Graphics g) {
         if (thumbnail == null) {
             loadImage();

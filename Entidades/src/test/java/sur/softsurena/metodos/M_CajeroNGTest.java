@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
@@ -13,9 +12,8 @@ public class M_CajeroNGTest {
 
     @Test
     public void testGetCajeros() {
-        List result = M_Cajero.select();
         assertFalse(
-                result.isEmpty(), 
+                M_Cajero.select().isEmpty(), 
                 "La tabla de cajero NO contiene usuarios"
         );
     }

@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Editar Clientes</title>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="txtSaldo">Saldo</label>
-                                        <input type="number" class="form-control" name="txtSaldo" required value="${cliente.saldo}" step="any"/>
+                                        <input type="number" class="form-control" name="txtSaldo" value="${cliente.saldo}" step="any" required/>
                                     </div>
                                 </div>
                             </div>

@@ -7,9 +7,11 @@ import javax.swing.JDesktopPane;
 import sur.softsurena.metodos.Imagenes;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class DesktopConFondo extends JDesktopPane {
+public final class DesktopConFondo extends JDesktopPane {
 
-    private Image imagen;
+    private static final long serialVersionUID = 1L;
+
+    private transient Image imagen;
     public void setImagen(String nombreImagen) {
         if (nombreImagen != null) {
             imagen = new Imagenes(nombreImagen).getIcono().getImage();

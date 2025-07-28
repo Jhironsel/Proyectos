@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,9 +25,9 @@ public class M_Codigo_Postal {
      */
     public synchronized static List<Codigo_Postal> getCodigoPostal(int id_provincia) {
         final String sql ="""
-                          SELECT ID, IDPROVINCIA, LOCALIDAD, CODIGO_POSTAL 
-                          FROM V_CODIGOS_POSTALES 
-                          WHERE r.IDPROVINCIA = %d;
+                          SELECT ID, ID_PROVINCIA, LOCALIDAD, CODIGO_POSTAL
+                          FROM V_T_CODIGOS_POSTALES
+                          WHERE ID_PROVINCIA = %d;
                           """.formatted(id_provincia);
 
         List<Codigo_Postal> codigo_postal_list = new ArrayList<>();
@@ -43,7 +42,7 @@ public class M_Codigo_Postal {
                         Codigo_Postal.
                                 builder().
                                 id(rs.getInt("ID")).
-                                idProvincia(rs.getInt("IDPROVINCIA")).
+                                idProvincia(rs.getInt("ID_PROVINCIA")).
                                 localidad(rs.getString("LOCALIDAD")).
                                 codigo_postal(rs.getInt("CODIGO_POSTAL")).
                                 build()

@@ -31,7 +31,7 @@ public class Role {
                 return "RDB$ADMIN";
             }
         }
-        return roleName.strip();
+        return roleName.strip().replace("R_", "");
     }
 
 }

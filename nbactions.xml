@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>clean</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>clean</goal>
+                
+                
+                
+                
+                
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Con Sonar</actionName>
+            <displayName>Con Sonar</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>verify</goal>
+                <goal>sonar:sonar</goal>
+                <goal>-Dsonar.projectKey=Proyectos-de-Sistemas</goal>
+                <goal>-Dsonar.host.url=http://40.233.25.79:9000</goal>
+                <goal>-Dsonar.login=sqp_1d5b76499319da5b3eea94c0a05f657d7919a7e4</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>profSonar</activatedProfile>
+            </activatedProfiles>
+        </action>
+    </actions>

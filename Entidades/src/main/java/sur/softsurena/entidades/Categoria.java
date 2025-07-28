@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Categoria implements Comparable {
+public final class Categoria implements Comparable<Object> {
     
     private final Integer id_categoria;
     private final String descripcion;

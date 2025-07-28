@@ -5,7 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class TestSlidingPanel extends JPanel {
+public final class TestSlidingPanel extends JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     public TestSlidingPanel() {
         SlidePaneFactory factory = SlidePaneFactory.getInstance();        

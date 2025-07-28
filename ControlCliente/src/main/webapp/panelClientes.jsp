@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <title>Lista de clientes</title>
         <jsp:include page="WEB-INF/paginas/comunes/scriptArriba.jsp"/>

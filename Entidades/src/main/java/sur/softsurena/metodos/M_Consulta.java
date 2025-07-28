@@ -66,7 +66,7 @@ public class M_Consulta {
         Boolean where = !id || !id_controlConsulta || !id_Paciente;
 
         return """
-                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE, 
+                SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,
                     ESTADO
                 FROM V_CONSULTAS
                 %s%s%s%s

@@ -24,7 +24,6 @@ public class Archivo {
         try (PrintWriter salida = new PrintWriter(archivo);){
             salida.println(contenido);
             salida.println();//Agregar espacio al final y en blanco.
-            salida.close();
             return true;
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -40,7 +39,6 @@ public class Archivo {
                 LOG.info(lectura);
                 lectura = entrada.readLine();
             }
-            entrada.close();
             return true;
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
@@ -55,7 +53,6 @@ public class Archivo {
         try (PrintWriter salida = new PrintWriter(new FileWriter(archivo, true));){
             salida.println(anexo);
             salida.println();//Agregar un espacio en blanco al final
-            salida.close();
             return true;
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);

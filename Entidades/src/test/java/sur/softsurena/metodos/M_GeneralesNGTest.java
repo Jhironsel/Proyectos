@@ -8,6 +8,7 @@ import org.testng.asserts.SoftAssert;
 import sur.softsurena.entidades.Generales;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA;
+import static sur.softsurena.metodos.M_Generales.GENERALES_ACTUALIZADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Generales.GENERALES_BORRADA_CORRECTAMENTE_DEL_SISTE;
 import static sur.softsurena.metodos.M_Generales.GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS;
 import sur.softsurena.utilidades.Resultado;
@@ -22,7 +23,7 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_GeneralesNGTest {
 
-    private static Integer idGeneral, idPersona, idTipoSangre=0;
+    private static int idGeneral, idPersona, idTipoSangre;
     private final SoftAssert softAssert;
 
     public M_GeneralesNGTest() {
@@ -109,6 +110,19 @@ public class M_GeneralesNGTest {
                 """
         );
 
+        assertEquals(
+                M_Generales.select(
+                        Generales
+                                .builder()
+                                .cedula("999-9999999-9")
+                                .build()
+                ).getFirst().getCedula(),
+                "000-0000000-0",
+                """
+                Error al realizar la consulta a generales. 99
+                """
+        );
+        
         assertNotNull(
                 M_Generales.select(
                         Generales
@@ -138,19 +152,30 @@ public class M_GeneralesNGTest {
     public void testPersona() {
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
-        
-        System.out.println("personas registrada para las generales %d.".formatted(idPersona));
     }
 
     @Test(
-        dependsOnMethods = "testPersona"
+            dependsOnMethods = "testPersona"
     )
-    public void testUpdateOrInsert() {
-        Resultado resultado = M_Generales.updateOrInsert(
-                getGenerales()
-        );
+    public void testInsert() {
+        M_PersonaNGTest.testInsert();
+
         assertEquals(
-                resultado,
+                M_Generales.insert(
+                        Generales
+                                .builder()
+                                .idPersona(
+                                        M_PersonaNGTest
+                                                .getPersona(Boolean.TRUE)
+                                                .getIdPersona()
+                                )
+                                .cedula(
+                                        M_Generales.generarCedula()
+                                )
+                                .idTipoSangre(1)
+                                .estado_civil('X')
+                                .build()
+                ),
                 Resultado
                         .builder()
                         .mensaje(GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS)
@@ -159,8 +184,35 @@ public class M_GeneralesNGTest {
                         .build(),
                 ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
         );
-        
-        idGeneral = resultado.getId();
+    }
+    
+//------------------------------------------------------------------------------
+    @Test(
+        dependsOnMethods = "testInsert"
+    )
+    public void testUpdate() {
+        assertEquals(
+                M_Generales.update(
+                        Generales
+                                .builder()
+                                .idPersona(
+                                        M_PersonaNGTest
+                                                .getPersona(Boolean.TRUE)
+                                                .getIdPersona()
+                                )
+                                .cedula(M_Generales.generarCedula())
+                                .idTipoSangre(0)
+                                .estado_civil('X')
+                                .build()
+                ),
+                Resultado
+                    .builder()
+                    .mensaje(GENERALES_ACTUALIZADA_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build(),
+                GENERALES_ACTUALIZADA_CORRECTAMENTE
+        );
     }
 
 //------------------------------------------------------------------------------
@@ -181,8 +233,10 @@ public class M_GeneralesNGTest {
                 ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE
         );
 
+        M_PersonaNGTest.testDelete();
     }
     
+//------------------------------------------------------------------------------
     @Test(
             dependsOnMethods = "testDelete"
     )
@@ -227,12 +281,12 @@ public class M_GeneralesNGTest {
         //softAssert.assertAll(); // Verifica todas las condiciones
     }
 
-    public synchronized static Generales getGenerales() {
+    public static Generales getGenerales(){
         return Generales
                 .builder()
                 .id(idGeneral)
                 .idPersona(idPersona)
-                .idTipoSangre(idTipoSangre)
+                .idTipoSangre(0)
                 .cedula(M_Generales.generarCedula())
                 .estado_civil('X')
                 .build();

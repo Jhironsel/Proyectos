@@ -3,7 +3,10 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-public class UnlockJFrame extends JFrame {
+public final class UnlockJFrame extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    
     private UnlockPanel unlockPanel;
     /**Constructor de clase*/
     public UnlockJFrame(){

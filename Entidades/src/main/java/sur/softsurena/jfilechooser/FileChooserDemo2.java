@@ -5,11 +5,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class FileChooserDemo2 extends JFrame {
-    private JTextArea log;
-    private JFileChooser fc = new JFileChooser();
+public final class FileChooserDemo2 extends JFrame {
 
-    private String newline = System.getProperty("line.separator");
+    private static final long serialVersionUID = 1L;
+    private final JTextArea log;
+    private final String newline = System.getProperty("line.separator");
 
     public FileChooserDemo2() {
         super("FileChooserDemo2");
@@ -27,6 +27,7 @@ public class FileChooserDemo2 extends JFrame {
     }
 
     private class AttachListener implements ActionListener {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             JFileChooser fc = new JFileChooser();
@@ -51,6 +52,7 @@ public class FileChooserDemo2 extends JFrame {
         JFrame frame = new FileChooserDemo2();
 
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {System.exit(0);}
         });
 

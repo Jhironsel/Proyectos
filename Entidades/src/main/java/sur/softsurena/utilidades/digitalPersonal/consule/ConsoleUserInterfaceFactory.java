@@ -3,8 +3,6 @@ package sur.softsurena.utilidades.digitalPersonal.consule;
 import com.digitalpersona.onetouch.*;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
 import com.digitalpersona.onetouch.capture.DPFPCapturePriority;
-import com.digitalpersona.onetouch.capture.event.DPFPDataEvent;
-import com.digitalpersona.onetouch.capture.event.DPFPDataListener;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusAdapter;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusEvent;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
@@ -18,8 +16,9 @@ import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -177,10 +176,9 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
         private static final int MAIN_MENU_ENROLL = 104;
         private static final int MAIN_MENU_VERIFY = 105;
 
-        private static final Vector<MenuItem> mainMenu;
+        private static final List<MenuItem> mainMenu = new ArrayList<>();
 
         static {
-            mainMenu = new Vector<>();
             mainMenu.add(new MenuItem("List all available readers", MAIN_MENU_ENUMERATE));
             mainMenu.add(new MenuItem("Select a reader", MAIN_MENU_SELECT));
             mainMenu.add(new MenuItem("Add a person to the database", MAIN_MENU_ADD));
@@ -204,7 +202,7 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
             fingerNames.put(DPFPFingerIndex.RIGHT_THUMB, "right thumb");
         }
 
-        private int MenuShow(Vector<MenuItem> menu, int nMenuFlags) {
+        private int MenuShow(List<MenuItem> menu, int nMenuFlags) {
             int choice = 0;
 
             if (menu == null) {
@@ -214,7 +212,7 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
             while (true) {
                 System.out.println();
                 for (int i = 0; i < menu.size(); ++i) {
-                    System.out.printf("%d: %s\n", i + 1, menu.elementAt(i).getText());
+                    System.out.printf("%d: %s\n", i + 1, menu.get(i).getText());
                 }
 
                 StringBuilder sb = new StringBuilder();
@@ -254,7 +252,7 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
                     continue;
                 }
 
-                choice = menu.elementAt(nInput - 1).getValue();
+                choice = menu.get(nInput - 1).getValue();
                 break;
             }
 
@@ -307,7 +305,7 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
                     System.out.printf("No fingers for \"%s\" have been enrolled. Choose a finger to enroll:", username);
                 }
 
-                Vector<MenuItem> menu = new Vector<MenuItem>();
+                List<MenuItem> menu = new ArrayList<>();
                 for (DPFPFingerIndex finger : DPFPFingerIndex.values()) {
                     menu.add(new MenuItem(fingerName(finger), finger.ordinal()));
                 }
@@ -430,7 +428,7 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
                 throw new IndexOutOfBoundsException("There are no readers available");
             }
 
-            Vector<MenuItem> menu = new Vector<>();
+            List<MenuItem> menu = new ArrayList<>();
             for (DPFPReaderDescription readerDescription : readers) {
                 menu.add(new MenuItem(readerDescription.getSerialNumber(), menu.size()));
             }
@@ -459,18 +457,16 @@ public class ConsoleUserInterfaceFactory implements UserInterface.Factory {
             DPFPCapture capture = DPFPGlobal.getCaptureFactory().createCapture();
             capture.setReaderSerialNumber(activeReader);
             capture.setPriority(DPFPCapturePriority.CAPTURE_PRIORITY_LOW);
-            capture.addDataListener(new DPFPDataListener() {
-                @Override
-                public void dataAcquired(DPFPDataEvent e) {
-                    if (e != null && e.getSample() != null) {
-                        try {
-                            samples.put(e.getSample());
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
+            capture.addDataListener(
+                    (var e) -> {
+                        if (e != null && e.getSample() != null) {
+                            try {
+                                samples.put(e.getSample());
+                            } catch (InterruptedException e1) {
+                            }
                         }
                     }
-                }
-            });
+            );
             capture.addReaderStatusListener(new DPFPReaderStatusAdapter() {
                 int lastStatus = DPFPReaderStatusEvent.READER_CONNECTED;
 

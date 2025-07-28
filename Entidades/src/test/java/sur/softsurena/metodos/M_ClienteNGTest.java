@@ -60,8 +60,11 @@ public class M_ClienteNGTest {
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 
-        Resultado result = M_Cliente.insertById(
-                idPersona
+        Resultado result = M_Cliente.insert(
+                Cliente
+                        .builder()
+                        .id(idPersona)
+                        .build()
         );
 
         assertEquals(
@@ -82,7 +85,10 @@ public class M_ClienteNGTest {
     )
     public static void testDelete() {
         Resultado result = M_Cliente.delete(
-                idPersona
+                Cliente
+                        .builder()
+                        .id(idPersona)
+                        .build()
         );
 
         assertEquals(

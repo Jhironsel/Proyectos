@@ -1,6 +1,5 @@
 package sur.softsurena.entidades;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Date;
 import lombok.Getter;

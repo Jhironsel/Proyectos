@@ -9,7 +9,7 @@ import sur.softsurena.entidades.Paginas;
 @Getter
 @SuperBuilder
 public class Persona {
-
+    
     private final Integer idPersona;
     private final Character persona;
     private final String pnombre;

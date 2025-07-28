@@ -28,16 +28,16 @@ public class M_Persona {
      * @param persona
      *
      * @return devuelve una lista de persona en el sistema completa.
-     *
-     * TODO 19/11/2024 esta lista debe de limitarse a 10 o 20 o 30.
      */
     public synchronized static List<Persona> select(
             @NonNull Persona persona
     ) {
         List<Persona> personaList = new ArrayList<>();
+        
+        String sql = sqlSelect(persona);
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sqlSelect(persona),
+                sql,
                 ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
@@ -59,7 +59,6 @@ public class M_Persona {
                                 .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
                                 .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
                                 .estado(rs.getBoolean("ESTADO"))
-                                //.user_name(rs.getString("USER_NAME"))
                                 .rol(rs.getString("ROL_USUARIO"))
                                 .build()
                 );
@@ -86,27 +85,36 @@ public class M_Persona {
         Boolean apellidos = Objects.isNull(persona.getApellidos());
         Boolean estado = Objects.isNull(persona.getEstado());
         
+        Boolean f_row = Objects.isNull(persona.getPagina());
+        
         Boolean where = id && tipoPersona && pNombre && sNombre && apellidos && 
                 estado;
 
         return """
-               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                   FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                   FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                    ESTADO, USER_NAME, ROL_USUARIO
                FROM V_PERSONAS
-               %s%s%s%s%s
+               %s%s%s%s%s%s
                """.strip().trim().formatted(
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(persona.getIdPersona()),
                 tipoPersona ? "":"PERSONA STARTING WITH '%s' ".formatted(persona.getPersona()),
                 (pNombre || sNombre || apellidos) ? "":"""
-                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s' 
+                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s'
                                                        """.formatted(
                                                                persona.getPnombre(), 
                                                                persona.getSnombre(), 
                                                                persona.getApellidos()
                                                        ),
-                estado ? "":"ESTADO IS %B ".formatted(persona.getEstado())
+                estado ? "":"ESTADO IS %B ".formatted(persona.getEstado()),
+                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                        .formatted(
+                                                persona.getPagina().getNPaginaNro(),
+                                                persona.getPagina().getNCantidadFilas(),
+                                                persona.getPagina().getNPaginaNro(),
+                                                persona.getPagina().getNCantidadFilas()
+                                        )
         ).strip().trim();
     }
 //------------------------------------------------------------------------------
@@ -245,11 +253,11 @@ public class M_Persona {
     /**
      * Metodo que elimina a una persona del sistema por su identificador.
      *
-     * @param id identificador de la persona.
+     * @param persona identificador de la persona.
      *
      * @return Objeto resultado de la persona.
      */
-    public static Resultado delete(int id) {
+    public static Resultado delete(Persona persona) {
         final String sql = """
                            EXECUTE PROCEDURE SP_D_PERSONA(?)
                            """;
@@ -260,7 +268,7 @@ public class M_Persona {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, id);
+            cs.setInt(1, persona.getIdPersona());
 
             cs.executeUpdate();
 
@@ -274,14 +282,14 @@ public class M_Persona {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,
-                    ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S.formatted(id),
+                    ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S.formatted(persona.getIdPersona()),
                     ex
             );
         }
 
         return Resultado
                 .builder()
-                .mensaje(ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S.formatted(id))
+                .mensaje(ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S.formatted(persona.getIdPersona()))
                 .icono(JOptionPane.INFORMATION_MESSAGE)
                 .estado(Boolean.FALSE)
                 .build();

@@ -44,8 +44,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 """.strip().trim()
@@ -59,8 +59,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 WHERE ID = 0
@@ -75,8 +75,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 WHERE PERSONA STARTING WITH 'F'
@@ -93,8 +93,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 WHERE PNOMBRE STARTING WITH 'GENERICO' OR SNOMBRE STARTING WITH 'GENERICO' OR APELLIDOS STARTING WITH 'GENERICO'
@@ -109,8 +109,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 WHERE ESTADO IS TRUE
@@ -126,8 +126,8 @@ public class M_PersonaNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
-                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
                     ESTADO, USER_NAME, ROL_USUARIO
                 FROM V_PERSONAS
                 WHERE ESTADO IS FALSE
@@ -140,7 +140,7 @@ public class M_PersonaNGTest {
             enabled = true,
             dependsOnMethods = {"testSqlSelect"},
             description = """
-                          Test que permite obtener un registro de la base de 
+                          Test que permite obtener un registro de la base de
                           datos del sistema.
                           """
     )
@@ -237,7 +237,12 @@ public class M_PersonaNGTest {
                 "Identificador de persona incorrecto, ID = %d ".formatted(idPersona)
         );
 
-        Resultado result = M_Persona.delete(idPersona);
+        Resultado result = M_Persona.delete(
+                Persona
+                        .builder()
+                        .idPersona(idPersona)
+                        .build()
+        );
 
         assertEquals(
                 result,

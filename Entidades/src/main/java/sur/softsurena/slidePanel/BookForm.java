@@ -2,7 +2,9 @@ package sur.softsurena.slidePanel;
 
 import java.awt.Dimension;
 
-public class BookForm extends javax.swing.JPanel {
+public final class BookForm extends javax.swing.JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     public BookForm() {
         initComponents();
@@ -10,7 +12,7 @@ public class BookForm extends javax.swing.JPanel {
         setPreferredSize(new Dimension(241,164));
     }
 
-    @SuppressWarnings("unchecked")
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

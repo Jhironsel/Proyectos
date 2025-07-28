@@ -72,9 +72,9 @@ public class M_Turno {
         Boolean estado = Objects.isNull(turno.getEstado());
         Boolean where = f_criterio && estado;
         return """
-               SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL, 
-               ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO 
-               FROM V_TURNOS 
+               SELECT ID, TURNO_USUARIO, FECHA_HORA_INICIO, FECHA_HORA_FINAL,
+               ESTADO, MONTO_FACTURADO, MONTO_DEVUELTO, MONTO_EFECTIVO, MONTO_CREDITO
+               FROM V_TURNOS
                %s%s%s
                """.formatted(
                 where ? "" : "WHERE ",

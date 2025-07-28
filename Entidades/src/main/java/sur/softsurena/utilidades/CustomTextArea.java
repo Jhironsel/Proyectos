@@ -10,9 +10,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JTextArea;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class CustomTextArea extends JTextArea {
+public final class CustomTextArea extends JTextArea {
 
-    private BufferedImage image;
+    private static final long serialVersionUID = 1L;
+
+    private transient BufferedImage image;
 
     public CustomTextArea(int num) {
         super(2, 2);
@@ -20,7 +22,11 @@ public class CustomTextArea extends JTextArea {
             image = ImageIO.read(getClass().
                     getResource("/imagenesPapeles/figura" + num + ".jpeg"));
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.log(
+                    Level.SEVERE, 
+                    ex.getMessage(), 
+                    ex
+            );
         }
     }
 

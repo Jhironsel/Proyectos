@@ -154,17 +154,17 @@ public class M_Tanda {
             Integer edadMax) {
         final String sql
                 = """
-                    SELECT t.id, trim( 
-                            case lunes when 1 then 'Lunes ' else trim('') end || 
-                            case martes when 1 then 'Martes ' else trim('') end || 
-                            case miercoles when 1 then 'Miercoles ' else trim('') end || 
-                            case jueves when 1 then 'Jueves ' else trim('') end || 
-                            case viernes when 1 then 'Viernes ' else trim('') end || 
-                            case sabados when 1 then 'Sabados ' else trim('') end|| 
+                    SELECT t.id, trim(
+                            case lunes when 1 then 'Lunes ' else trim('') end ||
+                            case martes when 1 then 'Martes ' else trim('') end ||
+                            case miercoles when 1 then 'Miercoles ' else trim('') end ||
+                            case jueves when 1 then 'Jueves ' else trim('') end ||
+                            case viernes when 1 then 'Viernes ' else trim('') end ||
+                            case sabados when 1 then 'Sabados ' else trim('') end||
                             case domingos when 1 then 'Domingos ' else trim('') end) || ' De ' ||
-                            subString(t.Hora_Inicio FROM 1 for 8) ||' Hasta '|| 
+                            subString(t.Hora_Inicio FROM 1 for 8) ||' Hasta '||
                             subString(t.Hora_Final FROM 1 for 8) AS HORARIO
-                    FROM V_TANDAS t 
+                    FROM V_TANDAS t
                     WHERE t.edad_minima <= ? and t.edad_maxima >= ?;
                   """;
         List<Tanda> tandaList = new ArrayList<>();

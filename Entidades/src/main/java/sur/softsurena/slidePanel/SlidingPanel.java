@@ -9,13 +9,15 @@ import javax.swing.JPanel;
  *
  * @author root
  */
-public class SlidingPanel extends JPanel implements StateListener {
+public final class SlidingPanel extends JPanel implements StateListener {
+
+    private static final long serialVersionUID = 1L;
 
     final int EXPAND = 1;
     final int COLLAPSE = 0;
     int state = COLLAPSE;
     JPanel slideContainer;
-    SlideAnimator slider = null;
+    transient SlideAnimator slider = null;
     TitlePanel titlePanel = null;
 
     public SlidingPanel(JComponent slideComponent, String title, Image imageIcon, boolean isExpand) {
@@ -32,12 +34,14 @@ public class SlidingPanel extends JPanel implements StateListener {
             toggleState();
     }
 
+    @Override
     public void reset() {
         titlePanel.toggleState(false);
         slideContainer.setVisible(false);
         validate();
     }
 
+    @Override
     public void toggleState() {
         if (state == COLLAPSE) {
             titlePanel.toggleState(true);

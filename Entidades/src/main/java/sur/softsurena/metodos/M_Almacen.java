@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +23,15 @@ public class M_Almacen {
         Boolean estado = Objects.isNull(almacen.getEstado());
         Boolean where = id && nombre && estado;
         return """
-               SELECT ID, NOMBRE, UBICACION, ESTADO 
-               FROM V_ALMACENES 
+               SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
+               FROM V_ALMACENES
                %s%s%s%s
                """.formatted(
-                       where ? "":"WHERE ",
-                       id ? "":"ID = %d ".formatted(almacen.getId()),
-                       nombre ? "":"NOMBRE STARTING WITH '%s'".formatted(almacen.getNombre()),
-                       estado ? "":"ESTADO IS %b ".formatted(almacen.getEstado())
-               ).strip();
+                where ? "" : "WHERE ",
+                id ? "" : "ID = %d ".formatted(almacen.getId()),
+                nombre ? "" : "NOMBRE STARTING WITH '%s'".formatted(almacen.getNombre()),
+                estado ? "" : "ESTADO IS %B ".formatted(almacen.getEstado())
+        ).strip();
     }
 
     /**
@@ -46,14 +45,14 @@ public class M_Almacen {
     public static List<Almacen> select(
             @NonNull Almacen almacen
     ) {
-        List < Almacen > almacenList = new ArrayList<>();
+        List<Almacen> almacenList = new ArrayList<>();
 
         try (Statement ps = getCnn().createStatement(
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
-        ); ResultSet rs = ps.executeQuery(sqlSelect(almacen));) {
-
+        )) {
+            ResultSet rs = ps.executeQuery(sqlSelect(almacen));
             while (rs.next()) {
                 almacenList.add(
                         Almacen
@@ -62,6 +61,7 @@ public class M_Almacen {
                                 .nombre(rs.getString("NOMBRE"))
                                 .ubicacion(rs.getString("UBICACION"))
                                 .estado(rs.getBoolean("ESTADO"))
+                                .borrado(rs.getBoolean("BORRADO"))
                                 .build()
                 );
             }
@@ -82,13 +82,11 @@ public class M_Almacen {
      * @param almacen
      * @return
      */
-    public static Resultado updateOrInsert(
+    public static Resultado insert(
             @NonNull Almacen almacen
     ) {
-        final String sql = """
-                           SELECT O_ID
-                           FROM SP_UI_ALMACEN(?,?,?,?);
-                           """;
+        final String sql
+                = "SELECT O_ID FROM SP_I_ALMACEN(?,?,?)";
 
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sql,
@@ -96,14 +94,9 @@ public class M_Almacen {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            if (Objects.isNull(almacen.getId())) {
-                ps.setNull(1, Types.INTEGER);
-            } else {
-                ps.setInt(1, almacen.getId());
-            }
-            ps.setString(2, almacen.getNombre());
-            ps.setString(3, almacen.getUbicacion());
-            ps.setBoolean(4, almacen.getEstado());
+            ps.setString(1, almacen.getNombre());
+            ps.setString(2, almacen.getUbicacion());
+            ps.setBoolean(3, almacen.getEstado());
 
             try (ResultSet rs = ps.executeQuery();) {
 
@@ -129,9 +122,9 @@ public class M_Almacen {
         }
     }
     public static final String ERROR_AL_INSERTAR__ALMACEN
-            = "Error al registrar/actualizar almacen al sistema.!!!";
+            = "Error al registrar almacen al sistema.";
     public static final String ALMACEN_AGREGADO_CORRECTAMENTE
-            = "Almacen agregado/actualizado correctamente.!!!";
+            = "Almacen agregado correctamente";
 
     /**
      * Elimina los registro de almacenes en el sistema.
@@ -183,4 +176,56 @@ public class M_Almacen {
             = "Almacen eliminado correctamente.";
     public static final String ERROR_AL_ELIMINAR_ALMACEN
             = "Error al eliminar almacen.";
+
+    //--------------------------------------------------------------------------
+    /**
+     * Metodo utilizado para actualizar los registros del sistema de los
+     * almacenes registrados.
+     *
+     * @param almacen
+     *
+     * @return
+     */
+    public static Resultado update(
+            @NonNull Almacen almacen
+    ) {
+        try (PreparedStatement cs = getCnn().prepareStatement(
+                """
+                EXECUTE PROCEDURE SP_U_ALMACEN(?,?,?,?)
+                """,
+                ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_READ_ONLY,
+                ResultSet.HOLD_CURSORS_OVER_COMMIT
+        )) {
+            cs.setInt(1, almacen.getId());
+            cs.setString(2, almacen.getNombre());
+            cs.setString(3, almacen.getUbicacion());
+            cs.setBoolean(4, almacen.getEstado());
+
+            cs.execute();
+
+            return Resultado
+                    .builder()
+                    .mensaje(ALMACEN_ACTUALIZADO_CORRECTAMENTE)
+                    .icono(JOptionPane.INFORMATION_MESSAGE)
+                    .estado(Boolean.TRUE)
+                    .build();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_ELIMINAR_ALMACEN,
+                    ex
+            );
+        }
+        return Resultado
+                .builder()
+                .mensaje(ERROR_AL_ACTUALIZAR_EL_REGISTRO_DEL_ALMAC)
+                .icono(JOptionPane.ERROR_MESSAGE)
+                .estado(Boolean.FALSE)
+                .build();
+    }
+    public static final String ERROR_AL_ACTUALIZAR_EL_REGISTRO_DEL_ALMAC
+            = "Error al actualizar el registro del almacen.";
+    public static final String ALMACEN_ACTUALIZADO_CORRECTAMENTE
+            = "Almacen actualizado correctamente.";
 }

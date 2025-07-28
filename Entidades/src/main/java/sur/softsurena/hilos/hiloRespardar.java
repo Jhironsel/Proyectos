@@ -29,7 +29,7 @@ public class hiloRespardar extends Thread {
 //                        + (miCan.get(Calendar.MONTH) + 1) + "_"
 //                        + miCan.get(Calendar.YEAR) + ".FBK";
                 
-                p = Runtime.getRuntime().exec(comando);
+                p = Runtime.getRuntime().exec(new String[]{comando});
                 stdInput = new BufferedReader(new InputStreamReader(
                         p.getInputStream()));
                 String linea;
@@ -39,7 +39,7 @@ public class hiloRespardar extends Thread {
                         JOptionPane.showMessageDialog(
                                 null,
                                 """
-                                Usuario no cuenta con los permisos necesarios 
+                                Usuario no cuenta con los permisos necesarios
                                 para realizar el backup.
                                 """,
                                 "",

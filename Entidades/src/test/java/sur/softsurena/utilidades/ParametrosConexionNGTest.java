@@ -21,7 +21,7 @@ public class ParametrosConexionNGTest {
     )
     public void testGetInstance() {
         
-        this.parametros = ParametrosConexion.getInstance();
+        this.parametros = new ParametrosConexion();
         assertNotNull(
                 this.parametros,
                 "No puede realizarse la instancia de la clase."
@@ -36,7 +36,6 @@ public class ParametrosConexionNGTest {
                           """
     )
     public void testCargarParamentos() {
-        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.testCargarParamentos()");
         Servidor result = parametros.cargarParamentos();
 
         if (Objects.nonNull(result)) {
@@ -54,7 +53,6 @@ public class ParametrosConexionNGTest {
                           """
     )
     public void testEscribirParametros() {
-        System.out.println("sur.softsurena.utilidades.ParametrosConexionNGTest.testEscribirParametros()");
         
         if (parametrosNulo) {
 

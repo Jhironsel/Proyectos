@@ -11,6 +11,7 @@ public class Almacen {
     private final String nombre;
     private final String ubicacion;
     private final Boolean estado;
+    private final Boolean borrado;
 
     @Override
     public int hashCode() {
@@ -19,6 +20,7 @@ public class Almacen {
         hash = 89 * hash + Objects.hashCode(this.nombre);
         hash = 89 * hash + Objects.hashCode(this.ubicacion);
         hash = 89 * hash + Objects.hashCode(this.estado);
+        hash = 89 * hash + Objects.hashCode(this.borrado);
         return hash;
     }
 
@@ -43,6 +45,9 @@ public class Almacen {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.borrado, other.borrado)) {
+            return false;
+        }
         return Objects.equals(this.estado, other.estado);
     }
 
@@ -58,6 +63,7 @@ public class Almacen {
         sb.append(", nombre=").append(nombre);
         sb.append(", ubicacion=").append(ubicacion);
         sb.append(", estado=").append(estado);
+        sb.append(", borrado=").append(borrado);
         sb.append('}');
         return sb.toString();
     }

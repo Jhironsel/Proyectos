@@ -66,16 +66,10 @@ public class M_ContactoEmailNGTest {
             dependsOnMethods = "testInsert"
     )
     public void testselectByID() {
-        List result = M_ContactoEmail.selectByID(0);
 
         assertFalse(
-                result.isEmpty(),
+                M_ContactoEmail.selectByID(0).isEmpty(),
                 ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO
-        );
-
-        assertNotNull(
-                result,
-                "Consulta no puede devolver nulo."
         );
 
     }

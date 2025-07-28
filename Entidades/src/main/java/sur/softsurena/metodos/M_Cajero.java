@@ -29,7 +29,7 @@ public class M_Cajero {
 
         final String SELECT
                 = """
-                  SELECT USER_NAME, ROL, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, DESCRIPCION 
+                  SELECT USER_NAME, ROL, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO, DESCRIPCION
                   FROM GET_CAJEROS;
                   """;
 

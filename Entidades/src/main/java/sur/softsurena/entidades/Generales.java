@@ -13,6 +13,8 @@ public class Generales{
     private final Integer idTipoSangre;
     private final String cedula;
     private final Character estado_civil;
+    
+    private final Paginas pagina;
 
     @Override
     public String toString() {

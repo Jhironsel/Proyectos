@@ -11,10 +11,12 @@ import java.awt.Frame;
 import java.util.Objects;
 
 
-public class VerificationForm extends CaptureForm
+public final class VerificationForm extends CaptureForm
 {
-	private final DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
-	private DPFPTemplate template;
+
+    private static final long serialVersionUID = 1L;
+	private transient final DPFPVerification verificator = DPFPGlobal.getVerificationFactory().createVerification();
+	private transient DPFPTemplate template;
 	VerificationForm(Frame owner) {
 		super(owner);
                 this.template = null;

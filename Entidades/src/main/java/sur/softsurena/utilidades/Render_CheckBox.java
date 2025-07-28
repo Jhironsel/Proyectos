@@ -9,7 +9,9 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
-public class Render_CheckBox extends JCheckBox implements TableCellRenderer {
+public final class Render_CheckBox extends JCheckBox implements TableCellRenderer {
+
+    private static final long serialVersionUID = 1L;
 
     private final JComponent component = new JCheckBox();
 

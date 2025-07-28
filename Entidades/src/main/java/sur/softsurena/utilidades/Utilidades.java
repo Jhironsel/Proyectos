@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -604,8 +603,7 @@ public class Utilidades {
     public static void repararColumnaTable(
             JTable miTabla
     ) {
-        DefaultTableCellRenderer tcr = new DefaultTableCellHeaderRenderer() {
-        };
+        DefaultTableCellRenderer tcr = new DefaultTableCellHeaderRenderer();
         tcr.setHorizontalAlignment(SwingConstants.LEFT);
 //        tblPermisosAsignados.getColumnModel().getColumn(0).setCellRenderer(tcr);
 
@@ -722,7 +720,7 @@ public class Utilidades {
 
     //--------------------------------------------------------------------------
     public static void eliminarRegistroTabla(JTable tabla,
-            DefaultTableModel modelo, List lista
+            DefaultTableModel modelo
     ) {
         if (tabla.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(
@@ -733,7 +731,6 @@ public class Utilidades {
             );
             return;
         }
-        lista.remove(tabla.getSelectedRow());
         modelo.removeRow(tabla.getSelectedRow());
         tabla.setModel(modelo);
     }

@@ -32,7 +32,7 @@ public class M_HorarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO 
+                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO
                 FROM HORARIOS
                 """.strip()
         );
@@ -45,7 +45,7 @@ public class M_HorarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO 
+                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO
                 FROM HORARIOS
                 WHERE ID = -2
                 """.strip()
@@ -59,7 +59,7 @@ public class M_HorarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO 
+                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO
                 FROM HORARIOS
                 WHERE DESCRIPCION STARTING WITH 'Entrada'
                 """.strip()
@@ -73,7 +73,7 @@ public class M_HorarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO 
+                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO
                 FROM HORARIOS
                 WHERE ESTADO
                 """.strip()
@@ -87,7 +87,7 @@ public class M_HorarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO 
+                SELECT ID, DESCRIPCION, HORA, TOLERANCIA, ESTADO
                 FROM HORARIOS
                 WHERE ESTADO IS FALSE
                 """.strip()

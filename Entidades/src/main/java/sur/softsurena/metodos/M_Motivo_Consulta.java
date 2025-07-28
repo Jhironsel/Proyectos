@@ -77,10 +77,10 @@ public class M_Motivo_Consulta {
     public synchronized static ResultSet getMotivo() {
         final String sql = 
                 """
-                SELECT IDMCONSULTA, DESCRIPCION, DEFENICION 
-                FROM V_MOTIVOS_CONSULTA 
-                WHERE ESTADO 
-                ORDER BY 1
+                SELECT IDMCONSULTA, DESCRIPCION, DEFENICION
+                FROM V_MOTIVOS_CONSULTA
+                WHERE ESTADO
+                ORDER BY 1;
                 """;
         try (PreparedStatement ps = getCnn().prepareStatement(sql,
                 ResultSet.TYPE_FORWARD_ONLY,

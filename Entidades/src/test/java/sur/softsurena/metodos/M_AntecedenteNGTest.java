@@ -33,7 +33,7 @@ public class M_AntecedenteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                SELECT ID, ID_CONSULTA, DESCRIPCION
                 FROM V_ANTECEDENTES
                 """.strip()
         );
@@ -46,7 +46,7 @@ public class M_AntecedenteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                SELECT ID, ID_CONSULTA, DESCRIPCION
                 FROM V_ANTECEDENTES
                 WHERE ID = -1
                 """.strip()
@@ -60,7 +60,7 @@ public class M_AntecedenteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                SELECT ID, ID_CONSULTA, DESCRIPCION
                 FROM V_ANTECEDENTES
                 WHERE ID_CONSULTA = -1
                 """.strip()
@@ -75,7 +75,7 @@ public class M_AntecedenteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, ID_CONSULTA, DESCRIPCION 
+                SELECT ID, ID_CONSULTA, DESCRIPCION
                 FROM V_ANTECEDENTES
                 WHERE ID = -1 AND ID_CONSULTA = -1
                 """.strip()

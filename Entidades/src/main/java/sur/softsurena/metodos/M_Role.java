@@ -33,29 +33,22 @@ public class M_Role {
         String sql = "";
         if(disponible){
             sql = """
-                  SELECT 
-                       TRIM(b.RDB$ROLE_NAME) ROL, 
-                       TRIM(COALESCE(b.RDB$DESCRIPTION, '')) DESCRIPCION,
-                       a.RDB$GRANT_OPTION ADMINISTRACION
-                  FROM RDB$USER_PRIVILEGES a
-                  INNER JOIN RDB$ROLES b ON a.RDB$RELATION_NAME = b.RDB$ROLE_NAME AND 
-                                           TRIM(a.RDB$PRIVILEGE) = 'M' AND 
-                                           a.RDB$USER = ? AND 
-                                           b.RDB$ROLE_NAME NOT STARTING WITH 'RRR_' AND 
-                                           a.RDB$GRANTOR IS NOT NULL
+                  SELECT TRIM(r.RDB$ROLE_NAME) ROL, COALESCE(r.RDB$DESCRIPTION, '') DESCRIPCION, FALSE AS ADMINISTRACION
+                  FROM RDB$ROLES r
+                  WHERE TRIM(r.RDB$ROLE_NAME) NOT IN(
+                  SELECT TRIM(r.RDB$RELATION_NAME)
+                  FROM RDB$USER_PRIVILEGES r
+                  WHERE r.RDB$PRIVILEGE = 'M' AND r.RDB$GRANTOR IS NOT NULL AND TRIM(r.RDB$USER) STARTING WITH UPPER(TRIM(?))
+                  ) AND r.RDB$ROLE_NAME NOT IN('RRR_*', 'RDB$ADMIN');
                   """;
         }else{
             sql = """
-                  SELECT 
-                        TRIM(b.RDB$ROLE_NAME) ROL,
-                        TRIM(COALESCE(b.RDB$DESCRIPTION, '')) DESCRIPCION,
-                        a.RDB$GRANT_OPTION ADMINISTRACION
-                   FROM RDB$USER_PRIVILEGES a
-                   RIGHT JOIN RDB$ROLES b ON a.RDB$RELATION_NAME = b.RDB$ROLE_NAME AND 
-                                            TRIM(a.RDB$PRIVILEGE) = 'M' AND 
-                                            a.RDB$USER = ? AND 
-                                            a.RDB$GRANTOR IS NOT NULL
-                   WHERE a.RDB$RELATION_NAME IS NULL  AND b.RDB$ROLE_NAME NOT STARTING WITH 'RRR_'
+                  SELECT r.RDB$GRANT_OPTION ADMINISTRACION, TRIM(r.RDB$RELATION_NAME) ROL, COALESCE(TRIM(rr.RDB$DESCRIPTION), '') DESCRIPCION
+                  FROM RDB$USER_PRIVILEGES r
+                  INNER JOIN RDB$ROLES rr ON TRIM(r.RDB$RELATION_NAME) STARTING WITH TRIM(rr.RDB$ROLE_NAME)
+                  WHERE r.RDB$PRIVILEGE = 'M' AND
+                        UPPER(TRIM(r.RDB$USER)) STARTING WITH UPPER(TRIM(?)) AND
+                        TRIM(r.RDB$GRANTOR) IS NOT NULL;
                   """;
         }
 
@@ -71,22 +64,12 @@ public class M_Role {
             ps.setString(1, userName.strip().toUpperCase());
 
             try (ResultSet rs = ps.executeQuery()) {
-
-                String aux, descripcion;
-
                 while (rs.next()) {
-                    aux = rs.getString("ROL").strip();
-
-                    descripcion = rs.getString("DESCRIPCION");
-
                     roles.add(
                             Role
                                     .builder()
-                                    .roleName(aux.strip())
-                                    .descripcion(
-                                            Objects.isNull(descripcion)
-                                            ? "" : descripcion.strip()
-                                    )
+                                    .roleName(rs.getString("ROL"))
+                                    .descripcion(rs.getString("DESCRIPCION"))
                                     .opcionPermiso(rs.getInt("ADMINISTRACION"))
                                     .build()
                     );
@@ -112,8 +95,8 @@ public class M_Role {
      */
     public synchronized static List<Role> getRoles() {
         final String sql = """
-                           SELECT ROL, PROPIETARIO, DESCRIPCION 
-                           FROM GET_ROLES
+                           SELECT ROL, PROPIETARIO, DESCRIPCION
+                           FROM GET_ROLES;
                            """;
 
         List<Role> rolesList = new ArrayList<>();
@@ -472,11 +455,11 @@ public class M_Role {
     /**
      * Metodo utilizado para crear los roles de los usuarios del sistema.
      *
-     * @param rolee Es el role a crear por el usuario.
+     * @param rol Es el role a crear por el usuario.
      * @return
      */
     public synchronized static Resultado createRole(
-            String rolee
+            String rol
     ) {
         final String sql = "EXECUTE PROCEDURE ADMIN_CREATE_ROLE(?);";
 
@@ -485,7 +468,7 @@ public class M_Role {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setString(1, rolee);
+            cs.setString(1, rol);
 
             cs.executeUpdate();
 

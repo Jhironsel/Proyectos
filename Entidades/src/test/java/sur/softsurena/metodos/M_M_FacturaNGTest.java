@@ -30,7 +30,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 """.strip()
@@ -45,7 +45,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID = -1
@@ -61,7 +61,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID_CLIENTE = -1
@@ -77,7 +77,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID_CONTACTOS_TEL = -1
@@ -93,7 +93,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID_CONTACTOS_DIRECCIONES = -1
@@ -109,7 +109,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID_CONTACTOS_EMAIL = -1
@@ -125,7 +125,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ID_TURNO = -1
@@ -141,7 +141,7 @@ public class M_M_FacturaNGTest {
                 ),
                 """
                 SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                     ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                      NOMBRE_TEMP
                 FROM V_M_FACTURAS
                 WHERE ESTADO_FACTURA = 't'
@@ -165,7 +165,7 @@ public class M_M_FacturaNGTest {
     }
     
     @Test(
-            dependsOnGroups = {"usuario.insert"},
+            dependsOnGroups = {"usuario.insert", "M_ContactoDireccionNGTest.testUpdateOrInsert"},
             dependsOnMethods = {"testPersona"}
     )
     public static void testInsert() {

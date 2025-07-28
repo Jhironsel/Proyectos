@@ -15,12 +15,13 @@ import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 import javax.swing.table.*;
 
-public class DefaultTableCellHeaderRenderer extends DefaultTableCellRenderer
+public final class DefaultTableCellHeaderRenderer extends DefaultTableCellRenderer
         implements UIResource {
 
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+
     private Boolean horizontalTextPositionSet;
-    private Icon sortArrow;
+    private transient Icon sortArrow;
     private final EmptyIcon emptyIcon = new EmptyIcon();
     
     public DefaultTableCellHeaderRenderer() {
@@ -71,15 +72,9 @@ public class DefaultTableCellHeaderRenderer extends DefaultTableCellRenderer
                 SortOrder sortOrder = getColumnSortOrder(table, column);
                 if (sortOrder != null) {
                     switch(sortOrder) {
-                    case ASCENDING:
-                        sortIcon = javax.swing.UIManager.getIcon("Table.ascendingSortIcon");
-                        break;
-                    case DESCENDING:
-                        sortIcon = javax.swing.UIManager.getIcon("Table.descendingSortIcon");
-                        break;
-                    case UNSORTED:
-                        sortIcon = javax.swing.UIManager.getIcon("Table.naturalSortIcon");
-                        break;
+                    case ASCENDING -> sortIcon = javax.swing.UIManager.getIcon("Table.ascendingSortIcon");
+                    case DESCENDING -> sortIcon = javax.swing.UIManager.getIcon("Table.descendingSortIcon");
+                    case UNSORTED -> sortIcon = javax.swing.UIManager.getIcon("Table.naturalSortIcon");
                     }
                 }
             }
@@ -108,7 +103,7 @@ public class DefaultTableCellHeaderRenderer extends DefaultTableCellRenderer
         }
         java.util.List<? extends RowSorter.SortKey> sortKeys =
             table.getRowSorter().getSortKeys();
-        if (sortKeys.size() > 0 && sortKeys.get(0).getColumn() ==
+        if (!sortKeys.isEmpty() && sortKeys.get(0).getColumn() ==
             table.convertColumnIndexToModel(column)) {
             rv = sortKeys.get(0).getSortOrder();
         }
@@ -163,6 +158,8 @@ public class DefaultTableCellHeaderRenderer extends DefaultTableCellRenderer
     }
 
     private class EmptyIcon implements Icon, Serializable {
+
+        private static final long serialVersionUID = 1L;
         int width = 0;
         int height = 0;
         @Override

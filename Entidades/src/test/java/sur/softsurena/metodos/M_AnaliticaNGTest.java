@@ -15,8 +15,8 @@ public class M_AnaliticaNGTest {
         return Analitica
                 .builder()
                 .id(idAnalitica)
-                .id_doctor(idDoctor) //TODO 10.05.2025 traer el id del doctor.
-                .id_paciente(idPaciente) //TODO 10.05.2025 traer el id del paciente.
+                .id_doctor(idDoctor) //TODO 10/05/2025 traer el id del doctor.
+                .id_paciente(idPaciente) //TODO 10/05/2025 traer el id del paciente.
                 .T_BHCG(Boolean.TRUE)
                 .T_EMB_ORINA(Boolean.TRUE)
                 .T_EMB_SANGRE(Boolean.TRUE)

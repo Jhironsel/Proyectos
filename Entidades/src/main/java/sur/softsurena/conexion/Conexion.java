@@ -18,16 +18,16 @@ import sur.softsurena.utilidades.Utilidades;
 public class Conexion {
 
     private static Connection cnn;
-    private static String USER, CLAVE, ROLE;
-    private static final String PROTOCOLO_FIREBIRD = "jdbc:firebirdsql://";
+    private static String user;
+    private static String clave;
+    private static String role;
     private static StringBuilder URL_DB;
-    private static frmRegistros miRegistros;
     
     /**
      * Metodo que ofrece la conexion realizada y validada del sistema.
      * @return
      */
-    public synchronized static Connection getCnn() {
+    public static Connection getCnn() {
         return cnn;
     }
 
@@ -62,20 +62,20 @@ public class Conexion {
             @NonNull String role
     ) {
         
-        Conexion.USER = user;
-        Conexion.CLAVE = clave;
-        Conexion.ROLE = role;
+        Conexion.user = user;
+        Conexion.clave = clave;
+        Conexion.role = role;
 
-        StringBuilder p = new StringBuilder("");
+        var url = new StringBuilder();
 
         if (!puerto.isBlank()) {
-            p.append(":").append(puerto);
+            url.append(":").append(puerto);
         }
 
         URL_DB = new StringBuilder();
-        URL_DB.append(PROTOCOLO_FIREBIRD)
+        URL_DB.append("jdbc:firebirdsql://")
                 .append(dominio)
-                .append(p)
+                .append(url)
                 .append("/")
                 .append(path_bd)
                 .append("?wireEncryption=chacha64");
@@ -92,9 +92,7 @@ public class Conexion {
         Conexion.ConexionHolder.INSTANCE = null;
     }
 
-    private Conexion() {
-        
-    }
+    private Conexion() {}
 
     public static boolean validarUsario(
             JTextField txtUsuario, JPasswordField txtClave, JFrame jframe
@@ -122,7 +120,7 @@ public class Conexion {
             return false;
         }//Fin de validaciones de campos
 
-        frmParametros parametros = frmParametros.getInstance();
+        VistaParametros parametros = new VistaParametros();
 
         Conexion.getInstance(
                 txtUsuario.getText(),
@@ -143,8 +141,6 @@ public class Conexion {
                     resultado.getIcono()
             );
 
-            txtClave.setText("");
-            txtUsuario.setText("");
             txtUsuario.requestFocus();
             return false;
         }
@@ -168,7 +164,7 @@ public class Conexion {
             );
 
             if (resp == JOptionPane.OK_OPTION) {
-                miRegistros = frmRegistros.getInstance(null, true);
+                VistaRegistros miRegistros = new VistaRegistros(null, true);
                 miRegistros.setVisible(true);
 
                 if (miRegistros.txtIdMaquina.getText()
@@ -191,8 +187,6 @@ public class Conexion {
             );
         }
 
-        //Blanquear la pass
-        txtClave.setText("");
         return true;
     }
 
@@ -206,12 +200,12 @@ public class Conexion {
     public static Resultado verificar() {
 
         final Properties properties = new Properties();
-        properties.setProperty("user", Conexion.USER);
-        properties.setProperty("password", Conexion.CLAVE);
+        properties.setProperty("user", Conexion.user);
+        properties.setProperty("password", Conexion.clave);
         properties.setProperty("charSet", "UTF8");
 
-        if (Objects.nonNull(Conexion.ROLE)) {
-            properties.setProperty("roleName", Conexion.ROLE);
+        if (Objects.nonNull(Conexion.role)) {
+            properties.setProperty("roleName", Conexion.role);
         }
 
         try {

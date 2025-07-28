@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -222,21 +223,22 @@ public class M_ContactoTel {
     public static String generarTelMovil() {
         StringBuilder telefonoMovil = new StringBuilder();
         
-        int indexArea = (int) (Math.random() * 3);
+        SecureRandom random = new SecureRandom();
+        int indexArea = (int) (random.nextDouble() * 3);
         String codigoArea[] = {"809", "829", "849"};
 
         telefonoMovil.
                 append("+1(").
                 append(codigoArea[indexArea]).
                 append(") ").
-                append((int) (Math.random() * 10)).
-                append((int) (Math.random() * 10)).
-                append((int) (Math.random() * 10)).
+                append((int) (random.nextDouble() * 10)).
+                append((int) (random.nextDouble() * 10)).
+                append((int) (random.nextDouble() * 10)).
                 append("-").
-                append((int) (Math.random() * 10)).
-                append((int) (Math.random() * 10)).
-                append((int) (Math.random() * 10)).
-                append((int) (Math.random() * 10));
+                append((int) (random.nextDouble() * 10)).
+                append((int) (random.nextDouble() * 10)).
+                append((int) (random.nextDouble() * 10)).
+                append((int) (random.nextDouble() * 10));
         return telefonoMovil.toString();
     }
 

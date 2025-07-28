@@ -110,7 +110,7 @@ public class M_M_Factura {
 
         return """
                SELECT ID, ID_CLIENTE, ID_CONTACTOS_TEL, ID_CONTACTOS_DIRECCIONES,
-                    ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA, 
+                    ID_CONTACTOS_EMAIL, ID_TURNO, FECHA_HORA, ESTADO_FACTURA,
                     NOMBRE_TEMP
                FROM V_M_FACTURAS
                %s%s%s%s%s%s%s%s

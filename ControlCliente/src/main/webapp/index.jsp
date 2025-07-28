@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <title>Control de clientes</title>
         <jsp:include page="WEB-INF/paginas/comunes/scriptArriba.jsp"/>

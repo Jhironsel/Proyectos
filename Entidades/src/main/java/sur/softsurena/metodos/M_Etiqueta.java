@@ -21,9 +21,9 @@ public class M_Etiqueta {
         List<Etiqueta> etiquetaList = new ArrayList<>();
 
         final String sql = """
-                           SELECT LLAVE, VALOR 
-                           FROM VS_USUARIOS_TAGS 
-                           WHERE UPPER(USUARIO) STARTING WITH UPPER(?)
+                           SELECT LLAVE, VALOR
+                           FROM VS_USUARIOS_TAGS
+                           WHERE UPPER(USUARIO) STARTING WITH UPPER(?);
                            """;
         
         try (PreparedStatement ps = getCnn().prepareStatement(

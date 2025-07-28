@@ -17,17 +17,8 @@ public class ParametrosConexion {
 
     private final Properties propiedades;
     private File filePropertie = null;
-
-    public static ParametrosConexion getInstance() {
-        return NewSingletonHolder.INSTANCE;
-    }
-
-    private static class NewSingletonHolder {
-
-        private static final ParametrosConexion INSTANCE = new ParametrosConexion();
-    }
     
-    private ParametrosConexion(){
+    public ParametrosConexion(){
          propiedades = new Properties();
 
         try {

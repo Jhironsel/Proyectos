@@ -6,7 +6,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-public class Celda_CheckBox extends DefaultCellEditor implements TableCellRenderer  {
+
+public final class Celda_CheckBox extends DefaultCellEditor implements TableCellRenderer  {
+
+    private static final long serialVersionUID = 1L;
 
     private final JComponent component = new JCheckBox();    
     private boolean value = false; 

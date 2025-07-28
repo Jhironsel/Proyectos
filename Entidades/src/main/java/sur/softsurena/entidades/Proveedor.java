@@ -12,7 +12,7 @@ public class Proveedor {
     private final Integer id;
     private final String codigoProveedor;
     
-    private final Paginas paginas;
+    private final Paginas pagina;
 
     @Override
     public String toString() {

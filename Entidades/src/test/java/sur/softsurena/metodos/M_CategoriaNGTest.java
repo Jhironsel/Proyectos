@@ -1,5 +1,6 @@
 package sur.softsurena.metodos;
 
+import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -47,7 +48,7 @@ public class M_CategoriaNGTest {
                 """
                 SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO
                 FROM V_CATEGORIAS
-                WHERE ID = 0 
+                WHERE ID = 0
                 ORDER BY 1;
                 """.trim().strip()
         );
@@ -157,31 +158,46 @@ public class M_CategoriaNGTest {
             dependsOnMethods = "testSelect"
     )
     public static void testInsert() {
-        Resultado result = M_Categoria.insert(
+        var descripcion = generarCodigoBarra();
+        
+        List<Categoria> lista = M_Categoria.select(
                 Categoria
                         .builder()
-                        .descripcion(generarCodigoBarra())
-                        .estado(Boolean.TRUE)
+                        .descripcion(descripcion)
                         .build()
         );
+        
+        if(lista.isEmpty()){
+            Resultado result = M_Categoria.insert(
+                    Categoria
+                            .builder()
+                            .descripcion(descripcion)
+                            .estado(Boolean.TRUE)
+                            .build()
+            );
 
-        assertEquals(
-                result,
-                Resultado
-                        .builder()
-                        .mensaje(M_Categoria.CATEGORIA_AGREGADA_CON_EXITO)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
-                        .build(),
-                "Problemas en el registro de la categoria."
-        );
+            assertEquals(
+                    result,
+                    Resultado
+                            .builder()
+                            .mensaje(M_Categoria.CATEGORIA_AGREGADA_CON_EXITO)
+                            .icono(JOptionPane.INFORMATION_MESSAGE)
+                            .estado(Boolean.TRUE)
+                            .build(),
+                    "Problemas en el registro de la categoria."
+            );
 
-        assertTrue(
-                result.getId() > 0,
-                "Identificador de la categoria es menor que cero!!!"
-        );
+            assertTrue(
+                    result.getId() > 0,
+                    "Identificador de la categoria es menor que cero!!!"
+            );
 
-        idCategoria = result.getId();
+            idCategoria = result.getId();
+        }else{
+            idCategoria = lista.stream().findFirst().orElseThrow().getId_categoria();
+        }
+        
+        
     }
 
     @Test(

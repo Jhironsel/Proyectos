@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import sur.softsurena.entidades.Tanda;
 import sur.softsurena.utilidades.Resultado;
 
-//TODO 14.05.2025 Crear test de tandas.
+//TODO 14/05/2025 Crear test de tandas.
 @Getter
 @Test(
         dependsOnGroups = "init"

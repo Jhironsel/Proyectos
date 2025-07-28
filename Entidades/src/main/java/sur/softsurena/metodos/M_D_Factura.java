@@ -93,7 +93,7 @@ public class M_D_Factura {
         final String sql = """
                            SELECT ID, LINEA, ID_PRODUCTO, ID_PRECIO, CANTIDAD
                            FROM V_D_FACTURAS
-                           WHERE ID_FACTURA = ? 
+                           WHERE ID_FACTURA = ?
                            ORDER BY LINEA;
                            """;
 

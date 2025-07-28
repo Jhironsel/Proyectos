@@ -14,7 +14,10 @@ import java.util.*;
 /**
  * Enrollment control test
  */
-public class VerificationDialog	extends JDialog {
+public final class VerificationDialog	extends JDialog {
+
+    private static final long serialVersionUID = 1L;
+    
     private EnumMap<DPFPFingerIndex, DPFPTemplate> templates;
     private int farRequested;
     private int farAchieved;

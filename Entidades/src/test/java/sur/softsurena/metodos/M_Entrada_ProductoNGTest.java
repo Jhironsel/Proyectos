@@ -1,10 +1,13 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.EntradaProducto;
+import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_ELIMINADA_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_REGISTRADA_CORRECTAMENTE;
+import static sur.softsurena.metodos.M_Entrada_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
 
 /**
@@ -17,40 +20,171 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_Entrada_ProductoNGTest {
 
-    @Test(
-            enabled = false
-    )
-    public void testAgregarProductoEntrada() {
-        EntradaProducto e = null;
-        boolean expResult = false;
-        Resultado result = M_Entrada_Producto.agregarProductoEntrada(e);
-        assertEquals(result, expResult);
+    private static Resultado resultado;
+
+    @Test
+    public void testSqlSelect() {
+        assertEquals(
+                M_Entrada_Producto.sqlSelect(
+                        EntradaProducto
+                                .builder()
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA, FECHA_ENTRADA
+                FROM V_M_ENTRADA_PRODUCTOS
+                """.strip()
+        );
+
+        assertEquals(
+                M_Entrada_Producto.sqlSelect(
+                        EntradaProducto
+                                .builder()
+                                .id(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA, FECHA_ENTRADA
+                FROM V_M_ENTRADA_PRODUCTOS
+                WHERE ID = 0
+                """.strip()
+        );
+
+        assertEquals(
+                M_Entrada_Producto.sqlSelect(
+                        EntradaProducto
+                                .builder()
+                                .idProveedor(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA, FECHA_ENTRADA
+                FROM V_M_ENTRADA_PRODUCTOS
+                WHERE ID_PROVEEDOR = 0
+                """.strip()
+        );
+
+        assertEquals(
+                M_Entrada_Producto.sqlSelect(
+                        EntradaProducto
+                                .builder()
+                                .idAlmacen(0)
+                                .build()
+                ),
+                """
+                SELECT ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA, FECHA_ENTRADA
+                FROM V_M_ENTRADA_PRODUCTOS
+                WHERE ID_ALMACEN = 0
+                """.strip()
+        );
     }
 
     @Test(
-            enabled = false
+            dependsOnMethods = "testSqlSelect"
     )
-    public void testAgregarProductoSalida() {
-        int IDENTRADA_PRODUCTO = 0;
-        int numero = 0;
-        String cencepto = "";
-        String idProducto = "";
-        double entrada = 0.0;
-        String idUsuario = "";
-        M_Entrada_Producto instance = new M_Entrada_Producto();
-        boolean expResult = false;
-        boolean result = instance.agregarProductoSalida(IDENTRADA_PRODUCTO, numero, cencepto, idProducto, entrada, idUsuario);
-        assertEquals(result, expResult);
+    public void testSelect() {
+        assertNotNull(
+                M_Entrada_Producto.select(
+                        EntradaProducto.builder().build()
+                )
+        );
+
+        assertNotNull(
+                M_Entrada_Producto.select(
+                        EntradaProducto
+                                .builder()
+                                .id(0)
+                                .build()
+                )
+        );
+
+        assertNotNull(
+                M_Entrada_Producto.select(
+                        EntradaProducto
+                                .builder()
+                                .idProveedor(0)
+                                .build()
+                )
+        );
+
+        assertNotNull(
+                M_Entrada_Producto.select(
+                        EntradaProducto
+                                .builder()
+                                .idAlmacen(0)
+                                .build()
+                )
+        );
     }
 
     @Test(
-            enabled = false
+            dependsOnMethods = "testSelect"
     )
-    public void testGetEntradaProducto() {
-        int mes = 0;
-        int year = 0;
-        ResultSet expResult = null;
-        ResultSet result = M_Entrada_Producto.getEntradaProducto(mes, year);
-        assertEquals(result, expResult);
+    public void testInsert() {
+        resultado = M_Entrada_Producto.insert(
+                EntradaProducto
+                        .builder()
+                        .idProveedor(0)
+                        .idAlmacen(0)
+                        .cod_factura(M_Generales.generarCedula())
+                        .estado('t')
+                        .build()
+        );
+
+        assertEquals(
+                resultado,
+                Resultado
+                        .builder()
+                        .mensaje(PRODUCTO_AGREGADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
     }
+
+    @Test(
+            dependsOnMethods = "testInsert"
+    )
+    public void testUpdate() {
+        assertEquals(
+                M_Entrada_Producto.update(
+                        EntradaProducto
+                                .builder()
+                                .id(resultado.getId())
+                                .idProveedor(0)
+                                .idAlmacen(0)
+                                .cod_factura(M_Generales.generarCedula())
+                                .estado('d')
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(ENTRADA_REGISTRADA_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+    }
+
+    @Test(
+            dependsOnMethods = {"testInsert", "testUpdate"}
+    )
+    public void testDelete() {
+        assertEquals(
+                M_Entrada_Producto.delete(
+                        EntradaProducto
+                                .builder()
+                                .id(resultado.getId())
+                                .build()
+                ),
+                Resultado
+                        .builder()
+                        .mensaje(ENTRADA_ELIMINADA_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
+        );
+
+    }
+
 }

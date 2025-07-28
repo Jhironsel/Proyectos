@@ -1,12 +1,12 @@
 package sur.softsurena.metodos;
 
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import static sur.softsurena.conexion.Conexion.getCnn;
@@ -57,9 +57,10 @@ public class M_Carton_Bingo implements IEntidad<Carton_Bingo>{
     }
 
     public static List<Integer> generarCarton() {
-        List<Integer> numbers = new ArrayList<Integer>();
+        List<Integer> numbers = new ArrayList<>();
 
-        Random rand = new Random();
+        SecureRandom rand = new SecureRandom();
+        
 
         Set<Integer> b = new HashSet<>();
 

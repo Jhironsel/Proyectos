@@ -1,6 +1,5 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
@@ -18,24 +17,51 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_ContactoDireccionNGTest {
 
-    private int idDireccion, idPersona, idProvincia, idMunicipio,
-            idDistritoMunicipal, idCodigoPostal;
-    
-    
-    @Test
+    private int idDireccion, idPersona;
+
+    @Test(
+            groups = "M_ContactoDireccionNGTest.testUpdateOrInsert"
+    )
     public void testUpdateOrInsert() {
+
+        Resultado result;
+        if (M_ContactoDireccion
+                .selectByID(0)
+                .stream()
+                .filter(dir -> dir.getId() == 0)
+                .findFirst()
+                .isEmpty()) {
+            result = M_ContactoDireccion.insert(
+                    ContactoDireccion
+                            .builder()
+                            .idPersona(0)
+                            .idProvincia(0)
+                            .idMunicipio(0)
+                            .idDistritoMunicipal(0)
+                            .direccion("Direccion de GENERICA.")
+                            .estado(Boolean.TRUE)
+                            .porDefecto(Boolean.TRUE)
+                            .build()
+            );
+
+            assertTrue(
+                    result.getEstado(),
+                    "No puede insertarse la direccion generica."
+            );
+        }
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 
-        Resultado result = M_ContactoDireccion.updateOrInsert(
+        result = M_ContactoDireccion.insert(
                 ContactoDireccion
                         .builder()
-                        .id(null)
                         .idPersona(idPersona)
                         .idProvincia(0)
                         .idMunicipio(0)
                         .idDistritoMunicipal(0)
                         .direccion("Insercion de prueba.")
+                        .estado(Boolean.TRUE)
                         .porDefecto(Boolean.TRUE)
                         .build()
         );
@@ -58,7 +84,7 @@ public class M_ContactoDireccionNGTest {
 
         idDireccion = result.getId();
     }//----------------------------------------------------------------------FIN
-    
+
     @Test(
             dependsOnMethods = "testUpdateOrInsert"
     )

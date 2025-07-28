@@ -30,7 +30,7 @@ This therefore allows the administrator to dynamically block websites in real ti
 Here, Proxy server is responsible for maintaining cached copies of the any websites that are requested by clients and this includes the HTML markup, images, css and js files associated with each webpage.
 The HashMaps which hold cached items and blocked sites are serialized and written to a file and are loaded back in when the proxy is started once more, meaning that cached and blocked sites are maintained.
  */
-public class Proxy implements Runnable {
+public final class Proxy implements Runnable {
     // Main method
 
     public static void main(String[] args) {

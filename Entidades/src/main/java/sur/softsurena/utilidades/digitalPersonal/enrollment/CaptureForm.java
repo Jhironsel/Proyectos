@@ -10,7 +10,9 @@ import com.digitalpersona.onetouch.processing.*;
 
 public class CaptureForm extends JDialog {
 
-    private final DPFPCapture capturer = DPFPGlobal.getCaptureFactory().createCapture();
+    private static final long serialVersionUID = 1L;
+
+    private final transient DPFPCapture capturer = DPFPGlobal.getCaptureFactory().createCapture();
     private final JLabel picture = new JLabel();
     private final JTextField prompt = new JTextField();
     private final JTextArea log = new JTextArea();

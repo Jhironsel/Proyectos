@@ -68,7 +68,7 @@ public class PesoParaEdadChicoChica {
 
             String str;
             
-            localBufferedReader.readLine();
+            System.out.println(localBufferedReader.readLine());
             
             for (str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {

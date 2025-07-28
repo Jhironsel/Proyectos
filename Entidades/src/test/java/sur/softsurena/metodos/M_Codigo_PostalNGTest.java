@@ -1,8 +1,7 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import lombok.Getter;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import org.testng.annotations.Test;
 
 /**
@@ -15,14 +14,12 @@ import org.testng.annotations.Test;
 )
 public class M_Codigo_PostalNGTest {
     
-    @Test(
-            enabled = false
-    )
+    @Test
     public void testGetCodigoPostal() {
-        int id_provincia = 0;
-        List expResult = null;
-        List result = M_Codigo_Postal.getCodigoPostal(id_provincia);
-        assertEquals(result, expResult);
+        assertFalse(
+                M_Codigo_Postal.getCodigoPostal(0).isEmpty(), 
+                "Registro de codigo postal principal no se encuentra."
+        );
     }
     
 }

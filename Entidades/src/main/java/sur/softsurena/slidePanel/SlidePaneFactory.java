@@ -14,10 +14,12 @@ import javax.swing.JPanel;
  *
  * @author root
  */
-public class SlidePaneFactory extends Box {
+public final class SlidePaneFactory extends Box {
 
-    StateListener listener;
-    List<StateListener> listeList = new ArrayList<>();
+    private static final long serialVersionUID = 1L;
+
+    transient StateListener listener;
+    transient List<StateListener> listeList = new ArrayList<>();
 
     private SlidePaneFactory(final boolean isGroup) {
         super(BoxLayout.Y_AXIS);
@@ -55,7 +57,6 @@ public static SlidePaneFactory getInstance(boolean isGroup) {
         add(slideComponent, title, imageIcon, false);
      }
     public void add(JComponent slideComponent, String title, Image imageIcon, boolean isExpand) {
-        listener = null;
         listener = new SlidingPanel(slideComponent, title, imageIcon, isExpand);
         super.add((JPanel) listener);
         super.add(Box.createVerticalGlue());

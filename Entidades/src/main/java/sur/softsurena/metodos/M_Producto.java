@@ -110,7 +110,7 @@ public class M_Producto {
                 ).trim().strip();
 
         final String sql = """
-                           SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION, 
+                           SELECT ID, ID_CATEGORIA, CODIGO, DESCRIPCION,
                             EXISTENCIA, FECHA_CREACION, ESTADO, NOTA
                            FROM V_PRODUCTOS
                            %S%S%S%S%S%S

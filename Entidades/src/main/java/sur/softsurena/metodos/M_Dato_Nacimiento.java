@@ -25,10 +25,10 @@ public class M_Dato_Nacimiento {
      */
     public synchronized static Dato_Nacimiento getDatosNacimiento(int id_paciente) {
         final String sql = """
-                           SELECT FECHANACIMIENTO, PESONACIMIENTOKG, ALTURA, MC, 
-                                    CESAREA, TIEMPOGESTACION, PC 
-                           FROM V_DATOSNACIMIENTO 
-                           WHERE idPaciente = ?
+                           SELECT FECHANACIMIENTO, PESONACIMIENTOKG, ALTURA, MC,
+                                    CESAREA, TIEMPOGESTACION, PC
+                           FROM V_DATOSNACIMIENTO
+                           WHERE idPaciente = ?;
                            """;
         
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -142,9 +142,9 @@ public class M_Dato_Nacimiento {
      */
     public synchronized static ResultSet getPesoKG(int idPaciente) {
         final String sql = """
-                           SELECT OUT_FECHANACIMIENTO, OUT_FECHACONSULTA, 
-                                  OUT_DEFERENCIAFECHA, OUT_PC 
-                           FROM PRO_PESO_EDAD(?)
+                           SELECT OUT_FECHANACIMIENTO, OUT_FECHACONSULTA,
+                                  OUT_DEFERENCIAFECHA, OUT_PC
+                           FROM PRO_PESO_EDAD(?);
                            """;
         
 //        List<
@@ -198,7 +198,7 @@ public class M_Dato_Nacimiento {
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE, 
-                    ex.getMessage(), 
+                    "", 
                     ex
             );
             return null;

@@ -19,9 +19,8 @@ import sur.softsurena.utilidades.Resultado;
 
 @Getter
 @Test(
-        enabled = true,
         dependsOnGroups = "init",
-        groups = "init.usuario"
+        threadPoolSize = 2
 )
 public class M_UsuarioNGTest {
 
@@ -44,9 +43,8 @@ public class M_UsuarioNGTest {
     public void testCambioClave() {
         String usuario = "sysdba";
         String clave = "1";
-        boolean result = M_Usuario.cambioClave(usuario, clave);
         assertTrue(
-                result,
+                M_Usuario.cambioClave(usuario, clave),
                 "La contraseña no fue cambiada. "
         );
     }
@@ -57,11 +55,15 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
                 """.strip()
@@ -80,7 +82,7 @@ public class M_UsuarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
                 WHERE ESTADO IS TRUE
@@ -100,7 +102,7 @@ public class M_UsuarioNGTest {
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
                 WHERE ESTADO IS FALSE
@@ -111,12 +113,16 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .administrador(Boolean.TRUE)
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
                 WHERE ADMINISTRADOR IS TRUE
@@ -127,12 +133,16 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .administrador(Boolean.FALSE)
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
                 WHERE ADMINISTRADOR IS FALSE
@@ -147,18 +157,15 @@ public class M_UsuarioNGTest {
                                 .persona(
                                         Persona
                                                 .builder()
-                                                .pnombre("SYSDBA")
-                                                .snombre("SYSDBA")
-                                                .apellidos("SYSDBA")
                                                 .build()
                                 )
                                 .build()
                 ),
                 """
-                SELECT USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
+                SELECT TRIM(USERNAME) USERNAME, PNOMBRE, SNOMBRE, APELLIDOS, ESTADO,
                       ADMINISTRADOR, DESCRIPCION
                 FROM VS_USUARIOS
-                WHERE USERNAME STARTING WITH 'SYSDBA' OR PNOMBRE STARTING WITH 'SYSDBA' OR SNOMBRE STARTING WITH 'SYSDBA' OR APELLIDOS STARTING WITH 'SYSDBA'
+                WHERE TRIM(UPPER(USERNAME)) STARTING WITH TRIM(UPPER('SYSDBA'))
                 """.strip()
         );
     }
@@ -171,7 +178,11 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .build()
                 ),
                 "Error al consultar la lista de usuario"
@@ -211,7 +222,11 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .administrador(Boolean.TRUE)
                                 .build()
                 ),
@@ -222,7 +237,11 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(Persona.builder().build())
+                                .persona(
+                                        Persona
+                                                .builder()
+                                                .build()
+                                )
                                 .administrador(Boolean.FALSE)
                                 .build()
                 ),
@@ -237,9 +256,6 @@ public class M_UsuarioNGTest {
                                 .persona(
                                         Persona
                                                 .builder()
-                                                .pnombre("SYSDBA")
-                                                .snombre("SYSDBA")
-                                                .apellidos("SYSDBA")
                                                 .build()
                                 )
                                 .build()
@@ -259,18 +275,16 @@ public class M_UsuarioNGTest {
                         .persona(
                                 Persona
                                         .builder()
-                                        .pnombre("CAJERO")
-                                        .snombre("CAJERO")
-                                        .apellidos("CAJERO")
                                         .build()
                         )
                         .build()
         );
 
         Resultado result;
-        List<Role> roles = new ArrayList();
+        
+        List<Role> roles = new ArrayList<>();
+        
         if (listaUsuario.isEmpty()) {
-
             roles.clear();
             roles.add(
                     Role
@@ -322,16 +336,12 @@ public class M_UsuarioNGTest {
                         .persona(
                                 Persona
                                         .builder()
-                                        .pnombre("ADMINISTRADOR")
-                                        .snombre("ADMINISTRADOR")
-                                        .apellidos("ADMINISTRADOR")
                                         .build()
                         )
                         .build()
         );
 
         if (listaUsuario.isEmpty()) {
-
             roles.clear();
             roles.add(
                     Role
@@ -419,7 +429,7 @@ public class M_UsuarioNGTest {
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
-        List<Role> roles = new ArrayList();
+        List<Role> roles = new ArrayList<>();
         roles.add(
                 Role
                         .builder()

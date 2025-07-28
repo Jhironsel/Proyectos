@@ -35,7 +35,7 @@ public class M_MunicipioNGTest {
                 """
                 SELECT ID, ID_PROVINCIA, NOMBRE
                 FROM V_T_MUNICIPIOS
-                WHERE ID IN(0, -1) 
+                WHERE ID IN(0, -1)
                 ORDER BY 1;
                 """.strip()
         );

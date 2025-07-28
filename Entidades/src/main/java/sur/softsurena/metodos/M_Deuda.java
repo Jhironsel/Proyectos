@@ -48,7 +48,7 @@ public class M_Deuda {
                             Deuda
                                     .builder()
                                     .id(rs.getInt("ID"))
-                                    .idCliente(rs.getInt("ID_CLIENTE"))
+                                    .idPersona(rs.getInt("ID_CLIENTE"))
                                     .concepto(rs.getString("CONCEPTO"))
                                     .monto(rs.getBigDecimal("MONTO"))
                                     .fecha(rs.getDate("FECHA"))
@@ -70,17 +70,27 @@ public class M_Deuda {
 
     protected static String sqlGetDeudas(Deuda deuda) {
         Boolean id = Objects.isNull(deuda.getId());
-        Boolean idCliente = Objects.isNull(deuda.getIdCliente());
+        Boolean idCliente = Objects.isNull(deuda.getIdPersona());
+
+        Boolean f_row = Objects.isNull(deuda.getPagina());
+
         boolean where = idCliente && id;
-        
+
         return """
                SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
                FROM V_M_DEUDAS
-               %s%s%s
+               %s%s%s%s
                """.formatted(
                 where ? "" : "WHERE ",
-                idCliente ? "" : "ID_CLIENTE = %d ".formatted(deuda.getIdCliente()),
-                id ? "" : "ID = %d ".formatted(deuda.getId())
+                idCliente ? "" : "ID_CLIENTE = %d ".formatted(deuda.getIdPersona()),
+                id ? "" : "ID = %d ".formatted(deuda.getId()),
+                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        deuda.getPagina().getNPaginaNro(),
+                                        deuda.getPagina().getNCantidadFilas(),
+                                        deuda.getPagina().getNPaginaNro(),
+                                        deuda.getPagina().getNCantidadFilas()
+                                )
         ).trim().strip();
     }
 //------------------------------------------------------------------------------
@@ -107,7 +117,7 @@ public class M_Deuda {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, deuda.getIdCliente());
+            ps.setInt(1, deuda.getIdPersona());
             ps.setString(2, deuda.getConcepto());
             ps.setBigDecimal(3, deuda.getMonto());
 
@@ -180,7 +190,7 @@ public class M_Deuda {
                     .build();
         }
     }
-    
+
     /**
      * Este procedimiento permite modificar el estado de una deuda.
      *

@@ -12,7 +12,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JComponent;
 
-public class Switch extends JComponent implements MouseListener {
+public final class Switch extends JComponent implements MouseListener {
+
+    private static final long serialVersionUID = 1L;
 
     // Captura el estado del interruptor
     private boolean OnOff = true;

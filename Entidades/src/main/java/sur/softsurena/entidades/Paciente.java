@@ -13,6 +13,8 @@ public class Paciente{
     private final Boolean cesarea;
     private final Integer tiempoGestacion;
     private final Boolean fumador;
+    
+    private final Paginas pagina;
 
     @Override
     public String toString() {

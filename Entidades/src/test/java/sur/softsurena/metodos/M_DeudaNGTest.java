@@ -57,7 +57,7 @@ public class M_DeudaNGTest {
                 M_Deuda.sqlGetDeudas(
                         Deuda
                                 .builder()
-                                .idCliente(0)
+                                .idPersona(0)
                                 .build()
                 ),
                 """
@@ -99,7 +99,7 @@ public class M_DeudaNGTest {
                 M_Deuda.select(
                         Deuda
                                 .builder()
-                                .idCliente(0)
+                                .idPersona(0)
                                 .build()
                 ),
                 "La tabla de deuda esta vacia."
@@ -120,7 +120,7 @@ public class M_DeudaNGTest {
         Resultado result = M_Deuda.insert(
                 Deuda
                         .builder()
-                        .idCliente(idPersona)
+                        .idPersona(idPersona)
                         .concepto("Sistema de prueba de deuda en registros.")
                         .monto(
                                 BigDecimal.valueOf(2300.55)

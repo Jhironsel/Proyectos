@@ -67,7 +67,7 @@ public class M_Antecedente {
         Boolean where = id && id_consulta;
         Boolean and = id || id_consulta;
         final String sql = """
-                           SELECT ID, ID_CONSULTA, DESCRIPCION 
+                           SELECT ID, ID_CONSULTA, DESCRIPCION
                            FROM V_ANTECEDENTES
                            %s%s%s%s
                            """.formatted(
