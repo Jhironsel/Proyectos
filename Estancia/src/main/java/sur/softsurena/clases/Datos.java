@@ -307,7 +307,6 @@ public class Datos {
                 st.setInt(2, h);
 
                 st.executeUpdate();
-                st.close();
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());

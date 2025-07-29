@@ -142,10 +142,9 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
 
         //Metodo encargado de inicializar los componentes del formulario.
         initComponents();
-        
+
         combosEntidades(entidades);
-        
-        
+
         v_editor = (JTextFieldDateEditor) dchFechaNacimiento.getDateEditor();
 
         v_editor.setBorder(
@@ -1638,6 +1637,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                 tblPersonas.getSelectedRow(),
                 2
         )).getIdPersona();
+        System.out.println("idPersona : [%d]".formatted(idPersona));
         mostrarRegistro();
     }//GEN-LAST:event_btnModificarPersonaActionPerformed
 
@@ -2897,20 +2897,17 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                 Persona
                         .builder()
                         .idPersona(idPersona)
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                        .nPaginaNro((int) jsPaginaNro.getValue())
-                                        .build()
-                        )
+                        .pagina(paginas())
                         .build()
         );
 
         if (lista.isEmpty()) {
             JOptionPane.showInternalMessageDialog(
                     this,
-                    "Persona no encontrado.!!!",
+                    """
+                    Persona no encontrado.!!!
+                    CODIGO ID=[%d]
+                    """.formatted(idPersona),
                     "",
                     JOptionPane.INFORMATION_MESSAGE
             );
@@ -2918,18 +2915,12 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             return;
         }
 
-        var _pagina = Paginas
-                .builder()
-                .nCantidadFilas((int) jsCantidadFilas.getValue())
-                .nPaginaNro((int) jsPaginaNro.getValue())
-                .build();
-        
         jcbCliente.setSelected(
                 !M_Cliente.select(
                         Cliente
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2938,7 +2929,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Empleado
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2948,7 +2939,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Estudiante
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2958,7 +2949,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Paciente
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2968,7 +2959,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Padre
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2978,7 +2969,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Proveedor
                                 .builder()
                                 .id(idPersona)
-                                .pagina(_pagina)
+                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -3046,17 +3037,19 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         llenarTablaCorreos(idPersona);
     }
 
+    private static Paginas paginas() {
+        return Paginas
+                .builder()
+                .nCantidadFilas((int) jsCantidadFilas.getValue())
+                .nPaginaNro((int) jsPaginaNro.getValue())
+                .build();
+    }
+
     private static void llenarTablaPersonas() {
         llenarTablaPersonas(
                 Persona
                         .builder()
-                        .pagina(
-                                Paginas
-                                        .builder()
-                                        .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                        .nPaginaNro((int) jsPaginaNro.getValue())
-                                        .build()
-                        )
+                        .pagina(paginas())
                         .build()
         );
     }
@@ -3124,13 +3117,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Cliente.select(
                     Cliente
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     cliente -> {
@@ -3143,13 +3130,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Empleado.select(
                     Empleado
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     empleado -> {
@@ -3162,13 +3143,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Estudiante.select(
                     Estudiante
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     estudiante -> {
@@ -3181,13 +3156,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Paciente.select(
                     Paciente
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     paciente -> {
@@ -3200,13 +3169,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Padre.select(
                     Padre
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     padre -> {
@@ -3221,13 +3184,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             M_Proveedor.select(
                     Proveedor
                             .builder()
-                            .pagina(
-                                    Paginas
-                                            .builder()
-                                            .nCantidadFilas((int) jsCantidadFilas.getValue())
-                                            .nPaginaNro((int) jsPaginaNro.getValue())
-                                            .build()
-                            )
+                            .pagina(paginas())
                             .build()
             ).stream().forEach(
                     proveedor -> {
@@ -3952,19 +3909,19 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
     private void combosEntidades(Entidades entidades) {
         jcbCliente.setVisible(entidades.isCliente());
         jcbFiltroClientes.setVisible(entidades.isCliente());
-        
+
         jcbEmpleado.setVisible(entidades.isEmpleado());
         jcbFiltroEmpleados.setVisible(entidades.isEmpleado());
-        
+
         jcbEstudiante.setVisible(entidades.isEstudiante());
         jcbFiltroEstudiantes.setVisible(entidades.isEstudiante());
-        
+
         jcbPaciente.setVisible(entidades.isPaciente());
         jcbFiltroPacientes.setVisible(entidades.isPaciente());
-        
+
         jcbPadre.setVisible(entidades.isPadre());
         jcbFiltroPadres.setVisible(entidades.isPadre());
-        
+
         jcbProveedor.setVisible(entidades.isProveedor());
         jcbFiltroProveedores.setVisible(entidades.isProveedor());
     }

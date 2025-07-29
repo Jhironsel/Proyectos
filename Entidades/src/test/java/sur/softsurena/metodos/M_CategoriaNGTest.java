@@ -103,7 +103,7 @@ public class M_CategoriaNGTest {
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
-        
+
         assertNotNull(
                 M_Categoria.select(
                         Categoria
@@ -112,7 +112,7 @@ public class M_CategoriaNGTest {
                 ),
                 "Error al consultar."
         );
-        
+
         assertNotNull(
                 M_Categoria.select(
                         Categoria
@@ -122,7 +122,7 @@ public class M_CategoriaNGTest {
                 ),
                 "Error al consultar."
         );
-        
+
         assertNotNull(
                 M_Categoria.select(
                         Categoria
@@ -159,15 +159,15 @@ public class M_CategoriaNGTest {
     )
     public static void testInsert() {
         var descripcion = generarCodigoBarra();
-        
+
         List<Categoria> lista = M_Categoria.select(
                 Categoria
                         .builder()
                         .descripcion(descripcion)
                         .build()
         );
-        
-        if(lista.isEmpty()){
+
+        if (lista.isEmpty()) {
             Resultado result = M_Categoria.insert(
                     Categoria
                             .builder()
@@ -193,47 +193,59 @@ public class M_CategoriaNGTest {
             );
 
             idCategoria = result.getId();
-        }else{
+        } else {
             idCategoria = lista.stream().findFirst().orElseThrow().getId_categoria();
         }
-        
-        
+
     }
 
     @Test(
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
-        assertEquals(
-                M_Categoria.update(
-                        Categoria
-                                .builder()
-                                .id_categoria(idCategoria)
-                                .descripcion(generarCodigoBarra())
-                                .estado(Boolean.TRUE)
-                                .build()
-                ),
-                Resultado
+        var descripcion = generarCodigoBarra();
+
+        List<Categoria> lista = M_Categoria.select(
+                Categoria
                         .builder()
-                        .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
-                        .icono(JOptionPane.INFORMATION_MESSAGE)
-                        .estado(Boolean.TRUE)
+                        .descripcion(descripcion)
                         .build()
         );
+
+        if (lista.isEmpty()) {
+            assertEquals(
+                    M_Categoria.update(
+                            Categoria
+                                    .builder()
+                                    .id_categoria(idCategoria)
+                                    .descripcion(descripcion)
+                                    .estado(Boolean.TRUE)
+                                    .build()
+                    ),
+                    Resultado
+                            .builder()
+                            .mensaje(SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE)
+                            .icono(JOptionPane.INFORMATION_MESSAGE)
+                            .estado(Boolean.TRUE)
+                            .build()
+            );
+        } else {
+            testUpdate();
+        }
     }
 
     @Test(
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public static void testDelete() {
-        
+
         M_Foto_Categoria.deleteById_categoria(
                 FotoCategoria
                         .builder()
                         .idCategoria(idCategoria)
                         .build()
         );
-        
+
         assertEquals(
                 M_Categoria.delete(idCategoria),
                 Resultado
