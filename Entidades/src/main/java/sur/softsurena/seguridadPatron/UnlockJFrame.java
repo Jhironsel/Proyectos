@@ -3,17 +3,19 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
 public final class UnlockJFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
     
-    private UnlockPanel unlockPanel;
     /**Constructor de clase*/
     public UnlockJFrame(){
         initComponents();
         UnlockJFrame.this.setLocationRelativeTo(null);
-    }    
+    }
+    
     private void initComponents() {        
+        UnlockPanel unlockPanel;
         setTitle("Unlock Pattern");
         setResizable(false);
         setSize(new Dimension(246,280));
@@ -22,7 +24,8 @@ public final class UnlockJFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().add(unlockPanel);
         pack();
-    }    
+    }
+    
     public static void main(String args[]){
         EventQueue.invokeLater(() -> {
             new UnlockJFrame().setVisible(true);

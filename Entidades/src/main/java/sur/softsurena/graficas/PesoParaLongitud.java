@@ -67,9 +67,12 @@ public class PesoParaLongitud {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
             
-            String str = localBufferedReader.readLine();
+            LOG.log(
+                    Level.INFO,
+                    localBufferedReader.readLine()
+            );
 
-            for (str = localBufferedReader.readLine();
+            for (var str = localBufferedReader.readLine();
                     str != null;
                     str = localBufferedReader.readLine()) {
                 float f1 = Float.parseFloat(str.substring(0, 7).trim());//Para el Mes
@@ -92,8 +95,8 @@ public class PesoParaLongitud {
                         SD3 = Float.valueOf(str.substring(112, 117).trim());
                     }
                 }
-
             }
+            
             ResultSet rs = getLongitudPeso(idPaciente);
             try {
                 while (rs.next()) {

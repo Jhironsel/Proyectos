@@ -1183,12 +1183,6 @@
                                       <Properties>
                                         <Property name="name" type="java.lang.String" value="jPanel13" noResource="true"/>
                                       </Properties>
-
-                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                                        <Property name="columns" type="int" value="0"/>
-                                        <Property name="horizontalGap" type="int" value="10"/>
-                                        <Property name="rows" type="int" value="1"/>
-                                      </Layout>
                                       <SubComponents>
                                         <Component class="javax.swing.JCheckBox" name="jcbCliente">
                                           <Properties>
@@ -1266,6 +1260,60 @@
                                           </AuxValues>
                                         </Component>
                                       </SubComponents>
+                                      <LayoutCode>
+                                        <CodeStatement>
+                                          <CodeExpression id="7_flowLayout2">
+                                            <CodeVariable name="flowLayout2" type="4096" declaredType="java.awt.FlowLayout"/>
+                                            <ExpressionOrigin>
+                                              <ExpressionProvider type="CodeConstructor">
+                                                <CodeConstructor class="java.awt.FlowLayout" parameterTypes="int"/>
+                                              </ExpressionProvider>
+                                              <Parameters>
+                                                <CodeExpression id="8">
+                                                  <ExpressionOrigin>
+                                                    <Value type="int" value="0"/>
+                                                  </ExpressionOrigin>
+                                                </CodeExpression>
+                                              </Parameters>
+                                            </ExpressionOrigin>
+                                          </CodeExpression>
+                                          <StatementProvider type="CodeExpression">
+                                            <CodeExpression id="7_flowLayout2"/>
+                                          </StatementProvider>
+                                          <Parameters>
+                                            <CodeExpression id="8"/>
+                                          </Parameters>
+                                        </CodeStatement>
+                                        <CodeStatement>
+                                          <CodeExpression id="7_flowLayout2"/>
+                                          <StatementProvider type="CodeMethod">
+                                            <CodeMethod name="setAlignOnBaseline" class="java.awt.FlowLayout" parameterTypes="boolean"/>
+                                          </StatementProvider>
+                                          <Parameters>
+                                            <CodeExpression id="9">
+                                              <ExpressionOrigin>
+                                                <Value type="boolean" value="true"/>
+                                              </ExpressionOrigin>
+                                            </CodeExpression>
+                                          </Parameters>
+                                        </CodeStatement>
+                                        <CodeStatement>
+                                          <CodeExpression id="10_jPanel13">
+                                            <CodeVariable name="jPanel13" type="8194" declaredType="javax.swing.JPanel"/>
+                                            <ExpressionOrigin>
+                                              <ExpressionProvider type="ComponentRef">
+                                                <ComponentRef name="jPanel13"/>
+                                              </ExpressionProvider>
+                                            </ExpressionOrigin>
+                                          </CodeExpression>
+                                          <StatementProvider type="CodeMethod">
+                                            <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
+                                          </StatementProvider>
+                                          <Parameters>
+                                            <CodeExpression id="7_flowLayout2"/>
+                                          </Parameters>
+                                        </CodeStatement>
+                                      </LayoutCode>
                                     </Container>
                                   </SubComponents>
                                 </Container>

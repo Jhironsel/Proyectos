@@ -78,11 +78,10 @@ public class M_Categoria {
 
     //TODO 19/01/2025 Agregar la descripcion al filtro.
     protected static String sqlSelect(Categoria categoria) {
-        Boolean id = Objects.isNull(categoria.getId_categoria());
-        Boolean estado = Objects.isNull(categoria.getEstado());
-        Boolean descripcion = Objects.isNull(categoria.getDescripcion());
-
-        Boolean where = id && estado && descripcion;
+        boolean id = Objects.isNull(categoria.getId_categoria());
+        boolean estado = Objects.isNull(categoria.getEstado());
+        boolean descripcion = Objects.isNull(categoria.getDescripcion());
+        boolean where = id && estado && descripcion;
 
         return """
                SELECT ID, DESCRIPCION, FECHA_CREACION, ESTADO

@@ -63,11 +63,10 @@ public class M_Estudiante {
     }
 
     protected static String sqlSelect(Estudiante estudiante) {
-        Boolean id = Objects.isNull(estudiante.getId());
-        Boolean matricula = Objects.isNull(estudiante.getMatricula());
-        Boolean pagina = Objects.isNull(estudiante.getPagina());
-        
-        Boolean where =  id && matricula;
+        boolean id = Objects.isNull(estudiante.getId());
+        boolean matricula = Objects.isNull(estudiante.getMatricula());
+        boolean pagina = Objects.isNull(estudiante.getPagina());
+        boolean where =  id && matricula;
         return """
                SELECT ID, MATRICULA
                FROM V_PERSONAS_ESTUDIANTES_ATR

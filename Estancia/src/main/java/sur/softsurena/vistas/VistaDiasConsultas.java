@@ -1,6 +1,8 @@
 package sur.softsurena.vistas;
 
-public class VistaDiasConsultas extends javax.swing.JDialog {
+public final  class VistaDiasConsultas extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     public VistaDiasConsultas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -150,7 +152,7 @@ public class VistaDiasConsultas extends javax.swing.JDialog {
             VistaHora hora = new VistaHora(null, true);
             hora.setLocationRelativeTo(null);
             hora.setVisible(true);
-            cbLunes.setSelected(hora.aceptar);
+            cbLunes.setSelected(VistaHora.aceptar);
         } else {
         }
         

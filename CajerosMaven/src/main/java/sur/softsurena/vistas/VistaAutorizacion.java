@@ -1,10 +1,11 @@
 package sur.softsurena.vistas;
 
 import java.util.logging.Level;
-import javax.swing.JFrame;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaAutorizacion extends javax.swing.JDialog {
+public final class VistaAutorizacion extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private boolean autorizado;
 
@@ -24,11 +25,11 @@ public class VistaAutorizacion extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        javax.swing.JLabel jLabel1 = new javax.swing.JLabel();
+        javax.swing.JLabel jLabel2 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         txtPass = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
+        javax.swing.JLabel jLabel3 = new javax.swing.JLabel();
 
         setTitle("Autorizacion...!");
         setAlwaysOnTop(true);
@@ -120,7 +121,7 @@ public class VistaAutorizacion extends javax.swing.JDialog {
         
         VistaCajeros c = new VistaCajeros();
         c.setLocationRelativeTo(null);
-        c.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        c.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         c.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_txtPassActionPerformed
@@ -130,9 +131,6 @@ public class VistaAutorizacion extends javax.swing.JDialog {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables

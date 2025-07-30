@@ -18,10 +18,10 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
 public class M_Almacen {
 
     public static String sqlSelect(Almacen almacen) {
-        Boolean id = Objects.isNull(almacen.getId());
-        Boolean nombre = Objects.isNull(almacen.getNombre());
-        Boolean estado = Objects.isNull(almacen.getEstado());
-        Boolean where = id && nombre && estado;
+        boolean id = Objects.isNull(almacen.getId());
+        boolean nombre = Objects.isNull(almacen.getNombre());
+        boolean estado = Objects.isNull(almacen.getEstado());
+        boolean where = id && nombre && estado;
         return """
                SELECT ID, NOMBRE, UBICACION, ESTADO, BORRADO
                FROM V_ALMACENES

@@ -87,8 +87,8 @@ public class M_Metrica {
     }
 
     protected static String sqlSelect(Metrica metrica) {
-        Boolean id = Objects.isNull(metrica.getId());
-        Boolean where = id;
+        boolean id = Objects.isNull(metrica.getId());
+        boolean where = id;
         return """
                SELECT ID, ID_CONSULTA, PESOKG, ESTATURAMETRO, ESCEFALO,
                 ENF_DETECT, HALLAZGOS_POS, ID_DIAG, TX, COMPLEMENTO,

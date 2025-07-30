@@ -73,9 +73,8 @@ public class M_Cliente {
     protected static String sqlSelect(
             Cliente cliente
     ) {
-        Boolean id = Objects.isNull(cliente.getId());
-        
-        Boolean pagina = Objects.isNull(cliente.getPagina());
+        boolean id = Objects.isNull(cliente.getId());
+        boolean pagina = Objects.isNull(cliente.getPagina());
         
         StringBuilder sb = new StringBuilder();
         sb.append(

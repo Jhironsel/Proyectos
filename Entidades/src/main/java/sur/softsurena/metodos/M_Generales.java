@@ -81,12 +81,11 @@ public class M_Generales {
     }
 
     protected static String sqlSelect(Generales generales) {
-        Boolean id = Objects.isNull(generales.getId());
-        Boolean idPersona = Objects.isNull(generales.getIdPersona());
-        Boolean cedula = Objects.isNull(generales.getCedula());
-        Boolean where = id && idPersona && cedula;
-
-        Boolean f_row = Objects.isNull(generales.getPagina());
+        boolean id = Objects.isNull(generales.getId());
+        boolean idPersona = Objects.isNull(generales.getIdPersona());
+        boolean cedula = Objects.isNull(generales.getCedula());
+        boolean where = id && idPersona && cedula;
+        boolean frow = Objects.isNull(generales.getPagina());
 
         return """
                SELECT ID, ID_PERSONA, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
@@ -97,7 +96,7 @@ public class M_Generales {
                 idPersona ? "" : "ID_PERSONA = %d ".formatted(generales.getIdPersona()),
                 id ? "" : "ID = %d ".formatted(generales.getId()),
                 cedula ? "" : "CEDULA STARTING WITH '%s' ".formatted(generales.getCedula()),
-                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                frow ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
                                         generales.getPagina().getNPaginaNro(),
                                         generales.getPagina().getNCantidadFilas(),

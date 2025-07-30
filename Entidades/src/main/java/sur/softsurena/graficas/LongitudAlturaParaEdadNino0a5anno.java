@@ -68,9 +68,13 @@ public class LongitudAlturaParaEdadNino0a5anno {
             XYSeries localXYSeries8 = new XYSeries("Longitud", true, true);
             XYSeries localXYSeries9 = new XYSeries("Estatura", true, true);
             
-            String str = localBufferedReader.readLine();
+            localBufferedReader.readLine();
+            LOG.log(
+                    Level.INFO,
+                    localBufferedReader.readLine()
+            );
             
-            for (str = localBufferedReader.readLine();
+            for (var str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes
                 if (Integer.parseInt(str.substring(8, 11).trim()) == (sexo.equals("m") ? 1 : 2)) {//Determina Sexo

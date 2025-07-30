@@ -156,9 +156,7 @@ public class Utilidades {
      * @param print
      */
     public static void extractPrintImage(String filePath, JasperPrint print) {
-        try {
-            OutputStream ouputStream = new FileOutputStream(filePath);
-
+        try (OutputStream ouputStream = new FileOutputStream(filePath);){
             JasperPrintManager printManager
                     = JasperPrintManager.getInstance(
                             DefaultJasperReportsContext.getInstance());
@@ -349,12 +347,10 @@ public class Utilidades {
      * base datos.
      */
     public synchronized static String imagenEncode64(File file) {
-        try {
+        try (FileInputStream imageInFile = new FileInputStream(file);){
             if (file == null) {
                 return "";
             }
-
-            FileInputStream imageInFile = new FileInputStream(file);
 
             byte imageData[] = new byte[(int) file.length()];
 

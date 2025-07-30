@@ -54,12 +54,10 @@ public class M_Proveedor {
     }
 
     public static String sqlSelect(Proveedor proveedor) {
-        Boolean id = Objects.isNull(proveedor.getId());
-        Boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
-
-        Boolean where = id && codigo;
-        
-        Boolean pagina = Objects.isNull(proveedor.getPagina());
+        boolean id = Objects.isNull(proveedor.getId());
+        boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
+        boolean where = id && codigo;
+        boolean pagina = Objects.isNull(proveedor.getPagina());
 
         String sql = """
                      SELECT ID

@@ -1,15 +1,17 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vistas.VistaCategoriasAdmin;
+import java.io.File;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import xy.ui.testing.Tester;
+import xy.ui.testing.util.TestingUtils;
 
 /**
  *
  * @author jhironsel
  */
 @Test(
-        dependsOnGroups = "init2"
+        dependsOnGroups = {"init2", "testSwingProducto"}
 )
 public class VistaCategoriasAdminNGTest {
 
@@ -33,6 +35,15 @@ public class VistaCategoriasAdminNGTest {
         Boolean aceptar = null;
         VistaCategoriasAdmin instance = null;
         instance.setAceptar(aceptar);
+    }
+    
+    //--------------------------------------------------------------------------
+    @Test
+    public void testSwingCategoria() throws Exception {
+        TestingUtils.assertSuccessfulReplay(
+                new Tester(),
+                new File("testSwing/testCategoria.stt")
+        );
     }
 
 }

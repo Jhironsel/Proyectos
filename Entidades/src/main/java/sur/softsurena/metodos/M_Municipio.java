@@ -58,10 +58,10 @@ public class M_Municipio {
     }
 
     protected static String sqlSelect(Municipio municipio) {
-        Boolean id = Objects.isNull(municipio.getId());
-        Boolean idProvincia = Objects.isNull(municipio.getIdProvincia());
-        Boolean where = id && idProvincia;
-        Boolean or = id || idProvincia;
+        boolean id = Objects.isNull(municipio.getId());
+        boolean idProvincia = Objects.isNull(municipio.getIdProvincia());
+        boolean where = id && idProvincia;
+        boolean or = id || idProvincia;
         return """
                SELECT ID, ID_PROVINCIA, NOMBRE
                FROM V_T_MUNICIPIOS

@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import com.mxrck.autocompleter.AutoCompleterCallback;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -18,19 +17,20 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Categoria;
-import sur.softsurena.entidades.Cliente;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 import sur.softsurena.vista.VistaBusquedaPersona;
 
-public class VistaCajeros extends javax.swing.JFrame implements Runnable {
+public final class VistaCajeros extends javax.swing.JFrame implements Runnable {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
     private String hora, minutos, segundos, ampm;
-    private final Thread h1;
+    private transient final Thread h1;
     private VistaAutorizacion miAut;
-    private TextAutoCompleter textAutoCompleter;
+    private transient TextAutoCompleter textAutoCompleter;
 
     @Override
     public void run() {
@@ -52,27 +52,23 @@ public class VistaCajeros extends javax.swing.JFrame implements Runnable {
         h1 = new Thread(this);
         h1.start();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                txtBuscarCodigo.requestFocus();
-            }
+        SwingUtilities.invokeLater(() -> {
+            txtBuscarCodigo.requestFocus();
         });
 
-        textAutoCompleter = new TextAutoCompleter(txtBuscarCodigo,
-                new AutoCompleterCallback() {
-            @Override
-            public void callback(Object selectedItem) {
-//                txtBuscarCodigo.setText();
-                buscarCodigo(
-                        ((Categoria) textAutoCompleter.findItem(
-                                selectedItem.toString())).getDescripcion()
-                );
-                if (cmbProducto.getSelectedIndex() != 0) {
-                    txtCantidad.requestFocus();
+        textAutoCompleter = new TextAutoCompleter(
+                txtBuscarCodigo,
+                (Object selectedItem) -> {
+                    //                txtBuscarCodigo.setText();
+                    buscarCodigo(
+                            ((Categoria) textAutoCompleter.findItem(
+                                    selectedItem.toString())).getDescripcion()
+                    );
+                    if (cmbProducto.getSelectedIndex() != 0) {
+                        txtCantidad.requestFocus();
+                    }
                 }
-            }
-        });
+        );
         textAutoCompleter.setMode(0);
         textAutoCompleter.setCaseSensitive(false);
         txtBuscarCodigo.requestFocus();

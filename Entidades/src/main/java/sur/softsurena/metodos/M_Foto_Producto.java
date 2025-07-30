@@ -61,10 +61,9 @@ public class M_Foto_Producto {
     }
 
     protected static String sqlSelect(FotoProducto fotoProducto) {
-        Boolean id = Objects.isNull(fotoProducto.getId());
-        Boolean id_persona = Objects.isNull(fotoProducto.getIdProducto());
-        
-        Boolean where = id && id_persona;
+        boolean id = Objects.isNull(fotoProducto.getId());
+        boolean id_persona = Objects.isNull(fotoProducto.getIdProducto());
+        boolean where = id && id_persona;
         return """
                SELECT ID, ID_PRODUCTO, FOTO, FECHA_HORA_CREACION, ACTUAL
                FROM V_FOTO_PRODUCTO

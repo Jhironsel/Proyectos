@@ -56,7 +56,7 @@ public class M_Provincia {
     }
 
     protected static String sqlSelect(Provincia provincia) {
-        Boolean id = Objects.isNull(provincia.getId());
+        boolean id = Objects.isNull(provincia.getId());
         return """
                SELECT ID, NOMBRE, ZONA
                FROM V_T_PROVINCIAS

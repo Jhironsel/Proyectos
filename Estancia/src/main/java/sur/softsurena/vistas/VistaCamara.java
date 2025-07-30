@@ -27,12 +27,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaCamara extends javax.swing.JDialog implements
+public final class VistaCamara extends javax.swing.JDialog implements
         WebcamListener, WindowListener, Thread.UncaughtExceptionHandler,
         ItemListener, WebcamDiscoveryListener {
 
     private static final long serialVersionUID = 1L;
-    private Webcam webcam = null;
+    private transient Webcam webcam = null;
     private WebcamPanel panel = null;
     private WebcamPicker picker = null;
     private boolean listo;

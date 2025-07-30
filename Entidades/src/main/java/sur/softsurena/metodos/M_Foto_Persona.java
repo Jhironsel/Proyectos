@@ -61,10 +61,10 @@ public class M_Foto_Persona {
     }
 
     protected static String sqlSelect(FotoPersona fotoPersona) {
-        Boolean id = Objects.isNull(fotoPersona.getId());
-        Boolean id_persona = Objects.isNull(fotoPersona.getIdPersona());
-        Boolean where = id && id_persona;
-        Boolean and = !id && !id_persona;
+        boolean id = Objects.isNull(fotoPersona.getId());
+        boolean id_persona = Objects.isNull(fotoPersona.getIdPersona());
+        boolean where = id && id_persona;
+        boolean and = !id && !id_persona;
         return """
                SELECT ID, ID_PERSONA, FOTO, FECHA_HORA_CREACION, ACTUAL
                FROM V_FOTO_PERSONA

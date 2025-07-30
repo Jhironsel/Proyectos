@@ -97,15 +97,14 @@ public class M_M_Factura {
     }
 
     protected static String sqlSelect(M_Factura factura) {
-        Boolean id = Objects.isNull(factura.getId());
-        Boolean idCliente = Objects.isNull(factura.getIdCliente());
-        Boolean idContactoTel = Objects.isNull(factura.getIdContactoTel());
-        Boolean idContactoDir = Objects.isNull(factura.getIdContactoDir());
-        Boolean idContactoEmail = Objects.isNull(factura.getIdContactoEmail());
-        Boolean idTurno = Objects.isNull(factura.getIdTurno());
-        Boolean estado = Objects.isNull(factura.getEstadoFactura());
-
-        Boolean where = id && idCliente && idContactoTel && idContactoDir
+        boolean id = Objects.isNull(factura.getId());
+        boolean idCliente = Objects.isNull(factura.getIdCliente());
+        boolean idContactoTel = Objects.isNull(factura.getIdContactoTel());
+        boolean idContactoDir = Objects.isNull(factura.getIdContactoDir());
+        boolean idContactoEmail = Objects.isNull(factura.getIdContactoEmail());
+        boolean idTurno = Objects.isNull(factura.getIdTurno());
+        boolean estado = Objects.isNull(factura.getEstadoFactura());
+        boolean where = id && idCliente && idContactoTel && idContactoDir
                 && idContactoEmail && idTurno && estado;
 
         return """

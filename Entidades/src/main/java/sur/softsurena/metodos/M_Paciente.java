@@ -62,10 +62,9 @@ public class M_Paciente {
             = "Error al consultar la vista GET_PACIENTES del sistema.";
 
     protected static String sqlSelect(Paciente paciente) {
-        Boolean id = Objects.isNull(paciente.getId());
-        Boolean where = id;
-
-        Boolean pagina = Objects.isNull(paciente.getPagina());
+        boolean id = Objects.isNull(paciente.getId());
+        boolean where = id;
+        boolean pagina = Objects.isNull(paciente.getPagina());
 
         return """
                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR

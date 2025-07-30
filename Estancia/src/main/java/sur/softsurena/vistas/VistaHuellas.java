@@ -28,22 +28,26 @@ import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaHuellas extends javax.swing.JDialog {
+public final class VistaHuellas extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     //Varible que permite iniciar el dispositivo de lector de huella conectado
     // con sus distintos metodos.
-    private final DPFPCapture Lector = DPFPGlobal.getCaptureFactory().createCapture();
+    private transient final DPFPCapture Lector = DPFPGlobal.getCaptureFactory().createCapture();
     //Varible que permite establecer las capturas de la huellas, para determina sus caracteristicas
     // y poder estimar la creacion de un template de la huella para luego poder guardarla
-    private final DPFPEnrollment Reclutador = DPFPGlobal.getEnrollmentFactory().createEnrollment();
+    private transient final DPFPEnrollment Reclutador = DPFPGlobal.getEnrollmentFactory().createEnrollment();
     //Esta variable tambien captura una huella del lector y crea sus caracteristcas para auntetificarla
     // o verificarla con alguna guardada en la BD
-    private final DPFPVerification Verificador = DPFPGlobal.getVerificationFactory().createVerification();
+    private transient final DPFPVerification Verificador = DPFPGlobal.getVerificationFactory().createVerification();
     //Variable que para crear el template de la huella luego de que se hallan creado las caracteriticas
     // necesarias de la huella si no ha ocurrido ningun problema
-    private DPFPTemplate template;
-    private DPFPFeatureSet featuresinscripcion;
-    private DPFPFeatureSet featuresverificacion;
+    private transient DPFPTemplate template;
+    private transient DPFPFeatureSet featuresinscripcion;
+    private transient DPFPFeatureSet featuresverificacion;
     
     private final String TEMPLATE_PROPERTY = "template";
     
@@ -302,7 +306,8 @@ public class VistaHuellas extends javax.swing.JDialog {
                 EstadoHuellas();
                 // Comprueba si la plantilla se ha creado.
                 switch (Reclutador.getTemplateStatus()) {
-                    case TEMPLATE_STATUS_READY:	// informe de éxito y detiene  la captura de huellas
+                    case TEMPLATE_STATUS_READY -> {
+                        // informe de éxito y detiene  la captura de huellas
                         stop();
                         setTemplate(Reclutador.getTemplate());
                         EnviarTexto("La Plantilla de la Huella ha Sido Creada, ya puede Verificarla o Identificarla");
@@ -310,16 +315,17 @@ public class VistaHuellas extends javax.swing.JDialog {
                         btnVerificar.setEnabled(false);
                         btnGuardar.setEnabled(true);
                         btnGuardar.grabFocus();
-                        break;
+                    }
 
-                    case TEMPLATE_STATUS_FAILED: // informe de fallas y reiniciar la captura de huellas
+                    case TEMPLATE_STATUS_FAILED -> {
+                        // informe de fallas y reiniciar la captura de huellas
                         Reclutador.clear();
                         stop();
                         EstadoHuellas();
                         setTemplate(null);
                         JOptionPane.showMessageDialog(VistaHuellas.this, "La Plantilla de la Huella no pudo ser creada, Repita el Proceso", "Inscripcion de Huellas Dactilares", JOptionPane.ERROR_MESSAGE);
                         start();
-                        break;
+                    }
                 }
             }
         }
@@ -397,7 +403,11 @@ public class VistaHuellas extends javax.swing.JDialog {
             btnGuardar.setEnabled(false);
             btnVerificar.grabFocus();
         } catch (SQLException ex) {
-            System.err.println("Error al guardar los datos de la huella.\n"+ex.getMessage());
+            LOG.log(
+                    Level.SEVERE, 
+                    "Error al guardar las huellas.", 
+                    ex
+            );
         }
     }
     /**

@@ -2,7 +2,6 @@ package sur.softsurena.graficas;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,7 +25,6 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import sur.softsurena.abstracta.Persona;
-import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.AlturaPeso;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getAlturaPeso;
 import sur.softsurena.metodos.M_Persona;
@@ -83,9 +81,12 @@ public class PesoParaEstatura {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
             
-            String str = localBufferedReader.readLine();
+            LOG.log(
+                    Level.INFO,
+                    localBufferedReader.readLine()
+            );
 
-            for (str = localBufferedReader.readLine();
+            for (var str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 float f1 = Float.parseFloat(str.substring(0, 7).trim());//Para el Mes
 

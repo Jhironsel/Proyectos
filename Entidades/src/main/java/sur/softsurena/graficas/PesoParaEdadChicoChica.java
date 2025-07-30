@@ -66,11 +66,12 @@ public class PesoParaEdadChicoChica {
             XYSeries localXYSeries7 = new XYSeries("SD3", true, true);
             XYSeries localXYSeries8 = new XYSeries("DATO", true, true);
 
-            String str;
-            
-            System.out.println(localBufferedReader.readLine());
-            
-            for (str = localBufferedReader.readLine();
+            LOG.log(
+                    Level.INFO,
+                    localBufferedReader.readLine()
+            );
+
+            for (var str = localBufferedReader.readLine();
                     str != null; str = localBufferedReader.readLine()) {
                 int f1 = Integer.parseInt(str.substring(0, 4).trim());//Para el Mes
                 if (Integer.parseInt(str.substring(10, 13).trim()) == (sexo.equals("m") ? 1 : 2)) {//Determina Sexo

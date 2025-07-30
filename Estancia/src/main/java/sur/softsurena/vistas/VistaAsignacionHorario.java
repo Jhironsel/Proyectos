@@ -9,9 +9,10 @@ import javax.swing.table.TableRowSorter;
 import sur.softsurena.entidades.Horario;
 import sur.softsurena.metodos.M_Horario;
 
-public class VistaAsignacionHorario extends javax.swing.JInternalFrame {
+public final class VistaAsignacionHorario extends javax.swing.JInternalFrame {
 
     private static VistaAsignacionHorario asigHorario;
+    private static final long serialVersionUID = 1L;
 
     public synchronized static VistaAsignacionHorario getAsignacionHorario() {
         if (asigHorario == null) {

@@ -9,7 +9,9 @@ import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Persona;
 
-public class VistaBuscarCedula extends javax.swing.JDialog {
+public final class VistaBuscarCedula extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private DefaultTableModel miTabla;
 

@@ -9,9 +9,10 @@ import sur.softsurena.conexion.Conexion;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.AnimationClass;
 
-public class VistaLogin extends javax.swing.JFrame {
+public final class VistaLogin extends javax.swing.JFrame {
 
     public static Datos datos;
+    private static final long serialVersionUID = 1L;
 
     public VistaLogin() {
         initComponents();

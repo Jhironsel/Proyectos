@@ -67,11 +67,9 @@ public class M_Empleado {
             = "Error al consulta la vista V_PERSONAS_CLIENTES";
 
     public static String sqlSelect(Empleado empleado) {
-        Boolean id = Objects.isNull(empleado.getId());
-
-        Boolean pagina = Objects.isNull(empleado.getPagina());
-
-        Boolean where = id;
+        boolean id = Objects.isNull(empleado.getId());
+        boolean pagina = Objects.isNull(empleado.getPagina());
+        boolean where = id;
         return """
                SELECT ID
                FROM V_PERSONAS_EMPLEADOS

@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -20,7 +19,7 @@ public final class UnlockPanel extends JPanel implements MouseListener, MouseMot
 
     private static final long serialVersionUID = 1L;
 
-    private final JFrame parent;
+    private final JFrame frame;
     private String myKey = "125895";//patron de desbloqueo
     //array para las 9 figuras que forman la matriz
     private final ArrayList<FigurePattern> figurePatternArr = new ArrayList<>();
@@ -40,7 +39,7 @@ public final class UnlockPanel extends JPanel implements MouseListener, MouseMot
     }
 
     public UnlockPanel(JFrame parent) {
-        this.parent = parent;
+        this.frame = parent;
         //se agregan 9 circulos al contenedor
         figurePatternArr.add(new FigurePattern(1, 0, 0));
         figurePatternArr.add(new FigurePattern(2, 80, 0));
@@ -75,11 +74,13 @@ public final class UnlockPanel extends JPanel implements MouseListener, MouseMot
             point = figurePattern.getCenterPoint();
         }
         //dibuja los circulos para los patrones de desbloqueo       
-        if (figurePatternArr != null) {
-            figurePatternArr.stream().forEach((b) -> {
-                b.draw(g2);
-            });
-        } else if (showError) {
+        figurePatternArr.stream().forEach(
+                (b) -> {
+                    b.draw(g2);
+                }
+        );
+
+        if (showError) {
             g2.drawImage(
                     new ImageIcon("src/images/access_denied.png").getImage(),
                     (getWidth() - 220) / 2,
@@ -148,7 +149,7 @@ public final class UnlockPanel extends JPanel implements MouseListener, MouseMot
      */
     public void checkUnlockPattern() {
         if (password.equals(myKey)) {//si patron de desbloqueo es correcto
-            parent.setVisible(false);//se oculta 
+            frame.setVisible(false);//se oculta 
             //se muestra aplicacion cliente
 //            frmLogin app = new frmLogin();
 //            app.setVisible(true);

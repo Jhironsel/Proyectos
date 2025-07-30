@@ -69,10 +69,10 @@ public class M_DistritoMunicipal {
             = "Error al consutar la vista V_DISTRITOS_MUNICIPALES.";
 
     protected static String sqlSelect(DistritoMunicipal distritoMunicipal) {
-        Boolean id = Objects.isNull(distritoMunicipal.getId());
-        Boolean idMunicipio = Objects.isNull(distritoMunicipal.getIdMunicipio());
-        Boolean where = id && idMunicipio;
-        Boolean or = id || idMunicipio;
+        boolean id = Objects.isNull(distritoMunicipal.getId());
+        boolean idMunicipio = Objects.isNull(distritoMunicipal.getIdMunicipio());
+        boolean where = id && idMunicipio;
+        boolean or = id || idMunicipio;
         return """
                SELECT ID, ID_MUNICIPIO, NOMBRE
                FROM V_T_DISTRITOS_MUNICIPALES

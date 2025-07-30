@@ -69,10 +69,10 @@ public class M_Deuda {
     }
 
     protected static String sqlGetDeudas(Deuda deuda) {
-        Boolean id = Objects.isNull(deuda.getId());
-        Boolean idCliente = Objects.isNull(deuda.getIdPersona());
+        boolean id = Objects.isNull(deuda.getId());
+        boolean idCliente = Objects.isNull(deuda.getIdPersona());
 
-        Boolean f_row = Objects.isNull(deuda.getPagina());
+        boolean row = Objects.isNull(deuda.getPagina());
 
         boolean where = idCliente && id;
 
@@ -84,7 +84,7 @@ public class M_Deuda {
                 where ? "" : "WHERE ",
                 idCliente ? "" : "ID_CLIENTE = %d ".formatted(deuda.getIdPersona()),
                 id ? "" : "ID = %d ".formatted(deuda.getId()),
-                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
                                         deuda.getPagina().getNPaginaNro(),
                                         deuda.getPagina().getNCantidadFilas(),

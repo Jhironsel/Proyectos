@@ -3,8 +3,11 @@ package sur.softsurena.vistas;
 /**
  * @author jhironsel
  */
-public class VistaHora extends javax.swing.JDialog {
+public final class VistaHora extends javax.swing.JDialog {
+    private static final long serialVersionUID = 1L;
+    
     protected static boolean aceptar = false;
+    
     public VistaHora(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

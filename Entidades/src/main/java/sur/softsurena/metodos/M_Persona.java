@@ -32,21 +32,18 @@ public class M_Persona {
     public synchronized static List<Persona> select(
             @NonNull Persona persona
     ) {
-        List<Persona> personaList = new ArrayList<>();
-        
-        String sql = sqlSelect(persona);
+        List<Persona> lista = new ArrayList<>();
 
         try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
+                sqlSelect(persona),
                 ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                personaList.add(
+                lista.add(
                         Persona
                                 .builder()
                                 .idPersona(rs.getInt("ID"))
@@ -71,23 +68,21 @@ public class M_Persona {
                     ex
             );
         }
-        return personaList;
+        return lista;
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_V_PERSONAS_DE
             = "Error al consultar la vista V_PERSONAS del sistema.";
 
     //--------------------------------------------------------------------------
     protected static String sqlSelect(Persona persona) {
-        Boolean id = Objects.isNull(persona.getIdPersona());
-        Boolean tipoPersona = Objects.isNull(persona.getPersona());
-        Boolean pNombre = Objects.isNull(persona.getPnombre());
-        Boolean sNombre = Objects.isNull(persona.getSnombre());
-        Boolean apellidos = Objects.isNull(persona.getApellidos());
-        Boolean estado = Objects.isNull(persona.getEstado());
-        
-        Boolean f_row = Objects.isNull(persona.getPagina());
-        
-        Boolean where = id && tipoPersona && pNombre && sNombre && apellidos && 
+        boolean id = Objects.isNull(persona.getIdPersona());
+        boolean tipoPersona = Objects.isNull(persona.getPersona());
+        boolean pNombre = Objects.isNull(persona.getPnombre());
+        boolean sNombre = Objects.isNull(persona.getSnombre());
+        boolean apellidos = Objects.isNull(persona.getApellidos());
+        boolean estado = Objects.isNull(persona.getEstado());
+        boolean frow = Objects.isNull(persona.getPagina());
+        boolean where = id && tipoPersona && pNombre && sNombre && apellidos && 
                 estado;
 
         return """
@@ -108,7 +103,7 @@ public class M_Persona {
                                                                persona.getApellidos()
                                                        ),
                 estado ? "":"ESTADO IS %B ".formatted(persona.getEstado()),
-                f_row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                frow ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                         .formatted(
                                                 persona.getPagina().getNPaginaNro(),
                                                 persona.getPagina().getNCantidadFilas(),

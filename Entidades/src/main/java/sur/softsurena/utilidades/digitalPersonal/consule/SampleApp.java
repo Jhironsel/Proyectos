@@ -13,7 +13,7 @@ public class SampleApp {
 
     public static void main (String[] args) {
 
-        try {
+        try (var cache = Executors.newCachedThreadPool();){
             UserDatabase.Factory dbFactory =  
                     (UserDatabase.Factory) Class.forName(DEFAULT_DB_FACTORY).newInstance();
             
@@ -24,7 +24,7 @@ public class SampleApp {
             
             UserInterface userInterface = uiFactory.createUI(userDatabase);
 
-            ExecutorService exec = Executors.newCachedThreadPool();
+            ExecutorService exec = cache;
             exec.execute(userInterface);
 
             exec.shutdown();

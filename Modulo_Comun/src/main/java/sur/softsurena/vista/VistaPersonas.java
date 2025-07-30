@@ -415,26 +415,21 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tblPersonas.setModel(new javax.swing.table.DefaultTableModel(
-            null,
+            new Object [][] {
+
+            },
             new String [] {
                 "Cedula", "Persona", "Nombres y apellidos", "Sexo", "Fecha de nacimiento", "Fecha de Ingreso", "Estado"
             }
         ) {
             Class<?>[] types = new Class<?>[] {
-                java.lang.Object.class, 
-                java.lang.Object.class, 
-                java.lang.Object.class, 
-                java.lang.Object.class, 
-                java.lang.Object.class, 
-                java.lang.Object.class, 
-                java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
             public Class<?> getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-
         tblPersonas.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblPersonas.setFontHead(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
         tblPersonas.setFontRowHover(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
@@ -694,7 +689,9 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         jPanel2.add(jPanel9);
 
         jPanel13.setName("jPanel13"); // NOI18N
-        jPanel13.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
+        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT);
+        flowLayout2.setAlignOnBaseline(true);
+        jPanel13.setLayout(flowLayout2);
 
         jcbCliente.setText("Cliente");
         jcbCliente.setMaximumSize(new java.awt.Dimension(100, 20));
@@ -1637,7 +1634,9 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                 tblPersonas.getSelectedRow(),
                 2
         )).getIdPersona();
+
         System.out.println("idPersona : [%d]".formatted(idPersona));
+        setEntidadesFalse();
         mostrarRegistro();
     }//GEN-LAST:event_btnModificarPersonaActionPerformed
 
@@ -2897,7 +2896,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                 Persona
                         .builder()
                         .idPersona(idPersona)
-                        .pagina(paginas())
                         .build()
         );
 
@@ -2920,16 +2918,15 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Cliente
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
+        
         jcbEmpleado.setSelected(
                 !M_Empleado.select(
                         Empleado
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2939,7 +2936,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Estudiante
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2949,7 +2945,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Paciente
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -2959,17 +2954,15 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         Padre
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
 
         jcbProveedor.setSelected(
-                !M_Proveedor.selectATR(
+                !M_Proveedor.select(
                         Proveedor
                                 .builder()
                                 .id(idPersona)
-                                .pagina(paginas())
                                 .build()
                 ).isEmpty()
         );
@@ -3059,7 +3052,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
      * @param _persona
      */
     public static void llenarTablaPersonas(Persona _persona) {
-        var registro = new Object[TITULOS_PERSONA.length];
 
         DefaultTableModel dtmPersonas = new DefaultTableModel(null, TITULOS_PERSONA) {
 
@@ -3080,6 +3072,8 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         };
 
         if (btnGTipoPersona.isSelected(jcbFiltroTodos.getModel())) {
+            var registro = new Object[TITULOS_PERSONA.length];
+
             M_Persona.select(
                     _persona
             ).stream().forEach(
@@ -3238,6 +3232,8 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         tblTelefonos.setModel(v_dtmTelefono);
         return tblTelefonos;
     }
+    
+    
 
     private static Object[] buscarPersona(Integer id) {
         var registro = new Object[TITULOS_PERSONA.length];
@@ -3487,7 +3483,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         if (jcbEstudiante.isSelected()) {
             M_Estudiante.insert(_estudiante);
         } else {
-            M_Estudiante.insert(_estudiante);
+            M_Estudiante.delete(_estudiante);
         }
 
         var _paciente = Paciente.builder().id(id).build();
@@ -3841,7 +3837,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                             )
                             .estado(Boolean.TRUE)
                             .porDefecto(
-                                    ((Boolean) tblDireccion.getValueAt(i, 6)).booleanValue()
+                                    (Boolean) tblDireccion.getValueAt(i, 6)
                             )
                             .build()
             );

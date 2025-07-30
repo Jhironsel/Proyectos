@@ -12,7 +12,8 @@ import xy.ui.testing.util.TestingUtils;
  * @author jhironsel
  */
 @Test(
-        dependsOnGroups = "init2"
+        dependsOnGroups = "init2",
+        groups = "testSwingProducto"
 )
 public class VistaProductosNGTest {
     

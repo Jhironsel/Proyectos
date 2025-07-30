@@ -61,10 +61,9 @@ public class M_Foto_Categoria {
     }
 
     protected static String sqlSelect(FotoCategoria fotoCategoria) {
-        Boolean id = Objects.isNull(fotoCategoria.getId());
-        Boolean id_categoria = Objects.isNull(fotoCategoria.getIdCategoria());
-
-        Boolean where = id && id_categoria;
+        boolean id = Objects.isNull(fotoCategoria.getId());
+        boolean id_categoria = Objects.isNull(fotoCategoria.getIdCategoria());
+        boolean where = id && id_categoria;
         return """
                SELECT ID, ID_CATEGORIA, FOTO, FECHA_HORA_CREACION, ACTUAL
                FROM V_FOTO_CATEGORIA

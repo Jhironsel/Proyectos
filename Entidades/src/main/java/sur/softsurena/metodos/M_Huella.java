@@ -71,9 +71,9 @@ public class M_Huella {
     }
 
     protected static String sqlSelect(Huella huella) {
-        Boolean id = Objects.isNull(huella.getId());
-        Boolean idPersona = Objects.isNull(huella.getIdPersona());
-        Boolean where = id && idPersona;
+        boolean id = Objects.isNull(huella.getId());
+        boolean idPersona = Objects.isNull(huella.getIdPersona());
+        boolean where = id && idPersona;
 
         return """
                SELECT ID, ID_PERSONA, TIPO_DEDO, HUELLA

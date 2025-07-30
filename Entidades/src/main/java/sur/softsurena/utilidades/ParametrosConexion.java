@@ -15,15 +15,15 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  */
 public class ParametrosConexion {
 
-    private final Properties propiedades;
+    private Properties propiedades;
     private File filePropertie = null;
     
     public ParametrosConexion(){
-         propiedades = new Properties();
-
-        try {
-            filePropertie = new File("../properties/propiedades.properties");
-            propiedades.load(new FileReader(filePropertie));
+        propiedades = new Properties();
+        filePropertie = new File("../properties/propiedades.properties");
+        
+        try (var fileReader = new FileReader(filePropertie)) {
+            propiedades.load(fileReader);
         } catch (FileNotFoundException ex) {
             LOG.log(Level.SEVERE, "Archivo no encotrado", ex);
         } catch (IOException ex) {
@@ -46,9 +46,9 @@ public class ParametrosConexion {
         propiedades.setProperty("Puerto_del_Servidor", servidor.getPuerto());
         propiedades.setProperty("PathBaseDatos", servidor.getPathBaseDatos());
 
-        try {
+        try (var fileReader = new FileWriter(filePropertie)) {
             propiedades.store(
-                    new FileWriter(filePropertie),
+                    fileReader,
                     "Parametros del Servidor actual"
             );
         } catch (IOException ex) {

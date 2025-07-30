@@ -59,11 +59,10 @@ public class M_Consulta {
     }
 
     protected static String sqlSelect(Consulta consulta) {
-        Boolean id = Objects.isNull(consulta.getId());
-        Boolean id_controlConsulta = Objects.isNull(consulta.getIdControlConsulta());
-        Boolean id_Paciente = Objects.isNull(consulta.getIdPaciente());
-
-        Boolean where = !id || !id_controlConsulta || !id_Paciente;
+        boolean id = Objects.isNull(consulta.getId());
+        boolean id_controlConsulta = Objects.isNull(consulta.getIdControlConsulta());
+        boolean id_Paciente = Objects.isNull(consulta.getIdPaciente());
+        boolean where = !id || !id_controlConsulta || !id_Paciente;
 
         return """
                 SELECT ID, ID_CONTROL_CONSULTA, FECHA, LINEA, ID_PACIENTE,

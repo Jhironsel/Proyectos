@@ -136,29 +136,27 @@ public class RequestHandler implements Runnable {
                 }
             } //  text based file requested
             else {
-                BufferedReader cachedFile_BufferedReader = new BufferedReader(
+                try (BufferedReader cachedFile_BufferedReader = new BufferedReader(
                         new InputStreamReader(
                                 new FileInputStream(cachedFile)
                         )
-                );
+                );) {
 
-                response = """
+                    response = """
                            HTTP/1.0 200 OK
                            Proxy-agent: ProxyServer/1.0
                            \r
                            """;
-                proxyToClient_bw.write(response);
-                proxyToClient_bw.flush();
+                    proxyToClient_bw.write(response);
+                    proxyToClient_bw.flush();
 
-                String line;
-                while ((line = cachedFile_BufferedReader.readLine()) != null) {
-                    proxyToClient_bw.write(line);
-                }
-                proxyToClient_bw.flush();
+                    String line;
+                    while ((line = cachedFile_BufferedReader.readLine()) != null) {
+                        proxyToClient_bw.write(line);
+                    }
+                    proxyToClient_bw.flush();
 
-                // Close all resources
-                if (cachedFile_BufferedReader != null) {
-                    cachedFile_BufferedReader.close();
+                } catch (Exception e) {
                 }
             }
 

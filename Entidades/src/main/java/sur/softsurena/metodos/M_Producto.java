@@ -75,37 +75,35 @@ public class M_Producto {
             = "Error al consultar PRODUCTOS del sistema.";
 
     protected static String sqlSelect(Producto producto) {
-        Boolean f_id = Objects.isNull(producto.getId());
-        Boolean f_categoria = Objects.isNull(producto.getIdCategoria());
-        Boolean f_codigo = Objects.isNull(producto.getCodigo());
-        Boolean f_descripcion = Objects.isNull(producto.getDescripcion());
-        Boolean f_estado = Objects.isNull(producto.getEstado());
+        boolean id = Objects.isNull(producto.getId());
+        boolean categoria = Objects.isNull(producto.getIdCategoria());
+        boolean codigo = Objects.isNull(producto.getCodigo());
+        boolean descripcion = Objects.isNull(producto.getDescripcion());
+        boolean estado = Objects.isNull(producto.getEstado());
+        boolean criterio = codigo && descripcion;
+        boolean where = (id && estado && criterio && categoria);
+        boolean row = Objects.isNull(producto.getPagina());
 
-        Boolean f_criterio = f_codigo && f_descripcion;
-
-        Boolean f_where = (f_id && f_estado && f_criterio && f_categoria);
-        Boolean f_row = Objects.isNull(producto.getPagina());
-
-        String r1 = (f_where ? "" : "WHERE ");
-        String r2 = (f_id ? "" : "ID = %d ".formatted(producto.getId()));
-        String r3 = (f_id ? "" : (f_estado ? "" : "AND "));
-        String r4 = (f_estado ? "" : producto.getEstado() ? "ESTADO " : "ESTADO IS FALSE ");
-        String r5 = (f_criterio ? "" : """
+        String r1 = (where ? "" : "WHERE ");
+        String r2 = (id ? "" : "ID = %d ".formatted(producto.getId()));
+        String r3 = (id ? "" : (estado ? "" : "AND "));
+        String r4 = (estado ? "" : producto.getEstado() ? "ESTADO " : "ESTADO IS FALSE ");
+        String r5 = (criterio ? "" : """
                                        %sTRIM(CODIGO) STARTING WITH TRIM('%s') OR
                                                               TRIM(CODIGO) CONTAINING TRIM('%s') OR
                                                               TRIM(DESCRIPCION) STARTING WITH TRIM('%s') OR
                                                               TRIM(DESCRIPCION) CONTAINING TRIM('%s')
                                        """.formatted(
-                f_id && f_estado ? "" : "OR ",
+                id && estado ? "" : "OR ",
                 producto.getCodigo(),
                 producto.getCodigo(),
                 producto.getDescripcion(),
                 producto.getDescripcion()
         ));
-        String r6 = f_categoria ? 
+        String r6 = categoria ? 
                 "":
                 "%sID_CATEGORIA = %d ".formatted(
-                        f_estado ? "":"AND ",
+                        estado ? "":"AND ",
                         producto.getIdCategoria()
                 ).trim().strip();
 
@@ -117,7 +115,7 @@ public class M_Producto {
                            """.strip().trim().formatted(r1, r2, r3, r4, r5, r6).strip().trim()
                 .concat("\nORDER BY ID").strip().trim()
                 .concat(
-                        f_row ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                        row ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                         .formatted(
                                                 producto.getPagina().getNPaginaNro(),
                                                 producto.getPagina().getNCantidadFilas(),

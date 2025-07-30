@@ -154,8 +154,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoProductos = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        mnuMantenimientoProveedores = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoAlmacenes = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         mnuMantenimientoUsuarios = new javax.swing.JMenuItem();
@@ -696,11 +694,13 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuOpciones);
 
         mnuMantenimiento.setForeground(new java.awt.Color(255, 255, 255));
+        mnuMantenimiento.setMnemonic('M');
         mnuMantenimiento.setText("Mantenimientos");
         mnuMantenimiento.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
         mnuMantenimientoClientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         mnuMantenimientoClientes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
+        mnuMantenimientoClientes.setMnemonic('C');
         mnuMantenimientoClientes.setText("Personas ...");
         mnuMantenimientoClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -720,17 +720,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         });
         mnuMantenimiento.add(mnuMantenimientoProductos);
         mnuMantenimiento.add(jSeparator6);
-
-        mnuMantenimientoProveedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
-        mnuMantenimientoProveedores.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
-        mnuMantenimientoProveedores.setText("Proveedores ...");
-        mnuMantenimientoProveedores.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuMantenimientoProveedoresActionPerformed(evt);
-            }
-        });
-        mnuMantenimiento.add(mnuMantenimientoProveedores);
-        mnuMantenimiento.add(jSeparator7);
 
         mnuMantenimientoAlmacenes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnuMantenimientoAlmacenes.setFont(new java.awt.Font("FreeSans", 0, 14)); // NOI18N
@@ -767,6 +756,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuMantenimiento);
 
         mnuSistemas.setForeground(new java.awt.Color(255, 255, 255));
+        mnuSistemas.setMnemonic('S');
         mnuSistemas.setText("Sistemas");
         mnuSistemas.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
         mnuSistemas.setName("mnuSistemas"); // NOI18N
@@ -795,6 +785,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         jMenuBar.add(mnuSistemas);
 
         mnuMovimientos.setForeground(new java.awt.Color(255, 255, 255));
+        mnuMovimientos.setMnemonic('M');
         mnuMovimientos.setText("Movimientos");
         mnuMovimientos.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
@@ -1251,10 +1242,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mnuAyudaAyudaActionPerformed
 
-    private void mnuMantenimientoProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProveedoresActionPerformed
-        abrirFormulario(new VistaProveedores());
-    }//GEN-LAST:event_mnuMantenimientoProveedoresActionPerformed
-
     private void mnuMantenimientoAlmacenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoAlmacenesActionPerformed
         abrirFormulario(new VistaAlmacenes());
     }//GEN-LAST:event_mnuMantenimientoAlmacenesActionPerformed
@@ -1427,7 +1414,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         mnuMantenimientoClientes.setIcon(new Imagenes("Clientes 32 x 32.png").getIcono());
         mnuMantenimientoProductos.setIcon(new Imagenes("Productos 32 x 32.png").getIcono());
         mnuMantenimientoUsuarios.setIcon(new Imagenes("Privilegios 32 x 32.png").getIcono());
-        mnuMantenimientoProveedores.setIcon(new Imagenes("Proveedor 32 x 34.png").getIcono());
         mnuMantenimientoAlmacenes.setIcon(new Imagenes("Almacen 32 x 32.png").getIcono());
 
         //Sistema 
@@ -1507,16 +1493,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
                                 .build()
                 )
         );
-        mnuMantenimientoProveedores.setVisible(
-                M_Privilegio.privilegio(
-                        Privilegio
-                                .builder()
-                                .privilegio(Privilegio.PRIVILEGIO_SELECT)
-                                .nombre_relacion("V_PERSONAS_PROVEEDORES")
-                                .nombre_campo("^")
-                                .build()
-                )
-        );
         mnuMantenimientoAlmacenes.setVisible(
                 M_Privilegio.privilegio(
                         Privilegio
@@ -1541,7 +1517,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         mnuMantenimiento.setVisible(
                 mnuMantenimientoClientes.isVisible()
                 || mnuMantenimientoProductos.isVisible()
-                || mnuMantenimientoProveedores.isVisible()
                 || mnuMantenimientoAlmacenes.isVisible()
                 || mnuMantenimientoUsuarios.isVisible()
         );
@@ -1726,7 +1701,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel jlGetIP;
@@ -1769,7 +1743,6 @@ public final class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuMantenimientoAlmacenes;
     public static javax.swing.JMenuItem mnuMantenimientoClientes;
     private javax.swing.JMenuItem mnuMantenimientoProductos;
-    private javax.swing.JMenuItem mnuMantenimientoProveedores;
     private javax.swing.JMenuItem mnuMantenimientoUsuarios;
     private javax.swing.JMenu mnuMovimientos;
     private javax.swing.JMenuItem mnuMovimientosDeudas;

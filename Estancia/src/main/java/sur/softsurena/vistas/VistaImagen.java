@@ -2,7 +2,9 @@ package sur.softsurena.vistas;
 
 import javax.swing.ImageIcon;
 
-public class VistaImagen extends javax.swing.JDialog {
+public final class VistaImagen extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     public VistaImagen(java.awt.Frame parent, boolean modal, ImageIcon imageIcon ) {
         super(parent, modal);

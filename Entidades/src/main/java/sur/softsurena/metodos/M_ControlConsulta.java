@@ -61,9 +61,9 @@ public class M_ControlConsulta {
     }
     
     protected static String sqlSelect(ControlConsulta controlConsulta) {
-        Boolean id = Objects.isNull(controlConsulta.getId());
-        Boolean userName = Objects.isNull(controlConsulta.getUser_name());
-        Boolean where = id && userName;
+        boolean id = Objects.isNull(controlConsulta.getId());
+        boolean userName = Objects.isNull(controlConsulta.getUser_name());
+        boolean where = id && userName;
         return """
                   SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
                         ESTADO

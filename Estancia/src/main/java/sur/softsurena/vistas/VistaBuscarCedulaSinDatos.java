@@ -1,6 +1,8 @@
 package sur.softsurena.vistas;
 
-public class VistaBuscarCedulaSinDatos extends javax.swing.JDialog {
+public final class VistaBuscarCedulaSinDatos extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     
     public VistaBuscarCedulaSinDatos(java.awt.Frame parent, boolean modal) {

@@ -67,8 +67,8 @@ public class M_Padre {
      * @return
      */
     protected static String sqlSelect(Padre padre) {
-        Boolean id = Objects.isNull(padre.getId());
-        Boolean pagina = Objects.isNull(padre.getPagina());
+        boolean id = Objects.isNull(padre.getId());
+        boolean pagina = Objects.isNull(padre.getPagina());
         return """
                SELECT ID
                FROM PERSONAS_PADRES

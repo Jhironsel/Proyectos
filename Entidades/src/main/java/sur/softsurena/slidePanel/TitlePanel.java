@@ -22,7 +22,7 @@ public final class TitlePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    int width = 0;
+    int ancho = 0;
     private Color startColor = Color.WHITE;//new Color(238, 238, 238);
     private Color endColor = Color.GRAY;//new Color(255, 255, 255);
     Color accentColor = new Color(0x80ffffff);
@@ -33,7 +33,7 @@ public final class TitlePanel extends JPanel {
     
     public TitlePanel(String title, Image imageIcon, int width) {
         super();
-        this.width = width;
+        ancho = width;
         this.title = title;
         MouseListener mouseListener = new MouseAdapter() {
 
@@ -88,7 +88,7 @@ public final class TitlePanel extends JPanel {
 
     @Override
     public int getWidth() {
-        return width;
+        return ancho;
     }
 
     @Override
@@ -96,12 +96,6 @@ public final class TitlePanel extends JPanel {
         return 30;
     }
 
-    /**
-     * Override the default paintComponent method to paint the gradient in the
-     * panel.
-     *
-     * @param g
-     */
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -159,39 +153,22 @@ public final class TitlePanel extends JPanel {
         }
     }
 
-    /**
-     *  This method sets the Actual Background Color of the Button
-     * @param color
-     */
     public void setStartColor(Color color) {
         startColor = color;
     }
 
-    /**
-     *  This method sets the Pressed Color of the Button
-     * @param pressedColor
-     */
     public void setEndColor(Color pressedColor) {
         endColor = pressedColor;
     }
 
-    /**
-     * @return  Starting Color of the Button
-     */
     public Color getStartColor() {
         return startColor;
     }
 
-    /**
-     * @return  Ending Color of the Button
-     */
     public Color getEndColor() {
         return endColor;
     }
 
-    /**
-     * @return the title
-     */
     public String getTitle() {
         return title;
     }

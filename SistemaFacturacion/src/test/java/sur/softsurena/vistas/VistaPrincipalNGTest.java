@@ -96,7 +96,6 @@ public class VistaPrincipalNGTest {
         abrirFormulario(new VistaFacturas());
         abrirFormulario(new VistaAdministradorTurnos());
         abrirFormulario(new VistaDeudas());
-        abrirFormulario(new VistaProveedores());
         abrirFormulario(new VistaAlmacenes());
         abrirFormulario(new VistaNomina());
         abrirFormulario(new VistaGestorGastos());

@@ -13,11 +13,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Paginas;
+import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Proveedor;
 import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
 import sur.softsurena.metodos.Imagenes;
-import sur.softsurena.metodos.M_Medicamento;
 import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.metodos.M_Proveedor;
 import sur.softsurena.utilidades.JComboExp;
 import sur.softsurena.utilidades.Resultado;
@@ -664,9 +665,10 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
                 null
                 )
                  */
-                Resultado resultado = M_Medicamento.update(
-                        null
+                Resultado resultado = M_Producto.update(
+                        Producto.builder().build()
                 );
+                
                 JOptionPane.showInternalMessageDialog(
                         this,
                         resultado.getMensaje(),

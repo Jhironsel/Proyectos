@@ -32,11 +32,10 @@ public class M_Entrada_Producto {
      * @return Una cadena de SQl con la consulta y los filtros necesario.
      */
     public static String sqlSelect(EntradaProducto entradaProducto) {
-        Boolean id = Objects.isNull(entradaProducto.getId());
-        Boolean idProveedor = Objects.isNull(entradaProducto.getIdProveedor());
-        Boolean idAlmacen = Objects.isNull(entradaProducto.getIdAlmacen());
-
-        Boolean where = id && idProveedor && idAlmacen;
+        boolean id = Objects.isNull(entradaProducto.getId());
+        boolean idProveedor = Objects.isNull(entradaProducto.getIdProveedor());
+        boolean idAlmacen = Objects.isNull(entradaProducto.getIdAlmacen());
+        boolean where = id && idProveedor && idAlmacen;
 
         String sql = """
                      SELECT ID, ID_PROVEEDOR, ID_ALMACEN, COD_FACTURA, FECHA_ENTRADA

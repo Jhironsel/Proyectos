@@ -10,7 +10,9 @@ import java.util.logging.Level;
 import javax.swing.JColorChooser;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaFuentes extends javax.swing.JDialog {
+public final class VistaFuentes extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private Font fuente;
     private Color color;

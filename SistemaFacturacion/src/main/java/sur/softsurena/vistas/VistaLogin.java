@@ -265,24 +265,32 @@ public final class VistaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if(!Conexion.validarUsario(txtUser, txtPassword, this)){
+        if (!Conexion.validarUsario(txtUser, txtPassword, this)) {
             return;
         }
-        
-        FirebirdEventos firebirdEventos = new FirebirdEventos(
-                txtUser.getText(), 
+
+        try (FirebirdEventos firebirdEventos = new FirebirdEventos(
+                txtUser.getText(),
                 new String(txtPassword.getPassword())
-        );
-        
-        if(!firebirdEventos.isConnected()){
-            JOptionPane.showMessageDialog(
-                    this, 
-                    "Error al conectar los eventos.", 
-                    "", 
-                    JOptionPane.ERROR_MESSAGE
+        );) {
+
+            if (!firebirdEventos.isConnected()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Error al conectar los eventos.",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+        }catch(SQLException e){
+            LOG.log(
+                    Level.SEVERE,
+                    "Error al crear ventana de cliente.",
+                    e
             );
         }
-        
+
         VistaPrincipal principal = new VistaPrincipal();
         principal.setVisible(true);
         principal.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -329,8 +337,6 @@ public final class VistaLogin extends javax.swing.JFrame {
         JLSystema.setText("Usted se encuentra en el SO: " + sistema);
     }//GEN-LAST:event_formWindowOpened
 
-    
-
     public static void main(String args[]) {
         Utilidades.beep();
         try {
@@ -352,10 +358,10 @@ public final class VistaLogin extends javax.swing.JFrame {
 //        FlatLaf.registerCustomDefaultsSource( "sur.softsurena.themes" );
 //        FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
-                    VistaLogin frmLogin = new VistaLogin("es");
-                    frmLogin.setVisible(true);
-                    frmLogin.setLocationRelativeTo(null);
-                }
+            VistaLogin frmLogin = new VistaLogin("es");
+            frmLogin.setVisible(true);
+            frmLogin.setLocationRelativeTo(null);
+        }
         );
         sistema = System.getProperty("os.name").strip();
     }

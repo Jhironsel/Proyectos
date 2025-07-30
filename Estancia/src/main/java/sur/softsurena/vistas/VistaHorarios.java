@@ -13,10 +13,11 @@ import sur.softsurena.entidades.Horario;
 import sur.softsurena.metodos.M_Horario;
 import sur.softsurena.utilidades.Utilidades;
 
-public class VistaHorarios extends javax.swing.JInternalFrame {
+public final class VistaHorarios extends javax.swing.JInternalFrame {
 
     private static VistaHorarios horarios;
-    private TableRowSorter<TableModel> modeloOrdenado;
+    private static final long serialVersionUID = 1L;
+    private transient TableRowSorter<TableModel> modeloOrdenado;
 
     public VistaHorarios() {
         initComponents();

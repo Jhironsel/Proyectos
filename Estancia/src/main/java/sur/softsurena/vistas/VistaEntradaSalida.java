@@ -9,7 +9,9 @@ package sur.softsurena.vistas;
  *
  * @author Jhironsel
  */
-public class VistaEntradaSalida extends javax.swing.JInternalFrame {
+public final class VistaEntradaSalida extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new form frmEntradaSalida

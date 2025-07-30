@@ -62,10 +62,10 @@ public class M_Antecedente {
     }
 
     protected static String sqlSelect(Antecedente antecedente) {
-        Boolean id = Objects.isNull(antecedente.getId());
-        Boolean id_consulta = Objects.isNull(antecedente.getIdConsulta());
-        Boolean where = id && id_consulta;
-        Boolean and = id || id_consulta;
+        boolean id = Objects.isNull(antecedente.getId());
+        boolean id_consulta = Objects.isNull(antecedente.getIdConsulta());
+        boolean where = id && id_consulta;
+        boolean and = id || id_consulta;
         final String sql = """
                            SELECT ID, ID_CONSULTA, DESCRIPCION
                            FROM V_ANTECEDENTES

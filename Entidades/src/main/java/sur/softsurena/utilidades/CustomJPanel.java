@@ -15,13 +15,13 @@ public final class CustomJPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private transient BufferedImage image;
-    private int x, y;
+    private int ex, ye;
     private static CustomJPanel custom;
 
     public CustomJPanel(int num, int x, int y) {
         super();
-        this.x = x;
-        this.y = y;
+        this.ex = x;
+        this.ye = y;
         try {
             image = ImageIO.read(getClass().
                     getResource("/imagenesPapeles/figura" + num + ".jpeg"));
@@ -53,7 +53,7 @@ public final class CustomJPanel extends JPanel {
         g2d.setColor(getBackground());
         g2d.fillRect(0, 0, getWidth(), getHeight());
         if (image != null) {
-            g2d.drawImage(image.getScaledInstance(x, y, Image.SCALE_DEFAULT), 0, 0, this);
+            g2d.drawImage(image.getScaledInstance(ex, ye, Image.SCALE_DEFAULT), 0, 0, this);
         }
         super.paintComponent(g2d);
         g2d.dispose();
