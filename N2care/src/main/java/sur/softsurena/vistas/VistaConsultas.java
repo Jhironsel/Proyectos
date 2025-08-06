@@ -21,9 +21,10 @@ import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.Doctor;
 import sur.softsurena.entidades.Medicamento;
 import sur.softsurena.entidades.Paciente;
-import static sur.softsurena.metodos.M_Motivo_Consulta.agregarMotivo;
-import static sur.softsurena.metodos.M_Motivo_Consulta.getMotivo;
+import sur.softsurena.metodos.M_Motivo_Consulta;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.metodos.M_Motivo_Consulta.insert;
+import static sur.softsurena.metodos.M_Motivo_Consulta.select;
 
 /**
  *
@@ -1132,7 +1133,7 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jpListadoConsultaKeyReleased
 
     private void jlEliminarMotivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlEliminarMotivoMouseClicked
-        VistaEliminarMotivo e = new VistaEliminarMotivo(null, true, jpMotivos);
+        VistaEliminarMotivo e = new VistaEliminarMotivo(null, true);
         e.setLocationRelativeTo(null);
         e.setVisible(true);
     }//GEN-LAST:event_jlEliminarMotivoMouseClicked
@@ -1149,7 +1150,7 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
             return;
         }
 
-        if (agregarMotivo(motivo)) {
+        if (insert(motivo)) {
             JOptionPane.showInternalMessageDialog(this,
                     "Motivo agregado correctamente");
         } else {
@@ -1193,43 +1194,39 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtHallazgosKeyReleased
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        ResultSet rs = getMotivo();
         jpMotivos.removeAll();
-        JCheckBox b;
-        try {
-            while (rs.next()) {
-                b = new JCheckBox(rs.getString("DESCRIPCION"));
-                b.setName(rs.getString("IDMCONSULTA"));
-                b.setForeground(new Color(255, 255, 255));
-                b.setToolTipText(rs.getString("DEFENICION"));
-                b.addMouseListener(new MouseAdapter() {
-                    final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
-                    final int dismissDelayMinutes = (int) TimeUnit.MINUTES.toMillis(2); // 10 minutes
 
-                    @Override
-                    public void mouseEntered(MouseEvent me) {
-                        ToolTipManager.sharedInstance().setDismissDelay(dismissDelayMinutes);
-                    }
+        M_Motivo_Consulta.select().forEach(
+                motivo -> {
+                    JCheckBox jCheckBox = new JCheckBox(motivo.getDescripcion());
+                    jCheckBox.setName("" + motivo.getId());
+                    jCheckBox.setForeground(new Color(255, 255, 255));
+                    jCheckBox.setToolTipText(motivo.getDescripcion());
+                    jCheckBox.addMouseListener(new MouseAdapter() {
+                        final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
+                        final int dismissDelayMinutes = (int) TimeUnit.MINUTES.toMillis(2); // 10 minutes
 
-                    @Override
-                    public void mouseExited(MouseEvent me) {
-                        ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
-                    }
-                });
-                b.setEnabled(false);
-                jpMotivos.add(b);
-            }
+                        @Override
+                        public void mouseEntered(MouseEvent me) {
+                            ToolTipManager.sharedInstance().setDismissDelay(dismissDelayMinutes);
+                        }
 
-            jlAgregarMotivo.setEnabled(false);
-            jlEliminarMotivo.setEnabled(false);
+                        @Override
+                        public void mouseExited(MouseEvent me) {
+                            ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
+                        }
+                    });
+                    jCheckBox.setEnabled(false);
+                    jpMotivos.add(jCheckBox);
+                }
+        );
 
-            jpMotivos.add(jlAgregarMotivo);
-            jpMotivos.add(jlEliminarMotivo);
-            jScrollPane1.getViewport().revalidate();
-            //pack();
-        } catch (SQLException ex) {
-            //Instalar Logger
-        }
+        jlAgregarMotivo.setEnabled(false);
+        jlEliminarMotivo.setEnabled(false);
+
+        jpMotivos.add(jlAgregarMotivo);
+        jpMotivos.add(jlEliminarMotivo);
+        jScrollPane1.getViewport().revalidate();
 
 //        llenarTabla(
 //                Utilidades.formatDate(dcConsulta.getDate(), ""),
@@ -1272,7 +1269,6 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //            );
 //
 //            ((JCheckBox) jpMotivos.getComponents()[rs.getInt(1)]).setSelected(true);
-
             jpMotivo.validate();
             jpMotivo.revalidate();
             jpMotivo.updateUI();
@@ -1400,7 +1396,7 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //                );
 //            } else {
 //                //TODO 13/12/2024 Faltan los atributos aqui.
-//                M_Motivo_Consulta.borrarMotivoConsulta(
+//                M_Motivo_Consulta.delete(
 //                        Motivo_Consulta
 //                                .builder()
 //                                .build()
@@ -1808,11 +1804,16 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 
     private void teclas(KeyEvent evt) {
         switch (evt.getExtendedKeyCode()) {
-            case KeyEvent.VK_F1 -> jtpVisor.setSelectedIndex(0);
-            case KeyEvent.VK_F2 -> jtpVisor.setSelectedIndex(1);
-            case KeyEvent.VK_F3 -> jtpVisor.setSelectedIndex(2);
-            case KeyEvent.VK_F4 -> jtpVisor.setSelectedIndex(3);
-            case KeyEvent.VK_F5 -> jtpVisor.setSelectedIndex(4);
+            case KeyEvent.VK_F1 ->
+                jtpVisor.setSelectedIndex(0);
+            case KeyEvent.VK_F2 ->
+                jtpVisor.setSelectedIndex(1);
+            case KeyEvent.VK_F3 ->
+                jtpVisor.setSelectedIndex(2);
+            case KeyEvent.VK_F4 ->
+                jtpVisor.setSelectedIndex(3);
+            case KeyEvent.VK_F5 ->
+                jtpVisor.setSelectedIndex(4);
             default -> {
             }
         }
@@ -1880,7 +1881,9 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //                        agregarGuiaVigilancia(((Categorias) jtGuiaVigilanciaDesarrollo.getValueAt(
 //                                jtGuiaVigilanciaDesarrollo.getSelectedRow(), 0)).getId(),
 //                                idPaciente);
-////                        , (Boolean) jtGuiaVigilanciaDesarrollo.getValueAt(
+    
+
+    ////                        , (Boolean) jtGuiaVigilanciaDesarrollo.getValueAt(
 ////                                        jtGuiaVigilanciaDesarrollo.getSelectedRow(), 2)
 //                    }
 //                }
@@ -1909,7 +1912,9 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //        );
 //
 //        DefaultTableModel miTabla = new DefaultTableModel(null, titulos);
-////        {
+    
+
+    ////        {
 ////            @Override
 ////            Class<?>[] types = new Class<>[]{
 ////                Object.class, Object.class, String.class
@@ -2070,7 +2075,7 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //                        .apellidos("Seleccione un doctor")
 //                        .build()
 //        );
-        
+
 //                "<html><b>" + rs.getString("nombreCompleto").trim() + "</b> <br> "
 //                + frmHorario.dia(rs.getString("DIA")) + ": Hora: "
 //                + rs.getString("INICIAL").substring(0, 5) + " hasta "

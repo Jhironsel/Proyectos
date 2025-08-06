@@ -1,26 +1,24 @@
 package sur.softsurena.vistas;
 
-import java.awt.Component;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import sur.softsurena.entidades.MotivoConsulta;
+import sur.softsurena.metodos.M_Motivo_Consulta;
 
 public final class VistaEliminarMotivo extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
-    private final JPanel comp;
-    
-    public VistaEliminarMotivo(JFrame f, boolean b, JPanel comp) {
+
+    public VistaEliminarMotivo(JFrame f, boolean b) {
         super(f, b);
         initComponents();
-        this.comp = comp;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jlMotivos = new javax.swing.JList();
+        jlMotivos = new javax.swing.JList<>();
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -82,13 +80,13 @@ public final class VistaEliminarMotivo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        DefaultListModel<Object> modelo = new DefaultListModel<>();
-        for (Component obj: comp.getComponents()) {
-            if(obj.getName() != null){
-                modelo.addElement(obj.getName());
-                jlMotivos.setModel(modelo);
-            }
-        }
+        DefaultListModel<MotivoConsulta> modelo = new DefaultListModel<>();
+        M_Motivo_Consulta.select().stream().forEach(
+                motivo -> {
+                    modelo.addElement(motivo);
+                    jlMotivos.setModel(modelo);
+                }
+        );
     }//GEN-LAST:event_formWindowOpened
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -96,13 +94,13 @@ public final class VistaEliminarMotivo extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JList jlMotivos;
+    private javax.swing.JList<MotivoConsulta> jlMotivos;
     // End of variables declaration//GEN-END:variables
 }

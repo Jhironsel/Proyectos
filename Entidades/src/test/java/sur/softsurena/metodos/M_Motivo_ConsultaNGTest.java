@@ -1,10 +1,9 @@
 package sur.softsurena.metodos;
 
-import java.sql.ResultSet;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Motivo_Consulta;
+import sur.softsurena.entidades.MotivoConsulta;
 
 /**
  *
@@ -16,15 +15,23 @@ import sur.softsurena.entidades.Motivo_Consulta;
 )
 public class M_Motivo_ConsultaNGTest {
 
+    @Test
+    public void testSelect() {
+        assertNotNull(
+                M_Motivo_Consulta.select(),
+                "Error al consultar los motivos de consultas."
+        );
+    }
+    
     @Test(
             enabled = false,
             priority = 0,
             description = ""
     )
     public void testBorrarMotivoConsulta() {
-        Motivo_Consulta mc = null;
+        MotivoConsulta mc = null;
         String expResult = "";
-        String result = M_Motivo_Consulta.borrarMotivoConsulta(mc);
+        String result = M_Motivo_Consulta.delete(mc);
         assertEquals(result, expResult);
     }
 
@@ -36,19 +43,10 @@ public class M_Motivo_ConsultaNGTest {
     public void testAgregarMotivo() {
         String m = "";
         boolean expResult = false;
-        boolean result = M_Motivo_Consulta.agregarMotivo(m);
+        boolean result = M_Motivo_Consulta.insert(m);
         assertEquals(result, expResult);
     }
 
-    @Test(
-            enabled = false,
-            priority = 0,
-            description = ""
-    )
-    public void testGetMotivo() {
-        ResultSet expResult = null;
-        ResultSet result = M_Motivo_Consulta.getMotivo();
-        assertEquals(result, expResult);
-    }
+    
 
 }

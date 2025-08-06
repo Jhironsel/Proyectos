@@ -274,6 +274,7 @@ public final class VistaLogin extends javax.swing.JFrame {
                 new String(txtPassword.getPassword())
         );) {
 
+            firebirdEventos.registro();
             if (!firebirdEventos.isConnected()) {
                 JOptionPane.showMessageDialog(
                         this,

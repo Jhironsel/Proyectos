@@ -43,12 +43,15 @@ public class hiloIp extends Thread {
         } else {
             JOptionPane.showMessageDialog(
                     null,
-                    "No se pudo obtener la IP pública.\n\n" +
-                    "Posibles causas:\n" +
-                    "• Sin conexión a Internet\n" +
-                    "• Firewall bloqueando la conexión\n" +
-                    "• Proxy corporativo\n" +
-                    "• Servicios de IP temporalmente no disponibles",
+                    """
+                    No se pudo obtener la IP pública.
+                    
+                    Posibles causas:
+                    • Sin conexión a Internet.
+                    • Firewall bloqueando la conexión.
+                    • Proxy corporativo.
+                    • Servicios de IP temporalmente no disponibles.
+                    """,
                     "Error de conexión",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -150,12 +153,12 @@ public class hiloIp extends Thread {
         for (String[] comando : comandos) {
             try {
                 Process p = Runtime.getRuntime().exec(comando);
-                BufferedReader stdInput = new BufferedReader(
-                    new InputStreamReader(p.getInputStream())
-                );
-                
-                String respuesta = stdInput.readLine();
-                stdInput.close();
+                String respuesta;
+                try (BufferedReader stdInput = new BufferedReader(
+                        new InputStreamReader(p.getInputStream())
+                )) {
+                    respuesta = stdInput.readLine();
+                }
                 
                 // Esperar a que termine el proceso
                 p.waitFor();
@@ -166,8 +169,12 @@ public class hiloIp extends Thread {
                 }
                 
             } catch (IOException | InterruptedException ex) {
-                LOG.log(Level.WARNING, "Error ejecutando comando " + 
-                       String.join(" ", comando) + ": " + ex.getMessage(), ex);
+                LOG.log(
+                        Level.WARNING, 
+                        "Error ejecutando comando " + String.join(" ", comando) + ": " + ex.getMessage(), 
+                        ex
+                );
+                Thread.currentThread().interrupt();
             }
         }
         return null;

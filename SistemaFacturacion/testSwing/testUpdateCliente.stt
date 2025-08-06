@@ -112,6 +112,18 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
+    <xy.ui.testing.action.component.property.ChangeComponentPropertyAction>
+      <componentClassName>javax.swing.JCheckBox</componentClassName>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>cbEstado</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <newPropertyValue>true</newPropertyValue>
+      <propertyName>Selected</propertyName>
+    </xy.ui.testing.action.component.property.ChangeComponentPropertyAction>
     <xy.ui.testing.action.component.SendKeysAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>

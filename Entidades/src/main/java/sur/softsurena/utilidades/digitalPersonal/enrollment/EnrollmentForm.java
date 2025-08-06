@@ -9,7 +9,7 @@ import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 
-public final class EnrollmentForm extends CaptureForm {
+public class EnrollmentForm extends CaptureForm {
 
     private static final long serialVersionUID = 1L;
 

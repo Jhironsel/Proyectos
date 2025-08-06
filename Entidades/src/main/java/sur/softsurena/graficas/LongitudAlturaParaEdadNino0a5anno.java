@@ -68,7 +68,6 @@ public class LongitudAlturaParaEdadNino0a5anno {
             XYSeries localXYSeries8 = new XYSeries("Longitud", true, true);
             XYSeries localXYSeries9 = new XYSeries("Estatura", true, true);
             
-            localBufferedReader.readLine();
             LOG.log(
                     Level.INFO,
                     localBufferedReader.readLine()

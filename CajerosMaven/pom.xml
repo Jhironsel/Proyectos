@@ -17,7 +17,7 @@
         <dependencies>
         <dependency>
             <groupId>sur.softsurena</groupId>
-            <artifactId>Modulo_Comun</artifactId>
+            <artifactId>ModuloComun</artifactId>
             <version>2</version>
             <type>jar</type>
         </dependency>

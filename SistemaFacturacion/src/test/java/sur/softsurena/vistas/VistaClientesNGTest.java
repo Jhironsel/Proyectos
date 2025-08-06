@@ -44,7 +44,7 @@ public class VistaClientesNGTest {
 
 //------------------------------------------------------------------------------
     @Test(
-           //dependsOnMethods = "testSwingUpdateCliente"
+           dependsOnMethods = "testSwingUpdateCliente"
     )
     public void testSwingDeleteCliente() throws Exception {
         TestingUtils.assertSuccessfulReplay(

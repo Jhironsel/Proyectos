@@ -81,9 +81,9 @@ public class M_Persona {
         boolean sNombre = Objects.isNull(persona.getSnombre());
         boolean apellidos = Objects.isNull(persona.getApellidos());
         boolean estado = Objects.isNull(persona.getEstado());
-        boolean frow = Objects.isNull(persona.getPagina());
-        boolean where = id && tipoPersona && pNombre && sNombre && apellidos && 
-                estado;
+        boolean row = Objects.isNull(persona.getPagina());
+        boolean where = id && tipoPersona && pNombre && sNombre && apellidos
+                && estado;
 
         return """
                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
@@ -94,22 +94,27 @@ public class M_Persona {
                """.strip().trim().formatted(
                 where ? "" : "WHERE ",
                 id ? "" : "ID = %d ".formatted(persona.getIdPersona()),
-                tipoPersona ? "":"PERSONA STARTING WITH '%s' ".formatted(persona.getPersona()),
-                (pNombre || sNombre || apellidos) ? "":"""
-                                                       PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s'
-                                                       """.formatted(
-                                                               persona.getPnombre(), 
-                                                               persona.getSnombre(), 
-                                                               persona.getApellidos()
-                                                       ),
-                estado ? "":"ESTADO IS %B ".formatted(persona.getEstado()),
-                frow ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
-                                        .formatted(
-                                                persona.getPagina().getNPaginaNro(),
-                                                persona.getPagina().getNCantidadFilas(),
-                                                persona.getPagina().getNPaginaNro(),
-                                                persona.getPagina().getNCantidadFilas()
-                                        )
+                tipoPersona ? "" : "PERSONA STARTING WITH '%s' ".formatted(
+                                persona.getPersona()
+                        ),
+                (pNombre || sNombre || apellidos) ? "" : """
+                                                         PNOMBRE STARTING WITH '%s' OR SNOMBRE STARTING WITH '%s' OR APELLIDOS STARTING WITH '%s'
+                                                         """.formatted(
+                                persona.getPnombre(),
+                                persona.getSnombre(),
+                                persona.getApellidos()
+                        ),
+                estado ? "" : " %s ESTADO IS %B ".formatted(
+                                id ? "" : "AND",
+                                persona.getEstado()
+                        ).strip(),
+                row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        persona.getPagina().getNPaginaNro(),
+                                        persona.getPagina().getNCantidadFilas(),
+                                        persona.getPagina().getNPaginaNro(),
+                                        persona.getPagina().getNCantidadFilas()
+                                )
         ).strip().trim();
     }
 //------------------------------------------------------------------------------

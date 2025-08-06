@@ -1020,11 +1020,10 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         if (claveMaster == JOptionPane.CANCEL_OPTION) {
             System.out.println("Proceso cancelado.");
-            
-        }
-        
-        //TODO trabajar este proceso en el sistema.
 
+        }
+
+        //TODO trabajar este proceso en el sistema.
 //        BDR = miFile.getSelectedFile();
 //        RGBAK = System.getProperty("user.dir") + "/respaldo/gbak";
 
@@ -1149,14 +1148,16 @@ public final class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOcultarPanelActionPerformed
 
     private void mnuMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoClientesActionPerformed
-        abrirFormulario(new VistaPersonas(
-                Entidades
-                        .builder()
-                        .cliente(true)
-                        .empleado(true)
-                        .proveedor(true)
-                        .build()
-        ));
+        abrirFormulario(
+                new VistaPersonas(
+                        Entidades
+                                .builder()
+                                .cliente(true)
+                                .empleado(true)
+                                .proveedor(true)
+                                .build()
+                )
+        );
     }//GEN-LAST:event_mnuMantenimientoClientesActionPerformed
 
     private void mnuMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMantenimientoProductosActionPerformed

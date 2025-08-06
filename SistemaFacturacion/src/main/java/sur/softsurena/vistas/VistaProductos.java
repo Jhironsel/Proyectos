@@ -37,13 +37,12 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     private Boolean v_nuevo = null;
     private static JFileChooser file = null;
     private static FileNameExtensionFilter filter = null;
-    private static int v_fila = 0;
     private static String criterioBusqueda = "";
     private static VistaPrincipal principal;
-    
+
     public VistaProductos() {
         initComponents();
-        
+
         /*
             Si un permiso a las vistas consultada anteriormente es negado, se 
         lanza una excepcion y la venta no se iniciará.
@@ -106,8 +105,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
         jsCantidadFilas = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jsPaginaNro = new javax.swing.JSpinner();
-        btnActualizarLista = new newscomponents.RSButtonGradientIcon_new();
-        btnControlPrecio = new newscomponents.RSButtonGradientIcon_new();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProducto = new RSMaterialComponent.RSTableMetro() {
             @Override
@@ -137,13 +134,16 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jmiHistorial = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jmiActualizarProductos = new javax.swing.JMenuItem();
+        jmCategorias = new javax.swing.JMenu();
         jmiCategoriasMantenimiento = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        jmEntradaSalidaProductos = new javax.swing.JMenu();
         jmiEntrada = new javax.swing.JMenuItem();
         jmiSalida = new javax.swing.JMenuItem();
-        jmiHistorial = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(37, 45, 223)));
         setClosable(true);
@@ -263,25 +263,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
             }
         });
 
-        btnActualizarLista.setText("Actualizar lista");
-        btnActualizarLista.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnActualizarLista.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.UPDATE);
-        btnActualizarLista.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarListaActionPerformed(evt);
-            }
-        });
-
-        btnControlPrecio.setText("Control de precio");
-        btnControlPrecio.setGradiente(newscomponents.RSButtonGradientIcon_new.Gradiente.HORIZONTAL);
-        btnControlPrecio.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.ATTACH_MONEY);
-        btnControlPrecio.setName("btnControlPrecio"); // NOI18N
-        btnControlPrecio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnControlPrecioActionPerformed(evt);
-            }
-        });
-
         tblProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -316,17 +297,9 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
                         .addComponent(jLabel2)
                         .addGap(4, 4, 4)
                         .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addGap(0, 0, 0))
         );
-
-        jPanel10Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnActualizarLista, btnControlPrecio});
-
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
@@ -337,12 +310,8 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jsPaginaNro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
-                .addGap(0, 0, 0)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnActualizarLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnControlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                .addGap(40, 40, 40))
         );
 
         javax.swing.GroupLayout jpProductosLayout = new javax.swing.GroupLayout(jpProductos);
@@ -620,6 +589,7 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
 
         jMenu5.setText("Impreciones");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jMenuItem1.setText("Listado de productos");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -628,14 +598,33 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
         });
         jMenu5.add(jMenuItem1);
 
+        jmiHistorial.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jmiHistorial.setText("Historial E/S");
+        jmiHistorial.setName("jmiHistorial"); // NOI18N
+        jmiHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiHistorialActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jmiHistorial);
+
         jMenu1.add(jMenu5);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Opciones");
+
+        jmiActualizarProductos.setText("Actualizar lista de productos");
+        jmiActualizarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiActualizarProductosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmiActualizarProductos);
+
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Categorias");
+        jmCategorias.setText("Categorias");
 
         jmiCategoriasMantenimiento.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jmiCategoriasMantenimiento.setText("Mantenimiento");
@@ -644,37 +633,46 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
                 jmiCategoriasMantenimientoActionPerformed(evt);
             }
         });
-        jMenu3.add(jmiCategoriasMantenimiento);
+        jmCategorias.add(jmiCategoriasMantenimiento);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(jmCategorias);
 
-        jMenu4.setText("Entrada/Salida Productos");
+        jmEntradaSalidaProductos.setText("Entrada/Salida Productos");
+        jmEntradaSalidaProductos.setName("jmEntradaSalidaProductos"); // NOI18N
 
+        jmiEntrada.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jmiEntrada.setText("Entrada");
+        jmiEntrada.setName("jmiEntrada"); // NOI18N
         jmiEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiEntradaActionPerformed(evt);
             }
         });
-        jMenu4.add(jmiEntrada);
+        jmEntradaSalidaProductos.add(jmiEntrada);
 
+        jmiSalida.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jmiSalida.setText("Salida");
+        jmiSalida.setName("jmiSalida"); // NOI18N
         jmiSalida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiSalidaActionPerformed(evt);
             }
         });
-        jMenu4.add(jmiSalida);
+        jmEntradaSalidaProductos.add(jmiSalida);
 
-        jmiHistorial.setText("Historial E/S");
-        jmiHistorial.addActionListener(new java.awt.event.ActionListener() {
+        jMenuBar1.add(jmEntradaSalidaProductos);
+
+        jMenu3.setText("Control de precios");
+
+        jMenuItem3.setText("Precios productos");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiHistorialActionPerformed(evt);
+                jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu4.add(jmiHistorial);
+        jMenu3.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -823,10 +821,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
                 return;
             }
 
-            //Guardamos la fila de producto en la tabla, he tenido que hacerlo asi,
-            //porque se está la fila.
-            v_fila = tblProducto.getSelectedRow();
-
             //Se actualiza el combo box de la categoria. 
             updateCategoria();
 
@@ -916,7 +910,7 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
      */
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         if (jtpPrincipal.getSelectedComponent() == jpProductos) {
-            btnActualizarListaActionPerformed(null);
+            jmiActualizarProductosActionPerformed(evt);
 
             if (tblProducto.getRowCount() == 0) {
                 JOptionPane.showInternalMessageDialog(
@@ -936,7 +930,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
             );
 
             if (!Objects.isNull(producto)) {
-                v_fila = 1;
                 jsPaginaNro.setValue(1);
                 criterioBusqueda = producto.strip();
                 llenarTablaProductos(criterioBusqueda);
@@ -955,7 +948,7 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         System.out.println(evt.getActionCommand());
-        
+
         if (jtpPrincipal.getSelectedComponent() == jpProductos) {
 
         } else if (jtpPrincipal.getSelectedComponent() == jpMantenimiento) {
@@ -1211,12 +1204,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
         llenarTablaProductos(criterioBusqueda);
     }//GEN-LAST:event_jsPaginaNroStateChanged
 
-    private void btnActualizarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarListaActionPerformed
-        criterioBusqueda = "";
-        llenarTablaProductos(criterioBusqueda);
-        reOrdenar();
-    }//GEN-LAST:event_btnActualizarListaActionPerformed
-
     private void cbActivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbActivoActionPerformed
         if (!txtDescripcion.isEditable()) {
             cbActivo.setSelected(!cbActivo.isSelected());
@@ -1229,14 +1216,6 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
             cbActivo.setText("Inactivo");
         }
     }//GEN-LAST:event_cbActivoActionPerformed
-
-    /**
-     *
-     * @param evt No utilizado por el momento
-     */
-    private void btnControlPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnControlPrecioActionPerformed
-        //TODO 01/12/2024 se necesita implementa este metodo. 
-    }//GEN-LAST:event_btnControlPrecioActionPerformed
 
     private void tblProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblProductoKeyPressed
         if (evt.isControlDown()) {
@@ -1338,6 +1317,16 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
             );
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jmiActualizarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiActualizarProductosActionPerformed
+        criterioBusqueda = "";
+        llenarTablaProductos(criterioBusqueda);
+        reOrdenar();
+    }//GEN-LAST:event_jmiActualizarProductosActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        //TODO 01/12/2024 se necesita implementa este metodo. 
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private static void btnBotonesPrivilegios() {
         btnNuevo.setEnabled(
@@ -1524,7 +1513,10 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
             return;
         }
 
-        int id = ((Producto) tblProducto.getValueAt(v_fila, 2)).getId();
+        int id = ((Producto) tblProducto.getValueAt(
+                tblProducto.getSelectedRow(),
+                2
+        )).getId();
 
         Producto producto = M_Producto.select(
                 Producto
@@ -1651,12 +1643,10 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private newscomponents.RSButtonGradientIcon_new btnActualizarLista;
     private newscomponents.RSButtonGradientIcon_new btnAgregarFoto;
     private static RSMaterialComponent.RSButtonMaterialIconOne btnBorrar;
     private static RSMaterialComponent.RSButtonMaterialIconOne btnBuscarProducto;
     public static RSMaterialComponent.RSButtonMaterialIconOne btnCancelar;
-    private newscomponents.RSButtonGradientIcon_new btnControlPrecio;
     private newscomponents.RSButtonGradientIcon_new btnEliminarFoto;
     private static RSMaterialComponent.RSButtonMaterialIconOne btnGuardar;
     private static RSMaterialComponent.RSButtonMaterialIconOne btnModificar;
@@ -1670,10 +1660,10 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
@@ -1682,6 +1672,9 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel jlImagenProducto;
+    private javax.swing.JMenu jmCategorias;
+    private javax.swing.JMenu jmEntradaSalidaProductos;
+    private javax.swing.JMenuItem jmiActualizarProductos;
     private static javax.swing.JMenuItem jmiCategoriasMantenimiento;
     private javax.swing.JMenuItem jmiEntrada;
     private javax.swing.JMenuItem jmiHistorial;
