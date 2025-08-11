@@ -1,10 +1,12 @@
 package sur.softsurena.clases;
 
 import java.awt.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class FormatoTabla extends DefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 1L;
 
     private final int columna_patron;
 

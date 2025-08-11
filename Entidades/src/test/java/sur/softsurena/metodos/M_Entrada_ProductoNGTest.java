@@ -5,10 +5,13 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.EntradaProducto;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_ELIMINADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_REGISTRADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Entrada_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -21,6 +24,7 @@ import sur.softsurena.utilidades.Resultado;
 public class M_Entrada_ProductoNGTest {
 
     private static Resultado resultado;
+    private static Integer idPersona;
 
     @Test
     public void testSqlSelect() {
@@ -121,10 +125,28 @@ public class M_Entrada_ProductoNGTest {
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MEntradaProducto")
+                .snombre("MEntradaProducto")
+                .apellidos("MEntradaProducto")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
+        M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
+
         resultado = M_Entrada_Producto.insert(
                 EntradaProducto
                         .builder()
-                        .idProveedor(0)
+                        .idProveedor(idPersona)
                         .idAlmacen(0)
                         .cod_factura(M_Generales.generarCedula())
                         .estado('t')
@@ -151,7 +173,7 @@ public class M_Entrada_ProductoNGTest {
                         EntradaProducto
                                 .builder()
                                 .id(resultado.getId())
-                                .idProveedor(0)
+                                .idProveedor(idPersona)
                                 .idAlmacen(0)
                                 .cod_factura(M_Generales.generarCedula())
                                 .estado('d')
@@ -184,7 +206,7 @@ public class M_Entrada_ProductoNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
-
+        M_PersonaNGTest.idPersona = idPersona;
+        M_PersonaNGTest.testDelete();
     }
-
 }

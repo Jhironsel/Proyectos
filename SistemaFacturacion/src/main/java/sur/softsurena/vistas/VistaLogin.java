@@ -4,12 +4,10 @@ import RSMaterialComponent.RSButtonMaterialIconOne;
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import sur.softsurena.conexion.Conexion;
@@ -268,29 +266,10 @@ public final class VistaLogin extends javax.swing.JFrame {
         if (!Conexion.validarUsario(txtUser, txtPassword, this)) {
             return;
         }
-
-        try (FirebirdEventos firebirdEventos = new FirebirdEventos(
+        new FirebirdEventos(
                 txtUser.getText(),
                 new String(txtPassword.getPassword())
-        );) {
-
-            firebirdEventos.registro();
-            if (!firebirdEventos.isConnected()) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Error al conectar los eventos.",
-                        "",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-
-        }catch(SQLException e){
-            LOG.log(
-                    Level.SEVERE,
-                    "Error al crear ventana de cliente.",
-                    e
-            );
-        }
+        );
 
         VistaPrincipal principal = new VistaPrincipal();
         principal.setVisible(true);

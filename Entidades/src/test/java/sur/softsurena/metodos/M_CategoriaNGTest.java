@@ -7,6 +7,7 @@ import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.entidades.FotoCategoria;
+import sur.softsurena.entidades.Producto;
 import static sur.softsurena.metodos.M_Categoria.SE_MODIFICO_LA_CATEGORIA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Producto.generarCodigoBarra;
 import sur.softsurena.utilidades.Resultado;
@@ -17,11 +18,12 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = "init",
+        groups = "gCategoria"
 )
 public class M_CategoriaNGTest {
 
-    public static Integer idCategoria;
+    public static int idCategoria;
 
     @Test
     public void testSqlSelect() {
@@ -229,8 +231,6 @@ public class M_CategoriaNGTest {
                             .estado(Boolean.TRUE)
                             .build()
             );
-        } else {
-            testUpdate();
         }
     }
 
@@ -239,6 +239,16 @@ public class M_CategoriaNGTest {
     )
     public static void testDelete() {
 
+        M_Producto.select(
+                Producto
+                        .builder()
+                        .idCategoria(idCategoria)
+                        .build()
+        ).stream().forEach(
+                producto -> {
+                    M_Producto.delete(producto.getId());
+                }
+        );
         M_Foto_Categoria.deleteById_categoria(
                 FotoCategoria
                         .builder()

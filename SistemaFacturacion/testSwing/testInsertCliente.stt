@@ -234,6 +234,20 @@
       <optionToSelect>MASCULINO</optionToSelect>
       <selectionMode>BY_LABEL_TEXT</selectionMode>
     </xy.ui.testing.action.component.specific.SelectComboBoxItemAction>
+    <xy.ui.testing.action.component.ClickAction>
+      <button>LEFT_BUTTON</button>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>jcbCliente</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <doubleClick>false</doubleClick>
+      <eventsIntervalMilliseconds>100</eventsIntervalMilliseconds>
+      <locationOnComponent class="null"/>
+      <poupTrigger>false</poupTrigger>
+    </xy.ui.testing.action.component.ClickAction>
     <xy.ui.testing.action.component.specific.SelectTabAction>
       <componentFinder class="xy.ui.testing.finder.DisplayedStringComponentFinder">
         <componentClassName class="null"/>
@@ -451,6 +465,19 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
+    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
+      <componentClassName>sur.softsurena.vista.VistaPersonas$2</componentClassName>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>tblDireccion</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <propertyName>Row Count</propertyName>
+      <propertyValueExpected>^[1-9]\d*$</propertyValueExpected>
+      <regularExpressionExpected>true</regularExpressionExpected>
+    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
     <xy.ui.testing.action.component.specific.SelectTabAction>
       <componentFinder class="xy.ui.testing.finder.DisplayedStringComponentFinder">
         <componentClassName class="null"/>
@@ -596,6 +623,19 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
+    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
+      <componentClassName>sur.softsurena.vista.VistaPersonas$3</componentClassName>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>tblTelefonos</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <propertyName>Row Count</propertyName>
+      <propertyValueExpected>^[1-9]\d*$</propertyValueExpected>
+      <regularExpressionExpected>true</regularExpressionExpected>
+    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
     <xy.ui.testing.action.component.specific.SelectTabAction>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
@@ -702,6 +742,19 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
+    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
+      <componentClassName>sur.softsurena.vista.VistaPersonas$4</componentClassName>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>tblCorreos</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <propertyName>Row Count</propertyName>
+      <propertyValueExpected>^[1-9]\d*$</propertyValueExpected>
+      <regularExpressionExpected>true</regularExpressionExpected>
+    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
     <xy.ui.testing.action.component.ClickAction>
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
@@ -744,5 +797,18 @@
       <locationOnComponent class="null"/>
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
+    <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
+      <componentClassName>sur.softsurena.vista.VistaPersonas$1</componentClassName>
+      <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
+        <componentClassName class="null"/>
+        <componentName>tblPersonas</componentName>
+        <occurrencesToSkip>0</occurrencesToSkip>
+        <windowIndex>0</windowIndex>
+      </componentFinder>
+      <disabled>false</disabled>
+      <propertyName>Row Count</propertyName>
+      <propertyValueExpected>^[1-9]\d*$</propertyValueExpected>
+      <regularExpressionExpected>true</regularExpressionExpected>
+    </xy.ui.testing.action.component.property.CheckComponentPropertyAction>
   </testActions>
 </xy.ui.testing.Tester>

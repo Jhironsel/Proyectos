@@ -5,8 +5,11 @@ import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.FotoPersona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -17,9 +20,8 @@ import sur.softsurena.utilidades.Utilidades;
 )
 public class M_Foto_PersonaNGTest {
 
-    private Integer idfoto;
-    private Integer idPersona;
-    private Integer idPersona2;
+    private int idfoto;
+    private int idPersona;
 
     @Test
     public void testSqlSelect() {
@@ -78,7 +80,7 @@ public class M_Foto_PersonaNGTest {
                 """.strip()
         );
     }
-    
+
     @Test(
             dependsOnMethods = "testSqlSelect"
     )
@@ -94,20 +96,31 @@ public class M_Foto_PersonaNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 2,
-            description = """
-                          """
+            dependsOnMethods = "testSelect"
     )
     public void testInsert() {
-        Resultado resultado = M_Persona.insert(
-                M_PersonaNGTest.getPersona(Boolean.TRUE)
-        );
+        M_PersonaNGTest.persona = Persona
+                        .builder()
+                        .persona('J')
+                        .pnombre("MFotoPersona")
+                        .snombre("MFotoPersona")
+                        .apellidos("MFotoPersona")
+                        .sexo('M')
+                        .fecha_nacimiento(
+                                javaDateToSqlDate(
+                                        stringToDate("23.06.2017", "dd.MM.yyyy")
+                                )
+                        )
+                        .estado(Boolean.TRUE)
+                        .build();
+        
+        M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
 
         Resultado result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .idPersona(resultado.getId())
+                        .idPersona(idPersona)
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("Imagenes/ImagenPrueba.png")
@@ -130,7 +143,7 @@ public class M_Foto_PersonaNGTest {
         result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .idPersona(resultado.getId())
+                        .idPersona(idPersona)
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("Imagenes/ImagenPrueba.png")
@@ -149,15 +162,11 @@ public class M_Foto_PersonaNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
-
-        idPersona = resultado.getId();
 //------------------------------------------------------------------------------
-        resultado = M_Persona.insert(M_PersonaNGTest.getPersona(Boolean.TRUE));
-
         result = M_Foto_Persona.insert(
                 FotoPersona
                         .builder()
-                        .idPersona(resultado.getId())
+                        .idPersona(idPersona)
                         .foto(
                                 Utilidades.imagenEncode64(
                                         new File("Imagenes/ImagenPrueba.png")
@@ -177,21 +186,17 @@ public class M_Foto_PersonaNGTest {
                         .build()
         );
         idfoto = result.getId();
-        idPersona2 = resultado.getId();
     }
 
     @Test(
-            enabled = true,
-            priority = 3,
-            description = """
-                          """
+            dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
         Resultado result = M_Foto_Persona.update(
                 FotoPersona
                         .builder()
                         .id(idfoto)
-                        .idPersona(idPersona2)
+                        .idPersona(idPersona)
                         .foto("")
                         .actual(Boolean.TRUE)
                         .build()
@@ -208,10 +213,7 @@ public class M_Foto_PersonaNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 4,
-            description = """
-                          """
+            dependsOnMethods = "testUpdate"
     )
     public void testDelete() {
         assertEquals(
@@ -231,10 +233,7 @@ public class M_Foto_PersonaNGTest {
     }
 
     @Test(
-            enabled = true,
-            priority = 5,
-            description = """
-                          """
+            dependsOnMethods = "testDelete"
     )
     public void testDeleteById_persona() {
         assertEquals(
@@ -251,5 +250,7 @@ public class M_Foto_PersonaNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
+        M_PersonaNGTest.idPersona = idPersona;
+        M_PersonaNGTest.testDelete();
     }
 }

@@ -1,6 +1,5 @@
 package sur.softsurena.vista;
 
-import sur.softsurena.clases.FormatoTabla;
 import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.Calendar;
@@ -16,10 +15,13 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import sur.softsurena.clases.FormatoTabla;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaPagos extends javax.swing.JInternalFrame {
+public final class VistaPagos extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     public VistaPagos() {
         initComponents();

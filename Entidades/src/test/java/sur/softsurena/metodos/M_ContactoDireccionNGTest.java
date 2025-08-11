@@ -5,11 +5,14 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoDireccion;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_ContactoDireccion.DIRECCION_AGREGADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_BORRAR_EL_REGISTRO_DE_LA_DIRECCI;
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_INSERTAR_DIRECCION;
 import static sur.softsurena.metodos.M_ContactoDireccion.REGISTRO_DE_LA_DIRECCION_BORRADO_CORRECTA;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 @Getter
 @Test(
@@ -50,6 +53,21 @@ public class M_ContactoDireccionNGTest {
             );
         }
 
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MContactoDireccion")
+                .snombre("MContactoDireccion")
+                .apellidos("MContactoDireccion")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+        
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 

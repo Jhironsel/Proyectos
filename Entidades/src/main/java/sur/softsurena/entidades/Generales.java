@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Generales{
     
-    private final Integer id;
     private final Integer idPersona;
     private final Integer idTipoSangre;
     private final String cedula;
@@ -24,7 +23,6 @@ public class Generales{
     public String getJSON() {
         StringBuilder sb = new StringBuilder();
         sb.append("Generales{");
-        sb.append("id=").append(id);
         sb.append(", idPersona=").append(idPersona);
         sb.append(", idTipoSangre=").append(idTipoSangre);
         sb.append(", cedula=").append(cedula);
@@ -36,7 +34,6 @@ public class Generales{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.id);
         hash = 59 * hash + Objects.hashCode(this.idPersona);
         hash = 59 * hash + Objects.hashCode(this.idTipoSangre);
         hash = 59 * hash + Objects.hashCode(this.cedula);
@@ -57,9 +54,6 @@ public class Generales{
         }
         final Generales other = (Generales) obj;
         if (!Objects.equals(this.cedula, other.cedula)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.idPersona, other.idPersona)) {

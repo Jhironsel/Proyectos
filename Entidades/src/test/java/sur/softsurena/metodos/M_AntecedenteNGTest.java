@@ -86,8 +86,8 @@ public class M_AntecedenteNGTest {
     @Test
     public void testInsert() {
         M_ConsultaNGTest.testInsert();
-
         idConsulta = M_ConsultaNGTest.idConsulta;
+        
         Resultado result = M_Antecedente.insert(
                 Antecedente
                         .builder()

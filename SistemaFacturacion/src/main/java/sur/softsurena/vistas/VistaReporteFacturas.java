@@ -2,7 +2,7 @@ package sur.softsurena.vistas;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Persona;

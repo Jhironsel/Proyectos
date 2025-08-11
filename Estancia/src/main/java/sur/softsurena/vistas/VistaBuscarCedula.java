@@ -4,7 +4,7 @@ import java.text.ParseException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Persona;

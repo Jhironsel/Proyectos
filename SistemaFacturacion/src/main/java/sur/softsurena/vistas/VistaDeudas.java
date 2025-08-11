@@ -2,8 +2,6 @@ package sur.softsurena.vistas;
 
 import sur.softsurena.vista.VistaBusquedaPersona;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Objects;
@@ -15,7 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paginas;
@@ -48,7 +46,9 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 SwingUtilities.invokeLater(() -> {
                     txtMonto.setSelectionStart(3);
-                    txtMonto.setSelectionEnd(txtMonto.getText().length());
+                    txtMonto.setSelectionEnd(
+                            txtMonto.getText().length()
+                    );
                 });
             }
         });
@@ -87,20 +87,12 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         btnGuardar = new RSMaterialComponent.RSButtonMaterialIconOne();
         btnCancelar = new RSMaterialComponent.RSButtonMaterialIconOne();
         rSMenuBar1 = new rojerusan.RSMenuBar();
-        jmArchivos = new javax.swing.JMenu();
-        jmiNuevo = new javax.swing.JMenuItem();
-        jmiModificar = new javax.swing.JMenuItem();
-        jmiBorrar = new javax.swing.JMenuItem();
-        jmEditar = new javax.swing.JMenu();
-        jmiBuscar = new javax.swing.JMenuItem();
         jmFiltros = new javax.swing.JMenu();
         cbTodos = new javax.swing.JCheckBoxMenuItem();
         cbInicial = new javax.swing.JCheckBoxMenuItem();
         cbAbonada = new javax.swing.JCheckBoxMenuItem();
         cbPagada = new javax.swing.JCheckBoxMenuItem();
         cbNula = new javax.swing.JCheckBoxMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -185,10 +177,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txtCedula.setToolTipText("Cedula del Cliente");
-        txtCedula.setDoubleBuffered(true);
-        txtCedula.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
-        txtCedula.setFocusTraversalPolicyProvider(true);
+        txtCedula.setActionCommand("");
         txtCedula.setFont(new java.awt.Font("Ubuntu Mono", 1, 16)); // NOI18N
         txtCedula.setPreferredSize(new java.awt.Dimension(52, 21));
         txtCedula.addActionListener(new java.awt.event.ActionListener() {
@@ -204,6 +193,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
 
         txtPNombre.setEditable(false);
         txtPNombre.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtPNombre.setActionCommand("<Not Set>");
         txtPNombre.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), " Primer Nombre ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 255))); // NOI18N
         txtPNombre.setDoubleBuffered(true);
         txtPNombre.setFocusTraversalPolicyProvider(true);
@@ -318,8 +308,8 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGetCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnGetCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -346,9 +336,9 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         jpRegistroDeudaLayout.setVerticalGroup(
             jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 64, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 64, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Registro de Deuda", jpRegistroDeuda);
@@ -432,28 +422,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         rSMenuBar1.setBorderPainted(false);
         rSMenuBar1.setPreferredSize(new java.awt.Dimension(0, 30));
 
-        jmArchivos.setForeground(new java.awt.Color(255, 255, 255));
-        jmArchivos.setText("Archivos");
-
-        jmiNuevo.setText("Nuevo");
-        jmArchivos.add(jmiNuevo);
-
-        jmiModificar.setText("Modificar");
-        jmArchivos.add(jmiModificar);
-
-        jmiBorrar.setText("Borrar");
-        jmArchivos.add(jmiBorrar);
-
-        rSMenuBar1.add(jmArchivos);
-
-        jmEditar.setForeground(new java.awt.Color(255, 255, 255));
-        jmEditar.setText("Editar");
-
-        jmiBuscar.setText("Buscar");
-        jmEditar.add(jmiBuscar);
-
-        rSMenuBar1.add(jmEditar);
-
         jmFiltros.setForeground(new java.awt.Color(255, 255, 255));
         jmFiltros.setText("Filtros");
 
@@ -502,15 +470,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             }
         });
         jmFiltros.add(cbNula);
-        jmFiltros.add(jSeparator1);
-
-        jMenuItem1.setText("Sumar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jmFiltros.add(jMenuItem1);
 
         rSMenuBar1.add(jmFiltros);
 
@@ -593,6 +552,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+        System.out.println("1");
         if (!txtCedula.isEditValid()) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -600,9 +560,10 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            limpiarCedula();
+            limpiarCampos();
             return;
         }
+        System.out.println("2");
         Generales general = M_Generales.select(
                 Generales
                         .builder()
@@ -610,7 +571,9 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                         .build()
         ).getFirst();
 
+        System.out.println("3");
         if (general.getIdPersona().equals(0)) {
+            System.out.println("4");
             var resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
@@ -628,6 +591,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
 
             VistaPrincipal.mnuMantenimientoClientes.doClick();
         } else {
+            System.out.println("5");
             mostrarRegistro(
                     M_Persona.select(
                             Persona
@@ -686,7 +650,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         miBusqueda.setVisible(true);
 
         if (Objects.isNull(miBusqueda.getPersona())) {
-            limpiarCedula();
+            limpiarCampos();
             return;
         }
 
@@ -699,7 +663,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         nuevo = true;
-        botones(false);
+        botones(true);
         txtCedula.requestFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -724,7 +688,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         if (!tblPersonas.getValueAt(
                 tblPersonas.getSelectedRow(),
                 6
-        ).toString().equals("i")) {
+        ).toString().equals(estadoDeuda('i'))) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "No se permite modificar deudas cuando el estado es diferente de iniciada.",
@@ -737,12 +701,13 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         //Columna cedula seleccionada.
         mostrarRegistro(
                 (Persona) tblPersonas.getValueAt(
-                        tblPersonas.getSelectedRow(), 
+                        tblPersonas.getSelectedRow(),
                         1
                 )
         );
         nuevo = false;
-        botones(false);
+        botones(true);
+        txtMonto.requestFocus();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
@@ -758,7 +723,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            limpiarCedula();
+            limpiarCampos();
             return;
         }
 
@@ -888,7 +853,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         nuevo = false;
-        botones(true);
+        botones(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
@@ -963,55 +928,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_txtCedulaKeyPressed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        //TODO Estudiar este metodo o btn para que se utiliza.
-        String estado = "", msg = "Nada para mostrar";
-
-        if (cbTodos.isSelected()) {
-            estado = "GROUP BY r.estado";
-        }
-        if (cbInicial.isSelected()) {
-            estado = "WHERE r.ESTADO like 'i' GROUP BY r.estado";
-        }
-        if (cbAbonada.isSelected()) {
-            estado = "WHERE r.ESTADO like 'a' GROUP BY r.estado";
-        }
-        if (cbPagada.isSelected()) {
-            estado = "WHERE r.ESTADO like 'p' GROUP BY r.estado";
-        }
-        if (cbNula.isSelected()) {
-            estado = "WHERE r.ESTADO like 'n' GROUP BY r.estado";
-        }
-
-//        getConsulta(
-//                "SELECT SUM(r.MONTO), case r.ESTADO "
-//                + "when 'i' then 'Inicial:' "
-//                + "when 'a' then 'Abonado:' "
-//                + "when 'p' then 'Pagado:' "
-//                + "when 'n' then 'Nulado:' "
-//                + "end "
-//                + "FROM GET_SUMA_DEUDA r "
-//                + estado);
-        ResultSet rs = null;
-
-        try {
-            while (rs.next()) {
-                msg = msg.replaceAll("Nada para mostrar", "");
-                msg = msg + (rs.getString(2)) + "       " + (rs.getString(1)) + " <BR>";
-            }
-        } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, "Error al cargar las sumas de las deudas.", ex);
-        }
-        msg = "<html><big>" + msg + "</big></html>";
-
-        JOptionPane.showInternalMessageDialog(
-                this,
-                msg,
-                "",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void cbTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosActionPerformed
         llenarTabla();
@@ -1153,7 +1069,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jmOpcionesPagosActionPerformed
 
     private void botones(Boolean valor) {
-        if (!valor) {
+        if (valor) {
             jtpPrincipal.addTab("Mantenimiento", jpRegistroDeuda);
             jtpPrincipal.setSelectedComponent(jpRegistroDeuda);
         } else {
@@ -1162,26 +1078,23 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         }
 
         //Botones Para Deshabilitar:
-        btnNuevo.setEnabled(valor);
-        btnModificar.setEnabled(valor);
-        btnBorrar.setEnabled(valor);
-        btnBuscar.setEnabled(valor);
-        tblPersonas.setEnabled(valor);
+        btnNuevo.setEnabled(!valor);
+        btnModificar.setEnabled(!valor);
+        btnBorrar.setEnabled(!valor);
+        btnBuscar.setEnabled(!valor);
+        tblPersonas.setEnabled(!valor);
 
-        btnGuardar.setEnabled(!valor);
-        btnCancelar.setEnabled(!valor);
+        btnGuardar.setEnabled(valor);
+        btnCancelar.setEnabled(valor);
 
         if (nuevo) {
-            limpiarCedula();
+            limpiarCampos();
         }
 
         txtCedula.setEditable(nuevo);
         btnGetCliente.setEnabled(nuevo);
     }
 
-    /**
-     *
-     */
     public static void llenarTabla() {
         String titulos[] = {
             "Cod.#", "Nombre completo", "Cedula persona", "Concepto", "Monto",
@@ -1211,7 +1124,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                                     .idPersona(
                                             deudaR.getIdPersona()
                                     ).build()
-                    );
+                    ).stream().findFirst().orElseThrow();
                     registro[2] = M_Generales.select(
                             Generales
                                     .builder()
@@ -1221,7 +1134,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                     registro[3] = deudaR.getConcepto();
                     registro[4] = deudaR.getMonto();
                     registro[5] = deudaR.getFecha();
-                    registro[6] = deudaR.getEstadoDeuda();
+                    registro[6] = estadoDeuda(deudaR.getEstadoDeuda());
                     miTabla.addRow(registro);
                 }
         );
@@ -1237,21 +1150,34 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         tblPersonas.getColumnModel().getColumn(4).setCellRenderer(tcr);
 
         TableColumn miTableColumn;
-        int[] ancho = {50, 100, 50, 600, 100, 50, 50};
+        int[] ancho = {20, 180, 50, 620, 30, 20, 20};
         for (int i = 0; i < titulos.length; i++) {
             miTableColumn = tblPersonas.getColumnModel().getColumn(i);
             miTableColumn.setPreferredWidth(ancho[i]);
         }
     }
 
-    private void limpiarCedula() {
+    private static String estadoDeuda(Character caracter) {
+        return switch (caracter) {
+            case 'i' ->
+                "INICIAL";
+            case 'p' ->
+                "PAGADA";
+            case 'a' ->
+                "Abonada";
+            default ->
+                "NULA";
+        };
+    }
+
+    private void limpiarCampos() {
         txtPNombre.setText("");
         txtSNombre.setText("");
         txtApellidos.setText("");
         txtMonto.setValue(0);
         txtConcepto.setText("");
 
-        txtCedula.setValue(null);
+        txtCedula.setValue("");
         txtCedula.requestFocus();
     }
 
@@ -1270,7 +1196,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                     "",
                     JOptionPane.ERROR_MESSAGE
             );
-            limpiarCedula();
+            limpiarCampos();
             return;
         }
 
@@ -1294,8 +1220,8 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             txtMonto.setValue(deuda.getMonto());
             txtConcepto.setText(deuda.getConcepto());
             txtCedula.setEditable(false);
-            txtMonto.requestFocus();
         }
+        txtMonto.requestFocus();
     }
 
     private BigDecimal txtMontoField() {
@@ -1326,7 +1252,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBoxMenuItem cbPagada;
     private javax.swing.JCheckBoxMenuItem cbTodos;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
@@ -1334,17 +1259,10 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel jlFoto;
-    private javax.swing.JMenu jmArchivos;
-    private javax.swing.JMenu jmEditar;
     private javax.swing.JMenu jmFiltros;
     private javax.swing.JMenu jmOpcionesPagos;
     private javax.swing.JMenuItem jmiAbonar;
-    private javax.swing.JMenuItem jmiBorrar;
-    private javax.swing.JMenuItem jmiBuscar;
-    private javax.swing.JMenuItem jmiModificar;
-    private javax.swing.JMenuItem jmiNuevo;
     private javax.swing.JMenuItem jmiVerPagos;
     private javax.swing.JPanel jpListaDeuda;
     private javax.swing.JPanel jpRegistroDeuda;

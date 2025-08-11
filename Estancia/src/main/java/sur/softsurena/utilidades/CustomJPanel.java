@@ -5,12 +5,17 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import static sur.softsurena.metodos.M_ContactoEmail.ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO;
+import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class CustomJPanel extends JPanel {
+public final class CustomJPanel extends JPanel {
 
-    private BufferedImage image;
+    private static final long serialVersionUID = 1L;
+
+    private transient BufferedImage image;
     private int x, y;
     private static CustomJPanel custom;
 
@@ -22,7 +27,11 @@ public class CustomJPanel extends JPanel {
             image = ImageIO.read(getClass().
                     getResource("/imagenesPapeles/figura" + num + ".jpeg"));
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.log(
+                    Level.SEVERE,
+                    ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO,
+                    ex
+            );
         }
     }
     

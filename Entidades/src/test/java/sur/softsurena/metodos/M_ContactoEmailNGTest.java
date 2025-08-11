@@ -1,11 +1,11 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoEmail;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_ContactoEmail.CONTACTO_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoEmail.CORREO_AGREGADO_O_MODIFICADO_CORRECTAMENT;
 import static sur.softsurena.metodos.M_ContactoEmail.EL_CONTACTO_DE_CORREO_FUE_ACTUALIZADO;
@@ -14,6 +14,8 @@ import static sur.softsurena.metodos.M_ContactoEmail.ERROR_AL_BORRAR_EL_CONTACTO
 import static sur.softsurena.metodos.M_ContactoEmail.ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO;
 import static sur.softsurena.metodos.M_ContactoEmail.ERROR_AL_EJECUTAR_EL___DEL_SISTEMA;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -26,17 +28,31 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_ContactoEmailNGTest {
 
-    private static int idCorreo;
+    public static int idCorreo, idPersona;
 
-    @Test(
-            groups = "contactoEmail.insert"
-    )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MContactoEmail")
+                .snombre("MContactoEmail")
+                .apellidos("MContactoEmail")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
+        M_PersonaNGTest.testInsert();
+        idPersona = M_PersonaNGTest.idPersona;
 
         Resultado result = M_ContactoEmail.insert(
                 ContactoEmail
                         .builder()
-                        .idPersona(0)
+                        .idPersona(idPersona)
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.TRUE)
@@ -61,15 +77,17 @@ public class M_ContactoEmailNGTest {
                 ERROR_AL_AGREGAR_O_MODIFICAR_CORREO
         );
     }
-    
+
     @Test(
-            dependsOnMethods = "testInsert"
+            dependsOnMethods = "testUpdate"
     )
     public void testselectByID() {
 
         assertFalse(
-                M_ContactoEmail.selectByID(0).isEmpty(),
-                ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO
+                M_ContactoEmail.selectByID(
+                        idPersona
+                ).isEmpty(),
+                ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO.formatted(idPersona)
         );
 
     }
@@ -82,7 +100,7 @@ public class M_ContactoEmailNGTest {
                 ContactoEmail
                         .builder()
                         .id(idCorreo)
-                        .idPersona(0)
+                        .idPersona(idPersona)
                         .email(M_ContactoEmail.generarCorreo())
                         .estado(Boolean.TRUE)
                         .porDefecto(Boolean.FALSE)
@@ -100,11 +118,9 @@ public class M_ContactoEmailNGTest {
                 ERROR_AL_EJECUTAR_EL___DEL_SISTEMA
         );
     }
-    
-    
 
     @Test(
-            dependsOnMethods = {"testInsert", "testUpdate"}
+            dependsOnMethods = {"testselectByID", "testUpdate"}
     )
     public void testDelete() {
         Resultado result = M_ContactoEmail.delete(idCorreo);
@@ -119,6 +135,8 @@ public class M_ContactoEmailNGTest {
                         .build(),
                 ERROR_AL_BORRAR_EL_CONTACTO_DE_CORREO_DEL
         );
+        M_PersonaNGTest.idPersona = idPersona;
+        M_PersonaNGTest.testDelete();
     }
 
     @Test(

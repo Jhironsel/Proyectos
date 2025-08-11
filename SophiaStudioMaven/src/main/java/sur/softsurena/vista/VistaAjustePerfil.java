@@ -6,7 +6,9 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaAjustePerfil extends javax.swing.JInternalFrame {
+public final class VistaAjustePerfil extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     ResultSet rs = null;
 

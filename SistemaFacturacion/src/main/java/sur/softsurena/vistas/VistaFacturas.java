@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.table.*;
 import lombok.NonNull;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.*;
 import static sur.softsurena.vistas.VistaPrincipal.mnuMovimientosNuevaFactura;
 import sur.softsurena.hilos.VistaPrintFacturaConReporte2;

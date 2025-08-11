@@ -1,12 +1,14 @@
 package sur.softsurena.metodos;
 
-import java.util.List;
 import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoTel;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -20,11 +22,26 @@ import sur.softsurena.utilidades.Resultado;
 public class M_ContactoTelNGTest {
 
     public static Integer idContactoTel, idPersona;
-    
+
     @Test(
             groups = "contactoTel.insert"
     )
     public void persona() {
+        M_PersonaNGTest.persona = Persona
+                        .builder()
+                        .persona('J')
+                        .pnombre("MContactoTel")
+                        .snombre("MContactoTel")
+                        .apellidos("MContactoTel")
+                        .sexo('M')
+                        .fecha_nacimiento(
+                                javaDateToSqlDate(
+                                        stringToDate("23.06.2017", "dd.MM.yyyy")
+                                )
+                        )
+                        .estado(Boolean.TRUE)
+                        .build();
+        
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
     }
@@ -104,9 +121,9 @@ public class M_ContactoTelNGTest {
                         .build(),
                 M_ContactoTel.ERROR_AL_ELIMINAR_CONTACTO_TELEFONICO_EN
         );
-        
+
     }
-    
+
     @Test(
             dependsOnMethods = {"testDetele"}
     )
@@ -124,7 +141,8 @@ public class M_ContactoTelNGTest {
     }
 
     @Test
-    public void testTelefono() {}
+    public void testTelefono() {
+    }
 
     private ContactoTel telefono() {
         return ContactoTel

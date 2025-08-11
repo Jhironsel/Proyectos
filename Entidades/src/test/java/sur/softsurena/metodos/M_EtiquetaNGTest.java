@@ -3,7 +3,7 @@ package sur.softsurena.metodos;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Usuario;
 
 /**

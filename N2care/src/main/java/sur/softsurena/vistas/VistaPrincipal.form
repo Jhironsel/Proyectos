@@ -95,7 +95,7 @@
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new Imagenes(&quot;Windows 8/MenuInicio 42 x 42.png&quot;).getIcono()" type="code"/>
+              <Connection code="new Imagenes(&quot;MenuInicio 42 x 42.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Archivos"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -103,24 +103,7 @@
             </Property>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuArchivosPadres">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Alt+P"/>
-                </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Ubuntu" size="15" style="1"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Family 42 x 42.png&quot;).getIcono()" type="code"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Padres"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuArchivosPadresActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuArchivosPacientes">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuArchivosPersonas">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Alt+K"/>
@@ -129,12 +112,12 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/CryingBaby 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;CryingBaby 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Pacientes"/>
+                <Property name="text" type="java.lang.String" value="Personas"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuArchivosPacientesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuArchivosPersonasActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuArchivosUsuarios">
@@ -146,7 +129,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/User 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;User 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Usuarios"/>
               </Properties>
@@ -165,7 +148,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Printer 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Printer 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Impresoras"/>
               </Properties>
@@ -184,7 +167,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Salida 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Salida 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cerrar Seccion"/>
               </Properties>
@@ -203,7 +186,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Salida 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Salida 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Salir"/>
               </Properties>
@@ -216,7 +199,7 @@
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new Imagenes(&quot;Windows 8/PanelControl 42 x 42.png&quot;).getIcono()" type="code"/>
+              <Connection code="new Imagenes(&quot;PanelControl 42 x 42.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Control de..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -233,7 +216,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Horarios"/>
               </Properties>
@@ -250,7 +233,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/TarjetasBancarias 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;TarjetasBancarias 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Seguros"/>
               </Properties>
@@ -267,7 +250,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Pildora 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Pildora 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Medicamentos"/>
               </Properties>
@@ -280,7 +263,7 @@
         <Menu class="javax.swing.JMenu" name="jMenu5">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new Imagenes(&quot;Windows 8/BoletaCalificaciones 32 x 32.png&quot;).getIcono()" type="code"/>
+              <Connection code="new Imagenes(&quot;BoletaCalificaciones 32 x 32.png&quot;).getIcono()" type="code"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Gesti&#xf3;n..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -294,7 +277,7 @@
                   <Font name="Ubuntu" size="15" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new Imagenes(&quot;Windows 8/Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
+                  <Connection code="new Imagenes(&quot;Calendario 42 x 42.png&quot;).getIcono()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Consultas"/>
               </Properties>

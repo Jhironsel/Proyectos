@@ -1658,7 +1658,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         //Se carga los roles del usuario en el comboBox.
         M_Role.selectDisponibles(
                 usuario.getUserName().strip(),
-                true
+                false
         ).stream().forEach(
                 rolItem -> {
                     cbRoles.addItem(rolItem);

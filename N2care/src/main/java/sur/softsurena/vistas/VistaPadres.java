@@ -10,11 +10,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.metodos.M_ARS;
@@ -1213,7 +1213,7 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
                         ((Generales) jtPadres.getValueAt(
                                 jtPadres.getSelectedRow(), 
                                 0
-                        )).getId()
+                        )).getIdPersona()
                 );
                 frm.setLocationRelativeTo(null);
                 frm.setVisible(true);

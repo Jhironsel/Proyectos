@@ -1,11 +1,11 @@
 package sur.softsurena.vista;
 
-import sur.softsurena.clases.PadreMadres;
-import sur.softsurena.correoPack.Controlador;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import sur.softsurena.clases.PadreMadres;
+import sur.softsurena.correoPack.Controlador;
 
-public class VistaRegistroPadre extends javax.swing.JInternalFrame {
+public final class VistaRegistroPadre extends javax.swing.JInternalFrame {
 
     private void cerrar() {
         VistaPrincipal miPrincipal = new VistaPrincipal();

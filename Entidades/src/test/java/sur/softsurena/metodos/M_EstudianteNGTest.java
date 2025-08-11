@@ -5,9 +5,12 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Estudiante;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__MODIFICADO__CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -77,18 +80,33 @@ public class M_EstudianteNGTest {
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MEstudiante")
+                .snombre("MEstudiante")
+                .apellidos("MEstudiante")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 
         assertEquals(M_Estudiante.insert(Estudiante
-                                .builder()
-                                .id(idPersona)
-                                .matricula(
-                                        M_ContactoTel
-                                                .generarTelMovil()
-                                                .substring(8, 16))
-                                .build()
-                ),
+                .builder()
+                .id(idPersona)
+                .matricula(
+                        M_ContactoTel
+                                .generarTelMovil()
+                                .substring(8, 16))
+                .build()
+        ),
                 Resultado
                         .builder()
                         .mensaje(ESTUDIANTE__AGREGADO__CORRECTAMENTE)
@@ -102,10 +120,11 @@ public class M_EstudianteNGTest {
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
-        assertEquals(M_Estudiante.update(Estudiante
+        assertEquals(
+                M_Estudiante.update(
+                        Estudiante
                                 .builder()
-                                .id(idPersona
-                                )
+                                .id(idPersona)
                                 .matricula(M_Generales.generarCedula().substring(0, 8))
                                 .build()
                 ),
@@ -125,10 +144,11 @@ public class M_EstudianteNGTest {
             }
     )
     public void testDelete() {
-        assertEquals(M_Estudiante.delete(Estudiante
+        assertEquals(
+                M_Estudiante.delete(
+                        Estudiante
                                 .builder()
-                                .id(idPersona
-                                )
+                                .id(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -141,5 +161,4 @@ public class M_EstudianteNGTest {
         M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }
-
 }

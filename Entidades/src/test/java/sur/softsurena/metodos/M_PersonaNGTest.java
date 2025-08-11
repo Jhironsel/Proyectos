@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Persona.ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA;
@@ -31,11 +31,9 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
 public class M_PersonaNGTest {
 
     public static Integer idPersona;
-    
-    @Test(
-            alwaysRun = true,
-            enabled = true
-    )
+    public static Persona persona;
+
+    @Test
     public static void testSqlSelect() {
         assertEquals(
                 M_Persona.sqlSelect(
@@ -66,7 +64,7 @@ public class M_PersonaNGTest {
                 WHERE ID = 0
                 """.strip().trim()
         );
-        
+
         assertEquals(
                 M_Persona.sqlSelect(
                         Persona
@@ -82,7 +80,7 @@ public class M_PersonaNGTest {
                 WHERE PERSONA STARTING WITH 'F'
                 """.strip().trim()
         );
-        
+
         assertEquals(
                 M_Persona.sqlSelect(
                         Persona
@@ -100,7 +98,7 @@ public class M_PersonaNGTest {
                 WHERE PNOMBRE STARTING WITH 'GENERICO' OR SNOMBRE STARTING WITH 'GENERICO' OR APELLIDOS STARTING WITH 'GENERICO'
                 """.strip().trim()
         );
-        
+
         assertEquals(
                 M_Persona.sqlSelect(
                         Persona
@@ -116,8 +114,7 @@ public class M_PersonaNGTest {
                 WHERE ESTADO IS TRUE
                 """.strip().trim()
         );
-        
-        
+
         assertEquals(
                 M_Persona.sqlSelect(
                         Persona
@@ -137,36 +134,44 @@ public class M_PersonaNGTest {
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            dependsOnMethods = {"testSqlSelect"},
-            description = """
-                          Test que permite obtener un registro de la base de
-                          datos del sistema.
-                          """
+            dependsOnMethods = {"testSqlSelect"}
     )
     public static void testSelect() {
-        Persona result = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(0)
-                        .build()
-        ).getFirst();
 
         assertNotNull(
-                result,
+                M_Persona.select(
+                        Persona
+                                .builder()
+                                .idPersona(0)
+                                .build()
+                ).getFirst(),
                 "Registros de CLIENTE GENERICO NO ENCONTRADO."
         );
+
+        persona = Persona
+                .builder()
+                .idPersona(idPersona)
+                .persona('J')
+                .pnombre("MPersona")
+                .snombre("MPersona")
+                .apellidos("MPersona")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
     }
 
     //--------------------------------------------------------------------------
     @Test(
-            groups = "persona.insert"
+            dependsOnMethods = "testSelect"
     )
     public static void testInsert() {
 
-        Resultado result = M_Persona.insert(
-                getPersona(true)
-        );
+        Resultado result = M_Persona.insert(persona);
 
         assertEquals(
                 result,
@@ -186,33 +191,40 @@ public class M_PersonaNGTest {
 
         idPersona = result.getId();
 
-        var persona = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(idPersona)
-                        .build()
-        ).getFirst();
-        
         assertNotNull(
-                persona,
+                M_Persona.select(
+                        Persona
+                                .builder()
+                                .idPersona(idPersona)
+                                .build()
+                ).getFirst(),
                 "Registros no encontrado en el sistema. CODIGO: [ %s ]".formatted(idPersona)
         );
     }
 
     //--------------------------------------------------------------------------
     @Test(
-            enabled = true,
-            description = """
-                          Prueba que permite actualizar un registros del sistema
-                          previamente insertado.
-                          """,
             dependsOnMethods = "testInsert"
     )
     public static void testUpdate() {
 
-        Resultado result = M_Persona.update(
-                getPersona(false)
-        );
+        persona = Persona
+                .builder()
+                .idPersona(idPersona)
+                .persona('J')
+                .pnombre("MPersona")
+                .snombre("MPersona")
+                .apellidos("Actualizado")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
+        Resultado result = M_Persona.update(persona);
 
         assertEquals(
                 result,
@@ -231,21 +243,19 @@ public class M_PersonaNGTest {
             dependsOnMethods = {"testInsert", "testUpdate"}
     )
     public synchronized static void testDelete() {
-        
+
         assertTrue(
                 idPersona > 0,
                 "Identificador de persona incorrecto, ID = %d ".formatted(idPersona)
         );
 
-        Resultado result = M_Persona.delete(
-                Persona
-                        .builder()
-                        .idPersona(idPersona)
-                        .build()
-        );
-
         assertEquals(
-                result,
+                M_Persona.delete(
+                        Persona
+                                .builder()
+                                .idPersona(idPersona)
+                                .build()
+                ),
                 Resultado
                         .builder()
                         .mensaje(REGISTRO_DE_PERSONA_ELIMINADO_CORRECTAMEN)
@@ -258,24 +268,7 @@ public class M_PersonaNGTest {
 
     /**
      * Metodo que contiene los atributos basicos de una persona.
-     * @param estado
+     *
      * @return
      */
-    public synchronized static Persona getPersona(Boolean estado) {
-        return Persona
-                .builder()
-                .idPersona(idPersona)
-                .persona('J')
-                .pnombre("Jhadiel")
-                .snombre("Jhoandry")
-                .apellidos("Diaz Paniagua")
-                .sexo('M')
-                .fecha_nacimiento(
-                        javaDateToSqlDate(
-                                stringToDate("23.06.2017", "dd.MM.yyyy")
-                        )
-                )
-                .estado(estado)
-                .build();
-    }
 }

@@ -16,9 +16,9 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Categoria;
+import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Producto;
-import sur.softsurena.entidades.Paginas;
 import sur.softsurena.metodos.M_Categoria;
 import sur.softsurena.metodos.M_Privilegio;
 import sur.softsurena.metodos.M_Producto;
@@ -1579,23 +1579,15 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     /**
      * Metodo utilizado para actualizar el jComboBox de categorias del sistema.
      *
-     * Este metodo es llamado desde: 1) btnNuevoActionPerformed 2)
-     * btnModificarActionPerformed 3) btnAdmCategoriasActionPerformed 4)
-     * formInternalFrameOpened
+     * Este metodo es llamado desde: 
+     * 1) btnNuevoActionPerformed 
+     * 2) btnModificarActionPerformed 
+     * 3) btnAdmCategoriasActionPerformed 
+     * 4) formInternalFrameOpened
      */
     private static void updateCategoria() {
         //Elimina registros previos.
         cbCategoria.removeAllItems();
-
-        //Agregar primer elemento con id negativo
-        //Lo agregamos al comboBox.
-        cbCategoria.addItem(
-                Categoria
-                        .builder()
-                        .id_categoria(-1)
-                        .descripcion("Seleccione categoria")
-                        .build()
-        );
 
         M_Categoria.select(
                 Categoria

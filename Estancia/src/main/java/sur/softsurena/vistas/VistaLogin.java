@@ -1,10 +1,10 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.clases.Datos;
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import sur.softsurena.clases.Datos;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.AnimationClass;
@@ -153,7 +153,7 @@ public final class VistaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMostrarLoginMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        SwingWorker w = new SwingWorker() {
+        SwingWorker<?,?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws Exception {
 
@@ -181,11 +181,6 @@ public final class VistaLogin extends javax.swing.JFrame {
 
     public static void main(String[] args) {
         System.setProperty("java.awt.headless", "true");
-       // System.out.println("Ruta: " + System.getProperty("user.dir"));
-        UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-        for (UIManager.LookAndFeelInfo look : looks) {
-            //System.out.println(Colores.ANSI_PURPLE + look.getClassName() + Colores.ANSI_RESET);
-        }
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (UnsupportedLookAndFeelException

@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.hilos.hiloImpresionFactura;

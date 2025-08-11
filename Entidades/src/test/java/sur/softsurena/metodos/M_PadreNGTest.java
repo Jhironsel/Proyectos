@@ -6,9 +6,12 @@ import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.entidades.Paginas;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Padre.BORRADO_DE_REGISTRO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Padre.PADRE__AGREGADO__EXITOSAMENTE;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -20,7 +23,7 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_PadreNGTest {
 
-    private static Integer idPersona;
+    public static Integer idPersona;
 
     @Test(
             enabled = true,
@@ -96,9 +99,9 @@ public class M_PadreNGTest {
         );
 
     }
-    
+
     @Test(
-            enabled = true, 
+            enabled = true,
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
@@ -160,9 +163,24 @@ public class M_PadreNGTest {
             enabled = true
     )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MPadre")
+                .snombre("MPadre")
+                .apellidos("MPadre")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
-        
+
         assertEquals(
                 M_Padre.insert(
                         Padre

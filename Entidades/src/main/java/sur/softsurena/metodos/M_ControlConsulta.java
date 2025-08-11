@@ -18,65 +18,72 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  * @author jhironsel
  */
 public class M_ControlConsulta {
+
     /**
      * Metodos que consultas las fechas y horas de los doctores en el sistema.
-     * 
+     *
      * @param controlConsulta
-     * 
+     *
      * @return returna una lista de consultas disponibles en el sistema.
      */
     public synchronized static List<ControlConsulta> select(
             ControlConsulta controlConsulta
     ) {
-        
+
         List<ControlConsulta> lista = new ArrayList<>();
-        
+
         try (PreparedStatement ps = getCnn().prepareStatement(
                 sqlSelect(controlConsulta),
                 ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            
+
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 lista.add(ControlConsulta
-                                .builder()
-                                .id(rs.getInt("ID"))
-                                .user_name(rs.getString("USER_NAME"))
-                                .cantidad(rs.getInt("CANTIDAD_PACIENTE"))
-                                .dia(rs.getString("DIA"))
-                                .inicial(rs.getTime("INICIAL"))
-                                .finall(rs.getTime("FINAL"))
-                                .estado(rs.getBoolean("ESTADO"))
-                                .build()
+                        .builder()
+                        .id(rs.getInt("ID"))
+                        .user_name(rs.getString("USER_NAME"))
+                        .cantidad(rs.getInt("CANTIDAD_PACIENTE"))
+                        .dia(rs.getString("DIA"))
+                        .inicial(rs.getTime("INICIAL"))
+                        .finall(rs.getTime("FINAL"))
+                        .estado(rs.getBoolean("ESTADO"))
+                        .build()
                 );
             }
         } catch (SQLException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(), 
+                    ex
+            );
         }
-        
+
         return lista;
     }
-    
+
     protected static String sqlSelect(ControlConsulta controlConsulta) {
         boolean id = Objects.isNull(controlConsulta.getId());
         boolean userName = Objects.isNull(controlConsulta.getUser_name());
         boolean where = id && userName;
         return """
-                  SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
-                        ESTADO
-                  FROM V_CONTROL_CONSULTA
-                  %s%s%s
-                  """.formatted(
-                          where ? "":"WHERE ",
-                          id ? "":"ID = %d ".formatted(controlConsulta.getId()),
-                          userName ? "":"USER_NAME STARTING WITH '%s' ".formatted(controlConsulta.getUser_name())
-                  ).trim().strip();
+               SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
+                    ESTADO
+               FROM V_CONTROL_CONSULTA
+               %s%s%s
+               """.formatted(
+                       where ? "" : "WHERE ",
+                       id ? "" : "ID = %d ".formatted(controlConsulta.getId()),
+                       userName ? "" : "USER_NAME STARTING WITH '%s' ".formatted(
+                               controlConsulta.getUser_name()
+                       )
+               ).trim().strip();
     }
 //------------------------------------------------------------------------------
-    
+
     /**
      * Permite agregar un control de consulta al sistema.
      *
@@ -104,7 +111,7 @@ public class M_ControlConsulta {
             ps.setBoolean(6, controlConsulta.getEstado());
 
             ResultSet rs = ps.executeQuery();
-            
+
             rs.next();
 
             return Resultado
@@ -145,7 +152,7 @@ public class M_ControlConsulta {
     ) {
         final String sql
                 = """
-                  EXECUTE PROCEDURE SP_U_CONTROL_CONSULTA (?,?,?,?,?,?,?);
+                  EXECUTE PROCEDURE SP_U_CONTROL_CONSULTA(?,?,?,?,?,?,?)
                   """;
 
         try (PreparedStatement ps = getCnn().prepareStatement(
@@ -163,7 +170,7 @@ public class M_ControlConsulta {
             ps.setBoolean(7, controlConsulta.getEstado());
 
             ps.execute();
-            
+
             return Resultado
                     .builder()
                     .mensaje(CONSULTA_MODIFICADO_CORRECTAMENTE)
@@ -180,12 +187,12 @@ public class M_ControlConsulta {
                     .build();
         }
     }
-    public static final String CONSULTA_MODIFICADO_CORRECTAMENTE 
+    public static final String CONSULTA_MODIFICADO_CORRECTAMENTE
             = "Control Consulta modificado correctamente.";
-    public static final String ERROR_AL_MODIFICAR_CONSULTA 
+    public static final String ERROR_AL_MODIFICAR_CONSULTA
             = "Error al modificar control consulta del sistema.";
 //------------------------------------------------------------------------------
-    
+
     /**
      * Metodo utilizado para eliminar los controles de consultas programadas
      * previamente.
@@ -204,9 +211,9 @@ public class M_ControlConsulta {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
             ps.setInt(1, idControlConsulta);
-            
+
             ps.execute();
-            
+
             return Resultado
                     .builder()
                     .mensaje(CONTROL__CONSULTA_BORRADO_CORRECTAMENTE)
@@ -219,7 +226,7 @@ public class M_ControlConsulta {
                     ERROR_AL_BORRAR_CONTROL_DE_LA_CONSULTA,
                     ex
             );
-            
+
             return Resultado
                     .builder()
                     .mensaje(ERROR_AL_BORRAR_CONTROL_DE_LA_CONSULTA)

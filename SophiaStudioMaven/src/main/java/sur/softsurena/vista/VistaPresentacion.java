@@ -1,5 +1,8 @@
 package sur.softsurena.vista;
-public class VistaPresentacion extends javax.swing.JDialog {
+
+public final class VistaPresentacion extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     public VistaPresentacion(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

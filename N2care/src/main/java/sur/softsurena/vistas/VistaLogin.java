@@ -166,17 +166,29 @@ public class VistaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMostrarLoginMouseClicked
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        var swinWorker = new SwingWorker<>(){
+
+        var swinWorker = new SwingWorker<>() {
+
             @Override
             protected Object doInBackground() throws Exception {
                 /*Empezamos validando los dos campos si estan vacios*/
                 if (txtUsuario.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Inserte un Usuario");
+                    JOptionPane.showMessageDialog(
+                            null, 
+                            "Inserte un Usuario",
+                            "",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     txtUsuario.requestFocus();
                     return null;
                 }
                 if (txtClave.getPassword().length == 0) {
-                    JOptionPane.showMessageDialog(null, "Inserte una clave");
+                    JOptionPane.showMessageDialog(
+                            null, 
+                            "Inserte una clave",
+                            "",
+                            JOptionPane.ERROR_MESSAGE
+                    );
                     txtClave.requestFocus();
                     return null;
                 }
@@ -189,7 +201,7 @@ public class VistaLogin extends javax.swing.JFrame {
                         "3050",
                         "NONE"
                 );
-                
+
                 if (Conexion.verificar().getEstado()) {
                     txtClave.setText("");
                     var principal = new VistaPrincipal();
@@ -199,10 +211,12 @@ public class VistaLogin extends javax.swing.JFrame {
                     dispose();
                 } else {
 
-                    JOptionPane.showMessageDialog(null,
+                    JOptionPane.showMessageDialog(
+                            null,
                             "Contraseña incorrecta o no hay conectividad",
-                            "Validacion de proceso",
-                            JOptionPane.PLAIN_MESSAGE);
+                            "",
+                            JOptionPane.ERROR_MESSAGE
+                    );
 
                     if (!txtUsuario.getText().equals("sysdba")) {
                         txtUsuario.setText("");
@@ -213,7 +227,7 @@ public class VistaLogin extends javax.swing.JFrame {
                 return null;
             }
         };
-        swinWorker.execute();
+        swinWorker.run();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed

@@ -24,7 +24,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getLongitudOEstatura;
 import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.utilidades.Utilidades.LOG;

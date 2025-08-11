@@ -2,15 +2,15 @@ package sur.softsurena.vistas;
 
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
-import java.util.logging.Level;
 import javax.swing.SwingWorker;
+import static sur.softsurena.conexion.Conexion.*;
+import sur.softsurena.entidades.Entidades;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.utilidades.DesktopConFondo;
 import sur.softsurena.vista.VistaAcercaDe;
 import sur.softsurena.vista.VistaImpresoras2;
+import sur.softsurena.vista.VistaPersonas;
 import sur.softsurena.vista.VistaUsuarios;
-import static sur.softsurena.conexion.Conexion.*;
-import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public final class VistaPrincipal extends javax.swing.JFrame {
 
@@ -56,8 +56,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         dpnEscritorio = new DesktopConFondo();
         mbMenu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        mnuArchivosPadres = new javax.swing.JMenuItem();
-        mnuArchivosPacientes = new javax.swing.JMenuItem();
+        mnuArchivosPersonas = new javax.swing.JMenuItem();
         mnuArchivosUsuarios = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         mnuArchivosImpresoras = new javax.swing.JMenuItem();
@@ -113,35 +112,24 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mbMenu.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        jMenu1.setIcon(new Imagenes("Windows 8/MenuInicio 42 x 42.png").getIcono());
+        jMenu1.setIcon(new Imagenes("MenuInicio 42 x 42.png").getIcono());
         jMenu1.setText("Archivos");
         jMenu1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
-        mnuArchivosPadres.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_DOWN_MASK));
-        mnuArchivosPadres.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosPadres.setIcon(new Imagenes("Windows 8/Family 42 x 42.png").getIcono());
-        mnuArchivosPadres.setText("Padres");
-        mnuArchivosPadres.addActionListener(new java.awt.event.ActionListener() {
+        mnuArchivosPersonas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        mnuArchivosPersonas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        mnuArchivosPersonas.setIcon(new Imagenes("CryingBaby 42 x 42.png").getIcono());
+        mnuArchivosPersonas.setText("Personas");
+        mnuArchivosPersonas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuArchivosPadresActionPerformed(evt);
+                mnuArchivosPersonasActionPerformed(evt);
             }
         });
-        jMenu1.add(mnuArchivosPadres);
-
-        mnuArchivosPacientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.ALT_DOWN_MASK));
-        mnuArchivosPacientes.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosPacientes.setIcon(new Imagenes("Windows 8/CryingBaby 42 x 42.png").getIcono());
-        mnuArchivosPacientes.setText("Pacientes");
-        mnuArchivosPacientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuArchivosPacientesActionPerformed(evt);
-            }
-        });
-        jMenu1.add(mnuArchivosPacientes);
+        jMenu1.add(mnuArchivosPersonas);
 
         mnuArchivosUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosUsuarios.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosUsuarios.setIcon(new Imagenes("Windows 8/User 42 x 42.png").getIcono());
+        mnuArchivosUsuarios.setIcon(new Imagenes("User 42 x 42.png").getIcono());
         mnuArchivosUsuarios.setText("Usuarios");
         mnuArchivosUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +141,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mnuArchivosImpresoras.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosImpresoras.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosImpresoras.setIcon(new Imagenes("Windows 8/Printer 42 x 42.png").getIcono());
+        mnuArchivosImpresoras.setIcon(new Imagenes("Printer 42 x 42.png").getIcono());
         mnuArchivosImpresoras.setText("Impresoras");
         mnuArchivosImpresoras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,7 +153,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mnuArchivoCerrarSeccion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivoCerrarSeccion.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivoCerrarSeccion.setIcon(new Imagenes("Windows 8/Salida 42 x 42.png").getIcono());
+        mnuArchivoCerrarSeccion.setIcon(new Imagenes("Salida 42 x 42.png").getIcono());
         mnuArchivoCerrarSeccion.setText("Cerrar Seccion");
         mnuArchivoCerrarSeccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,7 +165,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mnuArchivosSalir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_DOWN_MASK));
         mnuArchivosSalir.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuArchivosSalir.setIcon(new Imagenes("Windows 8/Salida 42 x 42.png").getIcono());
+        mnuArchivosSalir.setIcon(new Imagenes("Salida 42 x 42.png").getIcono());
         mnuArchivosSalir.setText("Salir");
         mnuArchivosSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,13 +176,13 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu1);
 
-        jMenu2.setIcon(new Imagenes("Windows 8/PanelControl 42 x 42.png").getIcono());
+        jMenu2.setIcon(new Imagenes("PanelControl 42 x 42.png").getIcono());
         jMenu2.setText("Control de...");
         jMenu2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         mnuControlCitas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlCitas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlCitas.setIcon(new Imagenes("Windows 8/Calendario 42 x 42.png").getIcono());
+        mnuControlCitas.setIcon(new Imagenes("Calendario 42 x 42.png").getIcono());
         mnuControlCitas.setText("Horarios");
         mnuControlCitas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,7 +193,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mnuControlSeguros.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlSeguros.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlSeguros.setIcon(new Imagenes("Windows 8/TarjetasBancarias 42 x 42.png").getIcono());
+        mnuControlSeguros.setIcon(new Imagenes("TarjetasBancarias 42 x 42.png").getIcono());
         mnuControlSeguros.setText("Seguros");
         mnuControlSeguros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,7 +204,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mnuControlMedicamentos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         mnuControlMedicamentos.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuControlMedicamentos.setIcon(new Imagenes("Windows 8/Pildora 42 x 42.png").getIcono());
+        mnuControlMedicamentos.setIcon(new Imagenes("Pildora 42 x 42.png").getIcono());
         mnuControlMedicamentos.setText("Medicamentos");
         mnuControlMedicamentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,12 +215,12 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu2);
 
-        jMenu5.setIcon(new Imagenes("Windows 8/BoletaCalificaciones 32 x 32.png").getIcono());
+        jMenu5.setIcon(new Imagenes("BoletaCalificaciones 32 x 32.png").getIcono());
         jMenu5.setText("Gestión...");
         jMenu5.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
 
         mnuGestionConsultas.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        mnuGestionConsultas.setIcon(new Imagenes("Windows 8/Calendario 42 x 42.png").getIcono());
+        mnuGestionConsultas.setIcon(new Imagenes("Calendario 42 x 42.png").getIcono());
         mnuGestionConsultas.setText("Consultas");
         mnuGestionConsultas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,6 +240,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
 
         mbMenu.add(jMenu5);
 
+        mnuAyuda.setMnemonic('y');
         mnuAyuda.setText("Ayuda");
         mnuAyuda.setFont(new java.awt.Font("FreeMono", 1, 18)); // NOI18N
 
@@ -321,63 +310,28 @@ public final class VistaPrincipal extends javax.swing.JFrame {
         new VistaImpresoras2(this, true).setVisible(true);
     }//GEN-LAST:event_mnuArchivosImpresorasActionPerformed
 
-    private void mnuArchivosPadresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPadresActionPerformed
-//        final SwingWorker<?, ?> w = new SwingWorker<>() {
-//            @Override
-//            protected Object doInBackground() throws Exception {
-//                VistaPadres padres = VistaPadres.getPadres();
-//                dpnEscritorio.remove(padres);
-//                dpnEscritorio.add(padres);
-        ////                padres.limpiarCampos();
-////                padres.llenarCombos();
-////                padres.llenarTabla(true);
-//                try {
-//                    padres.setMaximum(true);
-//                } catch (PropertyVetoException ex) {
-//                    LOG.log(
-//                            Level.SEVERE,
-//                            "No puede maximizarse la ventana.!",
-//                            ex
-//                    );
-//                }
-//                padres.setVisible(true);
-//                return padres;
-//            }
-//        };
-//        w.execute();
-        VistaPadres padres = VistaPadres.getPadres();
-        dpnEscritorio.remove(padres);
-        dpnEscritorio.add(padres);
-        try {
-            padres.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    "No puede maximizarse la ventana.!",
-                    ex
-            );
-        }
-        padres.setVisible(true);
-    }//GEN-LAST:event_mnuArchivosPadresActionPerformed
-
-    private void mnuArchivosPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPacientesActionPerformed
+    private void mnuArchivosPersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosPersonasActionPerformed
 
         final SwingWorker<?, ?> w = new SwingWorker<>() {
             @Override
             protected Object doInBackground() throws PropertyVetoException {
-                VistaPaciente paciente = VistaPaciente.getPadres();
-                dpnEscritorio.remove(paciente);
-                dpnEscritorio.add(paciente);
-                paciente.llenarCombox();
-                paciente.llenarTabla();
-                paciente.centralizar();
-                paciente.setMaximum(true);
-                paciente.setVisible(true);
-                return paciente;
+                VistaPersonas persona = new VistaPersonas(
+                        Entidades
+                                .builder()
+                                .paciente(true)
+                                .padre(true)
+                                .empleado(true)
+                                .build()
+                );
+                dpnEscritorio.remove(persona);
+                dpnEscritorio.add(persona);
+                persona.setMaximum(true);
+                persona.setVisible(true);
+                return persona;
             }
         };
         w.execute();
-    }//GEN-LAST:event_mnuArchivosPacientesActionPerformed
+    }//GEN-LAST:event_mnuArchivosPersonasActionPerformed
 
     private void mnuArchivosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuArchivosUsuariosActionPerformed
         final SwingWorker<?, ?> w = new SwingWorker<>() {
@@ -527,8 +481,7 @@ public final class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar mbMenu;
     private javax.swing.JMenuItem mnuArchivoCerrarSeccion;
     private javax.swing.JMenuItem mnuArchivosImpresoras;
-    private javax.swing.JMenuItem mnuArchivosPacientes;
-    private javax.swing.JMenuItem mnuArchivosPadres;
+    private javax.swing.JMenuItem mnuArchivosPersonas;
     private javax.swing.JMenuItem mnuArchivosSalir;
     private javax.swing.JMenuItem mnuArchivosUsuarios;
     private javax.swing.JMenu mnuAyuda;

@@ -19,15 +19,13 @@ import sur.softsurena.utilidades.Resultado;
  */
 @Getter
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = {"controlConsulta", "init"}
 )
 public class M_ConsultaNGTest {
 
-    public static Integer idConsulta, idPersona, idControlConsulta;
+    public static int idConsulta, idPersona, idControlConsulta;
 
-    @Test(
-            alwaysRun = true
-    )
+    @Test
     public static void testSqlSelect() {
         assertEquals(
                 M_Consulta.sqlSelect(
@@ -129,29 +127,15 @@ public class M_ConsultaNGTest {
     }
     
     @Test(
-            dependsOnGroups = "persona"
-    )
-    public static void testPersona() {
-        
-    }
-
-    @Test(
-            dependsOnMethods = "testPersona",
-            dependsOnGroups = "controlConsulta"
-    )
-    public static void testControlConsulta() {
-        
-    }
-    
-    @Test(
-            dependsOnMethods = {"testPersona", "testControlConsulta"}
+            dependsOnMethods = {"testSelect"}
     )
     public static void testInsert() {
         M_PacienteNGTest.testInsert();
-        idPersona = M_PacienteNGTest.generarPaciente().getId();
+        idPersona = M_PacienteNGTest.idPersona;
         
         M_Control_ConsultaNGTest.testInsert();
         idControlConsulta = M_Control_ConsultaNGTest.idControlConsulta;
+        //M_Control_ConsultaNGTest.idControlConsulta = null;
         
         Resultado result = M_Consulta.insert(
                 Consulta
@@ -194,9 +178,7 @@ public class M_ConsultaNGTest {
                         Consulta
                                 .builder()
                                 .id(idConsulta)
-                                .idPaciente(
-                                        idPersona
-                                )
+                                .idPaciente(idPersona)
                                 .idControlConsulta(
                                         idControlConsulta
                                 )
@@ -216,7 +198,7 @@ public class M_ConsultaNGTest {
     }
 
     @Test(
-            dependsOnMethods = {"testInsert", "testUpdate"}
+            dependsOnMethods = {"testUpdate"}
     )
     public static void testDelete() {
         assertEquals(
@@ -229,10 +211,13 @@ public class M_ConsultaNGTest {
                         .build(),
                 ERROR_AL_ELIMINAR_LA_CONSULTA_DEL_SISTEMA
         );
+        
         M_PacienteNGTest.idPersona = idPersona;
         M_PacienteNGTest.testDelete();
+        
         M_Control_ConsultaNGTest.idControlConsulta = idControlConsulta;
         M_Control_ConsultaNGTest.testDelete();
+        
         M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }

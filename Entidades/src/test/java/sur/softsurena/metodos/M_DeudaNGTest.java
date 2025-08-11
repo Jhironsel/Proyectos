@@ -6,7 +6,10 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Deuda;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -18,7 +21,7 @@ import sur.softsurena.utilidades.Resultado;
 )
 public class M_DeudaNGTest {
 
-    public static Integer idDeuda, idPersona;
+    public static int idDeuda, idPersona;
 
     @Test(
             enabled = true,
@@ -114,6 +117,21 @@ public class M_DeudaNGTest {
                           """
     )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MDeuda")
+                .snombre("MDeuda")
+                .apellidos("MDeuda")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 
@@ -196,7 +214,7 @@ public class M_DeudaNGTest {
                         .estado(Boolean.TRUE)
                         .build()
         );
-        
+
         M_PersonaNGTest.idPersona = idPersona;
         M_PersonaNGTest.testDelete();
     }

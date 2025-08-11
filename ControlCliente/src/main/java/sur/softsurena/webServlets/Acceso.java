@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.ContactoEmail;
@@ -25,6 +25,7 @@ import static sur.softsurena.utilidades.Utilidades.stringToDate;
 public class Acceso extends HttpServlet {
 
     private static List<Cliente> clientesList;
+    private static final long serialVersionUID = 1L;
 
     /**
      *

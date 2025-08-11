@@ -1,7 +1,9 @@
 package sur.softsurena.vista;
 
 
-public class VistaAbonos extends javax.swing.JInternalFrame {    
+public final class VistaAbonos extends javax.swing.JInternalFrame {    
+
+    private static final long serialVersionUID = 1L;
     
     public VistaAbonos() {
         initComponents();

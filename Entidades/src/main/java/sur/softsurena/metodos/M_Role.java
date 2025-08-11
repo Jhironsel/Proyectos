@@ -30,7 +30,7 @@ public class M_Role {
             String userName, 
             boolean disponible
     ) {
-        String sql = "";
+        String sql;
         if(disponible){
             sql = """
                   SELECT TRIM(r.RDB$ROLE_NAME) ROL, COALESCE(r.RDB$DESCRIPTION, '') DESCRIPCION, FALSE AS ADMINISTRACION
@@ -39,7 +39,7 @@ public class M_Role {
                   SELECT TRIM(r.RDB$RELATION_NAME)
                   FROM RDB$USER_PRIVILEGES r
                   WHERE r.RDB$PRIVILEGE = 'M' AND r.RDB$GRANTOR IS NOT NULL AND TRIM(r.RDB$USER) STARTING WITH UPPER(TRIM(?))
-                  ) AND r.RDB$ROLE_NAME NOT IN('RRR_*', 'RDB$ADMIN');
+                  ) AND r.RDB$ROLE_NAME NOT IN('RRR_SOFTSURENA', 'RDB$ADMIN');
                   """;
         }else{
             sql = """
@@ -48,7 +48,8 @@ public class M_Role {
                   INNER JOIN RDB$ROLES rr ON TRIM(r.RDB$RELATION_NAME) STARTING WITH TRIM(rr.RDB$ROLE_NAME)
                   WHERE r.RDB$PRIVILEGE = 'M' AND
                         UPPER(TRIM(r.RDB$USER)) STARTING WITH UPPER(TRIM(?)) AND
-                        TRIM(r.RDB$GRANTOR) IS NOT NULL;
+                        TRIM(r.RDB$GRANTOR) IS NOT NULL AND 
+                        TRIM(r.RDB$RELATION_NAME) NOT STARTING WITH 'RRR_';
                   """;
         }
 

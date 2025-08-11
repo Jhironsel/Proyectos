@@ -203,7 +203,7 @@
             <Property name="text" type="java.lang.String" value="Nombres o Apellidos"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+        <Component class="javax.swing.JCheckBox" name="jcbEstado">
           <Properties>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Activos"/>

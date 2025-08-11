@@ -4,7 +4,7 @@ import java.awt.Frame;
 import java.util.Date;
 import java.util.Objects;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Utilidades;

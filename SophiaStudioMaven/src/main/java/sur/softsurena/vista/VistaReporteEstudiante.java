@@ -1,7 +1,7 @@
 package sur.softsurena.vista;
 
 
-public class VistaReporteEstudiante extends javax.swing.JInternalFrame {
+public final class VistaReporteEstudiante extends javax.swing.JInternalFrame {
     
     
     public VistaReporteEstudiante() {

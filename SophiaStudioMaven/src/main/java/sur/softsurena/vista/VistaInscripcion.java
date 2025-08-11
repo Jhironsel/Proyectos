@@ -8,7 +8,9 @@ import javax.swing.JOptionPane;
 import sur.softsurena.entidades.Estudiante;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaInscripcion extends javax.swing.JInternalFrame {
+public final class VistaInscripcion extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
     
     
     public VistaInscripcion() {

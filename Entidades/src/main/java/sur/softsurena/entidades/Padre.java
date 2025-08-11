@@ -2,7 +2,6 @@ package sur.softsurena.entidades;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.metodos.M_Persona;
 
 @Getter

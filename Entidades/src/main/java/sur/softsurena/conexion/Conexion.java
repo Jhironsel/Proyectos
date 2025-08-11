@@ -148,22 +148,19 @@ public class Conexion {
         //Comprobación de los dias restante de la licencia.
         int dia = periodoMaquina();
         if (dia < 1) {
-            JOptionPane.showMessageDialog(
-                    jframe,
-                    "Licencia expirada...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
 
             int resp = JOptionPane.showConfirmDialog(
                     jframe,
-                    "Desea registrar el producto?",
+                    """
+                    <html><h1>Licencia expirada...!!!</h1></html>
+                    Desea registrar el producto?
+                    """,
                     "",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
             );
 
-            if (resp == JOptionPane.OK_OPTION) {
+            if (resp == JOptionPane.YES_OPTION) {
                 VistaRegistros miRegistros = new VistaRegistros(null, true);
                 miRegistros.setVisible(true);
 
@@ -181,7 +178,7 @@ public class Conexion {
         if (dia > 1 && dia < 10) {
             JOptionPane.showMessageDialog(
                     jframe,
-                    "Tiempo de version de prueba se acaba en " + dia + " dias.",
+                    "Tiempo de version de prueba se acaba en %d dias.".formatted(dia),
                     "",
                     JOptionPane.WARNING_MESSAGE
             );

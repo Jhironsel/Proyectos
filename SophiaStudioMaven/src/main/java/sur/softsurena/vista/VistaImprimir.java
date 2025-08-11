@@ -1,5 +1,7 @@
 package sur.softsurena.vista;
-public class VistaImprimir extends javax.swing.JDialog {
+public final class VistaImprimir extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     public VistaImprimir(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cajero;
 import sur.softsurena.entidades.Usuario;

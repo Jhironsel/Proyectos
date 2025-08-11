@@ -5,11 +5,14 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_NO_PUEDE_SER_BORRADO;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE__AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.ERROR_AL_INSERTAR__CLIENTE;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -57,6 +60,21 @@ public class M_ClienteNGTest {
             groups = "cliente.insert"
     )
     public static void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MCliente")
+                .snombre("MCliente")
+                .apellidos("MCliente")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 

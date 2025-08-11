@@ -7,14 +7,17 @@ import org.firebirdsql.event.FBEventManager;
 import org.firebirdsql.gds.ng.WireCrypt;
 import sur.softsurena.conexion.VistaParametros;
 import sur.softsurena.entidades.Almacen;
-import sur.softsurena.vista.VistaPersonas;
 import static sur.softsurena.utilidades.Utilidades.LOG;
+import sur.softsurena.vista.VistaPersonas;
 import sur.softsurena.vista.VistaUsuarios;
 
 public final class FirebirdEventos extends FBEventManager {
 
+    private String user;
+
     public FirebirdEventos(String user, String password) {
         super();
+        this.user = user;
 
         VistaParametros parametros = new VistaParametros();
 
@@ -25,18 +28,15 @@ public final class FirebirdEventos extends FBEventManager {
         setPortNumber(Integer.parseInt(parametros.cargarParamentos().getPuerto()));
         setCharSet("UTF8");
         setWireCryptAsEnum(WireCrypt.ENABLED);
-
-        if (!isConnected()) {
-            try {
-                connect();
-            } catch (SQLException ex) {
-                LOG.log(
-                        Level.SEVERE,
-                        ex.getMessage(),
-                        ex
-                );
-                throw new ExceptionInInitializerError("No pudo conectarse.");
-            }
+        try {
+            connect();
+        } catch (SQLException ex) {
+            LOG.log(
+                    Level.SEVERE,
+                    ex.getMessage(),
+                    ex
+            );
+            throw new ExceptionInInitializerError("No pudo conectarse.");
         }
         registro();
         user = null;
@@ -89,57 +89,73 @@ public final class FirebirdEventos extends FBEventManager {
     public void registro() {
         try {
             //Evento para productos.********************************************
-            addEventListener("EVENT_PRODUCTO", (DatabaseEvent event) -> {
-                logg(event);
-                VistaProductos.llenarTablaProductos("");
-            });
+            addEventListener("EVENT_PRODUCTO ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaProductos.llenarTablaProductos("");
+                    }
+            );
 
             //Evento para personas clientes.************************************
-            addEventListener("EVENT_PERSONA", (DatabaseEvent event) -> {
-                logg(event);
-                VistaPersonas.llenarTablaPersonas();
-            });
+            addEventListener("EVENT_PERSONA ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaPersonas.llenarTablaPersonas();
+                    }
+            );
 
             //Eventos de usuario.***********************************************
-            addEventListener("EVENT_USUARIO", (DatabaseEvent event) -> {
-                logg(event);
-                VistaUsuarios.llenarTablaUsuarios();
-            });
+            addEventListener("EVENT_USUARIO ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaUsuarios.llenarTablaUsuarios();
+                    }
+            );
 
             //Evento de Direccion de cliente.***********************************
-            addEventListener("EVENT_DIRECCION", (DatabaseEvent event) -> {
-                logg(event);
-                VistaPersonas.llenarTablaDirreciones(null);
-            });
+            addEventListener("EVENT_DIRECCION ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaPersonas.llenarTablaDirreciones(null);
+                    }
+            );
 
             //Evento de Telefono de cliente.************************************
-            addEventListener("EVENT_TELEFONO", (DatabaseEvent event) -> {
-                logg(event);
-                VistaPersonas.llenarTablaTelefonos(null);
-            });
+            addEventListener("EVENT_TELEFONO ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaPersonas.llenarTablaTelefonos(null);
+                    }
+            );
 
             //Evento de Correo de cliente.**************************************
-            addEventListener("EVENT_CORREO", (DatabaseEvent event) -> {
-                logg(event);
-                VistaPersonas.llenarTablaCorreos(null);
-            });
+            addEventListener("EVENT_CORREO ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaPersonas.llenarTablaCorreos(null);
+                    }
+            );
 
             //Evento de VistaDeudas de clientes.*************************************
-            addEventListener("EVENT_DEUDA", (DatabaseEvent event) -> {
-                logg(event);
-                VistaDeudas.llenarTabla();
-            });
+            addEventListener("EVENT_DEUDA ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaDeudas.llenarTabla();
+                    }
+            );
 
             //Evento de VistaAlmacenes del sistema.**********************************
-            addEventListener("EVENT_ALMACEN", (DatabaseEvent event) -> {
-                logg(event);
-                VistaAlmacenes.llenarTabla(
-                        Almacen
-                                .builder()
-                                .nombre("")
-                                .build()
-                );
-            });
+            addEventListener("EVENT_ALMACEN ".concat(user).toUpperCase(),
+                    (DatabaseEvent event) -> {
+                        logg(event);
+                        VistaAlmacenes.llenarTabla(
+                                Almacen
+                                        .builder()
+                                        .nombre("")
+                                        .build()
+                        );
+                    }
+            );
         } catch (SQLException ex) {
             LOG.log(
                     Level.SEVERE,

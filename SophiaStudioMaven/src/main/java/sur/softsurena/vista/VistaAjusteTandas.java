@@ -71,7 +71,7 @@ public class VistaAjusteTandas extends javax.swing.JInternalFrame {
                     "Jueves", "Viernes", "Sabado", "Domingo"
                 }
         ) {
-            Class[] types = new Class[]{
+            Class<?>[] types = new Class<?>[]{
                 java.lang.Object.class,
                 java.lang.Object.class,
                 java.lang.Object.class,
@@ -90,7 +90,7 @@ public class VistaAjusteTandas extends javax.swing.JInternalFrame {
             };
 
             @Override
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 

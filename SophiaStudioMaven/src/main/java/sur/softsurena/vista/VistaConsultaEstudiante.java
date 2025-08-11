@@ -12,7 +12,9 @@ import net.sf.jasperreports.swing.JRViewer;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaConsultaEstudiante extends javax.swing.JInternalFrame {
+public final class VistaConsultaEstudiante extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
     
     private int largo;
     private int ancho;

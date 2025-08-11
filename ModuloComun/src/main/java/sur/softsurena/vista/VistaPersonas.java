@@ -17,11 +17,10 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.table.DefaultTableModel;
 import rojerusan.RSTableMetro1;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.ContactoDireccion;
 import sur.softsurena.entidades.ContactoEmail;
 import sur.softsurena.entidades.ContactoTel;
-import sur.softsurena.entidades.ContactoDireccion;
 import sur.softsurena.entidades.DistritoMunicipal;
 import sur.softsurena.entidades.Empleado;
 import sur.softsurena.entidades.Entidades;
@@ -32,15 +31,16 @@ import sur.softsurena.entidades.Municipio;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.entidades.Paginas;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Privilegio;
 import sur.softsurena.entidades.Proveedor;
 import sur.softsurena.entidades.Provincia;
 import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoPersona;
 import sur.softsurena.metodos.M_Cliente;
+import sur.softsurena.metodos.M_ContactoDireccion;
 import sur.softsurena.metodos.M_ContactoEmail;
 import sur.softsurena.metodos.M_ContactoTel;
-import sur.softsurena.metodos.M_ContactoDireccion;
 import sur.softsurena.metodos.M_DistritoMunicipal;
 import sur.softsurena.metodos.M_Empleado;
 import sur.softsurena.metodos.M_EstadoCivil;
@@ -104,14 +104,12 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
     }
 
     private void mensajeResultado(Resultado resultado) {
-        if (!resultado.getEstado()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    resultado.getMensaje(),
-                    "",
-                    resultado.getIcono()
-            );
-        }
+        JOptionPane.showMessageDialog(
+                this,
+                resultado.getMensaje(),
+                "",
+                resultado.getIcono()
+        );
     }
 
     public VistaPersonas(Entidades entidades) {
@@ -291,8 +289,8 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         btnCancelarRegistro = new RSMaterialComponent.RSButtonMaterialIconOne();
         jMenuBar1 = new javax.swing.JMenuBar();
         javax.swing.JMenu jMenu1 = new javax.swing.JMenu();
-        jmiActualizar = new javax.swing.JMenuItem();
         javax.swing.JMenu jMenu2 = new javax.swing.JMenu();
+        jmiActualizar = new javax.swing.JMenuItem();
         javax.swing.JMenu jMenu3 = new javax.swing.JMenu();
         jcbMostrarGenerico = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu jMenu4 = new javax.swing.JMenu();
@@ -698,9 +696,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         jPanel2.add(jPanel9);
 
         jPanel13.setName("jPanel13"); // NOI18N
-        java.awt.FlowLayout flowLayout2 = new java.awt.FlowLayout(java.awt.FlowLayout.LEFT);
-        flowLayout2.setAlignOnBaseline(true);
-        jPanel13.setLayout(flowLayout2);
+        jPanel13.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jcbCliente.setText("Cliente");
         jcbCliente.setMaximumSize(new java.awt.Dimension(100, 20));
@@ -1485,7 +1481,12 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
 
         jMenu1.setText("Archivos");
         jMenu1.setName("jMenu1"); // NOI18N
+        jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Editar");
+        jMenu2.setName("jMenu2"); // NOI18N
+
+        jmiActualizar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         jmiActualizar.setText("Actualizar");
         jmiActualizar.setName("jmiActualizar"); // NOI18N
         jmiActualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -1493,12 +1494,8 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                 jmiActualizarActionPerformed(evt);
             }
         });
-        jMenu1.add(jmiActualizar);
+        jMenu2.add(jmiActualizar);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Editar");
-        jMenu2.setName("jMenu2"); // NOI18N
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Acciones");
@@ -1792,31 +1789,29 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         //Insertar o eliminar las entidades de la persona.
         registroEntidades(resultadoIUPersona.getId());
 
-        if (guardarCedula) {
-            var general = Generales
-                    .builder()
-                    .idPersona(resultadoIUPersona.getId())
-                    .cedula(txtCedula.getValue().toString())
-                    .estado_civil(
-                            ((EstadoCivil) jcbEstadoCivil.getSelectedItem())
-                                    .getAbreviatura()
-                    )
-                    .idTipoSangre(0)
-                    .build();
+        if (!guardarCedula) {
+            if (!txtCedula.getValue().toString().equals("000-0000000-0")
+                    && !Utilidades.validarCampo(txtCedula)) {
+                var general = Generales
+                        .builder()
+                        .idPersona(resultadoIUPersona.getId())
+                        .cedula(txtCedula.getValue().toString())
+                        .estado_civil(
+                                ((EstadoCivil) jcbEstadoCivil.getSelectedItem())
+                                        .getAbreviatura()
+                        )
+                        .idTipoSangre(0)
+                        .build();
 
-            //Insertamos o actualizamos las generales en el sistema.
-            Resultado resultado;
-            if (v_nuevo) {
-                resultado = M_Generales.insert(general);
-            } else {
-                resultado = M_Generales.update(general);
-            }
+                //Insertamos o actualizamos las generales en el sistema.
+                Resultado resultado = M_Generales.insert(general);
 
-            if (!resultado.getEstado()) {
-                mensajeResultado(
-                        resultado
-                );
-                return;
+                if (!resultado.getEstado()) {
+                    mensajeResultado(
+                            resultado
+                    );
+                    return;
+                }
             }
         }
 
@@ -1949,7 +1944,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             } else {
                 agregarDireccion(porDefecto);
             }
-            llenarTablaDirreciones(idPersona);
         }
 
         LimpiarComboBoxProMuniDistr();
@@ -2095,7 +2089,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             } else {
                 agregarCorreo(por_defecto);
             }
-            llenarTablaCorreos(idPersona);
         }
 
         txtCorreo.setText("");
@@ -2130,7 +2123,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                         .build()
         );
 
-        if (listaCedula.getFirst().getId() == 0) {
+        if (listaCedula.getFirst().getIdPersona() == 0) {
             JOptionPane.showInternalMessageDialog(
                     this,
                     "Cedula valida, puede continuar.",
@@ -2139,6 +2132,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             );
             txtPNombre.requestFocus();
         } else {
+
             Persona persona = M_Persona.select(
                     Persona
                             .builder()
@@ -2146,48 +2140,44 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                             .build()
             ).getLast();
 
-            if (v_nuevo) {
-                if (listaCedula.getLast().getIdPersona() <= 0 && !persona.getEstado()) {
-                    int resp = JOptionPane.showInternalConfirmDialog(
-                            this,
-                            """
-                            Esta persona está registrada y de estado inactivo.
-                            Procede a habilitar a la persona?
-                            """,
-                            "",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE
-                    );
+            if (persona.getEstado()) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        """
+                        Esta cedula se encuentra registrada en el sistema.
+                        """,
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            } else {
+                //Preguntamos si desea cargar la informacion de la persona.
+                if (JOptionPane.showInternalConfirmDialog(
+                        this,
+                        """
+                        Esta persona está registrada y de estado inactivo.
+                        Procede a habilitar a la persona?
+                        """,
+                        "",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                ) == JOptionPane.YES_OPTION) {
 
-                    //Preguntamos si desea cargar la informacion de la persona.
-                    if (resp == JOptionPane.YES_OPTION) {
-                        //habilitando a la persona en el sistema.
-                        M_Persona.update(
-                                Persona
-                                        .builder()
-                                        .idPersona(persona.getIdPersona())
-                                        .persona(persona.getPersona())
-                                        .pnombre(persona.getPnombre())
-                                        .snombre(persona.getSnombre())
-                                        .apellidos(persona.getApellidos())
-                                        .sexo(persona.getSexo())
-                                        .fecha_nacimiento(persona.getFecha_nacimiento())
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        );
-                    }
-
-                    btnCancelarRegistroActionPerformed(evt);
-                } else {
-                    JOptionPane.showInternalMessageDialog(
-                            this,
-                            """
-                            Esta cedula se encuentra registrada en el sistema y activa...
-                            """,
-                            "",
-                            JOptionPane.ERROR_MESSAGE
+                    //habilitando a la persona en el sistema.
+                    M_Persona.update(
+                            Persona
+                                    .builder()
+                                    .idPersona(persona.getIdPersona())
+                                    .persona(persona.getPersona())
+                                    .pnombre(persona.getPnombre())
+                                    .snombre(persona.getSnombre())
+                                    .apellidos(persona.getApellidos())
+                                    .sexo(persona.getSexo())
+                                    .fecha_nacimiento(persona.getFecha_nacimiento())
+                                    .estado(Boolean.TRUE)
+                                    .build()
                     );
                 }
+                btnCancelarRegistroActionPerformed(evt);
             }
         }
     }//GEN-LAST:event_btnCedulaValidadActionPerformed
@@ -2541,16 +2531,8 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
             if (evt.isAltDown()) {
                 if (evt.isShiftDown()) {
                     if (evt.isAltGraphDown()) {
-                        int cantidad = tblPersonas.getRowCount();
-                        if (cantidad != 0) {
-                            int randon = (int) (Math.random() * cantidad);
-
-                            if (randon == 0) {
-                                randon = 1;
-                            }
-
-                            tblPersonas.setRowSelectionInterval(randon, randon);
-                        }
+                        int randon = (int) (Math.random() * tblPersonas.getRowCount());
+                        tblPersonas.setRowSelectionInterval(randon, randon);
                     }
                 }
             }
@@ -3152,7 +3134,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         tblPersonas.setModel(dtmPersonas);
     }
 
-    public static synchronized JTable llenarTablaCorreos(Integer idPersona) {
+    public static JTable llenarTablaCorreos(Integer idPersona) {
         if (Objects.isNull(idPersona)) {
             idPersona = VistaPersonas.idPersona;
         }
@@ -3232,7 +3214,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
         return registro;
     }
 
-    public static synchronized void llenarTablaDirreciones(Integer idPersona) {
+    public static void llenarTablaDirreciones(Integer idPersona) {
 
         if (Objects.isNull(idPersona)) {
             idPersona = VistaPersonas.idPersona;
@@ -3281,7 +3263,6 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
     }
 
     private boolean validarCampoCedula() {
-        //Validar que la cedula este bien digitada.
         if (Utilidades.validarCampo(txtCedula)) {
             if (JOptionPane.showInternalConfirmDialog(
                     this,
@@ -3453,46 +3434,46 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
     }
 
     private void registroEntidades(Integer id) {
-        var _cliente = Cliente.builder().id(id).build();
+        var cliente = Cliente.builder().id(id).build();
         if (jcbCliente.isSelected()) {
-            M_Cliente.insert(_cliente);
+            M_Cliente.insert(cliente);
         } else {
-            M_Cliente.delete(_cliente);
+            M_Cliente.delete(cliente);
         }
 
-        var _empleado = Empleado.builder().id(id).build();
+        var empleado = Empleado.builder().id(id).build();
         if (jcbEmpleado.isSelected()) {
-            M_Empleado.insert(_empleado);
+            M_Empleado.insert(empleado);
         } else {
-            M_Empleado.delete(_empleado);
+            M_Empleado.delete(empleado);
         }
 
-        var _estudiante = Estudiante.builder().id(id).build();
+        var estudiante = Estudiante.builder().id(id).build();
         if (jcbEstudiante.isSelected()) {
-            M_Estudiante.insert(_estudiante);
+            M_Estudiante.insert(estudiante);
         } else {
-            M_Estudiante.delete(_estudiante);
+            M_Estudiante.delete(estudiante);
         }
 
-        var _paciente = Paciente.builder().id(id).build();
+        var paciente = Paciente.builder().id(id).build();
         if (jcbPaciente.isSelected()) {
-            M_Paciente.insert(_paciente);
+            M_Paciente.insert(paciente);
         } else {
-            M_Paciente.delete(_paciente);
+            M_Paciente.delete(paciente);
         }
 
-        var _padre = Padre.builder().id(id).build();
+        var padre = Padre.builder().id(id).build();
         if (jcbPadre.isSelected()) {
-            M_Padre.insert(_padre);
+            M_Padre.insert(padre);
         } else {
-            M_Padre.delete(_padre);
+            M_Padre.delete(padre);
         }
 
-        var _proveedor = Proveedor.builder().id(id).build();
+        var proveedor = Proveedor.builder().id(id).build();
         if (jcbProveedor.isSelected()) {
-            M_Proveedor.insert(_proveedor);
+            M_Proveedor.insert(proveedor);
         } else {
-            M_Proveedor.delete(_proveedor);
+            M_Proveedor.delete(proveedor);
         }
     }
 
@@ -3858,6 +3839,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbClienteActionPerformed(null);
 
         jcbEmpleado.setSelected(
                 !M_Empleado.select(
@@ -3867,6 +3849,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbEmpleadoActionPerformed(null);
 
         jcbEstudiante.setSelected(
                 !M_Estudiante.select(
@@ -3876,6 +3859,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbEstudianteActionPerformed(null);
 
         jcbPaciente.setSelected(
                 !M_Paciente.select(
@@ -3885,6 +3869,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbPacienteActionPerformed(null);
 
         jcbPadre.setSelected(
                 !M_Padre.select(
@@ -3894,6 +3879,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbPadreActionPerformed(null);
 
         jcbProveedor.setSelected(
                 !M_Proveedor.select(
@@ -3903,6 +3889,7 @@ public final class VistaPersonas extends javax.swing.JInternalFrame {
                                 .build()
                 ).isEmpty()
         );
+        jcbProveedorActionPerformed(null);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonMaterialIconOne btnAgregarCorreo;

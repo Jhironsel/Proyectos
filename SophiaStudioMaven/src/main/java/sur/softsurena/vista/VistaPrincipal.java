@@ -1,7 +1,5 @@
 package sur.softsurena.vista;
 
-import sur.softsurena.clases.Sonido;
-import sur.softsurena.clases.SophiaStudio;
 import java.beans.PropertyVetoException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +14,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import sur.softsurena.clases.Sonido;
+import sur.softsurena.clases.SophiaStudio;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.utilidades.DesktopConFondo;
 import sur.softsurena.utilidades.Opcion;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaPrincipal extends javax.swing.JFrame implements Runnable {
+public final class VistaPrincipal extends javax.swing.JFrame implements Runnable {
 
     private int id;
     private int[] idPerfiles = new int[getId()];

@@ -12,7 +12,9 @@ import sur.softsurena.metodos.M_Generales;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 //import sur.softsurena.entidades.Estudiantes;
 
-public class VistaRegistroEstudiante extends javax.swing.JInternalFrame {
+public final class VistaRegistroEstudiante extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer edad;
     private String edad2;

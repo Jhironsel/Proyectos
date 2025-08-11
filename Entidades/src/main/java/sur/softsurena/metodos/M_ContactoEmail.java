@@ -136,7 +136,7 @@ public class M_ContactoEmail {
                 = "SELECT ID, EMAIL, FECHA, ESTADO, POR_DEFECTO "
                 + "FROM V_CONTACTOS_EMAIL "
                 + (Objects.isNull(id_persona) ? "" : "WHERE ID_PERSONA = ? ")
-                + "ORDER BY 2, 1 "
+                + "ORDER BY ID "
                 + (Objects.isNull(id_persona) ? " ROWS (20) " : "");
 
         List<ContactoEmail> contactosEmailList = new ArrayList<>();
@@ -174,7 +174,9 @@ public class M_ContactoEmail {
         return contactosEmailList;
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_DE_V_CONTACTO
-            = "Error al consultar la vista de V_CONTACTOS_EMAIL de las personas.";
+            = """
+              Error al consultar la vista de V_CONTACTOS_EMAIL ID =[%d].
+              """;
 
     /**
      * Metodo que genera correo aleatorio para cuestiones de pruebas.

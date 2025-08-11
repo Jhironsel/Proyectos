@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.Cleanup;
 import lombok.NonNull;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;

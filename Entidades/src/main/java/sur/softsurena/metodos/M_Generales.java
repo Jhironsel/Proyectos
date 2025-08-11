@@ -49,7 +49,6 @@ public class M_Generales {
                     lista.add(
                             Generales
                                     .builder()
-                                    .id(rs.getInt("ID"))
                                     .idPersona(rs.getInt("ID_PERSONA"))
                                     .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
                                     .cedula(rs.getString("CEDULA"))
@@ -61,7 +60,6 @@ public class M_Generales {
                 lista.add(
                         Generales
                                 .builder()
-                                .id(0)
                                 .idPersona(0)
                                 .idTipoSangre(0)
                                 .cedula("000-0000000-0")
@@ -81,20 +79,18 @@ public class M_Generales {
     }
 
     protected static String sqlSelect(Generales generales) {
-        boolean id = Objects.isNull(generales.getId());
         boolean idPersona = Objects.isNull(generales.getIdPersona());
         boolean cedula = Objects.isNull(generales.getCedula());
-        boolean where = id && idPersona && cedula;
+        boolean where = idPersona && cedula;
         boolean frow = Objects.isNull(generales.getPagina());
 
         return """
-               SELECT ID, ID_PERSONA, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+               SELECT ID_PERSONA, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
                FROM V_GENERALES
-               %s%s%s%s%s
+               %s%s%s%s
                """.formatted(
                 where ? "" : "WHERE ",
                 idPersona ? "" : "ID_PERSONA = %d ".formatted(generales.getIdPersona()),
-                id ? "" : "ID = %d ".formatted(generales.getId()),
                 cedula ? "" : "CEDULA STARTING WITH '%s' ".formatted(generales.getCedula()),
                 frow ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
@@ -116,7 +112,7 @@ public class M_Generales {
             @NonNull Generales general
     ) {
         final String sql = """
-                           EXECUTE PROCEDURE SP_I_GENERAL(?,?,?,?)
+                           EXECUTE PROCEDURE SP_UI_GENERAL(?,?,?,?)
                            """;
 
         try (CallableStatement cs = getCnn().prepareCall(
@@ -155,64 +151,9 @@ public class M_Generales {
                 .build();
     }
     public static final String ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA
-            = "Error al insertar generales en el sistema.";
+            = "Error al insertar/Actualizar generales en el sistema.";
     public static final String GENERAL_INSERTADA_CORRECTAMENTE_EN_EL_SIS
-            = "General insertada correctamente en el sistema.";
-
-    //--------------------------------------------------------------------------
-    /**
-     * Metodo que permite la actulizaciones de las generales de una persona en
-     * el sistema.
-     *
-     * @param general
-     *
-     * @return
-     */
-    public static Resultado update(
-            @NonNull Generales general
-    ) {
-        final String sql = """
-                           EXECUTE PROCEDURE SP_U_GENERAL(?,?,?,?);
-                           """;
-
-        try (PreparedStatement ps = getCnn().prepareStatement(
-                sql,
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
-            ps.setInt(1, general.getIdPersona());
-            ps.setString(2, general.getCedula());
-            ps.setInt(3, general.getIdTipoSangre());
-            ps.setString(4, general.getEstado_civil().toString());
-
-            ps.execute();
-
-            return Resultado
-                    .builder()
-                    .mensaje(GENERALES_ACTUALIZADA_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build();
-
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S,
-                    ex
-            );
-        }
-        return Resultado
-                .builder()
-                .mensaje(ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S)
-                .icono(JOptionPane.ERROR_MESSAGE)
-                .estado(Boolean.FALSE)
-                .build();
-    }
-    public static final String ERROR_AL_ACTUALIZAR_LAS__GENERALES_EN_EL_S
-            = "Error al actualizar las Generales en el sistema.";
-    public static final String GENERALES_ACTUALIZADA_CORRECTAMENTE
-            = "Generales actualizada correctamente.";
+            = "General insertada/actualizada correctamente en el sistema.";
 
 //------------------------------------------------------------------------------
     public static Resultado delete(Integer id) {

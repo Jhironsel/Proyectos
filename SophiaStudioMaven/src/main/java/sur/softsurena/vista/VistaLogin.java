@@ -5,7 +5,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class VistaLogin extends javax.swing.JDialog {
+public final class VistaLogin extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     ImageIcon iconobtn = new ImageIcon("src/Images/Aceptar 32 x 32.png");
     ImageIcon iconobtn2 = new ImageIcon("src/Images/Cancelar 32 x 32.png");
 

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Role.asignarRolUsuario;

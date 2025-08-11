@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paginas;
@@ -56,12 +56,11 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
         cbEntidades = new RSMaterialComponent.RSComboBoxMaterial<>();
         rbCedula = new javax.swing.JRadioButton();
         rbNombresApellidos = new javax.swing.JRadioButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jcbEstado = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda de Clientes");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -87,20 +86,26 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
         btnCancelar.setColorPrimario(new java.awt.Color(153, 0, 0));
         btnCancelar.setColorPrimarioHover(new java.awt.Color(255, 51, 51));
         btnCancelar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.CANCEL);
-        btnCancelar.addActionListener((java.awt.event.ActionEvent evt) -> {
-            btnCancelarActionPerformed(evt);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
         });
 
         btnAceptar.setText("Aceptar");
         btnAceptar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.DONE);
-        btnAceptar.addActionListener((java.awt.event.ActionEvent evt) -> {
-            btnAceptarActionPerformed(evt);
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
         });
 
         txtCriterio.setToolTipText("");
         txtCriterio.setPlaceholder("Ingrese criterio de busqueda ya sea Identificador de cliente, nombres o apellidos.");
-        txtCriterio.addActionListener((java.awt.event.ActionEvent evt) -> {
-            txtCriterioActionPerformed(evt);
+        txtCriterio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCriterioActionPerformed(evt);
+            }
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 255)), "Filtrado por:"));
@@ -123,10 +128,10 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
         rbNombresApellidos.setText("Nombres o Apellidos");
         jPanel1.add(rbNombresApellidos);
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Activos");
-        jCheckBox1.setEnabled(false);
-        jPanel1.add(jCheckBox1);
+        jcbEstado.setSelected(true);
+        jcbEstado.setText("Activos");
+        jcbEstado.setEnabled(false);
+        jPanel1.add(jcbEstado);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,7 +187,6 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
      * @param evt
      */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -202,7 +206,6 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
         }
 
         persona = (Persona) tblTabla.getValueAt(tblTabla.getSelectedRow(), 0);
-        System.out.println(persona);
         dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -237,9 +240,9 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
     private newscomponents.RSButtonGradientIcon_new btnCancelar;
     private javax.swing.ButtonGroup buttonGroup1;
     private RSMaterialComponent.RSComboBoxMaterial<Object> cbEntidades;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox jcbEstado;
     private javax.swing.JRadioButton rbCedula;
     private javax.swing.JRadioButton rbNombresApellidos;
     private javax.swing.JTable tblTabla;
@@ -248,6 +251,29 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
 
     private void mostrarTodos() {
         if (cbEntidades.getSelectedItem().toString().equalsIgnoreCase("Todos")) {
+            if (rbCedula.isSelected()) {
+                M_Generales.select(
+                        Generales
+                                .builder()
+                                .cedula(txtCriterio.getText().strip())
+                                .build()
+                ).stream().forEach(
+                        general -> {
+                            M_Persona.select(
+                                    Persona
+                                            .builder()
+                                            .idPersona(general.getIdPersona())
+                                            .build()
+                            ).stream().forEach(
+                                    obj -> {
+                                        registro[0] = obj;
+                                        miTabla.addRow(registro);
+                                    }
+                            );
+                        }
+                );
+            }
+
             if (rbNombresApellidos.isSelected()) {
                 M_Persona.select(
                         Persona
@@ -264,32 +290,9 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 )
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
-                            registro[0] = $persona;
+                        obj -> {
+                            registro[0] = obj;
                             miTabla.addRow(registro);
-                        }
-                );
-            }
-
-            if (rbCedula.isSelected()) {
-                M_Generales.select(
-                        Generales
-                                .builder()
-                                .cedula(txtCriterio.getText().strip())
-                                .build()
-                ).stream().forEach(
-                        general -> {
-                            M_Persona.select(
-                                    Persona
-                                            .builder()
-                                            .idPersona(general.getIdPersona())
-                                            .build()
-                            ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
-                                        miTabla.addRow(registro);
-                                    }
-                            );
                         }
                 );
             }
@@ -326,8 +329,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                                 .idPersona(general.getIdPersona())
                                                 .build()
                                 ).stream().forEach(
-                                        _persona -> {
-                                            registro[0] = _persona;
+                                        obj -> {
+                                            registro[0] = obj;
                                             miTabla.addRow(registro);
                                         }
                                 );
@@ -345,14 +348,14 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 .apellidos(txtCriterio.getText().strip())
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
+                        obj -> {
                             if (!M_Cliente.select(
                                     Cliente
                                             .builder()
-                                            .id($persona.getIdPersona())
+                                            .id(obj.getIdPersona())
                                             .build()
                             ).isEmpty()) {
-                                registro[0] = $persona;
+                                registro[0] = obj;
                                 miTabla.addRow(registro);
                             }
 
@@ -374,8 +377,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 .apellidos(txtCriterio.getText().strip())
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
-                            registro[0] = $persona;
+                        obj -> {
+                            registro[0] = obj;
                             miTabla.addRow(registro);
                         }
                 );
@@ -395,8 +398,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                             .idPersona(general.getIdPersona())
                                             .build()
                             ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
+                                    obj -> {
+                                        registro[0] = obj;
                                         miTabla.addRow(registro);
                                     }
                             );
@@ -418,8 +421,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 .apellidos(txtCriterio.getText().strip())
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
-                            registro[0] = $persona;
+                        obj -> {
+                            registro[0] = obj;
                             miTabla.addRow(registro);
                         }
                 );
@@ -439,8 +442,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                             .idPersona(general.getIdPersona())
                                             .build()
                             ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
+                                    obj -> {
+                                        registro[0] = obj;
                                         miTabla.addRow(registro);
                                     }
                             );
@@ -462,8 +465,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 .apellidos(txtCriterio.getText().strip())
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
-                            registro[0] = $persona;
+                        obj -> {
+                            registro[0] = obj;
                             miTabla.addRow(registro);
                         }
                 );
@@ -483,8 +486,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                             .idPersona(general.getIdPersona())
                                             .build()
                             ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
+                                    obj -> {
+                                        registro[0] = obj;
                                         miTabla.addRow(registro);
                                     }
                             );
@@ -527,8 +530,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                             .idPersona(general.getIdPersona())
                                             .build()
                             ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
+                                    obj -> {
+                                        registro[0] = obj;
                                         miTabla.addRow(registro);
                                     }
                             );
@@ -549,8 +552,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                 .apellidos(txtCriterio.getText().strip())
                                 .build()
                 ).stream().forEach(
-                        $persona -> {
-                            registro[0] = $persona;
+                        obj -> {
+                            registro[0] = obj;
                             miTabla.addRow(registro);
                         }
                 );
@@ -569,8 +572,8 @@ public final class VistaBusquedaPersona extends javax.swing.JDialog {
                                             .idPersona(general.getIdPersona())
                                             .build()
                             ).stream().forEach(
-                                    _persona -> {
-                                        registro[0] = _persona;
+                                    obj -> {
+                                        registro[0] = obj;
                                         miTabla.addRow(registro);
                                     }
                             );

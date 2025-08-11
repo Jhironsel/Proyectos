@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>
-            <version>7.0.8.Final</version>
+            <version>7.0.9.Final</version>
         </dependency>
         
         <!--Dependecia para crear los POJO o JavaBeans de manera mas facil.-->
@@ -350,9 +350,6 @@
                 <version>3.14.0</version>
                 <configuration>
                     <debug>true</debug>
-                    <compilerArgs>
-                        <arg>-Xlint</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

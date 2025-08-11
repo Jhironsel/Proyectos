@@ -14,11 +14,11 @@ import static sur.softsurena.metodos.M_Producto.PRODUCTO__MODIFICADO__CORRECTAME
 import sur.softsurena.utilidades.Resultado;
 
 @Test(
-        dependsOnGroups = "init"
+        dependsOnGroups = {"gCategoria", "init"}
 )
 public class M_ProductoNGTest {
 
-    public static Integer idProducto, idCategoria;
+    public static int idProducto, idCategoria;
     
     @Test
     public void testSqlSelect() {
@@ -381,7 +381,9 @@ public class M_ProductoNGTest {
         );
     }
 
-    @Test
+    @Test(
+            dependsOnMethods = "testSelect"
+    )
     public static void testInsert() {
         M_CategoriaNGTest.testInsert();
         idCategoria = M_CategoriaNGTest.idCategoria;
@@ -424,7 +426,7 @@ public class M_ProductoNGTest {
     }
     
     @Test(
-            dependsOnMethods = {"testInsert", "testUpdate"}
+            dependsOnMethods = "testUpdate"
     )
     public static void testDeleteProducto(){
         M_PrecioNGTest.idProducto = idProducto;
@@ -474,7 +476,7 @@ public class M_ProductoNGTest {
         );
     }
 
-    public synchronized static Producto producto(Boolean estado) {
+    public static Producto producto(Boolean estado) {
         return Producto
                 .builder()
                 .id(idProducto)

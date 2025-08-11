@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.EntradaProducto;
 import sur.softsurena.entidades.Proveedor;

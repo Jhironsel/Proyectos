@@ -7,7 +7,7 @@ import xy.ui.testing.util.TestingUtils;
 
 @Test(
         //dependsOnGroups = "init2",
-        threadPoolSize = 2
+        threadPoolSize = 0b100
 )
 public class VistaClientesNGTest {
 

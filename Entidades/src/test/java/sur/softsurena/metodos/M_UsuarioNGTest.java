@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Usuario.ERROR_AL_AGREGAR__USUARIO;

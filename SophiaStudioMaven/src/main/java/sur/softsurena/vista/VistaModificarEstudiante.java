@@ -5,14 +5,14 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
-import sur.softsurena.entidades.Estudiante;
-import sur.softsurena.metodos.M_Estudiante;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaModificarEstudiante extends javax.swing.JInternalFrame {
+public final class VistaModificarEstudiante extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
     private Integer tanda = 0, edad = 0;
     private String edad2 = "";

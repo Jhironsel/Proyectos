@@ -5,8 +5,6 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Antecedente;
-import sur.softsurena.entidades.Consulta;
 import sur.softsurena.entidades.ControlConsulta;
 import static sur.softsurena.metodos.M_ControlConsulta.CONSULTA_MODIFICADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ControlConsulta.CONTROL_CONSULTA_AGREGADO_CORRECTAMENTE;
@@ -29,10 +27,7 @@ public class M_Control_ConsultaNGTest {
 
     public static Integer idControlConsulta;
 
-    @Test(
-            enabled = true,
-            alwaysRun = true
-    )
+    @Test
     public void testSqlSelect() {
 
         assertEquals(
@@ -43,7 +38,7 @@ public class M_Control_ConsultaNGTest {
                 ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
-                      ESTADO
+                     ESTADO
                 FROM V_CONTROL_CONSULTA
                 """.trim().strip()
         );
@@ -57,7 +52,7 @@ public class M_Control_ConsultaNGTest {
                 ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
-                      ESTADO
+                     ESTADO
                 FROM V_CONTROL_CONSULTA
                 WHERE ID = -1
                 """.trim().strip()
@@ -72,7 +67,7 @@ public class M_Control_ConsultaNGTest {
                 ),
                 """
                 SELECT ID, USER_NAME, CANTIDAD_PACIENTE, DIA, INICIAL, FINAL,
-                      ESTADO
+                     ESTADO
                 FROM V_CONTROL_CONSULTA
                 WHERE USER_NAME STARTING WITH 'Jhironsel'
                 """.trim().strip()
@@ -94,7 +89,9 @@ public class M_Control_ConsultaNGTest {
         );
     }
 
-    @Test
+    @Test(
+            dependsOnMethods = "testSelect"
+    )
     public static void testInsert() {
         var listaControlConsulta = M_ControlConsulta.select(
                 ControlConsulta
@@ -124,51 +121,32 @@ public class M_Control_ConsultaNGTest {
             );
 
             idControlConsulta = result.getId();
+            System.out.println("idControlConsulta Insertado = " +idControlConsulta );
         } else {
-            M_Consulta.select(
-                    Consulta
-                            .builder()
-                            .build()
-            ).stream().forEach(
-                    consulta -> {
-
-                        M_Antecedente.select(
-                                Antecedente
-                                        .builder()
-                                        .build()
-                        ).stream().forEach(
-                                antecedente -> {
-                                    M_Antecedente.delete(
-                                            Antecedente
-                                                    .builder()
-                                                    .id(antecedente.getId())
-                                                    .build()
-                                    );
-                                }
-                        );
-
-                        M_Consulta.delete(
-                                consulta.getId()
-                        );
-                    }
-            );
-            listaControlConsulta.stream().forEach(
-                    controlConsulta -> {
-                        M_ControlConsulta.delete(
-                                controlConsulta.getId()
-                        );
-                    }
-            );
-            testInsert();
+            idControlConsulta = listaControlConsulta.
+                    stream().
+                    findFirst().
+                    orElseThrow().
+                    getId();
+            System.out.println("idControlConsulta Recuperado = " +idControlConsulta );
         }
-
+        
+        System.out.println(
+                "Consulta despues de insertar: %d".formatted(
+                        controlConsulta().getId()
+                )
+        );
     }
 
     @Test(
             dependsOnMethods = "testInsert"
     )
     public void testUpdate() {
-
+        System.out.println(
+                "Maldito idControlConsulta: %d".formatted(
+                        controlConsulta().getId()
+                )
+        );
         Resultado result = M_ControlConsulta.update(
                 controlConsulta()
         );
@@ -186,7 +164,7 @@ public class M_Control_ConsultaNGTest {
     }
 
     @Test(
-            dependsOnMethods = {"testInsert", "testUpdate"}
+            dependsOnMethods = {"testUpdate"}
     )
     public static void testDelete() {
         Resultado result = M_ControlConsulta.delete(

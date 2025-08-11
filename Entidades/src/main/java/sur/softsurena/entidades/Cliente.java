@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.abstracta.Persona;
 import sur.softsurena.metodos.M_Persona;
 
 @Getter

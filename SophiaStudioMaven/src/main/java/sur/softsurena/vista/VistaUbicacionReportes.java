@@ -1,8 +1,5 @@
 package sur.softsurena.vista;
-/**
- *
- * @author jhiro
- */
+
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +9,9 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
-public class VistaUbicacionReportes extends javax.swing.JInternalFrame {
+public final class VistaUbicacionReportes extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
 
 
     public VistaUbicacionReportes() {

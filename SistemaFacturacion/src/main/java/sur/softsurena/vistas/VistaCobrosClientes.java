@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Paginas;
 import sur.softsurena.hilos.hiloImpresionFactura;

@@ -1,10 +1,12 @@
 package sur.softsurena.vista;
 
-import sur.softsurena.clases.PadreMadres;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import sur.softsurena.clases.PadreMadres;
 
-public class VistaModificarPadre extends javax.swing.JInternalFrame {
+public final class VistaModificarPadre extends javax.swing.JInternalFrame {
+
+    private static final long serialVersionUID = 1L;
     private Integer idPadre;
     
     public void setIdPadre(Integer idPadre) {

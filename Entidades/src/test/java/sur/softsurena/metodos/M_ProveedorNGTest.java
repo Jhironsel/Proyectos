@@ -4,9 +4,12 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Proveedor;
 import static sur.softsurena.metodos.M_Proveedor.CONSULTA_MODIFICADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
+import static sur.softsurena.utilidades.Utilidades.stringToDate;
 
 /**
  *
@@ -93,6 +96,21 @@ public class M_ProveedorNGTest {
             groups = "proveedor.insert"
     )
     public void testInsert() {
+        M_PersonaNGTest.persona = Persona
+                .builder()
+                .persona('J')
+                .pnombre("MProveedor")
+                .snombre("MProveedor")
+                .apellidos("MProveedor")
+                .sexo('M')
+                .fecha_nacimiento(
+                        javaDateToSqlDate(
+                                stringToDate("23.06.2017", "dd.MM.yyyy")
+                        )
+                )
+                .estado(Boolean.TRUE)
+                .build();
+
         M_PersonaNGTest.testInsert();
         idPersona = M_PersonaNGTest.idPersona;
 
@@ -125,13 +143,13 @@ public class M_ProveedorNGTest {
                                                 .generarTelMovil()
                                 )
                                 .build()
-                ), 
+                ),
                 Resultado
-                    .builder()
-                    .mensaje(CONSULTA_MODIFICADO_CORRECTAMENTE)
-                    .icono(JOptionPane.INFORMATION_MESSAGE)
-                    .estado(Boolean.TRUE)
-                    .build()
+                        .builder()
+                        .mensaje(CONSULTA_MODIFICADO_CORRECTAMENTE)
+                        .icono(JOptionPane.INFORMATION_MESSAGE)
+                        .estado(Boolean.TRUE)
+                        .build()
         );
     }
 

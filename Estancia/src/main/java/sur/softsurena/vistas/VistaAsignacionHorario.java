@@ -1,11 +1,11 @@
 package sur.softsurena.vistas;
 
-import static sur.softsurena.clases.Datos.getDatos;
 import java.sql.ResultSet;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import static sur.softsurena.clases.Datos.getDatos;
 import sur.softsurena.entidades.Horario;
 import sur.softsurena.metodos.M_Horario;
 
@@ -21,7 +21,7 @@ public final class VistaAsignacionHorario extends javax.swing.JInternalFrame {
         return asigHorario;
     }
     private DefaultTableModel dtmEmpleado;
-    private TableRowSorter<TableModel> modeloOrdenado;
+    private transient TableRowSorter<TableModel> modeloOrdenado;
 
     public VistaAsignacionHorario() {
         initComponents();
@@ -31,7 +31,7 @@ public final class VistaAsignacionHorario extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jcbHorarios = new javax.swing.JComboBox();
+        jcbHorarios = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtEmpleadoDisponible = new JTable(){
@@ -79,7 +79,6 @@ public final class VistaAsignacionHorario extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Horarios del sistema"));
 
-        jcbHorarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione un horario" }));
         jcbHorarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbHorariosActionPerformed(evt);
@@ -321,7 +320,7 @@ public final class VistaAsignacionHorario extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JComboBox jcbHorarios;
+    private javax.swing.JComboBox<Horario> jcbHorarios;
     private javax.swing.JTable jtEmpleadoDisponible;
     private javax.swing.JTable jtEmpleadoIncluido;
     // End of variables declaration//GEN-END:variables

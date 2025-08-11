@@ -2,11 +2,11 @@ package sur.softsurena.vista;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.utilidades.Opcion;
 
-public class VistaModificarUsuarios extends javax.swing.JInternalFrame {
+public final class VistaModificarUsuarios extends javax.swing.JInternalFrame {
     
     
     private int id;

@@ -7,7 +7,7 @@ import newscomponents.RSButtonGradientIcon_new;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 import rojeru_san.RSMTextFull;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 
 /**
  * TODO 24/11/2024 Crear prueba para esta clase. 

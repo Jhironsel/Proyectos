@@ -2,7 +2,7 @@ package sur.softsurena.vistas;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.abstracta.Persona;
+import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Antecedente;
 import sur.softsurena.entidades.Asegurado;
