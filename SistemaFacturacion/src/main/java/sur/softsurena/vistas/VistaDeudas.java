@@ -1,9 +1,11 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaPersona;
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
@@ -13,10 +15,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paginas;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.M_Deuda;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Persona;
@@ -35,11 +39,12 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     private static final long serialVersionUID = 1L;
 
     private static boolean nuevo;
-    private static Deuda deuda;
+    private static Deuda deudaField;
 
     public VistaDeudas() {
         initComponents();
         jtpPrincipal.remove(jpRegistroDeuda);
+        jtpPrincipal.remove(jpPagosDeuda);
 
         txtMonto.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -58,6 +63,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        txtCedula1 = new javax.swing.JFormattedTextField();
         jtpPrincipal = new javax.swing.JTabbedPane();
         jpListaDeuda = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -67,6 +73,8 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                 return false; //Las celdas no son editables.
             }
         };
+        jsPaginas = new javax.swing.JSpinner();
+        jsRegistros = new javax.swing.JSpinner();
         jpRegistroDeuda = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         txtCedula = new javax.swing.JFormattedTextField();
@@ -78,6 +86,29 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         txtConcepto = new javax.swing.JTextArea();
         jlFoto = new javax.swing.JLabel();
         btnGetCliente = new javax.swing.JButton();
+        jpPagosDeuda = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblDeudasPagas = new JTable(){
+            @Override
+            public boolean isCellEditable(int rowIndex, int colIndex) { 
+                return false; //Las celdas no son editables. 
+            }
+        };
+        jLabel2 = new javax.swing.JLabel();
+        txtCedula2 = new javax.swing.JFormattedTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtPNombre1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtApellidos1 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtMonto1 = new javax.swing.JFormattedTextField();
+        txtMontoPagado = new javax.swing.JFormattedTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtIdDeuda = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtSNombre1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         btnNuevo = new RSMaterialComponent.RSButtonMaterialIconOne();
@@ -93,12 +124,20 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         cbAbonada = new javax.swing.JCheckBoxMenuItem();
         cbPagada = new javax.swing.JCheckBoxMenuItem();
         cbNula = new javax.swing.JCheckBoxMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
         jmOpcionesPagos = new javax.swing.JMenu();
-        jmiVerPagos = new javax.swing.JMenuItem();
-        jmiAbonar = new javax.swing.JMenuItem();
+        jmiPagos = new javax.swing.JMenuItem();
+
+        txtCedula1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(37, 45, 223), 2, true), "Cedula", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("FreeSans", 0, 12))); // NOI18N
+        try {
+            txtCedula1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtCedula1.setText("012-0089344-8");
+        txtCedula1.setToolTipText("Ingrese su criterio de busqueda.\\n[Cedula, nombres o apellidos]");
+        txtCedula1.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtCedula1.setFocusTraversalPolicyProvider(true);
+        txtCedula1.setFont(new java.awt.Font("FreeMono", 1, 14)); // NOI18N
 
         setClosable(true);
         setIconifiable(true);
@@ -127,6 +166,8 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             }
         });
 
+        jtpPrincipal.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)));
+
         jpListaDeuda.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle de Deuda", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 14))); // NOI18N
 
         tblPersonas.setModel(new javax.swing.table.DefaultTableModel(
@@ -148,20 +189,36 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblPersonas);
 
+        jsPaginas.setToolTipText("");
+        jsPaginas.setBorder(null);
+
+        jsRegistros.setToolTipText("Cantidad de registros");
+        jsRegistros.setBorder(null);
+
         javax.swing.GroupLayout jpListaDeudaLayout = new javax.swing.GroupLayout(jpListaDeuda);
         jpListaDeuda.setLayout(jpListaDeudaLayout);
         jpListaDeudaLayout.setHorizontalGroup(
             jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpListaDeudaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+                .addGroup(jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 752, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpListaDeudaLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jsRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jsPaginas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jpListaDeudaLayout.setVerticalGroup(
             jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpListaDeudaLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpListaDeudaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                .addGroup(jpListaDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jsPaginas)
+                    .addComponent(jsRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -336,14 +393,228 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         jpRegistroDeudaLayout.setVerticalGroup(
             jpRegistroDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRegistroDeudaLayout.createSequentialGroup()
-                .addGap(0, 64, Short.MAX_VALUE)
+                .addGap(0, 47, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 64, Short.MAX_VALUE))
+                .addGap(0, 47, Short.MAX_VALUE))
         );
 
         jtpPrincipal.addTab("Registro de Deuda", jpRegistroDeuda);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Botones de Acción"));
+        jLabel1.setFont(new java.awt.Font("Ubuntu Light", 1, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Pagos del Deudor");
+        jLabel1.setToolTipText("");
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detalle de Pagos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 1, 14))); // NOI18N
+
+        tblDeudasPagas.setFont(new java.awt.Font("Ubuntu Light", 0, 14)); // NOI18N
+        tblDeudasPagas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Codigo Pago", "Fecha", "Hora", "Monto Pago"
+            }
+        ));
+        tblDeudasPagas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(tblDeudasPagas);
+
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText("Cedula:");
+        jLabel2.setFocusable(false);
+        jLabel2.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel2.setRequestFocusEnabled(false);
+        jLabel2.setVerifyInputWhenFocusTarget(false);
+
+        txtCedula2.setEditable(false);
+        try {
+            txtCedula2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtCedula2.setToolTipText("Cedula del Cliente");
+        txtCedula2.setDoubleBuffered(true);
+        txtCedula2.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtCedula2.setFocusTraversalPolicyProvider(true);
+        txtCedula2.setFont(new java.awt.Font("Ubuntu Mono", 1, 16)); // NOI18N
+        txtCedula2.setPreferredSize(new java.awt.Dimension(52, 21));
+
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Deuda#:");
+        jLabel3.setFocusable(false);
+        jLabel3.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel3.setRequestFocusEnabled(false);
+        jLabel3.setVerifyInputWhenFocusTarget(false);
+
+        txtPNombre1.setEditable(false);
+        txtPNombre1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtPNombre1.setDoubleBuffered(true);
+        txtPNombre1.setFocusTraversalPolicyProvider(true);
+        txtPNombre1.setPreferredSize(new java.awt.Dimension(52, 21));
+
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("Apellidos:");
+        jLabel4.setFocusable(false);
+        jLabel4.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel4.setRequestFocusEnabled(false);
+        jLabel4.setVerifyInputWhenFocusTarget(false);
+
+        txtApellidos1.setEditable(false);
+        txtApellidos1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtApellidos1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtApellidos1.setDoubleBuffered(true);
+        txtApellidos1.setFocusTraversalPolicyProvider(true);
+        txtApellidos1.setPreferredSize(new java.awt.Dimension(52, 21));
+
+        jLabel11.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel11.setText("Monto:");
+        jLabel11.setFocusable(false);
+        jLabel11.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel11.setRequestFocusEnabled(false);
+        jLabel11.setVerifyInputWhenFocusTarget(false);
+
+        txtMonto1.setEditable(false);
+        txtMonto1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        txtMonto1.setToolTipText("Indique el limite de credito del Cliente");
+        txtMonto1.setDoubleBuffered(true);
+        txtMonto1.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtMonto1.setFocusTraversalPolicyProvider(true);
+        txtMonto1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtMonto1.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtMonto1.setValue(0);
+
+        txtMontoPagado.setEditable(false);
+        txtMontoPagado.setForeground(new java.awt.Color(0, 0, 255));
+        txtMontoPagado.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("¤#,##0.00"))));
+        txtMontoPagado.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtMontoPagado.setToolTipText("Indique el limite de credito del Cliente");
+        txtMontoPagado.setDoubleBuffered(true);
+        txtMontoPagado.setFocusLostBehavior(javax.swing.JFormattedTextField.COMMIT);
+        txtMontoPagado.setFocusTraversalPolicyProvider(true);
+        txtMontoPagado.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        txtMontoPagado.setPreferredSize(new java.awt.Dimension(52, 21));
+        txtMontoPagado.setValue(0);
+
+        jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel12.setText("Monto Pagado:");
+        jLabel12.setFocusable(false);
+        jLabel12.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel12.setRequestFocusEnabled(false);
+        jLabel12.setVerifyInputWhenFocusTarget(false);
+
+        jLabel5.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Nombres:");
+        jLabel5.setFocusable(false);
+        jLabel5.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel5.setRequestFocusEnabled(false);
+        jLabel5.setVerifyInputWhenFocusTarget(false);
+
+        txtIdDeuda.setEditable(false);
+        txtIdDeuda.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtIdDeuda.setDoubleBuffered(true);
+        txtIdDeuda.setFocusTraversalPolicyProvider(true);
+        txtIdDeuda.setPreferredSize(new java.awt.Dimension(52, 21));
+
+        jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel6.setText("Nombres:");
+        jLabel6.setFocusable(false);
+        jLabel6.setPreferredSize(new java.awt.Dimension(52, 21));
+        jLabel6.setRequestFocusEnabled(false);
+        jLabel6.setVerifyInputWhenFocusTarget(false);
+
+        txtSNombre1.setEditable(false);
+        txtSNombre1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        txtSNombre1.setDoubleBuffered(true);
+        txtSNombre1.setFocusTraversalPolicyProvider(true);
+        txtSNombre1.setPreferredSize(new java.awt.Dimension(52, 21));
+
+        javax.swing.GroupLayout jpPagosDeudaLayout = new javax.swing.GroupLayout(jpPagosDeuda);
+        jpPagosDeuda.setLayout(jpPagosDeudaLayout);
+        jpPagosDeudaLayout.setHorizontalGroup(
+            jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
+                    .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                        .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtApellidos1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtPNombre1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPagosDeudaLayout.createSequentialGroup()
+                                .addComponent(txtCedula2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMonto1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtIdDeuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(txtSNombre1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtMontoPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jpPagosDeudaLayout.setVerticalGroup(
+            jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpPagosDeudaLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jLabel1)
+                .addGap(0, 0, 0)
+                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdDeuda, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCedula2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtApellidos1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMonto1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpPagosDeudaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMontoPagado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jtpPrincipal.addTab("Pagos del Deudor", jpPagosDeuda);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Botones de Acción"));
         jPanel2.setMaximumSize(new java.awt.Dimension(787, 81));
         jPanel2.setMinimumSize(new java.awt.Dimension(0, 0));
 
@@ -425,6 +696,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         jmFiltros.setForeground(new java.awt.Color(255, 255, 255));
         jmFiltros.setText("Filtros");
 
+        cbTodos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         buttonGroup1.add(cbTodos);
         cbTodos.setSelected(true);
         cbTodos.setText("Todos");
@@ -435,6 +707,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         });
         jmFiltros.add(cbTodos);
 
+        cbInicial.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         buttonGroup1.add(cbInicial);
         cbInicial.setText("Iniciadas");
         cbInicial.addActionListener(new java.awt.event.ActionListener() {
@@ -444,6 +717,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         });
         jmFiltros.add(cbInicial);
 
+        cbAbonada.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         buttonGroup1.add(cbAbonada);
         cbAbonada.setText("Abonadas");
         cbAbonada.addActionListener(new java.awt.event.ActionListener() {
@@ -453,6 +727,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         });
         jmFiltros.add(cbAbonada);
 
+        cbPagada.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         buttonGroup1.add(cbPagada);
         cbPagada.setText("Pagadas");
         cbPagada.addActionListener(new java.awt.event.ActionListener() {
@@ -462,6 +737,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         });
         jmFiltros.add(cbPagada);
 
+        cbNula.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         buttonGroup1.add(cbNula);
         cbNula.setText("Nulas");
         cbNula.addActionListener(new java.awt.event.ActionListener() {
@@ -473,32 +749,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
 
         rSMenuBar1.add(jmFiltros);
 
-        jMenu3.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu3.setText("Estados");
-        jMenu3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu3ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem2.setText("Reiniciar");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem2);
-
-        jMenuItem4.setText("Anular");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem4);
-
-        rSMenuBar1.add(jMenu3);
-
         jmOpcionesPagos.setForeground(new java.awt.Color(255, 255, 255));
         jmOpcionesPagos.setText("Opciones de pagos");
         jmOpcionesPagos.addActionListener(new java.awt.event.ActionListener() {
@@ -507,21 +757,14 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             }
         });
 
-        jmiVerPagos.setText("Ver pagos");
-        jmiVerPagos.addActionListener(new java.awt.event.ActionListener() {
+        jmiPagos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jmiPagos.setText("Pagos");
+        jmiPagos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiVerPagosActionPerformed(evt);
+                jmiPagosActionPerformed(evt);
             }
         });
-        jmOpcionesPagos.add(jmiVerPagos);
-
-        jmiAbonar.setText("Abonar");
-        jmiAbonar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiAbonarActionPerformed(evt);
-            }
-        });
-        jmOpcionesPagos.add(jmiAbonar);
+        jmOpcionesPagos.add(jmiPagos);
 
         rSMenuBar1.add(jmOpcionesPagos);
 
@@ -532,27 +775,26 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, 0)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jtpPrincipal)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jtpPrincipal))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jtpPrincipal)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-        System.out.println("1");
         if (!txtCedula.isEditValid()) {
             JOptionPane.showInternalMessageDialog(
                     this,
@@ -563,7 +805,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
             limpiarCampos();
             return;
         }
-        System.out.println("2");
+        
         Generales general = M_Generales.select(
                 Generales
                         .builder()
@@ -571,9 +813,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                         .build()
         ).getFirst();
 
-        System.out.println("3");
         if (general.getIdPersona().equals(0)) {
-            System.out.println("4");
             var resp = JOptionPane.showInternalConfirmDialog(
                     this,
                     """
@@ -589,12 +829,11 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                 return;
             }
 
-            VistaPrincipal.mnuMantenimientoClientes.doClick();
+            VistaPrincipalFacturacion.mnuMantenimientoClientes.doClick();
         } else {
-            System.out.println("5");
             mostrarRegistro(
                     M_Persona.select(
-                            Persona
+                            Cliente
                                     .builder()
                                     .idPersona(general.getIdPersona())
                                     .build()
@@ -658,43 +897,21 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGetClienteActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        llenarTabla();
+        llenarTabla(Deuda.builder().build());
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         nuevo = true;
+
+        jtpPrincipal.addTab("Registro de Deuda", jpRegistroDeuda);
+        jtpPrincipal.setSelectedComponent(jpRegistroDeuda);
+
         botones(true);
-        txtCedula.requestFocus();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         //Debe existir registros en la tabla de clientes.
-        if (tblPersonas.getRowCount() == 0) {
-            return;
-        }
-
-        //Debe de tener un cliente seleccionado.
-        if (tblPersonas.getSelectedRow() == -1) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe seleccionar cliente...!!!",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            return;
-        }
-
-        //Verificamos que la deuda tenga el estado de iniciada. 
-        if (!tblPersonas.getValueAt(
-                tblPersonas.getSelectedRow(),
-                6
-        ).toString().equals(estadoDeuda('i'))) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "No se permite modificar deudas cuando el estado es diferente de iniciada.",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
+        if (validarTablaPersonas()) {
             return;
         }
 
@@ -716,97 +933,99 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
      * @param evt
      */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCedula.getText().trim().isBlank()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe digitar una cedula del Cliente...",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            limpiarCampos();
-            return;
-        }
+        if (jtpPrincipal.getSelectedComponent().equals(jpRegistroDeuda)) {
+            if (txtCedula.getText().trim().isBlank()) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Debe digitar una cedula del Cliente...",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                limpiarCampos();
+                return;
+            }
 
-        try {
-            txtMonto.commitEdit();
-        } catch (ParseException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ex.getMessage(),
-                    ex
-            );
-        }
+            try {
+                txtMonto.commitEdit();
+            } catch (ParseException ex) {
+                LOG.log(
+                        Level.SEVERE,
+                        ex.getMessage(),
+                        ex
+                );
+                return;
+            }
 
-        if (txtMontoField().compareTo(BigDecimal.ZERO) <= 0) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Ingrese una cantidad mayor que cero",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtMonto.setValue(0);
-            txtMonto.requestFocus();
-            return;
-        }
+            if (txtMontoField().compareTo(BigDecimal.ZERO) <= 0) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Ingrese una cantidad mayor que cero",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                txtMonto.setValue(0);
+                txtMonto.requestFocus();
+                return;
+            }
 
-        if (txtConcepto.getText().isEmpty()) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Debe ingresar un concepto detallado de la deuda",
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtConcepto.requestFocus();
-            return;
-        }
+            if (txtConcepto.getText().isEmpty()) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Debe ingresar un concepto detallado de la deuda",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                txtConcepto.requestFocus();
+                return;
+            }
 
-        if (txtConcepto.getText().length() < 20 || txtConcepto.getText().length() > 199) {
-            JOptionPane.showInternalMessageDialog(
-                    this,
-                    "Ingrese concepto de un minimo "
-                    + "de 20 caracteres y un Maximo 200, Caracteres actuales de:"
-                    + " " + txtConcepto.getText().length(),
-                    "",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            txtConcepto.requestFocus();
-            return;
-        }
+            if (txtConcepto.getText().length() < 20 || txtConcepto.getText().length() > 199) {
+                JOptionPane.showInternalMessageDialog(
+                        this,
+                        "Ingrese concepto de un minimo "
+                        + "de 20 caracteres y un Maximo 200, Caracteres actuales de:"
+                        + " " + txtConcepto.getText().length(),
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                txtConcepto.requestFocus();
+                return;
+            }
 
-        //Creamos el Objeto Cliente y los agregamos a Datos
-        var _idPersona = ((Generales) txtCedula.getValue()).getIdPersona();
-        Deuda miDeuda = Deuda
-                .builder()
-                .id(nuevo ? null : deuda.getId())
-                .idPersona(_idPersona)
-                .concepto(txtConcepto.getText())
-                .monto(txtMontoField())
-                .build();
+            //Creamos el Objeto Cliente y los agregamos a Datos
+            var _idPersona = ((Generales) txtCedula.getValue()).getIdPersona();
+            Deuda miDeuda = Deuda
+                    .builder()
+                    .id(nuevo ? null : deudaField.getId())
+                    .idPersona(_idPersona)
+                    .concepto(txtConcepto.getText())
+                    .monto(txtMontoField())
+                    .build();
 
 //                new VistaDeudas(idCliente, getIdUsuario(),
 //                txtConcepto.getText(), monto);
-        String accion = "editar";
-        if (nuevo) {
-            accion = "inserta";
-        }
+            String accion = "editar";
+            if (nuevo) {
+                accion = "inserta";
+            }
 
-        Persona persona = M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(_idPersona)
-                        .build()
-        ).getFirst();
+            Persona persona = M_Persona.select(
+                    Cliente
+                            .builder()
+                            .idPersona(_idPersona)
+                            .build()
+            ).getFirst();
 
-        Generales generales = M_Generales.select(
-                Generales
-                        .builder()
-                        .idPersona(_idPersona)
-                        .build()
-        ).getFirst();
+            Generales generales = M_Generales.select(
+                    Generales
+                            .builder()
+                            .idPersona(_idPersona)
+                            .build()
+            ).getFirst();
 
-        int resp = JOptionPane.showInternalConfirmDialog(
-                this,
-                """
+            int resp = JOptionPane.showInternalConfirmDialog(
+                    this,
+                    """
                 <html>
                     <b><big>Se va a %s deuda a: </big></b> <big> %s </big><br/>
                     <b><big>Cedula no.: </big></b> <big> %s </big><br/>
@@ -816,52 +1035,82 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                     <b><big>Desea continuar? </big></b>
                 </html>
                 """.formatted(
-                        accion,
-                        persona.toString(),
-                        generales.toString(),
-                        txtMonto.getText(),
-                        txtConcepto.getText(),
-                        Utilidades.formatDate(new Date(), "dd.MM.yyyy")
-                ),
-                "",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+                            accion,
+                            persona.toString(),
+                            generales.toString(),
+                            txtMonto.getText(),
+                            txtConcepto.getText(),
+                            Utilidades.formatDate(new Date(), "dd.MM.yyyy")
+                    ),
+                    "",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
 
-        if (resp == JOptionPane.NO_OPTION) {
-            return;
+            if (resp == JOptionPane.NO_OPTION) {
+                return;
+            }
+
+            Resultado resultado;
+
+            if (nuevo) {
+                resultado = M_Deuda.insert(miDeuda);
+            } else {
+                resultado = M_Deuda.update(miDeuda);
+            }
+
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    resultado.getMensaje(),
+                    "",
+                    resultado.getIcono()
+            );
+
         }
 
-        Resultado resultado;
+        if (jtpPrincipal.getSelectedComponent().equals(jpPagosDeuda)) {
+            if (tblDeudasPagas.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No existen pagos",
+                        "",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 
-        if (nuevo) {
-            resultado = M_Deuda.insert(miDeuda);
-        } else {
-            resultado = M_Deuda.update(miDeuda);
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("idFactura", 1);
+
+            HiloImpresionFactura miHilo = new HiloImpresionFactura(
+                    true, //Mostrar Reporte
+                    false, //Con Copia
+                    new File("/Reportes/DetalleDeuda.jasper").getAbsolutePath(),
+                    parametros,
+                    VistaPrincipalFacturacion.jPanelImpresion,
+                    VistaPrincipalFacturacion.jprImpresion
+            );
+            miHilo.start();
         }
-
-        JOptionPane.showInternalMessageDialog(
-                this,
-                resultado.getMensaje(),
-                "",
-                resultado.getIcono()
-        );
-
-        llenarTabla();
         btnCancelarActionPerformed(evt);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        nuevo = false;
         botones(false);
+        jtpPrincipal.setSelectedComponent(jpListaDeuda);
+        jtpPrincipal.remove(jpRegistroDeuda);
+        jtpPrincipal.remove(jpPagosDeuda);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        if (tblPersonas.getRowCount() == 0) {
+        if (validarTablaPersonas()) {
             return;
         }
 
-        String idDeuda = tblPersonas.getValueAt(tblPersonas.getSelectedRow(), 0).toString();
+        String idDeuda = tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(),
+                0
+        ).toString();
 
         int rta = JOptionPane.showInternalConfirmDialog(
                 this,
@@ -881,21 +1130,54 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        if (tblPersonas.getRowCount() == 0) {
+        if (validarTablaPersonas()) {
             return;
         }
 
-        String cliente = JOptionPane.showInternalInputDialog(
+        txtCedula1.setValue(null);
+        //Utilidades.showTooltip(txtCedula1);
+        JOptionPane.showInternalMessageDialog(
                 this,
-                "Ingrese la Cedula del Cliente: ",
-                "",
-                JOptionPane.PLAIN_MESSAGE
+                txtCedula1,
+                "Ingresa cedula de la persona.",
+                JOptionPane.QUESTION_MESSAGE
         );
 
-        if (Objects.isNull(cliente)) {
+        if (Utilidades.validarCampo(txtCedula1)) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Error en el campo de la cedula, Vuelva a digitarla de nuevo",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
+        jsPaginas.setValue(1);
+
+        Generales generales = M_Generales.select(
+                Generales
+                        .builder()
+                        .cedula(txtCedula1.getValue().toString())
+                        .build()
+        ).stream().findFirst().orElseThrow();
+
+        if (generales.getIdPersona() == 0) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "No se encontro registros.",
+                    "",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .idPersona(generales.getIdPersona())
+                        .build()
+        );
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
@@ -930,117 +1212,62 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtCedulaKeyPressed
 
     private void cbTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTodosActionPerformed
-        llenarTabla();
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .build()
+        );
     }//GEN-LAST:event_cbTodosActionPerformed
 
     private void cbInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbInicialActionPerformed
-        llenarTabla();
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .estadoDeuda('i')
+                        .build()
+        );
     }//GEN-LAST:event_cbInicialActionPerformed
 
     private void cbAbonadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAbonadaActionPerformed
-        llenarTabla();
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .estadoDeuda('a')
+                        .build()
+        );
     }//GEN-LAST:event_cbAbonadaActionPerformed
 
     private void cbPagadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPagadaActionPerformed
-        llenarTabla();
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .estadoDeuda('p')
+                        .build()
+        );
     }//GEN-LAST:event_cbPagadaActionPerformed
 
     private void cbNulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNulaActionPerformed
-        llenarTabla();
+        llenarTabla(
+                Deuda
+                        .builder()
+                        .estadoDeuda('n')
+                        .build()
+        );
     }//GEN-LAST:event_cbNulaActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
-        if (tblPersonas.getRowCount() < 1) {
+    private void jmiPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPagosActionPerformed
+        if (validarTablaPersonas()) {
             return;
         }
-
-        if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocus();
-            return;
-        }
-
-        VistaAutorizacion miAut = new VistaAutorizacion(null, true);
-        miAut.setLocationRelativeTo(null);
-        miAut.setVisible(true);
-
-        if (!miAut.isAceptado()) {
-            return;
-        }
-
-        int valor = JOptionPane.showInternalConfirmDialog(
-                this,
-                "Se procederá a eliminar los pagos tambien!",
-                "",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE
-        );
-
-        if (valor == JOptionPane.NO_OPTION) {
-            return;
-        }
-
-        //TODO Sacar el Metodo de modificar la deuda y hacer que devuelva un Resultados.
-//        JOptionPane.showInternalMessageDialog(
-//                this,
-//                modificarDeuda(
-//                        Integer.parseInt(tblClientes.getValueAt(cliAct, 0).toString()),
-//                        "i"
-//                ),
-//                "",
-//                JOptionPane.INFORMATION_MESSAGE
-//        );
-        llenarTabla();
-//        mostrarRegistro();
-    }//GEN-LAST:event_jMenu3ActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        if (tblPersonas.getRowCount() < 1) {
-            return;
-        }
-        if (btnCancelar.isEnabled()) {
-            txtCedula.requestFocus();
-            return;
-        }
-
-        VistaAutorizacion miAut = new VistaAutorizacion(null, true);
-        miAut.setLocationRelativeTo(null);
-        miAut.setVisible(true);
-
-        if (!miAut.isAceptado()) {
-            return;
-        }
-
-        //TODO Analizar y Testear este metodo de modificarDeuda()
-        //Hacer que ese metodo Devuelva un resultados.
-//        JOptionPane.showInternalMessageDialog(
-//                this,
-//                modificarDeuda(
-//                        Integer.parseInt(tblClientes.getValueAt(
-//                                tblClientes.getSelectedRow(), 
-//                                0
-//                        ).toString()),
-//                        "n"
-//                ),
-//                "",
-//                JOptionPane.INFORMATION_MESSAGE
-//        );
-        llenarTabla();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jmiVerPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVerPagosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jmiVerPagosActionPerformed
-
-    private void jmiAbonarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAbonarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jmiAbonarActionPerformed
+        botones(true);
+        mostrarDeudas();
+        
+        jtpPrincipal.addTab("Pagos del Deudor", jpPagosDeuda);
+        jtpPrincipal.setSelectedComponent(jpPagosDeuda);
+    }//GEN-LAST:event_jmiPagosActionPerformed
 
     private void jmOpcionesPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmOpcionesPagosActionPerformed
-        if (tblPersonas.getRowCount() == -1) {
+        if (validarTablaPersonas()) {
             return;
         }
 
@@ -1069,14 +1296,6 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jmOpcionesPagosActionPerformed
 
     private void botones(Boolean valor) {
-        if (valor) {
-            jtpPrincipal.addTab("Mantenimiento", jpRegistroDeuda);
-            jtpPrincipal.setSelectedComponent(jpRegistroDeuda);
-        } else {
-            jtpPrincipal.setSelectedComponent(jpListaDeuda);
-            jtpPrincipal.remove(jpRegistroDeuda);
-        }
-
         //Botones Para Deshabilitar:
         btnNuevo.setEnabled(!valor);
         btnModificar.setEnabled(!valor);
@@ -1095,7 +1314,7 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         btnGetCliente.setEnabled(nuevo);
     }
 
-    public static void llenarTabla() {
+    public synchronized static void llenarTabla(Deuda deuda) {
         String titulos[] = {
             "Cod.#", "Nombre completo", "Cedula persona", "Concepto", "Monto",
             "Fecha", "Estado"
@@ -1107,6 +1326,8 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         M_Deuda.select(
                 Deuda
                         .builder()
+                        .idPersona(deuda.getIdPersona())
+                        .estadoDeuda(deuda.getEstadoDeuda())
                         .pagina(
                                 Paginas
                                         .builder()
@@ -1119,12 +1340,12 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
                 deudaR -> {
                     registro[0] = deudaR;
                     registro[1] = M_Persona.select(
-                            Persona
+                            Cliente
                                     .builder()
                                     .idPersona(
                                             deudaR.getIdPersona()
                                     ).build()
-                    ).stream().findFirst().orElseThrow();
+                    ).getFirst();
                     registro[2] = M_Generales.select(
                             Generales
                                     .builder()
@@ -1213,12 +1434,12 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
         );
 
         if (!nuevo) {
-            deuda = ((Deuda) tblPersonas.getValueAt(
+            deudaField = ((Deuda) tblPersonas.getValueAt(
                     tblPersonas.getSelectedRow(),
                     0
             ));
-            txtMonto.setValue(deuda.getMonto());
-            txtConcepto.setText(deuda.getConcepto());
+            txtMonto.setValue(deudaField.getMonto());
+            txtConcepto.setText(deudaField.getConcepto());
             txtCedula.setEditable(false);
         }
         txtMonto.requestFocus();
@@ -1251,29 +1472,118 @@ public final class VistaDeudas extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBoxMenuItem cbNula;
     private javax.swing.JCheckBoxMenuItem cbPagada;
     private javax.swing.JCheckBoxMenuItem cbTodos;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel jlFoto;
     private javax.swing.JMenu jmFiltros;
     private javax.swing.JMenu jmOpcionesPagos;
-    private javax.swing.JMenuItem jmiAbonar;
-    private javax.swing.JMenuItem jmiVerPagos;
+    private javax.swing.JMenuItem jmiPagos;
     private javax.swing.JPanel jpListaDeuda;
+    private javax.swing.JPanel jpPagosDeuda;
     private javax.swing.JPanel jpRegistroDeuda;
+    private javax.swing.JSpinner jsPaginas;
+    private javax.swing.JSpinner jsRegistros;
     private javax.swing.JTabbedPane jtpPrincipal;
     private rojerusan.RSMenuBar rSMenuBar1;
+    private javax.swing.JTable tblDeudasPagas;
     private static javax.swing.JTable tblPersonas;
     private javax.swing.JTextField txtApellidos;
+    private javax.swing.JTextField txtApellidos1;
     private javax.swing.JFormattedTextField txtCedula;
+    private javax.swing.JFormattedTextField txtCedula1;
+    private javax.swing.JFormattedTextField txtCedula2;
     private javax.swing.JTextArea txtConcepto;
+    private javax.swing.JTextField txtIdDeuda;
     private javax.swing.JFormattedTextField txtMonto;
+    private javax.swing.JFormattedTextField txtMonto1;
+    private javax.swing.JFormattedTextField txtMontoPagado;
     private javax.swing.JTextField txtPNombre;
+    private javax.swing.JTextField txtPNombre1;
     private javax.swing.JTextField txtSNombre;
+    private javax.swing.JTextField txtSNombre1;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Realiza la siguiente validaciones: 1) Valida que la tabla contenga
+     * registros en el sistema. 2) Valida que haya un cliente seleccionado. 3)
+     * valida que la deuda tenga estado inicial i.
+     *
+     * @return
+     */
+    private boolean validarTablaPersonas() {
+        if (tblPersonas.getRowCount() == 0) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "No existe registro para la operacion.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return true;
+        }
+
+        if (tblPersonas.getSelectedRow() == -1) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "Debe seleccionar un registro de la tabla...!!!",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return true;
+        }
+
+        //Verificamos que la deuda tenga el estado de iniciada. 
+        if (!tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(),
+                6
+        ).toString().equalsIgnoreCase(estadoDeuda('i'))) {
+            JOptionPane.showInternalMessageDialog(
+                    this,
+                    "No se permite modificar deudas cuando el estado es diferente de iniciada.",
+                    "",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return true;
+        }
+
+        return false;
+    }
+
+    public void mostrarDeudas() {
+        
+        var deuda = (Deuda) tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(), 
+                0
+        );
+        var persona = (Persona) tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(), 
+                1
+        );
+        var cedula = (Generales) tblPersonas.getValueAt(
+                tblPersonas.getSelectedRow(), 
+                2
+        );
+        
+        deuda = M_Deuda.select(deuda).getFirst();
+        persona = M_Persona.select(persona).getFirst();
+        cedula = M_Generales.select(cedula).getFirst();
+        
+        txtCedula1.setValue(cedula);
+        txtIdDeuda.setText(deuda.getId().toString());
+        txtPNombre1.setText(persona.getPnombre());
+        txtSNombre1.setText(persona.getSnombre());
+        txtApellidos1.setText(persona.getApellidos());
+        txtMonto1.setText(deuda.getMonto().toString());
+    }
 }

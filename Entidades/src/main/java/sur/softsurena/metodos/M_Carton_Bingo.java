@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Carton_Bingo;
-import sur.softsurena.interfaces.IEntidad;
+import sur.softsurena.interfaces.IBaseDatos;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -19,9 +19,34 @@ import static sur.softsurena.utilidades.Utilidades.LOG;
  *
  * @author jhironsel
  */
-public class M_Carton_Bingo implements IEntidad<Carton_Bingo>{
+public class M_Carton_Bingo implements IBaseDatos<Carton_Bingo>{
 
     private static int[][] card;
+
+    @Override
+    public List<Carton_Bingo> select(Carton_Bingo entidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Carton_Bingo selectById(Carton_Bingo entidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resultado insert(Carton_Bingo entidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resultado update(Carton_Bingo entidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resultado delete(Carton_Bingo entidad) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     public static synchronized boolean checkBingo() {
         boolean bingo = false;
@@ -132,30 +157,7 @@ public class M_Carton_Bingo implements IEntidad<Carton_Bingo>{
         }
     }
 
-    @Override
-    public List<Carton_Bingo> getListEntidad() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Carton_Bingo getEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Resultado agregarEntidad(Carton_Bingo objecto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Resultado modificarEntidad(Carton_Bingo objecto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Resultado borrarEntidad(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 
     
 }

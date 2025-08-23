@@ -11,8 +11,9 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.Cleanup;
 import lombok.NonNull;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -44,7 +45,7 @@ public class M_Persona {
 
             while (rs.next()) {
                 lista.add(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(rs.getInt("ID"))
                                 .persona(rs.getString("PERSONA").charAt(0))
@@ -54,7 +55,7 @@ public class M_Persona {
                                 .sexo(rs.getString("SEXO").charAt(0))
                                 .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
                                 .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
-                                .fecha_hora_ultima_update(rs.getDate("FECHA_HORA_ULTIMO_UPDATE"))
+                                .fecha_hora_ultima_update(rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE"))
                                 .estado(rs.getBoolean("ESTADO"))
                                 .rol(rs.getString("ROL_USUARIO"))
                                 .build()

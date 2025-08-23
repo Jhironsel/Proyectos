@@ -71,19 +71,20 @@ public class M_Deuda {
     protected static String sqlGetDeudas(Deuda deuda) {
         boolean id = Objects.isNull(deuda.getId());
         boolean idCliente = Objects.isNull(deuda.getIdPersona());
+        boolean estado = Objects.isNull(deuda.getEstadoDeuda());
 
         boolean row = Objects.isNull(deuda.getPagina());
-
-        boolean where = idCliente && id;
+        boolean where = idCliente && id && estado;
 
         return """
                SELECT ID, ID_CLIENTE, CONCEPTO, MONTO, FECHA, HORA, ESTADO
                FROM V_M_DEUDAS
-               %s%s%s%s
+               %s%s%s%s%s
                """.formatted(
                 where ? "" : "WHERE ",
                 idCliente ? "" : "ID_CLIENTE = %d ".formatted(deuda.getIdPersona()),
                 id ? "" : "ID = %d ".formatted(deuda.getId()),
+                estado ? "" : "ESTADO STARTING WITH '%s' ".formatted(deuda.getEstadoDeuda()),
                 row ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
                                         deuda.getPagina().getNPaginaNro(),
@@ -160,7 +161,7 @@ public class M_Deuda {
     public synchronized static Resultado update(
             @NonNull Deuda deuda
     ) {
-        final String sql = "EXECUTE PROCEDURE SP_U_DEUDA(?,?,?)";
+        final String sql = "EXECUTE PROCEDURE SP_U_M_DEUDA(?,?,?)";
 
         try (CallableStatement ps = getCnn().prepareCall(
                 sql,

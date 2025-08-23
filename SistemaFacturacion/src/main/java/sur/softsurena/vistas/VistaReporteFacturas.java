@@ -2,7 +2,7 @@ package sur.softsurena.vistas;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Persona;
@@ -160,9 +160,9 @@ public final class VistaReporteFacturas extends javax.swing.JInternalFrame {
         ).stream().forEach(
                 cliente -> {
                     M_Persona.select(
-                            Persona
+                            Cliente
                                     .builder()
-                                    .idPersona(cliente.getId())
+                                    .idPersona(cliente.getIdPersona())
                                     .estado(true)
                                     .build()
                     ).stream().forEach(
@@ -221,7 +221,7 @@ public final class VistaReporteFacturas extends javax.swing.JInternalFrame {
         }
 
         String filtro = "WHERE factura.idCliente = '"
-                + ((Cliente) cmbCliente.getSelectedItem()).getId() + "'";
+                + ((Cliente) cmbCliente.getSelectedItem()).getIdPersona()+ "'";
 
         //Para Realizar la Consulta por Fecha...
         //Si la fecha es seleccionada.

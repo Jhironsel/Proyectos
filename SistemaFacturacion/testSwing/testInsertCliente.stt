@@ -1,17 +1,17 @@
 <xy.ui.testing.Tester>
   <editingOptions>
     <analyticsEnabled>true</analyticsEnabled>
-    <controlsTheme>gradient</controlsTheme>
+    <controlsTheme>cloudy</controlsTheme>
     <testableModalWindowsForcedToDocumentModality>false</testableModalWindowsForcedToDocumentModality>
     <testableWindowsAlwaysOnTopFeatureDisabled>false</testableWindowsAlwaysOnTopFeatureDisabled>
   </editingOptions>
-  <maximumSecondsToWaitBetwneenActions>1.0</maximumSecondsToWaitBetwneenActions>
-  <minimumSecondsToWaitBetwneenActions>0.7</minimumSecondsToWaitBetwneenActions>
+  <maximumSecondsToWaitBetwneenActions>1.3</maximumSecondsToWaitBetwneenActions>
+  <minimumSecondsToWaitBetwneenActions>0.5</minimumSecondsToWaitBetwneenActions>
   <testActions>
     <xy.ui.testing.action.CallMainMethodAction>
       <arguments/>
       <checkThrownExceptionAfterSeconds>2</checkThrownExceptionAfterSeconds>
-      <className>sur.softsurena.vistas.VistaLogin</className>
+      <className>sur.softsurena.vistas.VistaLoginFacturacion</className>
       <disabled>false</disabled>
     </xy.ui.testing.action.CallMainMethodAction>
     <xy.ui.testing.action.component.SendKeysAction>
@@ -81,7 +81,7 @@
       <button>LEFT_BUTTON</button>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
-        <componentName>btnNuevaPersona</componentName>
+        <componentName>btnNuevaPersona2</componentName>
         <occurrencesToSkip>0</occurrencesToSkip>
         <windowIndex>0</windowIndex>
       </componentFinder>
@@ -466,7 +466,7 @@
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
     <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>sur.softsurena.vista.VistaPersonas$2</componentClassName>
+      <componentClassName>sur.softsurena.vistas.VistaPersonas$2</componentClassName>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>tblDireccion</componentName>
@@ -624,7 +624,7 @@
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
     <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>sur.softsurena.vista.VistaPersonas$3</componentClassName>
+      <componentClassName>sur.softsurena.vistas.VistaPersonas$3</componentClassName>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>tblTelefonos</componentName>
@@ -743,7 +743,7 @@
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
     <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>sur.softsurena.vista.VistaPersonas$4</componentClassName>
+      <componentClassName>sur.softsurena.vistas.VistaPersonas$4</componentClassName>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>tblCorreos</componentName>
@@ -798,7 +798,7 @@
       <poupTrigger>false</poupTrigger>
     </xy.ui.testing.action.component.ClickAction>
     <xy.ui.testing.action.component.property.CheckComponentPropertyAction>
-      <componentClassName>sur.softsurena.vista.VistaPersonas$1</componentClassName>
+      <componentClassName>sur.softsurena.vistas.VistaPersonas$1</componentClassName>
       <componentFinder class="xy.ui.testing.finder.NameBasedComponentFinder">
         <componentClassName class="null"/>
         <componentName>tblPersonas</componentName>

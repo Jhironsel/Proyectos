@@ -3,7 +3,6 @@ package sur.softsurena.metodos;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Usuario;
 
 /**
@@ -25,25 +24,16 @@ public class M_EtiquetaNGTest {
                     Usuario
                             .builder()
                             .userName("SYSDBA")
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .build())
                             .build()
             ).getLast();
 
             M_Usuario.update(
                     Usuario
                             .builder()
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre(usuario.getPersona().getPnombre())
-                                            .snombre(usuario.getPersona().getSnombre())
-                                            .apellidos(usuario.getPersona().getApellidos())
-                                            .estado(usuario.getPersona().getEstado())
-                                            .build()
-                            )
+                            .pnombre(usuario.getPnombre())
+                            .snombre(usuario.getSnombre())
+                            .apellidos(usuario.getApellidos())
+                            .estado(usuario.getEstado())
                             .userName(usuario.getUserName())
                             .administrador(usuario.getAdministrador())
                             .descripcion(usuario.getDescripcion())

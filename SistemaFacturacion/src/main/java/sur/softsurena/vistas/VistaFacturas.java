@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaPersona;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -15,16 +14,15 @@ import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.table.*;
 import lombok.NonNull;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.*;
-import static sur.softsurena.vistas.VistaPrincipal.mnuMovimientosNuevaFactura;
 import sur.softsurena.hilos.VistaPrintFacturaConReporte2;
-import sur.softsurena.hilos.hiloImpresionFactura;
-import sur.softsurena.metodos.Imagenes;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.*;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.*;
 import static sur.softsurena.utilidades.Utilidades.*;
+import static sur.softsurena.vistas.VistaPrincipalFacturacion.mnuMovimientosNuevaFactura;
 
 public final class VistaFacturas extends javax.swing.JInternalFrame implements ActionListener {
 
@@ -961,13 +959,13 @@ public final class VistaFacturas extends javax.swing.JInternalFrame implements A
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void formInternalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameDeiconified
-        if (VistaPrincipal.jpEstados.getComponent(0) != jpInfoFactura)
-            VistaPrincipal.jpEstados.add(jpInfoFactura, 0);
+        if (VistaPrincipalFacturacion.jpEstados.getComponent(0) != jpInfoFactura)
+            VistaPrincipalFacturacion.jpEstados.add(jpInfoFactura, 0);
     }//GEN-LAST:event_formInternalFrameDeiconified
 
     private void formInternalFrameIconified(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameIconified
-        if (VistaPrincipal.jpEstados.getComponent(0) == jpInfoFactura)
-            VistaPrincipal.jpEstados.remove(jpInfoFactura);
+        if (VistaPrincipalFacturacion.jpEstados.getComponent(0) == jpInfoFactura)
+            VistaPrincipalFacturacion.jpEstados.remove(jpInfoFactura);
     }//GEN-LAST:event_formInternalFrameIconified
 
     private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
@@ -1412,13 +1410,13 @@ public final class VistaFacturas extends javax.swing.JInternalFrame implements A
 //-----------------------------------------------------------------------------1
         Map<String, Object> parametros = new HashMap<>();
         parametros.put("idFactura", Integer.valueOf(txtIdFactura.getText()));
-        new hiloImpresionFactura(
+        new HiloImpresionFactura(
                 cbPrevistaMenu.isSelected(),
                 rbtCredito.isSelected(),
                 "/Reportes/factura.jasper",
                 parametros,
-                VistaPrincipal.jPanelImpresion,
-                VistaPrincipal.jprImpresion
+                VistaPrincipalFacturacion.jPanelImpresion,
+                VistaPrincipalFacturacion.jprImpresion
         ).start();
 //----------------------------------------------------------------------------
         totales();
@@ -1795,9 +1793,9 @@ public final class VistaFacturas extends javax.swing.JInternalFrame implements A
         ).stream().forEach(
                 cliente -> {
                     M_Persona.select(
-                            Persona
+                            Cliente
                                     .builder()
-                                    .idPersona(cliente.getId())
+                                    .idPersona(cliente.getIdPersona())
                                     .build()
                     ).stream().filter(filtro -> filtro.getEstado()).forEach(
                             persona -> {

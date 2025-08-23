@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaAcercaDe;
 import javax.swing.JLabel;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;

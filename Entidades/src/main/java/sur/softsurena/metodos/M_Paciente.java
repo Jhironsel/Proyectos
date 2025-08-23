@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -41,7 +42,26 @@ public class M_Paciente {
                 pacienteList.add(
                         Paciente
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(
+                                        rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE")
+                                )
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
                                 .cesarea(rs.getBoolean("CESAREA"))
                                 .tiempoGestacion(rs.getInt("TIEMPO_GESTACION"))
                                 .fumador(rs.getBoolean("FUMADOR"))
@@ -59,20 +79,23 @@ public class M_Paciente {
         return pacienteList;
     }
     public static final String ERROR_AL_CONSULTAR_LA_VISTA_GET_PACIENTES
-            = "Error al consultar la vista GET_PACIENTES del sistema.";
+            = "Error al consultar la vista V_PERSONAS_PACIENTES_GEN del sistema.";
 
     protected static String sqlSelect(Paciente paciente) {
-        boolean id = Objects.isNull(paciente.getId());
+        boolean id = Objects.isNull(paciente.getIdPersona());
         boolean where = id;
         boolean pagina = Objects.isNull(paciente.getPagina());
 
         return """
-               SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
-               FROM V_PERSONAS_PACIENTES_ATR
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, CESAREA, 
+                    TIEMPO_GESTACION, FUMADOR
+               FROM V_PERSONAS_PACIENTES_GEN
                %s%s
                """.strip().formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d ".formatted(paciente.getId())
+                id ? "" : "ID = %d ".formatted(paciente.getIdPersona())
         ).strip().concat("%s").formatted(
                 pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
@@ -106,7 +129,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getId());
+            ps.setInt(1, paciente.getIdPersona());
 
             ps.execute();
 
@@ -153,7 +176,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getId());
+            ps.setInt(1, paciente.getIdPersona());
             ps.setBoolean(2, paciente.getCesarea());
             ps.setInt(3, paciente.getTiempoGestacion());
             ps.setBoolean(4, paciente.getFumador());
@@ -202,7 +225,7 @@ public class M_Paciente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, paciente.getId());
+            ps.setInt(1, paciente.getIdPersona());
 
             ps.execute();
 
@@ -217,7 +240,7 @@ public class M_Paciente {
             LOG.log(
                     Level.SEVERE,
                     ERROR_AL_BORRAR_PACIENTE.formatted(
-                            paciente.getId()
+                            paciente.getIdPersona()
                     ),
                     ex
             );
@@ -225,7 +248,7 @@ public class M_Paciente {
         return Resultado
                 .builder()
                 .mensaje(ERROR_AL_BORRAR_PACIENTE.formatted(
-                        paciente.getId())
+                        paciente.getIdPersona())
                 )
                 .icono(JOptionPane.ERROR_MESSAGE)
                 .estado(Boolean.FALSE)

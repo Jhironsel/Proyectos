@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaProducto;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 

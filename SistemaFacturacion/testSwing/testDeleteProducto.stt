@@ -2,8 +2,8 @@
   <editingOptions>
     <analyticsEnabled>true</analyticsEnabled>
     <controlsTheme>classic</controlsTheme>
-    <testableModalWindowsForcedToDocumentModality>true</testableModalWindowsForcedToDocumentModality>
-    <testableWindowsAlwaysOnTopFeatureDisabled>true</testableWindowsAlwaysOnTopFeatureDisabled>
+    <testableModalWindowsForcedToDocumentModality>false</testableModalWindowsForcedToDocumentModality>
+    <testableWindowsAlwaysOnTopFeatureDisabled>false</testableWindowsAlwaysOnTopFeatureDisabled>
   </editingOptions>
   <maximumSecondsToWaitBetwneenActions>1.0</maximumSecondsToWaitBetwneenActions>
   <minimumSecondsToWaitBetwneenActions>0.1</minimumSecondsToWaitBetwneenActions>
@@ -11,7 +11,7 @@
     <xy.ui.testing.action.CallMainMethodAction>
       <arguments/>
       <checkThrownExceptionAfterSeconds>2</checkThrownExceptionAfterSeconds>
-      <className>sur.softsurena.vistas.VistaLogin</className>
+      <className>sur.softsurena.vistas.VistaLoginFacturacion</className>
       <disabled>false</disabled>
     </xy.ui.testing.action.CallMainMethodAction>
     <xy.ui.testing.action.component.SendKeysAction>

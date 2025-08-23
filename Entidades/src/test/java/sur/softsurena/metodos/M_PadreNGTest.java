@@ -6,7 +6,6 @@ import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.entidades.Paginas;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Padre.BORRADO_DE_REGISTRO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Padre.PADRE__AGREGADO__EXITOSAMENTE;
 import sur.softsurena.utilidades.Resultado;
@@ -37,8 +36,10 @@ public class M_PadreNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID
-                FROM PERSONAS_PADRES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+                FROM V_PERSONAS_PADRES_GEN
                 """.strip().trim()
         );
 
@@ -46,12 +47,14 @@ public class M_PadreNGTest {
                 M_Padre.sqlSelect(
                         Padre
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .build()
                 ),
                 """
-                SELECT ID
-                FROM PERSONAS_PADRES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+                FROM V_PERSONAS_PADRES_GEN
                 WHERE ID = -1
                 """.strip().trim()
         );
@@ -70,8 +73,10 @@ public class M_PadreNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID
-                FROM PERSONAS_PADRES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+                FROM V_PERSONAS_PADRES_GEN
                 ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
                 """.strip().trim()
         );
@@ -80,7 +85,7 @@ public class M_PadreNGTest {
                 M_Padre.sqlSelect(
                         Padre
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .pagina(
                                         Paginas
                                                 .builder()
@@ -91,8 +96,10 @@ public class M_PadreNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID
-                FROM PERSONAS_PADRES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+                FROM V_PERSONAS_PADRES_GEN
                 WHERE ID = -1
                 ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
                 """.strip().trim()
@@ -119,7 +126,7 @@ public class M_PadreNGTest {
                 M_Padre.select(
                         Padre
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .build()
                 ),
                 "Error al consultar la lista de padres."
@@ -145,7 +152,7 @@ public class M_PadreNGTest {
                 M_Padre.select(
                         Padre
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .pagina(
                                         Paginas
                                                 .builder()
@@ -163,7 +170,7 @@ public class M_PadreNGTest {
             enabled = true
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Padre
                 .builder()
                 .persona('J')
                 .pnombre("MPadre")
@@ -185,7 +192,7 @@ public class M_PadreNGTest {
                 M_Padre.insert(
                         Padre
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -205,7 +212,7 @@ public class M_PadreNGTest {
 
         assertEquals(
                 M_Padre.delete(
-                        Padre.builder().id(idPersona).build()
+                        Padre.builder().idPersona(idPersona).build()
                 ),
                 Resultado
                         .builder()

@@ -23,9 +23,9 @@ import org.jfree.chart.ui.TextAnchor;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getPesoKG;
-import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_Paciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class PesoParaEdadChicoChica {
@@ -41,8 +41,8 @@ public class PesoParaEdadChicoChica {
     private final int idPaciente;
 
     public PesoParaEdadChicoChica(int idPaciente) {
-        sexo = M_Persona.select(
-                Persona
+        sexo = M_Paciente.select(
+                Paciente
                         .builder()
                         .idPersona(idPaciente)
                         .build()

@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import lombok.Cleanup;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
-import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Empleado;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -49,7 +49,24 @@ public class M_Empleado {
                 lista.add(
                         Empleado
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
                                 .build()
                 );
             }
@@ -67,16 +84,19 @@ public class M_Empleado {
             = "Error al consulta la vista V_PERSONAS_CLIENTES";
 
     public static String sqlSelect(Empleado empleado) {
-        boolean id = Objects.isNull(empleado.getId());
+        boolean id = Objects.isNull(empleado.getIdPersona());
         boolean pagina = Objects.isNull(empleado.getPagina());
         boolean where = id;
         return """
-               SELECT ID
-               FROM V_PERSONAS_EMPLEADOS
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                    ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, ID_CARGO,
+                    SUELDO_BRUTO
+               FROM V_PERSONAS_EMPLEADOS_GEN
                %s%s
                """.formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d".formatted(empleado.getId())
+                id ? "" : "ID = %d".formatted(empleado.getIdPersona())
         ).strip().concat("%s").formatted(
                 pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
@@ -105,7 +125,7 @@ public class M_Empleado {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, empleado.getId());
+            ps.setInt(1, empleado.getIdPersona());
 
             ps.execute();
 
@@ -150,7 +170,7 @@ public class M_Empleado {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, empleado.getId());
+            ps.setInt(1, empleado.getIdPersona());
             ps.setInt(2, empleado.getIdDepartamento());
             ps.setInt(3, empleado.getIdCargo());
             ps.setBigDecimal(4, empleado.getSueldoBruto());
@@ -199,7 +219,7 @@ public class M_Empleado {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, empleado.getId());
+            ps.setInt(1, empleado.getIdPersona());
 
             ps.execute();
 

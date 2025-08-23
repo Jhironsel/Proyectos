@@ -1,13 +1,12 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaPersona;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import newscomponents.RSButtonGradientIcon_new;
 import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 import rojeru_san.RSMTextFull;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 
 /**
  * TODO 24/11/2024 Crear prueba para esta clase. 

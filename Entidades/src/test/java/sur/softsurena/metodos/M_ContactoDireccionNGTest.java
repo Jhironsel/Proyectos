@@ -5,7 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoDireccion;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import static sur.softsurena.metodos.M_ContactoDireccion.DIRECCION_AGREGADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_BORRAR_EL_REGISTRO_DE_LA_DIRECCI;
 import static sur.softsurena.metodos.M_ContactoDireccion.ERROR_AL_INSERTAR_DIRECCION;
@@ -53,7 +53,7 @@ public class M_ContactoDireccionNGTest {
             );
         }
 
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                 .builder()
                 .persona('J')
                 .pnombre("MContactoDireccion")

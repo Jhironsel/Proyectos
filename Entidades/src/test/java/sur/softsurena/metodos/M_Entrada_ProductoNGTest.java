@@ -5,7 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.EntradaProducto;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Proveedor;
 import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_ELIMINADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Entrada_Producto.ENTRADA_REGISTRADA_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Entrada_Producto.PRODUCTO_AGREGADO_CORRECTAMENTE;
@@ -125,7 +125,7 @@ public class M_Entrada_ProductoNGTest {
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Proveedor
                 .builder()
                 .persona('J')
                 .pnombre("MEntradaProducto")

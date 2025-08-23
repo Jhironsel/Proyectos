@@ -25,7 +25,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>sur.softsurena.formularios.frmLogin</mainClass>
+                            <mainClass>sur.softsurena.vistas.VistaLoginFacturacion</mainClass>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
@@ -37,7 +37,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>sur.softsurena.formularios.frmLogin</mainClass>
+                            <mainClass>sur.softsurena.vistas.VistaLoginFacturacion</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import sur.softsurena.entidades.Gasto;
-import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import static sur.softsurena.metodos.M_Gasto.agregarGastosPorTurno;
 import sur.softsurena.utilidades.Resultado;
 
@@ -245,13 +245,13 @@ public final class VistaGasto extends java.awt.Dialog {
 
 //        parametros.put("idTurno", getIdTurno());
 //        parametros.put("idCajero", getUsuario());
-        new hiloImpresionFactura(
+        new HiloImpresionFactura(
                 true, //Mostrar Reporte
                 false, //Con Copia
                 System.getProperty("user.dir") + "/Reportes/gasto.jasper",
                 parametros,
-                VistaPrincipal.jPanelImpresion,
-                VistaPrincipal.jprImpresion).start();
+                VistaPrincipalFacturacion.jPanelImpresion,
+                VistaPrincipalFacturacion.jprImpresion).start();
 
         this.dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed

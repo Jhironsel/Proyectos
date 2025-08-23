@@ -7,9 +7,8 @@ import org.firebirdsql.event.FBEventManager;
 import org.firebirdsql.gds.ng.WireCrypt;
 import sur.softsurena.conexion.VistaParametros;
 import sur.softsurena.entidades.Almacen;
+import sur.softsurena.entidades.Deuda;
 import static sur.softsurena.utilidades.Utilidades.LOG;
-import sur.softsurena.vista.VistaPersonas;
-import sur.softsurena.vista.VistaUsuarios;
 
 public final class FirebirdEventos extends FBEventManager {
 
@@ -41,41 +40,6 @@ public final class FirebirdEventos extends FBEventManager {
         registro();
         user = null;
         password = null;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Resultados 1:" + Boolean.logicalAnd(true, true));
-        System.out.println("Resultados 1:" + Boolean.logicalAnd(true, false));
-        System.out.println("Resultados 1:" + Boolean.logicalAnd(false, true));
-        System.out.println("Resultados 1:" + Boolean.logicalAnd(false, false));
-        /*
-        Resultados 1:true
-        Resultados 1:false
-        Resultados 1:false
-        Resultados 1:false
-         */
-        System.out.println("");
-        System.out.println("Resultados 2:" + Boolean.logicalOr(true, true));
-        System.out.println("Resultados 2:" + Boolean.logicalOr(true, false));
-        System.out.println("Resultados 2:" + Boolean.logicalOr(false, true));
-        System.out.println("Resultados 2:" + Boolean.logicalOr(false, false));
-        /*
-        Resultados 1:true
-        Resultados 1:true
-        Resultados 1:true
-        Resultados 1:false
-         */
-        System.out.println("");
-        System.out.println("Resultados 3:" + Boolean.logicalXor(true, true));
-        System.out.println("Resultados 3:" + Boolean.logicalXor(true, false));
-        System.out.println("Resultados 3:" + Boolean.logicalXor(false, true));
-        System.out.println("Resultados 3:" + Boolean.logicalXor(false, false));
-        /*
-        Resultados 1:false
-        Resultados 1:true
-        Resultados 1:true
-        Resultados 1:false
-         */
     }
 
     private void logg(DatabaseEvent event) {
@@ -137,10 +101,12 @@ public final class FirebirdEventos extends FBEventManager {
             );
 
             //Evento de VistaDeudas de clientes.*************************************
-            addEventListener("EVENT_DEUDA ".concat(user).toUpperCase(),
+            addEventListener("EVENT_M_DEUDA ".concat(user).toUpperCase(),
                     (DatabaseEvent event) -> {
                         logg(event);
-                        VistaDeudas.llenarTabla();
+                        VistaDeudas.llenarTabla(
+                                Deuda.builder().build()
+                        );
                     }
             );
 

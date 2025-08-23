@@ -38,7 +38,7 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
     private static JFileChooser file = null;
     private static FileNameExtensionFilter filter = null;
     private static String criterioBusqueda = "";
-    private static VistaPrincipal principal;
+    private static VistaPrincipalFacturacion principal;
 
     public VistaProductos() {
         initComponents();
@@ -1428,7 +1428,7 @@ public final class VistaProductos extends javax.swing.JInternalFrame {
      * @param criterioBusqueda
      * @return
      */
-    public static JTable llenarTablaProductos(String criterioBusqueda) {
+    public static synchronized JTable llenarTablaProductos(String criterioBusqueda) {
         Objects.requireNonNull(criterioBusqueda, "No se permite nulo en el parametro.");
 
         // Array de String que dan nombre a las columnas de la tabla.

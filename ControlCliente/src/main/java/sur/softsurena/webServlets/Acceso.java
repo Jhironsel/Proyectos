@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.conexion.Conexion;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.ContactoEmail;
@@ -54,7 +53,7 @@ public class Acceso extends HttpServlet {
                         M_Cliente.select(
                                 Cliente
                                         .builder()
-                                        .id(_idCliente)
+                                        .idPersona(_idCliente)
                                         .build()
                         )
                 );
@@ -72,7 +71,7 @@ public class Acceso extends HttpServlet {
                 M_Cliente.delete(
                         Cliente
                                 .builder()
-                                .id(_idCliente)
+                                .idPersona(_idCliente)
                                 .build()
                 );
             }
@@ -103,7 +102,7 @@ public class Acceso extends HttpServlet {
         if (!Objects.isNull(accion)) {
             if (accion.equalsIgnoreCase("insertar")) {
                 Resultado resultado = M_Persona.insert(
-                        Persona.
+                        Cliente.
                                 builder()
                                 .persona('F')
                                 .pnombre(req.getParameter("txtPNombre"))
@@ -133,7 +132,7 @@ public class Acceso extends HttpServlet {
                 );
 
                 M_Cliente.insert(
-                        Cliente.builder().id(resultado.getId()).build()
+                        Cliente.builder().idPersona(resultado.getId()).build()
                 );
 
                 try {
@@ -151,7 +150,7 @@ public class Acceso extends HttpServlet {
                     _idPersona = -1;
                 }
                 M_Persona.update(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(_idPersona)
                                 .pnombre(req.getParameter("txtPNombre"))

@@ -2,7 +2,7 @@ package sur.softsurena.swingWorker;
 
 import java.util.List;
 import javax.swing.SwingWorker;
-import static sur.softsurena.vista.VistaSplash.pgProceso;
+import static sur.softsurena.vistas.VistaSplash.pgProceso;
 
 public class Trabajo extends SwingWorker<Double, Integer> {
 

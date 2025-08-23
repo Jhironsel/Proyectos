@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Estudiante;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -46,7 +47,26 @@ public class M_Estudiante {
                 listaEstudiante.add(
                         Estudiante
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PNOMBRE").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(
+                                        rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE")
+                                )
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
                                 .matricula(rs.getString("MATRICULA"))
                                 .build()
                 );
@@ -63,17 +83,19 @@ public class M_Estudiante {
     }
 
     protected static String sqlSelect(Estudiante estudiante) {
-        boolean id = Objects.isNull(estudiante.getId());
+        boolean id = Objects.isNull(estudiante.getIdPersona());
         boolean matricula = Objects.isNull(estudiante.getMatricula());
         boolean pagina = Objects.isNull(estudiante.getPagina());
         boolean where =  id && matricula;
         return """
-               SELECT ID, MATRICULA
-               FROM V_PERSONAS_ESTUDIANTES_ATR
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO, 
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE, 
+                    ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, MATRICULA
+               FROM V_PERSONAS_ESTUDIANTES_GEN
                %s%s%s
                """.formatted(
                        where ? "":"WHERE ",
-                       id ? "":"ID = %d".formatted(estudiante.getId()),
+                       id ? "":"ID = %d ".formatted(estudiante.getIdPersona()),
                        matricula ? "" : "MATRICULA STARTING WITH '%s' ".formatted(estudiante.getMatricula())
         ).strip().concat("%s").formatted(
                 pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
@@ -108,7 +130,7 @@ public class M_Estudiante {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, estudiante.getId());
+            cs.setInt(1, estudiante.getIdPersona());
 
             cs.execute();
 
@@ -153,7 +175,7 @@ public class M_Estudiante {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, estudiante.getId());
+            ps.setInt(1, estudiante.getIdPersona());
             ps.setString(2, estudiante.getMatricula());
 
             ps.executeUpdate();
@@ -200,7 +222,7 @@ public class M_Estudiante {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, estudiante.getId());
+            ps.setInt(1, estudiante.getIdPersona());
 
             ps.executeUpdate();
 

@@ -5,7 +5,6 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Estudiante;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__AGREGADO__CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Estudiante.ESTUDIANTE__MODIFICADO__CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
@@ -33,8 +32,10 @@ public class M_EstudianteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, MATRICULA
-                FROM V_PERSONAS_ESTUDIANTES_ATR
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, MATRICULA
+                FROM V_PERSONAS_ESTUDIANTES_GEN
                 """.strip()
         );
         assertEquals(
@@ -45,8 +46,10 @@ public class M_EstudianteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, MATRICULA
-                FROM V_PERSONAS_ESTUDIANTES_ATR
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, MATRICULA
+                FROM V_PERSONAS_ESTUDIANTES_GEN
                 WHERE MATRICULA STARTING WITH '00'
                 """.strip()
         );
@@ -80,7 +83,7 @@ public class M_EstudianteNGTest {
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Estudiante
                 .builder()
                 .persona('J')
                 .pnombre("MEstudiante")
@@ -100,7 +103,7 @@ public class M_EstudianteNGTest {
 
         assertEquals(M_Estudiante.insert(Estudiante
                 .builder()
-                .id(idPersona)
+                .idPersona(idPersona)
                 .matricula(
                         M_ContactoTel
                                 .generarTelMovil()
@@ -124,7 +127,7 @@ public class M_EstudianteNGTest {
                 M_Estudiante.update(
                         Estudiante
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .matricula(M_Generales.generarCedula().substring(0, 8))
                                 .build()
                 ),
@@ -148,7 +151,7 @@ public class M_EstudianteNGTest {
                 M_Estudiante.delete(
                         Estudiante
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .build()
                 ),
                 Resultado

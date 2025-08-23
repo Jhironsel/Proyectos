@@ -3,7 +3,7 @@ package sur.softsurena.vistas;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.metodos.M_Persona;
@@ -185,7 +185,7 @@ public final class VistaBuscarCedula extends javax.swing.JDialog {
         ).stream().forEach(
                 general -> {
                     M_Persona.select(
-                            Persona
+                            Cliente
                                     .builder()
                                     .idPersona(general.getIdPersona())
                                     .build()

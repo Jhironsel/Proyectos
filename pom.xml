@@ -28,8 +28,8 @@
         <module>TelegramBoot</module>
         <module>CajerosMaven</module>
         <module>JPA_Firebird</module>
-        <!--<module>Curso JSF/CursoJSF</module>-->
         <module>apiRestSoftSurena</module>
+        <!--<module>Curso JSF/CursoJSF</module>-->
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.util.Date;
 import java.util.Objects;
 import javax.swing.JOptionPane;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Usuario;
 import sur.softsurena.metodos.M_Usuario;
 import sur.softsurena.utilidades.Utilidades;
@@ -245,12 +244,7 @@ public final class VistaSolicitudFecha extends javax.swing.JDialog {
         M_Usuario.select(
                 Usuario
                         .builder()
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .estado(true)
-                                        .build()
-                        )
+                        .estado(true)
                         .build()
         ).stream().forEach(
                 usuario -> {

@@ -11,7 +11,7 @@
     <xy.ui.testing.action.CallMainMethodAction>
       <arguments/>
       <checkThrownExceptionAfterSeconds>2</checkThrownExceptionAfterSeconds>
-      <className>sur.softsurena.vistas.VistaLogin</className>
+      <className>sur.softsurena.vistas.VistaLoginFacturacion</className>
       <disabled>false</disabled>
     </xy.ui.testing.action.CallMainMethodAction>
     <xy.ui.testing.action.component.SendKeysAction>

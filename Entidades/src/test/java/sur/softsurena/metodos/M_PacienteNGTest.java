@@ -5,7 +5,6 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Paciente;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_BORRAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_INSERTAR_PACIENTE;
 import static sur.softsurena.metodos.M_Paciente.ERROR_AL_MODIFICAR_PACIENTE;
@@ -34,8 +33,11 @@ public class M_PacienteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
-                FROM V_PERSONAS_PACIENTES_ATR
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, CESAREA,
+                     TIEMPO_GESTACION, FUMADOR
+                FROM V_PERSONAS_PACIENTES_GEN
                 """.strip()
         );
 
@@ -43,12 +45,15 @@ public class M_PacienteNGTest {
                 M_Paciente.sqlSelect(
                         Paciente
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .build()
                 ),
                 """
-                SELECT ID, CESAREA, TIEMPO_GESTACION, FUMADOR
-                FROM V_PERSONAS_PACIENTES_ATR
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                     FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                     ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, CESAREA,
+                     TIEMPO_GESTACION, FUMADOR
+                FROM V_PERSONAS_PACIENTES_GEN
                 WHERE ID = -1
                 """.strip()
         );
@@ -71,7 +76,7 @@ public class M_PacienteNGTest {
                 M_Paciente.select(
                         Paciente
                                 .builder()
-                                .id(-1)
+                                .idPersona(-1)
                                 .build()
                 ),
                 "Error en la consulta de pacientes."
@@ -80,7 +85,7 @@ public class M_PacienteNGTest {
 
     @Test
     public static void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Paciente
                 .builder()
                 .persona('J')
                 .pnombre("MPaciente")
@@ -142,7 +147,7 @@ public class M_PacienteNGTest {
                 M_Paciente.delete(
                         Paciente
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .build()
                 ),
                 Resultado
@@ -161,7 +166,7 @@ public class M_PacienteNGTest {
     public static Paciente generarPaciente() {
         return Paciente
                 .builder()
-                .id(idPersona)
+                .idPersona(idPersona)
                 .cesarea(Boolean.FALSE)
                 .tiempoGestacion(8)
                 .fumador(Boolean.FALSE)

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -46,7 +47,24 @@ public class M_Padre {
                 listaPadre.add(
                         Padre
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
                                 .build()
                 );
             }
@@ -62,28 +80,29 @@ public class M_Padre {
     }
 
     /**
-     * 
+     *
      * @param padre
      * @return
      */
     protected static String sqlSelect(Padre padre) {
-        boolean id = Objects.isNull(padre.getId());
+        boolean id = Objects.isNull(padre.getIdPersona());
         boolean pagina = Objects.isNull(padre.getPagina());
         return """
-               SELECT ID
-               FROM PERSONAS_PADRES
-               %s
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                    ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL
+               FROM V_PERSONAS_PADRES_GEN
+               %s%s
                """.formatted(
-                id ? "" : "WHERE ID = %d ".formatted(padre.getId())
-        ).trim().strip().concat("%s").formatted(
-                pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                id ? "" : "WHERE ID = %d\n".formatted(padre.getIdPersona()),
+                pagina ? "" : "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
                                         padre.getPagina().getNPaginaNro(),
                                         padre.getPagina().getNCantidadFilas(),
                                         padre.getPagina().getNPaginaNro(),
                                         padre.getPagina().getNCantidadFilas()
                                 )
-        ).trim().strip();
+        ).strip();
     }
 //------------------------------------------------------------------------------
 
@@ -102,7 +121,7 @@ public class M_Padre {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, padre.getId());
+            ps.setInt(1, padre.getIdPersona());
 
             ps.executeUpdate();
 
@@ -150,7 +169,7 @@ public class M_Padre {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, padre.getId());
+            ps.setInt(1, padre.getIdPersona());
 
             ps.executeUpdate();
 

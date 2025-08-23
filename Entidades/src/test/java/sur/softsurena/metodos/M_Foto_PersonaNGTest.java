@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.FotoPersona;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
@@ -99,7 +99,7 @@ public class M_Foto_PersonaNGTest {
             dependsOnMethods = "testSelect"
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                         .builder()
                         .persona('J')
                         .pnombre("MFotoPersona")

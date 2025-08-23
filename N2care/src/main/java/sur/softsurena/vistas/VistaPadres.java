@@ -10,11 +10,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Padre;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Sexo;
 import sur.softsurena.entidades.TipoSangre;
 import sur.softsurena.metodos.M_ARS;
@@ -69,7 +69,7 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
             padres = new VistaPadres();
         }
 
-        if (VistaPrincipal.txtUsuario.getText().contains("SECRETARIA")) {
+        if (VistaPrincipalN2Care.txtUsuario.getText().contains("SECRETARIA")) {
             btnAntecedentes.setVisible(false);
             btnBorrar.setVisible(false);
         } else {
@@ -937,12 +937,10 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
             return;
         }//FIN de las Validaciones..........................
 
-        var persona = Persona
+        var persona = Padre
                 .builder()
                 .idPersona(
-                        nuevo
-                                ? -1
-                                : ((Padre) jtPadres.getValueAt(jtPadres.getSelectedRow(), 0)).getId()
+                        ((Padre) jtPadres.getValueAt(jtPadres.getSelectedRow(), 0)).getIdPersona()
                 )
                 .pnombre(txtPNombre.getText())
                 .snombre(txtSNombre.getText())
@@ -1036,7 +1034,7 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
         M_Padre.delete(
                 Padre
                         .builder()
-                        .id(_padre.getId())
+                        .idPersona(_padre.getIdPersona())
                         .build()
         );
 
@@ -1385,7 +1383,7 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
         }
 
         Persona persona = M_Persona.select(
-                Persona
+                Padre
                         .builder()
                         .idPersona(cedula.getIdPersona())
                         .build()
@@ -1459,15 +1457,15 @@ public final class VistaPadres extends javax.swing.JInternalFrame {
                             Generales
                                     .builder()
                                     .idPersona(
-                                            padre.getId()
+                                            padre.getIdPersona()
                                     )
                                     .build()
                     ).getFirst();
                     Persona persona = M_Persona.select(
-                            Persona
+                            Padre
                                     .builder()
                                     .idPersona(
-                                            padre.getId()
+                                            padre.getIdPersona()
                                     )
                                     .build()
                     ).getFirst();

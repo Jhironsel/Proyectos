@@ -5,52 +5,44 @@ import java.sql.Date;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.abstractas.Persona;
 
 @Getter
 @SuperBuilder
-public class Cliente {
+public class Cliente extends Persona{
     
-    private final Integer id;
     private final BigDecimal totalFacturado;
     private final BigDecimal totalDeuda;
     private final Integer cantidadFactura;
     private final Date fechaUltimaCompra;
     private final BigDecimal saldo;
-    
-    private final Paginas pagina;
 
     @Override
     public String toString() {
-        
-        return M_Persona.select(
-                Persona
-                        .builder()
-                        .idPersona(id)
-                        .build()
-        ).getFirst().toString();
+        return super.toString();
     }
     
+    @Override
     public String getJSON() {
-        return "Cliente{" + 
-                "Id=" + id.toString() + 
-                ", totalFacturado=" + totalFacturado + 
-                ", totalDeuda=" + totalDeuda + 
-                ", cantidadFactura=" + cantidadFactura + 
-                ", fechaUltimaCompra=" + fechaUltimaCompra + 
-                ", saldo=" + saldo + 
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cliente{");
+        sb.append("totalFacturado=").append(totalFacturado);
+        sb.append(", totalDeuda=").append(totalDeuda);
+        sb.append(", cantidadFactura=").append(cantidadFactura);
+        sb.append(", fechaUltimaCompra=").append(fechaUltimaCompra);
+        sb.append(", saldo=").append(saldo);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.id);
-        hash = 59 * hash + Objects.hashCode(this.totalFacturado);
-        hash = 59 * hash + Objects.hashCode(this.totalDeuda);
-        hash = 59 * hash + Objects.hashCode(this.cantidadFactura);
-        hash = 59 * hash + Objects.hashCode(this.fechaUltimaCompra);
-        hash = 59 * hash + Objects.hashCode(this.saldo);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.totalFacturado);
+        hash = 17 * hash + Objects.hashCode(this.totalDeuda);
+        hash = 17 * hash + Objects.hashCode(this.cantidadFactura);
+        hash = 17 * hash + Objects.hashCode(this.fechaUltimaCompra);
+        hash = 17 * hash + Objects.hashCode(this.saldo);
         return hash;
     }
 
@@ -66,10 +58,6 @@ public class Cliente {
             return false;
         }
         final Cliente other = (Cliente) obj;
-        
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.totalFacturado, other.totalFacturado)) {
             return false;
         }
@@ -84,4 +72,10 @@ public class Cliente {
         }
         return Objects.equals(this.saldo, other.saldo);
     }
+    
+    
+    
+    
+
+    
 }

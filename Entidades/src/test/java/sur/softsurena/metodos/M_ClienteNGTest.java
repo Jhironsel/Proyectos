@@ -5,7 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Cliente;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Paginas;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE_NO_PUEDE_SER_BORRADO;
 import static sur.softsurena.metodos.M_Cliente.CLIENTE__AGREGADO__CORRECTAMENTE;
@@ -35,8 +35,49 @@ public class M_ClienteNGTest {
                                 .build()
                 ),
                 """
-                SELECT ID
-                FROM V_PERSONAS_CLIENTES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, ESTADO, ID_TIPO_SANGRE,
+                    CEDULA, ESTADO_CIVIL, TOTAL_FACTURADO, TOTAL_DEUDA,
+                    CANTIDAD_FACTURA, FECHA_ULTIMA_COMPRA
+                FROM V_PERSONAS_CLIENTES_GEN
+                """.strip()
+        );
+        assertEquals(
+                M_Cliente.sqlSelect(
+                        Cliente
+                                .builder()
+                                .idPersona(1)
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, ESTADO, ID_TIPO_SANGRE,
+                    CEDULA, ESTADO_CIVIL, TOTAL_FACTURADO, TOTAL_DEUDA,
+                    CANTIDAD_FACTURA, FECHA_ULTIMA_COMPRA
+                FROM V_PERSONAS_CLIENTES_GEN
+                WHERE ID = 1
+                """.strip()
+        );
+        assertEquals(
+                M_Cliente.sqlSelect(
+                        Cliente
+                                .builder()
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                """
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, ESTADO, ID_TIPO_SANGRE,
+                    CEDULA, ESTADO_CIVIL, TOTAL_FACTURADO, TOTAL_DEUDA,
+                    CANTIDAD_FACTURA, FECHA_ULTIMA_COMPRA
+                FROM V_PERSONAS_CLIENTES_GEN
+                ROWS (1 - 1) * 20 + 1 TO (1 + (1 - 1)) * 20;
                 """.strip()
         );
     }
@@ -45,7 +86,6 @@ public class M_ClienteNGTest {
             dependsOnMethods = "testSqlSelect"
     )
     public void testSelect() {
-
         assertNotNull(
                 M_Cliente.select(
                         Cliente
@@ -54,13 +94,37 @@ public class M_ClienteNGTest {
                 ),
                 "Error al consultar la lista de clientes."
         );
+        assertNotNull(
+                M_Cliente.select(
+                        Cliente
+                                .builder()
+                                .idPersona(1)
+                                .build()
+                ),
+                "Error al consultar la lista de clientes. Por ID"
+        );
+        assertNotNull(
+                M_Cliente.select(
+                        Cliente
+                                .builder()
+                                .pagina(
+                                        Paginas
+                                                .builder()
+                                                .nPaginaNro(1)
+                                                .nCantidadFilas(20)
+                                                .build()
+                                )
+                                .build()
+                ),
+                "Error al consultar la lista de clientes. Por Row"
+        );
     }
 
     @Test(
             groups = "cliente.insert"
     )
     public static void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                 .builder()
                 .persona('J')
                 .pnombre("MCliente")
@@ -81,7 +145,7 @@ public class M_ClienteNGTest {
         Resultado result = M_Cliente.insert(
                 Cliente
                         .builder()
-                        .id(idPersona)
+                        .idPersona(idPersona)
                         .build()
         );
 
@@ -105,7 +169,7 @@ public class M_ClienteNGTest {
         Resultado result = M_Cliente.delete(
                 Cliente
                         .builder()
-                        .id(idPersona)
+                        .idPersona(idPersona)
                         .build()
         );
 

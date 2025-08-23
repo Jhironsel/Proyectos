@@ -19,7 +19,8 @@ public class VistaAdministradorTurnosNGTest {
             priority = 0
     )
     public void testGetInstance() {
-        assertNotNull(new VistaAdministradorTurnos(),
+        assertNotNull(
+                new VistaAdministradorTurnos(),
                 "Error al cargar frmAdministradorTurnos."
         );
     }

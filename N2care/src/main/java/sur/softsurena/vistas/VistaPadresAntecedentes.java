@@ -2,11 +2,11 @@ package sur.softsurena.vistas;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Antecedente;
 import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.Consulta;
+import sur.softsurena.entidades.Padre;
 import sur.softsurena.metodos.M_ARS;
 import sur.softsurena.metodos.M_Antecedente;
 import sur.softsurena.metodos.M_Asegurado;
@@ -298,7 +298,7 @@ public final class VistaPadresAntecedentes extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         var persona = M_Persona.select(
-                Persona
+                Padre
                         .builder()
                         .idPersona(idPadre)
                         .build()

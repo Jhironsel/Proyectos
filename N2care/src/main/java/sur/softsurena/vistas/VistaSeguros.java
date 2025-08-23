@@ -1,6 +1,6 @@
 package sur.softsurena.vistas;
 
-import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
+import static sur.softsurena.vistas.VistaPrincipalN2Care.dpnEscritorio;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.swing.JOptionPane;

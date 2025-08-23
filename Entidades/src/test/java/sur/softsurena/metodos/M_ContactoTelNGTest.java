@@ -5,7 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoTel;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
@@ -27,7 +27,7 @@ public class M_ContactoTelNGTest {
             groups = "contactoTel.insert"
     )
     public void persona() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                         .builder()
                         .persona('J')
                         .pnombre("MContactoTel")

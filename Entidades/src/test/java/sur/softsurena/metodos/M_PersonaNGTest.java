@@ -4,7 +4,8 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
+import sur.softsurena.entidades.Cliente;
 import static sur.softsurena.metodos.M_Persona.ERROR_ACTUALIZAR_PERSONA_EN_EL_SISTEMA;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_ELIMINAR_REGISTROS_CODIGO_S;
 import static sur.softsurena.metodos.M_Persona.ERROR_AL_REGISTRAR_PERSONA_AL_SISTEMA;
@@ -37,7 +38,7 @@ public class M_PersonaNGTest {
     public static void testSqlSelect() {
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .build()
                 ),
@@ -51,7 +52,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(0)
                                 .build()
@@ -67,7 +68,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .persona('F')
                                 .build()
@@ -83,7 +84,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .pnombre("GENERICO")
                                 .snombre("GENERICO")
@@ -101,7 +102,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .estado(Boolean.TRUE)
                                 .build()
@@ -117,7 +118,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.sqlSelect(
-                        Persona
+                        Cliente
                                 .builder()
                                 .estado(Boolean.FALSE)
                                 .build()
@@ -140,7 +141,7 @@ public class M_PersonaNGTest {
 
         assertNotNull(
                 M_Persona.select(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(0)
                                 .build()
@@ -148,7 +149,7 @@ public class M_PersonaNGTest {
                 "Registros de CLIENTE GENERICO NO ENCONTRADO."
         );
 
-        persona = Persona
+        persona = Cliente
                 .builder()
                 .idPersona(idPersona)
                 .persona('J')
@@ -193,7 +194,7 @@ public class M_PersonaNGTest {
 
         assertNotNull(
                 M_Persona.select(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(idPersona)
                                 .build()
@@ -208,7 +209,7 @@ public class M_PersonaNGTest {
     )
     public static void testUpdate() {
 
-        persona = Persona
+        persona = Cliente
                 .builder()
                 .idPersona(idPersona)
                 .persona('J')
@@ -251,7 +252,7 @@ public class M_PersonaNGTest {
 
         assertEquals(
                 M_Persona.delete(
-                        Persona
+                        Cliente
                                 .builder()
                                 .idPersona(idPersona)
                                 .build()

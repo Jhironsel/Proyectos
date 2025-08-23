@@ -56,7 +56,7 @@ public class ConexionNGTest {
         JPasswordField txtClave = new JPasswordField("1");
         JFrame jframe = null;
         assertTrue(
-                Conexion.validarUsario(txtUsuario, txtClave, jframe),
+                Conexion.validarUsuario(txtUsuario, txtClave, jframe),
                 "Error en el metodo de validarUsuario."
         );
     }

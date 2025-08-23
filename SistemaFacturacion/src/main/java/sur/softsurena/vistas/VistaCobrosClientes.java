@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaPersona;
 import java.awt.Frame;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -12,12 +11,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Paginas;
-import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
-import sur.softsurena.metodos.M_Persona;
 import static sur.softsurena.metodos.M_Usuario.getUsuarioActual;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -372,24 +370,16 @@ public final class VistaCobrosClientes extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cmbCliente.removeAllItems();
-                                Persona
-                                        .builder()
-                                        .idPersona(-1)
-                                        .pnombre("Seleccione un Cliente...")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .estado(false)
-                                        .build();
         cmbCliente.addItem(
                 Cliente
                         .builder()
-                        .id(-1)
+                        .idPersona(-1)
+                        .pnombre("Seleccione un Cliente...")
+                        .snombre("")
+                        .apellidos("")
+                        .estado(false)
                         .build()
         );
-                                Persona
-                                        .builder()
-                                        .estado(true)
-                                        .build();
 
         M_Cliente.select(
                 Cliente
@@ -404,17 +394,7 @@ public final class VistaCobrosClientes extends javax.swing.JDialog {
                         .build()
         ).stream().forEach(
                 cliente -> {
-                    M_Persona.select(
-                            Persona
-                                    .builder()
-                                    .idPersona(cliente.getId())
-                                    .estado(Boolean.TRUE)
-                                    .build()
-                    ).stream().forEach(
-                            persona -> {
-                                cmbCliente.addItem(cliente);
-                            }
-                    );
+                    cmbCliente.addItem(cliente);
                 }
         );
     }//GEN-LAST:event_formWindowOpened
@@ -530,7 +510,7 @@ public final class VistaCobrosClientes extends javax.swing.JDialog {
                 "idCliente",
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                ).getId()
+                ).getIdPersona()
         );
         parametros.put(
                 "nombreCliente",
@@ -547,13 +527,13 @@ public final class VistaCobrosClientes extends javax.swing.JDialog {
                 )
         );
 
-        hiloImpresionFactura miHilo = new hiloImpresionFactura(
+        HiloImpresionFactura miHilo = new HiloImpresionFactura(
                 true, //Mostrar Reporte
                 false, //Con Copia
                 "/Reportes/cobroFactura.jasper",
                 parametros,
-                VistaPrincipal.jPanelImpresion,
-                VistaPrincipal.jprImpresion);
+                VistaPrincipalFacturacion.jPanelImpresion,
+                VistaPrincipalFacturacion.jprImpresion);
 
         miHilo.start();
 
@@ -571,8 +551,8 @@ public final class VistaCobrosClientes extends javax.swing.JDialog {
         if (persona == null) {
             return;
         }
-        
-        
+
+
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();

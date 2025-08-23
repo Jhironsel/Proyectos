@@ -294,7 +294,7 @@ public final class VistaAdministradorTurnos extends javax.swing.JInternalFrame {
         //Obtenemos el cajero seleccionado.
         String userName = ((Cajero) tblCajerosDisponible.getValueAt(
                 userSelected, 0
-        )).getUsuario().getUserName();
+        )).getUserName();
 
         //Verificamos si el usuario tiene turno abierto
         if (!M_Turno.select(
@@ -440,7 +440,7 @@ public final class VistaAdministradorTurnos extends javax.swing.JInternalFrame {
 
         String userName = (
                 (Cajero) tblCajerosDisponible.getValueAt(cajeroSelectRow, 0)
-                ).getUsuario().getUserName();
+                ).getUserName();
 
         crearReporte(userName);
     }//GEN-LAST:event_tblCajerosDisponibleMouseClicked

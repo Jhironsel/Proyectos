@@ -11,17 +11,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.Paginas;
 import sur.softsurena.entidades.Producto;
 import sur.softsurena.entidades.Proveedor;
-import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
 import sur.softsurena.metodos.Imagenes;
 import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.metodos.M_Producto;
 import sur.softsurena.metodos.M_Proveedor;
 import sur.softsurena.utilidades.JComboExp;
 import sur.softsurena.utilidades.Resultado;
+import static sur.softsurena.vistas.VistaPrincipalN2Care.dpnEscritorio;
 
 /**
  * 
@@ -553,7 +553,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
                         M_Proveedor.insert(
                                 Proveedor
                                         .builder()
-                                        .id(WIDTH)
+                                        .idPersona(WIDTH)
                                         .codigoProveedor(txtCodigoProveedor.getText())
                                         .build()
                         )
@@ -574,7 +574,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
                         M_Proveedor.update(
                                 Proveedor
                                         .builder()
-                                        .id(((Proveedor) cbProveedores.getSelectedItem()).getId())
+                                        .idPersona(((Proveedor) cbProveedores.getSelectedItem()).getIdPersona())
                                         .codigoProveedor(txtCodigoProveedor.getText())
                                         .build()
                         )
@@ -904,7 +904,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
 //            @Override
 //            protected Integer doInBackground() throws Exception {
 //                jpbFoto.setVisible(true);
-//                VistaPrincipal.jpEstado.setVisible(true);
+//                VistaPrincipalN2Care.jpEstado.setVisible(true);
 //                dpnEscritorio.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 //                publish(10);
 //                if (!map.containsKey(((Proveedor) tblMedicamentos.getValueAt(
@@ -952,7 +952,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
 //            protected void done() {
 //                super.done();
 //                jpbFoto.setVisible(false);
-//                VistaPrincipal.jpEstado.setVisible(false);
+//                VistaPrincipalN2Care.jpEstado.setVisible(false);
 //                dpnEscritorio.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 //            }
 //
@@ -960,7 +960,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
 //            protected void process(List<Object> chunks) {
 //                super.process(chunks);
 //                jpbFoto.setValue((Integer) chunks.get(0));
-//                VistaPrincipal.jpbEstado.setValue((Integer) chunks.get(0));
+//                VistaPrincipalN2Care.jpbEstado.setValue((Integer) chunks.get(0));
 //            }
 //        };
 //        w.execute();
@@ -1021,7 +1021,7 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
 
         //TODO 05/04/2025 Revisar si recivimos la persona generica.
         cbProveedores.addItem(
-                Persona
+                Proveedor
                         .builder()
                         .idPersona(0)
                         .build()
@@ -1035,9 +1035,9 @@ public final class VistaMedicamentos extends javax.swing.JInternalFrame {
                 proveedor -> {
                     cbProveedores.addItem(
                             M_Persona.select(
-                                    Persona
+                                    Proveedor
                                             .builder()
-                                            .idPersona(proveedor.getId())
+                                            .idPersona(proveedor.getIdPersona())
                                             .build()
                             ).getFirst()
                     );

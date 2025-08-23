@@ -14,26 +14,16 @@ import sur.softsurena.entidades.Almacen;
 )
 public class VistaAlmacenesNGTest {
 
-    @Test(
-            enabled = true,
-            priority = 0,
-            description = """
-                          Verifica que se puede realizar una instancia de frmAlmacenes.
-                          """
-    )
+    @Test
     public void testGetInstance() {
-        assertNotNull(new VistaAlmacenes(),
+        assertNotNull(
+                new VistaAlmacenes(),
                 "Error al obtener la instancia de frmAlmacenes"
         );
     }
 
     @Test(
-            enabled = true,
-            priority = 1,
-            description = """
-                          Test para verrificar las consultas a la base de datos
-                          de los registros de almacenes registrados.
-                          """
+            dependsOnMethods = "testGetInstance"
     )
     public void testLlenarTabla() {
         JTable tabla = VistaAlmacenes.llenarTabla(

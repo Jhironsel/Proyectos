@@ -10,7 +10,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import sur.softsurena.entidades.Categoria;
-import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
+import static sur.softsurena.vistas.VistaPrincipalN2Care.dpnEscritorio;
 import sur.softsurena.utilidades.Utilidades;
 
 public final class VistaGestionConsultas extends javax.swing.JInternalFrame {

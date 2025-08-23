@@ -5,8 +5,8 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_BORRAR_LAS_GENERALES_EN_EL_SISTE;
 import static sur.softsurena.metodos.M_Generales.ERROR_AL_INSERTAR_GENERALES_EN_EL_SISTEMA;
 import static sur.softsurena.metodos.M_Generales.GENERALES_BORRADA_CORRECTAMENTE_DEL_SISTE;
@@ -127,7 +127,7 @@ public class M_GeneralesNGTest {
 
     @Test
     public void testPersona() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                 .builder()
                 .persona('J')
                 .pnombre("MGenerales")

@@ -94,7 +94,7 @@ public class Conexion {
 
     private Conexion() {}
 
-    public static boolean validarUsario(
+    public static boolean validarUsuario(
             JTextField txtUsuario, JPasswordField txtClave, JFrame jframe
     ) {
         //Validación de campos del login. 

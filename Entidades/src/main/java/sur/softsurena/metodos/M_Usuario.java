@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Role.asignarRolUsuario;
@@ -18,15 +17,15 @@ import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class M_Usuario {
-    
+
     /**
-     * 
+     *
      * @param usuario
-     * @return 
+     * @return
      */
     public static String sqlSelect(Usuario usuario) {
         Boolean userName = Objects.isNull(usuario.getUserName());
-        Boolean estado = Objects.isNull(usuario.getPersona().getEstado());
+        Boolean estado = Objects.isNull(usuario.getEstado());
         Boolean administradores = Objects.isNull(usuario.getAdministrador());
 
         Boolean where = userName && estado && administradores;
@@ -40,7 +39,7 @@ public class M_Usuario {
                   """.strip().formatted(
                         where ? "" : "WHERE ",
                         userName ? "" : "TRIM(UPPER(USERNAME)) STARTING WITH TRIM(UPPER('%s')) ".formatted(usuario.getUserName()),
-                        estado ? "" : "ESTADO IS %B ".formatted(usuario.getPersona().getEstado()),
+                        estado ? "" : "ESTADO IS %B ".formatted(usuario.getEstado()),
                         administradores ? "" : "ADMINISTRADOR IS %B ".formatted(usuario.getAdministrador())
                 ).strip();
 
@@ -65,15 +64,10 @@ public class M_Usuario {
                     usuarios.add(
                             Usuario
                                     .builder()
-                                    .persona(
-                                            Persona
-                                                    .builder()
-                                                    .pnombre(rs.getString("PNOMBRE"))
-                                                    .snombre(rs.getString("SNOMBRE"))
-                                                    .apellidos(rs.getString("APELLIDOS"))
-                                                    .estado(rs.getBoolean("ESTADO"))
-                                                    .build()
-                                    )
+                                    .pnombre(rs.getString("PNOMBRE"))
+                                    .snombre(rs.getString("SNOMBRE"))
+                                    .apellidos(rs.getString("APELLIDOS"))
+                                    .estado(rs.getBoolean("ESTADO"))
                                     .userName(rs.getString("USERNAME"))
                                     .administrador(rs.getBoolean("ADMINISTRADOR"))
                                     .descripcion(rs.getString("DESCRIPCION"))
@@ -91,8 +85,6 @@ public class M_Usuario {
         return usuarios;
     }
 
-    
-    
     /**
      * Metodo para consultar cual es el usuario actual del sistema.<br>
      *
@@ -120,12 +112,7 @@ public class M_Usuario {
             rs.next();
             return Usuario
                     .builder()
-                    .persona(
-                            Persona
-                                    .builder()
-                                    .rol(rs.getString("ROLE"))
-                                    .build()
-                    )
+                    .rol(rs.getString("ROLE"))
                     .userName(rs.getString("USUARIO"))
                     .build();
         } catch (SQLException ex) {
@@ -137,7 +124,7 @@ public class M_Usuario {
             return null;
         }
     }
-    
+
     /**
      * Metodo que permite el cambio de contraseña de un usuario en el sistema.
      *
@@ -195,10 +182,10 @@ public class M_Usuario {
         )) {
             cs.setString(1, usuario.getUserName());
             cs.setString(2, usuario.getClave());
-            cs.setString(3, usuario.getPersona().getPnombre());
-            cs.setString(4, usuario.getPersona().getSnombre());
-            cs.setString(5, usuario.getPersona().getApellidos());
-            cs.setBoolean(6, usuario.getPersona().getEstado());
+            cs.setString(3, usuario.getPnombre());
+            cs.setString(4, usuario.getSnombre());
+            cs.setString(5, usuario.getApellidos());
+            cs.setBoolean(6, usuario.getEstado());
             cs.setBoolean(7, usuario.getAdministrador());
             cs.setString(8, usuario.getDescripcion());
             cs.setString(9, usuario.getTags());
@@ -257,10 +244,10 @@ public class M_Usuario {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT)) {
             cs.setString(1, usuario.getUserName());
             cs.setString(2, usuario.getClave());
-            cs.setString(3, usuario.getPersona().getPnombre());
-            cs.setString(4, usuario.getPersona().getSnombre());
-            cs.setString(5, usuario.getPersona().getApellidos());
-            cs.setBoolean(6, usuario.getPersona().getEstado());
+            cs.setString(3, usuario.getPnombre());
+            cs.setString(4, usuario.getSnombre());
+            cs.setString(5, usuario.getApellidos());
+            cs.setBoolean(6, usuario.getEstado());
             cs.setBoolean(7, usuario.getAdministrador());
             cs.setString(8, usuario.getDescripcion());
             cs.setString(9, usuario.getTags());

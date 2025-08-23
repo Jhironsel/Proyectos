@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import static sur.softsurena.conexion.Conexion.getCnn;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Proveedor;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
@@ -39,7 +40,25 @@ public class M_Proveedor {
                 lista.add(
                         Proveedor
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .fecha_hora_ultima_update(rs.getTimestamp("FECHA_HORA_ULTIMO_UPDATE"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
+                                .codigoProveedor(rs.getString("CODIGO"))
                                 .build()
                 );
             }
@@ -54,29 +73,31 @@ public class M_Proveedor {
     }
 
     public static String sqlSelect(Proveedor proveedor) {
-        boolean id = Objects.isNull(proveedor.getId());
+        boolean id = Objects.isNull(proveedor.getIdPersona());
         boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
         boolean where = id && codigo;
         boolean pagina = Objects.isNull(proveedor.getPagina());
 
-        String sql = """
-                     SELECT ID
-                     FROM V_PERSONAS_PROVEEDORES
-                     %s%s
-                     """.formatted(
+        return """
+               SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, FECHA_HORA_ULTIMO_UPDATE,
+                    ESTADO, ID_TIPO_SANGRE, CEDULA, ESTADO_CIVIL, CODIGO
+               FROM V_PERSONAS_PROVEEDORES_GEN
+               %s%s%s%s
+               """.formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d ".formatted(proveedor.getId()),
-                codigo ? "" : "CODIGO STARTING WITH '%s'".formatted(proveedor.getCodigoProveedor())
+                id ? "" : "ID = %d ".formatted(proveedor.getIdPersona()),
+                codigo ? "" : "CODIGO STARTING WITH '%s'".formatted(
+                                proveedor.getCodigoProveedor()
+                        ),
+                pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+                                .formatted(
+                                        proveedor.getPagina().getNPaginaNro(),
+                                        proveedor.getPagina().getNCantidadFilas(),
+                                        proveedor.getPagina().getNPaginaNro(),
+                                        proveedor.getPagina().getNCantidadFilas()
+                                )
         );
-        return sql.concat("%s").formatted(
-                        pagina ? "" : "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
-                                        .formatted(
-                                                proveedor.getPagina().getNPaginaNro(),
-                                                proveedor.getPagina().getNCantidadFilas(),
-                                                proveedor.getPagina().getNPaginaNro(),
-                                                proveedor.getPagina().getNCantidadFilas()
-                                        )
-                );
     }
 
     public synchronized static List<Proveedor> selectATR(Proveedor proveedor) {
@@ -93,7 +114,7 @@ public class M_Proveedor {
                 lista.add(
                         Proveedor
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
                                 .codigoProveedor(rs.getString("CODIGO"))
                                 .build()
                 );
@@ -109,7 +130,7 @@ public class M_Proveedor {
     }
 
     public static String sqlProveedor(Proveedor proveedor) {
-        boolean id = Objects.isNull(proveedor.getId());
+        boolean id = Objects.isNull(proveedor.getIdPersona());
         boolean codigo = Objects.isNull(proveedor.getCodigoProveedor());
         boolean where = id && codigo;
 
@@ -121,7 +142,7 @@ public class M_Proveedor {
                            %s%s%s
                            """.formatted(
                 where ? "" : "WHERE ",
-                id ? "" : "ID = %d ".formatted(proveedor.getId()),
+                id ? "" : "ID = %d ".formatted(proveedor.getIdPersona()),
                 codigo ? "" : "CODIGO STARTING WITH '%s' ".formatted(proveedor.getCodigoProveedor())
         );
         return sql.strip().concat("%s").formatted(
@@ -157,7 +178,7 @@ public class M_Proveedor {
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
 
-            ps.setInt(1, proveedor.getId());
+            ps.setInt(1, proveedor.getIdPersona());
 
             ps.executeUpdate();
 
@@ -205,7 +226,7 @@ public class M_Proveedor {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, proveedor.getId());
+            ps.setInt(1, proveedor.getIdPersona());
             ps.setString(2, proveedor.getCodigoProveedor());
 
             ps.executeUpdate();
@@ -256,7 +277,7 @@ public class M_Proveedor {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, proveedor.getId());
+            ps.setInt(1, proveedor.getIdPersona());
 
             ps.executeUpdate();
 

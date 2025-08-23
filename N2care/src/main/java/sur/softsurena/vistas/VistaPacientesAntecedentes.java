@@ -273,7 +273,7 @@ public final class VistaPacientesAntecedentes extends javax.swing.JDialog {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         Paciente paciente = Paciente
                 .builder()
-                .id(idPaciente)
+                .idPersona(idPaciente)
                 .build();
 
         Asegurado asegurado = M_Asegurado.select(

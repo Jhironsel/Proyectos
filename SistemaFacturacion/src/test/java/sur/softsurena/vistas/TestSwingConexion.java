@@ -13,7 +13,7 @@ public class TestSwingConexion {
     }
 
     public static void main(String[] args) throws IOException, Exception {
-        editTestSwing("testSwing/testCategoria.stt", false);
+        editTestSwing("testSwing/testInsertCliente.stt", false);
         
 //        TestingUtils.assertSuccessfulReplay(
 //                new File("testSwing/testParametros.stt")

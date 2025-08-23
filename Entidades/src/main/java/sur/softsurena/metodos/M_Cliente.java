@@ -14,6 +14,7 @@ import lombok.Cleanup;
 import lombok.NonNull;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cliente;
+import sur.softsurena.entidades.Generales;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
@@ -47,7 +48,27 @@ public class M_Cliente {
                 lista.add(
                         Cliente
                                 .builder()
-                                .id(rs.getInt("ID"))
+                                .idPersona(rs.getInt("ID"))
+                                .persona(rs.getString("PERSONA").charAt(0))
+                                .pnombre(rs.getString("PNOMBRE"))
+                                .snombre(rs.getString("SNOMBRE"))
+                                .apellidos(rs.getString("APELLIDOS"))
+                                .sexo(rs.getString("SEXO").charAt(0))
+                                .fecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"))
+                                .fecha_ingreso(rs.getDate("FECHA_INGRESO"))
+                                .estado(rs.getBoolean("ESTADO"))
+                                .generales(
+                                        Generales
+                                                .builder()
+                                                .idTipoSangre(rs.getInt("ID_TIPO_SANGRE"))
+                                                .cedula(rs.getString("CEDULA"))
+                                                .estado_civil(rs.getString("ESTADO_CIVIL").charAt(0))
+                                                .build()
+                                )
+                                .totalFacturado(rs.getBigDecimal("TOTAL_FACTURADO"))
+                                .totalDeuda(rs.getBigDecimal("TOTAL_DEUDA"))
+                                .cantidadFactura(rs.getInt("CANTIDAD_FACTURA"))
+                                .fechaUltimaCompra(rs.getDate("FECHA_ULTIMA_COMPRA"))
                                 .build()
                 );
             }
@@ -73,96 +94,31 @@ public class M_Cliente {
     protected static String sqlSelect(
             Cliente cliente
     ) {
-        boolean id = Objects.isNull(cliente.getId());
+        boolean id = Objects.isNull(cliente.getIdPersona());
         boolean pagina = Objects.isNull(cliente.getPagina());
         
         StringBuilder sb = new StringBuilder();
         sb.append(
                 """
-                SELECT ID
-                FROM V_PERSONAS_CLIENTES
+                SELECT ID, PERSONA, PNOMBRE, SNOMBRE, APELLIDOS, SEXO,
+                    FECHA_NACIMIENTO, FECHA_INGRESO, ESTADO, ID_TIPO_SANGRE,
+                    CEDULA, ESTADO_CIVIL, TOTAL_FACTURADO, TOTAL_DEUDA,
+                    CANTIDAD_FACTURA, FECHA_ULTIMA_COMPRA
+                FROM V_PERSONAS_CLIENTES_GEN
                 """
         );
-        sb.append(id ? "":"WHERE ID = %d ".formatted(cliente.getId()));
-        sb.append(pagina ? "": "\nROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
+        sb.append(id ? "":"WHERE ID = %d ".formatted(cliente.getIdPersona()).strip());
+        sb.append(pagina ? "": "ROWS (%d - 1) * %d + 1 TO (%d + (1 - 1)) * %d;"
                                 .formatted(
                                         cliente.getPagina().getNPaginaNro(),
                                         cliente.getPagina().getNCantidadFilas(),
                                         cliente.getPagina().getNPaginaNro(),
                                         cliente.getPagina().getNCantidadFilas()
-                                )
+                                ).strip()
         );
-        
-
         return sb.toString().strip();
     }
-    
-//------------------------------------------------------------------------------
-    /**
-     * Metodo que permite obtener los cliente del sistema.
-     *
-     * @param cliente contiene los elemento de la consulta.
-     *
-     * @return
-     */
-    public static List<Cliente> selectATR(
-            @NonNull Cliente cliente
-    ) {
-        List<Cliente> lista = new ArrayList<>();
-        try (Statement ps = getCnn().createStatement(
-                ResultSet.TYPE_FORWARD_ONLY,
-                ResultSet.CONCUR_READ_ONLY,
-                ResultSet.HOLD_CURSORS_OVER_COMMIT
-        )) {
 
-            @Cleanup
-            ResultSet rs = ps.executeQuery(sqlSelect(cliente));
-
-            while (rs.next()) {
-                lista.add(
-                        Cliente
-                                .builder()
-                                .id(rs.getInt("ID"))
-                                .totalFacturado(rs.getBigDecimal("TOTAL_FACTURADO"))
-                                .totalDeuda(rs.getBigDecimal("TOTAL_DEUDA"))
-                                .cantidadFactura(rs.getInt("CANTIDAD_FACTURA"))
-                                .fechaUltimaCompra(rs.getDate("FECHA_ULTIMA_COMPRA"))
-                                .saldo(rs.getBigDecimal("SALDO"))
-                                .build()
-                );
-            }
-        } catch (SQLException ex) {
-            LOG.log(
-                    Level.SEVERE,
-                    ERROR_AL_CONSULTA_LA_VISTA_GET_PERSONA_CL,
-                    ex
-            );
-        }
-        return lista;
-    }
-
-    /**
-     *
-     * @param cliente
-     *
-     * @return
-     */
-    protected static String sqlSelectSTR(
-            Cliente cliente
-    ) {
-        Boolean id = Objects.isNull(cliente.getId());
-        StringBuilder sb = new StringBuilder();
-        sb.append(
-                """
-                SELECT ID, TOTAL_FACTURADO, TOTAL_DEUDA, CANTIDAD_FACTURA,
-                    FECHA_ULTIMA_COMPRA, SALDO
-                FROM V_PERSONAS_CLIENTES_ATR
-                """
-        );
-        sb.append(id ? "":"ID = %d ".formatted(cliente.getId()));
-
-        return sb.toString();
-    }
 //------------------------------------------------------------------------------
     
     /**
@@ -180,7 +136,7 @@ public class M_Cliente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            cs.setInt(1, cliente.getId());
+            cs.setInt(1, cliente.getIdPersona());
 
             cs.execute();
             return Resultado
@@ -227,7 +183,7 @@ public class M_Cliente {
                 ResultSet.CONCUR_READ_ONLY,
                 ResultSet.HOLD_CURSORS_OVER_COMMIT
         )) {
-            ps.setInt(1, cliente.getId());
+            ps.setInt(1, cliente.getIdPersona());
 
             ps.execute();
 

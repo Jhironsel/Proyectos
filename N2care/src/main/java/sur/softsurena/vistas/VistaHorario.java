@@ -3,7 +3,7 @@ package sur.softsurena.vistas;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import sur.softsurena.entidades.Doctor;
-import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
+import static sur.softsurena.vistas.VistaPrincipalN2Care.dpnEscritorio;
 
 public final class VistaHorario extends javax.swing.JInternalFrame {
 

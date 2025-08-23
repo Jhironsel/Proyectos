@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.M_Factura;
-import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.M_M_Factura;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 
@@ -228,14 +228,14 @@ public final class VistaBuscarTemporal extends java.awt.Dialog {
                         tblDetalle.getSelectedRow(), 0
                 ).toString()));
 
-        hiloImpresionFactura miFactura
-                = new hiloImpresionFactura(
+        HiloImpresionFactura miFactura
+                = new HiloImpresionFactura(
                         true, //Mostrar Reporte
                         false, //No se requiere copia del documento
                         "/Reportes/factura.jasper",
                         parametros,
-                        VistaPrincipal.jPanelImpresion,
-                        VistaPrincipal.jprImpresion);
+                        VistaPrincipalFacturacion.jPanelImpresion,
+                        VistaPrincipalFacturacion.jprImpresion);
         miFactura.start();
     }//GEN-LAST:event_btnImprimirCuentaActionPerformed
     /**

@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaProducto;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -9,7 +8,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Almacen;
 import sur.softsurena.entidades.EntradaProducto;
 import sur.softsurena.entidades.Proveedor;
@@ -518,12 +516,12 @@ public final class VistaEntradaProducto extends javax.swing.JDialog {
                 $entradaProducto -> {
                     registro[0] = $entradaProducto;
                     registro[1] = M_Persona.select(
-                            Persona
+                            Proveedor
                                     .builder()
                                     .idPersona($entradaProducto.getIdProveedor())
                                     .build()
                     ).stream().findFirst().orElse(
-                            Persona
+                            Proveedor
                                     .builder()
                                     .pnombre("Persona No encontrada.")
                                     .snombre("")

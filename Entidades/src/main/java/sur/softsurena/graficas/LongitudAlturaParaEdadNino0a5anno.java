@@ -24,9 +24,9 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.metodos.M_Dato_Nacimiento.getLongitudOEstatura;
-import sur.softsurena.metodos.M_Persona;
+import sur.softsurena.metodos.M_Paciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 public class LongitudAlturaParaEdadNino0a5anno {
@@ -42,8 +42,8 @@ public class LongitudAlturaParaEdadNino0a5anno {
     private final int idPaciente;
 
     public LongitudAlturaParaEdadNino0a5anno(int idPaciente) {
-        sexo = M_Persona.select(
-                Persona
+        sexo = M_Paciente.select(
+                Paciente
                         .builder()
                         .idPersona(idPaciente)
                         .build()

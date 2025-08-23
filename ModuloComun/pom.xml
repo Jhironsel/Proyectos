@@ -14,7 +14,7 @@
     </parent>
     
     <properties>
-        <exec.mainClass>sur.softsurena.VistaIconos</exec.mainClass>
+        <exec.mainClass>sur.softsurena.vistas.VistaIconos</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>

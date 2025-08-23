@@ -7,14 +7,13 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.ARS;
 import sur.softsurena.entidades.Asegurado;
 import sur.softsurena.entidades.FotoPersona;
 import sur.softsurena.entidades.Generales;
 import sur.softsurena.entidades.Paciente;
 import sur.softsurena.entidades.TipoSangre;
-import static sur.softsurena.vistas.VistaPrincipal.dpnEscritorio;
 import sur.softsurena.metodos.M_ARS;
 import sur.softsurena.metodos.M_Foto_Persona;
 import sur.softsurena.metodos.M_Generales;
@@ -23,6 +22,7 @@ import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.metodos.M_TiposSangres;
 import sur.softsurena.utilidades.Resultado;
 import sur.softsurena.utilidades.Utilidades;
+import static sur.softsurena.vistas.VistaPrincipalN2Care.dpnEscritorio;
 
 public class VistaPaciente extends javax.swing.JInternalFrame {
 
@@ -918,12 +918,10 @@ public class VistaPaciente extends javax.swing.JInternalFrame {
                 .builder()
                 .build();
 
-        Persona persona = Persona
+        Persona persona = Paciente
                 .builder()
                 .idPersona(
-                        nuevo
-                                ? -1
-                                : ((Generales) txtCedula.getValue()).getIdPersona()
+                        ((Generales) txtCedula.getValue()).getIdPersona()
                 )
                 .pnombre(txtPNombre.getText())
                 .snombre(txtSNombre.getText())
@@ -1068,7 +1066,7 @@ public class VistaPaciente extends javax.swing.JInternalFrame {
         VistaPacientesAntecedentes frm = new VistaPacientesAntecedentes(
                 null,
                 true,
-                ((Paciente) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getId()
+                ((Paciente) tblPacientes.getValueAt(tblPacientes.getSelectedRow(), 2)).getIdPersona()
         );
 
         frm.setLocationRelativeTo(null);
@@ -1350,9 +1348,9 @@ public class VistaPaciente extends javax.swing.JInternalFrame {
         ).stream().forEach(
                 paciente -> {
                     Persona persona = M_Persona.select(
-                            Persona
+                            Paciente
                                     .builder()
-                                    .idPersona(paciente.getId())
+                                    .idPersona(paciente.getIdPersona())
                                     .build()
                     ).getLast();
 

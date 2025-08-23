@@ -15,12 +15,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.Categoria;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.utilidades.Utilidades.LOG;
-import sur.softsurena.vista.VistaBusquedaPersona;
 
 public final class VistaCajeros extends javax.swing.JFrame implements Runnable {
 

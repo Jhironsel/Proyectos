@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaProducto;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.image.BufferedImage;

@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Generales;
-import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.M_Cliente;
 import sur.softsurena.metodos.M_Generales;
 import sur.softsurena.utilidades.DefaultTableCellHeaderRenderer;
@@ -454,13 +454,13 @@ public final class VistaDetalleFacturaClientes extends javax.swing.JInternalFram
         parametros.put("idFactura", Integer.valueOf(
                 tblFactura.getValueAt(
                         tblFactura.getSelectedRow(), 0).toString()));
-        hiloImpresionFactura impresionFactura = new hiloImpresionFactura(
+        HiloImpresionFactura impresionFactura = new HiloImpresionFactura(
                 true,
                 false,
                 "/Reportes/factura(copia).jasper",
                 parametros,
-                VistaPrincipal.jPanelImpresion,
-                VistaPrincipal.jprImpresion);
+                VistaPrincipalFacturacion.jPanelImpresion,
+                VistaPrincipalFacturacion.jprImpresion);
 
         impresionFactura.start();
     }//GEN-LAST:event_btnImprimirActionPerformed
@@ -482,7 +482,7 @@ public final class VistaDetalleFacturaClientes extends javax.swing.JInternalFram
                     registro[1] = M_Generales.select(
                             Generales
                                     .builder()
-                                    .idPersona(cliente.getId())
+                                    .idPersona(cliente.getIdPersona())
                                     .build()
                     ).getFirst();
                     miTabla.addRow(registro);

@@ -5,7 +5,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.ContactoEmail;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import static sur.softsurena.metodos.M_ContactoEmail.CONTACTO_BORRADO_CORRECTAMENTE;
 import static sur.softsurena.metodos.M_ContactoEmail.CORREO_AGREGADO_O_MODIFICADO_CORRECTAMENT;
 import static sur.softsurena.metodos.M_ContactoEmail.EL_CONTACTO_DE_CORREO_FUE_ACTUALIZADO;
@@ -31,7 +31,7 @@ public class M_ContactoEmailNGTest {
     public static int idCorreo, idPersona;
 
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                 .builder()
                 .persona('J')
                 .pnombre("MContactoEmail")

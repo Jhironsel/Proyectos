@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaIconos;
 import org.testng.annotations.Test;
 
 /**

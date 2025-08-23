@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Role;
 import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.metodos.M_Usuario.ERROR_AL_AGREGAR__USUARIO;
@@ -34,7 +33,7 @@ public class M_UsuarioNGTest {
         );
 
         assertEquals(
-                result.getPersona().getRol(),
+                result.getRol(),
                 "ADMINISTRADOR"
         );
     }
@@ -55,11 +54,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .build()
                 ),
                 """
@@ -73,12 +67,7 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.TRUE)
-                                                .build()
-                                )
+                                .estado(Boolean.TRUE)
                                 .build()
                 ),
                 """
@@ -93,12 +82,7 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.FALSE)
-                                                .build()
-                                )
+                                .estado(Boolean.FALSE)
                                 .build()
                 ),
                 """
@@ -113,11 +97,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .administrador(Boolean.TRUE)
                                 .build()
                 ),
@@ -133,11 +112,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.sqlSelect(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .administrador(Boolean.FALSE)
                                 .build()
                 ),
@@ -154,11 +128,6 @@ public class M_UsuarioNGTest {
                         Usuario
                                 .builder()
                                 .userName("SYSDBA")
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .build()
                 ),
                 """
@@ -178,11 +147,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .build()
                 ),
                 "Error al consultar la lista de usuario"
@@ -192,12 +156,7 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.TRUE)
-                                                .build()
-                                )
+                                .estado(Boolean.TRUE)
                                 .build()
                 ),
                 "Error al consultar la lista de usuario"
@@ -207,12 +166,7 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .estado(Boolean.FALSE)
-                                                .build()
-                                )
+                                .estado(Boolean.FALSE)
                                 .build()
                 ),
                 "Error al consultar la lista de usuario"
@@ -222,11 +176,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .administrador(Boolean.TRUE)
                                 .build()
                 ),
@@ -237,11 +186,6 @@ public class M_UsuarioNGTest {
                 M_Usuario.select(
                         Usuario
                                 .builder()
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .administrador(Boolean.FALSE)
                                 .build()
                 ),
@@ -253,11 +197,6 @@ public class M_UsuarioNGTest {
                         Usuario
                                 .builder()
                                 .userName("SYSDBA")
-                                .persona(
-                                        Persona
-                                                .builder()
-                                                .build()
-                                )
                                 .build()
                 ),
                 "Error al consultar la lista de usuario"
@@ -272,18 +211,13 @@ public class M_UsuarioNGTest {
                 Usuario
                         .builder()
                         .userName("CAJERO")
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
                         .build()
         );
 
         Resultado result;
-        
+
         List<Role> roles = new ArrayList<>();
-        
+
         if (listaUsuario.isEmpty()) {
             roles.clear();
             roles.add(
@@ -298,15 +232,10 @@ public class M_UsuarioNGTest {
                     Usuario
                             .builder()
                             .userName("CAJERO")
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre("")
-                                            .snombre("")
-                                            .apellidos("")
-                                            .estado(Boolean.TRUE)
-                                            .build()
-                            )
+                            .pnombre("")
+                            .snombre("")
+                            .apellidos("")
+                            .estado(Boolean.TRUE)
                             .clave("1")
                             .administrador(Boolean.FALSE)
                             .descripcion("Usuario por defecto que administra las cajas del sistema.")
@@ -333,11 +262,6 @@ public class M_UsuarioNGTest {
                 Usuario
                         .builder()
                         .userName("ADMINISTRADOR")
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .build()
-                        )
                         .build()
         );
 
@@ -355,15 +279,10 @@ public class M_UsuarioNGTest {
                     Usuario
                             .builder()
                             .userName("ADMINISTRADOR")
-                            .persona(
-                                    Persona
-                                            .builder()
-                                            .pnombre("")
-                                            .snombre("")
-                                            .apellidos("")
-                                            .estado(Boolean.TRUE)
-                                            .build()
-                            )
+                            .pnombre("")
+                            .snombre("")
+                            .apellidos("")
+                            .estado(Boolean.TRUE)
                             .clave("1")
                             .administrador(Boolean.TRUE)
                             .descripcion("")
@@ -396,15 +315,10 @@ public class M_UsuarioNGTest {
                 Usuario
                         .builder()
                         .userName("PRUEBA")
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pnombre("PRUEBA")
-                                        .snombre("PRUEBA")
-                                        .apellidos("PRUEBA")
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
+                        .pnombre("PRUEBA")
+                        .snombre("PRUEBA")
+                        .apellidos("PRUEBA")
+                        .estado(Boolean.TRUE)
                         .clave("1")
                         .administrador(Boolean.TRUE)
                         .descripcion("")
@@ -442,15 +356,10 @@ public class M_UsuarioNGTest {
                 Usuario
                         .builder()
                         .userName("PRUEBA")
-                        .persona(
-                                Persona
-                                        .builder()
-                                        .pnombre("")
-                                        .snombre("")
-                                        .apellidos("")
-                                        .estado(Boolean.TRUE)
-                                        .build()
-                        )
+                        .pnombre("")
+                        .snombre("")
+                        .apellidos("")
+                        .estado(Boolean.TRUE)
                         .clave("1")
                         .administrador(Boolean.FALSE)
                         .descripcion("Es un usuario de prueba para el sistema.")

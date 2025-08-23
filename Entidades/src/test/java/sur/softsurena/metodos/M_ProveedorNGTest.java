@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
-import sur.softsurena.entidades.Persona;
 import sur.softsurena.entidades.Proveedor;
 import static sur.softsurena.metodos.M_Proveedor.CONSULTA_MODIFICADO_CORRECTAMENTE;
 import sur.softsurena.utilidades.Resultado;
@@ -32,14 +31,24 @@ public class M_ProveedorNGTest {
                 FROM V_PERSONAS_PROVEEDORES_ATR"""
         );
         assertEquals(
-                M_Proveedor.sqlProveedor(Proveedor.builder().id(-1).build()),
+                M_Proveedor.sqlProveedor(
+                        Proveedor
+                                .builder()
+                                .idPersona(-1)
+                                .build()
+                ),
                 """
                 SELECT ID, CODIGO
                 FROM V_PERSONAS_PROVEEDORES_ATR
                 WHERE ID = -1"""
         );
         assertEquals(
-                M_Proveedor.sqlProveedor(Proveedor.builder().codigoProveedor("000-0000").build()),
+                M_Proveedor.sqlProveedor(
+                        Proveedor
+                                .builder()
+                                .codigoProveedor("000-0000")
+                                .build()
+                ),
                 """
                 SELECT ID, CODIGO
                 FROM V_PERSONAS_PROVEEDORES_ATR
@@ -64,7 +73,7 @@ public class M_ProveedorNGTest {
                 M_Proveedor.selectATR(
                         Proveedor
                                 .builder()
-                                .id(0)
+                                .idPersona(0)
                                 .build()
                 ),
                 "Error al consultar los proveedores."
@@ -96,7 +105,7 @@ public class M_ProveedorNGTest {
             groups = "proveedor.insert"
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Proveedor
                 .builder()
                 .persona('J')
                 .pnombre("MProveedor")
@@ -117,7 +126,7 @@ public class M_ProveedorNGTest {
         Resultado result = M_Proveedor.insert(
                 Proveedor
                         .builder()
-                        .id(idPersona)
+                        .idPersona(idPersona)
                         .codigoProveedor(M_ContactoTel.generarTelMovil())
                         .build()
         );
@@ -137,7 +146,7 @@ public class M_ProveedorNGTest {
                 M_Proveedor.update(
                         Proveedor
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .codigoProveedor(
                                         M_ContactoTel
                                                 .generarTelMovil()
@@ -162,7 +171,7 @@ public class M_ProveedorNGTest {
                 M_Proveedor.delete(
                         Proveedor
                                 .builder()
-                                .id(idPersona)
+                                .idPersona(idPersona)
                                 .build()
                 ).getEstado(),
                 "Error al eliminar el proveedor."

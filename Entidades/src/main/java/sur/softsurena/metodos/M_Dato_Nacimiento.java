@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.AlturaPeso;
 import sur.softsurena.entidades.Dato_Nacimiento;
+import sur.softsurena.entidades.Paciente;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -104,7 +104,7 @@ public class M_Dato_Nacimiento {
      */
     public synchronized static ResultSet getPCefalico(int idPaciente) {
         Date fecha_nacimiento = M_Persona.select(
-                Persona
+                Paciente
                         .builder()
                         .idPersona(idPaciente)
                         .build()

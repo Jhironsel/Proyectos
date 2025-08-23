@@ -7,8 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JCheckBox;
@@ -24,7 +22,6 @@ import sur.softsurena.entidades.Paciente;
 import sur.softsurena.metodos.M_Motivo_Consulta;
 import sur.softsurena.utilidades.Utilidades;
 import static sur.softsurena.metodos.M_Motivo_Consulta.insert;
-import static sur.softsurena.metodos.M_Motivo_Consulta.select;
 
 /**
  *
@@ -1261,7 +1258,7 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 
             habilitarConsulta(true, false);
 
-            idPaciente = ((Paciente) jtPacientes.getValueAt(registro, 1)).getId();
+            idPaciente = ((Paciente) jtPacientes.getValueAt(registro, 1)).getIdPersona();
 
 //            getDetalleMotivo(
 //                    ((Paciente) jtPacientes.getValueAt(registro, 2)).getId(),
@@ -1432,8 +1429,8 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
 //                    false,
 //                    i.getAbsolutePath(),
 //                    parametros,
-//                    VistaPrincipal.jpEstado,
-//                    VistaPrincipal.jpbEstado).start();
+//                    VistaPrincipalN2Care.jpEstado,
+//                    VistaPrincipalN2Care.jpbEstado).start();
 //
 //        }
 //
@@ -1553,8 +1550,8 @@ public final class VistaConsultas extends javax.swing.JInternalFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 VistaMensajes m = new VistaMensajes();
-                VistaPrincipal.dpnEscritorio.remove(m);
-                VistaPrincipal.dpnEscritorio.add(m);
+                VistaPrincipalN2Care.dpnEscritorio.remove(m);
+                VistaPrincipalN2Care.dpnEscritorio.add(m);
 
                 m.setMaximum(true);
                 m.setVisible(true);

@@ -32,7 +32,7 @@ public final class VistaCategorias extends javax.swing.JDialog {
     private String nombreCategoria;
     private File imagenCategoria;
 
-    public VistaCategorias(VistaPrincipal parent, boolean modal) {
+    public VistaCategorias(VistaPrincipalFacturacion parent, boolean modal) {
         super(parent, modal);
         initComponents();
         actualizarCombo();

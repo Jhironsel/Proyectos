@@ -17,7 +17,8 @@ public class VistaDetalleFacturaClientesNGTest {
                           """
     )
     public void testTablaClientes() {
-        Assert.assertNotNull(new VistaDetalleFacturaClientes(),
+        Assert.assertNotNull(
+                new VistaDetalleFacturaClientes(),
                 "No puede ser instanaciada la clase frmDetalleFacturaClientes."
         );
     }

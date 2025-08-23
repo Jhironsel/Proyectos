@@ -6,7 +6,7 @@ import lombok.Getter;
 import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 import sur.softsurena.entidades.Deuda;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.entidades.Cliente;
 import sur.softsurena.utilidades.Resultado;
 import static sur.softsurena.utilidades.Utilidades.javaDateToSqlDate;
 import static sur.softsurena.utilidades.Utilidades.stringToDate;
@@ -117,7 +117,7 @@ public class M_DeudaNGTest {
                           """
     )
     public void testInsert() {
-        M_PersonaNGTest.persona = Persona
+        M_PersonaNGTest.persona = Cliente
                 .builder()
                 .persona('J')
                 .pnombre("MDeuda")

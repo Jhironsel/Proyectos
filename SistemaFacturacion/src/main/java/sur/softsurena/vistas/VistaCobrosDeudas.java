@@ -1,6 +1,5 @@
 package sur.softsurena.vistas;
 
-import sur.softsurena.vista.VistaBusquedaPersona;
 import java.awt.Frame;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -13,10 +12,10 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import lombok.Getter;
-import sur.softsurena.entidades.Persona;
+import sur.softsurena.abstractas.Persona;
 import sur.softsurena.entidades.Cliente;
 import sur.softsurena.entidades.Deuda;
-import sur.softsurena.hilos.hiloImpresionFactura;
+import sur.softsurena.hilos.HiloImpresionFactura;
 import sur.softsurena.metodos.M_Deuda;
 import sur.softsurena.metodos.M_Persona;
 import sur.softsurena.utilidades.Utilidades;
@@ -29,7 +28,7 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
 
     private int idTurno;
     private String nombreCajero;
-    
+
     public VistaCobrosDeudas(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -346,7 +345,7 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
         cmbCliente.addItem(
                 Cliente
                         .builder()
-                        .id(-1)
+                        .idPersona(-1)
                         .build()
         );
 
@@ -357,18 +356,12 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
         ).stream().forEach(
                 deuda -> {
                     cmbCliente.addItem(
-                            Cliente
-                                    .builder()
-                                    .id(
-                                            M_Persona.select(
-                                                    Persona
-                                                            .builder()
-                                                            .idPersona(deuda.getIdPersona())
-                                                            .estado(Boolean.TRUE)
-                                                            .build()
-                                            ).getFirst().getIdPersona()
-                                    )
-                                    .build()
+                            M_Persona.select(
+                                    Cliente
+                                            .builder()
+                                            .idPersona(deuda.getIdPersona())
+                                            .build()
+                            ).getFirst()
                     );
                 }
         );
@@ -462,9 +455,8 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
         if (persona == null) {
             return;
         }
-        
+
         //TODO Trabajos.
-        
 //        for (int i = 0; i < cmbCliente.getItemCount(); i++) {
 //            if (((Cliente) cmbCliente.getItemAt(i)).getGenerales().getCedula().equals(cliente.getGenerales().getCedula())) {
 //                cmbCliente.setSelectedIndex(i);
@@ -479,7 +471,7 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
         llenarTabla(
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                ).getId()
+                ).getIdPersona()
         );
 
         txtMonto.setValue(0.0);
@@ -549,19 +541,19 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
                 "idCliente",
                 cmbCliente.getItemAt(
                         cmbCliente.getSelectedIndex()
-                ).getId());
+                ).getIdPersona());
         parametros.put(
                 "nombreCliente",
                 cmbCliente.getItemAt(cmbCliente.getSelectedIndex()).toString()
         );
 
-        hiloImpresionFactura impresionFactura = new hiloImpresionFactura(
+        HiloImpresionFactura impresionFactura = new HiloImpresionFactura(
                 true,
                 false,
                 System.getProperty("user.dir") + "/Reportes/cobroFactura.jasper",
                 parametros,
-                VistaPrincipal.jPanelImpresion,
-                VistaPrincipal.jprImpresion);
+                VistaPrincipalFacturacion.jPanelImpresion,
+                VistaPrincipalFacturacion.jprImpresion);
 
         impresionFactura.start();
     }
@@ -633,7 +625,7 @@ public final class VistaCobrosDeudas extends javax.swing.JDialog {
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnPagar;
-    private javax.swing.JComboBox<Cliente> cmbCliente;
+    private javax.swing.JComboBox<Persona> cmbCliente;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;

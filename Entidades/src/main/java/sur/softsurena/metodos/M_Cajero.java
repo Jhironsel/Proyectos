@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import sur.softsurena.entidades.Persona;
 import static sur.softsurena.conexion.Conexion.getCnn;
 import sur.softsurena.entidades.Cajero;
-import sur.softsurena.entidades.Usuario;
 import static sur.softsurena.utilidades.Utilidades.LOG;
 
 /**
@@ -44,24 +42,13 @@ public class M_Cajero {
                     cajerosList.add(
                             Cajero
                                     .builder()
-                                    .usuario(
-                                            Usuario
-                                                    .builder()
-                                                    .userName(rs.getString("USER_NAME"))
-                                                    .persona(
-                                                            Persona
-                                                                    .builder()
-                                                                    
-                                                                    .rol(rs.getString("ROL"))
-                                                                    .pnombre(rs.getString("PNOMBRE"))
-                                                                    .snombre(rs.getString("SNOMBRE"))
-                                                                    .apellidos(rs.getString("APELLIDOS"))
-                                                                    .estado(rs.getBoolean("ESTADO"))
-                                                                    .build()
-                                                    )
-                                                    .descripcion(rs.getString("DESCRIPCION"))
-                                                    .build()
-                                    )
+                                    .userName(rs.getString("USER_NAME"))
+                                    .rol(rs.getString("ROL"))
+                                    .pnombre(rs.getString("PNOMBRE"))
+                                    .snombre(rs.getString("SNOMBRE"))
+                                    .apellidos(rs.getString("APELLIDOS"))
+                                    .estado(rs.getBoolean("ESTADO"))
+                                    .descripcion(rs.getString("DESCRIPCION"))
                                     .build());
                 }
             }
